@@ -28,62 +28,68 @@ public class MainResource extends
 	public String listResources() {
 
 		final SecurityContext context = SecurityContextHolder.getContext();
-		final String username = context.getAuthentication().getName();
+		final StringBuilder routeStringBuilder = new StringBuilder();
+		if (context.getAuthentication() != null) {
+			final String username = context.getAuthentication().getName();
 
-		// key will be appended below
-		String userKey = "";
+			// key will be appended below
+			String userKey = "";
 
-		final String dbUrl = (String) getContext().getAttributes().get(
-				"databaseUrl");
+			final String dbUrl = (String) getContext().getAttributes().get(
+					"databaseUrl");
+			try (Connection conn = DriverManager.getConnection(dbUrl)) {
+				if (conn != null) {
 
-		try (Connection conn = DriverManager.getConnection(dbUrl)) {
-			if (conn != null) {
-
-				final String sql_query = "SELECT * FROM api_keys WHERE username=?;";
-				PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
-				query_stmnt.setString(
-						1,
-						username);
-				ResultSet rs = query_stmnt.executeQuery();
-				// There is no existing row, so we should generate a key for
-				// this user and add it to
-				// the table
-				if (!rs.next()) {
-
-					// close resources we are done with
-					rs.close();
-					query_stmnt.close();
-
-					// generate new api key
-					final UUID apiKey = UUID.randomUUID();
-					userKey = apiKey.toString();
-
-					// SQL statement for inserting a new user/api key
-					final String sql = "INSERT INTO api_keys (apiKey, username)\n" + "VALUES(?, ?);";
-					getContext().getLogger().info("Inserting a new api key and user.");
-					PreparedStatement stmnt = conn.prepareStatement(sql);
-					stmnt.setString(
+					final String sql_query = "SELECT * FROM api_keys WHERE username=?;";
+					PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
+					query_stmnt.setString(
 							1,
-							apiKey.toString());
-					stmnt.setString(
-							2,
 							username);
-					stmnt.executeUpdate();
-					stmnt.close();
-				}
-				else {
-					final String apiKeyStr = rs.getString("apiKey");
-					userKey = apiKeyStr;
-					// close resources we are done with
-					rs.close();
-					query_stmnt.close();
-				}
-				conn.close();
-			}
+					ResultSet rs = query_stmnt.executeQuery();
+					// There is no existing row, so we should generate a key for
+					// this user and add it to
+					// the table
+					if (!rs.next()) {
 
-		}
-		catch (SQLException e) {
-			getContext().getLogger().log(Level.SEVERE, e.getMessage());
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+
+						// generate new api key
+						final UUID apiKey = UUID.randomUUID();
+						userKey = apiKey.toString();
+
+						// SQL statement for inserting a new user/api key
+						final String sql = "INSERT INTO api_keys (apiKey, username)\n" + "VALUES(?, ?);";
+						getContext().getLogger().info(
+								"Inserting a new api key and user.");
+						PreparedStatement stmnt = conn.prepareStatement(sql);
+						stmnt.setString(
+								1,
+								apiKey.toString());
+						stmnt.setString(
+								2,
+								username);
+						stmnt.executeUpdate();
+						stmnt.close();
+					}
+					else {
+						final String apiKeyStr = rs.getString("apiKey");
+						userKey = apiKeyStr;
+						// close resources we are done with
+						rs.close();
+						query_stmnt.close();
+					}
+					conn.close();
+				}
+
+			}
+			catch (SQLException e) {
+				getContext().getLogger().log(
+						Level.SEVERE,
+						e.getMessage());
+			}
+			routeStringBuilder.append("<b>Welcome " + username + "!</b><br><b>API key:</b> " + userKey + "<br><br>");
 		}
 
 		final ArrayList<RestRoute> availableRoutes = (ArrayList<RestRoute>) getContext().getAttributes().get(
@@ -91,8 +97,7 @@ public class MainResource extends
 		final ArrayList<String> unavailableCommands = (ArrayList<String>) getContext().getAttributes().get(
 				"unavailableCommands");
 
-		final StringBuilder routeStringBuilder = new StringBuilder(
-				"Available Routes:<br>");
+		routeStringBuilder.append("Available Routes:<br>");
 
 		for (final RestRoute route : availableRoutes) {
 			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
@@ -103,8 +108,7 @@ public class MainResource extends
 			routeStringBuilder.append("<span style='color:blue'>" + command + "</span><br>");
 		}
 
-		return "<b>Welcome " + username + "!</b><br><b>API key:</b> " + userKey + "<br><br>"
-				+ routeStringBuilder.toString();
+		return routeStringBuilder.toString();
 	}
 
 	/**

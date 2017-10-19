@@ -15,7 +15,7 @@
 	<context:property-placeholder location="classpath:/application.properties" />
 
 	<security:http pattern="/api" security="none"/>
-	<security:http pattern="/geowave/**" security="none"/>
+	<security:http pattern="/v0/**" security="none"/>
 	<security:http entry-point-ref="authenticationEntryPoint">
 	    <security:form-login />
 	    <security:anonymous enabled="false"/>

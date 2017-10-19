@@ -14,7 +14,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -31,7 +35,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		ServiceEnabledCommand<Properties>
+		ServiceEnabledCommand<SortedMap<String,Object>>
 {
 
 	@Parameter(names = {
@@ -43,33 +47,29 @@ public class ListCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-		final Pair<String, Properties> list = getList(params);
+		final Pair<String, SortedMap<String,Object>> list = getProperties(params);
 		final String name = list.getKey();
-		final Properties p = list.getValue();
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + name + ")");
 
-		final List<String> keys = new ArrayList<String>();
-		keys.addAll(p.stringPropertyNames());
-		Collections.sort(keys);
+		final SortedMap<String,Object> properties = list.getValue();
 
-		for (final String key : keys) {
-			final String value = (String) p.get(key);
+		for (final Entry<String,Object> e : properties.entrySet()) {
 			JCommander.getConsole().println(
-					key + ": " + value);
+					e.getKey() + ": " + e.getValue());
 		}
 	}
 
 	@Override
-	public Properties computeResults(
+	public SortedMap<String,Object> computeResults(
 			final OperationParams params ) {
 
-		return getList(
+		return getProperties(
 				params).getValue();
 	}
 
-	private Pair<String, Properties> getList(
+	private Pair<String, SortedMap<String,Object>> getProperties(
 			final OperationParams params ) {
 
 		final File f = (File) params.getContext().get(
@@ -87,10 +87,23 @@ public class ListCommand extends
 					f,
 					null);
 		}
-
 		return new ImmutablePair<>(
 				f.getName(),
-				p);
+				new GeoWaveConfig(p));
+	}
+	
+	protected static class GeoWaveConfig extends TreeMap<String,Object>{
+
+		private static final long serialVersionUID = 1L;
+
+		public GeoWaveConfig() {
+			super();
+		}
+
+		public GeoWaveConfig(Map m) {
+			super(m);
+		}
+		
 	}
 
 }

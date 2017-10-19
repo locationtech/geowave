@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.service.rest.webapp;
 
+import java.lang.reflect.Modifier;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -23,7 +24,9 @@ import org.restlet.service.CorsService;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.service.rest.MainResource;
+import mil.nga.giat.geowave.service.rest.FileUpload;
 import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
 import mil.nga.giat.geowave.service.rest.RestRoute;
 import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
@@ -46,12 +49,9 @@ public class ApiRestletApplication extends
 
 		// add the CORS service so others can access the service
 		CorsService corsService = new CorsService();
-		corsService.setAllowedOrigins(
-				new HashSet(
-						Arrays.asList(
-								"*")));
-		corsService.setAllowedCredentials(
-				true);
+		corsService.setAllowedOrigins(new HashSet(
+				Arrays.asList("*")));
+		corsService.setAllowedCredentials(true);
 		this.getServices().add(
 				corsService);
 	}
@@ -73,23 +73,19 @@ public class ApiRestletApplication extends
 
 		final ServletContext servlet = (ServletContext) getContext().getAttributes().get(
 				"org.restlet.ext.servlet.ServletContext");
-		final String realPath = servlet.getRealPath(
-				"/");
+		final String realPath = servlet.getRealPath("/");
 		getContext().getAttributes().put(
 				"databaseUrl",
 				"jdbc:sqlite:" + realPath + "api.db");
 
 		// actual mapping here
-		router.attachDefault(
-				MainResource.class);
+		router.attachDefault(MainResource.class);
 		router.attach(
 				"/api",
 				SwaggerResource.class);
-		attachApiRoutes(
-				router);
+		attachApiRoutes(router);
 
-		initApiKeyDatabase(
-				realPath + "api.db");
+		initApiKeyDatabase(realPath + "api.db");
 		return router;
 	}
 
@@ -98,16 +94,14 @@ public class ApiRestletApplication extends
 
 		String url = "jdbc:sqlite:" + fileName;
 
-		try (Connection conn = DriverManager.getConnection(
-				url)) {
+		try (Connection conn = DriverManager.getConnection(url)) {
 			if (conn != null) {
 				// SQL statement for creating a new table
 				String sql = "CREATE TABLE IF NOT EXISTS api_keys (\n" + "	id integer PRIMARY KEY,\n"
 						+ "	apiKey blob NOT NULL,\n" + "	username text NOT NULL\n" + ");";
 
 				Statement stmnt = conn.createStatement();
-				stmnt.execute(
-						sql);
+				stmnt.execute(sql);
 				stmnt.close();
 			}
 		}
@@ -128,32 +122,23 @@ public class ApiRestletApplication extends
 		availableRoutes = new ArrayList<RestRoute>();
 		unavailableCommands = new ArrayList<String>();
 
-		for (final Class<?> operation : new Reflections(
-				"mil.nga.giat.geowave").getTypesAnnotatedWith(
-						GeowaveOperation.class)) {
-			if ((operation.getAnnotation(
-					GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.GET)
-					|| (((operation.getAnnotation(
-							GeowaveOperation.class).restEnabled() == GeowaveOperation.RestEnabledType.POST))
-							&& DefaultOperation.class.isAssignableFrom(
-									operation))
-					|| ServerResource.class.isAssignableFrom(
-							operation)) {
-
-				availableRoutes.add(
-						new RestRoute(
-								operation));
+		for (final Class<? extends ServiceEnabledCommand> operation : new Reflections(
+				"mil.nga.giat.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
+			try {
+				if (!Modifier.isAbstract(operation.getModifiers())) {
+					availableRoutes.add(new RestRoute(
+							operation.newInstance()));
+				}
 			}
-			else {
-				final GeowaveOperation operationInfo = operation.getAnnotation(
-						GeowaveOperation.class);
-				unavailableCommands.add(
-						operation.getName() + " " + operationInfo.name());
+			catch (InstantiationException | IllegalAccessException e) {
+				getLogger().log(
+						Level.SEVERE,
+						"Unable to instantiate Service Resource",
+						e);
 			}
 		}
 
-		Collections.sort(
-				availableRoutes);
+		Collections.sort(availableRoutes);
 	}
 
 	/**
@@ -168,37 +153,22 @@ public class ApiRestletApplication extends
 				"GeoWave API",
 				"REST API for GeoWave CLI commands");
 		for (final RestRoute route : availableRoutes) {
+			router.attach(
+					"/" + route.getPath(),
+					new GeoWaveOperationFinder(
+							route.getOperation()));
 
-			if (DefaultOperation.class.isAssignableFrom(
-					route.getOperation())) {
-				router.attach(
-						"/" + route.getPath(),
-						new GeoWaveOperationFinder(
-								(Class<? extends DefaultOperation<?>>) route.getOperation()));
+			apiParser.addRoute(route);
 
-				final Class<? extends DefaultOperation<?>> opClass = ((Class<? extends DefaultOperation<?>>) route
-						.getOperation());
-
-				apiParser.addRoute(
-						route);
-
-			}
-			else {
-				router.attach(
-						route.getPath(),
-						(Class<? extends ServerResource>) route.getOperation());
-			}
 		}
 
 		// determine path on file system where the servlet resides
 		// so we can serialize the swagger api json file to the correct location
 		final ServletContext servlet = (ServletContext) router.getContext().getAttributes().get(
 				"org.restlet.ext.servlet.ServletContext");
-		final String realPath = servlet.getRealPath(
-				"/");
+		final String realPath = servlet.getRealPath("/");
 
-		if (!apiParser.serializeSwaggerJson(
-				realPath + "swagger.json"))
+		if (!apiParser.serializeSwaggerJson(realPath + "swagger.json"))
 			getLogger().warning(
 					"Serialization of swagger.json Failed");
 		else

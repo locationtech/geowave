@@ -23,7 +23,6 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
@@ -263,57 +262,58 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-
-		String apiKey = getQueryValue("apiKey");
-		if (apiKey == null) {
-			setStatus(
-					Status.CLIENT_ERROR_BAD_REQUEST,
-					"apiKey is null");
-			return null;
-		}
-		else {
-			Application app = this.getApplication();
-			Context c = app.getContext();
-			final String dbUrl = (String) c.getAttributes().get(
-					"databaseUrl");
-
-			try (Connection conn = DriverManager.getConnection(dbUrl)) {
-				if (conn != null) {
-
-					final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
-					PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
-					query_stmnt.setString(
-							1,
-							apiKey);
-					ResultSet rs = query_stmnt.executeQuery();
-					// There is no existing row, the apiKey is invalid
-					if (!rs.next()) {
-
-						// close resources we are done with
-						rs.close();
-						query_stmnt.close();
-						conn.close();
-						setStatus(
-								Status.CLIENT_ERROR_BAD_REQUEST,
-								"apiKey is invalid");
-						return null;
-					}
-					else {
-						// final String apiKeyStr = rs.getString("apiKey");
-						// userAndKey = userAndKey + ":" + apiKeyStr;
-						// close resources we are done with
-						rs.close();
-						query_stmnt.close();
-					}
-					conn.close();
-				}
-
-			}
-			catch (SQLException e) {
-				LOGGER.error("Error SQLException: ",
-								e.getMessage());			
-				}
-		}
+		
+//		String apiKey = getQueryValue("apiKey");
+//		if (apiKey == null) {
+//			setStatus(
+//					Status.CLIENT_ERROR_BAD_REQUEST,
+//					"apiKey is null");
+//			return null;
+//		}
+//		else {
+//			Application app = this.getApplication();
+//			Context c = app.getContext();
+//			final String dbUrl = (String) c.getAttributes().get(
+//					"databaseUrl");
+//
+//			try (Connection conn = DriverManager.getConnection(dbUrl)) {
+//				if (conn != null) {
+//
+//					final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
+//					PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
+//					query_stmnt.setString(
+//							1,
+//							apiKey);
+//					ResultSet rs = query_stmnt.executeQuery();
+//					// There is no existing row, the apiKey is invalid
+//					if (!rs.next()) {
+//
+//						// close resources we are done with
+//						rs.close();
+//						query_stmnt.close();
+//						conn.close();
+//						setStatus(
+//								Status.CLIENT_ERROR_BAD_REQUEST,
+//								"apiKey is invalid");
+//						return null;
+//					}
+//					else {
+//						// final String apiKeyStr = rs.getString("apiKey");
+//						// userAndKey = userAndKey + ":" + apiKeyStr;
+//						// close resources we are done with
+//						rs.close();
+//						query_stmnt.close();
+//					}
+//					conn.close();
+//				}
+//
+//			}
+//			catch (SQLException e) {
+//				LOGGER.error(
+//						"Error SQLException: ",
+//						e.getMessage());
+//			}
+//		}
 
 		try {
 			injectParameters(

@@ -29,7 +29,9 @@ public class RemoveIndexGroupCommand extends
 
 		// Search for properties relevant to the given name
 		pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
-		return super.computeResults(params);
+		return super.computeResults(
+				params,
+				pattern);
 
 	}
 

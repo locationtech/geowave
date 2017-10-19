@@ -35,6 +35,8 @@ public class RemoveIndexCommand extends
 			final OperationParams params ) {
 
 		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
-		return super.computeResults(params);
+		return super.computeResults(
+				params,
+				pattern);
 	}
 }

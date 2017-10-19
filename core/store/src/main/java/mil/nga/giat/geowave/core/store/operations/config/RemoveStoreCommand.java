@@ -29,7 +29,9 @@ public class RemoveStoreCommand extends
 
 		// Search for properties relevant to the given name
 		pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
-		return super.computeResults(params);
+		return super.computeResults(
+				params,
+				pattern);
 
 	}
 
