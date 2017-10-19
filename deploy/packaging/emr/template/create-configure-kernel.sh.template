@@ -62,6 +62,8 @@ wait_until_spark_is_available() {
 }
 
 install_kernel() {
+	wait_until_spark_is_available
+	
 	# Create the jupyter kernel
 	jupyter pixiedust install <<END
 	y
