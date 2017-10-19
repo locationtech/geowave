@@ -496,6 +496,10 @@
 <td class="colFirst"><code><a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KMeansRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansRunner.html#getInputDataStore--">getInputDataStore</a></span>()</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><span class="typeNameLabel">KMeansRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansRunner.html#getOutputDataStore--">getOutputDataStore</a></span>()</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -510,19 +514,23 @@
 <td class="colLast"><span class="typeNameLabel">KMeansRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansRunner.html#setInputDataStore-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setInputDataStore</a></span>(<a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">KMeansRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansRunner.html#setOutputDataStore-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setOutputDataStore</a></span>(<a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStore)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">ScaledTemporalRange</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KMeansUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansUtils.html#setRunnerTimeParams-mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.index.ByteArrayId-">setRunnerTimeParams</a></span>(<a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansRunner.html" title="class in mil.nga.giat.geowave.analytic.javaspark.kmeans">KMeansRunner</a>&nbsp;runner,
                    <a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore,
                    <a href="../../../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KMeansUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansUtils.html#writeClusterCentroids-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange-">writeClusterCentroids</a></span>(org.apache.spark.mllib.clustering.KMeansModel&nbsp;clusterModel,
                      <a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputDataStore,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidAdapterName,
                      <a href="../../../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">ScaledTemporalRange</a>&nbsp;scaledRange)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a></code></td>
 <td class="colLast"><span class="typeNameLabel">KMeansUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../../../mil/nga/giat/geowave/analytic/javaspark/kmeans/KMeansUtils.html#writeClusterHulls-org.apache.spark.api.java.JavaRDD-org.apache.spark.mllib.clustering.KMeansModel-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-java.lang.String-boolean-">writeClusterHulls</a></span>(org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;&nbsp;inputCentroids,
                  org.apache.spark.mllib.clustering.KMeansModel&nbsp;clusterModel,
