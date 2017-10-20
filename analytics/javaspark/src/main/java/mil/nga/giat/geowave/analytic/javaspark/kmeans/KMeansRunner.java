@@ -67,6 +67,9 @@ public class KMeansRunner
 
 		sparkConf.setAppName(appName);
 		sparkConf.setMaster(master);
+		sparkConf.setJars(new String[] {
+			"/usr/local/geowave/tools/geowave-tools-0.9.6-hdp2.jar"
+		});
 
 		jsc = new JavaSparkContext(
 				sparkConf);

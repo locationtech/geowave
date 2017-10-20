@@ -398,7 +398,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 	}
 
 	protected void testStats(
-			final File[] inputFiles,
+			final URL[] inputFiles,
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
 		// In the multithreaded case, only test min/max and count. Stats will be
@@ -409,8 +409,8 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(index.getId());
-		for (final File inputFile : inputFiles) {
-			LOGGER.warn("Calculating stats from file '" + inputFile.getName() + "' - this may take several minutes...");
+		for (final URL inputFile : inputFiles) {
+			LOGGER.warn("Calculating stats from file '" + inputFile.getPath() + "' - this may take several minutes...");
 			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
 					inputFile,
 					indexIds,
@@ -446,7 +446,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			catch (final IOException e) {
 				e.printStackTrace();
 				TestUtils.deleteAll(getDataStorePluginOptions());
-				Assert.fail("Error occurred while reading data from file '" + inputFile.getAbsolutePath() + "': '"
+				Assert.fail("Error occurred while reading data from file '" + inputFile.getPath() + "': '"
 						+ e.getLocalizedMessage() + "'");
 			}
 		}

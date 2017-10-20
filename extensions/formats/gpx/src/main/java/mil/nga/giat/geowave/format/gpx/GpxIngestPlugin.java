@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.Collection;
@@ -41,6 +42,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
@@ -112,14 +114,14 @@ public class GpxIngestPlugin extends
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		// if its a gpx extension assume it is supported
-		if (file.getName().toLowerCase(
+		if (FilenameUtils.getName(file.getPath()).toLowerCase(
 				Locale.ENGLISH).endsWith(
 				"gpx")) {
 			return true;
 		}
-		if ("metadata.xml".equals(file.getName())) {
+		if ("metadata.xml".equals(FilenameUtils.getName(file.getPath()))) {
 			return false;
 		}
 		// otherwise take a quick peek at the file to ensure it matches the GPX
@@ -129,7 +131,7 @@ public class GpxIngestPlugin extends
 		}
 		catch (SAXException | IOException e) {
 			LOGGER.warn(
-					"Unable to read file:" + file.getAbsolutePath(),
+					"Unable to read file:" + file.getPath(),
 					e);
 		}
 		return false;
@@ -152,11 +154,11 @@ public class GpxIngestPlugin extends
 
 	@Override
 	public GpxTrack[] toAvroObjects(
-			final File input ) {
+			final URL input ) {
 		GpxTrack track = null;
 		if (metadata != null) {
 			try {
-				final long id = Long.parseLong(FilenameUtils.removeExtension(input.getName()));
+				final long id = Long.parseLong(FilenameUtils.getBaseName(input.getPath()));
 				track = metadata.remove(id);
 			}
 			catch (final NumberFormatException e) {
@@ -169,11 +171,11 @@ public class GpxIngestPlugin extends
 		}
 
 		try {
-			track.setGpxfile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
+			track.setGpxfile(ByteBuffer.wrap(IOUtils.toByteArray(input)));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read GPX file: " + input.getAbsolutePath(),
+					"Unable to read GPX file: " + input.getPath(),
 					e);
 		}
 

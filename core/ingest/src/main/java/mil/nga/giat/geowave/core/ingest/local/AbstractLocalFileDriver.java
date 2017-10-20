@@ -12,13 +12,20 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableMap;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
@@ -65,6 +72,22 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		}
 		return valid;
 	}
+	
+	public static void main(String[] args) throws IOException, URISyntaxException{
+		
+		//AKIAI4JZSZE3JRYAQYQQ
+		//GQRna+UV0mDGLB2PPdYnLFNtwk8D8/jaQM5d7Xjp
+		
+//		Map<String, ?> env = ImmutableMap.<String, Object> builder()
+//				.put(com.upplication.s3fs.AmazonS3Factory.ACCESS_KEY, "access key")
+//				.put(com.upplication.s3fs.AmazonS3Factory.SECRET_KEY, "secret key").build();
+		//Map<String, ?> env = ImmutableMap.<String, Object> builder().build();
+		//System.err.println(Files.walk(FileSystems.newFileSystem(new URI("s3://s3.amazonaws.com/"), env, Thread.currentThread().getContextClassLoader()).getPath("/geowave-benchmarks/")).count());
+		     URL u = new URL("http://www.yourserver.com:80/abc/demo.htm");
+		    System.out.println("The URL is " + u);
+		    System.out.println("The file part is " + u.getFile());
+		    System.out.println("The path part is " + u.getPath());
+	}
 
 	protected void processInput(
 			final String inputPath,
@@ -97,7 +120,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 	}
 
 	abstract protected void processFile(
-			final File file,
+			final URL file,
 			String typeName,
 			P plugin,
 			R runData )

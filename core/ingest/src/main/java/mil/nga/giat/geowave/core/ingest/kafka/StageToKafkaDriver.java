@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.ingest.kafka;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.avro.specific.SpecificRecordBase;
@@ -48,7 +49,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 
 	@Override
 	protected void processFile(
-			final File file,
+			final URL file,
 			final String typeName,
 			final AvroFormatPlugin<?, ?> plugin,
 			final StageKafkaData<?> runData ) {
@@ -67,7 +68,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 		}
 		catch (final Exception e) {
 			LOGGER.info(
-					"Unable to send file [" + file.getAbsolutePath() + "] to Kafka topic: " + e.getMessage(),
+					"Unable to send file [" + file.getPath()+ "] to Kafka topic: " + e.getMessage(),
 					e);
 		}
 	}

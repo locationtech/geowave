@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.ingest.hdfs;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.avro.file.DataFileWriter;
@@ -51,7 +52,7 @@ public class StageToHdfsDriver extends
 
 	@Override
 	protected void processFile(
-			final File file,
+			final URL file,
 			final String typeName,
 			final AvroFormatPlugin<?, ?> plugin,
 			final StageRunData runData ) {

@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.ingest.avro;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * All plugins based off of staged intermediate data (either reading or writing)
@@ -29,6 +30,6 @@ public interface AvroPluginBase<T> extends
 	 * @return The Avro encoded Java object
 	 */
 	public T[] toAvroObjects(
-			File file );
+			URL file );
 
 }

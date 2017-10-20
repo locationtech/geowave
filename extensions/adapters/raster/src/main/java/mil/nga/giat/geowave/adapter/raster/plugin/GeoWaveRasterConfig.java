@@ -210,34 +210,31 @@ public class GeoWaveRasterConfig
 			throws IOException,
 			ParserConfigurationException,
 			SAXException {
-		final InputStream in = xmlURL.openStream();
-		final InputSource input = new InputSource(
-				xmlURL.toString());
+		try (final InputStream in = xmlURL.openStream()) {
+			final InputSource input = new InputSource(xmlURL.toString());
 
-		final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		dbf.setIgnoringElementContentWhitespace(true);
-		dbf.setIgnoringComments(true);
+			final DocumentBuilderFactory dbf = DocumentBuilderFactory
+					.newInstance();
+			dbf.setIgnoringElementContentWhitespace(true);
+			dbf.setIgnoringComments(true);
 
-		dbf.setFeature(
-				XMLConstants.FEATURE_SECURE_PROCESSING,
-				true);
+			dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
 
-		final DocumentBuilder db = dbf.newDocumentBuilder();
+			final DocumentBuilder db = dbf.newDocumentBuilder();
 
-		// db.setEntityResolver(new ConfigEntityResolver(xmlURL));
-		final Document dom = db.parse(input);
-		in.close();
+			// db.setEntityResolver(new ConfigEntityResolver(xmlURL));
+			final Document dom = db.parse(input);
+			in.close();
 
-		final NodeList children = dom.getChildNodes().item(
-				0).getChildNodes();
-		final Map<String, String> configParams = new HashMap<String, String>();
-		for (int i = 0; i < children.getLength(); i++) {
-			final Node child = children.item(i);
-			configParams.put(
-					child.getNodeName(),
-					child.getTextContent());
+			final NodeList children = dom.getChildNodes().item(0)
+					.getChildNodes();
+			final Map<String, String> configParams = new HashMap<String, String>();
+			for (int i = 0; i < children.getLength(); i++) {
+				final Node child = children.item(i);
+				configParams.put(child.getNodeName(), child.getTextContent());
+			}
+			return configParams;
 		}
-		return configParams;
 	}
 
 	private static void parseParamsIntoRasterConfig(

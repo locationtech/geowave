@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
 import java.io.File;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -140,7 +141,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
+			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		final I[] hdfsObjects = toAvroObjects(input);

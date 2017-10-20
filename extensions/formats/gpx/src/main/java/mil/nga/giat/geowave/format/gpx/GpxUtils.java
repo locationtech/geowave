@@ -532,30 +532,28 @@ public class GpxUtils
 		return null;
 	}
 
-	public static boolean validateGpx(
-			final File gpxDocument )
-			throws SAXException,
-			IOException {
-		final Source xmlFile = new StreamSource(
-				gpxDocument);
-		try {
-			SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
-			return true;
-		}
-		catch (final SAXException e) {
-			LOGGER.info(
-					"XML file '" + "' failed GPX 1.1 validation",
-					e);
+	public static boolean validateGpx(final URL gpxDocument)
+			throws SAXException, IOException {
+		try (InputStream in = gpxDocument.openStream()) {
+			final Source xmlFile = new StreamSource(in);
 			try {
-				SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
+				SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
 				return true;
+			} catch (final SAXException e) {
+				LOGGER.info("XML file '" + "' failed GPX 1.1 validation", e);
+				try {
+					SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
+					return true;
+				} catch (final SAXException e2) {
+					LOGGER.info("XML file '" + "' failed GPX 1.0 validation",
+							e2);
+				}
+				return false;
 			}
-			catch (final SAXException e2) {
-				LOGGER.info(
-						"XML file '" + "' failed GPX 1.0 validation",
-						e2);
-			}
+		} catch (IOException e) {
+			LOGGER.info("Unable read "+ gpxDocument.getPath(),e);
 			return false;
 		}
+
 	}
 }

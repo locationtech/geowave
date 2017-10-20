@@ -80,9 +80,8 @@ public class GPXIngestPluginTest
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(indexId);
 		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
-				new File(
 						this.getClass().getClassLoader().getResource(
-								"12345.xml").getPath()),
+								"12345.xml"),
 				indexIds,
 				"");
 
