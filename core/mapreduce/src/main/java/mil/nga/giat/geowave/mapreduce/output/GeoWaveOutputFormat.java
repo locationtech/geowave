@@ -95,6 +95,7 @@ public class GeoWaveOutputFormat extends
 							is,
 							"UTF-8"));
 				}
+				is.close();
 
 				LOGGER.debug(sbDebug.toString());
 			}

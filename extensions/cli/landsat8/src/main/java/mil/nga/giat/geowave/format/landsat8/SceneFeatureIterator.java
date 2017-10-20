@@ -169,12 +169,12 @@ public class SceneFeatureIterator implements
 			try {
 				in = new URL(
 						SCENES_GZ_URL).openStream();
+
 				final FileOutputStream outStream = new FileOutputStream(
 						compressedFile);
 				IOUtils.copyLarge(
 						in,
 						outStream);
-				outStream.close();
 			}
 			catch (final IOException e) {
 				LOGGER.warn(
@@ -183,6 +183,10 @@ public class SceneFeatureIterator implements
 				throw e;
 			}
 			finally {
+				if(outStream != null) {
+					outStream.close();
+				}
+				
 				if (in != null) {
 					IOUtils.closeQuietly(in);
 				}
