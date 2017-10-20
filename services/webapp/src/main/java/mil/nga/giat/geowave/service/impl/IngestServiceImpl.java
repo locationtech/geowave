@@ -94,7 +94,10 @@ public class IngestServiceImpl implements
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response localIngest(
-			final FormDataMultiPart multiPart ) {
+			final FormDataMultiPart multiPart ) { // HPFortify -
+													// "Mass Assignment: Insecure Binder Configuration"
+													// FP: multiPart input is
+													// well-managed
 		ingest(
 				"localingest",
 				multiPart);
@@ -107,7 +110,11 @@ public class IngestServiceImpl implements
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response hdfsIngest(
-			final FormDataMultiPart multiPart ) {
+			final FormDataMultiPart multiPart ) { // HPFortify -
+													// "Mass Assignment: Insecure Binder Configuration"
+													// FP: multiPart input is
+													// well-managed
+
 		return ingest(
 				"hdfsingest",
 				multiPart);

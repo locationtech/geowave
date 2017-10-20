@@ -103,10 +103,13 @@ public abstract class GeoWaveBaseConverter<T> extends
 				});
 		getConsole().print(
 				promptMessage);
-		char[] passwordChars = getConsole().readPassword(
+		char[] responseChars = getConsole().readPassword(
 				defaultEchoEnabled);
-		return new String(
-				passwordChars);
+		String response = new String(
+				responseChars);
+		responseChars = null;
+
+		return response;
 	}
 
 	/**
@@ -135,8 +138,11 @@ public abstract class GeoWaveBaseConverter<T> extends
 				promptMessage);
 		char[] passwordChars = getConsole().readPassword(
 				passwordEchoEnabled);
-		return new String(
+		String strPassword = new String(
 				passwordChars);
+		passwordChars = null;
+
+		return strPassword;
 	}
 
 	/**
