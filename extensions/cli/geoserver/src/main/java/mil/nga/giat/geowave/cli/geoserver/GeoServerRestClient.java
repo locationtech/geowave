@@ -1502,7 +1502,10 @@ public class GeoServerRestClient
 			xformer.transform(
 					source,
 					result);
-
+			
+			// HP Fortify "Improper Resource Shutdown or Release" false positive
+			// coverageXml holds onto a string rather than the writer itself.
+			// result.getWriter().close() is called explicitly in the finally clause below
 			coverageXml = result.getWriter().toString();
 		}
 		catch (final TransformerException e) {
