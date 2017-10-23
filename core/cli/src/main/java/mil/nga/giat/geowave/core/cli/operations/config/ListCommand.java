@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		ServiceEnabledCommand<SortedMap<String,Object>>
+		ServiceEnabledCommand<SortedMap<String, Object>>
 {
 
 	@Parameter(names = {
@@ -47,29 +47,29 @@ public class ListCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-		final Pair<String, SortedMap<String,Object>> list = getProperties(params);
+		final Pair<String, SortedMap<String, Object>> list = getProperties(params);
 		final String name = list.getKey();
 
 		JCommander.getConsole().println(
 				"PROPERTIES (" + name + ")");
 
-		final SortedMap<String,Object> properties = list.getValue();
+		final SortedMap<String, Object> properties = list.getValue();
 
-		for (final Entry<String,Object> e : properties.entrySet()) {
+		for (final Entry<String, Object> e : properties.entrySet()) {
 			JCommander.getConsole().println(
 					e.getKey() + ": " + e.getValue());
 		}
 	}
 
 	@Override
-	public SortedMap<String,Object> computeResults(
+	public SortedMap<String, Object> computeResults(
 			final OperationParams params ) {
 
 		return getProperties(
 				params).getValue();
 	}
 
-	private Pair<String, SortedMap<String,Object>> getProperties(
+	private Pair<String, SortedMap<String, Object>> getProperties(
 			final OperationParams params ) {
 
 		final File f = (File) params.getContext().get(
@@ -89,10 +89,13 @@ public class ListCommand extends
 		}
 		return new ImmutablePair<>(
 				f.getName(),
-				new GeoWaveConfig(p));
+				new GeoWaveConfig(
+						p));
 	}
-	
-	protected static class GeoWaveConfig extends TreeMap<String,Object>{
+
+	protected static class GeoWaveConfig extends
+			TreeMap<String, Object>
+	{
 
 		private static final long serialVersionUID = 1L;
 
@@ -100,10 +103,12 @@ public class ListCommand extends
 			super();
 		}
 
-		public GeoWaveConfig(Map m) {
-			super(m);
+		public GeoWaveConfig(
+				Map m ) {
+			super(
+					m);
 		}
-		
+
 	}
 
 }

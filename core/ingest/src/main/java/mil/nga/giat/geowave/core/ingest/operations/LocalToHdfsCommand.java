@@ -113,7 +113,6 @@ public class LocalToHdfsCommand extends
 		String hdfsHostPort = parameters.get(1);
 		final String basePath = parameters.get(2);
 
-
 		// Ingest Plugins
 		final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
 

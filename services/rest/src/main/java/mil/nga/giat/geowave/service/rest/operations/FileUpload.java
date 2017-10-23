@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest;
+package mil.nga.giat.geowave.service.rest.operations;
 
 import java.io.File;
 import java.util.List;
@@ -13,8 +13,6 @@ import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
-
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 /**
  * ServerResource to handle uploading files. Uses restlet fileupload.
@@ -53,7 +51,8 @@ public class FileUpload extends
 				true)) {
 			// 1/ Create a factory for disk-based file items
 			final DiskFileItemFactory factory = new DiskFileItemFactory();
-			factory.setSizeThreshold(1000240);
+			factory.setSizeThreshold(
+					1000240);
 
 			// 2/ Create a new file upload handler based on the Restlet
 			// FileUpload extension that will parse Restlet requests and
@@ -63,7 +62,8 @@ public class FileUpload extends
 
 			// 3/ Request is parsed by the handler which generates a
 			// list of FileItems
-			final String tempDir = System.getProperty("java.io.tmpdir");
+			final String tempDir = System.getProperty(
+					"java.io.tmpdir");
 			final File dir = new File(
 					tempDir);
 			final File filename = File.createTempFile(
@@ -72,7 +72,8 @@ public class FileUpload extends
 					dir);
 			result = new UploadedFile(
 					filename.getAbsolutePath());
-			final List<FileItem> fileList = upload.parseRepresentation(entity);
+			final List<FileItem> fileList = upload.parseRepresentation(
+					entity);
 			if (fileList.size() != 1) {
 				throw new ResourceException(
 						Status.CLIENT_ERROR_BAD_REQUEST);

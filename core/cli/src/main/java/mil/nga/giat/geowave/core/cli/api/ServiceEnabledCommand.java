@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.core.cli.api;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 public abstract class ServiceEnabledCommand<T> extends
@@ -7,6 +10,14 @@ public abstract class ServiceEnabledCommand<T> extends
 		Command
 {
 	protected String path = null;
+
+	public Pair<ServiceStatus, T> executeService(
+			OperationParams params )
+			throws Exception {
+		return ImmutablePair.of(
+				ServiceStatus.OK,
+				computeResults(params));
+	}
 
 	abstract public T computeResults(
 			OperationParams params )
@@ -34,7 +45,9 @@ public abstract class ServiceEnabledCommand<T> extends
 		if (path == null) {
 			path = defaultGetPath();
 		}
-		return path.replace("geowave", "v0");
+		return path.replace(
+				"geowave",
+				"v0");
 	}
 
 	public String getId() {

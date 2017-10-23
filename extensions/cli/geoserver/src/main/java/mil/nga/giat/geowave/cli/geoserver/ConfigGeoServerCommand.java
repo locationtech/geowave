@@ -66,7 +66,7 @@ public class ConfigGeoServerCommand extends
 	}, description = "GeoServer Default Workspace")
 	private String workspace;
 
-	@Parameter(description = "GeoServer URL (for example http://localhost:8080/geoserver or https://localhost:8443/geoserver), or simply host:port and appropriate assumptions are made")
+	@Parameter(description = "<GeoServer URL>")
 	private final List<String> parameters = new ArrayList<String>();
 	private String url = null;
 

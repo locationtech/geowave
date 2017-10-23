@@ -63,7 +63,6 @@ public class VectorMRExportCommand extends
 		String hdfsPath = parameters.get(1);
 		String storeName = parameters.get(2);
 
-
 		// Config file
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);

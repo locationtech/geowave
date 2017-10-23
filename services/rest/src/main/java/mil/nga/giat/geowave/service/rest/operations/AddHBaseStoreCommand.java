@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -39,9 +36,6 @@ public class AddHBaseStoreCommand extends
 	/**
 	 * A REST Operation for the AddStoreCommand where --type=hbase
 	 */
-
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddHBaseStoreCommand.class);
-
 	public static final String PROPERTIES_CONTEXT = "properties";
 
 	// Default AddStore Options

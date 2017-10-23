@@ -16,14 +16,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-client</artifactId>
+			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-webapp</artifactId>
+			<artifactId>geowave-format-gpx</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

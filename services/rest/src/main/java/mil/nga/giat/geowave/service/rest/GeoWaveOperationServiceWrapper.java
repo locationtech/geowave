@@ -1,16 +1,10 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import org.restlet.Application;
-import org.restlet.Context;
+import org.apache.commons.lang3.tuple.Pair;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -23,16 +17,14 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
-import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
-import scala.actors.threadpool.Arrays;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
@@ -195,9 +187,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 								(Class<Enum>) f.getType(),
 								strValue);
 					}
-					else if (FilterParameter.class.isAssignableFrom(f.getType())) {
-						objValue = new ConvertCQLStrToFilterConverter().convert(strValue);
-					}
 					else {
 						throw new RuntimeException(
 								"Unsupported format on field " + f.getType());
@@ -262,58 +251,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		
-//		String apiKey = getQueryValue("apiKey");
-//		if (apiKey == null) {
-//			setStatus(
-//					Status.CLIENT_ERROR_BAD_REQUEST,
-//					"apiKey is null");
-//			return null;
-//		}
-//		else {
-//			Application app = this.getApplication();
-//			Context c = app.getContext();
-//			final String dbUrl = (String) c.getAttributes().get(
-//					"databaseUrl");
-//
-//			try (Connection conn = DriverManager.getConnection(dbUrl)) {
-//				if (conn != null) {
-//
-//					final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
-//					PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
-//					query_stmnt.setString(
-//							1,
-//							apiKey);
-//					ResultSet rs = query_stmnt.executeQuery();
-//					// There is no existing row, the apiKey is invalid
-//					if (!rs.next()) {
-//
-//						// close resources we are done with
-//						rs.close();
-//						query_stmnt.close();
-//						conn.close();
-//						setStatus(
-//								Status.CLIENT_ERROR_BAD_REQUEST,
-//								"apiKey is invalid");
-//						return null;
-//					}
-//					else {
-//						// final String apiKeyStr = rs.getString("apiKey");
-//						// userAndKey = userAndKey + ":" + apiKeyStr;
-//						// close resources we are done with
-//						rs.close();
-//						query_stmnt.close();
-//					}
-//					conn.close();
-//				}
-//
-//			}
-//			catch (SQLException e) {
-//				LOGGER.error(
-//						"Error SQLException: ",
-//						e.getMessage());
-//			}
-//		}
 
 		try {
 			injectParameters(
@@ -330,6 +267,15 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
+			 Pair<ServiceStatus, T> result = operation.executeService(params);
+			 switch(result.getLeft()){
+				 case OK:
+					 setStatus(Status.SUCCESS_OK);
+					 break;
+				 case NOT_FOUND:
+					 setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+					 break;					 
+			 }
 			return operation.computeResults(params);
 		}
 		catch (final Exception e) {

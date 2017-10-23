@@ -1,36 +1,39 @@
 package mil.nga.giat.geowave.service.rest.webapp;
 
+import java.lang.management.ManagementFactory;
 import java.lang.reflect.Modifier;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.logging.Level;
 
+import javax.management.MBeanServer;
+import javax.management.ObjectName;
+import javax.management.Query;
+import javax.management.QueryExp;
 import javax.servlet.ServletContext;
 
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Restlet;
-import org.restlet.engine.Engine;
-import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.service.rest.MainResource;
-import mil.nga.giat.geowave.service.rest.FileUpload;
 import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
+import mil.nga.giat.geowave.service.rest.MainResource;
 import mil.nga.giat.geowave.service.rest.RestRoute;
 import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
 import mil.nga.giat.geowave.service.rest.SwaggerResource;
+import mil.nga.giat.geowave.service.rest.operations.FileUpload;
+import scala.reflect.api.Quasiquotes.Quasiquote.api;
 
 /**
  * This class provides the main webapp entry point
@@ -38,6 +41,7 @@ import mil.nga.giat.geowave.service.rest.SwaggerResource;
 public class ApiRestletApplication extends
 		Application
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(ApiRestletApplication.class);
 	private ArrayList<RestRoute> availableRoutes = null;
 	private ArrayList<String> unavailableCommands = null;
 
@@ -48,11 +52,11 @@ public class ApiRestletApplication extends
 		parseOperationsForApiRoutes();
 
 		// add the CORS service so others can access the service
-		CorsService corsService = new CorsService();
+		final CorsService corsService = new CorsService();
 		corsService.setAllowedOrigins(new HashSet(
 				Arrays.asList("*")));
 		corsService.setAllowedCredentials(true);
-		this.getServices().add(
+		getServices().add(
 				corsService);
 	}
 
@@ -60,7 +64,7 @@ public class ApiRestletApplication extends
 	public synchronized Restlet createInboundRoot() {
 
 		// Create a router Restlet and map all the resources
-		Router router = new Router(
+		final Router router = new Router(
 				getContext());
 
 		// set context attributes that resources may need access to here
@@ -71,45 +75,16 @@ public class ApiRestletApplication extends
 				"unavailableCommands",
 				unavailableCommands);
 
-		final ServletContext servlet = (ServletContext) getContext().getAttributes().get(
-				"org.restlet.ext.servlet.ServletContext");
-		final String realPath = servlet.getRealPath("/");
-		getContext().getAttributes().put(
-				"databaseUrl",
-				"jdbc:sqlite:" + realPath + "api.db");
-
 		// actual mapping here
 		router.attachDefault(MainResource.class);
 		router.attach(
 				"/api",
 				SwaggerResource.class);
+		router.attach(
+				"/v0/fileupload",
+				FileUpload.class);
 		attachApiRoutes(router);
-
-		initApiKeyDatabase(realPath + "api.db");
 		return router;
-	}
-
-	public void initApiKeyDatabase(
-			String fileName ) {
-
-		String url = "jdbc:sqlite:" + fileName;
-
-		try (Connection conn = DriverManager.getConnection(url)) {
-			if (conn != null) {
-				// SQL statement for creating a new table
-				String sql = "CREATE TABLE IF NOT EXISTS api_keys (\n" + "	id integer PRIMARY KEY,\n"
-						+ "	apiKey blob NOT NULL,\n" + "	username text NOT NULL\n" + ");";
-
-				Statement stmnt = conn.createStatement();
-				stmnt.execute(sql);
-				stmnt.close();
-			}
-		}
-		catch (SQLException e) {
-			getContext().getLogger().log(
-					Level.SEVERE,
-					e.getMessage());
-		}
 	}
 
 	/**
@@ -146,10 +121,27 @@ public class ApiRestletApplication extends
 	 * them to the router. It also generates the swagger definition file.
 	 */
 	public void attachApiRoutes(
-			Router router ) {
+			final Router router ) {
+		final ServletContext servlet = (ServletContext) router.getContext().getAttributes().get(
+				"org.restlet.ext.servlet.ServletContext");
+		// TODO document that this can be provided rather than discovered used
+		// this servlet init param
+		String apiHostPort = servlet.getInitParameter("host_port");
+		if (apiHostPort == null) {
+			try {
+				apiHostPort = getHTTPEndPoint();
+			}
+			catch (final Exception e) {
+				LOGGER.error(
+						"Unable to find httpo endpoint for swagger",
+						e);
+			}
+
+		}
 		final SwaggerApiParser apiParser = new SwaggerApiParser(
-				"localhost:8080/geowave-service-rest-webapp",
-				"1.0.0",
+				apiHostPort,
+				servlet.getContextPath(),
+				VersionUtils.getVersion(),
 				"GeoWave API",
 				"REST API for GeoWave CLI commands");
 		for (final RestRoute route : availableRoutes) {
@@ -164,16 +156,51 @@ public class ApiRestletApplication extends
 
 		// determine path on file system where the servlet resides
 		// so we can serialize the swagger api json file to the correct location
-		final ServletContext servlet = (ServletContext) router.getContext().getAttributes().get(
-				"org.restlet.ext.servlet.ServletContext");
 		final String realPath = servlet.getRealPath("/");
 
-		if (!apiParser.serializeSwaggerJson(realPath + "swagger.json"))
+		if (!apiParser.serializeSwaggerJson(realPath + "swagger.json")) {
 			getLogger().warning(
 					"Serialization of swagger.json Failed");
-		else
+		}
+		else {
 			getLogger().info(
 					"Serialization of swagger.json Succeeded");
+		}
 	}
 
+	private static String getHTTPEndPoint()
+			throws Exception {
+		final MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+		final QueryExp subQuery1 = Query.match(
+				Query.attr("protocol"),
+				Query.value("HTTP/1.1"));
+		final QueryExp subQuery2 = Query.anySubString(
+				Query.attr("protocol"),
+				Query.value("Http11"));
+		final QueryExp query = Query.or(
+				subQuery1,
+				subQuery2);
+		final Set<ObjectName> objs = mbs.queryNames(
+				new ObjectName(
+						"*:type=Connector,*"),
+				query);
+		final String hostname = InetAddress.getLocalHost().getHostName();
+		final InetAddress[] addresses = InetAddress.getAllByName(hostname);
+		for (final Iterator<ObjectName> i = objs.iterator(); i.hasNext();) {
+			final ObjectName obj = i.next();
+			// final String scheme = mbs.getAttribute(
+			// obj,
+			// "scheme").toString();
+			final String port = obj.getKeyProperty("port");
+			for (final InetAddress addr : addresses) {
+				if (addr.isAnyLocalAddress() || addr.isLoopbackAddress() || addr.isMulticastAddress()) {
+					continue;
+				}
+				final String host = addr.getHostAddress();
+				// just return the first one
+				return host + ":" + port;
+			}
+		}
+		return "http://localhost:8080";
+	}
 }

@@ -15,9 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -28,7 +25,6 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
-import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
@@ -39,8 +35,6 @@ public class AddSpatialIndexCommand extends
 	/**
 	 * A REST Operation for the AddIndexCommand where --type=spatial
 	 */
-
-	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
 	@Parameter(description = "<name>", required = true)
 	private List<String> parameters = new ArrayList<String>();

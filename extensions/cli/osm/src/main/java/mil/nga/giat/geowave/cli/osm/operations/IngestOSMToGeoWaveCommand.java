@@ -151,7 +151,6 @@ public class IngestOSMToGeoWaveCommand extends
 		final String basePath = parameters.get(1);
 		final String inputStoreName = parameters.get(2);
 
-
 		if (!basePath.startsWith("/")) {
 			throw new ParameterException(
 					"HDFS Base path must start with forward slash /");
