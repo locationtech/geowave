@@ -233,13 +233,19 @@ public class RestFieldFactory
 						@Override
 						public T apply(
 								final Pair<String, Boolean> input ) {
-							return mainParamInitializer.apply(
-									toURLFriendlyString(input.getLeft()),
-									input.getRight(),
-									field,
-									i++,
-									totalSize,
-									instance);
+							if (input.getLeft() != null && input.getRight() != null) {
+								return mainParamInitializer.apply(
+										toURLFriendlyString(input.getLeft()),
+										input.getRight(),
+										field,
+										i++,
+										totalSize,
+										instance);
+							}
+
+							else {
+								return null;
+							}
 						}
 					});
 		}

@@ -10,10 +10,14 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPluginOptions;
 
@@ -24,7 +28,7 @@ public class RemoveIndexGroupCommand extends
 {
 
 	@Override
-	public Void computeResults(
+	public String computeResults(
 			final OperationParams params ) {
 
 		// Search for properties relevant to the given name
@@ -33,6 +37,16 @@ public class RemoveIndexGroupCommand extends
 				params,
 				pattern);
 
+	}
+
+	@Override
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				super.getStatus(),
+				ret);
 	}
 
 	@Override

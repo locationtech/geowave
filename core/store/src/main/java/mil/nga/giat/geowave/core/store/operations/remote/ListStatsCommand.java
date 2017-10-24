@@ -14,6 +14,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -38,7 +41,7 @@ import net.sf.json.JSONObject;
 @GeowaveOperation(name = "liststats", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Print statistics of an existing GeoWave dataset to standard output.  ")
 public class ListStatsCommand extends
-		AbstractStatsCommand<Void> implements
+		AbstractStatsCommand<String> implements
 		Command
 {
 
@@ -51,6 +54,10 @@ public class ListStatsCommand extends
 
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();
+
+	private String retValue = "";
+	
+	private ServiceStatus status = ServiceStatus.OK;
 
 	@Override
 	public void execute(
@@ -121,8 +128,9 @@ public class ListStatsCommand extends
 					builder.append("\n");
 				}
 			}
+			retValue = builder.toString().trim();
 			JCommander.getConsole().println(
-					builder.toString().trim());
+					retValue);
 
 		}
 
@@ -142,9 +150,19 @@ public class ListStatsCommand extends
 			parameters.add(adapterName);
 		}
 	}
-
+	
 	@Override
-	public Void computeResults(
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	
+	@Override
+	public String computeResults(
 			final OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() < 1) {
@@ -157,6 +175,21 @@ public class ListStatsCommand extends
 		super.run(
 				params,
 				parameters);
-		return null;
+		if (!retValue.equals("")) {
+			setStatus(ServiceStatus.OK);
+			return retValue;
+		}
+		else {
+			setStatus(ServiceStatus.NOT_FOUND);
+			return "No Data Found";
+		}
+	}
+	
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
 	}
 }

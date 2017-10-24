@@ -153,7 +153,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				objValue = parameters;
 			}
 			else {
-
 				final String strValue = getFieldValue(
 						form,
 						f.getName());
@@ -267,16 +266,19 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
-			 Pair<ServiceStatus, T> result = operation.executeService(params);
-			 switch(result.getLeft()){
-				 case OK:
-					 setStatus(Status.SUCCESS_OK);
-					 break;
-				 case NOT_FOUND:
-					 setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-					 break;					 
-			 }
-			return operation.computeResults(params);
+			Pair<ServiceStatus, T> result = operation.executeService(params);
+			switch (result.getLeft()) {
+				case OK:
+					setStatus(Status.SUCCESS_OK);
+					break;
+				case NOT_FOUND:
+					setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+					break;
+				case DUPLICATE:
+					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+					break;
+			}
+			return result.getRight();
 		}
 		catch (final Exception e) {
 			LOGGER.error(

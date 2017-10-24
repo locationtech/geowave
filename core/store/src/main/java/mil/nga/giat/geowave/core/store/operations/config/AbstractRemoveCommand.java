@@ -17,24 +17,30 @@ import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
  * Common code for removing an entry from the properties file.
  */
 public abstract class AbstractRemoveCommand extends
-		ServiceEnabledCommand<Void>
+		ServiceEnabledCommand<String>
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();
 
 	protected String pattern = null;
+	
+	private ServiceStatus status = ServiceStatus.OK;
 
 	public String getEntryName() {
 		if (parameters.size() < 1) {
@@ -45,8 +51,18 @@ public abstract class AbstractRemoveCommand extends
 		return parameters.get(
 				0).trim();
 	}
-
-	public Void computeResults(
+	
+	@Override
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	
+	public String computeResults(
 			final OperationParams params,
 			final String patternPrefix ) {
 		
@@ -65,6 +81,8 @@ public abstract class AbstractRemoveCommand extends
 			}
 		}
 
+		int startSize = existingProps.size();
+
 		// Remove each property.
 		for (final String key : keysToRemove) {
 			existingProps.remove(key);
@@ -74,8 +92,25 @@ public abstract class AbstractRemoveCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+		int endSize = existingProps.size();
 
-		return null;
+		if (endSize < startSize) {
+			setStatus(ServiceStatus.OK);
+			return patternPrefix + " successfully removed";
+		}
+		else {
+			setStatus(ServiceStatus.NOT_FOUND);
+			return patternPrefix + " does not exist";
+
+		}
+	}
+
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
 	}
 
 	public void setEntryName(

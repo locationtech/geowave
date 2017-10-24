@@ -15,6 +15,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -23,15 +26,17 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions;
 
 @GeowaveOperation(name = "addstore/hbase", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddHBaseStoreCommand extends
-		ServiceEnabledCommand<Void>
+		ServiceEnabledCommand<String>
 {
 	/**
 	 * A REST Operation for the AddStoreCommand where --type=hbase
@@ -48,6 +53,8 @@ public class AddHBaseStoreCommand extends
 	}, description = "Make this the default store in all operations")
 	private Boolean makeDefault;
 
+	private ServiceStatus status = ServiceStatus.OK;
+	
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 
 	@ParametersDelegate
@@ -70,7 +77,17 @@ public class AddHBaseStoreCommand extends
 	}
 
 	@Override
-	public Void computeResults(
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	
+	@Override
+	public String computeResults(
 			final OperationParams params ) {
 
 		final File propFile = (File) params.getContext().get(
@@ -84,13 +101,14 @@ public class AddHBaseStoreCommand extends
 			throw new ParameterException(
 					"Must specify store name");
 		}
-
+		
+		// Make sure we're not already in the index.
 		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(
 				existingProps,
 				getNamespace())) {
-			throw new ParameterException(
-					"That store already exists: " + getPluginName());
+				setStatus(ServiceStatus.DUPLICATE);
+			return "That store already exists: " + getPluginName();
 		}
 
 		// Save the store options.
@@ -110,7 +128,26 @@ public class AddHBaseStoreCommand extends
 				propFile,
 				existingProps);
 
-		return null;
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			String[] split = key.toString().split(
+					"\\.");
+			if (split.length > 1) {
+				if (split[1].equals(parameters.get(0))) {
+					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+				}
+			}
+		}
+		setStatus(ServiceStatus.OK);
+		return builder.toString();
+	}
+
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
 	}
 
 	@Override

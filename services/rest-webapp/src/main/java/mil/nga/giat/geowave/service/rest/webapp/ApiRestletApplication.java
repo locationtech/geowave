@@ -43,7 +43,6 @@ public class ApiRestletApplication extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ApiRestletApplication.class);
 	private ArrayList<RestRoute> availableRoutes = null;
-	private ArrayList<String> unavailableCommands = null;
 
 	public ApiRestletApplication() {
 		super();
@@ -71,9 +70,6 @@ public class ApiRestletApplication extends
 		getContext().getAttributes().put(
 				"availableRoutes",
 				availableRoutes);
-		getContext().getAttributes().put(
-				"unavailableCommands",
-				unavailableCommands);
 
 		// actual mapping here
 		router.attachDefault(MainResource.class);
@@ -95,7 +91,6 @@ public class ApiRestletApplication extends
 	 */
 	public void parseOperationsForApiRoutes() {
 		availableRoutes = new ArrayList<RestRoute>();
-		unavailableCommands = new ArrayList<String>();
 
 		for (final Class<? extends ServiceEnabledCommand> operation : new Reflections(
 				"mil.nga.giat.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
@@ -200,7 +195,8 @@ public class ApiRestletApplication extends
 				// just return the first one
 				return host + ":" + port;
 			}
+			return hostname + ":" + port;
 		}
-		return "http://localhost:8080";
+		return "localhost:8080";
 	}
 }
