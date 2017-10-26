@@ -21,11 +21,13 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class GeowaveRDDExample
 {
-	public static void main(
+	public GeowaveRDDExample() {}
+
+	public boolean loadRddFromStore(
 			final String[] args ) {
 		if (args.length < 1) {
 			System.err.println("Missing required arg 'storename'");
-			System.exit(-1);
+			return false;
 		}
 
 		String storeName = args[0];
@@ -38,7 +40,7 @@ public class GeowaveRDDExample
 			if (args[1].equals("--splits")) {
 				if (args.length < 4) {
 					System.err.println("USAGE: storename --splits min max");
-					System.exit(-1);
+					return false;
 				}
 
 				minSplits = Integer.parseInt(args[2]);
@@ -48,7 +50,7 @@ public class GeowaveRDDExample
 					if (args[4].equals("--bbox")) {
 						if (args.length < 9) {
 							System.err.println("USAGE: storename --splits min max --bbox west south east north");
-							System.exit(-1);
+							return false;
 						}
 
 						double west = Double.parseDouble(args[5]);
@@ -70,7 +72,7 @@ public class GeowaveRDDExample
 			else if (args[1].equals("--bbox")) {
 				if (args.length < 6) {
 					System.err.println("USAGE: storename --bbox west south east north");
-					System.exit(-1);
+					return false;
 				}
 
 				double west = Double.parseDouble(args[2]);
@@ -89,7 +91,7 @@ public class GeowaveRDDExample
 			}
 			else {
 				System.err.println("USAGE: storename --splits min max --bbox west south east north");
-				System.exit(-1);
+				return false;
 			}
 		}
 
@@ -128,5 +130,7 @@ public class GeowaveRDDExample
 		catch (IOException e) {
 			System.err.println(e.getMessage());
 		}
+
+		return true;
 	}
 }

@@ -38,6 +38,7 @@ public class SPIServiceRegistryTest
 
 	@Test
 	public void test()
+			// HPFortify FP: unit test not subject to security vulnerability
 			throws FileSystemException,
 			MalformedURLException {
 		DefaultFileSystemManager fsManager = new DefaultFileSystemManager();

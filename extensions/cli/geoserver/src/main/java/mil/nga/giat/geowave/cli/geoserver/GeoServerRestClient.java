@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -108,14 +109,13 @@ public class GeoServerRestClient
 		if (webTarget == null) {
 			String url = getConfig().getUrl();
 			if (url != null) {
-				url = url.trim();
+				url = url.trim().toLowerCase(
+						Locale.ROOT);
 				Client client = null;
-				if (url.toLowerCase().startsWith(
-						"http://")) {
+				if (url.startsWith("http://")) {
 					client = ClientBuilder.newClient();
 				}
-				else if (url.toLowerCase().startsWith(
-						"https://")) {
+				else if (url.startsWith("https://")) {
 					SslConfigurator sslConfig = SslConfigurator.newInstance();
 					if (getConfig().getGsConfigProperties() != null) {
 						loadSSLConfigurations(
@@ -224,6 +224,9 @@ public class GeoServerRestClient
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_FILE)) {
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				File keyStoreFile = new File(
 						FileUtils.formatFilePath(getPropertyValue(
 								gsConfigProperties,
@@ -1490,13 +1493,15 @@ public class GeoServerRestClient
 			// use a transformer to create the xml string for the rest call
 			final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
-			// HP Fortify "XML External Entity Injection" false positive
-			// The following modifications to xformerFactory are the
-			// fortify-recommended procedure to secure a TransformerFactory
-			// but the report still flags this instance
-			xformerFactory.setFeature(
-					XMLConstants.FEATURE_SECURE_PROCESSING,
-					true);
+			// HP Fortify "XML External Entity Injection" fix.
+			// These ines are the recommended fix for 
+			// protecting a Java TransformerFactory from XXE.
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_DTD,
+					"");
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
+					"");
 
 			final Transformer xformer = xformerFactory.newTransformer();
 
@@ -1508,7 +1513,10 @@ public class GeoServerRestClient
 			xformer.transform(
 					source,
 					result);
-
+			
+			// HP Fortify "Improper Resource Shutdown or Release" false positive
+			// coverageXml holds onto a string rather than the writer itself.
+			// result.getWriter().close() is called explicitly in the finally clause below
 			coverageXml = result.getWriter().toString();
 		}
 		catch (final TransformerException e) {

@@ -243,6 +243,8 @@ public class GeoWaveAnalyticExtractJobRunner extends
 		try (final FileSystem fs = FileSystem.get(config)) {
 			if (fs.exists(this.getHdfsOutputPath())) {
 				fs.delete(
+						// HPFortify "Path Manipulation"
+						// False positive - path is internally managed
 						getHdfsOutputPath(),
 						true);
 			}

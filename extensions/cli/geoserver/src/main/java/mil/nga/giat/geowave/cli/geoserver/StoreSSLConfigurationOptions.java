@@ -319,7 +319,11 @@ public abstract class StoreSSLConfigurationOptions extends
 		Field[] fields = StoreSSLConfigurationOptions.class.getDeclaredFields();
 		if (fields != null && fields.length != 0) {
 			for (Field field : fields) {
-				field.setAccessible(true);
+				field.setAccessible(true); // HPFortify
+											// "Access Specifier Manipulation"
+				// False Positive: These fields are being modified by trusted
+				// code,
+				// in a way that is not influenced by user input
 				Annotation[] annotations = field.getAnnotations();
 				for (Annotation annotation : annotations) {
 					if (annotation instanceof SSLOptionAnnotation) {

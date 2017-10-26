@@ -341,6 +341,9 @@ public class MemoryDataStore implements
 		catch (final IOException e)
 
 		{
+			// HP Fortify "Improper Output Neutralization" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 			LOGGER.error(
 					"Cannot process query [" + (query == null ? "all" : query.toString()) + "]",
 					e);

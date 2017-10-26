@@ -88,6 +88,9 @@ public class MiniAccumuloClusterFactory
 			}
 			boolean success = false;
 			if (hadoopHome != null) {
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				final File hadoopDir = new File(
 						hadoopHome);
 				if (hadoopDir.exists()) {
@@ -158,7 +161,10 @@ public class MiniAccumuloClusterFactory
 		manifest.getMainAttributes().put(
 				Attributes.Name.CLASS_PATH,
 				classpath);
-
+		
+		// HP Fortify "Improper Resource Shutdown or Release" false positive
+		// target is inside try-as-resource clause (and is auto-closeable) and the FileOutputStream 
+		// is closed implicitly by target.close()
 		try (final JarOutputStream target = new JarOutputStream(
 				new FileOutputStream(
 						jarFile),
