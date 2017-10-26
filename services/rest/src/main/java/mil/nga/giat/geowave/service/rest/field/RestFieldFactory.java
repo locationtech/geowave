@@ -233,7 +233,7 @@ public class RestFieldFactory
 						@Override
 						public T apply(
 								final Pair<String, Boolean> input ) {
-							if (input.getLeft() != null && input.getRight() != null) {
+							if (input!= null) {
 								return mainParamInitializer.apply(
 										toURLFriendlyString(input.getLeft()),
 										input.getRight(),
