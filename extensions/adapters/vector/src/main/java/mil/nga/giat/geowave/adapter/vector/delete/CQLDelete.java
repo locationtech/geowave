@@ -206,5 +206,4 @@ public class CQLDelete extends
 					value);
 		}
 	}
-
 }

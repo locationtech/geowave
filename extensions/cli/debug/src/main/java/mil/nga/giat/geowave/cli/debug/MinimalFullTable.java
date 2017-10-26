@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -52,14 +52,14 @@ public class MinimalFullTable extends
 	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
 	private String indexId;
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws ParseException {
 		final Stopwatch stopWatch = new Stopwatch();
 
@@ -69,21 +69,21 @@ public class MinimalFullTable extends
 					"Requires arguments: <storename>");
 		}
 
-		String storeName = parameters.get(0);
+		final String storeName = parameters.get(0);
 
 		// Attempt to load store.
-		StoreLoader storeOptions = new StoreLoader(
+		final StoreLoader storeOptions = new StoreLoader(
 				storeName);
 		if (!storeOptions.loadFromConfig(getGeoWaveConfigFile(params))) {
 			throw new ParameterException(
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}
 
-		String storeType = storeOptions.getDataStorePlugin().getType();
+		final String storeType = storeOptions.getDataStorePlugin().getType();
 
 		if (storeType.equals(AccumuloDataStore.TYPE)) {
 			try {
-				AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
+				final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
 				final AccumuloOperations ops = new BasicAccumuloOperations(
 						opts.getZookeeper(),
@@ -95,7 +95,7 @@ public class MinimalFullTable extends
 				long results = 0;
 				final BatchScanner scanner = ops.createBatchScanner(indexId);
 				scanner.setRanges(Collections.singleton(new Range()));
-				Iterator<Entry<Key, Value>> it = scanner.iterator();
+				final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
 				stopWatch.start();
 				while (it.hasNext()) {

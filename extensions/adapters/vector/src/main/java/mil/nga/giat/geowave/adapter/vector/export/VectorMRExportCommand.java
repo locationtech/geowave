@@ -63,12 +63,9 @@ public class VectorMRExportCommand extends
 		String hdfsPath = parameters.get(1);
 		String storeName = parameters.get(2);
 
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
-
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load store.
 		if (storeOptions == null) {

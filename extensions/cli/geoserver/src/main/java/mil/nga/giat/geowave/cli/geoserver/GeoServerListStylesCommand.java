@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,35 +10,42 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
-
-import com.beust.jcommander.Parameters;
 
 @GeowaveOperation(name = "liststyles", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer styles")
 public class GeoServerListStylesCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+			final OperationParams params ) {
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			final File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			final GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -47,20 +54,23 @@ public class GeoServerListStylesCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
 
-		Response listStylesResponse = geoserverClient.getStyles();
+	@Override
+	public String computeResults(
+			final OperationParams params )
+			throws Exception {
+		final Response listStylesResponse = geoserverClient.getStyles();
 
 		if (listStylesResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer styles list:");
-
-			JSONObject jsonResponse = JSONObject.fromObject(listStylesResponse.getEntity());
-			JSONArray styles = jsonResponse.getJSONArray("styles");
-			System.out.println(styles.toString(2));
+			final JSONObject jsonResponse = JSONObject.fromObject(listStylesResponse.getEntity());
+			final JSONArray styles = jsonResponse.getJSONArray("styles");
+			return "\nGeoServer styles list: " + styles.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer styles list; code = " + listStylesResponse.getStatus());
-		}
+		return "Error getting GeoServer styles list; code = " + listStylesResponse.getStatus();
 	}
 }

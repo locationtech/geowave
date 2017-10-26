@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,9 +21,9 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
@@ -37,8 +37,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptio
 @GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files in local file system directly, without using HDFS")
 public class LocalToGeowaveCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<file or directory> <storename> <comma delimited index/group list>")
@@ -67,8 +66,7 @@ public class LocalToGeowaveCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+			final OperationParams params ) {
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -81,24 +79,98 @@ public class LocalToGeowaveCommand extends
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params ) {
+		computeResults(params);
+	}
 
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String fileOrDirectory,
+			final String storeName,
+			final String commaDelimitedIndexes ) {
+		parameters = new ArrayList<String>();
+		parameters.add(fileOrDirectory);
+		parameters.add(storeName);
+		parameters.add(commaDelimitedIndexes);
+	}
+
+	public VisibilityOptions getIngestOptions() {
+		return ingestOptions;
+	}
+
+	public void setIngestOptions(
+			final VisibilityOptions ingestOptions ) {
+		this.ingestOptions = ingestOptions;
+	}
+
+	public LocalInputCommandLineOptions getLocalInputOptions() {
+		return localInputOptions;
+	}
+
+	public void setLocalInputOptions(
+			final LocalInputCommandLineOptions localInputOptions ) {
+		this.localInputOptions = localInputOptions;
+	}
+
+	public IngestFormatPluginOptions getPluginFormats() {
+		return pluginFormats;
+	}
+
+	public void setPluginFormats(
+			final IngestFormatPluginOptions pluginFormats ) {
+		this.pluginFormats = pluginFormats;
+	}
+
+	public int getThreads() {
+		return threads;
+	}
+
+	public void setThreads(
+			final int threads ) {
+		this.threads = threads;
+	}
+
+	public DataStorePluginOptions getInputStoreOptions() {
+		return inputStoreOptions;
+	}
+
+	public void setInputStoreOptions(
+			final DataStorePluginOptions inputStoreOptions ) {
+		this.inputStoreOptions = inputStoreOptions;
+	}
+
+	public List<IndexPluginOptions> getInputIndexOptions() {
+		return inputIndexOptions;
+	}
+
+	public void setInputIndexOptions(
+			final List<IndexPluginOptions> inputIndexOptions ) {
+		this.inputIndexOptions = inputIndexOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 3) {
 			throw new ParameterException(
 					"Requires arguments: <file or directory> <storename> <comma delimited index/group list>");
 		}
 
-		String inputPath = parameters.get(0);
-		String inputStoreName = parameters.get(1);
-		String indexList = parameters.get(2);
+		final String inputPath = parameters.get(0);
+		final String inputStoreName = parameters.get(1);
+		final String indexList = parameters.get(2);
 
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+		final File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
+			final StoreLoader inputStoreLoader = new StoreLoader(
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -109,7 +181,7 @@ public class LocalToGeowaveCommand extends
 
 		// Load the Indexes
 		if (inputIndexOptions == null) {
-			IndexLoader indexLoader = new IndexLoader(
+			final IndexLoader indexLoader = new IndexLoader(
 					indexList);
 			if (!indexLoader.loadFromConfig(configFile)) {
 				throw new ParameterException(
@@ -119,10 +191,10 @@ public class LocalToGeowaveCommand extends
 		}
 
 		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
 		// Driver
-		LocalFileIngestDriver driver = new LocalFileIngestDriver(
+		final LocalFileIngestDriver driver = new LocalFileIngestDriver(
 				inputStoreOptions,
 				inputIndexOptions,
 				ingestPlugins,
@@ -135,73 +207,7 @@ public class LocalToGeowaveCommand extends
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}
-	}
+		return null;
 
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String fileOrDirectory,
-			String storeName,
-			String commaDelimitedIndexes ) {
-		parameters = new ArrayList<String>();
-		parameters.add(fileOrDirectory);
-		parameters.add(storeName);
-		parameters.add(commaDelimitedIndexes);
-	}
-
-	public VisibilityOptions getIngestOptions() {
-		return ingestOptions;
-	}
-
-	public void setIngestOptions(
-			VisibilityOptions ingestOptions ) {
-		this.ingestOptions = ingestOptions;
-	}
-
-	public LocalInputCommandLineOptions getLocalInputOptions() {
-		return localInputOptions;
-	}
-
-	public void setLocalInputOptions(
-			LocalInputCommandLineOptions localInputOptions ) {
-		this.localInputOptions = localInputOptions;
-	}
-
-	public IngestFormatPluginOptions getPluginFormats() {
-		return pluginFormats;
-	}
-
-	public void setPluginFormats(
-			IngestFormatPluginOptions pluginFormats ) {
-		this.pluginFormats = pluginFormats;
-	}
-
-	public int getThreads() {
-		return threads;
-	}
-
-	public void setThreads(
-			int threads ) {
-		this.threads = threads;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
-	public List<IndexPluginOptions> getInputIndexOptions() {
-		return inputIndexOptions;
-	}
-
-	public void setInputIndexOptions(
-			List<IndexPluginOptions> inputIndexOptions ) {
-		this.inputIndexOptions = inputIndexOptions;
 	}
 }

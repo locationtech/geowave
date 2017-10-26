@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -17,44 +17,48 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import net.sf.json.JSONObject;
-
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import net.sf.json.JSONObject;
+
 @GeowaveOperation(name = "getds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get GeoServer DataStore info")
 public class GeoServerGetDatastoreCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
-	}, required = false, description = "<workspace name>")
+	}, required = false, description = "workspace name")
 	private String workspace = null;
 
 	@Parameter(description = "<datastore name>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 	private String datastore = null;
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
+			final OperationParams params ) {
 		if (geoserverClient == null) {
+			// Get the local config for GeoServer
+			final File propFile = (File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+			final GeoServerConfig config = new GeoServerConfig(
+					propFile);
+
 			// Create the rest client
 			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
+					config);
 		}
 
 		// Successfully prepared
@@ -63,7 +67,15 @@ public class GeoServerGetDatastoreCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
+			throws Exception {
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			final OperationParams params )
 			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
@@ -72,24 +84,19 @@ public class GeoServerGetDatastoreCommand extends
 
 		datastore = parameters.get(0);
 
-		if (workspace == null || workspace.isEmpty()) {
+		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}
 
-		Response getStoreResponse = geoserverClient.getDatastore(
+		final Response getStoreResponse = geoserverClient.getDatastore(
 				workspace,
 				datastore);
 
 		if (getStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer store info for '" + datastore + "':");
-
-			JSONObject jsonResponse = JSONObject.fromObject(getStoreResponse.getEntity());
-			JSONObject datastore = jsonResponse.getJSONObject("dataStore");
-			System.out.println(datastore.toString(2));
+			final JSONObject jsonResponse = JSONObject.fromObject(getStoreResponse.getEntity());
+			final JSONObject datastore = jsonResponse.getJSONObject("dataStore");
+			return "\nGeoServer store info for '" + datastore + "': " + datastore.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer store info for '" + datastore + "'; code = "
-					+ getStoreResponse.getStatus());
-		}
+		return "Error getting GeoServer store info for '" + datastore + "'; code = " + getStoreResponse.getStatus();
 	}
 }

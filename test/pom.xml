@@ -16,14 +16,13 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-client</artifactId>
+			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-service-webapp</artifactId>
+			<artifactId>geowave-format-gpx</artifactId>
 			<version>${project.version}</version>
-			<type>pom</type>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -124,35 +123,6 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
 				<executions>
-					<execution>
-						<id>unpack-wars</id>
-						<goals>
-							<goal>unpack</goal>
-						</goals>
-						<phase>pre-integration-test</phase>
-						<configuration>
-							<artifactItems>
-								<artifactItem>
-									<groupId>mil.nga.giat</groupId>
-									<artifactId>geowave-service-webapp</artifactId>
-									<version>${project.version}</version>
-									<type>war</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/geowave-services</outputDirectory>
-									<includes>**/*.class,**/*.config,**/*.xml,WEB-INF/lib/**/slf4j*.jar</includes>
-								</artifactItem>
-								<artifactItem>
-									<groupId>org.geoserver.web</groupId>
-									<artifactId>gs-web-app</artifactId>
-									<version>${geoserver.version}</version>
-									<type>war</type>
-									<overWrite>true</overWrite>
-									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
-								</artifactItem>
-							</artifactItems>
-						</configuration>
-					</execution>
 					<execution>
 						<id>setup-wps</id>
 						<goals>

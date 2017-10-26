@@ -10,28 +10,37 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
  * Common code for removing an entry from the properties file.
  */
 public abstract class AbstractRemoveCommand extends
-		DefaultOperation
+		ServiceEnabledCommand<String>
 {
 
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();
+
+	protected String pattern = null;
+	
+	private ServiceStatus status = ServiceStatus.OK;
 
 	public String getEntryName() {
 		if (parameters.size() < 1) {
@@ -42,8 +51,18 @@ public abstract class AbstractRemoveCommand extends
 		return parameters.get(
 				0).trim();
 	}
-
-	public void execute(
+	
+	@Override
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	
+	public String computeResults(
 			final OperationParams params,
 			final String patternPrefix ) {
 		// this ensures we are only exact-matching rather than using the prefix
@@ -58,6 +77,8 @@ public abstract class AbstractRemoveCommand extends
 			}
 		}
 
+		int startSize = existingProps.size();
+
 		// Remove each property.
 		for (final String key : keysToRemove) {
 			existingProps.remove(key);
@@ -67,6 +88,25 @@ public abstract class AbstractRemoveCommand extends
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(params),
 				existingProps);
+		int endSize = existingProps.size();
+
+		if (endSize < startSize) {
+			setStatus(ServiceStatus.OK);
+			return patternPrefix + " successfully removed";
+		}
+		else {
+			setStatus(ServiceStatus.NOT_FOUND);
+			return patternPrefix + " does not exist";
+
+		}
+	}
+
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
 	}
 
 	public void setEntryName(

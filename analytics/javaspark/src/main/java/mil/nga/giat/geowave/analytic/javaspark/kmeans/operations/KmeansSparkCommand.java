@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
@@ -28,7 +29,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering via Spark ML")
 public class KmeansSparkCommand extends
-		DefaultOperation implements
+		ServiceEnabledCommand<Void> implements
 		Command
 {
 	@Parameter(description = "<input storename> <output storename>")
@@ -52,7 +53,14 @@ public class KmeansSparkCommand extends
 			throw new ParameterException(
 					"Requires arguments: <input storename> <output storename>");
 		}
+		computeResults(params);
 
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		final String inputStoreName = parameters.get(0);
 		final String outputStoreName = parameters.get(1);
 
@@ -132,6 +140,7 @@ public class KmeansSparkCommand extends
 					"Failed to execute: " + e.getMessage());
 		}
 
+		return null;
 	}
 
 	public List<String> getParameters() {
@@ -170,4 +179,5 @@ public class KmeansSparkCommand extends
 			final KMeansSparkOptions kMeansSparkOptions ) {
 		this.kMeansSparkOptions = kMeansSparkOptions;
 	}
+
 }
