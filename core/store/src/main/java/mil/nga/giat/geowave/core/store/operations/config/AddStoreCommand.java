@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- *
+ * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -27,11 +26,8 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
@@ -65,26 +61,18 @@ public class AddStoreCommand extends
 
 	@Override
 	public boolean prepare(
-			final OperationParams params ) {
+			OperationParams params ) {
+		super.prepare(params);
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
-			if (storeType.equals("memory")) {
-				GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
-						storeType,
-						new MemoryStoreFactoryFamily());
-			}
 			pluginOptions.selectPlugin(storeType);
 		}
 		else {
 			// Try to load the 'default' options.
-
-			final File configFile = getGeoWaveConfigFile(params);
-			final Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
-			final String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
 			if (defaultStore != null) {
@@ -93,10 +81,10 @@ public class AddStoreCommand extends
 							existingProps,
 							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
 						// Set the required type option.
-						storeType = pluginOptions.getType();
+						this.storeType = pluginOptions.getType();
 					}
 				}
-				catch (final ParameterException pe) {
+				catch (ParameterException pe) {
 					// HP Fortify "Improper Output Neutralization" false positive
 					// What Fortify considers "user input" comes only
 					// from users with OS-level access anyway
@@ -113,17 +101,9 @@ public class AddStoreCommand extends
 
 	@Override
 	public void execute(
-			final OperationParams params ) {
-		computeResults(params);
-	}
+			OperationParams params ) {
 
-	public void computeResults(
-			final OperationParams params ) {
-
-		final File propFile = getGeoWaveConfigFile(params);
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {
@@ -132,19 +112,19 @@ public class AddStoreCommand extends
 		}
 
 		// Make sure we're not already in the index.
-		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
+		DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(
 				existingProps,
 				getNamespace())) {
 			throw new ParameterException(
 					"That store already exists: " + getPluginName());
 		}
-	
+
 		if (pluginOptions.getFactoryOptions() != null) {
- 			pluginOptions.getFactoryOptions().validatePluginOptions(
- 							existingProps);
-		}	 
-		
+			pluginOptions.getFactoryOptions().validatePluginOptions(
+					existingProps);
+		}
+
 		// Save the store options.
 		pluginOptions.save(
 				existingProps,
@@ -159,8 +139,10 @@ public class AddStoreCommand extends
 
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
-				existingProps);
+				getGeoWaveConfigFile(),
+				existingProps,
+				pluginOptions.getFactoryOptions().getClass(),
+				getNamespace() + "." + DataStorePluginOptions.OPTS);
 	}
 
 	public DataStorePluginOptions getPluginOptions() {
@@ -180,9 +162,9 @@ public class AddStoreCommand extends
 	}
 
 	public void setParameters(
-			final String storeName ) {
-		parameters = new ArrayList<String>();
-		parameters.add(storeName);
+			String storeName ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(storeName);
 	}
 
 	public Boolean getMakeDefault() {
@@ -190,7 +172,7 @@ public class AddStoreCommand extends
 	}
 
 	public void setMakeDefault(
-			final Boolean makeDefault ) {
+			Boolean makeDefault ) {
 		this.makeDefault = makeDefault;
 	}
 
@@ -199,12 +181,12 @@ public class AddStoreCommand extends
 	}
 
 	public void setStoreType(
-			final String storeType ) {
+			String storeType ) {
 		this.storeType = storeType;
 	}
 
 	public void setPluginOptions(
-			final DataStorePluginOptions pluginOptions ) {
+			DataStorePluginOptions pluginOptions ) {
 		this.pluginOptions = pluginOptions;
 	}
 }

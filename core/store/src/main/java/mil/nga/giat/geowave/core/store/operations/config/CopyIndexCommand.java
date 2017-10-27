@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- *
+ * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -24,7 +23,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
@@ -35,6 +33,7 @@ public class CopyIndexCommand extends
 		DefaultOperation implements
 		Command
 {
+
 	@Parameter(description = "<name> <new name>")
 	private List<String> parameters = new ArrayList<String>();
 
@@ -47,17 +46,12 @@ public class CopyIndexCommand extends
 	@ParametersDelegate
 	private IndexPluginOptions newPluginOptions = new IndexPluginOptions();
 
-	private File configFile;
-	private Properties existingProps;
-
 	@Override
 	public boolean prepare(
-			final OperationParams params ) {
+			OperationParams params ) {
+		super.prepare(params);
 
-		configFile = getGeoWaveConfigFile(params);
-		existingProps = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Load the old index, so that we can override the values
 		String oldIndex = null;
@@ -77,34 +71,9 @@ public class CopyIndexCommand extends
 
 	@Override
 	public void execute(
-			final OperationParams params ) {
-		copyIndex(params);
+			OperationParams params ) {
 
-	}
-
-	public Void computeResults(
-			final OperationParams params ) {
-
-		try {
-			copyIndex(params);
-		}
-		catch (WritePropertiesException | ParameterException e) {
-			// TODO GEOWAVE-rest-project server error status message
-			// this.setStatus(
-			// Status.SERVER_ERROR_INTERNAL,
-			// e.getMessage());
-		}
-
-		return null;
-	}
-
-	/**
-	 * copies index
-	 *
-	 * @return none
-	 */
-	private void copyIndex(
-			final OperationParams params ) {
+		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -112,11 +81,11 @@ public class CopyIndexCommand extends
 		}
 
 		// This is the new index name.
-		final String newIndex = parameters.get(1);
-		final String newIndexNamespace = IndexPluginOptions.getIndexNamespace(newIndex);
+		String newIndex = parameters.get(1);
+		String newIndexNamespace = IndexPluginOptions.getIndexNamespace(newIndex);
 
 		// Make sure we're not already in the index.
-		final IndexPluginOptions existPlugin = new IndexPluginOptions();
+		IndexPluginOptions existPlugin = new IndexPluginOptions();
 		if (existPlugin.load(
 				existingProps,
 				newIndexNamespace)) {
@@ -137,12 +106,10 @@ public class CopyIndexCommand extends
 		}
 
 		// Write properties file
-		if (!ConfigOptions.writeProperties(
-				configFile,
-				existingProps)) {
-			throw new WritePropertiesException(
-					"Write failure");
-		}
+		ConfigOptions.writeProperties(
+				getGeoWaveConfigFile(params),
+				existingProps);
+
 	}
 
 	public List<String> getParameters() {
@@ -150,27 +117,11 @@ public class CopyIndexCommand extends
 	}
 
 	public void setParameters(
-			final String existingIndex,
-			final String newIndex ) {
-		parameters = new ArrayList<String>();
-		parameters.add(existingIndex);
-		parameters.add(newIndex);
-	}
-
-	private static class WritePropertiesException extends
-			RuntimeException
-	{
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		private WritePropertiesException(
-				final String string ) {
-			super(
-					string);
-		}
-
+			String existingIndex,
+			String newIndex ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(existingIndex);
+		this.parameters.add(newIndex);
 	}
 
 }

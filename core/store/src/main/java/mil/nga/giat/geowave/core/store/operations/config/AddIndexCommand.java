@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- *
+ * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -59,21 +58,17 @@ public class AddIndexCommand extends
 
 	@Override
 	public boolean prepare(
-			final OperationParams params ) {
+			OperationParams params ) {
+		super.prepare(params);
 
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
 		}
 		else {
-			// Try to load the 'default' options.
+			Properties existingProps = getGeoWaveConfigProperties(params);
 
-			final File configFile = getGeoWaveConfigFile(params);
-			final Properties existingProps = ConfigOptions.loadProperties(
-					configFile,
-					null);
-
-			final String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
 			// Load the default index.
 			if (defaultIndex != null) {
@@ -82,10 +77,10 @@ public class AddIndexCommand extends
 							existingProps,
 							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
 						// Set the required type option.
-						type = pluginOptions.getType();
+						this.type = pluginOptions.getType();
 					}
 				}
-				catch (final ParameterException pe) {
+				catch (ParameterException pe) {
 					// HP Fortify "Improper Output Neutralization" false positive
 					// What Fortify considers "user input" comes only
 					// from users with OS-level access anyway
@@ -102,8 +97,41 @@ public class AddIndexCommand extends
 
 	@Override
 	public void execute(
-			final OperationParams params ) {
-		computeResults(params);
+			OperationParams params ) {
+
+		// Ensure that a name is chosen.
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Must specify index name");
+		}
+
+		Properties existingProps = getGeoWaveConfigProperties(params);
+
+		// Make sure we're not already in the index.
+		IndexPluginOptions existPlugin = new IndexPluginOptions();
+		if (existPlugin.load(
+				existingProps,
+				getNamespace())) {
+			throw new ParameterException(
+					"That index already exists: " + getPluginName());
+		}
+
+		// Save the options.
+		pluginOptions.save(
+				existingProps,
+				getNamespace());
+
+		// Make default?
+		if (Boolean.TRUE.equals(makeDefault)) {
+			existingProps.setProperty(
+					IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE,
+					getPluginName());
+		}
+
+		// Write properties file
+		ConfigOptions.writeProperties(
+				getGeoWaveConfigFile(params),
+				existingProps);
 	}
 
 	public IndexPluginOptions getPluginOptions() {
@@ -123,9 +151,9 @@ public class AddIndexCommand extends
 	}
 
 	public void setParameters(
-			final String indexName ) {
-		parameters = new ArrayList<String>();
-		parameters.add(indexName);
+			String indexName ) {
+		this.parameters = new ArrayList<String>();
+		this.parameters.add(indexName);
 	}
 
 	public Boolean getMakeDefault() {
@@ -133,7 +161,7 @@ public class AddIndexCommand extends
 	}
 
 	public void setMakeDefault(
-			final Boolean makeDefault ) {
+			Boolean makeDefault ) {
 		this.makeDefault = makeDefault;
 	}
 
@@ -142,60 +170,12 @@ public class AddIndexCommand extends
 	}
 
 	public void setType(
-			final String type ) {
+			String type ) {
 		this.type = type;
 	}
 
 	public void setPluginOptions(
-			final IndexPluginOptions pluginOptions ) {
+			IndexPluginOptions pluginOptions ) {
 		this.pluginOptions = pluginOptions;
-	}
-
-	public void computeResults(
-			final OperationParams params ) {
-
-		// Ensure that a name is chosen.
-		if (getParameters().size() < 1) {
-			System.out.println(getParameters());
-			throw new ParameterException(
-					"Must specify index name");
-		}
-
-		if (getType() == null) {
-			throw new ParameterException(
-					"No type could be infered");
-		}
-
-		final File propFile = getGeoWaveConfigFile(params);
-		Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
-
-		// Make sure we're not already in the index.
-		final IndexPluginOptions existPlugin = new IndexPluginOptions();
-		if (existPlugin.load(
-				existingProps,
-				getNamespace())) {
-			throw new ParameterException(
-					"That index already exists: " + getPluginName());
-		}
-
-		final String namespace = getNamespace();
-		getPluginOptions().save(
-				existingProps,
-				namespace);
-
-		// Make default?
-		if (Boolean.TRUE.equals(makeDefault)) {
-
-			existingProps.setProperty(
-					IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE,
-					getPluginName());
-		}
-
-		// Write properties file
-		ConfigOptions.writeProperties(
-				propFile,
-				existingProps);
 	}
 }
