@@ -39,6 +39,7 @@ public class RemoveStoreCommand extends
 				pattern);
 
 	}
+
 	@Override
 	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
@@ -48,6 +49,7 @@ public class RemoveStoreCommand extends
 				super.getStatus(),
 				ret);
 	}
+
 	@Override
 	public void execute(
 			final OperationParams params ) {

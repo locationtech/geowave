@@ -84,7 +84,7 @@ public class AddAccumuloStoreCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
@@ -95,7 +95,7 @@ public class AddAccumuloStoreCommand extends
 					"password").convert(requiredOptions.getPassword()));
 		}
 		final File propFile = getGeoWaveConfigFile(params);
-				
+
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
@@ -111,7 +111,7 @@ public class AddAccumuloStoreCommand extends
 		if (existingOptions.load(
 				existingProps,
 				getNamespace())) {
-				setStatus(ServiceStatus.DUPLICATE);
+			setStatus(ServiceStatus.DUPLICATE);
 			return "That store already exists: " + getPluginName();
 		}
 
@@ -150,7 +150,8 @@ public class AddAccumuloStoreCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 

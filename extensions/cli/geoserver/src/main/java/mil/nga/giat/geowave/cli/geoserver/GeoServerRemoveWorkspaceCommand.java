@@ -38,7 +38,6 @@ public class GeoServerRemoveWorkspaceCommand extends
 	private final List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
 
-
 	@Override
 	public void execute(
 			final OperationParams params )

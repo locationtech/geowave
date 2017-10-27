@@ -39,7 +39,7 @@ public abstract class AbstractRemoveCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	protected String pattern = null;
-	
+
 	private ServiceStatus status = ServiceStatus.OK;
 
 	public String getEntryName() {
@@ -51,7 +51,7 @@ public abstract class AbstractRemoveCommand extends
 		return parameters.get(
 				0).trim();
 	}
-	
+
 	@Override
 	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
@@ -61,7 +61,7 @@ public abstract class AbstractRemoveCommand extends
 				status,
 				ret);
 	}
-	
+
 	public String computeResults(
 			final OperationParams params,
 			final String patternPrefix ) {
@@ -105,7 +105,8 @@ public abstract class AbstractRemoveCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 

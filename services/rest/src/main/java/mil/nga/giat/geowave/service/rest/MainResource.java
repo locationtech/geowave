@@ -24,19 +24,15 @@ public class MainResource extends
 		final ArrayList<String> unavailableCommands = (ArrayList<String>) getContext().getAttributes().get(
 				"unavailableCommands");
 
-		routeStringBuilder.append(
-				"Available Routes:<br>");
+		routeStringBuilder.append("Available Routes:<br>");
 
 		for (final RestRoute route : availableRoutes) {
-			routeStringBuilder.append(
-					route.getPath() + " --> " + route.getOperation() + "<br>");
+			routeStringBuilder.append(route.getPath() + " --> " + route.getOperation() + "<br>");
 		}
 
-		routeStringBuilder.append(
-				"<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
+		routeStringBuilder.append("<br><br><span style='color:blue'>Unavailable Routes:</span><br>");
 		for (final String command : unavailableCommands) {
-			routeStringBuilder.append(
-					"<span style='color:blue'>" + command + "</span><br>");
+			routeStringBuilder.append("<span style='color:blue'>" + command + "</span><br>");
 		}
 
 		return routeStringBuilder.toString();

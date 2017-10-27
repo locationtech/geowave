@@ -72,7 +72,6 @@ public class KmeansParallelCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-				
 
 		// Attempt to load store.
 		if (inputStoreOptions == null) {

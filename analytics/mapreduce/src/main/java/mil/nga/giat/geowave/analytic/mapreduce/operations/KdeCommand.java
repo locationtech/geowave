@@ -63,7 +63,6 @@ public class KdeCommand extends
 		final String outputStore = parameters.get(1);
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-				
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

@@ -262,7 +262,7 @@ public class ConfigGeoServerCommand extends
 			final OperationParams params )
 			throws Exception {
 		final File propFile = getGeoWaveConfigFile(params);
-				
+
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

@@ -21,8 +21,7 @@ import mil.nga.giat.geowave.service.rest.GeoWaveOperationServiceWrapper;
 
 public class RestFieldFactory
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveOperationServiceWrapper.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
 	private static final BitSet UNESCAPED_CHARS = initUnescapedChars();
 
 	@FunctionalInterface
@@ -122,14 +121,12 @@ public class RestFieldFactory
 		for (final Field field : FieldUtils.getFieldsWithAnnotation(
 				instanceType,
 				Parameter.class)) {
-			retVal.addAll(
-					internalCreateRestFields(
-							field,
-							field.getAnnotation(
-									Parameter.class),
-							instance,
-							parameterInitializer,
-							mainParamInitializer));
+			retVal.addAll(internalCreateRestFields(
+					field,
+					field.getAnnotation(Parameter.class),
+					instance,
+					parameterInitializer,
+					mainParamInitializer));
 
 		}
 
@@ -142,18 +139,16 @@ public class RestFieldFactory
 				// time on reflection to make delegate instance
 				final Object delegateInstance = instance == null ? null : delegateInstanceType.newInstance();
 				if (instance != null) {
-					field.setAccessible(
-							true);
+					field.setAccessible(true);
 					field.set(
 							instance,
 							delegateInstance);
 				}
-				retVal.addAll(
-						internalCreateRestFields(
-								delegateInstance,
-								delegateInstanceType,
-								parameterInitializer,
-								mainParamInitializer));
+				retVal.addAll(internalCreateRestFields(
+						delegateInstance,
+						delegateInstanceType,
+						parameterInitializer,
+						mainParamInitializer));
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				LOGGER.error(
@@ -177,10 +172,8 @@ public class RestFieldFactory
 		final String desc = parameter.description();
 		// this is intended to match one or more "<" + at least one alphanumeric
 		// or some select special character + ">"
-		if (List.class.isAssignableFrom(
-				field.getType()) && !desc.isEmpty()
-				&& desc.matches(
-						"(<[a-zA-Z0-9:/\\s]+>\\s*)+")) {
+		if (List.class.isAssignableFrom(field.getType()) && !desc.isEmpty()
+				&& desc.matches("(<[a-zA-Z0-9:/\\s]+>\\s*)+")) {
 			int currentEndParamIndex = 0;
 			// this simply is collecting names and a flag to indicate if its a
 			// list
@@ -199,27 +192,22 @@ public class RestFieldFactory
 						currentStartParamIndex + 1,
 						currentEndParamIndex).trim();
 				if (!fullName.isEmpty()) {
-					if (fullName.startsWith(
-							"comma separated list of ")) {
-						individualParams.add(
-								ImmutablePair.of(
-										fullName.substring(
-												24).trim(),
-										true));
+					if (fullName.startsWith("comma separated list of ")) {
+						individualParams.add(ImmutablePair.of(
+								fullName.substring(
+										24).trim(),
+								true));
 					}
-					else if (fullName.startsWith(
-							"comma delimited ")) {
-						individualParams.add(
-								ImmutablePair.of(
-										fullName.substring(
-												16).trim(),
-										true));
+					else if (fullName.startsWith("comma delimited ")) {
+						individualParams.add(ImmutablePair.of(
+								fullName.substring(
+										16).trim(),
+								true));
 					}
 					else {
-						individualParams.add(
-								ImmutablePair.of(
-										fullName,
-										false));
+						individualParams.add(ImmutablePair.of(
+								fullName,
+								false));
 					}
 				}
 			}
@@ -233,7 +221,7 @@ public class RestFieldFactory
 						@Override
 						public T apply(
 								final Pair<String, Boolean> input ) {
-							if (input!= null) {
+							if (input != null) {
 								return mainParamInitializer.apply(
 										toURLFriendlyString(input.getLeft()),
 										input.getRight(),
@@ -250,11 +238,10 @@ public class RestFieldFactory
 					});
 		}
 		else {
-			return Collections.singletonList(
-					parameterInitializer.apply(
-							field,
-							parameter,
-							instance));
+			return Collections.singletonList(parameterInitializer.apply(
+					field,
+					parameter,
+					instance));
 		}
 	}
 
@@ -264,17 +251,13 @@ public class RestFieldFactory
 		final StringBuffer out = new StringBuffer(
 				str.length());
 		for (int i = 0; i < str.length(); i++) {
-			final int c = str.charAt(
-					i);
-			if (UNESCAPED_CHARS.get(
-					c)) {
-				out.append(
-						(char) c);
+			final int c = str.charAt(i);
+			if (UNESCAPED_CHARS.get(c)) {
+				out.append((char) c);
 			}
 			else {
 				needToChange = true;
-				out.append(
-						'_');
+				out.append('_');
 			}
 		}
 		return (needToChange ? out.toString() : str);
@@ -285,24 +268,17 @@ public class RestFieldFactory
 				256);
 		int i;
 		for (i = 'a'; i <= 'z'; i++) {
-			unescapedChars.set(
-					i);
+			unescapedChars.set(i);
 		}
 		for (i = 'A'; i <= 'Z'; i++) {
-			unescapedChars.set(
-					i);
+			unescapedChars.set(i);
 		}
 		for (i = '0'; i <= '9'; i++) {
-			unescapedChars.set(
-					i);
-			unescapedChars.set(
-					'-');
-			unescapedChars.set(
-					'_');
-			unescapedChars.set(
-					'.');
-			unescapedChars.set(
-					'*');
+			unescapedChars.set(i);
+			unescapedChars.set('-');
+			unescapedChars.set('_');
+			unescapedChars.set('.');
+			unescapedChars.set('*');
 		}
 		return unescapedChars;
 	}

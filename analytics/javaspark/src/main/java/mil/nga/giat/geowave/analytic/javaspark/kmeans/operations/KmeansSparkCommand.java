@@ -66,7 +66,6 @@ public class KmeansSparkCommand extends
 
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-				
 
 		// Attempt to load stores.
 		if (inputDataStore == null) {

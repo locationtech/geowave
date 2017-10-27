@@ -42,9 +42,9 @@ public class AddIndexGroupCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexGroupCommand.class);
-	
+
 	ServiceStatus status = ServiceStatus.OK;
-	
+
 	@Override
 	public void execute(
 			final OperationParams params ) {
@@ -60,7 +60,7 @@ public class AddIndexGroupCommand extends
 				status,
 				ret);
 	}
-	
+
 	/**
 	 * Add rest endpoint for the addIndexGroup command. Looks for POST params
 	 * with keys 'key' and 'value' to set.
@@ -168,7 +168,8 @@ public class AddIndexGroupCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 

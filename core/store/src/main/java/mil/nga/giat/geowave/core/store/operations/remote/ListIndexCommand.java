@@ -38,7 +38,7 @@ public class ListIndexCommand extends
 		ServiceEnabledCommand<String>
 {
 
-	private static  Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();

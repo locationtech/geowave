@@ -45,7 +45,7 @@ public class GeoServerListCoveragesCommand extends
 	@Parameter(description = "<coverage store name>")
 	private final List<String> parameters = new ArrayList<String>();
 	private String csName = null;
-	
+
 	@Override
 	public void execute(
 			final OperationParams params )

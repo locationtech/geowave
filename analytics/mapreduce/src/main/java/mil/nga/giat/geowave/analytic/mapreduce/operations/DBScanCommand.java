@@ -111,7 +111,6 @@ public class DBScanCommand extends
 
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-				
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

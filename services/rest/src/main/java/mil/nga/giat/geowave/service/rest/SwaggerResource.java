@@ -16,8 +16,7 @@ import org.slf4j.LoggerFactory;
 public class SwaggerResource extends
 		ServerResource
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			SwaggerResource.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerResource.class);
 
 	/**
 	 * This resource returns the swagger.json
@@ -28,8 +27,7 @@ public class SwaggerResource extends
 
 		final ServletContext servlet = (ServletContext) getContext().getAttributes().get(
 				"org.restlet.ext.servlet.ServletContext");
-		final String realPath = servlet.getRealPath(
-				"/");
+		final String realPath = servlet.getRealPath("/");
 
 		final JacksonRepresentation<ApiDeclaration> result = new JacksonRepresentation<ApiDeclaration>(
 				new FileRepresentation(

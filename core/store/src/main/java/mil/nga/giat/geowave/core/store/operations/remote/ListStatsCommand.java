@@ -56,7 +56,7 @@ public class ListStatsCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	private String retValue = "";
-	
+
 	private ServiceStatus status = ServiceStatus.OK;
 
 	@Override
@@ -150,7 +150,7 @@ public class ListStatsCommand extends
 			parameters.add(adapterName);
 		}
 	}
-	
+
 	@Override
 	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
@@ -160,7 +160,7 @@ public class ListStatsCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
@@ -184,12 +184,13 @@ public class ListStatsCommand extends
 			return "No Data Found";
 		}
 	}
-	
+
 	public ServiceStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 }

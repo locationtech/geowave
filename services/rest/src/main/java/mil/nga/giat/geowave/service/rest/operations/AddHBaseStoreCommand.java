@@ -54,7 +54,7 @@ public class AddHBaseStoreCommand extends
 	private Boolean makeDefault;
 
 	private ServiceStatus status = ServiceStatus.OK;
-	
+
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 
 	@ParametersDelegate
@@ -85,13 +85,13 @@ public class AddHBaseStoreCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
 
 		final File propFile = getGeoWaveConfigFile(params);
-				
+
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
@@ -101,13 +101,13 @@ public class AddHBaseStoreCommand extends
 			throw new ParameterException(
 					"Must specify store name");
 		}
-		
+
 		// Make sure we're not already in the index.
 		final DataStorePluginOptions existingOptions = new DataStorePluginOptions();
 		if (existingOptions.load(
 				existingProps,
 				getNamespace())) {
-				setStatus(ServiceStatus.DUPLICATE);
+			setStatus(ServiceStatus.DUPLICATE);
 			return "That store already exists: " + getPluginName();
 		}
 
@@ -146,7 +146,8 @@ public class AddHBaseStoreCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 

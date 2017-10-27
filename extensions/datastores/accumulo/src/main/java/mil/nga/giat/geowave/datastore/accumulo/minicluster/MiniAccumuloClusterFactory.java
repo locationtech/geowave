@@ -161,9 +161,10 @@ public class MiniAccumuloClusterFactory
 		manifest.getMainAttributes().put(
 				Attributes.Name.CLASS_PATH,
 				classpath);
-		
+
 		// HP Fortify "Improper Resource Shutdown or Release" false positive
-		// target is inside try-as-resource clause (and is auto-closeable) and the FileOutputStream 
+		// target is inside try-as-resource clause (and is auto-closeable) and
+		// the FileOutputStream
 		// is closed implicitly by target.close()
 		try (final JarOutputStream target = new JarOutputStream(
 				new FileOutputStream(

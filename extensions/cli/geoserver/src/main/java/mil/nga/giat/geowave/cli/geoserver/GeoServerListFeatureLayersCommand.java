@@ -49,7 +49,7 @@ public class GeoServerListFeatureLayersCommand extends
 		"--geowaveOnly"
 	}, required = false, description = "Show only GeoWave feature layers (default: false)")
 	private final Boolean geowaveOnly = false;
-	
+
 	@Override
 	public void execute(
 			final OperationParams params )

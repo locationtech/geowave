@@ -73,7 +73,6 @@ public class ListCommand extends
 			final OperationParams params ) {
 
 		final File f = getGeoWaveConfigFile(params);
-				
 
 		// Reload options with filter if specified.
 		Properties p = null;

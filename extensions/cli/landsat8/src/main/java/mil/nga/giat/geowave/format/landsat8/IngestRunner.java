@@ -68,8 +68,10 @@ public class IngestRunner extends
 		final DataStore vectorStore;
 		final PrimaryIndex[] vectorIndices;
 		// Config file
-		final File configFile = getGeoWaveConfigFile(params);
-				
+		final File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		;
+
 		if ((vectorOverrideOptions.getVectorStore() != null)
 				&& !vectorOverrideOptions.getVectorStore().trim().isEmpty()) {
 			String vectorStoreName = vectorOverrideOptions.getVectorStore();

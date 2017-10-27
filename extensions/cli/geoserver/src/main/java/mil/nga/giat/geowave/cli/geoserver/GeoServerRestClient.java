@@ -73,7 +73,7 @@ import net.sf.json.JSONObject;
 
 public class GeoServerRestClient
 {
-	private static GeoServerRestClient SINGLETON_INSTANCE; 
+	private static GeoServerRestClient SINGLETON_INSTANCE;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
@@ -91,22 +91,26 @@ public class GeoServerRestClient
 		this.config = config;
 	}
 
-	private  GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config,
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
 	}
-	
-	public static GeoServerRestClient getInstance(GeoServerConfig config){
-		if (SINGLETON_INSTANCE == null){
-			SINGLETON_INSTANCE = new GeoServerRestClient(config);
+
+	public static GeoServerRestClient getInstance(
+			GeoServerConfig config ) {
+		if (SINGLETON_INSTANCE == null) {
+			SINGLETON_INSTANCE = new GeoServerRestClient(
+					config);
 		}
 		return SINGLETON_INSTANCE;
 	}
-	public static void invalidateInstance(){
+
+	public static void invalidateInstance() {
 		SINGLETON_INSTANCE = null;
 	}
+
 	/**
 	 *
 	 * @return
@@ -1504,7 +1508,7 @@ public class GeoServerRestClient
 			final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
 			// HP Fortify "XML External Entity Injection" fix.
-			// These ines are the recommended fix for 
+			// These ines are the recommended fix for
 			// protecting a Java TransformerFactory from XXE.
 			xformerFactory.setAttribute(
 					XMLConstants.ACCESS_EXTERNAL_DTD,
@@ -1523,10 +1527,11 @@ public class GeoServerRestClient
 			xformer.transform(
 					source,
 					result);
-			
+
 			// HP Fortify "Improper Resource Shutdown or Release" false positive
 			// coverageXml holds onto a string rather than the writer itself.
-			// result.getWriter().close() is called explicitly in the finally clause below
+			// result.getWriter().close() is called explicitly in the finally
+			// clause below
 			coverageXml = result.getWriter().toString();
 		}
 		catch (final TransformerException e) {

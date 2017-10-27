@@ -38,7 +38,6 @@ public class GeoServerRemoveStyleCommand extends
 	private final List<String> parameters = new ArrayList<String>();
 	private String styleName = null;
 
-
 	@Override
 	public void execute(
 			final OperationParams params )

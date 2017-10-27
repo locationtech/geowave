@@ -48,8 +48,6 @@ public class GeoServerAddCoverageCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
 
-
-
 	@Override
 	public void execute(
 			final OperationParams params )

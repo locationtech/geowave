@@ -51,9 +51,9 @@ public class SetCommand extends
 
 	private boolean isPassword;
 	private boolean isRestCall = true;
-	
+
 	ServiceStatus status = ServiceStatus.OK;
-	
+
 	@Override
 	public void execute(
 			final OperationParams params ) {
@@ -80,7 +80,7 @@ public class SetCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public Object computeResults(
 			final OperationParams params ) {
@@ -117,19 +117,19 @@ public class SetCommand extends
 					parameters.get(0),
 					"=");
 			key = parts[0];
-			if(isRestCall){
+			if (isRestCall) {
 				value = parts[1];
 			}
-			else{
+			else {
 				value = converter.convert(parts[1]);
 			}
 		}
 		else if (parameters.size() == 2) {
 			key = parameters.get(0);
-			if(isRestCall){
+			if (isRestCall) {
 				value = parameters.get(1);
 			}
-			else{
+			else {
 				value = converter.convert(parameters.get(1));
 			}
 		}
@@ -196,10 +196,11 @@ public class SetCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
-	
+
 	private static class WritePropertiesException extends
 			RuntimeException
 	{

@@ -78,7 +78,6 @@ public class SparkSqlCommand extends
 
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-				
 
 		final String sql = parameters.get(0);
 

@@ -49,7 +49,7 @@ public class AddSpatialTemporalIndexCommand extends
 	private Boolean makeDefault;
 
 	private ServiceStatus status = ServiceStatus.OK;
-	
+
 	@ParametersDelegate
 	private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
 
@@ -124,15 +124,16 @@ public class AddSpatialTemporalIndexCommand extends
 			final IndexPluginOptions pluginOptions ) {
 		this.pluginOptions = pluginOptions;
 	}
-	
+
 	public ServiceStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
-	
+
 	@Override
 	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
@@ -142,7 +143,7 @@ public class AddSpatialTemporalIndexCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
@@ -160,7 +161,7 @@ public class AddSpatialTemporalIndexCommand extends
 		}
 
 		final File propFile = getGeoWaveConfigFile(params);
-				
+
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
@@ -170,7 +171,7 @@ public class AddSpatialTemporalIndexCommand extends
 		if (existPlugin.load(
 				existingProps,
 				getNamespace())) {
-				setStatus(ServiceStatus.DUPLICATE);
+			setStatus(ServiceStatus.DUPLICATE);
 			return "That index already exists: " + getPluginName();
 		}
 

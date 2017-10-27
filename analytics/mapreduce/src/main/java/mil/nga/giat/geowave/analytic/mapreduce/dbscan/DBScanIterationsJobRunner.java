@@ -182,7 +182,7 @@ public class DBScanIterationsJobRunner implements
 					"Running with partition distance {}",
 					maxDistance);
 			// HP Fortify "Command Injection" false positive
-			// What Fortify considers "externally-influenced input" 
+			// What Fortify considers "externally-influenced input"
 			// comes only from users with OS-level access anyway
 			final int initialStatus = jobRunner.run(
 					config,
@@ -293,7 +293,7 @@ public class DBScanIterationsJobRunner implements
 						nextPath));
 
 				// HP Fortify "Command Injection" false positive
-				// What Fortify considers "externally-influenced input" 
+				// What Fortify considers "externally-influenced input"
 				// comes only from users with OS-level access anyway
 				final int status = jobRunner.run(
 						config,
@@ -332,7 +332,7 @@ public class DBScanIterationsJobRunner implements
 			inputLoadRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
 					startPath));
 			// HP Fortify "Command Injection" false positive
-			// What Fortify considers "externally-influenced input" 
+			// What Fortify considers "externally-influenced input"
 			// comes only from users with OS-level access anyway
 			inputLoadRunner.run(
 					config,

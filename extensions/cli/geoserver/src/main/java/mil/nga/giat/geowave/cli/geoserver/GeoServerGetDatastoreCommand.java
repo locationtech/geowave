@@ -44,7 +44,7 @@ public class GeoServerGetDatastoreCommand extends
 	@Parameter(description = "<datastore name>")
 	private final List<String> parameters = new ArrayList<String>();
 	private String datastore = null;
-	
+
 	@Override
 	public void execute(
 			final OperationParams params )

@@ -82,13 +82,13 @@ public class AddBigTableStoreCommand extends
 				status,
 				ret);
 	}
-	
+
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
 
 		final File propFile = getGeoWaveConfigFile(params);
-				
+
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
@@ -143,7 +143,8 @@ public class AddBigTableStoreCommand extends
 		return status;
 	}
 
-	public void setStatus(ServiceStatus status) {
+	public void setStatus(
+			ServiceStatus status ) {
 		this.status = status;
 	}
 

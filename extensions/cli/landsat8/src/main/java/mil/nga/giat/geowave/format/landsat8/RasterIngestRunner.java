@@ -114,8 +114,9 @@ public class RasterIngestRunner extends
 		final String indexList = parameters.get(1);
 
 		// Config file
-		final File configFile = getGeoWaveConfigFile(params);
-				
+		final File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);

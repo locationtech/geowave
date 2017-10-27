@@ -72,7 +72,6 @@ public class KmeansJumpCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-				
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

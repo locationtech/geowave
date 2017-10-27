@@ -19,8 +19,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 
 public class SwaggerApiParser
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			SwaggerApiParser.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerApiParser.class);
 	/**
 	 * Reads RestRoute(s) and operations and parses class fields for particular
 	 * annotations ( @Parameter and @ParametersDelegate from JCommander) The
@@ -56,8 +55,7 @@ public class SwaggerApiParser
 			final RestRoute route ) {
 		final ServiceEnabledCommand<?> instance = route.getOperation();
 		// iterate over routes and paths here
-		LOGGER.info(
-				"OPERATION: " + route.getPath() + " : " + instance.getClass().getName());
+		LOGGER.info("OPERATION: " + route.getPath() + " : " + instance.getClass().getName());
 		final SwaggerOperationParser parser = new SwaggerOperationParser<>(
 				instance);
 		final JsonObject op_json = parser.getJsonObject();
@@ -70,8 +68,7 @@ public class SwaggerApiParser
 				"/");
 		final JsonPrimitive tag = new JsonPrimitive(
 				path_toks[1]);
-		tags_json.add(
-				tag);
+		tags_json.add(tag);
 
 		op_json.add(
 				"tags",
@@ -107,8 +104,7 @@ public class SwaggerApiParser
 		final Gson gson = new GsonBuilder().create();
 
 		try {
-			writer.write(
-					swaggerHeader);
+			writer.write(swaggerHeader);
 			final StringWriter strWriter = new StringWriter();
 			gson.toJson(
 					routesJson,
@@ -118,12 +114,9 @@ public class SwaggerApiParser
 			// appended and then re-add the closing brace
 			strWriter.getBuffer().deleteCharAt(
 					strWriter.getBuffer().length() - 1);
-			writer.write(
-					strWriter.getBuffer().toString());
-			writer.write(
-					fileUpload);
-			writer.write(
-					'}');
+			writer.write(strWriter.getBuffer().toString());
+			writer.write(fileUpload);
+			writer.write('}');
 			writer.close();
 		}
 		catch (final IOException e1) {
