@@ -76,17 +76,19 @@ public class AvroIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
 			final URL file ) {
-		
-	    try(DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(file.openStream(),
-					new SpecificDatumReader<AvroSimpleFeatureCollection>())){
-			if (ds.getHeader() != null){
+
+		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
+				file.openStream(),
+				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+			if (ds.getHeader() != null) {
 				return true;
-			};
+			}
+			;
 		}
 		catch (final IOException e) {
 			// just log as info as this may not have been intended to be read as

@@ -111,7 +111,8 @@ public class TwitterUtils
 
 	public static boolean validate(
 			final URL file ) {
-		return FilenameUtils.getName(file.getPath()).toLowerCase(
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
 				"\\d{8}-\\d{6}\\.txt\\.gz");
 	}

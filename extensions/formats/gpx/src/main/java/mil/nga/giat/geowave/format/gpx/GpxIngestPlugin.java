@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
@@ -83,12 +84,18 @@ public class GpxIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
-		final File f = new File(
-				baseDirectory,
-				"metadata.xml");
-		if (!f.exists()) {
-			LOGGER.info("No metadata file found - looked at: " + f.getAbsolutePath());
+			final URL baseDirectory ) {
+		URL f = null;
+		try {
+			f = new URL(
+					baseDirectory.getPath().concat(
+							"metadata.xml"));
+		}
+		catch (MalformedURLException e1) {
+			LOGGER.info("Invalid URL for metadata.xml. No metadata will be loaded");
+		}
+		if (f.getPath() == null) {
+			LOGGER.info("No metadata file found - looked at: " + f.getPath());
 			LOGGER.info("No metadata will be loaded");
 		}
 		else {
@@ -105,7 +112,7 @@ public class GpxIngestPlugin extends
 			}
 			catch (final XMLStreamException | FileNotFoundException e) {
 				LOGGER.warn(
-						"Unable to read OSM metadata file: " + f.getAbsolutePath(),
+						"Unable to read OSM metadata file: " + f.getPath(),
 						e);
 			}
 		}
@@ -116,7 +123,8 @@ public class GpxIngestPlugin extends
 	public boolean supportsFile(
 			final URL file ) {
 		// if its a gpx extension assume it is supported
-		if (FilenameUtils.getName(file.getPath()).toLowerCase(
+		if (FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).endsWith(
 				"gpx")) {
 			return true;

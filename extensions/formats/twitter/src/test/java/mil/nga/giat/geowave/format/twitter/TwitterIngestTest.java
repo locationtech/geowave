@@ -46,7 +46,8 @@ public class TwitterIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final URL toIngest = this.getClass().getClassLoader().getResource(filePath);
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(TwitterUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

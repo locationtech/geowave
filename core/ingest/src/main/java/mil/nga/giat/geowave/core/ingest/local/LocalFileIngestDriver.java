@@ -166,7 +166,7 @@ public class LocalFileIngestDriver extends
 
 		LOGGER.info(String.format(
 				"Beginning ingest for file: [%s]",
-				//file.getName()));
+				// file.getName()));
 				FilenameUtils.getName(file.getPath())));
 
 		// This loads up the primary indexes that are specified on the command

@@ -95,15 +95,16 @@ public class Stanag4676IngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
-	public boolean supportsFile  (
+	public boolean supportsFile(
 			final URL file ) {
 		// TODO: consider checking for schema compliance
 		try {
 			return file.openConnection().getContentLength() > 0;
-		} catch (IOException e) {
+		}
+		catch (IOException e) {
 			LOGGER.info(
 					"Unable to read URL for '" + file.getPath() + "'",
 					e);

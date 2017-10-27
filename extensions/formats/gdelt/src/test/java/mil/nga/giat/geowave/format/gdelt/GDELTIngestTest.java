@@ -57,7 +57,7 @@ public class GDELTIngestTest
 			throws IOException {
 
 		final URL toIngest = this.getClass().getClassLoader().getResource(
-						filePath);
+				filePath);
 
 		assertTrue(GDELTUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

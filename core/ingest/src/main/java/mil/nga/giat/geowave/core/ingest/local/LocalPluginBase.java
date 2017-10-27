@@ -33,13 +33,13 @@ public interface LocalPluginBase
 	 * Initialize the plugin and give it the base directory that is provided by
 	 * the user.
 	 * 
-	 * @param baseDirectory
+	 * @param url
 	 *            The base directory provided as a command-line argument (if the
 	 *            argument is a file, the base directory given will be its
 	 *            parent directory).
 	 */
 	public void init(
-			File baseDirectory );
+			URL url );
 
 	/**
 	 * This method will be called for every file that matches the given

@@ -194,9 +194,11 @@ public class GDELTUtils
 
 	public static boolean validate(
 			final URL file ) {
-		return FilenameUtils.getName(file.getPath()).toLowerCase(
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
-				"\\d{8}\\.export\\.csv\\.zip") || FilenameUtils.getName(file.getPath()).toLowerCase(
+				"\\d{8}\\.export\\.csv\\.zip") || FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
 				"\\d{4,6}\\.zip");
 	}

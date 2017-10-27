@@ -83,7 +83,7 @@ public class TdriveIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
+			final URL baseDirectory ) {
 
 	}
 
@@ -114,7 +114,7 @@ public class TdriveIngestPlugin extends
 		long pointInstance = 0l;
 		final List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
 		try {
-			 fis = input.openStream();
+			fis = input.openStream();
 			fr = new BufferedReader(
 					new InputStreamReader(
 							fis,

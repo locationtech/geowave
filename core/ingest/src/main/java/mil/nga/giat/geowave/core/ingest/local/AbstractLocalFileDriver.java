@@ -12,20 +12,37 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
+import java.net.URLStreamHandlerFactory;
+import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.FileVisitor;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.lang.reflect.Field;
 
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.ImmutableMap;
+import com.amazonaws.ClientConfiguration;
+import com.amazonaws.Protocol;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.S3Object;
+import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
@@ -72,21 +89,35 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		}
 		return valid;
 	}
-	
-	public static void main(String[] args) throws IOException, URISyntaxException{
-		
-		//AKIAI4JZSZE3JRYAQYQQ
-		//GQRna+UV0mDGLB2PPdYnLFNtwk8D8/jaQM5d7Xjp
-		
-//		Map<String, ?> env = ImmutableMap.<String, Object> builder()
-//				.put(com.upplication.s3fs.AmazonS3Factory.ACCESS_KEY, "access key")
-//				.put(com.upplication.s3fs.AmazonS3Factory.SECRET_KEY, "secret key").build();
-		//Map<String, ?> env = ImmutableMap.<String, Object> builder().build();
-		//System.err.println(Files.walk(FileSystems.newFileSystem(new URI("s3://s3.amazonaws.com/"), env, Thread.currentThread().getContextClassLoader()).getPath("/geowave-benchmarks/")).count());
-		     URL u = new URL("http://www.yourserver.com:80/abc/demo.htm");
-		    System.out.println("The URL is " + u);
-		    System.out.println("The file part is " + u.getFile());
-		    System.out.println("The path part is " + u.getPath());
+
+	public void setURLStreamHandleFactory()
+			throws NoSuchFieldException,
+			SecurityException,
+			IllegalArgumentException,
+			IllegalAccessException {
+
+		Field factoryField = URL.class.getDeclaredField("factory");
+		factoryField.setAccessible(true);
+
+		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
+
+		if (urlStreamHandlerFactory == null) {
+			URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
+
+		}
+		else {
+			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
+			lockField.setAccessible(true);
+			synchronized (lockField.get(null)) {
+
+				factoryField.set(
+						null,
+						null);
+				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
+						urlStreamHandlerFactory));
+			}
+		}
+
 	}
 
 	protected void processInput(
@@ -98,20 +129,55 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 			LOGGER.error("Unable to ingest data, base directory or file input not specified");
 			return;
 		}
-		final File f = new File(
-				inputPath);
-		if (!f.exists()) {
-			LOGGER.error("Input file '" + f.getAbsolutePath() + "' does not exist");
-			throw new IllegalArgumentException(
-					inputPath + " does not exist");
+
+		Path path = null;
+		// If input path is S3
+		if (inputPath.startsWith("s3://")) {
+			try {
+				setURLStreamHandleFactory();
+			}
+			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+				LOGGER.error("Error in setting up S3URLStreamHandle Factory");
+				return;
+			}
+			try {
+				FileSystem fs = FileSystems.newFileSystem(
+						new URI(
+								"s3://s3.amazonaws.com/"),
+						new HashMap<String, Object>(),
+						Thread.currentThread().getContextClassLoader());
+				String s3InputPath = inputPath.replaceFirst(
+						"s3://",
+						"/");
+				path = (S3Path) fs.getPath(s3InputPath);
+				if (!path.isAbsolute()) {
+					LOGGER.error("Input file " + inputPath + " does not exist");
+					return;
+				}
+			}
+			catch (URISyntaxException e) {
+				LOGGER.error("Unable to ingest data, Inavlid S3 URI");
+				return;
+			}
 		}
-		final File base = f.isDirectory() ? f : f.getParentFile();
+		else {
+			final File f = new File(
+					inputPath);
+			if (!f.exists()) {
+				LOGGER.error("Input file '" + f.getAbsolutePath() + "' does not exist");
+				throw new IllegalArgumentException(
+						inputPath + " does not exist");
+			}
+			path = Paths.get(inputPath);
+		}
 
 		for (final LocalPluginBase localPlugin : localPlugins.values()) {
-			localPlugin.init(base);
+			localPlugin.init(path.toUri().toURL());
 		}
+
 		Files.walkFileTree(
-				Paths.get(inputPath),
+				// Paths.get(inputPath),
+				path,
 				new LocalPluginFileVisitor<P, R>(
 						localPlugins,
 						this,

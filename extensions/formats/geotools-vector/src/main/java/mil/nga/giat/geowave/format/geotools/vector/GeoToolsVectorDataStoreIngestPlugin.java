@@ -90,11 +90,12 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	private static boolean isPropertiesFile(
 			URL file ) {
-		return FilenameUtils.getName(file.getPath()).toLowerCase(
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).endsWith(
 				PROPERTIES_EXTENSION);
 	}

@@ -111,9 +111,7 @@ public class GDELTIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
-
-	}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(

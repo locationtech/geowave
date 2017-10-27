@@ -46,8 +46,8 @@ abstract public class AbstractStageWholeFileToAvro<O> implements
 			// large
 			return new WholeFile[] {
 				new WholeFile(
-						ByteBuffer.wrap(IOUtils.toByteArray(f))
-						,f.getPath())
+						ByteBuffer.wrap(IOUtils.toByteArray(f)),
+						f.getPath())
 			};
 		}
 		catch (final IOException e) {
@@ -58,5 +58,5 @@ abstract public class AbstractStageWholeFileToAvro<O> implements
 		return new WholeFile[] {};
 
 	}
-	
+
 }

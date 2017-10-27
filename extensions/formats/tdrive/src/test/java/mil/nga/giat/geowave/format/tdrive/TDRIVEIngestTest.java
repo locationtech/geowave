@@ -51,7 +51,8 @@ public class TDRIVEIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final URL toIngest = this.getClass().getClassLoader().getResource(filePath);
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(TdriveUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

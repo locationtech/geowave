@@ -108,14 +108,13 @@ public class GpxUtils
 		"SF_SWITCH_NO_DEFAULT"
 	})
 	public static Map<Long, GpxTrack> parseOsmMetadata(
-			final File metadataFile )
+			final URL metadataFile )
 			throws FileNotFoundException,
 			XMLStreamException {
 		final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
 		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 		XMLEventReader eventReader = null;
-		try (final FileInputStream fis = new FileInputStream(
-				metadataFile); final InputStream in = new BufferedInputStream(
+		try (final InputStream fis = metadataFile.openStream(); final InputStream in = new BufferedInputStream(
 				fis);) {
 			inputFactory.setProperty(
 					"javax.xml.stream.isSupportingExternalEntities",
@@ -532,26 +531,37 @@ public class GpxUtils
 		return null;
 	}
 
-	public static boolean validateGpx(final URL gpxDocument)
-			throws SAXException, IOException {
+	public static boolean validateGpx(
+			final URL gpxDocument )
+			throws SAXException,
+			IOException {
 		try (InputStream in = gpxDocument.openStream()) {
-			final Source xmlFile = new StreamSource(in);
+			final Source xmlFile = new StreamSource(
+					in);
 			try {
 				SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
 				return true;
-			} catch (final SAXException e) {
-				LOGGER.info("XML file '" + "' failed GPX 1.1 validation", e);
+			}
+			catch (final SAXException e) {
+				LOGGER.info(
+						"XML file '" + "' failed GPX 1.1 validation",
+						e);
 				try {
 					SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
 					return true;
-				} catch (final SAXException e2) {
-					LOGGER.info("XML file '" + "' failed GPX 1.0 validation",
+				}
+				catch (final SAXException e2) {
+					LOGGER.info(
+							"XML file '" + "' failed GPX 1.0 validation",
 							e2);
 				}
 				return false;
 			}
-		} catch (IOException e) {
-			LOGGER.info("Unable read "+ gpxDocument.getPath(),e);
+		}
+		catch (IOException e) {
+			LOGGER.info(
+					"Unable read " + gpxDocument.getPath(),
+					e);
 			return false;
 		}
 

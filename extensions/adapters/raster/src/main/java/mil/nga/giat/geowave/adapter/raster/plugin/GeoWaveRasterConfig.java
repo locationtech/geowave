@@ -211,14 +211,16 @@ public class GeoWaveRasterConfig
 			ParserConfigurationException,
 			SAXException {
 		try (final InputStream in = xmlURL.openStream()) {
-			final InputSource input = new InputSource(xmlURL.toString());
+			final InputSource input = new InputSource(
+					xmlURL.toString());
 
-			final DocumentBuilderFactory dbf = DocumentBuilderFactory
-					.newInstance();
+			final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 			dbf.setIgnoringElementContentWhitespace(true);
 			dbf.setIgnoringComments(true);
 
-			dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+			dbf.setFeature(
+					XMLConstants.FEATURE_SECURE_PROCESSING,
+					true);
 
 			final DocumentBuilder db = dbf.newDocumentBuilder();
 
@@ -226,12 +228,14 @@ public class GeoWaveRasterConfig
 			final Document dom = db.parse(input);
 			in.close();
 
-			final NodeList children = dom.getChildNodes().item(0)
-					.getChildNodes();
+			final NodeList children = dom.getChildNodes().item(
+					0).getChildNodes();
 			final Map<String, String> configParams = new HashMap<String, String>();
 			for (int i = 0; i < children.getLength(); i++) {
 				final Node child = children.item(i);
-				configParams.put(child.getNodeName(), child.getTextContent());
+				configParams.put(
+						child.getNodeName(),
+						child.getTextContent());
 			}
 			return configParams;
 		}

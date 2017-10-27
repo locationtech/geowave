@@ -76,7 +76,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
@@ -246,14 +246,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 				};
 			}
 			else {
-				LOGGER.warn("Null grid coverage from file '" + input.getPath()
-						+ "' for discovered geotools format '" + format.getName() + "'");
+				LOGGER.warn("Null grid coverage from file '" + input.getPath() + "' for discovered geotools format '"
+						+ format.getName() + "'");
 			}
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read grid coverage of file '" + input.getPath()
-							+ "' for discovered geotools format '" + format.getName() + "'",
+					"Unable to read grid coverage of file '" + input.getPath() + "' for discovered geotools format '"
+							+ format.getName() + "'",
 					e);
 		}
 		return new Wrapper(

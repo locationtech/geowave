@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.ingest.operations;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
+import mil.nga.giat.geowave.core.ingest.local.ConfigAWSCommad;
 
 public class IngestOperationProvider implements
 		CLIOperationProviderSpi
@@ -24,7 +25,8 @@ public class IngestOperationProvider implements
 		LocalToHdfsCommand.class,
 		LocalToKafkaCommand.class,
 		LocalToMapReduceToGeowaveCommand.class,
-		MapReduceToGeowaveCommand.class
+		MapReduceToGeowaveCommand.class,
+		ConfigAWSCommad.class
 	};
 
 	@Override

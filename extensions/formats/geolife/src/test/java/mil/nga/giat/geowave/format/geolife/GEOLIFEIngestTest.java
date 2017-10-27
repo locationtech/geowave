@@ -51,7 +51,8 @@ public class GEOLIFEIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final URL toIngest = this.getClass().getClassLoader().getResource(filePath);
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(GeoLifeUtils.validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();

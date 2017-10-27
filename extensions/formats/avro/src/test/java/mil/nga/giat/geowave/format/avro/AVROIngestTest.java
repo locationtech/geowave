@@ -56,7 +56,8 @@ public class AVROIngestTest
 	public void testIngest()
 			throws IOException {
 
-		final URL toIngest =this.getClass().getClassLoader().getResource(filePath);
+		final URL toIngest = this.getClass().getClassLoader().getResource(
+				filePath);
 
 		assertTrue(validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
@@ -104,11 +105,13 @@ public class AVROIngestTest
 
 	private boolean validate(
 			URL file ) {
-			try(DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(file.openStream(),
-					new SpecificDatumReader<AvroSimpleFeatureCollection>())){
-				if (ds.getHeader() != null){
-					return true;
-				};
+		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
+				file.openStream(),
+				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
+			if (ds.getHeader() != null) {
+				return true;
+			}
+			;
 		}
 		catch (final IOException e) {
 			// Do nothing for now
