@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +29,7 @@ import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
@@ -47,6 +50,8 @@ public class SetCommand extends
 
 	private boolean isPassword;
 
+	ServiceStatus status = ServiceStatus.OK;
+	
 	@Override
 	public void execute(
 			final OperationParams params ) {
@@ -64,16 +69,22 @@ public class SetCommand extends
 	 *         set
 	 */
 	@Override
+	public Pair<ServiceStatus, Object> executeService(
+			OperationParams params )
+			throws Exception {
+		Object ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	@Override
 	public Object computeResults(
 			final OperationParams params ) {
 		try {
 			return setKeyValue(params);
 		}
 		catch (WritePropertiesException | ParameterException e) {
-			// TODO GEOWAVE-rest-project server error status message
-			// this.setStatus(
-			// Status.SERVER_ERROR_INTERNAL,
-			// e.getMessage());
+			setStatus(ServiceStatus.INTERNAL_ERROR);
 			return null;
 		}
 	}
@@ -147,6 +158,7 @@ public class SetCommand extends
 					"Write failure");
 		}
 		else {
+			status = ServiceStatus.OK;
 			return previousValue;
 		}
 	}
@@ -163,6 +175,14 @@ public class SetCommand extends
 		parameters.add(value);
 	}
 
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
+	}
+	
 	private static class WritePropertiesException extends
 			RuntimeException
 	{

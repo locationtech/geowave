@@ -277,6 +277,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				case DUPLICATE:
 					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 					break;
+				case INTERNAL_ERROR:
+					setStatus(Status.SERVER_ERROR_INTERNAL);
 			}
 			return result.getRight();
 		}
