@@ -94,8 +94,8 @@ public class AddAccumuloStoreCommand extends
 			requiredOptions.setPassword(new PasswordConverter(
 					"password").convert(requiredOptions.getPassword()));
 		}
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
+				
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

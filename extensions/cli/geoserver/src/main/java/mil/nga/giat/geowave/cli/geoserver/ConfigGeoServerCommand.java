@@ -261,8 +261,8 @@ public class ConfigGeoServerCommand extends
 	public Void computeResults(
 			final OperationParams params )
 			throws Exception {
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
+				
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

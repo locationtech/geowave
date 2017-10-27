@@ -65,8 +65,8 @@ public class KmeansSparkCommand extends
 		final String outputStoreName = parameters.get(1);
 
 		// Config file
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
+				
 
 		// Attempt to load stores.
 		if (inputDataStore == null) {

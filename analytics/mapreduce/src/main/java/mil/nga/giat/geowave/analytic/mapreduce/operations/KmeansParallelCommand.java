@@ -71,8 +71,8 @@ public class KmeansParallelCommand extends
 		String inputStoreName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
+				
 
 		// Attempt to load store.
 		if (inputStoreOptions == null) {

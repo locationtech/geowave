@@ -87,8 +87,8 @@ public class AddBigTableStoreCommand extends
 	public String computeResults(
 			final OperationParams params ) {
 
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
+				
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

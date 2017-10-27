@@ -50,8 +50,8 @@ public class SetCommandTest
 		setcommand.prepare(params);
 		setcommand.execute(params);
 
-		File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File f = getGeoWaveConfigFile(params);
+				
 		Properties p = ConfigOptions.loadProperties(
 				f,
 				null);

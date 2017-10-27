@@ -59,8 +59,8 @@ public class VersionCommand extends
 
 		final String inputStoreName = parameters.get(0);
 
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
+				
 
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);

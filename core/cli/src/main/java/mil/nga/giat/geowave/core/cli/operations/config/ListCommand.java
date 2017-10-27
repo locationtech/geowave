@@ -72,8 +72,8 @@ public class ListCommand extends
 	private Pair<String, SortedMap<String, Object>> getProperties(
 			final OperationParams params ) {
 
-		final File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File f = getGeoWaveConfigFile(params);
+				
 
 		// Reload options with filter if specified.
 		Properties p = null;

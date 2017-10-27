@@ -132,7 +132,7 @@ public class GeoWaveDedupeJobRunner extends
 		StoreLoader loader = new StoreLoader(
 				holder.getMainParameter().get(
 						0));
-		loader.loadFromConfig((File) params.getContext().get(
+		loader.loadFromConfig(getGeoWaveConfigFile(params);
 				ConfigOptions.PROPERTIES_FILE_CONTEXT));
 
 		final int res = ToolRunner.run(

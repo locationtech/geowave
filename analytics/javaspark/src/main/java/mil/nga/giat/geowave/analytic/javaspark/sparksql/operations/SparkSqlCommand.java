@@ -77,8 +77,8 @@ public class SparkSqlCommand extends
 			throws Exception {
 
 		// Config file
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
+				
 
 		final String sql = parameters.get(0);
 

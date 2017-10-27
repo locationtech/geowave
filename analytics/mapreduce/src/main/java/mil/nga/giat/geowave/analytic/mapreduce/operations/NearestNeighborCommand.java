@@ -109,8 +109,8 @@ public class NearestNeighborCommand extends
 		final String inputStoreName = parameters.get(0);
 
 		// Config file
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
+				
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

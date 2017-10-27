@@ -159,8 +159,8 @@ public class AddSpatialTemporalIndexCommand extends
 					"No type could be infered");
 		}
 
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
+				
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

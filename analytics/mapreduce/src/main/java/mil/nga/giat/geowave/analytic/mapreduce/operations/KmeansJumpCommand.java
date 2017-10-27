@@ -71,8 +71,8 @@ public class KmeansJumpCommand extends
 		String inputStoreName = parameters.get(0);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
+				
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

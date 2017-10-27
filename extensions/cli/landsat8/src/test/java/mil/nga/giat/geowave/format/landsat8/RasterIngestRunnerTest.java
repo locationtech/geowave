@@ -97,8 +97,8 @@ public class RasterIngestRunnerTest
 
 	private DataStore getStore(
 			OperationParams params ) {
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		File configFile = getGeoWaveConfigFile(params);
+				
 		StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -111,7 +111,7 @@ public class RasterIngestRunnerTest
 
 	/*
 	 * private PrimaryIndex getIndex(OperationParams params){ File configFile =
-	 * (File) params.getContext().get( ConfigOptions.PROPERTIES_FILE_CONTEXT);
+	 * getGeoWaveConfigFile(params); 
 	 * IndexLoader indexLoader = new IndexLoader("spatialindex"); if
 	 * (!indexLoader.loadFromConfig(configFile)) { throw new ParameterException(
 	 * "Cannot find index(s) by name: " + indexLoader.getIndexName()); }

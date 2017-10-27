@@ -82,8 +82,7 @@ public abstract class DefaultOperation implements
 			final OperationParams params )
 			throws Exception {
 
-		setGeoWaveConfigFile((File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT));
+		setGeoWaveConfigFile(getGeoWaveConfigFile(params));
 
 		if (getGeoWaveConfigFile(params) == null) {
 			// if file does not exist
@@ -189,8 +188,7 @@ public abstract class DefaultOperation implements
 	public File getGeoWaveConfigFile(
 			final OperationParams params ) {
 		if (getGeoWaveConfigFile() == null) {
-			setGeoWaveConfigFile((File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT));
+			setGeoWaveConfigFile(getGeoWaveConfigFile(params));
 
 		}
 		return getGeoWaveConfigFile();
