@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 
@@ -49,7 +50,8 @@ public class SetCommand extends
 	private String password = null;
 
 	private boolean isPassword;
-
+	private boolean isRestCall = true;
+	
 	ServiceStatus status = ServiceStatus.OK;
 	
 	@Override
@@ -58,6 +60,7 @@ public class SetCommand extends
 		if ((password != null) && !"".equals(password.trim())) {
 			isPassword = Boolean.parseBoolean(password.trim());
 		}
+		isRestCall = false;
 		computeResults(params);
 	}
 
@@ -103,6 +106,8 @@ public class SetCommand extends
 
 		String key = null;
 		String value = null;
+		PasswordConverter converter = new PasswordConverter(
+				null);
 		if ((parameters.size() == 1) && (parameters.get(
 				0).indexOf(
 				"=") != -1)) {
@@ -110,11 +115,21 @@ public class SetCommand extends
 					parameters.get(0),
 					"=");
 			key = parts[0];
-			value = parts[1];
+			if(isRestCall){
+				value = parts[1];
+			}
+			else{
+				value = converter.convert(parts[1]);
+			}
 		}
 		else if (parameters.size() == 2) {
 			key = parameters.get(0);
-			value = parameters.get(1);
+			if(isRestCall){
+				value = parameters.get(1);
+			}
+			else{
+				value = converter.convert(parameters.get(1));
+			}
 		}
 		else {
 			throw new ParameterException(
