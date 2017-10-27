@@ -139,7 +139,12 @@ public class AddStoreCommand extends
 			throw new ParameterException(
 					"That store already exists: " + getPluginName());
 		}
-
+	
+		if (pluginOptions.getFactoryOptions() != null) {
+ 			pluginOptions.getFactoryOptions().validatePluginOptions(
+ 							existingProps);
+		}	 
+		
 		// Save the store options.
 		pluginOptions.save(
 				existingProps,
