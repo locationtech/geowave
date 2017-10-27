@@ -45,7 +45,7 @@ import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 @GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
 public class ConfigGeoServerCommand extends
-		ServiceEnabledCommand<Void>
+		GeoServerCommand<Void>
 {
 	@Parameter(names = {
 		"-u",
@@ -296,6 +296,7 @@ public class ConfigGeoServerCommand extends
 		ConfigOptions.writeProperties(
 				propFile,
 				existingProps);
+		GeoServerRestClient.invalidateInstance();
 		return null;
 	}
 }

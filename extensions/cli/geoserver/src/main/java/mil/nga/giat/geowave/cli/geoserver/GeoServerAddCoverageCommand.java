@@ -28,7 +28,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 @GeowaveOperation(name = "addcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage")
 public class GeoServerAddCoverageCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -48,21 +48,7 @@ public class GeoServerAddCoverageCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
 
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		super.prepare(params);
 
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

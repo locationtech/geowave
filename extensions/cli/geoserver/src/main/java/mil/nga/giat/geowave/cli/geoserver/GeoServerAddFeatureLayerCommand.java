@@ -29,7 +29,7 @@ import net.sf.json.JSONObject;
 @GeowaveOperation(name = "addfl", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer feature layer")
 public class GeoServerAddFeatureLayerCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -48,21 +48,6 @@ public class GeoServerAddFeatureLayerCommand extends
 	@Parameter(description = "<layer name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

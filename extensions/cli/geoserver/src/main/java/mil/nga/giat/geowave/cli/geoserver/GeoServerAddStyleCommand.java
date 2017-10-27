@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 @GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer style")
 public class GeoServerAddStyleCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -45,21 +45,6 @@ public class GeoServerAddStyleCommand extends
 	@Parameter(description = "<GeoWave style name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStyle = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

@@ -28,28 +28,13 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 @GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add GeoServer workspace")
 public class GeoServerAddWorkspaceCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(description = "<workspace name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

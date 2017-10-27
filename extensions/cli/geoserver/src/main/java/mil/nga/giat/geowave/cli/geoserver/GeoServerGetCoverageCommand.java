@@ -31,7 +31,7 @@ import net.sf.json.JSONObject;
 @GeowaveOperation(name = "getcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get a GeoServer coverage's info")
 public class GeoServerGetCoverageCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -50,26 +50,6 @@ public class GeoServerGetCoverageCommand extends
 	@Parameter(description = "<coverage name>")
 	private final List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			final File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			final GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					config);
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

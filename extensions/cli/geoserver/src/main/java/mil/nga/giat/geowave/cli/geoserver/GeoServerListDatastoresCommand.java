@@ -29,7 +29,7 @@ import net.sf.json.JSONObject;
 @GeowaveOperation(name = "listds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer datastores")
 public class GeoServerListDatastoresCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -38,26 +38,6 @@ public class GeoServerListDatastoresCommand extends
 		"--workspace"
 	}, required = false, description = "workspace name")
 	private String workspace;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			final File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			final GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					config);
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

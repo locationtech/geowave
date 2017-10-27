@@ -28,7 +28,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 @GeowaveOperation(name = "addds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer datastore")
 public class GeoServerAddDatastoreCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -47,21 +47,6 @@ public class GeoServerAddDatastoreCommand extends
 	@Parameter(description = "<GeoWave store name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

@@ -30,7 +30,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 @GeowaveOperation(name = "rmds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer DataStore")
 public class GeoServerRemoveDatastoreCommand extends
-		ServiceEnabledCommand<String>
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -43,26 +43,6 @@ public class GeoServerRemoveDatastoreCommand extends
 	@Parameter(description = "<datastore name>")
 	private final List<String> parameters = new ArrayList<String>();
 	private String datastoreName = null;
-
-	@Override
-	public boolean prepare(
-			final OperationParams params ) {
-		if (geoserverClient == null) {
-			// Get the local config for GeoServer
-			final File propFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
-			final GeoServerConfig config = new GeoServerConfig(
-					propFile);
-
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					config);
-		}
-
-		// Successfully prepared
-		return true;
-	}
 
 	@Override
 	public void execute(

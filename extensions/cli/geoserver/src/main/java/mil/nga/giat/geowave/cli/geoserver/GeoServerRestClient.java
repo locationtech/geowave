@@ -73,6 +73,7 @@ import net.sf.json.JSONObject;
 
 public class GeoServerRestClient
 {
+	private static GeoServerRestClient SINGLETON_INSTANCE; 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
@@ -85,18 +86,27 @@ public class GeoServerRestClient
 	private final GeoServerConfig config;
 	private WebTarget webTarget = null;
 
-	public GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config ) {
 		this.config = config;
 	}
 
-	public GeoServerRestClient(
+	private  GeoServerRestClient(
 			final GeoServerConfig config,
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
 	}
-
+	
+	public static GeoServerRestClient getInstance(GeoServerConfig config){
+		if (SINGLETON_INSTANCE == null){
+			SINGLETON_INSTANCE = new GeoServerRestClient(config);
+		}
+		return SINGLETON_INSTANCE;
+	}
+	public static void invalidateInstance(){
+		SINGLETON_INSTANCE = null;
+	}
 	/**
 	 *
 	 * @return
