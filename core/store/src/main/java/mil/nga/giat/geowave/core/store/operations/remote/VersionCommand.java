@@ -39,7 +39,7 @@ public class VersionCommand extends
 		ServiceEnabledCommand<Void>
 {
 	@Parameter(description = "<storename>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(

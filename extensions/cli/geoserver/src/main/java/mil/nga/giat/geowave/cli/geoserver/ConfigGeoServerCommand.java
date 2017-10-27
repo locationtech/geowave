@@ -67,7 +67,7 @@ public class ConfigGeoServerCommand extends
 	private String workspace;
 
 	@Parameter(description = "<GeoServer URL>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String url = null;
 
 	@ParametersDelegate

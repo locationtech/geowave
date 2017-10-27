@@ -43,10 +43,10 @@ public class GeoServerAddFeatureLayerCommand extends
 		"-ds",
 		"--datastore"
 	}, required = true, description = "datastore name")
-	private final String datastore = null;
+	private String datastore = null;
 
 	@Parameter(description = "<layer name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
 	@Override

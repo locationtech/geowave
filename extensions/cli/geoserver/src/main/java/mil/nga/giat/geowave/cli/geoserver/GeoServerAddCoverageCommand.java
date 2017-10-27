@@ -42,10 +42,10 @@ public class GeoServerAddCoverageCommand extends
 		"-cs",
 		"--cvgstore"
 	}, required = true, description = "coverage store name")
-	private final String cvgstore = null;
+	private String cvgstore = null;
 
 	@Parameter(description = "<coverage name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
 
 	@Override

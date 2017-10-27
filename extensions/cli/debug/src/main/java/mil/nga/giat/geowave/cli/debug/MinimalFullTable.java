@@ -52,7 +52,7 @@ public class MinimalFullTable extends
 	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
 	private String indexId;

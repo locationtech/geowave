@@ -40,10 +40,10 @@ public class GeoServerAddStyleCommand extends
 		"-sld",
 		"--stylesld"
 	}, required = true, description = "style sld file")
-	private final String stylesld = null;
+	private String stylesld = null;
 
 	@Parameter(description = "<GeoWave style name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String gwStyle = null;
 
 	@Override

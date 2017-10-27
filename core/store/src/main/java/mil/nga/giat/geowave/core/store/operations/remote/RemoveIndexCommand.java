@@ -30,7 +30,7 @@ public class RemoveIndexCommand extends
 {
 
 	@Parameter(description = "<store name> <indexId>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(

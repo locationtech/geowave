@@ -42,10 +42,10 @@ public class GeoServerAddDatastoreCommand extends
 		"-ds",
 		"--datastore"
 	}, required = false, description = "datastore name")
-	private final String datastore = null;
+	private String datastore = null;
 
 	@Parameter(description = "<GeoWave store name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
 	@Override

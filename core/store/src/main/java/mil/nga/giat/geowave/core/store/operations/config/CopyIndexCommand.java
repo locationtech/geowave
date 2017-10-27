@@ -45,7 +45,7 @@ public class CopyIndexCommand extends
 	private Boolean makeDefault;
 
 	@ParametersDelegate
-	private final IndexPluginOptions newPluginOptions = new IndexPluginOptions();
+	private IndexPluginOptions newPluginOptions = new IndexPluginOptions();
 
 	private File configFile;
 	private Properties existingProps;

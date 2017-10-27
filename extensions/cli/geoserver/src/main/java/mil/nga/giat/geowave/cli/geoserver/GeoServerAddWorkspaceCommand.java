@@ -33,7 +33,7 @@ public class GeoServerAddWorkspaceCommand extends
 	private GeoServerRestClient geoserverClient = null;
 
 	@Parameter(description = "<workspace name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
 
 	@Override

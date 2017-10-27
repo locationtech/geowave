@@ -53,7 +53,7 @@ public class GeoServerAddLayerCommand extends
 		"-a",
 		"--add"
 	}, converter = AddOptionConverter.class, description = "For multiple layers, add (all | raster | vector)")
-	private final AddOption addOption = null;
+	private AddOption addOption = null;
 
 	@Parameter(names = {
 		"-id",
@@ -65,10 +65,10 @@ public class GeoServerAddLayerCommand extends
 		"-sld",
 		"--setStyle"
 	}, description = "default style sld")
-	private final String style = null;
+	private String style = null;
 
 	@Parameter(description = "<GeoWave store name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
 	@Override

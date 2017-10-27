@@ -38,7 +38,7 @@ public abstract class AbstractStatsCommand<T> extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@ParametersDelegate
-	private final StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
+	private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
 
 	private DataStorePluginOptions inputStoreOptions = null;
 

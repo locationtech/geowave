@@ -46,7 +46,7 @@ public class CopyStoreCommand extends
 	private Boolean makeDefault;
 
 	@ParametersDelegate
-	private final DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
+	private DataStorePluginOptions newPluginOptions = new DataStorePluginOptions();
 
 	private File configFile;
 	private Properties existingProps;

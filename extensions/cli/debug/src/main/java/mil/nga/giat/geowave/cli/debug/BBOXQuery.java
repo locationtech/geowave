@@ -67,7 +67,7 @@ public class BBOXQuery extends
 		"--useAggregation",
 		"-agg"
 	}, description = "Compute count on the server side")
-	private final Boolean useAggregation = Boolean.FALSE;
+	private Boolean useAggregation = Boolean.FALSE;
 
 	private Geometry geom;
 

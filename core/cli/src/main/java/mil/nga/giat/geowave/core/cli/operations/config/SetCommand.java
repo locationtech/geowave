@@ -43,7 +43,7 @@ public class SetCommand extends
 	@Parameter(names = {
 		"--password"
 	}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
-	private final String password = null;
+	private String password = null;
 
 	private boolean isPassword;
 

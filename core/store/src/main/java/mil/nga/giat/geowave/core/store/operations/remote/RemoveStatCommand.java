@@ -33,7 +33,7 @@ public class RemoveStatCommand extends
 {
 
 	@Parameter(description = "<store name> <adapterId> <statId>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	private String statId = null;
 
