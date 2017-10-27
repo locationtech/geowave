@@ -13,5 +13,4 @@ bin
 docker-root
 generated
 .metadata
-swagger.json
-api.db
+
