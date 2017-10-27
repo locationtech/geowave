@@ -62,8 +62,7 @@ public class ListIndexCommand extends
 
 		// Get the config options from the properties file
 
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load the desired input store
 

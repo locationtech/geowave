@@ -55,8 +55,7 @@ public class CopyStoreCommand extends
 	public boolean prepare(
 			final OperationParams params ) {
 
-		configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		configFile = getGeoWaveConfigFile(params);
 		existingProps = ConfigOptions.loadProperties(
 				configFile,
 				null);

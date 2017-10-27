@@ -72,8 +72,7 @@ public class AddIndexGroupCommand extends
 	 */
 	private void addIndexGroup(
 			final OperationParams params ) {
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);

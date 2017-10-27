@@ -64,9 +64,7 @@ public class VectorMRExportCommand extends
 		String storeName = parameters.get(2);
 
 		// Config file
-		File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-
+		File configFile = getGeoWaveConfigFile(params);
 		// Attempt to load store.
 		if (storeOptions == null) {
 			StoreLoader storeLoader = new StoreLoader(

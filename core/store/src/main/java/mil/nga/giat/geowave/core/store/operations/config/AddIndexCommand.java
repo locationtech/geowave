@@ -68,8 +68,7 @@ public class AddIndexCommand extends
 		else {
 			// Try to load the 'default' options.
 
-			final File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+			final File configFile = getGeoWaveConfigFile(params);
 			final Properties existingProps = ConfigOptions.loadProperties(
 					configFile,
 					null);
@@ -167,9 +166,8 @@ public class AddIndexCommand extends
 					"No type could be infered");
 		}
 
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		final Properties existingProps = ConfigOptions.loadProperties(
+		final File propFile = getGeoWaveConfigFile(params);
+		Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
 

@@ -85,8 +85,7 @@ public class SetCommand extends
 	private Object setKeyValue(
 			final OperationParams params ) {
 
-		final File f = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File f = getGeoWaveConfigFile(params);
 		final Properties p = ConfigOptions.loadProperties(
 				f,
 				null);

@@ -79,8 +79,7 @@ public class AddStoreCommand extends
 		else {
 			// Try to load the 'default' options.
 
-			final File configFile = (File) params.getContext().get(
-					ConfigOptions.PROPERTIES_FILE_CONTEXT);
+			final File configFile = getGeoWaveConfigFile(params);
 			final Properties existingProps = ConfigOptions.loadProperties(
 					configFile,
 					null);
@@ -121,8 +120,7 @@ public class AddStoreCommand extends
 	public void computeResults(
 			final OperationParams params ) {
 
-		final File propFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File propFile = getGeoWaveConfigFile(params);
 		final Properties existingProps = ConfigOptions.loadProperties(
 				propFile,
 				null);
