@@ -80,6 +80,7 @@ public class SetCommand extends
 				status,
 				ret);
 	}
+	
 	@Override
 	public Object computeResults(
 			final OperationParams params ) {
@@ -88,6 +89,7 @@ public class SetCommand extends
 		}
 		catch (WritePropertiesException | ParameterException e) {
 			setStatus(ServiceStatus.INTERNAL_ERROR);
+			LOGGER.error(e.toString());
 			return null;
 		}
 	}

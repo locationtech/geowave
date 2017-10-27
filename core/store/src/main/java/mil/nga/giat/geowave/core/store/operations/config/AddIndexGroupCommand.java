@@ -15,6 +15,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -22,6 +27,7 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexGroupPluginOptions;
@@ -35,12 +41,26 @@ public class AddIndexGroupCommand extends
 	@Parameter(description = "<name> <comma separated list of indexes>")
 	private List<String> parameters = new ArrayList<String>();
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexGroupCommand.class);
+	
+	ServiceStatus status = ServiceStatus.OK;
+	
 	@Override
 	public void execute(
 			final OperationParams params ) {
 		addIndexGroup(params);
 	}
 
+	@Override
+	public Pair<ServiceStatus, Void> executeService(
+			OperationParams params )
+			throws Exception {
+		Void ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
+	}
+	
 	/**
 	 * Add rest endpoint for the addIndexGroup command. Looks for POST params
 	 * with keys 'key' and 'value' to set.
@@ -55,10 +75,8 @@ public class AddIndexGroupCommand extends
 			addIndexGroup(params);
 		}
 		catch (WritePropertiesException | ParameterException e) {
-			// TODO GEOWAVE-rest-project server error status message
-			// this.setStatus(
-			// Status.SERVER_ERROR_INTERNAL,
-			// e.getMessage());
+			setStatus(ServiceStatus.INTERNAL_ERROR);
+			LOGGER.error(e.toString());
 		}
 
 		return null;
@@ -144,6 +162,14 @@ public class AddIndexGroupCommand extends
 		parameters = new ArrayList<String>();
 		parameters.add(name);
 		parameters.add(commaSeparatedIndexes);
+	}
+
+	public ServiceStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(ServiceStatus status) {
+		this.status = status;
 	}
 
 	private static class WritePropertiesException extends

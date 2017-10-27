@@ -30,7 +30,7 @@ public class Landsat8IngestVectorCommand extends
 {
 
 	@Parameter(description = "<storename> <comma delimited index/group list>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
 	protected Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
