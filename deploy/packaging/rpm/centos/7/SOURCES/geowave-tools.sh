@@ -19,7 +19,7 @@ fi
 
 # Setting up Hadoop env
 if [ -z "$HADOOP_HOME" ]; then
-  VENDOR_VERSION=$( cat /usr/local/geowave/tools/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
+  VENDOR_VERSION=$( cat $GEOWAVE_TOOLS_HOME/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
   if [[ $VENDOR_VERSION == apache ]]; then
     export HADOOP_HOME=/usr/lib/hadoop
   elif [[ $VENDOR_VERSION == hdp* ]]; then
@@ -50,7 +50,7 @@ CLASSPATH=${HADOOP_CLASSPATH}
 
 # Setting up Spark env
 if [ -z "$SPARK_HOME" ]; then
-  VENDOR_VERSION=$( cat /usr/local/geowave/tools/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
+  VENDOR_VERSION=$( cat $GEOWAVE_TOOLS_HOME/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
   if [[ $VENDOR_VERSION == apache ]]; then
     export SPARK_HOME=/usr/lib/spark
   elif [[ $VENDOR_VERSION == hdp* ]]; then
@@ -74,10 +74,10 @@ if [ -n "${SPARK_HOME}" ] && [ -d "${SPARK_HOME}" ]; then
      fi
   done  
 
-  CLASSPATH="/usr/local/geowave/tools/geowave-tools-0.9.6-hdp2.jar:/usr/local/geowave-0.9.5-hdp2/tools/plugins/*:${SPARK_HOME}/conf:${SPARK_CLASSPATH}:${CLASSPATH}"
+  CLASSPATH="$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${SPARK_HOME}/conf:${SPARK_CLASSPATH}:${CLASSPATH}"
 
 else
-  CLASSPATH="/usr/local/geowave/tools/geowave-tools-0.9.6-hdp2.jar:/usr/local/geowave-0.9.5-hdp2/tools/plugins/*:${CLASSPATH}"
+  CLASSPATH="$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${CLASSPATH}"
 fi
 
 
