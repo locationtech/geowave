@@ -188,7 +188,8 @@ public abstract class DefaultOperation implements
 	public File getGeoWaveConfigFile(
 			final OperationParams params ) {
 		if (getGeoWaveConfigFile() == null) {
-			setGeoWaveConfigFile(getGeoWaveConfigFile(params));
+			setGeoWaveConfigFile((File) params.getContext().get(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT));
 
 		}
 		return getGeoWaveConfigFile();

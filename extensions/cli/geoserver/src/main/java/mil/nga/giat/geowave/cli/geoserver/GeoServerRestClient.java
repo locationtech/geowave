@@ -107,6 +107,11 @@ public class GeoServerRestClient
 		return SINGLETON_INSTANCE;
 	}
 
+	public void setWebTarget(
+			WebTarget webTarget ) {
+		this.webTarget = webTarget;
+	}
+
 	public static void invalidateInstance() {
 		SINGLETON_INSTANCE = null;
 	}
