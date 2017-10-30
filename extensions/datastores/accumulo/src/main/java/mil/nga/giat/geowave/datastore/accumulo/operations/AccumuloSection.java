@@ -14,7 +14,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.GeowaveTopLevelSection;
 
 @GeowaveOperation(name = "accumulo", parentOperation = GeowaveTopLevelSection.class)

@@ -117,20 +117,21 @@ public class SetCommand extends
 					parameters.get(0),
 					"=");
 			key = parts[0];
-			if (isRestCall) {
-				value = parts[1];
+			if (!isRestCall && isPassword) {
+				value = converter.convert(parts[1]);
 			}
 			else {
-				value = converter.convert(parts[1]);
+				value = parts[1];
 			}
 		}
 		else if (parameters.size() == 2) {
 			key = parameters.get(0);
-			if (isRestCall) {
-				value = parameters.get(1);
+			if (!isRestCall && isPassword) {
+				value = converter.convert(parameters.get(1));
+
 			}
 			else {
-				value = converter.convert(parameters.get(1));
+				value = parameters.get(1);
 			}
 		}
 		else {

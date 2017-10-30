@@ -96,7 +96,6 @@ public class VectorIngestRunnerTest
 			OperationParams params ) {
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		;
 
 		StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
