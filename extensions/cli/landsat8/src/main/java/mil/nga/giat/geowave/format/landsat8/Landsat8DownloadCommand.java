@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -35,7 +35,7 @@ public class Landsat8DownloadCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		final DownloadRunner runner = new DownloadRunner(
 				analyzeOptions,

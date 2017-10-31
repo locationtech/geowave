@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,9 +20,8 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.ingest.kafka.KafkaProducerCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.kafka.StageToKafkaDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
@@ -32,8 +31,7 @@ import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOpt
 @GeowaveOperation(name = "localToKafka", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to a Kafka topic")
 public class LocalToKafkaCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<file or directory>")
@@ -52,7 +50,7 @@ public class LocalToKafkaCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -62,24 +60,70 @@ public class LocalToKafkaCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 *
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
+		computeResults(params);
+	}
 
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String fileOrDirectory ) {
+		parameters = new ArrayList<String>();
+		parameters.add(fileOrDirectory);
+	}
+
+	public KafkaProducerCommandLineOptions getKafkaOptions() {
+		return kafkaOptions;
+	}
+
+	public void setKafkaOptions(
+			final KafkaProducerCommandLineOptions kafkaOptions ) {
+		this.kafkaOptions = kafkaOptions;
+	}
+
+	public LocalInputCommandLineOptions getLocalInputOptions() {
+		return localInputOptions;
+	}
+
+	public void setLocalInputOptions(
+			final LocalInputCommandLineOptions localInputOptions ) {
+		this.localInputOptions = localInputOptions;
+	}
+
+	public IngestFormatPluginOptions getPluginFormats() {
+		return pluginFormats;
+	}
+
+	public void setPluginFormats(
+			final IngestFormatPluginOptions pluginFormats ) {
+		this.pluginFormats = pluginFormats;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params )
+			throws Exception {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires arguments: <file or directory>");
 		}
 
-		String inputPath = parameters.get(0);
+		final String inputPath = parameters.get(0);
 
 		// Ingest Plugins
-		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
+		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
 		// Driver
-		StageToKafkaDriver driver = new StageToKafkaDriver(
+		final StageToKafkaDriver driver = new StageToKafkaDriver(
 				kafkaOptions,
 				ingestPlugins,
 				localInputOptions);
@@ -89,42 +133,6 @@ public class LocalToKafkaCommand extends
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String fileOrDirectory ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(fileOrDirectory);
-	}
-
-	public KafkaProducerCommandLineOptions getKafkaOptions() {
-		return kafkaOptions;
-	}
-
-	public void setKafkaOptions(
-			KafkaProducerCommandLineOptions kafkaOptions ) {
-		this.kafkaOptions = kafkaOptions;
-	}
-
-	public LocalInputCommandLineOptions getLocalInputOptions() {
-		return localInputOptions;
-	}
-
-	public void setLocalInputOptions(
-			LocalInputCommandLineOptions localInputOptions ) {
-		this.localInputOptions = localInputOptions;
-	}
-
-	public IngestFormatPluginOptions getPluginFormats() {
-		return pluginFormats;
-	}
-
-	public void setPluginFormats(
-			IngestFormatPluginOptions pluginFormats ) {
-		this.pluginFormats = pluginFormats;
+		return null;
 	}
 }

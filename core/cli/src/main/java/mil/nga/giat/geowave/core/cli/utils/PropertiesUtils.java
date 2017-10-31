@@ -44,8 +44,10 @@ public class PropertiesUtils implements
 		if (propsFile != null && propsFile.exists()) {
 			properties = new Properties();
 			try {
-				// HP Fortify "Improper Resource Shutdown or Release" false positive
-				// FileInputStream is closed automatically below as a result of isr.close();
+				// HP Fortify "Improper Resource Shutdown or Release" false
+				// positive
+				// FileInputStream is closed automatically below as a result of
+				// isr.close();
 				InputStreamReader isr = new InputStreamReader(
 						new FileInputStream(
 								propsFile),
@@ -174,7 +176,8 @@ public class PropertiesUtils implements
 				val = null;
 			}
 			// HP Fortify "Privacy Violation" false positive
-			// The information in the Properties file is not private or sensitive
+			// The information in the Properties file is not private or
+			// sensitive
 			if (val == null && req) {
 				throw new IllegalArgumentException(
 						"Missing required property: " + name);

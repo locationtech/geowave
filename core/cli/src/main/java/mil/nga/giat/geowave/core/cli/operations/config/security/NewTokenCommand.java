@@ -82,8 +82,10 @@ public class NewTokenCommand extends
 									String configValue = configProps.getProperty(configKey);
 									if (configValue != null && !"".equals(configValue.trim())
 											&& BaseEncryption.isProperlyWrapped(configValue)) {
-										// HP Fortify "NULL Pointer Dereference" false positive
-										// Exception handling will catch if backupFile is null
+										// HP Fortify "NULL Pointer Dereference"
+										// false positive
+										// Exception handling will catch if
+										// backupFile is null
 										String decryptedValue = SecurityUtils.decryptHexEncodedValue(
 												configValue,
 												backupFile.getCanonicalPath());

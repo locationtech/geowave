@@ -30,7 +30,7 @@ import mil.nga.giat.geowave.core.cli.spi.DefaultConfigProviderSpi;
  * The default operation prevents implementors from having to implement the
  * 'prepare' function, if they don't want to.
  */
-public class DefaultOperation implements
+public abstract class DefaultOperation implements
 		Operation
 {
 	private final static Logger sLog = LoggerFactory.getLogger(DefaultOperation.class);
@@ -82,8 +82,7 @@ public class DefaultOperation implements
 			final OperationParams params )
 			throws Exception {
 
-		setGeoWaveConfigFile((File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT));
+		setGeoWaveConfigFile(getGeoWaveConfigFile(params));
 
 		if (getGeoWaveConfigFile(params) == null) {
 			// if file does not exist
