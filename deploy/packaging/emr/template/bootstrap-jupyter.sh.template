@@ -55,15 +55,18 @@ echo bootstrap_conda.sh completed. PATH now: $PATH
 echo Performing pixiedust and jupyter kernel setup.
 
 # setup python 3.5 in the master and workers
-printf '\nexport PYSPARK_PYTHON=$HOME/conda/bin/python3.5' >> $HOME/.bashrc
-printf '\nexport PYSPARK_DRIVER_PYTHON=$HOME/conda/bin/python3.5' >> $HOME/.bashrc
+printf "\nexport PYSPARK_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+printf "\nexport PYSPARK_DRIVER_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+# This was added because Upstart doesn't capture user environment variables before loading jupyter
+printf "\nexport HOSTNAME=$HOSTNAME" >> $HOME/.bashrc
 source $HOME/.bashrc
 
-pip --version
-pip install  pixiedust ipywidgets ipyleaflet geomet
+pip install --upgrade pip
+# Pandas added to install again because conda-forge misses correct pytz dependency version
+pip install  pixiedust ipywidgets ipyleaflet geomet pandas
 
 jupyter nbextension enable --py --sys-prefix ipyleaflet
-
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
 # generate empty config for notebook server
 jupyter notebook --generate-config
@@ -76,7 +79,6 @@ printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook
 printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
-printf "\nc.ContentsManager.checkpoints_kwargs = {'root_dir': '.checkpoints'}" >> $HOME/.jupyter/jupyter_notebook_config.py
 
 # Install Jupyter Kernel components on master node
 if is_master ; then
