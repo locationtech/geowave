@@ -25,6 +25,7 @@ if [ -z "$HADOOP_HOME" ]; then
   elif [[ $VENDOR_VERSION == hdp* ]]; then
     export HADOOP_HOME=/usr/hdp/current/hadoop-client
     export HDP_VERSION=$(hdp-select| grep  hadoop-hdfs-namenode| sed "s/hadoop-hdfs-namenode - //g")
+    export GEOWAVE_TOOL_JAVA_OPT="$GEOWAVE_TOOL_JAVA_OPT -Dhdp.version=${HDP_VERSION}"
   elif [[ $VENDOR_VERSION == cdh* ]]; then
     export HADOOP_HOME=/usr/lib/hadoop
   else
@@ -36,7 +37,6 @@ fi
 # set up HADOOP specific env only if HADOOP is installed
 if [ -n "${HADOOP_HOME}" ] && [ -d "${HADOOP_HOME}" ]; then
      . $HADOOP_HOME/libexec/hadoop-config.sh
-     export GEOWAVE_TOOL_JAVA_OPT="$GEOWAVE_TOOL_JAVA_OPT $HADOOP_OPTS" 
      HADOOP_CLASSPATH=""
      for i in $(echo $CLASSPATH | sed "s/:/ /g")
      do
@@ -58,7 +58,7 @@ if [ -z "$SPARK_HOME" ]; then
   elif [[ $VENDOR_VERSION == cdh* ]]; then
     export SPARK_HOME=/usr/lib/spark
   else
-    echo "Unknow Spark Distribution. Set env variable SPARK_HOME."
+    echo "Unknown Spark Distribution. Set env variable SPARK_HOME."
   fi
 fi
 
