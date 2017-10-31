@@ -17,25 +17,31 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "aws", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for aws s3")
-public class ConfigAWSCommad extends DefaultOperation implements Command {
+public class ConfigAWSCommand extends
+		DefaultOperation implements
+		Command
+{
 
 	public static final String AWS_S3_ENDPOINT_PREFIX = "endpoint";
 	public static final String AWS_S3_ENDPOINT_URL = AWS_S3_ENDPOINT_PREFIX + ".url";
-	
+
 	@Parameter(description = "<AWS S3 endpoint URL> (for example s3://s3.amazonaws.com ")
 	private List<String> parameters = new ArrayList<String>();
 	private String url = null;
-	
+
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
 		boolean retval = true;
 		retval |= super.prepare(params);
-		
+
 		return retval;
 	}
+
 	@Override
-	public void execute(OperationParams params) throws Exception {
+	public void execute(
+			OperationParams params )
+			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <AWS S3 endpoint URL>");
@@ -49,15 +55,13 @@ public class ConfigAWSCommad extends DefaultOperation implements Command {
 					AWS_S3_ENDPOINT_URL,
 					url);
 		}
-		
-		System.out.println("URL:"+ url);
-		
+
 		// Write properties file
-				ConfigOptions.writeProperties(
-						getGeoWaveConfigFile(params),
-						existingProps,
-						this.getClass(),
-						AWS_S3_ENDPOINT_PREFIX);
+		ConfigOptions.writeProperties(
+				getGeoWaveConfigFile(params),
+				existingProps,
+				this.getClass(),
+				AWS_S3_ENDPOINT_PREFIX);
 	}
-	
+
 }

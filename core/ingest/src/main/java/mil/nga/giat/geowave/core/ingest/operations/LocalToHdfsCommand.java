@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -72,6 +73,9 @@ public class LocalToHdfsCommand extends
 		String inputPath = parameters.get(0);
 		String hdfsHostPort = parameters.get(1);
 		String basePath = parameters.get(2);
+		
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
 
 		// Ensures that the url starts with hdfs://
 		if (!hdfsHostPort.contains("://")) {
@@ -89,7 +93,7 @@ public class LocalToHdfsCommand extends
 				localInputOptions);
 
 		// Execute
-		if (!driver.runOperation(inputPath)) {
+		if (!driver.runOperation(inputPath,configFile)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}

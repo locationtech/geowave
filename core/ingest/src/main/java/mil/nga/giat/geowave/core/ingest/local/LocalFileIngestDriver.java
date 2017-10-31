@@ -60,7 +60,7 @@ public class LocalFileIngestDriver extends
 			Map<String, LocalFileIngestPlugin<?>> ingestPlugins,
 			VisibilityOptions ingestOptions,
 			LocalInputCommandLineOptions inputOptions,
-			int threads ) {
+			int threads) {
 		super(
 				inputOptions);
 		this.storeOptions = storeOptions;
@@ -71,7 +71,7 @@ public class LocalFileIngestDriver extends
 	}
 
 	public boolean runOperation(
-			String inputPath ) {
+			String inputPath, File configFile ) {
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
@@ -101,6 +101,7 @@ public class LocalFileIngestDriver extends
 
 			processInput(
 					inputPath,
+					configFile,
 					localFileIngestPlugins,
 					runData);
 

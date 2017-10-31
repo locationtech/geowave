@@ -75,7 +75,8 @@ public class StageToHdfsDriver extends
 	}
 
 	public boolean runOperation(
-			String inputPath ) {
+			String inputPath,
+			File configFile) {
 
 		// first collect the stage to hdfs plugins
 		final Map<String, AvroFormatPlugin<?, ?>> stageToHdfsPlugins = ingestPlugins;
@@ -100,6 +101,7 @@ public class StageToHdfsDriver extends
 							fs);
 					processInput(
 							inputPath,
+							configFile,
 							stageToHdfsPlugins,
 							runData);
 					runData.close();

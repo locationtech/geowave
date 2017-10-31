@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.local;
 
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -31,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Properties;
 import java.lang.reflect.Field;
 
 import org.apache.commons.lang.StringUtils;
@@ -47,6 +49,8 @@ import com.upplication.s3fs.S3Path;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
  * This class can be sub-classed to handle recursing over a local directory
@@ -122,8 +126,10 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 
 	protected void processInput(
 			final String inputPath,
+			final File configFile,
 			final Map<String, P> localPlugins,
 			final R runData )
+			//final LocalIngestRunData runData)
 			throws IOException {
 		if (inputPath == null) {
 			LOGGER.error("Unable to ingest data, base directory or file input not specified");
@@ -140,10 +146,20 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				LOGGER.error("Error in setting up S3URLStreamHandle Factory");
 				return;
 			}
+			
+			
+			Properties configProperties= null;
+			
+			if (configFile != null && configFile.exists()) {
+				configProperties = ConfigOptions.loadProperties(
+						configFile, null);
+			}
+			String endpoint_url  = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
+			
 			try {
+				
 				FileSystem fs = FileSystems.newFileSystem(
-						new URI(
-								"s3://s3.amazonaws.com/"),
+						new URI(endpoint_url+"/"),
 						new HashMap<String, Object>(),
 						Thread.currentThread().getContextClassLoader());
 				String s3InputPath = inputPath.replaceFirst(
@@ -185,6 +201,8 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 						localInput.getExtensions()));
 	}
 
+	
+	
 	abstract protected void processFile(
 			final URL file,
 			String typeName,

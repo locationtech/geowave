@@ -146,7 +146,7 @@ public class LocalToMapReduceToGeowaveCommand extends
 					localInputOptions);
 
 			// Execute
-			if (!driver.runOperation(inputPath)) {
+			if (!driver.runOperation(inputPath,configFile)) {
 				throw new RuntimeException(
 						"Ingest failed to execute");
 			}
