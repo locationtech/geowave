@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -74,8 +74,8 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -103,7 +103,12 @@ var activeTableTab = "activeTableTab";
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html" title="class in mil.nga.giat.geowave.core.cli.api">mil.nga.giat.geowave.core.cli.api.DefaultOperation</a></li>
 <li>
 <ul class="inheritance">
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&gt;</li>
+<li>
+<ul class="inheritance">
 <li>mil.nga.giat.geowave.core.store.operations.remote.VersionCommand</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -119,8 +124,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">VersionCommand</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/DefaultOperation.html" title="class in mil.nga.giat.geowave.core.cli.api">DefaultOperation</a>
-implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Command.html" title="interface in mil.nga.giat.geowave.core.cli.api">Command</a></pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&gt;</pre>
 <div class="block">Command for trying to retrieve the version of GeoWave for a remote datastore</div>
 </li>
 </ul>
@@ -128,6 +132,36 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="nested.classes.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">
+<!--   -->
+</a>
+<h3>Nested classes/interfaces inherited from class&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.HttpMethod.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand.HttpMethod</a></code></li>
+</ul>
+</li>
+</ul>
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#path">path</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -158,12 +192,29 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/VersionCommand.html#computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-">computeResults</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/VersionCommand.html#execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">execute</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>
 <div class="block">Execute the command, and return whether we want to continue execution</div>
 </td>
 </tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.HttpMethod.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand.HttpMethod</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/VersionCommand.html#getMethod--">getMethod</a></span>()</code>
+<div class="block">the method to expose as a resource</div>
+</td>
+</tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getId--">getId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getName--">getName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getPath--">getPath</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.DefaultOperation">
 <!--   -->
@@ -219,18 +270,49 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <a name="execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>execute</h4>
 <pre>public&nbsp;void&nbsp;execute(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
-             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Command.html#execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">Command</a></code></span></div>
 <div class="block">Execute the command, and return whether we want to continue execution</div>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Command.html#execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">execute</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Command.html" title="interface in mil.nga.giat.geowave.core.cli.api">Command</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>computeResults</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&nbsp;computeResults(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-">computeResults</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getMethod--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getMethod</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.HttpMethod.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand.HttpMethod</a>&nbsp;getMethod()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getMethod--">ServiceEnabledCommand</a></code></span></div>
+<div class="block">the method to expose as a resource</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getMethod--">getMethod</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the HTTP method</dd>
 </dl>
 </li>
 </ul>
@@ -287,8 +369,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Co
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#nested.classes.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">Nested</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
