@@ -70,21 +70,31 @@ if [[ ! -d $DOCKER_ROOT ]]; then
 fi
 
 $WORKSPACE/deploy/packaging/rpm/centos/7/rpm.sh --command clean
-	
+
 docker run $DOCKER_ARGS --rm \
-	-e WORKSPACE=/usr/src/geowave \
-	-e MAVEN_OPTS="-Xmx1500m" \
-	-v $DOCKER_ROOT:/root \
-	-v $WORKSPACE:/usr/src/geowave \
-	locationtech/geowave-centos7-java8-build \
-	/bin/bash -c \
-	"cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
+    -e WORKSPACE=/usr/src/geowave \
+    -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
+    -e TIME_TAG="$TIME_TAG" \
+    -v $DOCKER_ROOT:/root \
+    -v $WORKSPACE:/usr/src/geowave \
+    locationtech/geowave-centos7-rpm-build \
+    /bin/bash -c \
+    "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh"
+
+docker run $DOCKER_ARGS --rm \
+    -e WORKSPACE=/usr/src/geowave \
+    -e MAVEN_OPTS="-Xmx1500m" \
+    -v $DOCKER_ROOT:/root \
+    -v $WORKSPACE:/usr/src/geowave \
+    locationtech/geowave-centos7-java8-build \
+    /bin/bash -c \
+    "cd \$WORKSPACE && deploy/packaging/docker/build-src/build-geowave-common.sh $SKIP_EXTRA"
 	
 docker run $DOCKER_ARGS --rm \
     -e WORKSPACE=/usr/src/geowave \
-	-e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
-	-e BUILD_SUFFIX="common" \
-	-e TIME_TAG="$TIME_TAG" \
+    -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
+    -e BUILD_SUFFIX="common" \
+    -e TIME_TAG="$TIME_TAG" \
     -v $DOCKER_ROOT:/root \
     -v $WORKSPACE:/usr/src/geowave \
     locationtech/geowave-centos7-rpm-build \
@@ -95,7 +105,7 @@ docker run $DOCKER_ARGS --rm \
     -e WORKSPACE=/usr/src/geowave \
     -e LOCAL_REPO_DIR=/usr/src/repo \
     -e LOCK_DIR=/usr/src/lock \
-	-e TIME_TAG="$TIME_TAG" \
+    -e TIME_TAG="$TIME_TAG" \
     -v $DOCKER_ROOT:/root \
     -v $WORKSPACE:/usr/src/geowave \
     -v $LOCAL_REPO_DIR:/usr/src/repo \
