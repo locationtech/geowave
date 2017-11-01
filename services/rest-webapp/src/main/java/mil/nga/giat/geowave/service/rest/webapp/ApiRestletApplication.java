@@ -179,7 +179,11 @@ public class ApiRestletApplication extends
 				new ObjectName(
 						"*:type=Connector,*"),
 				query);
+		// HP Fortify "DNS Lookups" false positive
+		// The DNS lookups referenced here are not used for Security purposes
 		final String hostname = InetAddress.getLocalHost().getHostName();
+		// HP Fortify "DNS Lookups" false positive
+		// The DNS lookups referenced here are not used for Security purposes
 		final InetAddress[] addresses = InetAddress.getAllByName(hostname);
 		for (final Iterator<ObjectName> i = objs.iterator(); i.hasNext();) {
 			final ObjectName obj = i.next();
@@ -187,6 +191,9 @@ public class ApiRestletApplication extends
 			// obj,
 			// "scheme").toString();
 			final String port = obj.getKeyProperty("port");
+			// HP Fortify "DNS Lookups" false positive
+			// The DNS lookups referenced here are not used for Security
+			// purposes
 			for (final InetAddress addr : addresses) {
 				if (addr.isAnyLocalAddress() || addr.isLoopbackAddress() || addr.isMulticastAddress()) {
 					continue;
