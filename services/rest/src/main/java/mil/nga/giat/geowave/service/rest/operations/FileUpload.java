@@ -62,6 +62,9 @@ public class FileUpload extends
 			// 3/ Request is parsed by the handler which generates a
 			// list of FileItems
 			final String tempDir = System.getProperty("java.io.tmpdir");
+			// HP Fortify "Path Traversal" false positive
+			// A user would need to have OS-level access anyway
+			// to change the system properties
 			final File dir = new File(
 					tempDir);
 			final File filename = File.createTempFile(

@@ -122,7 +122,24 @@ public class SwaggerApiParser
 		catch (final IOException e1) {
 			e1.printStackTrace();
 		}
+		finally {
+			safeClose(writer);
+		}
 
 		return true;
+	}
+
+	public static void safeClose(
+			Writer writer ) {
+		if (writer != null) {
+			try {
+				writer.close();
+			}
+			catch (IOException e) {
+				LOGGER.warn(
+						"Unable to close Writer",
+						e);
+			}
+		}
 	}
 }

@@ -139,6 +139,9 @@ public class RestFieldFactory
 				// time on reflection to make delegate instance
 				final Object delegateInstance = instance == null ? null : delegateInstanceType.newInstance();
 				if (instance != null) {
+					// HP Fortify "Access Control" false positive
+					// The need to change the accessibility here is
+					// necessary, has been review and judged to be safe
 					field.setAccessible(true);
 					field.set(
 							instance,

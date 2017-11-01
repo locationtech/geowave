@@ -51,6 +51,9 @@ abstract public class AbstractMainParam<T> implements
 			final T value )
 			throws IllegalArgumentException,
 			IllegalAccessException {
+		// HP Fortify "Access Control" false positive
+		// The need to change the accessibility here is
+		// necessary, has been review and judged to be safe
 		listMainParamField.setAccessible(true);
 		List<String> currentValue = (List<String>) listMainParamField.get(instance);
 		if (currentValue == null || currentValue.size() == 0) {
