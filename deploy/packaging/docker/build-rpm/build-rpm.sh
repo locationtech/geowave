@@ -69,7 +69,6 @@ else
 		sed -i -e s/'$DATASTORE_TOKEN'/hbase/g deploy-geowave-hbase-to-hdfs.sh
 		sed -i -e s/'$DATASTORE_USER_TOKEN'/hbase/g deploy-geowave-hbase-to-hdfs.sh
 	fi
-        cp /usr/scr/geowave/services/rest-webapp/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war .
 	cp /usr/src/geowave/deploy/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar .
 	cp /usr/src/geowave/deploy/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.tar.gz .
 fi

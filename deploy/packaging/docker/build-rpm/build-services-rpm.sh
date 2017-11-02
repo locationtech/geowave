@@ -17,7 +17,7 @@
 trap 'chmod -R 777 $WORKSPACE' EXIT
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 
-decler -A ARGS
+declare -A ARGS
 while [ $# -gt 0 ]; do
   # Trim the first two chars off of the arg name ex: --foo
   case "$1" in
