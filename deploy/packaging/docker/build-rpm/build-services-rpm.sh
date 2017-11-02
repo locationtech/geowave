@@ -38,7 +38,8 @@ cd services_tmp
 #grab the geoserver war file and tomcat tarball
 #Check if the files already exists before grabbing them
 if [ ! -f geoserver-2.12.0-war.zip ]; then
-  wget http://sourceforge.net/projects/geoserver/files/GeoServer/2.12.0/geoserver-2.12.0-war.zip
+  echo "Downloading geoserver-2.12.0-war"
+  wget -q http://sourceforge.net/projects/geoserver/files/GeoServer/2.12.0/geoserver-2.12.0-war.zip
 fi
 
 if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
@@ -46,8 +47,8 @@ if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
   tar xzf apache-tomcat-8.5.20.tar.gz && mv apache-tomcat-8.5.20 tomcat8
 fi
 
-#Check if the RPM directorie exists. If not create it
-DIRECTORY = "$WORKSPACE/$ARGS[buildroot]/RPM/$ARGS[arch]"
+#Check if the RPM directory exists. If not create it
+DIRECTORY="$WORKSPACE/$ARGS[buildroot]/RPM/$ARGS[arch]"
 if [ ! -d $DIRECTORY ]; then
   mkdir -p $WORKSPACE/$ARGS[buildroot]/RPM/$ARGS[arch]
 fi
@@ -111,5 +112,5 @@ if [ $ARGS[build] = "services" ]; then
 fi
 
 #clean up
-rm -rf tomcat8
-rm -rf apache-tomcat-8.5.20.tar.gz
+cd $WORKSPACE
+rm -rf services_tmp
