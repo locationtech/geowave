@@ -16,6 +16,7 @@
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
+set -e
 
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -49,17 +50,17 @@ if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
 fi
 
 #Check if the RPM directory exists. If not create it
-DIRECTORY="$WORKSPACE/$ARGS[buildroot]/RPM/$ARGS[arch]"
+DIRECTORY="$WORKSPACE/${ARGS[buildroot]}/RPM/${ARGS[arch]}"
 if [ ! -d $DIRECTORY ]; then
-  mkdir -p $WORKSPACE/$ARGS[buildroot]/RPM/$ARGS[arch]
+  mkdir -p $WORKSPACE/${ARGS[buildroot]}/RPM/${ARGS[arch]}
 fi
 
 # Ensure mounted volume permissions are OK for access
 chown -R root:root $WORKSPACE/deploy/packaging/rpm
 
-if [ $ARGS[build] = "tomcat" ]; then
+if [ ${ARGS[build]} = "tomcat" ]; then
   echo "Creating tomcat rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a $ARGS[arch] \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d java-1.8.0-openjdk.x86_64 \
       -d geowave-${GEOWAVE_VERSION}-core \ 
@@ -74,7 +75,7 @@ if [ $ARGS[build] = "tomcat" ]; then
   cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-tomcat8.${TIME_TAG}.noarch.rpm
 fi
 
-if [ $ARGS[build] = "services" ]; then
+if [ ${ARGS[build]} = "services" ]; then
   #grab the rest services war file
   cp $WORKSPACE/services/rest-webapp/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war .
 
@@ -86,23 +87,23 @@ if [ $ARGS[build] = "services" ]; then
   rm -rf data/layergropus/*
   rm -rf data/workspaces/*
   mkdir data/workspaces/geowave
-  cp $WORKSPACE/$ARGS[buildroot]/SOURCES/geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar WEB-INF/lib/
-  cp $WORKSPACE/$ARGS[buildroot]/SOURCES/default.xml data/workspaces/
-  cp $WORKSPACE/$ARGS[buildroot]/SOURCES/namespace.xml data/workspaces/geowave/
-  cp $WORKSPACE/$ARGS[buildroot]/SOURCES/workspace.xml data/workspaces/geowave/
+  cp $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar WEB-INF/lib/
+  cp $WORKSPACE/${ARGS[buildroot]}/SOURCES/default.xml data/workspaces/
+  cp $WORKSPACE/${ARGS[buildroot]}/SOURCES/namespace.xml data/workspaces/geowave/
+  cp $WORKSPACE/${ARGS[buildroot]}/SOURCES/workspace.xml data/workspaces/geowave/
 
   #package the war file
   jar -cf geoserver.war *
   mv geoserver.war ../
   rm -rf tmp
   echo "Creating Geoserver and services rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver" -v $GEOSERVER_VERSION -a $ARGS[arch]  \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver" -v $GEOSERVER_VERSION -a ${ARGS[arch]}  \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-tomcat8 \
       --vendor geoserver --description "GeoServer is an open source server for sharing geospatial data." \
       --url "https://geoserver.org/" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geoserver.war
 
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v $GEOWAVE_VERSION -a $ARGS[arch] \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-tomcat8 \
       --vendor geowave --description "Geowave rest services rpm. This deploys the Geowave services WAR file to the Tomcat server." \

@@ -91,16 +91,16 @@ docker run $DOCKER_ARGS --rm \
   /bin/bash -c \
   "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-rpm.sh"
 
-  docker run $DOCKER_ARGS --rm \
-    -e WORKSPACE=/usr/src/geowave \
-    -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
-    -e TIME_TAG="$TIME_TAG" \
-    -v $DOCKER_ROOT:/root \
-    -v $WORKSPACE:/usr/src/geowave \
-    -v $LOCAL_REPO_DIR:/usr/src/repo \
-    locationtech/geowave-centos7-rpm-build \
-    /bin/bash -c \
-    "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh --buildroot deploy/packaging/rpm/centos/7 --build tomcat --arch noarch"
+docker run $DOCKER_ARGS --rm \
+  -e WORKSPACE=/usr/src/geowave \
+  -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
+  -e TIME_TAG="$TIME_TAG" \
+  -v $DOCKER_ROOT:/root \
+  -v $WORKSPACE:/usr/src/geowave \
+  -v $LOCAL_REPO_DIR:/usr/src/repo \
+  locationtech/geowave-centos7-rpm-build \
+  /bin/bash -c \
+  "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh --buildroot deploy/packaging/rpm/centos/7 --build tomcat --arch noarch"
 
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
