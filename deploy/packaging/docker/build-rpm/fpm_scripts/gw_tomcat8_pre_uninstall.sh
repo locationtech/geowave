@@ -1,6 +1,4 @@
 #Check if the service is running before removing it
-
-#Check if the service is running before removing it
 PROCESS_NAME=gw_tomcat8
 pidfile=${PIDFILE-/usr/local/geowave/tomcat8/temp/${PROCESS_NAME}.pid}
 PID=`pidofproc -p ${pidfile} ${PROCESS_NAME}`

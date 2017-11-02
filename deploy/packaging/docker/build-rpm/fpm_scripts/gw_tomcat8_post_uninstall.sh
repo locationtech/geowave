@@ -1,6 +1,3 @@
-#delete user
-#userdel -r geowave
-
 #Ensure all files in dir are removed
 DIRECTORY="/usr/local/geowave/tomcat8"
 if [ -d $DIRECTORY ]; then
