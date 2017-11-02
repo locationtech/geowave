@@ -4,6 +4,7 @@ class geowave(
   $install_accumulo       = $geowave::params::install_accumulo,
   $install_hbase          = $geowave::params::install_hbase,
   $install_app            = $geowave::params::install_app,
+  $install_tomcat_server  = $geowave::params::install_tomcat_server,
   $install_app_server     = $geowave::params::install_app_server,
   $http_port              = $geowave::params::http_port
 ) inherits geowave::params {
@@ -27,6 +28,14 @@ class geowave(
     anchor {'geowave::begin': } ->
       class {'geowave::server':} ->
       class {'geowave::service':} ->
+    anchor {'geowave::end':}
+  }
+
+
+  if $install_tomcat_server {
+    anchor {'geowave::begin': } ->
+      class {'geowave::tomcat_server':} ->
+      class {'geowave::tomcat_service':} ->
     anchor {'geowave::end':}
   }
 
