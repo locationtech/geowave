@@ -14,8 +14,8 @@
 #
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
-trap 'chmod -R 777 $WORKSPACE' EXIT
-trap 'chmod -R 777 $WORKSPACE && exit' ERR
+trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
+trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -43,7 +43,8 @@ if [ ! -f geoserver-2.12.0-war.zip ]; then
 fi
 
 if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
-  wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz
+  echo "Downloading tomcat-8.5.20"
+  wget -q http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz
   tar xzf apache-tomcat-8.5.20.tar.gz && mv apache-tomcat-8.5.20 tomcat8
 fi
 
@@ -57,7 +58,7 @@ fi
 chown -R root:root $WORKSPACE/deploy/packaging/rpm
 
 if [ $ARGS[build] = "tomcat" ]; then
-  #TODO MAKE DEFAULT PORT CONFIGURABLE server.xml "connector port=8080"
+  echo "Creating tomcat rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a $ARGS[arch] \
       -p geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d java-1.8.0-openjdk.x86_64 \
@@ -69,7 +70,8 @@ if [ $ARGS[build] = "tomcat" ]; then
       --post-uninstall fpm_scripts/gw_tomcat8_post_uninstall.sh \
       fpm_scripts/gw_tomcat8.service=/etc/systemd/system/gw_tomcat8.service \
       tomcat8/=${GEOWAVE_DIR}/tomcat8/
-  cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/$ARGS[buildroot])/RPM/$ARGS[arch])/*.rpm
+  echo "Created tomcat rpm"
+  cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-tomcat8.${TIME_TAG}.noarch.rpm
 fi
 
 if [ $ARGS[build] = "services" ]; then
@@ -93,7 +95,7 @@ if [ $ARGS[build] = "services" ]; then
   jar -cf geoserver.war *
   mv geoserver.war ../
   rm -rf tmp
-
+  echo "Creating Geoserver and services rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver" -v $GEOSERVER_VERSION -a $ARGS[arch]  \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-tomcat8 \
@@ -107,8 +109,9 @@ if [ $ARGS[build] = "services" ]; then
       --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geowave.war
 
   #Move the rpms to the repo to indexed later
-  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/$ARGS[buildroot])/RPM/$ARGS[arch])/*.rpm
-  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm $WORKSPACE/$ARGS[buildroot])/RPM/$ARGS[arch])/*.rpm
+  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
+  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm
+
 fi
 
 #clean up
