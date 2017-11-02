@@ -25,7 +25,7 @@ node ('master') {
   stage('Maven Deploy'){
     dir('${env.WORKSPACE}/docker-root') {
       sh "aws s3 cp s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz ."
-      sh "tar xvfz mvn-repo-cache-latest.tar.gz"
+      sh "tar xfz mvn-repo-cache-latest.tar.gz"
       sh "rm mvn-repo-cache-latest.tar.gz"
     }
     withMaven(
