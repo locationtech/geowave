@@ -70,8 +70,8 @@ chmod -R 777 $WORKSPACE/deploy
 if [ ${ARGS[build]} = "tomcat" ]; then
   set -x
   echo "Creating tomcat rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
-      -p geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-gwtomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
+      -p geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d java-1.8.0-openjdk.x86_64 \
       -d geowave-${GEOWAVE_VERSION}-core \
       --vendor "apache" \
@@ -81,8 +81,8 @@ if [ ${ARGS[build]} = "tomcat" ]; then
       --post-install ${FPM_SCRIPTS}/gw_tomcat8_post_install.sh \
       --pre-uninstall ${FPM_SCRIPTS}/gw_tomcat8_pre_uninstall.sh \
       --post-uninstall ${FPM_SCRIPTS}/gw_tomcat8_post_uninstall.sh \
-      ${FPM_SCRIPTS}/gw_tomcat8.service=/etc/systemd/system/gw_tomcat8.service \
-      tomcat8/=${WORKSPACE}/tomcat8/
+      ${FPM_SCRIPTS}/gwtomcat8.service=/etc/systemd/system/gwtomcat8.service \
+      tomcat8/=${GEOWAVE_DIR}/tomcat8/
   cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-tomcat8.${TIME_TAG}.noarch.rpm
 fi
 
@@ -110,15 +110,15 @@ if [ ${ARGS[build]} = "services" ]; then
   cd ..
   rm -rf tmp
   echo "Creating Geoserver and services rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gw_geoserver" -v $GEOSERVER_VERSION -a ${ARGS[arch]}  \
-      -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gw_geoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
-      -d geowave-${GEOWAVE_VERSION}-tomcat8 \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" -v $GEOSERVER_VERSION -a ${ARGS[arch]}  \
+      -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
+      -d geowave-${GEOWAVE_VERSION}-gwtomcat8 \
       --vendor geoserver --description "GeoServer is an open source server for sharing geospatial data." \
       --url "https://geoserver.org/" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geoserver.war
 
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
-      -d geowave-${GEOWAVE_VERSION}-tomcat8 \
+      -d geowave-${GEOWAVE_VERSION}-gwtomcat8 \
       --vendor geowave --description "Geowave rest services rpm. This deploys the Geowave services WAR file to the Tomcat server." \
       --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps restservices.war
 

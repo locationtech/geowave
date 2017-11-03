@@ -1,5 +1,5 @@
-class geowave::tomcat_service {
-  service { 'gw_tomcat8':
+class geowave::gwtomcat_service {
+  service { 'gwtomcat8':
     ensure     => 'running',
     enable     => true,
     hasstatus  => true,

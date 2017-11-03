@@ -86,6 +86,8 @@ class { 'geowave':
 	install_$DATASTORE_TOKEN	=> true,
 	install_app           		=> true,
 	install_app_server 		=> true,
+        install_restservices            => false,
+        install_gw_geoserver            => false,
 	http_port             		=> '${GEOSERVER_PORT}',
 }
 
