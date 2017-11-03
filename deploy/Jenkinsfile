@@ -32,8 +32,9 @@ node ('master') {
       maven: 'maven-3.5.0',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "export MAVEN_OPTS=\"-Xmx2g\""
-      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
+      withEnv(["MAVEN_OPTS=\"-Xmx3g\""]){
+        sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
+      }
     }
   }
 
