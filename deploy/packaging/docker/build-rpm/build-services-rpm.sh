@@ -91,7 +91,7 @@ if [ ${ARGS[build]} = "services" ]; then
 
   #get geoserver the war files ready
   #unpack it in tmp dir
-  unzip geoserver-2.12.0-war.zip geoserver.war
+  unzip -f geoserver-2.12.0-war.zip geoserver.war
   mkdir tmp && cd tmp
   jar -xf ../geoserver.war
   rm -rf data/layergropus/*
