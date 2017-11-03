@@ -18,6 +18,13 @@ trap 'chmod -R 777 $WORKSPACE' EXIT
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 set -e
 
+# Set a default version
+VENDOR_VERSION=apache
+
+if [ ! -z "$BUILD_ARGS" ]; then
+	VENDOR_VERSION=$(echo "$BUILD_ARGS" | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
+fi
+
 declare -A ARGS
 while [ $# -gt 0 ]; do
   # Trim the first two chars off of the arg name ex: --foo
@@ -29,12 +36,13 @@ done
 
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
 FPM_SCRIPTS="${WORKSPACE}/deploy/packaging/docker/build-rpm/fpm_scripts"
-BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
 GEOWAVE_DIR="/usr/local/geowave"
 GEOSERVER_VERSION="2.12.0"
 
 #Make a tmp directory and work out of there
-mkdir services_tmp
+if [ ! -d 'services_tmp' ]; then
+  mkdir services_tmp
+fi
 cd services_tmp
 
 #grab the geoserver war file and tomcat tarball
@@ -114,9 +122,8 @@ if [ ${ARGS[build]} = "services" ]; then
   #Move the rpms to the repo to indexed later
   cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
   cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm
-
+  rm -rf geoserver.war
 fi
 
-#clean up
+#Go back to where we started from
 cd $WORKSPACE
-rm -rf services_tmp
