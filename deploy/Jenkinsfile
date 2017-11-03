@@ -4,9 +4,6 @@ node ('master') {
   // Setting java home for the withMaven block
   jdk = tool name: 'JDK18'
   env.JAVA_HOME = "${jdk}"
-  environment {
-    MVN_OPTS = '-Xmx8192M -Xss128M'
-  }
   stage('Wipe workspace'){
     deleteDir()
   }
@@ -33,9 +30,8 @@ node ('master') {
     withMaven(
       maven: 'maven-3.5.0',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
-      mavenOpts: '${LARGE_MVN_OPTS}',
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e -X"
+      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
      }
   }
 
