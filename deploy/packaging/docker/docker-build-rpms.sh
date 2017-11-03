@@ -142,6 +142,8 @@ do
     
     docker run $DOCKER_ARGS --rm \
       -e WORKSPACE=/usr/src/geowave \
+      -e BUILD_ARGS="$build_args" \
+      -e BUILD_SUFFIX="vendor" \
       -e TIME_TAG="$TIME_TAG" \
       -v $WORKSPACE:/usr/src/geowave \
       locationtech/geowave-centos7-rpm-build \
