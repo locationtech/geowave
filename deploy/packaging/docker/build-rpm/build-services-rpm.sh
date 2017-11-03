@@ -14,8 +14,8 @@
 #
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
-trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
-trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
+trap 'chmod -R 777 $WORKSPACE' EXIT
+trap 'chmod -R 777 $WORKSPACE && exit' ERR
 set -e
 
 declare -A ARGS
@@ -28,9 +28,10 @@ while [ $# -gt 0 ]; do
 done
 
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
+FPM_SCRIPTS="${WORKSPACE}/deploy/packaging/docker/build-rpm/fpm_scripts"
 BUILD_TYPE=$(cat $WORKSPACE/deploy/target/build-type.txt)
 GEOWAVE_DIR="/usr/local/geowave"
-GEOSERVER_VERSION="2.11.2"
+GEOSERVER_VERSION="2.12.0"
 
 #Make a tmp directory and work out of there
 mkdir services_tmp
@@ -56,22 +57,23 @@ if [ ! -d $DIRECTORY ]; then
 fi
 
 # Ensure mounted volume permissions are OK for access
-chown -R root:root $WORKSPACE/deploy/packaging/rpm
+chmod -R 777 $WORKSPACE/deploy
 
 if [ ${ARGS[build]} = "tomcat" ]; then
   echo "Creating tomcat rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d java-1.8.0-openjdk.x86_64 \
-      -d geowave-${GEOWAVE_VERSION}-core \ 
-      -vendor apache --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
-      -url "http://tomcat.apache.org/" --directories ${GEOWAVE_DIR}/tomcat8 \
-      --post-install fpm_scripts/gw_tomcat8_post_install.sh \
-      --pre-uninstall fpm_scripts/gw_tomcat8_pre_uninstall.sh \
-      --post-uninstall fpm_scripts/gw_tomcat8_post_uninstall.sh \
-      fpm_scripts/gw_tomcat8.service=/etc/systemd/system/gw_tomcat8.service \
-      tomcat8/=${GEOWAVE_DIR}/tomcat8/
-  echo "Created tomcat rpm"
+      -d geowave-${GEOWAVE_VERSION}-core \
+      --vendor "apache" \
+      --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
+      --url "http://tomcat.apache.org/" \
+      --directories ${WORKSPACE}/tomcat8 \
+      --post-install ${FPM_SCRIPTS}/gw_tomcat8_post_install.sh \
+      --pre-uninstall ${FPM_SCRIPTS}/gw_tomcat8_pre_uninstall.sh \
+      --post-uninstall ${FPM_SCRIPTS}/gw_tomcat8_post_uninstall.sh \
+      ${FPM_SCRIPTS}/gw_tomcat8.service=/etc/systemd/system/gw_tomcat8.service \
+      tomcat8/=${WORKSPACE}/tomcat8/
   cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-tomcat8.${TIME_TAG}.noarch.rpm
 fi
 
