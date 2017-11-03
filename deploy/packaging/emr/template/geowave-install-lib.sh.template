@@ -85,7 +85,7 @@ class { 'geowave':
 	hadoop_vendor_version 		=> 'apache',
 	install_$DATASTORE_TOKEN	=> true,
 	install_app           		=> true,
-	install_tomcat_server 		=> true,
+	install_app_server 		=> true,
 	http_port             		=> '${GEOSERVER_PORT}',
 }
 

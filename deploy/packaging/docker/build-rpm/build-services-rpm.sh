@@ -68,6 +68,7 @@ fi
 chmod -R 777 $WORKSPACE/deploy
 
 if [ ${ARGS[build]} = "tomcat" ]; then
+  set -x
   echo "Creating tomcat rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-tomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
@@ -86,12 +87,13 @@ if [ ${ARGS[build]} = "tomcat" ]; then
 fi
 
 if [ ${ARGS[build]} = "services" ]; then
+  set -x
   #grab the rest services war file
-  cp $WORKSPACE/services/rest-webapp/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war .
+  cp $WORKSPACE/services/rest-webapp/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
 
   #get geoserver the war files ready
   #unpack it in tmp dir
-  unzip -f geoserver-2.12.0-war.zip geoserver.war
+  unzip -o geoserver-2.12.0-war.zip geoserver.war
   mkdir tmp && cd tmp
   jar -xf ../geoserver.war
   rm -rf data/layergropus/*
@@ -105,10 +107,11 @@ if [ ${ARGS[build]} = "services" ]; then
   #package the war file
   jar -cf geoserver.war *
   mv geoserver.war ../
+  cd ..
   rm -rf tmp
   echo "Creating Geoserver and services rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver" -v $GEOSERVER_VERSION -a ${ARGS[arch]}  \
-      -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gw_geoserver" -v $GEOSERVER_VERSION -a ${ARGS[arch]}  \
+      -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gw_geoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-tomcat8 \
       --vendor geoserver --description "GeoServer is an open source server for sharing geospatial data." \
       --url "https://geoserver.org/" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geoserver.war
@@ -117,7 +120,7 @@ if [ ${ARGS[build]} = "services" ]; then
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-tomcat8 \
       --vendor geowave --description "Geowave rest services rpm. This deploys the Geowave services WAR file to the Tomcat server." \
-      --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geowave.war
+      --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps restservices.war
 
   #Move the rpms to the repo to indexed later
   cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
