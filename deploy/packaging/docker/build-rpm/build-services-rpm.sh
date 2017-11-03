@@ -83,7 +83,8 @@ if [ ${ARGS[build]} = "tomcat" ]; then
       --post-uninstall ${FPM_SCRIPTS}/gw_tomcat8_post_uninstall.sh \
       ${FPM_SCRIPTS}/gwtomcat8.service=/etc/systemd/system/gwtomcat8.service \
       tomcat8/=${GEOWAVE_DIR}/tomcat8/
-  cp geowave-${GEOWAVE_VERSION}-tomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-tomcat8.${TIME_TAG}.noarch.rpm
+  echo "created tomcat rpm"
+  cp geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-gwtomcat8.${TIME_TAG}.noarch.rpm
 fi
 
 if [ ${ARGS[build]} = "services" ]; then
@@ -123,8 +124,8 @@ if [ ${ARGS[build]} = "services" ]; then
       --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps restservices.war
 
   #Move the rpms to the repo to indexed later
+  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm
   cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
-  cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-geoserver.$TIME_TAG.noarch.rpm
   rm -rf geoserver.war
 fi
 

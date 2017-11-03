@@ -5,7 +5,7 @@ node ('master') {
   jdk = tool name: 'JDK18'
   env.JAVA_HOME = "${jdk}"
   environment {
-    MVN_OPTS = '-Xmx8192M -Xss128M'
+    MVN_OPTS = '-Xmx4096M -Xss128M'
   }
   stage('Wipe workspace'){
     deleteDir()
