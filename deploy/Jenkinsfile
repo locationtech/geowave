@@ -30,6 +30,7 @@ node ('master') {
     withMaven(
       maven: 'maven-3.5.0',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+      mavenOpts: "-Xmx4096m",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
      }

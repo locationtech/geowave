@@ -142,8 +142,8 @@
                                     <artifactId>maven-war-plugin</artifactId>
                                     <version>3.2.0</version>
                                     <configuration>
+                                      <argLine>-Xmx4096m</argLine>
                                       <warName>${restservices.finalName}</warName>
-                                      <argLine>-Xmx2048m</argLine>
                                     </configuration>
                                 </plugin>
 			</plugins>
