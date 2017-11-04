@@ -77,7 +77,7 @@ if [ ${ARGS[build]} = "tomcat" ]; then
       --vendor "apache" \
       --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
       --url "http://tomcat.apache.org/" \
-      --directories ${WORKSPACE}/tomcat8 \
+      --directories ${GEOWAVE_DIR}/tomcat8 \
       --post-install ${FPM_SCRIPTS}/gw_tomcat8_post_install.sh \
       --pre-uninstall ${FPM_SCRIPTS}/gw_tomcat8_pre_uninstall.sh \
       --post-uninstall ${FPM_SCRIPTS}/gw_tomcat8_post_uninstall.sh \
