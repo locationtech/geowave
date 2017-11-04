@@ -36,7 +36,8 @@ public class MapReduceTestUtils
 	protected static void testMapReduceIngest(
 			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
-			final String ingestFilePath ) {
+			final String ingestFilePath )
+			throws Exception {
 		testMapReduceIngest(
 				dataStore,
 				dimensionalityType,
@@ -48,7 +49,8 @@ public class MapReduceTestUtils
 			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
 			final String format,
-			final String ingestFilePath ) {
+			final String ingestFilePath )
+			throws Exception {
 		// ingest gpx data directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
 		LOGGER.warn("Ingesting '" + ingestFilePath + "' - this may take several minutes...");

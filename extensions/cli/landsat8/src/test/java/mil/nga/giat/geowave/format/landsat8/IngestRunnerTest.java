@@ -103,6 +103,7 @@ public class IngestRunnerTest
 			OperationParams params ) {
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -115,10 +116,10 @@ public class IngestRunnerTest
 
 	/*
 	 * private PrimaryIndex getIndex(OperationParams params){ File configFile =
-	 * (File) params.getContext().get( ConfigOptions.PROPERTIES_FILE_CONTEXT);
-	 * IndexLoader indexLoader = new IndexLoader("spatialindex"); if
-	 * (!indexLoader.loadFromConfig(configFile)) { throw new ParameterException(
-	 * "Cannot find index(s) by name: " + indexLoader.getIndexName()); }
+	 * getGeoWaveConfigFile(params); IndexLoader indexLoader = new
+	 * IndexLoader("spatialindex"); if (!indexLoader.loadFromConfig(configFile))
+	 * { throw new ParameterException( "Cannot find index(s) by name: " +
+	 * indexLoader.getIndexName()); }
 	 * 
 	 * IndexPluginOptions indexOptions =
 	 * Iterables.getOnlyElement(indexLoader.getLoadedIndexes()); return

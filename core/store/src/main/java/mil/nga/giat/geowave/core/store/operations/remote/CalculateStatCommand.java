@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,7 +22,6 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -45,8 +44,7 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
  * existing value.
  */
 public class CalculateStatCommand extends
-		AbstractStatsCommand implements
-		Command
+		AbstractStatsCommand<Void>
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CalculateStatCommand.class);
@@ -60,21 +58,11 @@ public class CalculateStatCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-
-		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
-			throw new ParameterException(
-					"Requires arguments: <store name> <adapterId> <statId>");
-		}
-
-		statId = parameters.get(2);
-
-		super.run(
-				params,
-				parameters);
+			final OperationParams params ) {
+		computeResults(params);
 	}
 
+	@Override
 	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
 			final DataAdapter<?> adapter,
@@ -83,21 +71,21 @@ public class CalculateStatCommand extends
 
 		try {
 
-			AdapterIndexMappingStore mappingStore = storeOptions.createAdapterIndexMappingStore();
-			DataStore dataStore = storeOptions.createDataStore();
-			IndexStore indexStore = storeOptions.createIndexStore();
+			final AdapterIndexMappingStore mappingStore = storeOptions.createAdapterIndexMappingStore();
+			final DataStore dataStore = storeOptions.createDataStore();
+			final IndexStore indexStore = storeOptions.createIndexStore();
 
 			boolean isFirstTime = true;
 			for (final PrimaryIndex index : mappingStore.getIndicesForAdapter(
 					adapter.getAdapterId()).getIndices(
 					indexStore)) {
 
-				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 				@SuppressWarnings({
 					"rawtypes",
 					"unchecked"
 				})
-				DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
+				final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
+				final DataStoreStatisticsProvider provider = new DataStoreStatisticsProvider(
 						adapter,
 						index,
 						isFirstTime) {
@@ -110,11 +98,7 @@ public class CalculateStatCommand extends
 					}
 				};
 
-				try (@SuppressWarnings({
-					"rawtypes",
-					"unchecked"
-				})
-				StatsCompositionTool<?> statsTool = new StatsCompositionTool(
+				try (StatsCompositionTool<?> statsTool = new StatsCompositionTool(
 						provider,
 						storeOptions.createDataStatisticsStore())) {
 					try (CloseableIterator<?> entryIt = dataStore.query(
@@ -149,12 +133,29 @@ public class CalculateStatCommand extends
 	}
 
 	public void setParameters(
-			String storeName,
-			String adapterId,
-			String statId ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
-		this.parameters.add(adapterId);
-		this.parameters.add(statId);
+			final String storeName,
+			final String adapterId,
+			final String statId ) {
+		parameters = new ArrayList<String>();
+		parameters.add(storeName);
+		parameters.add(adapterId);
+		parameters.add(statId);
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params ) {
+		// Ensure we have all the required arguments
+		if (parameters.size() != 3) {
+			throw new ParameterException(
+					"Requires arguments: <store name> <adapterId> <statId>");
+		}
+
+		statId = parameters.get(2);
+
+		super.run(
+				params,
+				parameters);
+		return null;
 	}
 }

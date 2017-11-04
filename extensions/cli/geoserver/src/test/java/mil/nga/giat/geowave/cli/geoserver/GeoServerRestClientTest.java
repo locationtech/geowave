@@ -13,6 +13,8 @@ package mil.nga.giat.geowave.cli.geoserver;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerConfig;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerRestClient;
 
+import org.apache.hadoop.yarn.security.client.ClientTimelineSecurityInfo;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -59,9 +61,14 @@ public class GeoServerRestClientTest
 	public void prepare() {
 		webTarget = mockedWebTarget();
 		config = new GeoServerConfig();
-		client = new GeoServerRestClient(
-				config,
-				webTarget);
+		client = GeoServerRestClient.getInstance(config);
+		client.setWebTarget(webTarget);
+	}
+
+	// We want to start each test with a new instance
+	@After
+	public void cleanUp() {
+		client.invalidateInstance();
 	}
 
 	@Test

@@ -1,0 +1,20 @@
+[[quickstart-guide-intro]]
+<<<
+
+_v${project.version}_
+
+= GeoWave Quickstart Guide AWS EMR Environment Setup image:geowave-icon-logo-cropped.png[width="28%"]
+
+[[quickstart-guide-intro]]
+== What you will need
+- <<110-appendices.adoc#create-ec2-key-pair, EC2 Key Pair>>
+- <<110-appendices.adoc#create-ec2-vpc-network-interface-subnet-id, VPC (Network Interface/Subnet Id)>>
+- <<110-appendices.adoc#create-ec2-security-group, EC2 Security Group>>
+- <<110-appendices.adoc#create-aws-s3-bucket, AWS S3 Bucket>>
+ * Not necessary if you are in the us-east-1 region
+- <<110-appendices.adoc#aws-cli-setup, AWS CLI>> setup on your local machine (optional)
+ * Not needed if you plan on using the EMR GUI to create the cluster
+
+== Creating the Cluster
+
+We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands to download, ingest, analyze and visualize the data.

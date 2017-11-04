@@ -10,9 +10,14 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -436,13 +441,24 @@ public class GeoWaveConfiguratorBase
 	public static void setRemoteInvocationParams(
 			final String hdfsHostPort,
 			final String jobTrackerOrResourceManagerHostPort,
-			final Configuration conf ) {
+			final Configuration conf )
+			throws IOException {
+		String finalHdfsHostPort;
+		// Ensures that the url starts with hdfs://
+		if (!hdfsHostPort.contains("://")) {
+			finalHdfsHostPort = "hdfs://" + hdfsHostPort;
+		}
+		else {
+			finalHdfsHostPort = hdfsHostPort;
+		}
+
 		conf.set(
 				"fs.defaultFS",
-				hdfsHostPort);
+				finalHdfsHostPort);
 		conf.set(
 				"fs.hdfs.impl",
 				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+
 		// if this property is used, it hadoop does not support yarn
 		conf.set(
 				"mapred.job.tracker",
@@ -472,5 +488,6 @@ public class GeoWaveConfiguratorBase
 		conf.set(
 				"yarn.app.mapreduce.am.staging-dir",
 				"/tmp/hadoop-" + user);
+
 	}
 }

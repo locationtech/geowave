@@ -1,3 +1,18 @@
+
+body {
+	padding-bottom: 0;
+}
+
+#footer {
+    font-size: 16px;
+    font-weight: 400;
+    font-style: normal;
+	background-color: rgba(0,0,0,.8);
+    padding: 1.25em;
+}
+
+#footer-text { color:rgba(255,255,255,.8); line-height: 1.44; }
+
 #content {
     max-width: none;
     margin-top:0;
@@ -32,3 +47,4 @@ p, blockquote, dt, td.content {
 .page-header h2 {margin-top:50px;}
 
 #content h1#geowave { display:none; }
+#content h2#geowave { display:none; }

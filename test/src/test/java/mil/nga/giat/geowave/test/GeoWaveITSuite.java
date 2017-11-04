@@ -31,9 +31,6 @@ import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
-import mil.nga.giat.geowave.test.service.GeoServerIT;
-import mil.nga.giat.geowave.test.service.GeoWaveIngestGeoserverIT;
-import mil.nga.giat.geowave.test.service.GeoWaveServicesIT;
 import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
@@ -48,9 +45,6 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	BulkIngestInputGenerationIT.class,
 	KDERasterResizeIT.class,
 	GeoWaveNNIT.class,
-	GeoServerIT.class,
-	GeoWaveServicesIT.class,
-	GeoWaveIngestGeoserverIT.class,
 	AttributesSubsetQueryIT.class,
 	SpatialTemporalQueryIT.class,
 	PolygonDataIdQueryIT.class,

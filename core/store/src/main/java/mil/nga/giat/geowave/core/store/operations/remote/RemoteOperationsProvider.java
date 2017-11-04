@@ -27,7 +27,6 @@ public class RemoteOperationsProvider implements
 		MergeDataCommand.class,
 		RecalculateStatsCommand.class,
 		RemoveAdapterCommand.class,
-		RemoveIndexCommand.class,
 		RemoveStatCommand.class
 	};
 

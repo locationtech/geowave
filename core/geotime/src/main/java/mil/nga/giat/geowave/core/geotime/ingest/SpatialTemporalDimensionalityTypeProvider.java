@@ -118,7 +118,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		};
 	}
 
-	private static class SpatialTemporalOptions implements
+	public static class SpatialTemporalOptions implements
 			DimensionalityTypeOptions
 	{
 		@Parameter(names = {

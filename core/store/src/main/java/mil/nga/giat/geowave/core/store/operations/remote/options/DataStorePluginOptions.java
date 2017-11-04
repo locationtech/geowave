@@ -113,6 +113,11 @@ public class DataStorePluginOptions extends
 		this.factoryOptions = factoryOptions;
 	}
 
+	public void setFactoryFamily(
+			StoreFactoryFamilySpi factoryPlugin ) {
+		this.factoryPlugin = factoryPlugin;
+	}
+
 	public StoreFactoryFamilySpi getFactoryFamily() {
 		return factoryPlugin;
 	}

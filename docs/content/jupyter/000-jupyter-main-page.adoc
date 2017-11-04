@@ -9,9 +9,7 @@ _v${project.version}_
 
 == Assumptions
 
-This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit: 
-
-- link:http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
+This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit the link:aws-env.html[Amazon Web Services EMR, window="_blank"] quickstart guide.
 
 == Recommended Hardware settings
 
@@ -35,7 +33,8 @@ Below are the recommended hardware settings to change for the cluster:
 
 To properly run and visualize the results from the Jupyter notebook demo we need to first install python and a few additional packages. We've created a bootstrap script to do that for you that can be found here:
 
-- Jupyter Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh
+- Jupyter Bootstrap: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh[
+                            http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh, window="_blank"]
 
 This bootstrap script will install python, all necessary packages needed for this demo, and create the jupyter kernel to run the notebooks. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
@@ -43,9 +42,10 @@ This bootstrap script will install python, all necessary packages needed for thi
 ====
 It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application to add to your cluster from AWS. 
 
-- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+- Accumulo Bootstrap: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh[
+                            http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh, window="_blank"]
 
-For more information on setting up bootstrap actions visit this link: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
+For more information on setting up bootstrap actions visit the link:aws-env.html[Amazon Web Services EMR, window="_blank"] quickstart guide.
 ====
 
 == Run the Jupyter notebook
@@ -53,7 +53,7 @@ For more information on setting up bootstrap actions visit this link: http://loc
 After your cluster has been created with the script above, you are ready to connect to the cluster and run the demo. Once you are connected to the cluster run the commands below to launch the notebook server.
 [NOTE]
 ====
-For more information on connecting to the EMR cluster follow the instructions here: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
+For more information on connecting to the EMR cluster follow the instructions in the link:aws-env.html[Amazon Web Services EMR, window="_blank"] quickstart guide.
 ====
 
 . Launch the jupyter notebook server
@@ -82,12 +82,4 @@ http://ec2-34-226-244-139.compute-1.amazonaws.com:8888/?token=87a7c6eb2d2723b9f2
 ----
 
 . After connecting to the notebook server you should see a list of all notebooks in the browser. Select the geowave-gdelt demo notebook and follow the instructions there once the notebook loads to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.
-
-
-
-
-
-
-
-
 

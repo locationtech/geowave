@@ -1,6 +1,7 @@
 [[quickstart-guide-steo-1]]
 <<<
 
+[[quickstart-guide-steo-1]]
 *Step 1:*
 
 image::aws-gui-method-2.png[scaledwidth="100%",alt="select emr"]
