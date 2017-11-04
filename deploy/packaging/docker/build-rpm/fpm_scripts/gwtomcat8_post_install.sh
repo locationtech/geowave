@@ -9,4 +9,4 @@ echo "<% response.sendRedirect(\"/geoserver\"); %>" > /usr/local/geowave/tomcat8
 chown -R geowave:geowave /usr/local/geowave/tomcat8
 
 #change settings on service script
-chmod 755 /etc/systemd/system/gw_tomcat8.services
+chmod 755 /etc/systemd/system/gwtomcat8.services

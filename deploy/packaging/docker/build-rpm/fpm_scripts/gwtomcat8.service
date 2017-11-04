@@ -7,7 +7,7 @@ After=syslog.target network.target
 Type=forking
 
 Environment=JAVA_HOME=/usr/lib/jvm/jre
-Environment=CATALINA_PID=/usr/local/geowave/tomcat8/temp/gw_tomcat8.pid
+Environment=CATALINA_PID=/usr/local/geowave/tomcat8/temp/gwtomcat8.pid
 Environment=CATALINA_HOME=/usr/local/geowave/tomcat8
 Environment=CATALINA_BASE=/usr/local/geowave/tomcat8
 Environment='CATALINA_OPTS=-Xms512M -Xmx1024M -server -XX:+UseParallelGC'

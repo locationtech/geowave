@@ -4,4 +4,4 @@ if [ -d $DIRECTORY ]; then
   rm -rf $DIRECTORY
 fi
 
-rm -rf /etc/systemd/system/gw_tomcat8.service
+rm -rf /etc/systemd/system/gwtomcat8.service

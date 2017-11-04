@@ -78,9 +78,9 @@ if [ ${ARGS[build]} = "tomcat" ]; then
       --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
       --url "http://tomcat.apache.org/" \
       --directories ${GEOWAVE_DIR}/tomcat8 \
-      --post-install ${FPM_SCRIPTS}/gw_tomcat8_post_install.sh \
-      --pre-uninstall ${FPM_SCRIPTS}/gw_tomcat8_pre_uninstall.sh \
-      --post-uninstall ${FPM_SCRIPTS}/gw_tomcat8_post_uninstall.sh \
+      --post-install ${FPM_SCRIPTS}/gwtomcat8_post_install.sh \
+      --pre-uninstall ${FPM_SCRIPTS}/gwtomcat8_pre_uninstall.sh \
+      --post-uninstall ${FPM_SCRIPTS}/gwtomcat8_post_uninstall.sh \
       ${FPM_SCRIPTS}/gwtomcat8.service=/etc/systemd/system/gwtomcat8.service \
       tomcat8/=${GEOWAVE_DIR}/tomcat8/
   echo "created tomcat rpm"
