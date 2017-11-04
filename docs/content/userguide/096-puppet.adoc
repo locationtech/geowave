@@ -14,7 +14,7 @@ There are a couple of different RPM repo settings that may need setting. As the 
 === Options
 
 geowave_version::
-The desired version of GeoWave to install, ex: '0.9.3'. We support concurrent installs but only one will be active at a time.
+The desired version of GeoWave to install, ex: '${project.version}'. We support concurrent installs but only one will be active at a time.
 
 hadoop_vendor_version::
 The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2. Check the link:http://locationtech.github.io/geowave/packages.html[available packages^, window="_blank"] site for currently supported hadoop distributions.
@@ -53,7 +53,7 @@ class { 'geowave::repo':
   repo_refresh_md => 0,
 } ->
 class { 'geowave':
-  geowave_version       => '0.9.3',
+  geowave_version       => '${project.version}',
   hadoop_vendor_version => 'apache',
   install_accumulo      => true,
   install_app           => true,
@@ -73,7 +73,7 @@ node 'c1-master' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
-    geowave_version       => '0.9.3',
+    geowave_version       => '${project.version}',
     hadoop_vendor_version => 'apache',
     install_accumulo      => true,
     install_app           => true,
@@ -87,7 +87,7 @@ node 'c1-app-01' {
     repo_enabled    => 1,
   } ->
   class { 'geowave':
-    geowave_version       => '0.9.3',
+    geowave_version       => '${project.version}',
     hadoop_vendor_version => 'apache',
     install_app_server    => true,
     http_port             => '8888',

@@ -100,6 +100,21 @@
         $('.refresh').on('click', function() { list.refresh(currentTab, true); });
         setInterval(function () { list.refresh(currentTab); }, REFRESH_INTERVAL);
     });
+    		
+	$( document ).ready(function() {
+		var prevReleases = [ "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
+		var menu = $('#releases_submenu')
+		jQuery.each( prevReleases, function( index, value ) {
+			var li = $('<li/>').addClass('dropdown-submenu').appendTo(menu);
+			var a = $('<a/>').addClass('dropdown-toggle').attr('href', '#').attr('data-toggle','dropdown').text(value).appendTo(li);
+			var subList = $('<ul/>').addClass('dropdown-menu').appendTo(li);
+			var docs = { "userguide.html": "User Guide", "devguide.html": "Developer Guide", "commands.html": "CLI Commands", "quickstart.html": "Quickstart Guide" };
+			$.each( docs, function( filename, label ) {
+				$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + filename).text(label).appendTo($('<li/>').appendTo(subList));
+			});
+		});
+	});
+
 </script>
 ++++
 
