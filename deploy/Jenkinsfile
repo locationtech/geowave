@@ -22,15 +22,20 @@ node ('master') {
   }
 
   stage('Maven Deploy'){
-    //dir("${env.WORKSPACE}/docker-root") {
-    //  sh "aws s3 cp s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz . --quiet"
-    //  sh "tar xfz mvn-repo-cache-latest.tar.gz"
-    //  sh "rm mvn-repo-cache-latest.tar.gz"
-    //}
+    dir("${env.WORKSPACE}/docker-root") {
+      sh "aws s3 cp s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz . --quiet"
+      sh "tar xfz mvn-repo-cache-latest.tar.gz"
+      sh "rm mvn-repo-cache-latest.tar.gz"
+    }
     withMaven(
-      maven: 'maven-3.5.0',
+      maven: 'maven-3.5.2',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+      mavenOpts: "-Xmx2048m",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
+      sh "echo ${env.MAVEN_OPTS}"
+      env.MAVEN_OPTS = "\"-Xmx2048m\""
+      sh "echo ${env.MAVEN_OPTS}"
+      sh "echo \"-------------------------------------------------------\" "
       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
      }
   }
