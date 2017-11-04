@@ -1,6 +1,7 @@
 [[steps-overview]]
 <<<
 
+[[steps-overview]]
 === Connecting to the Cluster
 
 Once your cluster is running and bootstrapped, ssh into the cluster. 
@@ -22,7 +23,7 @@ If you are using Accumulo as your datastore, the script will automatically creat
 
 === Demo Links
 
-- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo]
-- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo]
-- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration]
-- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster]
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]

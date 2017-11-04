@@ -207,7 +207,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 					groupAssignmentRunner.setZoomLevel(zoomLevel);
 
 					// HP Fortify "Command Injection" false positive
-					// What Fortify considers "externally-influenced input" 
+					// What Fortify considers "externally-influenced input"
 					// comes only from users with OS-level access anyway
 					status = retainGroupAssigments ? groupAssignmentRunner.run(
 							config,
@@ -215,7 +215,7 @@ public abstract class MultiLevelClusteringJobRunner extends
 
 					if (status == 0) {
 						// HP Fortify "Command Injection" false positive
-						// What Fortify considers "externally-influenced input" 
+						// What Fortify considers "externally-influenced input"
 						// comes only from users with OS-level access anyway
 						status = hullRunner.run(
 								config,

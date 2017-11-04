@@ -3,8 +3,6 @@
 
 :linkattrs:
 
-= GeoWave
-
 ++++
 <!-- Start Navbar -->
     <div class="navbar-wrapper">
@@ -24,45 +22,14 @@
                         <ul class="nav navbar-nav">
                             <li><a href="quickstart.html">Quickstart Guides</a></li>
                             <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Documentation <span class="caret"></span></a>
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Documentation <span class="caret"></span></a>
                                 <ul class="dropdown-menu multi-level" role="menu">
                                     <li><a href="userguide.html">User Guide</a></li>
 									<li><a href="devguide.html">Developer Guide</a></li>
 									<li><a href="commands.html">CLI Commands</a></li>
 									<li class="divider"></li>
-									<li class="dropdown-submenu">
+									<li class="dropdown-submenu" id="releases_submenu">
 										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Releases</a>
-										<ul class="dropdown-menu">
-											<li class="dropdown-submenu">
-												<a href="#" class="dropdown-toggle" data-toggle="dropdown">${project.version} (Current)</a>
-												<ul class="dropdown-menu">
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.5/docs/userguide.html">User Guide</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.5/docs/devguide.html">Developer Guide</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.5/docs/commands.html">CLI Commands</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.5/docs/quickstart.html">Quickstart Guide</a></li>
-												</ul>
-											</li>
-											<li class="dropdown-submenu">
-												<a href="#" class="dropdown-toggle" data-toggle="dropdown">0.9.4.1</a>
-												<ul class="dropdown-menu">
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.4.1/docs/userguide.html">User Guide</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.4.1/docs/devguide.html">Developer Guide</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.4.1/docs/commands.html">CLI Commands</a></li>
-													<li><a  href="http://s3.amazonaws.com/geowave/0.9.4.1/docs/quickstart.html">Quickstart Guide</a></li>
-												</ul>
-											</li>
-											<li class="dropdown-submenu">
-												<a href="#" class="dropdown-toggle" data-toggle="dropdown">0.9.3</a>
-												<ul class="dropdown-menu">
-													<li><a  href="previous-versions/0.9.3/userguide.html">User Guide</a></li>
-													<li><a  href="previous-versions/0.9.3/devguide.html">Developer Guide</a></li>
-													<li><a  href="previous-versions/0.9.3/commands.html">CLI Commands</a></li>
-													<li><a  href="previous-versions/0.9.3/quickstart.html">Quickstart Guide</a></li>
-												</ul>
-											</li>
-											<li><a  href="previous-versions/0.9.2.1/documentation.html">0.9.2.1</a></li>
-											<li><a  href="previous-versions/0.9.1/documentation.html">0.9.1</a></li>
-										</ul>
 									</li>
                                 </ul>
                             </li>

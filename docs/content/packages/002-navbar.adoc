@@ -3,7 +3,7 @@
 
 :linkattrs:
 
-= GeoWave
+== GeoWave
 
 ++++
 <!-- Start Navbar -->
@@ -36,6 +36,7 @@
     </div>
     <!-- End Navbar -->
 ++++
+
 
 
 

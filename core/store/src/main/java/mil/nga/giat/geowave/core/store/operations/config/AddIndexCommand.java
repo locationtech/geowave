@@ -81,7 +81,8 @@ public class AddIndexCommand extends
 					}
 				}
 				catch (ParameterException pe) {
-					// HP Fortify "Improper Output Neutralization" false positive
+					// HP Fortify "Improper Output Neutralization" false
+					// positive
 					// What Fortify considers "user input" comes only
 					// from users with OS-level access anyway
 					LOGGER.warn(

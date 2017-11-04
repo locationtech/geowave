@@ -1,0 +1,12 @@
+
+<<<
+
+_v${project.version}_
+
+= GeoWave Quickstart Guide Sandbox Environment Setup image:geowave-icon-logo-cropped.png[width="28%"]
+
+== Introduction
+
+The Sandbox Quickstart Guide is designed to allow a user to see some of the capabilities of the GeoWave library on a personal computer, even though GeoWave is primarily designed to be used with massive datasets that would require 
+a much more powerful machine to process. The Sandbox VirtualBox image provided will allow a user to deploy a single node cluster where they can demo GeoWave on sets of vector and raster data.
+

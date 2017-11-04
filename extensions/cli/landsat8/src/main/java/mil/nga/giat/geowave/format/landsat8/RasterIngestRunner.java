@@ -116,6 +116,7 @@ public class RasterIngestRunner extends
 		// Config file
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);

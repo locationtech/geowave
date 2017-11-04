@@ -10,7 +10,7 @@ Authorization Management provides the set of credentials compared against the se
 The provided implementations include the following
 
 * Empty - Each request is processed without additional authorization.
-* JSON - The requester user name, extracted from the Security Context, is used as a key to find the user's set of authorizations from a JSON file. The location of the JSON file is determined by the associated _Authorization Data URL_ (e.g., file://opt/config/auth.json). An example of the contents of the JSON file is given below.
+* JSON - The requester user name, extracted from the Security Context, is used as a key to find the user's set of authorizations from a JSON file. The location of the JSON file is determined by the associated _Authorization Data URL_ (e.g., _/opt/config/auth.json_). An example of the contents of the JSON file is given below.
 
 [source, json]
 ----

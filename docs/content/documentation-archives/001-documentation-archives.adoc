@@ -1,0 +1,26 @@
+[[documentation-archive]]
+<<<
+
+:linkattrs:
+
+_v${project.version}_
+
+== GeoWave Documentation Archive image:geowave-icon-logo-cropped.png[width="28%"]
+
+This page provides links to archived GeoWave release documentation, in the event that it is still needed to be referenced.
+
+++++
+<table id="archived-documentation" class="tableblock frame-all grid-all spread">
+	<colgroup>
+		<col style="width: 28%;">
+		<col style="width: 71%;">
+	</colgroup>
+	<thead>
+		<tr>
+			<th class="tableblock halign-left valign-top">Release Version #</th>
+			<th class="tableblock halign-left valign-top">Link to Documentation</th>
+		</tr>
+	</thead>
+</table>
+++++
+

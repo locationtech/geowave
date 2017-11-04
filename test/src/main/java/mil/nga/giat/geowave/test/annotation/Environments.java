@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
-import mil.nga.giat.geowave.test.service.ServicesTestEnvironment;
 
 /**
  * The <code>Environments</code> annotation specifies the GeoWave test
@@ -39,8 +38,6 @@ public @interface Environments {
 	public static enum Environment {
 		MAP_REDUCE(
 				MapReduceTestEnvironment.getInstance()),
-		SERVICES(
-				ServicesTestEnvironment.getInstance()),
 		KAFKA(
 				KafkaTestEnvironment.getInstance());
 		private final TestEnvironment testEnvironment;

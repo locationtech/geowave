@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,22 +14,28 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Properties;
+import java.util.SortedMap;
+import java.util.TreeMap;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "list", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "List property name within cache")
 public class ListCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<SortedMap<String, Object>>
 {
 
 	@Parameter(names = {
@@ -40,26 +46,68 @@ public class ListCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-
-		File f = getGeoWaveConfigFile(params);
-
-		// Reload options with filter if specified.
-		Properties p = getGeoWaveConfigProperties(
-				params,
-				filter);
+			final OperationParams params ) {
+		final Pair<String, SortedMap<String, Object>> list = getProperties(params);
+		final String name = list.getKey();
 
 		JCommander.getConsole().println(
-				"PROPERTIES (" + f.getName() + ")");
+				"PROPERTIES (" + name + ")");
 
-		List<String> keys = new ArrayList<String>();
-		keys.addAll(p.stringPropertyNames());
-		Collections.sort(keys);
+		final SortedMap<String, Object> properties = list.getValue();
 
-		for (String key : keys) {
-			String value = (String) p.get(key);
+		for (final Entry<String, Object> e : properties.entrySet()) {
 			JCommander.getConsole().println(
-					key + ": " + value);
+					e.getKey() + ": " + e.getValue());
 		}
 	}
+
+	@Override
+	public SortedMap<String, Object> computeResults(
+			final OperationParams params ) {
+
+		return getProperties(
+				params).getValue();
+	}
+
+	private Pair<String, SortedMap<String, Object>> getProperties(
+			final OperationParams params ) {
+
+		final File f = getGeoWaveConfigFile(params);
+
+		// Reload options with filter if specified.
+		Properties p = null;
+		if (filter != null) {
+			p = ConfigOptions.loadProperties(
+					f,
+					filter);
+		}
+		else {
+			p = ConfigOptions.loadProperties(
+					f,
+					null);
+		}
+		return new ImmutablePair<>(
+				f.getName(),
+				new GeoWaveConfig(
+						p));
+	}
+
+	protected static class GeoWaveConfig extends
+			TreeMap<String, Object>
+	{
+
+		private static final long serialVersionUID = 1L;
+
+		public GeoWaveConfig() {
+			super();
+		}
+
+		public GeoWaveConfig(
+				Map m ) {
+			super(
+					m);
+		}
+
+	}
+
 }
