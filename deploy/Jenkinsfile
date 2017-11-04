@@ -27,13 +27,13 @@ node ('master') {
       sh "tar xfz mvn-repo-cache-latest.tar.gz"
       sh "rm mvn-repo-cache-latest.tar.gz"
     }
+    env.MAVEN_OPTS = "\"-Xmx2048m\""
+    sh "echo ${env.MAVEN_OPTS}"
     withMaven(
       maven: 'maven-3.5.2',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2048m",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "echo ${env.MAVEN_OPTS}"
-      env.MAVEN_OPTS = "\"-Xmx2048m\""
       sh "echo ${env.MAVEN_OPTS}"
       sh "echo \"-------------------------------------------------------\" "
       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
