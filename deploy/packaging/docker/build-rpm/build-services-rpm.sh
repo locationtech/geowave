@@ -78,6 +78,7 @@ if [ ${ARGS[build]} = "tomcat" ]; then
   echo "Creating tomcat rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-gwtomcat8" -v $GEOWAVE_VERSION-$TIME_TAG -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
+      -d java-1.8.0-openjdk \
       -d geowave-${GEOWAVE_VERSION}-core \
       --vendor "apache" \
       --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
