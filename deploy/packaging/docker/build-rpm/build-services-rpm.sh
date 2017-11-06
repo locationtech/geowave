@@ -69,10 +69,17 @@ chmod -R 777 $WORKSPACE/deploy
 
 if [ ${ARGS[build]} = "tomcat" ]; then
   set -x
+  #Prep the tomcat8 directory for packaging
+  rm -rf tomcat8/webapps/*
+
+  #put in root page redirect
+  mkdir tomcat8/webapps/ROOT
+  echo "<% response.sendRedirect(\"/geoserver\"); %>" > tomcat8/webapps/ROOT/index.jsp
+
   echo "Creating tomcat rpm"
   fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-gwtomcat8" -v $GEOWAVE_VERSION -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
-      -d java-1.8.0-openjdk.x86_64 \
+      -d java-1.8.0-openjdk \
       -d geowave-${GEOWAVE_VERSION}-core \
       --vendor "apache" \
       --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
@@ -81,7 +88,7 @@ if [ ${ARGS[build]} = "tomcat" ]; then
       --post-install ${FPM_SCRIPTS}/gwtomcat8_post_install.sh \
       --pre-uninstall ${FPM_SCRIPTS}/gwtomcat8_pre_uninstall.sh \
       --post-uninstall ${FPM_SCRIPTS}/gwtomcat8_post_uninstall.sh \
-      ${FPM_SCRIPTS}/gwtomcat8.service=/etc/systemd/system/gwtomcat8.service \
+      ${FPM_SCRIPTS}/gwtomcat8=/etc/init.d/gwtomcat8 \
       tomcat8/=${GEOWAVE_DIR}/tomcat8/
   echo "created tomcat rpm"
   cp geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-gwtomcat8.${TIME_TAG}.noarch.rpm
