@@ -25,6 +25,9 @@ public class ParameterRestFieldValue extends
 			final Object value )
 			throws IllegalArgumentException,
 			IllegalAccessException {
+		// HP Fortify "Access Control" false positive
+		// The need to change the accessibility here is
+		// necessary, has been review and judged to be safe
 		field.setAccessible(true);
 		field.set(
 				instance,
