@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.webapp.security.oauth2;
+package mil.nga.giat.geowave.service.rest.security.oauth2;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 

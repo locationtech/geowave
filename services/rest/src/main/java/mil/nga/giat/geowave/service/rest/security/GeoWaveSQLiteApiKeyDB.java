@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.webapp.security;
+package mil.nga.giat.geowave.service.rest.security;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

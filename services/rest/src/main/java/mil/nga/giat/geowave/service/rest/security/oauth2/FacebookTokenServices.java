@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.webapp.security.oauth2;
+package mil.nga.giat.geowave.service.rest.security.oauth2;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -91,7 +91,9 @@ public class FacebookTokenServices extends
 					"UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
-			logger.error("Unsupported encoding", e);
+			logger.error(
+					"Unsupported encoding",
+					e);
 		}
 
 		Map<String, Object> map = getForMap(

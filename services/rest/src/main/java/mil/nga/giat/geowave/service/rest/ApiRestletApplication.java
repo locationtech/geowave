@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.webapp;
+package mil.nga.giat.geowave.service.rest;
 
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Modifier;
@@ -30,11 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
-import mil.nga.giat.geowave.service.rest.MainResource;
-import mil.nga.giat.geowave.service.rest.RestRoute;
-import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
-import mil.nga.giat.geowave.service.rest.SwaggerResource;
 import mil.nga.giat.geowave.service.rest.operations.FileUpload;
 
 /**
