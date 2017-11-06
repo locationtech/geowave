@@ -91,8 +91,7 @@ public class FacebookTokenServices extends
 					"UTF-8");
 		}
 		catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			logger.error("Unsupported encoding", e);
 		}
 
 		Map<String, Object> map = getForMap(

@@ -3,13 +3,6 @@ package mil.nga.giat.geowave.service.rest.webapp;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
-//=======
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-//>>>>>>> fc56a1429f955dfab0c96af83a1f04a5e89a0022
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -43,21 +36,6 @@ import mil.nga.giat.geowave.service.rest.RestRoute;
 import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
 import mil.nga.giat.geowave.service.rest.SwaggerResource;
 import mil.nga.giat.geowave.service.rest.operations.FileUpload;
-import scala.reflect.api.Quasiquotes.Quasiquote.api;
-//=======
-import org.restlet.engine.Engine;
-import org.restlet.resource.ServerResource;
-import org.restlet.routing.Router;
-import org.restlet.service.CorsService;
-
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
-import mil.nga.giat.geowave.service.rest.RestRoute;
-import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
-import mil.nga.giat.geowave.service.rest.SwaggerResource;
-
-//>>>>>>> fc56a1429f955dfab0c96af83a1f04a5e89a0022
 
 /**
  * This class provides the main webapp entry point
@@ -71,7 +49,6 @@ public class ApiRestletApplication extends
 	public ApiRestletApplication() {
 		super();
 
-		// Engine.setRestletLogLevel(Level.FINEST);
 		parseOperationsForApiRoutes();
 
 		// add the CORS service so others can access the service
