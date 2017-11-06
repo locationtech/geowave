@@ -122,6 +122,11 @@
 			<artifactId>spring-security-oauth2</artifactId>
 			<version>2.2.0.RELEASE</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.xerial</groupId>
+		    <artifactId>sqlite-jdbc</artifactId>
+		    <version>3.20.1</version>
+		</dependency>
 	</dependencies>
 	<!-- Tomcat Maven Plugin is added to facilitate testing the webapp without 
 		deploying to an actual server i.e. create a run config with tomcat7:run as 

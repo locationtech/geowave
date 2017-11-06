@@ -3,10 +3,18 @@ package mil.nga.giat.geowave.service.rest.webapp;
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Modifier;
 import java.net.InetAddress;
+//=======
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+//>>>>>>> fc56a1429f955dfab0c96af83a1f04a5e89a0022
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
@@ -15,11 +23,13 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.Query;
 import javax.management.QueryExp;
+
 import javax.servlet.ServletContext;
 
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Restlet;
+
 import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
 import org.slf4j.Logger;
@@ -34,6 +44,20 @@ import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
 import mil.nga.giat.geowave.service.rest.SwaggerResource;
 import mil.nga.giat.geowave.service.rest.operations.FileUpload;
 import scala.reflect.api.Quasiquotes.Quasiquote.api;
+//=======
+import org.restlet.engine.Engine;
+import org.restlet.resource.ServerResource;
+import org.restlet.routing.Router;
+import org.restlet.service.CorsService;
+
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
+import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
+import mil.nga.giat.geowave.service.rest.RestRoute;
+import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
+import mil.nga.giat.geowave.service.rest.SwaggerResource;
+
+//>>>>>>> fc56a1429f955dfab0c96af83a1f04a5e89a0022
 
 /**
  * This class provides the main webapp entry point
@@ -133,6 +157,7 @@ public class ApiRestletApplication extends
 			}
 
 		}
+
 		final SwaggerApiParser apiParser = new SwaggerApiParser(
 				apiHostPort,
 				servlet.getContextPath(),
@@ -146,7 +171,6 @@ public class ApiRestletApplication extends
 							route.getOperation()));
 
 			apiParser.addRoute(route);
-
 		}
 
 		// determine path on file system where the servlet resides

@@ -12,6 +12,7 @@
 							 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 							 http://www.springframework.org/schema/security/oauth2 http://www.springframework.org/schema/security/spring-security-oauth2-2.0.xsd">
 	
+
 	<security:http pattern="/api" security="none"/>
 	<security:http pattern="/v0/**" security="none"/>
 </b:beans>
