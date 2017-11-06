@@ -32,11 +32,17 @@ class geowave(
     anchor {'geowave::end':}
   }
 
-  if $install_gwgeoserver {
-    class {'geowave::gwgeoserver':}
+  if $install_gwgeoserver or $install_restservices {
+    anchor {'geowave_tomcat::begin': } ->
+      class {'geowave::gwtomcat8_server':} ->
+      class {'geowave::gwtomcat8_service':} ->
+    anchor {'geowave_tomcat::end':}
+    if $install_gwgeoserver {
+      class {'geowave::gwgeoserver':}
+    }
+    if $install_restservices {
+      class {'geowave::restservices':}
+    }
   }
 
-  if $install_restservices {
-    class {'geowave::restservices':}
-  }
 }
