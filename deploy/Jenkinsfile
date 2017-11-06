@@ -34,7 +34,7 @@ node ('master') {
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
       sh "echo ${env.MAVEN_OPTS}"
       sh "echo \"-------------------------------------------------------\" "
-      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
+      sh "mvn -pl '!services/rest-webapp' deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
      }
   }
 
