@@ -64,6 +64,15 @@ if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
   echo "Downloading tomcat-8.5.20"
   wget -q https://s3.amazonaws.com/geowave/third-party-downloads/tomcat/apache-tomcat-8.5.20.tar.gz
   tar xzf apache-tomcat-8.5.20.tar.gz && mv apache-tomcat-8.5.20 tomcat8
+
+
+  #Prep the tomcat8 directory for packaging
+  rm -rf tomcat8/webapps/*
+
+  #put in root page redirect
+  mkdir tomcat8/webapps/ROOT
+  echo "<% response.sendRedirect(\"/geoserver\"); %>" > tomcat8/webapps/ROOT/index.jsp
+
 fi
 
 #Check if the RPM directory exists. If not create it
@@ -74,13 +83,6 @@ fi
 
 # Ensure mounted volume permissions are OK for access
 chmod -R 777 $WORKSPACE/deploy
-
-#Prep the tomcat8 directory for packaging
-rm -rf tomcat8/webapps/*
-
-#put in root page redirect
-mkdir tomcat8/webapps/ROOT
-echo "<% response.sendRedirect(\"/geoserver\"); %>" > tomcat8/webapps/ROOT/index.jsp
 
 echo "Creating tomcat rpm"
 fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat8" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
