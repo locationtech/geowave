@@ -44,5 +44,4 @@ class geowave(
       class {'geowave::restservices':}
     }
   }
-
 }
