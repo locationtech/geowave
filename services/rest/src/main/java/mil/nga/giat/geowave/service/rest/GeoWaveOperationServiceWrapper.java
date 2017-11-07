@@ -14,14 +14,6 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Patch;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
-/*=======
- import java.lang.reflect.Field;
- import java.sql.Connection;
- import java.sql.DriverManager;
- import java.sql.PreparedStatement;
- import java.sql.ResultSet;
- import java.sql.SQLException;
- import java.util.List;*/
 
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
