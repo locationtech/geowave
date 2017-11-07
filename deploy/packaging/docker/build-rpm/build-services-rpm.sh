@@ -76,11 +76,11 @@ if [ ${ARGS[build]} = "tomcat" ]; then
   echo "<% response.sendRedirect(\"/geoserver\"); %>" > tomcat8/webapps/ROOT/index.jsp
 
   echo "Creating tomcat rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-gwtomcat8" -v $GEOWAVE_VERSION-$TIME_TAG -a ${ARGS[arch]} \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-gwtomcat8" -v ${GEOWAVE_VERSION}-${TIME_TAG} -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d java-1.8.0-openjdk \
       -d geowave-${GEOWAVE_VERSION}-core \
-      --vendor "apache" \
+      --vendor "geowave" \
       --description "Apache Tomcat is an open source software implementation of the Java Servlet and JavaServer Pages technologies." \
       --url "http://tomcat.apache.org/" \
       --directories ${GEOWAVE_DIR}/tomcat8 \
@@ -117,13 +117,13 @@ if [ ${ARGS[build]} = "services" ]; then
   cd ..
   rm -rf tmp
   echo "Creating Geoserver and services rpm"
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" -v $GEOWAVE_VERSION-$TIME_TAG -a ${ARGS[arch]}  \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" -v ${GEOWAVE_VERSION}-${TIME_TAG} -a ${ARGS[arch]}  \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm --rpm-os linux --license "GNU General Public License Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-gwtomcat8 \
-      --vendor geoserver --description "GeoServer is an open source server for sharing geospatial data." \
+      --vendor geowave --description "GeoServer is an open source server for sharing geospatial data." \
       --url "https://geoserver.org/" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geoserver.war
 
-  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v $GEOWAVE_VERSION-$TIME_TAG -a ${ARGS[arch]} \
+  fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v ${GEOWAVE_VERSION}-${TIME_TAG} -a ${ARGS[arch]} \
       -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
       -d geowave-${GEOWAVE_VERSION}-gwtomcat8 \
       --vendor geowave --description "Geowave rest services rpm. This deploys the Geowave services WAR file to the Tomcat server." \
