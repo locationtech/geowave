@@ -97,7 +97,7 @@ fi
 if [ ${ARGS[build]} = "services" ]; then
   set -x
   #grab the rest services war file
-  cp $WORKSPACE/services/rest-webapp/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
+  cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
 
   #get geoserver the war files ready
   #unpack it in tmp dir

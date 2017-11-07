@@ -55,7 +55,7 @@ fi
 # Build each of the "fat jar" artifacts and rename to remove any version strings in the file name
 mvn -q package -am -pl deploy -P geotools-container-singlejar -Dgeotools.finalName=geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
-mvn -q package -am -pl services/rest-webapp -Drestservices.finalName=geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
+mvn -q package -am -pl services/rest -p rest-services-war -Drestservices.finalName=geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
 mvn -q package -am -pl deploy -P accumulo-container-singlejar -Daccumulo.finalName=geowave-accumulo-${GEOWAVE_VERSION}-${VENDOR_VERSION} $BUILD_ARGS "$@"
 
