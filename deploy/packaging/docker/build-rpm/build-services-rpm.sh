@@ -83,7 +83,7 @@ mkdir tomcat8/webapps/ROOT
 echo "<% response.sendRedirect(\"/geoserver\"); %>" > tomcat8/webapps/ROOT/index.jsp
 
 echo "Creating tomcat rpm"
-fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSOIN}-gwtomcat8" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
+fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat8" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
     -d java-1.8.0-openjdk \
     -d geowave-${GEOWAVE_VERSION}-core \
@@ -99,7 +99,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSOIN}-gwtomcat8" -v
     ${FPM_SCRIPTS}/gwtomcat8=/etc/init.d/gwtomcat8 \
     tomcat8/=${GEOWAVE_DIR}/tomcat8/
 echo "created tomcat rpm"
-cp geowave-${GEOWAVE_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-gwtomcat8.${TIME_TAG}.noarch.rpm
+cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat8.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat8.${TIME_TAG}.noarch.rpm
 
 #grab the rest services war file
 cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
@@ -140,7 +140,9 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices"
 #Move the rpms to the repo to indexed later
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
+#Clean up tmp files
 rm -rf geoserver.war
+rm -rf restservices.war
 
 #Go back to where we started from
 cd $WORKSPACE
