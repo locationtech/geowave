@@ -288,9 +288,8 @@
 <li><a href="mil/nga/giat/geowave/service/rest/package-tree.html">mil.nga.giat.geowave.service.rest</a>, </li>
 <li><a href="mil/nga/giat/geowave/service/rest/field/package-tree.html">mil.nga.giat.geowave.service.rest.field</a>, </li>
 <li><a href="mil/nga/giat/geowave/service/rest/operations/package-tree.html">mil.nga.giat.geowave.service.rest.operations</a>, </li>
-<li><a href="mil/nga/giat/geowave/service/rest/webapp/package-tree.html">mil.nga.giat.geowave.service.rest.webapp</a>, </li>
-<li><a href="mil/nga/giat/geowave/service/rest/webapp/security/package-tree.html">mil.nga.giat.geowave.service.rest.webapp.security</a>, </li>
-<li><a href="mil/nga/giat/geowave/service/rest/webapp/security/oauth2/package-tree.html">mil.nga.giat.geowave.service.rest.webapp.security.oauth2</a>, </li>
+<li><a href="mil/nga/giat/geowave/service/rest/security/package-tree.html">mil.nga.giat.geowave.service.rest.security</a>, </li>
+<li><a href="mil/nga/giat/geowave/service/rest/security/oauth2/package-tree.html">mil.nga.giat.geowave.service.rest.security.oauth2</a>, </li>
 <li><a href="mil/nga/giat/geowave/test/package-tree.html">mil.nga.giat.geowave.test</a>, </li>
 <li><a href="mil/nga/giat/geowave/test/annotation/package-tree.html">mil.nga.giat.geowave.test.annotation</a>, </li>
 <li><a href="mil/nga/giat/geowave/test/kafka/package-tree.html">mil.nga.giat.geowave.test.kafka</a>, </li>
@@ -1078,7 +1077,7 @@
 <li type="circle">mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter"><span class="typeNameLink">DedupeFilter</span></a> (implements mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>)</li>
 <li type="circle">org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter (implements org.springframework.security.oauth2.provider.token.AccessTokenConverter)
 <ul>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.oauth2.<a href="mil/nga/giat/geowave/service/rest/webapp/security/oauth2/FacebookAccessTokenConverter.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security.oauth2"><span class="typeNameLink">FacebookAccessTokenConverter</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.security.oauth2.<a href="mil/nga/giat/geowave/service/rest/security/oauth2/FacebookAccessTokenConverter.html" title="class in mil.nga.giat.geowave.service.rest.security.oauth2"><span class="typeNameLink">FacebookAccessTokenConverter</span></a></li>
 </ul>
 </li>
 <li type="circle">org.geotools.filter.visitor.DefaultFilterVisitor (implements org.opengis.filter.expression.ExpressionVisitor, org.opengis.filter.FilterVisitor)
@@ -1402,8 +1401,8 @@
 <li type="circle">mil.nga.giat.geowave.core.ingest.avro.<a href="mil/nga/giat/geowave/core/ingest/avro/GenericAvroSerializer.html" title="class in mil.nga.giat.geowave.core.ingest.avro"><span class="typeNameLink">GenericAvroSerializer</span></a>&lt;T&gt;</li>
 <li type="circle">org.springframework.web.filter.GenericFilterBean (implements org.springframework.beans.factory.BeanNameAware, org.springframework.beans.factory.DisposableBean, org.springframework.context.EnvironmentAware, javax.servlet.Filter, org.springframework.beans.factory.InitializingBean, org.springframework.web.context.ServletContextAware)
 <ul>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.<a href="mil/nga/giat/geowave/service/rest/webapp/security/GeoWaveApiKeyFilter.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security"><span class="typeNameLink">GeoWaveApiKeyFilter</span></a></li>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.<a href="mil/nga/giat/geowave/service/rest/webapp/security/GeoWaveApiKeySetterFilter.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security"><span class="typeNameLink">GeoWaveApiKeySetterFilter</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.security.<a href="mil/nga/giat/geowave/service/rest/security/GeoWaveApiKeyFilter.html" title="class in mil.nga.giat.geowave.service.rest.security"><span class="typeNameLink">GeoWaveApiKeyFilter</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.security.<a href="mil/nga/giat/geowave/service/rest/security/GeoWaveApiKeySetterFilter.html" title="class in mil.nga.giat.geowave.service.rest.security"><span class="typeNameLink">GeoWaveApiKeySetterFilter</span></a></li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.core.store.util.<a href="mil/nga/giat/geowave/core/store/util/GenericTypeResolver.html" title="class in mil.nga.giat.geowave.core.store.util"><span class="typeNameLink">GenericTypeResolver</span></a></li>
@@ -1453,9 +1452,9 @@
 <li type="circle">mil.nga.giat.geowave.format.geotools.vector.<a href="mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestFormat.html" title="class in mil.nga.giat.geowave.format.geotools.vector"><span class="typeNameLink">GeoToolsVectorDataStoreIngestFormat</span></a> (implements mil.nga.giat.geowave.core.ingest.spi.<a href="mil/nga/giat/geowave/core/ingest/spi/IngestFormatPluginProviderSpi.html" title="interface in mil.nga.giat.geowave.core.ingest.spi">IngestFormatPluginProviderSpi</a>&lt;I,O&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.format.geotools.vector.<a href="mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html" title="class in mil.nga.giat.geowave.format.geotools.vector"><span class="typeNameLink">GeoToolsVectorDataStoreIngestPlugin</span></a> (implements mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;O&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.adapter.vector.plugin.transaction.<a href="mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveAutoCommitTransactionState.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.transaction"><span class="typeNameLink">GeoWaveAutoCommitTransactionState</span></a> (implements mil.nga.giat.geowave.adapter.vector.plugin.transaction.<a href="mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionState.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransactionState</a>)</li>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.<a href="mil/nga/giat/geowave/service/rest/webapp/security/GeoWaveBaseApiKeyDB.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security"><span class="typeNameLink">GeoWaveBaseApiKeyDB</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.springframework.web.context.ServletContextAware)
+<li type="circle">mil.nga.giat.geowave.service.rest.security.<a href="mil/nga/giat/geowave/service/rest/security/GeoWaveBaseApiKeyDB.html" title="class in mil.nga.giat.geowave.service.rest.security"><span class="typeNameLink">GeoWaveBaseApiKeyDB</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.springframework.web.context.ServletContextAware)
 <ul>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.<a href="mil/nga/giat/geowave/service/rest/webapp/security/GeoWaveSQLiteApiKeyDB.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security"><span class="typeNameLink">GeoWaveSQLiteApiKeyDB</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.security.<a href="mil/nga/giat/geowave/service/rest/security/GeoWaveSQLiteApiKeyDB.html" title="class in mil.nga.giat.geowave.service.rest.security"><span class="typeNameLink">GeoWaveSQLiteApiKeyDB</span></a></li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.mapreduce.<a href="mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">GeoWaveConfiguratorBase</span></a>
@@ -2109,7 +2108,7 @@
 <li type="circle">mil.nga.giat.geowave.core.store.operations.remote.<a href="mil/nga/giat/geowave/core/store/operations/remote/RemoteOperationsProvider.html" title="class in mil.nga.giat.geowave.core.store.operations.remote"><span class="typeNameLink">RemoteOperationsProvider</span></a> (implements mil.nga.giat.geowave.core.cli.spi.<a href="mil/nga/giat/geowave/core/cli/spi/CLIOperationProviderSpi.html" title="interface in mil.nga.giat.geowave.core.cli.spi">CLIOperationProviderSpi</a>)</li>
 <li type="circle">org.springframework.security.oauth2.provider.token.RemoteTokenServices (implements org.springframework.security.oauth2.provider.token.ResourceServerTokenServices)
 <ul>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.security.oauth2.<a href="mil/nga/giat/geowave/service/rest/webapp/security/oauth2/FacebookTokenServices.html" title="class in mil.nga.giat.geowave.service.rest.webapp.security.oauth2"><span class="typeNameLink">FacebookTokenServices</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.security.oauth2.<a href="mil/nga/giat/geowave/service/rest/security/oauth2/FacebookTokenServices.html" title="class in mil.nga.giat.geowave.service.rest.security.oauth2"><span class="typeNameLink">FacebookTokenServices</span></a></li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.<a href="mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster"><span class="typeNameLink">Resolution</span></a> (implements java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparable.html?is-external=true" title="class or interface in java.lang">Comparable</a>&lt;T&gt;, mil.nga.giat.geowave.core.index.persist.<a href="mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>)</li>
@@ -2131,7 +2130,7 @@
 <ul>
 <li type="circle">org.restlet.Application
 <ul>
-<li type="circle">mil.nga.giat.geowave.service.rest.webapp.<a href="mil/nga/giat/geowave/service/rest/webapp/ApiRestletApplication.html" title="class in mil.nga.giat.geowave.service.rest.webapp"><span class="typeNameLink">ApiRestletApplication</span></a></li>
+<li type="circle">mil.nga.giat.geowave.service.rest.<a href="mil/nga/giat/geowave/service/rest/ApiRestletApplication.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">ApiRestletApplication</span></a></li>
 </ul>
 </li>
 <li type="circle">org.restlet.resource.Finder
