@@ -13,14 +13,24 @@ This document assumes you understand how to create and configure an EMR cluster 
 
 - link:http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
 
+== Configuring Spark
+
+To better configure Spark for our demos we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called `maximizeResourceAllocation`. This option has to be provided at cluster creation as a configuration option given to Spark. 
+For more information on how to set this option visit link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html[Configuring Spark].
+
+[WARNING]
+====
+Setting this option on some smaller instances with HBase installed can cut the maximum available yarn resources in half (see link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hadoop-task-config.html[here] for memory config per instance type). *AWS DOES NOT* account for HBase being installed when using `maximizeResourceAllocation`.
+When running through Jupyter notebook there is no issue because we account for this ourselves, but if you want to use spark through the CLI or shell this can break spark unless you modify the `spark-defaults.conf` manually.
+====
+
 == Recommended Hardware settings
 
-If you wish to run both jupyter notebook demos you will need to increase the hardware specifications for your emr cluster slightly to support it.
+Currently, there are two notebook demos using differently sized data sets. If you wish to run either jupyter notebook demo you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified for the demos below.
 
 image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
 
-Below are the recommended hardware settings to change for the cluster:
-
+=== GDELT Demo Settings
 - Root device EBS volume size
 ** Set this to at least 20gb
 - Master
@@ -31,13 +41,24 @@ Below are the recommended hardware settings to change for the cluster:
 ** Select 4 for the Instance count
 ** Do not touch the EBS Storage or Auto Scaling
 
+=== GPX Demo Settings
+- Root device EBS volume size
+** Set this to at least 20gb
+- Master
+** Edit the Instance Type to be m4.2xlarge
+** Do not touch the EBS Storage
+- Core
+** Edit the Instance Type to be m4.2xlarge
+** Select 8 for the Instance count
+** Do not touch the EBS Storage or Auto Scaling
+
 == Install Python and Jupyter
 
 To properly run and visualize the results from the Jupyter notebook demo we need to first install python and a few additional packages. We've created a bootstrap script to do that for you that can be found here:
 
 - Jupyter Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh
 
-This bootstrap script will install python, all necessary packages needed for this demo, and create the jupyter kernel to run the notebooks. This script needs to be run as a bootstrap action when creating the EMR cluster.
+This bootstrap script will install python, all necessary packages needed for the demos, create the jupyter kernel, and run the jupyter notebook server on port 9000 of your cluster. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
 [NOTE]
 ====
@@ -48,40 +69,51 @@ It is recommended to use the Accumulo bootstrap script as the first bootstrap sc
 For more information on setting up bootstrap actions visit this link: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
 ====
 
-== Run the Jupyter notebook
+== Connect to the notebook server
 
-After your cluster has been created with the script above, you are ready to connect to the cluster and run the demo. Once you are connected to the cluster run the commands below to launch the notebook server.
-[NOTE]
-====
-For more information on connecting to the EMR cluster follow the instructions here: http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
-====
+After your cluster has been created with the script above and is in the Waiting state, you are ready to connect to the notebook server and run the demo:
 
-. Launch the jupyter notebook server
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+. Use the master public dns of the cluster like below in your browser to connect to the notebook server.  
++
+[source]
+----
+{master_public_dns}:9000
+----
+. Enter the default password `geowave` to gain access to the notebooks. 
+. Then simply select the demo notebook you wish to run and follow the instructions in the notebook to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.
+
+== Appendices
+
+=== Modifying Spark settings on Jupyter kernel
+
+Our bootstrap scripts setup the Jupyter kernel to use yarn by default, and other spark configuration settings through the `kernel.json` file for the kernel itself. If for any reason you would like to change these settings, you can do so by modifying the `kernel.json` once you are connected to the cluster.
+
+. SSH into the emr cluster
+. Open the `kernel.json` file in your favorite text editor (vim, vi, nano) found at the following location
+.. `/home/hadoop/.local/share/jupyter/kernels/pythonwithpixiedust22/kernel.json`
+. Modify `PYSPARK_SUBMIT_ARGS` to contain whatever settings you need for spark.
+. Restart the Jupyter Kernel (if running), or your settings will be applied the next time the kernel loads.
+
+=== Restarting the Jupyter Daemon
+
+The Jupyter notebook server is launched at cluster creation as a link:http://upstart.ubuntu.com/[Upstart] service. If Jupyter should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.
+
+. SSH into the emr cluster
+. Run the following commands
+
 +
 [source, bash]
 ----
-jupyter notebook ./notebooks --ip=0.0.0.0 --no-browser
+sudo stop jupyter
+sudo start jupyter
 ----
 
-.. This command will launch a jupyter notebook server from the cluster and output a link to connect to the server that will look like this:
-+
-[source]
-----
-http://0.0.0.0:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f
-----
 
-. Copy and paste the output url into your browser, and replace the "0.0.0.0" with the Master Public DNS of your EMR cluster.
-+
-image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
 
- .. The final url will look something like this:
-+
-[source]
-----
-http://ec2-34-226-244-139.compute-1.amazonaws.com:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f
-----
 
-. After connecting to the notebook server you should see a list of all notebooks in the browser. Select the geowave-gdelt demo notebook and follow the instructions there once the notebook loads to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.
+
 
 
 

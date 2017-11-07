@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.webapp;
+package mil.nga.giat.geowave.service.rest;
 
 import java.lang.management.ManagementFactory;
 import java.lang.reflect.Modifier;
@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
+
 import java.util.Iterator;
 import java.util.Set;
 import java.util.logging.Level;
@@ -15,11 +16,13 @@ import javax.management.MBeanServer;
 import javax.management.ObjectName;
 import javax.management.Query;
 import javax.management.QueryExp;
+
 import javax.servlet.ServletContext;
 
 import org.reflections.Reflections;
 import org.restlet.Application;
 import org.restlet.Restlet;
+
 import org.restlet.routing.Router;
 import org.restlet.service.CorsService;
 import org.slf4j.Logger;
@@ -27,13 +30,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.service.rest.GeoWaveOperationFinder;
-import mil.nga.giat.geowave.service.rest.MainResource;
-import mil.nga.giat.geowave.service.rest.RestRoute;
-import mil.nga.giat.geowave.service.rest.SwaggerApiParser;
-import mil.nga.giat.geowave.service.rest.SwaggerResource;
 import mil.nga.giat.geowave.service.rest.operations.FileUpload;
-import scala.reflect.api.Quasiquotes.Quasiquote.api;
 
 /**
  * This class provides the main webapp entry point
@@ -47,7 +44,6 @@ public class ApiRestletApplication extends
 	public ApiRestletApplication() {
 		super();
 
-		// Engine.setRestletLogLevel(Level.FINEST);
 		parseOperationsForApiRoutes();
 
 		// add the CORS service so others can access the service
@@ -133,6 +129,7 @@ public class ApiRestletApplication extends
 			}
 
 		}
+
 		final SwaggerApiParser apiParser = new SwaggerApiParser(
 				apiHostPort,
 				servlet.getContextPath(),
@@ -146,7 +143,6 @@ public class ApiRestletApplication extends
 							route.getOperation()));
 
 			apiParser.addRoute(route);
-
 		}
 
 		// determine path on file system where the servlet resides

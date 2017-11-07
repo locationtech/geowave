@@ -2,6 +2,8 @@
 
 GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
 
+JUPYTER_PASSWORD=${2-geowave}
+
 # I've externalized commands into library functions for clarity, download and source
 if [ ! -f /tmp/create-configure-kernel.sh ]; then
 	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
@@ -53,16 +55,30 @@ echo bootstrap_conda.sh completed. PATH now: $PATH
 echo Performing pixiedust and jupyter kernel setup.
 
 # setup python 3.5 in the master and workers
-printf '\nexport PYSPARK_PYTHON=$HOME/conda/bin/python3.5' >> $HOME/.bashrc
-printf '\nexport PYSPARK_DRIVER_PYTHON=$HOME/conda/bin/python3.5' >> $HOME/.bashrc
+printf "\nexport PYSPARK_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+printf "\nexport PYSPARK_DRIVER_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+# This was added because Upstart doesn't capture user environment variables before loading jupyter
+printf "\nexport HOSTNAME=$HOSTNAME" >> $HOME/.bashrc
 source $HOME/.bashrc
 
-pip --version
-pip install  pixiedust ipywidgets ipyleaflet geomet
+pip install --upgrade pip
+# Pandas added to install again because conda-forge misses correct pytz dependency version
+pip install  pixiedust ipywidgets ipyleaflet geomet pandas
 
 jupyter nbextension enable --py --sys-prefix ipyleaflet
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
 
-# Installing Jupyter Kernel beyond here.
+# generate empty config for notebook server
+jupyter notebook --generate-config
+
+# generate default password for server
+HASHED_PASSWORD=$(python -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))")
+
+printf "c.NotebookApp.password = u'$HASHED_PASSWORD'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
 
 # Install Jupyter Kernel components on master node
 if is_master ; then

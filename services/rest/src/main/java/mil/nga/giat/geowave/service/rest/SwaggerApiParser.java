@@ -20,6 +20,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 public class SwaggerApiParser
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(SwaggerApiParser.class);
+
 	/**
 	 * Reads RestRoute(s) and operations and parses class fields for particular
 	 * annotations ( @Parameter and @ParametersDelegate from JCommander) The

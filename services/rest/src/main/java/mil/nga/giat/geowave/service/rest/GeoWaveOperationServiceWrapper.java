@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.restlet.resource.Get;
 import org.restlet.resource.Patch;
 import org.restlet.resource.Post;
 import org.restlet.resource.Put;
+
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -241,8 +243,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	private T handleRequest(
 			final Form form )
 			throws Exception {
+
 		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
 				.getFirstValue("config_file");
+
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
 
@@ -256,7 +260,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					form,
 					operation);
 		}
-
 		catch (final MissingArgumentException e) {
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
@@ -303,6 +306,5 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			super(
 					"Missing argument: " + argumentName);
 		}
-
 	}
 }
