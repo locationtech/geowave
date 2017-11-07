@@ -46,8 +46,8 @@ cd services_tmp
 
 #grab the geoserver war file and tomcat tarball
 #Check if the files already exists before grabbing them
-if [ ! -f geoserver-2.12.0-war.zip ]; then
-  echo "Downloading geoserver-2.12.0-war"
+if [ ! -f geoserver-2.10.0-war.zip ]; then
+  echo "Downloading geoserver-2.10.0-war"
   wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-2.10.0-war.zip
 fi
 
@@ -101,7 +101,7 @@ if [ ${ARGS[build]} = "services" ]; then
 
   #get geoserver the war files ready
   #unpack it in tmp dir
-  unzip -o geoserver-2.12.0-war.zip geoserver.war
+  unzip -o geoserver-2.10.0-war.zip geoserver.war
   mkdir tmp && cd tmp
   jar -xf ../geoserver.war
   rm -rf data/layergropus/*
