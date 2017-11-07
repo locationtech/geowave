@@ -93,14 +93,6 @@ docker run $DOCKER_ARGS --rm \
 
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
-  -e TIME_TAG="$TIME_TAG" \
-  -v $WORKSPACE:/usr/src/geowave \
-  locationtech/geowave-centos7-rpm-build \
-  /bin/bash -c \
-  "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh --buildroot deploy/packaging/rpm/centos/7 --build tomcat --arch noarch"
-
-docker run $DOCKER_ARGS --rm \
-  -e WORKSPACE=/usr/src/geowave \
   -e LOCAL_REPO_DIR=/usr/src/repo \
   -e LOCK_DIR=/usr/src/lock \
   -e TIME_TAG="$TIME_TAG" \
@@ -143,12 +135,11 @@ do
     docker run $DOCKER_ARGS --rm \
       -e WORKSPACE=/usr/src/geowave \
       -e BUILD_ARGS="$build_args" \
-      -e BUILD_SUFFIX="vendor" \
       -e TIME_TAG="$TIME_TAG" \
       -v $WORKSPACE:/usr/src/geowave \
       locationtech/geowave-centos7-rpm-build \
       /bin/bash -c \
-      "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh --buildroot deploy/packaging/rpm/centos/7 --build services --arch noarch"
+      "cd \$WORKSPACE && deploy/packaging/docker/build-rpm/build-services-rpm.sh --buildroot deploy/packaging/rpm/centos/7 --arch noarch"
 
     docker run --rm $DOCKER_ARGS \
       -e WORKSPACE=/usr/src/geowave \
