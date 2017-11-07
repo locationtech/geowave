@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# tomcat
+# gwtomcat8
 #
 # chkconfig: 345 96 30
 # description:  Start up the Tomcat servlet engine.
