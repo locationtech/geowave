@@ -8,11 +8,10 @@ class geowave::gwtomcat8_server {
     }
   }
 
-  if !defined(Package["geowave-${geowave::geowave_version}-gwtomcat8"]) {
-    package { "geowave-${geowave::geowave_version}-gwtomcat8":
-      ensure => latest,
-      tag    => 'geowave-package',
-    }
+  package { "geowave-${geowave::geowave_version}-gwtomcat8":
+    ensure => latest,
+    tag    => 'geowave-package',
+    notify  => Service['gwtomcat8']
   }
 
   file_line {'Change_default_port':

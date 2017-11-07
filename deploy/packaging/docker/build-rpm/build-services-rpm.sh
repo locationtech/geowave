@@ -48,12 +48,12 @@ cd services_tmp
 #Check if the files already exists before grabbing them
 if [ ! -f geoserver-2.12.0-war.zip ]; then
   echo "Downloading geoserver-2.12.0-war"
-  wget -q http://sourceforge.net/projects/geoserver/files/GeoServer/2.12.0/geoserver-2.12.0-war.zip
+  wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-2.10.0-war.zip
 fi
 
 if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
   echo "Downloading tomcat-8.5.20"
-  wget -q http://archive.apache.org/dist/tomcat/tomcat-8/v8.5.20/bin/apache-tomcat-8.5.20.tar.gz
+  wget -q https://s3.amazonaws.com/geowave/third-party-downloads/tomcat/apache-tomcat-8.5.20.tar.gz
   tar xzf apache-tomcat-8.5.20.tar.gz && mv apache-tomcat-8.5.20 tomcat8
 fi
 
