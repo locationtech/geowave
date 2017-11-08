@@ -184,11 +184,6 @@
 									<goal>shade</goal>
 								</goals>
 								<configuration>
-									<artifactSet>
-										<excludes>
-											<exclude>org.slf4j:*</exclude>
-										</excludes>
-									</artifactSet>
 									<filters>
 										<filter>
 											<artifact>*:*</artifact>
@@ -223,7 +218,25 @@
 										</transformer>
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-
+										
+										<!-- merge various spring files -->
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.handlers</resource>
+										</transformer>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.schemas</resource>
+										</transformer>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.provides</resource>
+										</transformer>
+										<transformer
+											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+											<resource>META-INF/spring.factories</resource>
+										</transformer>
+										
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
 										<transformer
