@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# gwtomcat8
+# gwtomcat
 #
 # chkconfig: 345 96 30
 # description:  Start up the Tomcat servlet engine.
@@ -10,16 +10,16 @@
 #
 #
 ### BEGIN INIT INFO
-# Provides:          gwtomcat8 service
+# Provides:          gwtomcat service
 # Required-Start:    $networking $syslog
 # Required-Stop:     $networking $syslog
-# Description:       gwtomcat8 service
+# Description:       gwtomcat service
 ### END INIT INFO
 
 # Source function library.
 . /etc/init.d/functions
 
-PROCESS_NAME=gwtomcat8
+PROCESS_NAME=gwtomcat
 CATALINA_HOME="/usr/local/geowave/tomcat8/"
 TOMCAT_USER=geowave
  

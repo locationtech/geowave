@@ -4,4 +4,4 @@ if [ -d $DIRECTORY ]; then
   rm -rf $DIRECTORY
 fi
 
-rm -rf /etc/init.d/gwtomcat8
+rm -rf /etc/init.d/gwtomcat

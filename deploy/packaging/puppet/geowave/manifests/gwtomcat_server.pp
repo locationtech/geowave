@@ -1,4 +1,4 @@
-class geowave::gwtomcat8_server {
+class geowave::gwtomcat_server {
   $http_port = $geowave::http_port
 
   if !defined(Package["geowave-${geowave::geowave_version}-core"]) {
@@ -8,10 +8,10 @@ class geowave::gwtomcat8_server {
     }
   }
 
-  package { "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-gwtomcat8":
+  package { "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-gwtomcat":
     ensure => latest,
     tag    => 'geowave-package',
-    notify  => Service['gwtomcat8']
+    notify  => Service['gwtomcat']
   }
 
   file_line {'Change_default_port':
@@ -19,6 +19,6 @@ class geowave::gwtomcat8_server {
     path    => "/usr/local/geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}/tomcat8/conf/server.xml",
     line    => "<Connector port=\"${http_port}\" protocol=\"HTTP/1.1\"",
     match   => '.Connector\ port="(\d{1,5}".protocol="HTTP.*"$)',
-    notify  => Service['gwtomcat8']
+    notify  => Service['gwtomcat']
   }
 }

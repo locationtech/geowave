@@ -103,7 +103,7 @@ file { '/etc/geowave/geowave.config':
 EOF
 
 	sudo sh -c "puppet apply /tmp/geowave.pp"
-        sudo service gwtomcat8 restart
+        sudo service gwtomcat restart
 	return 0
 }
 

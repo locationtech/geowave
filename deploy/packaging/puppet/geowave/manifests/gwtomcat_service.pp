@@ -1,5 +1,5 @@
-class geowave::gwtomcat8_service {
-  service { 'gwtomcat8':
+class geowave::gwtomcat_service {
+  service { 'gwtomcat':
     ensure   => 'running',
     provider => 'redhat',
     enable   => true,
