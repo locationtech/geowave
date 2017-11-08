@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.analytic.mapreduce.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -35,6 +36,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "kmeansjump", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering using Jump Method")
@@ -73,6 +75,24 @@ public class KmeansJumpCommand extends
 		// Config file
 		File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
+		if (commonOptions.getMapReduceHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+			if (hdfsFSUrl == null) {
+				throw new ParameterException(
+						"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+			}
+
+			if (!hdfsFSUrl.contains("://")) {
+				hdfsFSUrl = "hdfs://" + hdfsFSUrl;
+			}
+			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
+		}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

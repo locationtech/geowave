@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.operations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,10 +22,10 @@ public class ConfigAWSCommand extends
 		Command
 {
 
-	public static final String AWS_S3_ENDPOINT_PREFIX = "endpoint";
+	public static final String AWS_S3_ENDPOINT_PREFIX = "s3.endpoint";
 	public static final String AWS_S3_ENDPOINT_URL = AWS_S3_ENDPOINT_PREFIX + ".url";
 
-	@Parameter(description = "<AWS S3 endpoint URL> (for example s3://s3.amazonaws.com ")
+	@Parameter(description = "<AWS S3 endpoint URL> (for example s3.amazonaws.com)")
 	private List<String> parameters = new ArrayList<String>();
 	private String url = null;
 

@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -24,6 +25,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.MapReduceCommandLineOptions;
@@ -34,6 +36,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "mrToGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Ingest supported files that already exist in HDFS")
@@ -42,7 +45,7 @@ public class MapReduceToGeowaveCommand extends
 		Command
 {
 
-	@Parameter(description = "<hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>")
+	@Parameter(description = "<path to base directory to write to> <store name> <comma delimited index/group list>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -85,9 +88,9 @@ public class MapReduceToGeowaveCommand extends
 			OperationParams params ) {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 4) {
+		if (parameters.size() != 3) {
 			throw new ParameterException(
-					"Requires arguments: <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>");
+					"Requires arguments: <path to base directory to write to> <store name> <comma delimited index/group list>");
 		}
 
 		if (mapReduceOptions.getJobTrackerOrResourceManagerHostPort() == null) {
@@ -95,18 +98,28 @@ public class MapReduceToGeowaveCommand extends
 					"Requires job tracker or resource manager option (try geowave help <command>...)");
 		}
 
-		String hdfsHostPort = parameters.get(0);
-		String basePath = parameters.get(1);
-		String inputStoreName = parameters.get(2);
-		String indexList = parameters.get(3);
+		// String hdfsHostPort = parameters.get(0);
+		String basePath = parameters.get(0);
+		String inputStoreName = parameters.get(1);
+		String indexList = parameters.get(2);
+
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
+
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+		if (hdfsHostPort == null) {
+			throw new ParameterException(
+					"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+		}
 
 		// Ensures that the url starts with hdfs://
 		if (!hdfsHostPort.contains("://")) {
 			hdfsHostPort = "hdfs://" + hdfsHostPort;
 		}
-
-		// Config file
-		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

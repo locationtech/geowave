@@ -75,7 +75,7 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 
 	public boolean runOperation(
 			String inputPath,
-			File configFile) {
+			File configFile ) {
 
 		final Map<String, AvroFormatPlugin<?, ?>> stageToKafkaPlugins = ingestPlugins;
 

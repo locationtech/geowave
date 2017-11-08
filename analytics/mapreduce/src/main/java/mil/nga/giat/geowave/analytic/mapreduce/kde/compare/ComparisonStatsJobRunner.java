@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde.compare;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.apache.hadoop.conf.Configuration;
@@ -46,11 +47,13 @@ public class ComparisonStatsJobRunner extends
 			final ComparisonCommandLineOptions inputOptions,
 			final KDECommandLineOptions kdeCommandLineOptions,
 			final DataStorePluginOptions inputDataStoreOptions,
-			final DataStorePluginOptions outputDataStoreOptions ) {
+			final DataStorePluginOptions outputDataStoreOptions,
+			final File configFile ) {
 		super(
 				kdeCommandLineOptions,
 				inputDataStoreOptions,
-				outputDataStoreOptions);
+				outputDataStoreOptions,
+				configFile);
 		timeAttribute = inputOptions.getTimeAttribute();
 	}
 
@@ -72,6 +75,9 @@ public class ComparisonStatsJobRunner extends
 		// Load the params for config file.
 		opts.prepare(params);
 
+		File configFile = (File) params.getContext().get(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+
 		// Don't care about output, but this will set the datastore options.
 		kdeCommand.createRunner(params);
 
@@ -79,7 +85,8 @@ public class ComparisonStatsJobRunner extends
 				comparisonOptions,
 				kdeCommand.getKdeOptions(),
 				kdeCommand.getInputStoreOptions(),
-				kdeCommand.getOutputStoreOptions());
+				kdeCommand.getOutputStoreOptions(),
+				configFile);
 
 		final int res = ToolRunner.run(
 				new Configuration(),

@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.adapter.raster.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -25,8 +26,10 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "resize", parentOperation = RasterSection.class)
 @Parameters(commandDescription = "Resize Raster Tiles")
@@ -87,6 +90,24 @@ public class ResizeCommand extends
 						"Cannot find store name: " + outputStoreLoader.getStoreName());
 			}
 			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+		}
+
+		if (options.getHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+			if (hdfsFSUrl == null) {
+				throw new ParameterException(
+						"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+			}
+
+			if (!hdfsFSUrl.contains("://")) {
+				hdfsFSUrl = "hdfs://" + hdfsFSUrl;
+			}
+			options.setHdfsHostPort(hdfsFSUrl);
 		}
 
 		RasterTileResizeJobRunner runner = new RasterTileResizeJobRunner(

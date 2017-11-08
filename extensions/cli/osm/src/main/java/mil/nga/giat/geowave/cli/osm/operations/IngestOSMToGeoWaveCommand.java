@@ -10,8 +10,10 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.osm.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.hadoop.util.ToolRunner;
 
@@ -28,8 +30,10 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)
 @Parameters(commandDescription = "Ingest and convert OSM data from HDFS to GeoWave")
@@ -38,7 +42,7 @@ public class IngestOSMToGeoWaveCommand extends
 		Command
 {
 
-	@Parameter(description = "<hdfs host:port> <path to base directory to read from> <store name>")
+	@Parameter(description = "<path to base directory to read from> <store name>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -52,14 +56,26 @@ public class IngestOSMToGeoWaveCommand extends
 			throws Exception {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
+		if (parameters.size() != 2) {
 			throw new ParameterException(
-					"Requires arguments: <hdfs host:port> <path to base directory to read from> <store name>");
+					"Requires arguments: <path to base directory to read from> <store name>");
 		}
 
-		String hdfsHostPort = parameters.get(0);
-		String basePath = parameters.get(1);
-		String inputStoreName = parameters.get(2);
+		// String hdfsHostPort = parameters.get(0);
+		String basePath = parameters.get(0);
+		String inputStoreName = parameters.get(1);
+
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+		if (hdfsHostPort == null) {
+			throw new ParameterException(
+					"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+		}
 
 		// Ensures that the url starts with hdfs://
 		if (!hdfsHostPort.contains("://")) {

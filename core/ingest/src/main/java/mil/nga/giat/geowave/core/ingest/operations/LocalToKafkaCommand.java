@@ -75,7 +75,7 @@ public class LocalToKafkaCommand extends
 		}
 
 		String inputPath = parameters.get(0);
-		
+
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
 
@@ -89,7 +89,9 @@ public class LocalToKafkaCommand extends
 				localInputOptions);
 
 		// Execute
-		if (!driver.runOperation(inputPath,configFile)) {
+		if (!driver.runOperation(
+				inputPath,
+				configFile)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}

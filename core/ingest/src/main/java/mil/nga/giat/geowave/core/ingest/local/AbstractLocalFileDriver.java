@@ -10,10 +10,11 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.local;
 
-
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -29,13 +30,16 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 import java.lang.reflect.Field;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.StringUtils;
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +52,11 @@ import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 /**
  * This class can be sub-classed to handle recursing over a local directory
@@ -129,7 +135,6 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 			final File configFile,
 			final Map<String, P> localPlugins,
 			final R runData )
-			//final LocalIngestRunData runData)
 			throws IOException {
 		if (inputPath == null) {
 			LOGGER.error("Unable to ingest data, base directory or file input not specified");
@@ -137,6 +142,14 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		}
 
 		Path path = null;
+		Properties configProperties = null;
+
+		if (configFile != null && configFile.exists()) {
+			configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+		}
+
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
@@ -146,36 +159,69 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				LOGGER.error("Error in setting up S3URLStreamHandle Factory");
 				return;
 			}
-			
-			
-			Properties configProperties= null;
-			
-			if (configFile != null && configFile.exists()) {
-				configProperties = ConfigOptions.loadProperties(
-						configFile, null);
+
+			String s3EndpointUrl = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
+			if (s3EndpointUrl == null) {
+				LOGGER.error("S3 endpoint URL is empty. Config using \"geowave config aws <s3 endpoint url>\"");
+				return;
 			}
-			String endpoint_url  = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
-			
+
 			try {
-				
-				FileSystem fs = FileSystems.newFileSystem(
-						new URI(endpoint_url+"/"),
-						new HashMap<String, Object>(),
-						Thread.currentThread().getContextClassLoader());
-				String s3InputPath = inputPath.replaceFirst(
-						"s3://",
-						"/");
+
+				if (!s3EndpointUrl.contains("://")) {
+					s3EndpointUrl = "s3://" + s3EndpointUrl;
+				}
+				FileSystem fs = FileSystems.newFileSystem(new URI(s3EndpointUrl
+						+ "/"), new HashMap<String, Object>(), Thread
+						.currentThread().getContextClassLoader());
+				String s3InputPath = inputPath.replaceFirst("s3://", "/");
 				path = (S3Path) fs.getPath(s3InputPath);
 				if (!path.isAbsolute()) {
-					LOGGER.error("Input file " + inputPath + " does not exist");
+					LOGGER.error("Input path " + inputPath + " does not exist");
 					return;
 				}
-			}
-			catch (URISyntaxException e) {
-				LOGGER.error("Unable to ingest data, Inavlid S3 URI");
+			} catch (URISyntaxException e) {
+				LOGGER.error("Unable to ingest data, Inavlid S3 path");
 				return;
 			}
 		}
+		// If input path is HDFS
+		else if (inputPath.startsWith("hdfs://")) {
+			try {
+				URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+			}
+			catch (final Error e) {
+				System.err.println("The HDFS URL scheme handler has already been loaded");
+			}
+
+			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+			if (hdfsFSUrl == null) {
+				LOGGER.error("HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+				return;
+			}
+
+			String hdfsInputPath = inputPath.replaceFirst(
+					"hdfs://",
+					"/");
+
+			try {
+
+				if (!hdfsFSUrl.contains("://")) {
+					hdfsFSUrl = "hdfs://" + hdfsFSUrl;
+				}
+				URI uri = new URI(hdfsFSUrl + hdfsInputPath);
+				path = Paths.get(uri);
+				if (!Files.exists(path)) {
+					LOGGER.error("Input path " + inputPath + " does not exist");
+					return;
+				}
+			} catch (URISyntaxException e) {
+				LOGGER.error("Unable to ingest data, Inavlid HDFS Path");
+				return;
+			}
+		}
+
 		else {
 			final File f = new File(
 					inputPath);
@@ -192,7 +238,6 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		}
 
 		Files.walkFileTree(
-				// Paths.get(inputPath),
 				path,
 				new LocalPluginFileVisitor<P, R>(
 						localPlugins,
@@ -201,8 +246,6 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 						localInput.getExtensions()));
 	}
 
-	
-	
 	abstract protected void processFile(
 			final URL file,
 			String typeName,

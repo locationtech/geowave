@@ -49,7 +49,7 @@ public class CommonOptions
 	@Parameter(names = {
 		"-hdfs",
 		"--mapReduceHdfsHostPort"
-	}, required = true, description = "HDFS hostname and port in the format hostname:port")
+	}, description = "HDFS hostname and port in the format hostname:port")
 	private String mapReduceHdfsHostPort;
 
 	@MapReduceParameter(MapReduceParameters.MRConfig.JOBTRACKER_HOST_PORT)

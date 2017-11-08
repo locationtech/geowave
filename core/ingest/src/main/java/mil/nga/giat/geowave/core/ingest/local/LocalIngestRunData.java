@@ -52,7 +52,7 @@ public class LocalIngestRunData implements
 
 	public LocalIngestRunData(
 			final List<WritableDataAdapter<?>> adapters,
-			final DataStore dataStore) {
+			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		// NOTE: This should be thread-safe because the adapterCache is never
 		// added to after this point. It's a static list.
@@ -79,8 +79,6 @@ public class LocalIngestRunData implements
 			if (!indexCache.indexExists(index.getId())) indexCache.addIndex(index);
 		}
 	}
-	
-
 
 	/**
 	 * Return an index writer from the pool. The pool will create a new one The
