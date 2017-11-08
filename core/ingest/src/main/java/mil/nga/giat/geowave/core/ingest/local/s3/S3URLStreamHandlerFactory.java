@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.local.s3;
 
 import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;

@@ -52,6 +52,7 @@ import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.local.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -100,7 +101,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		return valid;
 	}
 
-	public void setURLStreamHandleFactory()
+	private static void setURLStreamHandlerFactory()
 			throws NoSuchFieldException,
 			SecurityException,
 			IllegalArgumentException,
@@ -153,7 +154,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
-				setURLStreamHandleFactory();
+				setURLStreamHandlerFactory();
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 				LOGGER.error("Error in setting up S3URLStreamHandle Factory");
@@ -196,7 +197,10 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
 			}
 			catch (final Error e) {
-				System.err.println("The HDFS URL scheme handler has already been loaded");
+				LOGGER.error(
+						"Error in setStreamHandlerFactory for HDFS",
+						e);
+				return;
 			}
 
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);

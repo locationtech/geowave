@@ -1,13 +1,9 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.local.s3;
 
 import java.io.IOException;
 import java.net.URL;
 
 import org.apache.commons.lang.StringUtils;
-
-/**
- * @author jenshadlich@googlemail.com
- */
 
 public class S3ParamsExtractor
 {

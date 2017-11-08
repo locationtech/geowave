@@ -88,7 +88,6 @@ public class AvroIngestPlugin extends
 			if (ds.getHeader() != null) {
 				return true;
 			}
-			;
 		}
 		catch (final IOException e) {
 			// just log as info as this may not have been intended to be read as

@@ -1,8 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
-
-/**
- * @author jenshadlich@googlemail.com
- */
+package mil.nga.giat.geowave.core.ingest.local.s3;
 
 public class S3Params
 {

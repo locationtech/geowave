@@ -111,7 +111,6 @@ public class AVROIngestTest
 			if (ds.getHeader() != null) {
 				return true;
 			}
-			;
 		}
 		catch (final IOException e) {
 			// Do nothing for now

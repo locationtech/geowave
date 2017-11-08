@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local;
+package mil.nga.giat.geowave.core.ingest.local.s3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,9 +11,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
 
-/**
- * @author jenshadlich@googlemail.com
- */
 public class S3URLConnection extends
 		URLConnection
 {
@@ -44,8 +41,6 @@ public class S3URLConnection extends
 
 		final AmazonS3 s3Client = new AmazonS3Client(
 				clientConfig);
-		// s3Client.setEndpoint(s3Params.getEndpoint());
-		// s3Client.setEndpoint("s3.amazonaws.com");
 
 		final S3Object object = s3Client.getObject(
 				s3Params.getBucket(),

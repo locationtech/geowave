@@ -88,17 +88,15 @@ public class GpxIngestPlugin extends
 		URL f = null;
 		try {
 			f = new URL(
-					baseDirectory.getPath().concat(
+					baseDirectory.toString().concat(
 							"metadata.xml"));
 		}
 		catch (MalformedURLException e1) {
-			LOGGER.info("Invalid URL for metadata.xml. No metadata will be loaded");
+			LOGGER.info(
+					"Invalid URL for metadata.xml. No metadata will be loaded",
+					e1);
 		}
-		if (f.getPath() == null) {
-			LOGGER.info("No metadata file found - looked at: " + f.getPath());
-			LOGGER.info("No metadata will be loaded");
-		}
-		else {
+		if (f != null) {
 			try {
 				long time = System.currentTimeMillis();
 				metadata = GpxUtils.parseOsmMetadata(f);

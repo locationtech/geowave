@@ -112,10 +112,11 @@ public class GpxUtils
 			throws FileNotFoundException,
 			XMLStreamException {
 		final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
-		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		XMLEventReader eventReader = null;
 		try (final InputStream fis = metadataFile.openStream(); final InputStream in = new BufferedInputStream(
 				fis);) {
+
+			final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+			XMLEventReader eventReader = null;
 			inputFactory.setProperty(
 					"javax.xml.stream.isSupportingExternalEntities",
 					false);
