@@ -113,6 +113,8 @@ public class DBScanIterationsJobRunner implements
 			Path startPath = new Path(
 					outputBaseDir + "/level_0");
 			if (fs.exists(startPath)) {
+				// HPFortify "Path Manipulation"
+				// False positive - path is internally managed
 				fs.delete(
 						startPath,
 						true);
@@ -179,6 +181,9 @@ public class DBScanIterationsJobRunner implements
 			LOGGER.info(
 					"Running with partition distance {}",
 					maxDistance);
+			// HP Fortify "Command Injection" false positive
+			// What Fortify considers "externally-influenced input"
+			// comes only from users with OS-level access anyway
 			final int initialStatus = jobRunner.run(
 					config,
 					runTimeProperties);
@@ -278,6 +283,8 @@ public class DBScanIterationsJobRunner implements
 						outputBaseDir + "/level_" + iteration);
 
 				if (fs.exists(nextPath)) {
+					// HPFortify "Path Manipulation"
+					// False positive - path is internally managed
 					fs.delete(
 							nextPath,
 							true);
@@ -285,6 +292,9 @@ public class DBScanIterationsJobRunner implements
 				jobRunner.setOutputFormatConfiguration(new SequenceFileOutputFormatConfiguration(
 						nextPath));
 
+				// HP Fortify "Command Injection" false positive
+				// What Fortify considers "externally-influenced input"
+				// comes only from users with OS-level access anyway
 				final int status = jobRunner.run(
 						config,
 						localScopeProperties);
@@ -321,6 +331,9 @@ public class DBScanIterationsJobRunner implements
 					localScopeProperties.get(HullParameters.Hull.INDEX_ID));
 			inputLoadRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
 					startPath));
+			// HP Fortify "Command Injection" false positive
+			// What Fortify considers "externally-influenced input"
+			// comes only from users with OS-level access anyway
 			inputLoadRunner.run(
 					config,
 					runTimeProperties);

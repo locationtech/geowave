@@ -70,6 +70,8 @@ public class IngestRunner extends
 		// Config file
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		;
+
 		if ((vectorOverrideOptions.getVectorStore() != null)
 				&& !vectorOverrideOptions.getVectorStore().trim().isEmpty()) {
 			String vectorStoreName = vectorOverrideOptions.getVectorStore();

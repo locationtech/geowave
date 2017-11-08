@@ -14,9 +14,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
@@ -33,6 +36,7 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -69,6 +73,7 @@ import net.sf.json.JSONObject;
 
 public class GeoServerRestClient
 {
+	private static GeoServerRestClient SINGLETON_INSTANCE;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoServerRestClient.class);
 	private final static int defaultIndentation = 2;
 
@@ -81,16 +86,34 @@ public class GeoServerRestClient
 	private final GeoServerConfig config;
 	private WebTarget webTarget = null;
 
-	public GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config ) {
 		this.config = config;
 	}
 
-	public GeoServerRestClient(
+	private GeoServerRestClient(
 			final GeoServerConfig config,
 			WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
+	}
+
+	public static GeoServerRestClient getInstance(
+			GeoServerConfig config ) {
+		if (SINGLETON_INSTANCE == null) {
+			SINGLETON_INSTANCE = new GeoServerRestClient(
+					config);
+		}
+		return SINGLETON_INSTANCE;
+	}
+
+	public void setWebTarget(
+			WebTarget webTarget ) {
+		this.webTarget = webTarget;
+	}
+
+	public static void invalidateInstance() {
+		SINGLETON_INSTANCE = null;
 	}
 
 	/**
@@ -105,14 +128,13 @@ public class GeoServerRestClient
 		if (webTarget == null) {
 			String url = getConfig().getUrl();
 			if (url != null) {
-				url = url.trim();
+				url = url.trim().toLowerCase(
+						Locale.ROOT);
 				Client client = null;
-				if (url.toLowerCase().startsWith(
-						"http://")) {
+				if (url.startsWith("http://")) {
 					client = ClientBuilder.newClient();
 				}
-				else if (url.toLowerCase().startsWith(
-						"https://")) {
+				else if (url.startsWith("https://")) {
 					SslConfigurator sslConfig = SslConfigurator.newInstance();
 					if (getConfig().getGsConfigProperties() != null) {
 						loadSSLConfigurations(
@@ -129,7 +151,15 @@ public class GeoServerRestClient
 					client.register(HttpAuthenticationFeature.basic(
 							getConfig().getUser(),
 							getConfig().getPass()));
-					webTarget = client.target(url);
+					try {
+						webTarget = client.target(new URI(
+								url));
+					}
+					catch (URISyntaxException e) {
+						LOGGER.error(
+								"Unable to parse geoserver URL: " + url,
+								e);
+					}
 				}
 			}
 		}
@@ -213,6 +243,9 @@ public class GeoServerRestClient
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_KEYSTORE_FILE)) {
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				File keyStoreFile = new File(
 						FileUtils.formatFilePath(getPropertyValue(
 								gsConfigProperties,
@@ -1479,13 +1512,15 @@ public class GeoServerRestClient
 			// use a transformer to create the xml string for the rest call
 			final TransformerFactory xformerFactory = TransformerFactory.newInstance();
 
-			// HP Fortify "XML External Entity Injection" false positive
-			// The following modifications to xformerFactory are the
-			// fortify-recommended procedure to secure a TransformerFactory
-			// but the report still flags this instance
-			xformerFactory.setFeature(
-					XMLConstants.FEATURE_SECURE_PROCESSING,
-					true);
+			// HP Fortify "XML External Entity Injection" fix.
+			// These ines are the recommended fix for
+			// protecting a Java TransformerFactory from XXE.
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_DTD,
+					"");
+			xformerFactory.setAttribute(
+					XMLConstants.ACCESS_EXTERNAL_STYLESHEET,
+					"");
 
 			final Transformer xformer = xformerFactory.newTransformer();
 
@@ -1498,6 +1533,10 @@ public class GeoServerRestClient
 					source,
 					result);
 
+			// HP Fortify "Improper Resource Shutdown or Release" false positive
+			// coverageXml holds onto a string rather than the writer itself.
+			// result.getWriter().close() is called explicitly in the finally
+			// clause below
 			coverageXml = result.getWriter().toString();
 		}
 		catch (final TransformerException e) {

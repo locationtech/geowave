@@ -53,7 +53,7 @@ public class AddStoreCommand extends
 	@Parameter(names = {
 		"-t",
 		"--type"
-	}, required = true, description = "The type of store, such as accumulo, memory, etc")
+	}, required = true, description = "The type of store, such as accumulo, hbase, etc")
 	private String storeType;
 
 	@ParametersDelegate
@@ -85,6 +85,10 @@ public class AddStoreCommand extends
 					}
 				}
 				catch (ParameterException pe) {
+					// HP Fortify "Improper Output Neutralization" false
+					// positive
+					// What Fortify considers "user input" comes only
+					// from users with OS-level access anyway
 					LOGGER.warn(
 							"Couldn't load default store: " + defaultStore,
 							pe);

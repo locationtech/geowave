@@ -205,6 +205,10 @@ abstract public class WarpOpImage extends
 	 */
 	private PlanarImage getImage() {
 		PlanarImage img = roiImage;
+		// HP Fortify "Double-Checked Locking" false positive
+		// This is not a security issue. We are aware of the extremely small
+		// potential for this to be called twice, but that is not an
+		// inconsistency and is more than worth the performance gains
 		if (img == null) {
 			synchronized (this) {
 				img = roiImage;

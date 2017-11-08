@@ -118,7 +118,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 			TestUtils.deleteAll(inputDataStore);
 
-			runner.closeContext();
+			runner.close();
 		}
 
 		// Run kmeans
@@ -178,7 +178,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 		TestUtils.deleteAll(inputDataStore);
 
-		runner.closeContext();
+		runner.close();
 	}
 
 	private void queryFeatures(

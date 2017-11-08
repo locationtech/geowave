@@ -16,7 +16,7 @@
 
 # This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
-trap 'exit' ERR
+trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 
 # Get the version
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
@@ -69,6 +69,8 @@ if command -v aws >/dev/null 2>&1 ; then
 		aws s3 rm --recursive s3://geowave/${GEOWAVE_VERSION_URL}/scripts/
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/emr/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/emr/
 		aws s3 cp --acl public-read --recursive ${WORKSPACE}/deploy/packaging/sandbox/generated/ s3://geowave/${GEOWAVE_VERSION_URL}/scripts/sandbox/
+		
+		aws s3 cp --acl public-read --recursive ${WORKSPACE}/examples/data/notebooks/jupyter/ s3://geowave-notebooks/${GEOWAVE_VERSION_URL}/notebooks/
 	else
 		echo '###### Skipping publish to S3: GEOWAVE_VERSION_URL not defined'
 	fi

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,24 +10,25 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import java.io.File;
+
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.api.OperationParams;
-
-import net.sf.json.JSONObject;
-
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
+
+import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
+import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "listfl", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "List GeoServer feature layers")
 public class GeoServerListFeatureLayersCommand extends
-		DefaultOperation implements
-		Command
+		GeoServerCommand<String>
 {
 	private GeoServerRestClient geoserverClient = null;
 
@@ -35,51 +36,41 @@ public class GeoServerListFeatureLayersCommand extends
 		"-ws",
 		"--workspace"
 	}, required = false, description = "Workspace Name")
-	private String workspace = null;
+	private final String workspace = null;
 
 	@Parameter(names = {
 		"-ds",
 		"--datastore"
 	}, required = false, description = "Datastore Name")
-	private String datastore = null;
+	private final String datastore = null;
 
 	@Parameter(names = {
 		"-g",
 		"--geowaveOnly"
 	}, required = false, description = "Show only GeoWave feature layers (default: false)")
-	private Boolean geowaveOnly = false;
-
-	@Override
-	public boolean prepare(
-			OperationParams params ) {
-		super.prepare(params);
-		if (geoserverClient == null) {
-			// Create the rest client
-			geoserverClient = new GeoServerRestClient(
-					new GeoServerConfig(
-							getGeoWaveConfigFile(params)));
-		}
-
-		// Successfully prepared
-		return true;
-	}
+	private final Boolean geowaveOnly = false;
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
-		Response listLayersResponse = geoserverClient.getFeatureLayers(
+		JCommander.getConsole().println(
+				computeResults(params));
+	}
+
+	@Override
+	public String computeResults(
+			final OperationParams params )
+			throws Exception {
+		final Response listLayersResponse = geoserverClient.getFeatureLayers(
 				workspace,
 				datastore,
 				geowaveOnly);
 
 		if (listLayersResponse.getStatus() == Status.OK.getStatusCode()) {
-			System.out.println("\nGeoServer layer list:");
-			JSONObject listObj = JSONObject.fromObject(listLayersResponse.getEntity());
-			System.out.println(listObj.toString(2));
+			final JSONObject listObj = JSONObject.fromObject(listLayersResponse.getEntity());
+			return "\nGeoServer layer list: " + listObj.toString(2);
 		}
-		else {
-			System.err.println("Error getting GeoServer layer list; code = " + listLayersResponse.getStatus());
-		}
+		return "Error getting GeoServer layer list; code = " + listLayersResponse.getStatus();
 	}
 }

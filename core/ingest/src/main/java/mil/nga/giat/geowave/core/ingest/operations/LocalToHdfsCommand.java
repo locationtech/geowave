@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,9 +22,8 @@ import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
@@ -35,8 +34,7 @@ import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 @GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to HDFS")
 public class LocalToHdfsCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 
 	@Parameter(description = "<file or directory> <path to base directory to write to>")
@@ -52,7 +50,7 @@ public class LocalToHdfsCommand extends
 
 	@Override
 	public boolean prepare(
-			OperationParams params ) {
+			final OperationParams params ) {
 
 		// Based on the selected formats, select the format plugins
 		pluginFormats.selectPlugin(localInputOptions.getFormats());
@@ -62,21 +60,58 @@ public class LocalToHdfsCommand extends
 
 	/**
 	 * Prep the driver & run the operation.
+	 *
+	 * @throws Exception
 	 */
 	@Override
 	public void execute(
-			OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 
+		computeResults(params);
+	}
+
+	public List<String> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(
+			final String fileOrDirectory,
+			final String hdfsHostPort,
+			final String hdfsPath ) {
+		parameters = new ArrayList<String>();
+		parameters.add(fileOrDirectory);
+		parameters.add(hdfsHostPort);
+		parameters.add(hdfsPath);
+	}
+
+	public IngestFormatPluginOptions getPluginFormats() {
+		return pluginFormats;
+	}
+
+	public void setPluginFormats(
+			final IngestFormatPluginOptions pluginFormats ) {
+		this.pluginFormats = pluginFormats;
+	}
+
+	public LocalInputCommandLineOptions getLocalInputOptions() {
+		return localInputOptions;
+	}
+
+	public void setLocalInputOptions(
+			final LocalInputCommandLineOptions localInputOptions ) {
+		this.localInputOptions = localInputOptions;
+	}
+
+	@Override
+	public Void computeResults(
+			final OperationParams params )
+			throws Exception {
 		// Ensure we have all the required arguments
 		if (parameters.size() != 2) {
 			throw new ParameterException(
 					"Requires arguments: <file or directory> <path to base directory to write to>");
 		}
-
-		String inputPath = parameters.get(0);
-		// String hdfsHostPort = parameters.get(1);
-		String basePath = parameters.get(1);
-
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
 		Properties configProperties = ConfigOptions.loadProperties(
@@ -93,12 +128,14 @@ public class LocalToHdfsCommand extends
 		if (!hdfsHostPort.contains("://")) {
 			hdfsHostPort = "hdfs://" + hdfsHostPort;
 		}
+		final String inputPath = parameters.get(0);
+		final String basePath = parameters.get(1);
 
 		// Ingest Plugins
-		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
+		final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
 
 		// Driver
-		StageToHdfsDriver driver = new StageToHdfsDriver(
+		final StageToHdfsDriver driver = new StageToHdfsDriver(
 				ingestPlugins,
 				hdfsHostPort,
 				basePath,
@@ -111,37 +148,6 @@ public class LocalToHdfsCommand extends
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}
-	}
-
-	public List<String> getParameters() {
-		return parameters;
-	}
-
-	public void setParameters(
-			String fileOrDirectory,
-			String hdfsHostPort,
-			String hdfsPath ) {
-		parameters = new ArrayList<String>();
-		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
-		parameters.add(hdfsPath);
-	}
-
-	public IngestFormatPluginOptions getPluginFormats() {
-		return pluginFormats;
-	}
-
-	public void setPluginFormats(
-			IngestFormatPluginOptions pluginFormats ) {
-		this.pluginFormats = pluginFormats;
-	}
-
-	public LocalInputCommandLineOptions getLocalInputOptions() {
-		return localInputOptions;
-	}
-
-	public void setLocalInputOptions(
-			LocalInputCommandLineOptions localInputOptions ) {
-		this.localInputOptions = localInputOptions;
+		return null;
 	}
 }

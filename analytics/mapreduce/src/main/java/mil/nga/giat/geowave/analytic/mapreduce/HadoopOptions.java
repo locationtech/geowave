@@ -44,7 +44,7 @@ public class HadoopOptions
 		final String hostport = runTimeProperties.getPropertyAsString(
 				MRConfig.HDFS_HOST_PORT,
 				"localhost:53000");
-		hdfsHostPort = (!hostport.contains("://")) ? "hdfs://" + hostport : hostport;
+		hdfsHostPort = hostport;
 		basePath = new Path(
 				runTimeProperties.getPropertyAsString(MRConfig.HDFS_BASE_DIR),
 				"/");

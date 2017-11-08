@@ -47,17 +47,7 @@ public class CQLQueryFilter implements
 	public CQLQueryFilter(
 			final Filter filter,
 			final GeotoolsFeatureDataAdapter adapter ) {
-		try {
-			// We do not have a way to transform a filter directly from one to
-			// another.
-			this.filter = FilterToCQLTool.toFilter(FilterToCQLTool.toCQL(filter));
-		}
-		catch (CQLException e) {
-			LOGGER.trace(
-					"Filter is not a CQL Expression",
-					e);
-			this.filter = filter;
-		}
+		this.filter = FilterToCQLTool.fixDWithin(filter);
 		this.adapter = adapter;
 	}
 
@@ -119,7 +109,7 @@ public class CQLQueryFilter implements
 			filterBytes = new byte[] {};
 		}
 		else {
-			filterBytes = StringUtils.stringToBinary(FilterToCQLTool.toCQL(filter));
+			filterBytes = StringUtils.stringToBinary(ECQL.toCQL(filter));
 		}
 		byte[] adapterBytes;
 		if (adapter != null) {

@@ -382,6 +382,9 @@ public class Stanag4676ImageryChipService
 			throws IOException {
 
 		final File videoFileDir = Files.createTempDir();
+		// HP Fortify "Path Traversal" false positive
+		// What Fortify considers "user input" comes only
+		// from users with OS-level access anyway
 		final File videoFile = new File(
 				videoFileDir,
 				mission + "_" + track + ".webm");

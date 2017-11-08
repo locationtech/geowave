@@ -137,6 +137,9 @@ public class KMeansIterationsJobRunner<T> implements
 		runTimeProperties.storeIfEmpty(
 				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 				FeatureCentroidDistanceFn.class);
+		// HP Fortify "Command Injection" false positive
+		// What Fortify considers "externally-influenced input"
+		// comes only from users with OS-level access anyway
 		return jobRunner.run(
 				config,
 				runTimeProperties);

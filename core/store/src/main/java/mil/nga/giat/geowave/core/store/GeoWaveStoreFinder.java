@@ -166,11 +166,17 @@ public class GeoWaveStoreFinder
 				if (missingOptions.isEmpty()) {
 					return factory;
 				}
+				// HP Fortify "Improper Output Neutralization" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				LOGGER.error("Unable to find config options for store '" + storeHint.toString() + "'."
 						+ ConfigUtils.getOptions(missingOptions));
 				return null;
 			}
 			else {
+				// HP Fortify "Improper Output Neutralization" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				LOGGER.error("Unable to find store '" + storeHint.toString() + "'");
 				return null;
 			}

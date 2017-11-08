@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,16 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.operations;
 
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameters;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatPluginRegistry;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -27,23 +28,26 @@ import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
-import com.beust.jcommander.Parameters;
-
 @GeowaveOperation(name = "listplugins", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "List supported data store types, index types, and ingest formats")
 public class ListPluginsCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<List<String>>
 {
 
 	@Override
 	public void execute(
-			OperationParams params ) {
-		final PrintWriter pw = new PrintWriter(
-				new OutputStreamWriter(
-						System.out,
-						StringUtils.GEOWAVE_CHAR_SET));
-		pw.println("Available index types currently registered as plugins:\n");
+			final OperationParams params ) {
+		for (final String string : computeResults(params)) {
+			JCommander.getConsole().println(
+					string);
+		}
+	}
+
+	@Override
+	public List<String> computeResults(
+			final OperationParams params ) {
+		final List<String> output = new ArrayList<>();
+		output.add("Available index types currently registered as plugins:\n");
 		for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry
 				.getRegisteredDimensionalityTypes()
 				.entrySet()) {
@@ -51,11 +55,11 @@ public class ListPluginsCommand extends
 			final String desc = pluginProvider.getDimensionalityTypeDescription() == null ? "no description"
 					: pluginProvider.getDimensionalityTypeDescription();
 			final String text = "  " + pluginProviderEntry.getKey() + ":\n    " + desc;
-			pw.println(text);
-			pw.println();
+			output.add(text);
+			output.add(" ");
 		}
 
-		pw.println("Available ingest formats currently registered as plugins:\n");
+		output.add("Available ingest formats currently registered as plugins:\n");
 		for (final Entry<String, IngestFormatPluginProviderSpi<?, ?>> pluginProviderEntry : IngestFormatPluginRegistry
 				.getPluginProviderRegistry()
 				.entrySet()) {
@@ -63,10 +67,11 @@ public class ListPluginsCommand extends
 			final String desc = pluginProvider.getIngestFormatDescription() == null ? "no description" : pluginProvider
 					.getIngestFormatDescription();
 			final String text = "  " + pluginProviderEntry.getKey() + ":\n    " + desc;
-			pw.println(text);
-			pw.println();
+			output.add(text);
+			output.add(" ");
 		}
-		pw.println("Available datastores currently registered:\n");
+
+		output.add("Available datastores currently registered:\n");
 		final Map<String, StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder
 				.getRegisteredStoreFactoryFamilies();
 		for (final Entry<String, StoreFactoryFamilySpi> dataStoreFactoryEntry : dataStoreFactories.entrySet()) {
@@ -74,10 +79,9 @@ public class ListPluginsCommand extends
 			final String desc = dataStoreFactory.getDescription() == null ? "no description" : dataStoreFactory
 					.getDescription();
 			final String text = "  " + dataStoreFactory.getType() + ":\n    " + desc;
-			pw.println(text);
-			pw.println();
+			output.add(text);
+			output.add(" ");
 		}
-		pw.flush();
+		return output;
 	}
-
 }

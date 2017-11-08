@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.analytic.javaspark.sparksql;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -12,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.analytic.javaspark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -24,10 +26,10 @@ public class SqlQueryRunner
 	private final static Logger LOGGER = LoggerFactory.getLogger(SqlQueryRunner.class);
 
 	private String appName = "SqlQueryRunner";
-	private String master = "local[*]";
+	private String master = "yarn";
 	private String host = "localhost";
 
-	private SparkSession spark;
+	private SparkSession session;
 	private JavaSparkContext jsc = null;
 
 	private DataStorePluginOptions inputDataStore1 = null;
@@ -43,20 +45,37 @@ public class SqlQueryRunner
 	public SqlQueryRunner() {}
 
 	private void initContext() {
-		spark = SparkSession.builder().master(
-				master).appName(
-				appName).getOrCreate();
+		if (jsc == null) {
+			String jar = "";
+			try {
+				jar = KMeansRunner.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			}
+			catch (final URISyntaxException e) {
+				LOGGER.error(
+						"Unable to set jar location in spark configuration",
+						e);
+			}
+			session = SparkSession.builder().appName(
+					appName).master(
+					master).config(
+					"spark.driver.host",
+					host).config(
+					"spark.jars",
+					jar).getOrCreate();
 
-		jsc = new JavaSparkContext(
-				spark.sparkContext());
+			jsc = new JavaSparkContext(
+					session.sparkContext());
+		}
 	}
 
-	public void closeContext() {
+	public void close() {
 		if (jsc != null) {
 			jsc.close();
 			jsc = null;
-
-			spark.close();
+		}
+		if (session != null) {
+			session.close();
+			session = null;
 		}
 	}
 
@@ -74,11 +93,11 @@ public class SqlQueryRunner
 		QueryOptions queryOptions = null;
 		if (adapterId1 != null) {
 			// Retrieve the adapters
-			CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore1.createAdapterStore().getAdapters();
+			final CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore1.createAdapterStore().getAdapters();
 			DataAdapter adapterForQuery = null;
 
 			while (adapterIt.hasNext()) {
-				DataAdapter adapter = adapterIt.next();
+				final DataAdapter adapter = adapterIt.next();
 
 				if (adapter.getAdapterId().equals(
 						adapterId1)) {
@@ -91,15 +110,15 @@ public class SqlQueryRunner
 		}
 
 		// Load RDD from datastore
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> rdd1 = GeoWaveRDD.rddForSimpleFeatures(
+		final JavaPairRDD<GeoWaveInputKey, SimpleFeature> rdd1 = GeoWaveRDD.rddForSimpleFeatures(
 				jsc.sc(),
 				inputDataStore1,
 				null,
 				queryOptions);
 
 		// Create a DataFrame from the Left RDD
-		SimpleFeatureDataFrame dataFrame1 = new SimpleFeatureDataFrame(
-				spark);
+		final SimpleFeatureDataFrame dataFrame1 = new SimpleFeatureDataFrame(
+				session);
 
 		if (!dataFrame1.init(
 				inputDataStore1,
@@ -110,7 +129,7 @@ public class SqlQueryRunner
 
 		LOGGER.debug(dataFrame1.getSchema().json());
 
-		Dataset<Row> dfTemp1 = dataFrame1.getDataFrame(rdd1);
+		final Dataset<Row> dfTemp1 = dataFrame1.getDataFrame(rdd1);
 
 		if (LOGGER.isDebugEnabled()) {
 			dfTemp1.show(
@@ -124,11 +143,11 @@ public class SqlQueryRunner
 			queryOptions = null;
 			if (adapterId2 != null) {
 				// Retrieve the adapters
-				CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore2.createAdapterStore().getAdapters();
+				final CloseableIterator<DataAdapter<?>> adapterIt = inputDataStore2.createAdapterStore().getAdapters();
 				DataAdapter adapterForQuery = null;
 
 				while (adapterIt.hasNext()) {
-					DataAdapter adapter = adapterIt.next();
+					final DataAdapter adapter = adapterIt.next();
 
 					if (adapter.getAdapterId().equals(
 							adapterId2)) {
@@ -141,15 +160,15 @@ public class SqlQueryRunner
 			}
 
 			// Load RDD from datastore
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rdd2 = GeoWaveRDD.rddForSimpleFeatures(
+			final JavaPairRDD<GeoWaveInputKey, SimpleFeature> rdd2 = GeoWaveRDD.rddForSimpleFeatures(
 					jsc.sc(),
 					inputDataStore2,
 					null,
 					queryOptions);
 
 			// Create a DataFrame from the Left RDD
-			SimpleFeatureDataFrame dataFrame2 = new SimpleFeatureDataFrame(
-					spark);
+			final SimpleFeatureDataFrame dataFrame2 = new SimpleFeatureDataFrame(
+					session);
 
 			if (!dataFrame2.init(
 					inputDataStore2,
@@ -160,7 +179,7 @@ public class SqlQueryRunner
 
 			LOGGER.debug(dataFrame2.getSchema().json());
 
-			Dataset<Row> dfTemp2 = dataFrame2.getDataFrame(rdd2);
+			final Dataset<Row> dfTemp2 = dataFrame2.getDataFrame(rdd2);
 
 			if (LOGGER.isDebugEnabled()) {
 				dfTemp2.show(
@@ -172,7 +191,7 @@ public class SqlQueryRunner
 		}
 
 		// Run the query
-		Dataset<Row> results = spark.sql(sql);
+		final Dataset<Row> results = session.sql(sql);
 
 		return results;
 	}
@@ -186,52 +205,52 @@ public class SqlQueryRunner
 	}
 
 	public void setAppName(
-			String appName ) {
+			final String appName ) {
 		this.appName = appName;
 	}
 
 	public void setMaster(
-			String master ) {
+			final String master ) {
 		this.master = master;
 	}
 
 	public void setHost(
-			String host ) {
+			final String host ) {
 		this.host = host;
 	}
 
 	public void setInputDataStore1(
-			DataStorePluginOptions inputDataStore ) {
-		this.inputDataStore1 = inputDataStore;
+			final DataStorePluginOptions inputDataStore ) {
+		inputDataStore1 = inputDataStore;
 	}
 
 	public void setAdapterId1(
-			ByteArrayId adapterId ) {
-		this.adapterId1 = adapterId;
+			final ByteArrayId adapterId ) {
+		adapterId1 = adapterId;
 	}
 
 	public void setTempView1(
-			String tempView1 ) {
+			final String tempView1 ) {
 		this.tempView1 = tempView1;
 	}
 
 	public void setInputDataStore2(
-			DataStorePluginOptions inputDataStore ) {
-		this.inputDataStore2 = inputDataStore;
+			final DataStorePluginOptions inputDataStore ) {
+		inputDataStore2 = inputDataStore;
 	}
 
 	public void setAdapterId2(
-			ByteArrayId adapterId ) {
-		this.adapterId2 = adapterId;
+			final ByteArrayId adapterId ) {
+		adapterId2 = adapterId;
 	}
 
 	public void setTempView2(
-			String tempView2 ) {
+			final String tempView2 ) {
 		this.tempView2 = tempView2;
 	}
 
 	public void setSql(
-			String sql ) {
+			final String sql ) {
 		this.sql = sql;
 	}
 }

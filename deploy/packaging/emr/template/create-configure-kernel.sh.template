@@ -1,0 +1,155 @@
+#!/bin/bash
+
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+MASTER_ARG=${2:-yarn}
+INTIAL_POLLING_INTERVAL=15 # This gets doubled for each attempt up to max_attempts
+
+# Parses a configuration file put in place by EMR to determine the role of this node
+
+is_master() {
+  if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Avoid race conditions and actually poll for availability of component dependencies
+# Credit: http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs/8351489#8351489
+with_backoff() {
+  local max_attempts=${ATTEMPTS-5}
+  local timeout=${INTIAL_POLLING_INTERVAL-1}
+  local attempt=0
+  local exitCode=0
+
+  while (( $attempt < $max_attempts ))
+  do
+    set +e
+    "$@"
+    exitCode=$?
+    set -e
+
+    if [[ $exitCode == 0 ]]
+    then
+      break
+    fi
+
+    echo "Retrying $@ in $timeout.." 1>&2
+    sleep $timeout
+    attempt=$(( attempt + 1 ))
+    timeout=$(( timeout * 2 ))
+  done
+
+  if [[ $exitCode != 0 ]]
+  then
+    echo "Fail: $@ failed to complete after $max_attempts attempts" 1>&2
+  fi
+
+  return $exitCode
+}
+
+is_spark_available() {
+	pyspark --version /
+	return $?
+}
+
+wait_until_spark_is_available() {
+	with_backoff is_spark_available
+	if [ $? != 0 ]; then
+		echo "HDFS not available before timeout. Exiting ..."
+		exit 1
+	fi
+}
+
+install_kernel() {
+wait_until_spark_is_available
+
+# Create the jupyter kernel
+jupyter pixiedust install <<END
+y
+n
+/usr/lib/spark
+y
+y
+y
+END
+
+#Use jq to remove unnecessary keys
+GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
+KERNEL_JSON=$HOME/.local/share/jupyter/kernels/pythonwithpixiedustspark22/kernel.json
+jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+
+#Disable shell file globbing
+set -f
+
+#Use jq to read submit args into array
+submit_args=($(jq -r '.env["PYSPARK_SUBMIT_ARGS"]' $KERNEL_JSON))
+
+#Enable shell file globbing
+set +f
+
+#Add geowave jar to submit --jars option
+submit_args[1]=${submit_args[1]},${GEOWAVE_INSTALL}
+
+#Modify master to use yarn/local
+submit_args[5]=${MASTER_ARG}
+
+#Pulling array out to string so it can be passed properly to jq
+submit_string=${submit_args[@]}
+
+#Modifying default spark allocation properties to use max memory resources available with HBase
+YARN_SCHED_MAX=`xmllint --xpath 'string(//property[name="yarn.scheduler.maximum-allocation-mb"]/value)' /etc/hadoop/conf/yarn-site.xml`
+YARN_CONT_MAX=`xmllint --xpath 'string(//property[name="yarn.nodemanager.resource.memory-mb"]/value)' /etc/hadoop/conf/yarn-site.xml`
+echo "Yarn Scheduler Max Memory = ${YARN_SCHED_MAX}(MB)"
+echo "Yarn Container Max Memory = ${YARN_CONT_MAX}(MB)"
+
+MAX_MOD=0.9
+CONT_MOD=0.8
+#Use bc calculator to get new max and container memory and truncate floating result
+MOD_SCHED_MAX=$(echo "($YARN_SCHED_MAX*$MAX_MOD) / 1" | bc)
+MOD_CONT_MAX=$(echo "($YARN_CONT_MAX*$CONT_MOD) / 1" | bc)
+
+echo "Modified Yarn Scheduler Max Memory = ${MOD_SCHED_MAX}(MB)"
+echo "Modified Yarn Container Max Memory = ${MOD_CONT_MAX}(MB)"
+
+DRIVER_MEM="--driver-memory ${MOD_SCHED_MAX}M "
+EXECUTOR_MEM="--executor-memory ${MOD_CONT_MAX}M "
+
+submit_string=$DRIVER_MEM$EXECUTOR_MEM$submit_string
+
+echo "New Spark Submit Options: ${submit_string}"
+
+#Write the new submit_args to the kernel.json
+jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_args' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
+
+echo "Modified Kernel to use yarn by default"
+
+#Adding Jupyter to Upstart so it can be run at bootstrap
+cd $HOME
+sudo cat << EOF > $HOME/jupyter.conf
+description "Jupyter"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+respawn limit 0 10
+
+env HOME=$HOME
+script
+    . $HOME/.bashrc
+    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
+end script
+EOF
+sudo mv $HOME/jupyter.conf /etc/init/
+sudo chown root:root /etc/init/jupyter.conf
+
+# be sure that jupyter daemon is registered in initctl
+sudo initctl reload-configuration
+
+# start jupyter daemon
+sudo initctl start jupyter
+
+return 0
+}

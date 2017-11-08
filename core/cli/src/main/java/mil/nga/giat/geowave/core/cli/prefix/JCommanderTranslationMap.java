@@ -55,7 +55,8 @@ public class JCommanderTranslationMap
 	// classpath.
 	public static final String NAMES_MEMBER = "names";
 	public static final String REQUIRED_MEMBER = "required";
-	// HP Fortify "Hardcoded Password" false positive
+	// HP Fortify "Hardcoded Password - Password Management: Hardcoded Password"
+	// false positive
 	// This is a password label, not a password
 	public static final String PASSWORD_MEMBER = "password";
 	public static final String PREFIX_SEPARATOR = ".";

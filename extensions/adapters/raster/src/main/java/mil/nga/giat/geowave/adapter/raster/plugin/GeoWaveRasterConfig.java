@@ -222,7 +222,15 @@ public class GeoWaveRasterConfig
 					XMLConstants.FEATURE_SECURE_PROCESSING,
 					true);
 
-			final DocumentBuilder db = dbf.newDocumentBuilder();
+		// HP Fortify "XML External Entity Injection" fix.
+		// These lines are the recommended fix for
+		// protecting a Java DocumentBuilderFactory from XXE.
+		String DISALLOW_DOCTYPE_DECL = "http://apache.org/xml/features/disallow-doctype-decl";
+		dbf.setFeature(
+				DISALLOW_DOCTYPE_DECL,
+				true);
+
+		final DocumentBuilder db = dbf.newDocumentBuilder();
 
 			// db.setEntityResolver(new ConfigEntityResolver(xmlURL));
 			final Document dom = db.parse(input);

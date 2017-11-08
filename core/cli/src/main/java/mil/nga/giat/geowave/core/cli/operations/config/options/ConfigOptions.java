@@ -238,6 +238,7 @@ public class ConfigOptions
 			try (FileOutputStream str = new FileOutputStream(
 					configFile)) {
 				tmp.store(
+						// HPFortify FP: passwords are stored encrypted
 						str,
 						null);
 			}

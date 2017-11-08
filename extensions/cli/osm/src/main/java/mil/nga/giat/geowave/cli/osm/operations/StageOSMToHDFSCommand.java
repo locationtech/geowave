@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -49,7 +49,7 @@ public class StageOSMToHDFSCommand extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 
 		// Ensure we have all the required arguments
@@ -58,8 +58,7 @@ public class StageOSMToHDFSCommand extends
 					"Requires arguments: <file or directory>  <path to base directory to write to>");
 		}
 
-		String inputPath = parameters.get(0);
-		// String hdfsHostPort = parameters.get(1);
+		final String inputPath = parameters.get(0);
 		String basePath = parameters.get(1);
 
 		// Config file
@@ -90,10 +89,10 @@ public class StageOSMToHDFSCommand extends
 		parserOptions.setHdfsBasePath(basePath);
 		parserOptions.setNameNode(hdfsHostPort);
 
-		OsmPbfParser osmPbfParser = new OsmPbfParser();
-		Configuration conf = osmPbfParser.stageData(parserOptions);
+		final OsmPbfParser osmPbfParser = new OsmPbfParser();
+		final Configuration conf = osmPbfParser.stageData(parserOptions);
 
-		ContentSummary cs = getHDFSFileSummary(
+		final ContentSummary cs = getHDFSFileSummary(
 				conf,
 				basePath);
 		System.out.println("**************************************************");
@@ -117,9 +116,9 @@ public class StageOSMToHDFSCommand extends
 	}
 
 	public void setParameters(
-			String fileOrDirectory,
-			String hdfsHostPort,
-			String hdfsPath ) {
+			final String fileOrDirectory,
+			final String hdfsHostPort,
+			final String hdfsPath ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
 		parameters.add(hdfsHostPort);
@@ -131,19 +130,20 @@ public class StageOSMToHDFSCommand extends
 	}
 
 	public void setParserOptions(
-			OsmPbfParserOptions parserOptions ) {
+			final OsmPbfParserOptions parserOptions ) {
 		this.parserOptions = parserOptions;
 	}
 
 	private static ContentSummary getHDFSFileSummary(
-			Configuration conf,
-			String filename )
+			final Configuration conf,
+			final String filename )
 			throws IOException {
-		org.apache.hadoop.fs.Path path = new org.apache.hadoop.fs.Path(
+		final org.apache.hadoop.fs.Path path = new org.apache.hadoop.fs.Path(
 				filename);
-		FileSystem file = path.getFileSystem(conf);
-		ContentSummary cs = file.getContentSummary(path);
+		final FileSystem file = path.getFileSystem(conf);
+		final ContentSummary cs = file.getContentSummary(path);
 		file.close();
 		return cs;
 	}
+
 }

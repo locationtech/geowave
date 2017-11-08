@@ -5,12 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.mllib.clustering.KMeansModel;
-import org.apache.spark.mllib.linalg.Vector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -19,7 +13,6 @@ import com.vividsolutions.jts.util.Stopwatch;
 
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansRunner;
-import mil.nga.giat.geowave.analytic.javaspark.kmeans.KMeansUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.AnalyticSection;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.options.PropertyManagementConverter;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
@@ -28,20 +21,17 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 @GeowaveOperation(name = "kmeansspark", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "KMeans Clustering via Spark ML")
 public class KmeansSparkCommand extends
-		DefaultOperation implements
+		ServiceEnabledCommand<Void> implements
 		Command
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(KmeansSparkCommand.class);
-
 	@Parameter(description = "<input storename> <output storename>")
 	private List<String> parameters = new ArrayList<String>();
 
@@ -63,13 +53,19 @@ public class KmeansSparkCommand extends
 			throw new ParameterException(
 					"Requires arguments: <input storename> <output storename>");
 		}
+		computeResults(params);
 
+	}
+
+	@Override
+	public Void computeResults(
+			OperationParams params )
+			throws Exception {
 		final String inputStoreName = parameters.get(0);
 		final String outputStoreName = parameters.get(1);
 
 		// Config file
-		final File configFile = (File) params.getContext().get(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT);
+		final File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load stores.
 		if (inputDataStore == null) {
@@ -108,33 +104,15 @@ public class KmeansSparkCommand extends
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setAppName(kMeansSparkOptions.getAppName());
 		runner.setMaster(kMeansSparkOptions.getMaster());
+		runner.setHost(kMeansSparkOptions.getHost());
 		runner.setSplits(
 				kMeansSparkOptions.getMinSplits(),
 				kMeansSparkOptions.getMaxSplits());
 		runner.setInputDataStore(inputDataStore);
 		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
 		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
-
-		ScaledTemporalRange scaledRange = null;
-
-		if (kMeansSparkOptions.isUseTime()) {
-			ByteArrayId adapterId = null;
-			if (kMeansSparkOptions.getAdapterId() != null) {
-				adapterId = new ByteArrayId(
-						kMeansSparkOptions.getAdapterId());
-			}
-
-			scaledRange = KMeansUtils.setRunnerTimeParams(
-					runner,
-					inputDataStore,
-					adapterId);
-
-			if (scaledRange == null) {
-				LOGGER.error("Failed to set time params for kmeans. Please specify a valid feature type.");
-				throw new ParameterException(
-						"--useTime option: Failed to set time params");
-			}
-		}
+		runner.setUseTime(kMeansSparkOptions.isUseTime());
+		runner.setAdapterId(kMeansSparkOptions.getAdapterId());
 
 		if (kMeansSparkOptions.getEpsilon() != null) {
 			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
@@ -147,10 +125,11 @@ public class KmeansSparkCommand extends
 		if (kMeansSparkOptions.getCqlFilter() != null) {
 			runner.setCqlFilter(kMeansSparkOptions.getCqlFilter());
 		}
-
-		stopwatch.reset();
-		stopwatch.start();
-
+		runner.setGenerateHulls(kMeansSparkOptions.isGenerateHulls());
+		runner.setComputeHullData(kMeansSparkOptions.isComputeHullData());
+		runner.setHullTypeName(kMeansSparkOptions.getHullTypeName());
+		runner.setCentroidTypeName(kMeansSparkOptions.getCentroidTypeName());
+		runner.setOutputDataStore(outputDataStore);
 		try {
 			runner.run();
 
@@ -160,33 +139,7 @@ public class KmeansSparkCommand extends
 					"Failed to execute: " + e.getMessage());
 		}
 
-		stopwatch.stop();
-		LOGGER.debug("KMeans runner took " + stopwatch.getTimeString());
-
-		final KMeansModel clusterModel = runner.getOutputModel();
-
-		// output cluster centroids (and hulls) to output datastore
-		KMeansUtils.writeClusterCentroids(
-				clusterModel,
-				outputDataStore,
-				kMeansSparkOptions.getCentroidTypeName(),
-				scaledRange);
-
-		if (kMeansSparkOptions.isGenerateHulls()) {
-			stopwatch.reset();
-			stopwatch.start();
-
-			final JavaRDD<Vector> inputCentroids = runner.getInputCentroids();
-			KMeansUtils.writeClusterHulls(
-					inputCentroids,
-					clusterModel,
-					outputDataStore,
-					kMeansSparkOptions.getHullTypeName(),
-					kMeansSparkOptions.isComputeHullData());
-
-			stopwatch.stop();
-			LOGGER.debug("KMeans hull generation took " + stopwatch.getTimeString());
-		}
+		return null;
 	}
 
 	public List<String> getParameters() {
@@ -225,4 +178,5 @@ public class KmeansSparkCommand extends
 			final KMeansSparkOptions kMeansSparkOptions ) {
 		this.kMeansSparkOptions = kMeansSparkOptions;
 	}
+
 }
