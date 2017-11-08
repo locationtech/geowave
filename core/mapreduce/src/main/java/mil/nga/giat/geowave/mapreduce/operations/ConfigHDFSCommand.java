@@ -22,8 +22,8 @@ public class ConfigHDFSCommand extends
 		Command
 {
 
-	public static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defultFS";
-	public static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";
+	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defultFS";
+	private static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";
 
 	@Parameter(description = "<HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.hortonworks.com:8020 )")
 	private List<String> parameters = new ArrayList<String>();
@@ -62,6 +62,21 @@ public class ConfigHDFSCommand extends
 				existingProps,
 				this.getClass(),
 				HDFS_DEFAULTFS_PREFIX);
+	}
+
+	public static String getHdfsUrl(
+			Properties configProperties ) {
+		String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
+
+		if (hdfsFSUrl == null) {
+			throw new ParameterException(
+					"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
+		}
+
+		if (!hdfsFSUrl.contains("://")) {
+			hdfsFSUrl = "hdfs://" + hdfsFSUrl;
+		}
+		return hdfsFSUrl;
 	}
 
 }

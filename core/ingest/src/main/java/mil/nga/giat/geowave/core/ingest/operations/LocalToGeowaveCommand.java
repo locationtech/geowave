@@ -202,7 +202,8 @@ public class LocalToGeowaveCommand extends
 				threads);
 
 		// Execute
-		if (!driver.runOperation(inputPath,
+		if (!driver.runOperation(
+				inputPath,
 				configFile)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");

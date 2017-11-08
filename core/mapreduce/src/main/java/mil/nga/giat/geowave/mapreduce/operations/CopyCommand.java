@@ -30,7 +30,6 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.mapreduce.copy.StoreCopyJobRunner;
 
-
 @GeowaveOperation(name = "copy", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Copy a data store")
 public class CopyCommand extends
@@ -73,16 +72,7 @@ public class CopyCommand extends
 			Properties configProperties = ConfigOptions.loadProperties(
 					configFile,
 					null);
-			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-			if (hdfsFSUrl == null) {
-				throw new ParameterException(
-						"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
-			}
-
-			if (!hdfsFSUrl.contains("://")) {
-				hdfsFSUrl = "hdfs://" + hdfsFSUrl;
-			}
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			options.setHdfsHostPort(hdfsFSUrl);
 		}
 

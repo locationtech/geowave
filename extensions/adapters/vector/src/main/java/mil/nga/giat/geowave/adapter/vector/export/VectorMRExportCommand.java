@@ -70,16 +70,7 @@ public class VectorMRExportCommand extends
 		Properties configProperties = ConfigOptions.loadProperties(
 				configFile,
 				null);
-		String hdfsHostPort = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-		if (hdfsHostPort == null) {
-			throw new ParameterException(
-					"HDFS DefaultFS URL is empty. Config using geowave config hdfs <hdfs DefaultFS>");
-		}
-
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load store.
 		if (storeOptions == null) {

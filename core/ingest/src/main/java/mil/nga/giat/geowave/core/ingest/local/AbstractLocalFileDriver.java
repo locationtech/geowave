@@ -171,16 +171,21 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				if (!s3EndpointUrl.contains("://")) {
 					s3EndpointUrl = "s3://" + s3EndpointUrl;
 				}
-				FileSystem fs = FileSystems.newFileSystem(new URI(s3EndpointUrl
-						+ "/"), new HashMap<String, Object>(), Thread
-						.currentThread().getContextClassLoader());
-				String s3InputPath = inputPath.replaceFirst("s3://", "/");
+				FileSystem fs = FileSystems.newFileSystem(
+						new URI(
+								s3EndpointUrl + "/"),
+						new HashMap<String, Object>(),
+						Thread.currentThread().getContextClassLoader());
+				String s3InputPath = inputPath.replaceFirst(
+						"s3://",
+						"/");
 				path = (S3Path) fs.getPath(s3InputPath);
 				if (!path.isAbsolute()) {
 					LOGGER.error("Input path " + inputPath + " does not exist");
 					return;
 				}
-			} catch (URISyntaxException e) {
+			}
+			catch (URISyntaxException e) {
 				LOGGER.error("Unable to ingest data, Inavlid S3 path");
 				return;
 			}
@@ -194,12 +199,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				System.err.println("The HDFS URL scheme handler has already been loaded");
 			}
 
-			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-			if (hdfsFSUrl == null) {
-				LOGGER.error("HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
-				return;
-			}
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 			String hdfsInputPath = inputPath.replaceFirst(
 					"hdfs://",
@@ -207,16 +207,15 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 
 			try {
 
-				if (!hdfsFSUrl.contains("://")) {
-					hdfsFSUrl = "hdfs://" + hdfsFSUrl;
-				}
-				URI uri = new URI(hdfsFSUrl + hdfsInputPath);
+				URI uri = new URI(
+						hdfsFSUrl + hdfsInputPath);
 				path = Paths.get(uri);
 				if (!Files.exists(path)) {
 					LOGGER.error("Input path " + inputPath + " does not exist");
 					return;
 				}
-			} catch (URISyntaxException e) {
+			}
+			catch (URISyntaxException e) {
 				LOGGER.error("Unable to ingest data, Inavlid HDFS Path");
 				return;
 			}

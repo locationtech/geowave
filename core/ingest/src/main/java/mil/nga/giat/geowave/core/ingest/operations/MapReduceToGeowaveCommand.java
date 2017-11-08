@@ -184,17 +184,7 @@ public class MapReduceToGeowaveCommand extends
 		Properties configProperties = ConfigOptions.loadProperties(
 				configFile,
 				null);
-		String hdfsHostPort = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-		if (hdfsHostPort == null) {
-			throw new ParameterException(
-					"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
-		}
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

@@ -117,17 +117,7 @@ public class LocalToHdfsCommand extends
 		Properties configProperties = ConfigOptions.loadProperties(
 				configFile,
 				null);
-		String hdfsHostPort = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-		if (hdfsHostPort == null) {
-			throw new ParameterException(
-					"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
-		}
-
-		// Ensures that the url starts with hdfs://
-		if (!hdfsHostPort.contains("://")) {
-			hdfsHostPort = "hdfs://" + hdfsHostPort;
-		}
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 		final String inputPath = parameters.get(0);
 		final String basePath = parameters.get(1);
 

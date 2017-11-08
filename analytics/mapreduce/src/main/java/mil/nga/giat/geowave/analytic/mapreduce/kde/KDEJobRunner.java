@@ -148,16 +148,7 @@ public class KDEJobRunner extends
 			Properties configProperties = ConfigOptions.loadProperties(
 					configFile,
 					null);
-			String hdfsFSUrl = configProperties.getProperty(ConfigHDFSCommand.HDFS_DEFAULTFS_URL);
-
-			if (hdfsFSUrl == null) {
-				throw new ParameterException(
-						"HDFS DefaultFS URL is empty. Config using \"geowave config hdfs <hdfs DefaultFS>\"");
-			}
-
-			if (!hdfsFSUrl.contains("://")) {
-				hdfsFSUrl = "hdfs://" + hdfsFSUrl;
-			}
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
 		}
 
