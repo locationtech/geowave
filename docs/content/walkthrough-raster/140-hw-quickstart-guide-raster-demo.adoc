@@ -81,19 +81,19 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 
 [source, bash]
 ----
-geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster \
+geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
 -i accumulo -u geowave -p geowave
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 . If running with EMR HBase
 
 [source, bash]
 ----
-geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 Add a spatial index.
