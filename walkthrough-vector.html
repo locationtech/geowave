@@ -523,7 +523,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t accumulo --zookeeper sandbox.hortonworks.com:2181 --instance accumulo \
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
 --user geowave --password geowave</code></pre>
 </div>
 </div>
@@ -533,7 +533,7 @@ sandbox.hortonworks.com:2181</code></pre>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t hbase --zookeeper sandbox.hortonworks.com:2181</code></pre>
+-t hbase --zookeeper $HOSTNAME:2181</code></pre>
 </div>
 </div>
 </li>
@@ -688,7 +688,7 @@ sandbox.hortonworks.com:2181</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-08 18:19:56 +00:00
+Last updated 2017-11-09 13:03:21 +00:00
 </div>
 </div>
 </body>
