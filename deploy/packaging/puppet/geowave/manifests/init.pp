@@ -4,10 +4,14 @@ class geowave(
   $install_accumulo       = $geowave::params::install_accumulo,
   $install_hbase          = $geowave::params::install_hbase,
   $install_app            = $geowave::params::install_app,
-  $install_gwgeoserver   = $geowave::params::install_gwgeoserver,
+  $install_gwgeoserver    = $geowave::params::install_gwgeoserver,
   $install_restservices   = $geowave::params::install_restservices,
   $install_app_server     = $geowave::params::install_app_server,
-  $http_port              = $geowave::params::http_port
+  $http_port              = $geowave::params::http_port,
+  $http_port_ajp          = $geowave::params::http_port_ajp,
+  $http_port_shutdown     = $geowave::params::http_port_shutdown,
+  $set_public_dns         = $geowave::params::set_public_dns,
+  $public_dns             = $geowave::params::public_dns
 ) inherits geowave::params {
 
   if $geowave_version == undef { fail("geowave_version parameter is required") }
