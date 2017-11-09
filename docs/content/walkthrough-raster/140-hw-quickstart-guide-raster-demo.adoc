@@ -2,7 +2,9 @@
 
 :linkattrs:
 
-GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
+_v${project.version}_
+
+== GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
 
 In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command 
 downloads those images and combines them to create a mosaic.  

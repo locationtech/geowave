@@ -121,6 +121,24 @@
 						</goals>
 					</execution>
 					<execution>
+						<id>generate-documentation-archives</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-documentation-archives" dir="${project.basedir}/content/documentation-archives" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-documentation-archives">
+									<map from="${project.basedir}/content/documentation-archives/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/documentation-archives/documentation-archives.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
 						<id>generate-packages</id>
 						<phase>generate-sources</phase>
 						<configuration>
@@ -744,7 +762,30 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>../stylesheets</stylesdir>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-documentation-archives</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/documentation-archives</sourceDirectory>
+									<sourceDocumentName>documentation-archives.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<icons>font</icons>
@@ -767,7 +808,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>../stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<icons>font</icons>

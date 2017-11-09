@@ -1,6 +1,8 @@
 
 <<<
 
+_v${project.version}_
+
 = GeoWave Quickstart Guide Sandbox Environment Setup image:geowave-icon-logo-cropped.png[width="28%"]
 
 == Introduction

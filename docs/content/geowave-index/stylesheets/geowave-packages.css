@@ -17,5 +17,6 @@ body {
 .navbar-wrapper { padding-top:0; margin-top:20px; }
 
 #content h1#geowave { display:none; }
+#content h2#geowave { display:none; }
 
 p { font-family: "Helvetica Neue",Helvetica,Arial,sans-serif; font-size:14px; color: #5a5a5a; }

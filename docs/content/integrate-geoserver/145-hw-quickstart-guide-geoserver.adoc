@@ -2,7 +2,9 @@
 
 :linkattrs:
 
-= GeoWave Quickstart Guide Integrate with GeoServer image:geowave-icon-logo-cropped.png[width="28%"]
+_v${project.version}_
+
+== GeoWave Quickstart Guide Integrate with GeoServer image:geowave-icon-logo-cropped.png[width="28%"]
 
 In order to view the images generated from the vector and raster demos, use the GeoServer web interface. The following command configures and restarts GeoServer.
 

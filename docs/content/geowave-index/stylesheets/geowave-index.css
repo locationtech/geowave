@@ -47,3 +47,4 @@ p, blockquote, dt, td.content {
 .page-header h2 {margin-top:50px;}
 
 #content h1#geowave { display:none; }
+#content h2#geowave { display:none; }

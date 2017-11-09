@@ -101,20 +101,90 @@
         setInterval(function () { list.refresh(currentTab); }, REFRESH_INTERVAL);
     });
     		
-	$( document ).ready(function() {
-		var prevReleases = [ "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
-		var menu = $('#releases_submenu')
-		jQuery.each( prevReleases, function( index, value ) {
+$( document ).ready(function() {
+		/* Newer releases array contains those which have the newer documentation and additional guides, beyond the standard 4 from the previous releases. */
+		/* Once 0.9.6 is released, this can be added, and will be populated with the different quickstart guides for the release. Otherwise, specified links are invalid. */
+		/* NOTE :: The first version between newerReleases + recentReleases will be denoted with '(Current)' appended to the version label */
+		var newerReleases  = [ /* "0.9.6" */ ];
+		var recentReleases = [ "0.9.5", "0.9.4.1", "0.9.4", "0.9.3" ];
+
+		var mainDocs = { 
+				"userguide.html"		: "User Guide", 
+				"devguide.html"		: "Developer Guide", 
+				"commands.html"		: "CLI Commands", 
+				"quickstart.html"	: "Quickstart Guide"
+		};
+		
+		var qsDocs = {
+				"aws-env.html" 				: "AWS EMR Quickstart Guide",
+				"integrate-geoserver.html" 	: "GeoServer Integration Quickstart Guide",
+				"interact-cluster.html" 		: "Interacting with the cluster Quickstart Guide",
+				"jupyter.html" 				: "Jupyter Quickstart Guide",
+				"sandbox-env.html" 			: "Sandbox Virtual Image Quickstart Guide",
+				"walkthrough-raster.html" 	: "Raster Demo Quickstart Guide",
+				"walkthrough-vector.html" 	: "Vector Demo Quickstart Guide"
+		};
+		
+		/* Populate QuickStart Guides Tab */
+		var quickStartMenuTab = $('#quickstart-guides_menu');
+		$.each( qsDocs, function( qsFilename, qsLabel ) {
+			$('<a/>').attr('href', qsFilename).text(qsLabel).appendTo($('<li/>').appendTo(quickStartMenuTab));
+		});
+
+		/* Populate Documentation --> Releases Tab */
+		var releasesTab = $('#releases_submenu');
+		var menu = $('<ul/>').addClass('dropdown-menu').appendTo(releasesTab);
+
+		/* keep track of if a current version has been denoted */
+		var currentSpecified = new Boolean(false);
+		jQuery.each( newerReleases, function( index, value ) {
 			var li = $('<li/>').addClass('dropdown-submenu').appendTo(menu);
 			var a = $('<a/>').addClass('dropdown-toggle').attr('href', '#').attr('data-toggle','dropdown').text(value).appendTo(li);
+			if (index == 0 && currentSpecified == Boolean(false)) {
+				a.text(a.text() + " (Current)");
+				/* add a divider line to separate the current version from the other versions */
+				$('<li/>').addClass('divider').appendTo(menu);
+				currentSpecified = new Boolean(true);
+			}
 			var subList = $('<ul/>').addClass('dropdown-menu').appendTo(li);
-			var docs = { "userguide.html": "User Guide", "devguide.html": "Developer Guide", "commands.html": "CLI Commands", "quickstart.html": "Quickstart Guide" };
-			$.each( docs, function( filename, label ) {
+
+			var loopIndex=0;
+			$.each( mainDocs, function( filename, label ) {
+				if (loopIndex != 3) {
+					$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + filename).text(label).appendTo($('<li/>').appendTo(subList));
+				} else {
+					var qsMenuHeader = $('<li/>').addClass('dropdown-submenu').appendTo(subList);
+					$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + filename).text(label).appendTo(qsMenuHeader);
+					var qsMenu = $('<ul/>').addClass('dropdown-menu').addClass('multi-level').attr('role','menu').appendTo(qsMenuHeader);
+
+					$.each( qsDocs, function( qsFilename, qsLabel ) {
+						$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + qsFilename).text(qsLabel).appendTo($('<li/>').appendTo(qsMenu));
+					});
+				}
+				loopIndex = loopIndex+1;
+			});
+		});
+
+		jQuery.each( recentReleases, function( index, value ) {
+			var li = $('<li/>').addClass('dropdown-submenu').appendTo(menu);
+			var a = $('<a/>').addClass('dropdown-toggle').attr('href', '#').attr('data-toggle','dropdown').text(value).appendTo(li);
+			if (index == 0 && currentSpecified == Boolean(false)) {
+				a.text(a.text() + " (Current)");
+				/* add a divider line to separate the current version from the other versions */
+				$('<li/>').addClass('divider').appendTo(menu);
+				currentSpecified = new Boolean(true);
+			}
+
+			var subList = $('<ul/>').addClass('dropdown-menu').appendTo(li);
+			$.each( mainDocs, function( filename, label ) {
 				$('<a/>').attr('href', "http://s3.amazonaws.com/geowave/" + value +"/docs/" + filename).text(label).appendTo($('<li/>').appendTo(subList));
 			});
 		});
+		
+		/* add a divider line to separate the archive link from the release versions */
+		$('<li/>').addClass('divider').appendTo(menu);
+		$('<a/>').attr('href', "documentation-archives.html").text('Archive').appendTo($('<li/>').appendTo(menu));
 	});
-
 </script>
 ++++
 
