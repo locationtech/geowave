@@ -79,7 +79,8 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 
 [source, bash]
 ----
-geowave config addstore - accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster \
+-i accumulo -u geowave -p geowave
 
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 ----
@@ -88,7 +89,7 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 
 [source, bash]
 ----
-geowave config addstore - hbase -z sandbox.hortonworks.com:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
 
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 ----
@@ -97,7 +98,7 @@ Add a spatial index.
 
 [source, bash]
 ----
-geowave config addindex - spatial spatial
+geowave config addindex -t spatial spatial
 ----
 
 Filter the dataset by calling analyze. In this example we look for Band 8 images that are in Berlin.

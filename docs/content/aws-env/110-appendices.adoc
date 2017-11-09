@@ -109,10 +109,7 @@ Select your security group from the list. Click on the “Inbound” tab towards
 
 image::create-security-group-2.png[scaledwidth="100%",alt="Create security group"]
 
-In the popup window, select SSH from the “Type” drop down, Anywhere from the “Source” drop down, then click the “Save” 
-button.
-
-image::create-security-group-3.png[scaledwidth="100%",alt="Create security group"]
+In the popup window, select SSH from the “Type” drop down, add your ip address in the the “Source” box, then click the “Save” button.
 
 For more detailed information on AWS EC2 Security Groups please see the Amazon documentation http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html[here].
 
