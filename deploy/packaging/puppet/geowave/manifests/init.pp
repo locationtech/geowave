@@ -6,10 +6,9 @@ class geowave(
   $install_app            = $geowave::params::install_app,
   $install_gwgeoserver    = $geowave::params::install_gwgeoserver,
   $install_restservices   = $geowave::params::install_restservices,
-  $install_app_server     = $geowave::params::install_app_server,
   $http_port              = $geowave::params::http_port,
-  $http_port_ajp          = $geowave::params::http_port_ajp,
-  $http_port_shutdown     = $geowave::params::http_port_shutdown,
+  $ajp_port               = $geowave::params::ajp_port_ajp,
+  $shutdown_port          = $geowave::params::shutdown_port,
   $set_public_dns         = $geowave::params::set_public_dns,
   $public_dns             = $geowave::params::public_dns
 ) inherits geowave::params {
@@ -27,13 +26,6 @@ class geowave(
 
   if $install_app {
     class {'geowave::app':}
-  }
-
-  if $install_app_server {
-    anchor {'geowave::begin': } ->
-      class {'geowave::server':} ->
-      class {'geowave::service':} ->
-    anchor {'geowave::end':}
   }
 
   if $install_gwgeoserver or $install_restservices {

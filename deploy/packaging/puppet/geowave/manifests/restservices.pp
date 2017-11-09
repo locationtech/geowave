@@ -1,5 +1,5 @@
 class geowave::restservices {
-  $set_public_ip = $geowave::set_public_ip
+  $set_public_dns = $geowave::set_public_dns
   $public_dns = $geowave::public_dns
 
   $line_string = "
@@ -21,11 +21,11 @@ class geowave::restservices {
     notify => Service['gwtomcat'],
   }
 
-  if $set_public_ip{
-    file_line {'Set_public_dns':
+  if $set_public_dns{
+    file_line {'set_public_dns':
       ensure  => present,
       line    => $line_string,
-      path    => "/home/akamel/test/test2.txt",
+      path    => "/usr/local/geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}/tomcat8/webapps/restservices/WEB-INF/web.xml",
       match   => "<param-value>$public_dns<\/param-value>",
       after   => "<\/context-param>",
       replace => false,
