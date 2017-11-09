@@ -13,8 +13,8 @@ if [ "x" == "x$JAVA_HOME" ]; then
     export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
 fi
 if [ "x" == "x$GEOSERVER_HOME" ]; then
-    export GEOSERVER_HOME=/usr/local/geowave/geoserver
+    export GEOSERVER_HOME=/usr/local/geowave/tomcat8/webapps/geoserver
 fi
 if [ "x" == "x$GEOSERVER_DATA_DIR" ]; then
-    export GEOSERVER_DATA_DIR=/usr/local/geowave/geoserver/data_dir
+    export GEOSERVER_DATA_DIR=/usr/local/geowave/tomcat8/webapps/geoserver/data
 fi

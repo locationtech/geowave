@@ -32,22 +32,8 @@ SKIP_EXTRA="-Dfindbugs.skip -Dformatter.skip -DskipTests"
 cd "$SCRIPT_DIR/../../.."
 WORKSPACE="$(pwd)"
 DOCKER_ROOT=$WORKSPACE/docker-root
-GEOSERVER_VERSION=geoserver-2.10.0-bin.zip
-GEOSERVER_ARTIFACT=$WORKSPACE/deploy/packaging/rpm/centos/7/SOURCES/geoserver.zip
 LOCAL_REPO_DIR=/var/www/geowave-efs/html/repos/snapshots
 LOCK_DIR=/var/lock/subsys
-
-if [ -z $GEOSERVER_DOWNLOAD_BASE ]; then
-	GEOSERVER_DOWNLOAD_BASE=https://s3.amazonaws.com/geowave-deploy/third-party-downloads/geoserver
-fi
-
-if [ -z $GEOSERVER_VERSION ]; then
-	GEOSERVER_VERSION=geoserver-2.10.0-bin.zip
-fi
-
-if [ ! -f "$GEOSERVER_ARTIFACT" ]; then
-	curl $GEOSERVER_DOWNLOAD_BASE/$GEOSERVER_VERSION > $GEOSERVER_ARTIFACT
-fi
 
 # If you'd like to build a different set of artifacts rename build-args-matrix.sh.example
 if [ -z $BUILD_ARGS_MATRIX  ]; then
@@ -82,7 +68,6 @@ docker run $DOCKER_ARGS --rm \
 	
 docker run $DOCKER_ARGS --rm \
   -e WORKSPACE=/usr/src/geowave \
-  -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
   -e BUILD_SUFFIX="common" \
   -e TIME_TAG="$TIME_TAG" \
   -v $DOCKER_ROOT:/root \
@@ -122,7 +107,6 @@ do
     docker run --rm $DOCKER_ARGS \
       -e WORKSPACE=/usr/src/geowave \
       -e BUILD_ARGS="$build_args" \
-      -e GEOSERVER_VERSION="$GEOSERVER_VERSION" \
       -e BUILD_SUFFIX="vendor" \
       -e TIME_TAG="$TIME_TAG" \
       -v $DOCKER_ROOT:/root \

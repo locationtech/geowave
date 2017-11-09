@@ -8,7 +8,27 @@
 # Version 2.0 which accompanies this distribution and is available at
 # http://www.apache.org/licenses/LICENSE-2.0.txt
 #-------------------------------------------------------------------------------
-/usr/local/geowave/geoserver/logs/*.log {
+/usr/local/geowave/tomcat8/webapps/geoserver/data/logs/*.log {
+    compress
+    copytruncate
+    dateext
+    size=+1k
+    notifempty
+    missingok
+    create  644
+}
+
+/usr/local/geowave/tomcat8/logs/*.log {
+    compress
+    copytruncate
+    dateext
+    size=+1k
+    notifempty
+    missingok
+    create  644
+}
+
+/usr/local/geowave/tomcat8/logs/*.out {
     compress
     copytruncate
     dateext
