@@ -500,7 +500,9 @@ source /mnt/geowave-env.sh</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">cd /mnt
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo mkdir /mnt/gdal
+
+cd /mnt/gdal
 
 sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
 
@@ -547,10 +549,10 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster \
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
 -i accumulo -u geowave -p geowave
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
 <div class="olist arabic">
@@ -562,9 +564,9 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector<
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -628,7 +630,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-09 13:03:21 +00:00
+Last updated 2017-11-09 19:23:00 +00:00
 </div>
 </div>
 </body>
