@@ -18,13 +18,15 @@ class geowave::restservices {
   package { "geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-restservices":
     ensure => latest,
     tag    => 'geowave-package',
-    notify => Service['gwtomcat'],
+    notify => Exec['wait_for_restservices_to_unpack'], #force restart of service
   }
 
-  exec { 'wait_for_restservices_to_unpack' :
+  #This is done instead of a notify => Service['gwtomcat'] to force immediate
+  #restart of the tomcat8 server. This is to ensure the war file is unpacked
+  #so we can run the file_line block if needed.  
+  exec { 'wait_for_restservices_to_unpack':
     require => Package ["geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-restservices"],
-    command => "sleep 20",
-    path => "/usr/bin:/bin",
+    command => "/sbin/service gwtomcat restart && sleep 10",
   }
 
   if $set_public_dns{
