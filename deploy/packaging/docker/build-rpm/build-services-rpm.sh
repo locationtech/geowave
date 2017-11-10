@@ -99,6 +99,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v 
     --pre-uninstall ${FPM_SCRIPTS}/gwtomcat_pre_uninstall.sh \
     --post-uninstall ${FPM_SCRIPTS}/gwtomcat_post_uninstall.sh \
     ${FPM_SCRIPTS}/gwtomcat=/etc/init.d/gwtomcat \
+    ${FPM_SCRIPTS}/gwtomcat_logrotate=/etc/logrotate.d/gwtomcat \
     tomcat8/=${GEOWAVE_DIR}/tomcat8/
 echo "created tomcat rpm"
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.${TIME_TAG}.noarch.rpm
@@ -130,14 +131,17 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver" 
     -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat \
     --iteration $TIME_TAG \
     --vendor geowave --description "GeoServer is an open source server for sharing geospatial data." \
-    --url "https://geoserver.org/" --prefix ${GEOWAVE_DIR}/tomcat8/webapps geoserver.war
+    --url "https://geoserver.org/" \
+    ${FPM_SCRIPTS}/gwgeoserver_logrotate=/etc/logrotate.d/gwgeoserver \
+    geoserver.war=${GEOWAVE_DIR}/tomcat8/webapps/geoserver.war
 
 fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
     -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat \
     --iteration $TIME_TAG \
     --vendor geowave --description "Geowave rest services rpm. This deploys the Geowave services WAR file to the Tomcat server." \
-    --url "https://locationtech.github.io/geowave" --prefix ${GEOWAVE_DIR}/tomcat8/webapps restservices.war
+    --url "https://locationtech.github.io/geowave" \
+    restservices.war=${GEOWAVE_DIR}/tomcat8/webapps/restservices.war
 
 #Move the rpms to the repo to indexed later
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm

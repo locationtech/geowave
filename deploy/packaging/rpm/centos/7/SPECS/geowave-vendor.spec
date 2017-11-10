@@ -32,7 +32,6 @@ Source0:        geowave-accumulo-%{version}-%{vendor_version}.jar
 Source1:        deploy-geowave-accumulo-to-hdfs.sh
 Source2:        geowave-hbase-%{version}-%{vendor_version}.jar
 Source3:        deploy-geowave-hbase-to-hdfs.sh
-Source6:        geowave-logrotate.sh
 Source8:        default.xml
 Source9:        namespace.xml
 Source10:       workspace.xml
@@ -70,11 +69,6 @@ cp %{SOURCE2} %{SOURCE3} %{buildroot}%{geowave_hbase_home}
 # Extract version info file for easy inspection
 unzip -p %{SOURCE0} build.properties > %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties
 unzip -p %{SOURCE2} build.properties > %{buildroot}%{geowave_hbase_home}/geowave-hbase-build.properties
-
-# Copy system service files into place
-mkdir -p %{buildroot}/etc/logrotate.d
-cp %{SOURCE6} %{buildroot}/etc/logrotate.d/gwtomcat
-mkdir -p %{buildroot}/etc/init.d
 
 # Stage geowave tools
 mkdir -p %{buildroot}%{geowave_tools_home}
