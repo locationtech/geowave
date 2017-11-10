@@ -21,6 +21,12 @@ class geowave::restservices {
     notify => Service['gwtomcat'],
   }
 
+  exec { 'wait_for_restservices_to_unpack' :
+    require => Package ["geowave-${geowave::geowave_version}-${geowave::hadoop_vendor_version}-restservices"],
+    command => "sleep 20",
+    path => "/usr/bin:/bin",
+  }
+
   if $set_public_dns{
     file_line {'set_public_dns':
       ensure  => present,
