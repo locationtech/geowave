@@ -8,13 +8,22 @@
 # Version 2.0 which accompanies this distribution and is available at
 # http://www.apache.org/licenses/LICENSE-2.0.txt
 #-------------------------------------------------------------------------------
-# For use by geowave jetty server, set if not already set elsewhere
-if [ "x" == "x$JAVA_HOME" ]; then
-    export JAVA_HOME=$(readlink -f /usr/bin/java | sed "s:bin/java::")
-fi
-if [ "x" == "x$GEOSERVER_HOME" ]; then
-    export GEOSERVER_HOME=/usr/local/geowave/tomcat8/webapps/geoserver
-fi
-if [ "x" == "x$GEOSERVER_DATA_DIR" ]; then
-    export GEOSERVER_DATA_DIR=/usr/local/geowave/tomcat8/webapps/geoserver/data
-fi
+/usr/local/geowave/tomcat8/logs/*.log {
+    compress
+    copytruncate
+    dateext
+    size=+1k
+    notifempty
+    missingok
+    create  644
+}
+
+/usr/local/geowave/tomcat8/logs/*.out {
+    compress
+    copytruncate
+    dateext
+    size=+1k
+    notifempty
+    missingok
+    create  644
+}

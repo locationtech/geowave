@@ -4,7 +4,6 @@ node ('master') {
   // Setting java home for the withMaven block
   jdk = tool name: 'JDK18'
   env.JAVA_HOME = "${jdk}"
-
   stage('Wipe workspace'){
     deleteDir()
   }
@@ -23,12 +22,18 @@ node ('master') {
   }
 
   stage('Maven Deploy'){
+    dir("${env.WORKSPACE}/docker-root") {
+      sh "aws s3 cp s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz . --quiet"
+      sh "tar xfz mvn-repo-cache-latest.tar.gz"
+      sh "rm mvn-repo-cache-latest.tar.gz"
+    }
     withMaven(
-      maven: 'maven-3.5.0',
+      maven: 'maven-3.5.2',
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
+      mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
       sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
-    }
+     }
   }
 
   // Mark the build artifacts 'stage'....
@@ -58,16 +63,16 @@ node ('master') {
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       dir("${env.WORKSPACE}/docker-root") {
-        sh "tar cvzf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
-        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz"
+        sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
       // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
       }
     }
     else if (build_type == "release" ){
       def version  = readFile('deploy/target/version.txt').trim()
       dir("${env.WORKSPACE}/docker-root") {
-        sh "tar cvzf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
-        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz"
+        sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
       // $DOCKERROOT/.m2 and upload to upload s3://geowave/mvn-cache/release/mvn-repo-cache-version.tar.gz
       }
     } else {

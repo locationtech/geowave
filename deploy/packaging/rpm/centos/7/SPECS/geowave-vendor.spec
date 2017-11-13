@@ -15,11 +15,8 @@
 %define geowave_install        /usr/local/%{vendor_app_name}
 %define geowave_accumulo_home  %{geowave_install}/accumulo
 %define geowave_hbase_home     %{geowave_install}/hbase
-%define geowave_geoserver_home %{geowave_install}/geoserver
 %define geowave_tools_home     %{geowave_install}/tools
 %define geowave_plugins_home   %{geowave_tools_home}/plugins
-%define geowave_geoserver_libs %{geowave_geoserver_home}/webapps/geoserver/WEB-INF/lib
-%define geowave_geoserver_data %{geowave_geoserver_home}/data_dir
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -35,10 +32,6 @@ Source0:        geowave-accumulo-%{version}-%{vendor_version}.jar
 Source1:        deploy-geowave-accumulo-to-hdfs.sh
 Source2:        geowave-hbase-%{version}-%{vendor_version}.jar
 Source3:        deploy-geowave-hbase-to-hdfs.sh
-Source4:        geoserver.zip
-Source5:        geowave-geoserver-%{version}-%{vendor_version}.jar
-Source6:        geowave-logrotate.sh
-Source7:        geowave-init.sh
 Source8:        default.xml
 Source9:        namespace.xml
 Source10:       workspace.xml
@@ -77,35 +70,6 @@ cp %{SOURCE2} %{SOURCE3} %{buildroot}%{geowave_hbase_home}
 unzip -p %{SOURCE0} build.properties > %{buildroot}%{geowave_accumulo_home}/geowave-accumulo-build.properties
 unzip -p %{SOURCE2} build.properties > %{buildroot}%{geowave_hbase_home}/geowave-hbase-build.properties
 
-# Unpack and rename prepackaged jetty/geoserver
-unzip -qq  %{SOURCE4} -d %{buildroot}%{geowave_install}
-mv %{buildroot}%{geowave_geoserver_home}-* %{buildroot}%{geowave_geoserver_home}
-
-# patch some config settings
-sed -i 's/yyyy_mm_dd.//g' %{buildroot}%{geowave_geoserver_home}/etc/jetty-http.xml
-
-# Remove cruft we don't want in our deployment
-rm -fr %{buildroot}%{geowave_geoserver_home}/bin/*.bat
-rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/layergroups/*
-rm -fr %{buildroot}%{geowave_geoserver_home}/data_dir/workspaces/*
-rm -fr %{buildroot}%{geowave_geoserver_home}/logs/keepme.txt
-
-# Copy our geowave library into place
-mkdir -p %{buildroot}%{geowave_geoserver_libs}
-cp %{SOURCE5} %{buildroot}%{geowave_geoserver_libs}
-
-# Copy system service files into place
-mkdir -p %{buildroot}/etc/logrotate.d
-cp %{SOURCE6} %{buildroot}/etc/logrotate.d/geowave
-mkdir -p %{buildroot}/etc/init.d
-cp %{SOURCE7} %{buildroot}/etc/init.d/geowave
-
-# Copy over our custom workspace config files
-mkdir -p %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
-cp %{SOURCE8} %{buildroot}%{geowave_geoserver_data}/workspaces
-cp %{SOURCE9} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
-cp %{SOURCE10} %{buildroot}%{geowave_geoserver_data}/workspaces/geowave
-
 # Stage geowave tools
 mkdir -p %{buildroot}%{geowave_tools_home}
 cp %{SOURCE11} %{buildroot}%{geowave_tools_home}
@@ -127,7 +91,8 @@ Summary:        All GeoWave Components
 Group:          Applications/Internet
 Requires:       %{vendor_app_name}-accumulo = %{version}
 Requires:       %{vendor_app_name}-hbase = %{version}
-Requires:       %{vendor_app_name}-jetty = %{version}
+Requires:       %{vendor_app_name}-gwgeoserver = %{version}
+Requires:       %{vendor_app_name}-restservices = %{version}
 Requires:       %{vendor_app_name}-tools = %{version}
 
 %description -n %{vendor_app_name}-single-host
@@ -185,43 +150,6 @@ This package installs the HBase components of GeoWave
 %attr(755, hdfs, hdfs) %{geowave_hbase_home}
 %attr(644, hdfs, hdfs) %{geowave_hbase_home}/geowave-hbase-%{version}-%{vendor_version}.jar
 %attr(755, hdfs, hdfs) %{geowave_hbase_home}/deploy-geowave-hbase-to-hdfs.sh
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-%package -n     %{vendor_app_name}-jetty
-Summary:        GeoWave GeoServer Components
-Group:          Applications/Internet
-Provides:       %{vendor_app_name}-jetty = %{version}
-Requires:       %{vendor_app_name}-tools = %{version}
-Requires:       %{common_app_name}-core = %{version}
-
-%description -n %{vendor_app_name}-jetty
-GeoWave provides geospatial and temporal indexing on top of Accumulo.
-This package installs the Accumulo components of GeoWave
-
-%post -n %{vendor_app_name}-jetty
-/sbin/chkconfig --add geowave
-chown -R geowave:geowave /usr/local/geowave
-exit 0
-
-%preun -n %{vendor_app_name}-jetty
-/sbin/service geowave stop >/dev/null 2>&1
-exit 0
-
-%files -n %{vendor_app_name}-jetty
-%defattr(644, geowave, geowave, 755) 
-%{geowave_geoserver_home}
-
-%attr(755, geowave, geowave) %{geowave_geoserver_home}/bin
-
-%config %defattr(644, geowave, geowave, 755)
-%{geowave_geoserver_home}/etc
-
-%config %defattr(644, geowave, geowave, 755)
-%{geowave_geoserver_data}
-
-%attr(644, root, root) /etc/logrotate.d/geowave
-%attr(755, root, root) /etc/init.d/geowave
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
