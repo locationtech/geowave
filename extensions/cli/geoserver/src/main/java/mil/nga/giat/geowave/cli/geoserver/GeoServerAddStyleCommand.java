@@ -27,15 +27,12 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 
 @GeowaveOperation(name = "addstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer style")
 public class GeoServerAddStyleCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-sld",
 		"--stylesld"

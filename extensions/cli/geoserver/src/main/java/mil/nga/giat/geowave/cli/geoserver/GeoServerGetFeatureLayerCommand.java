@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +23,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "getfl", parentOperation = GeoServerSection.class)
@@ -33,10 +30,8 @@ import net.sf.json.JSONObject;
 public class GeoServerGetFeatureLayerCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(description = "<layer name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
 	@Override

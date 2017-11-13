@@ -23,15 +23,12 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 
 @GeowaveOperation(name = "addds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer datastore")
 public class GeoServerAddDatastoreCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
