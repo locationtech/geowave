@@ -88,7 +88,6 @@
 							<nonFilteredFileExtensions>
 								<nonFilteredFileExtension>js</nonFilteredFileExtension>
 								<nonFilteredFileExtension>css</nonFilteredFileExtension>
-								<nonFilteredFileExtension>html</nonFilteredFileExtension>
 								<nonFilteredFileExtension>eot</nonFilteredFileExtension>
 								<nonFilteredFileExtension>svg</nonFilteredFileExtension>
 								<nonFilteredFileExtension>ttf</nonFilteredFileExtension>
@@ -96,12 +95,67 @@
 							</nonFilteredFileExtensions>
 						</configuration>
 					</execution>
+					
 				</executions>
 			</plugin>
 			<plugin>
 				<artifactId>maven-antrun-plugin</artifactId>
 				<version>1.7</version>
 				<executions>
+					<execution>
+						<id>generate-index</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-index" dir="${project.basedir}/content/geowave-index" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-index">
+									<map from="${project.basedir}/content/geowave-index/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/geowave-index/index.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-documentation-archives</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-documentation-archives" dir="${project.basedir}/content/documentation-archives" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-documentation-archives">
+									<map from="${project.basedir}/content/documentation-archives/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/documentation-archives/documentation-archives.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>generate-packages</id>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<fileset id="generate-index-file-packages" dir="${project.basedir}/content/packages" includes="*.adoc" />
+								<!-- Abusing this a bit to do some simple templating, I have a file 
+									list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+								<pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-packages">
+									<map from="${project.basedir}/content/packages/" to="include::" />
+								</pathconvert>
+								<echo file="${project.build.directory}/content/packages/packages.adoc">${asciidoc-files}[]</echo>
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
 					<execution>
 						<id>generate-devguide</id>
 						<phase>generate-sources</phase>
@@ -697,6 +751,75 @@
 						<artifactId>asciidoctor-maven-plugin</artifactId>
 						<executions>
 							<execution>
+								<id>generate-html-index</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/geowave-index</sourceDirectory>
+									<sourceDocumentName>index.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-documentation-archives</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/documentation-archives</sourceDirectory>
+									<sourceDocumentName>documentation-archives.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
+								<id>generate-html-packages</id>
+								<phase>generate-resources</phase>
+								<goals>
+									<goal>process-asciidoc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>${project.build.directory}/content/packages</sourceDirectory>
+									<sourceDocumentName>packages.adoc</sourceDocumentName>
+									<backend>html5</backend>
+									<sourceHighlighter>highlightjs</sourceHighlighter>
+									<attributes>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
+										<stylesheet>geowave.css</stylesheet>
+										<imagesdir>./images</imagesdir>
+										<icons>font</icons>
+										<sectanchors>true</sectanchors>
+										<idprefix />
+										<idseparator>-</idseparator>
+										<docinfo1>true</docinfo1>
+									</attributes>
+								</configuration>
+							</execution>
+							<execution>
 								<id>generate-html-userguide</id>
 								<phase>generate-resources</phase>
 								<goals>
@@ -708,7 +831,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -732,7 +855,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -756,7 +879,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -780,15 +903,15 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
-										<toc>right</toc>
 										<icons>font</icons>
 										<sectanchors>true</sectanchors>
 										<idprefix />
 										<idseparator>-</idseparator>
 										<docinfo1>true</docinfo1>
+										<toc>right</toc>
 									</attributes>
 								</configuration>
 							</execution>
@@ -804,7 +927,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -828,7 +951,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -852,7 +975,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -876,7 +999,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -900,7 +1023,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -924,7 +1047,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>
@@ -948,7 +1071,7 @@
 									<backend>html5</backend>
 									<sourceHighlighter>highlightjs</sourceHighlighter>
 									<attributes>
-										<stylesdir>stylesheets</stylesdir>
+										<stylesdir>../geowave-index/stylesheets</stylesdir>
 										<stylesheet>geowave.css</stylesheet>
 										<imagesdir>./images</imagesdir>
 										<toc>right</toc>

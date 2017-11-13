@@ -72,11 +72,11 @@ The RPM packaged version of GeoWave puts a timestamp in the name so it's pretty 
 .Compare version and timestamps of installed RPMs
 [source, bash]
 ----
-[spohnae@c1-master ~]$ rpm -qa | grep geowave
-geowave-0.9.3-apache-core-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-jetty-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-accumulo-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-tools-0.9.3-201602012009.noarch
+[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
+geowave-${project.version}-apache-core-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-jetty-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-accumulo-${project.version}-201602012009.noarch
+geowave-${project.version}-apache-tools-${project.version}-201602012009.noarch
 ----
 
 [[accumulo-config-versioning-advanced]]

@@ -1,7 +1,9 @@
 
 :linkattrs:
 
-= GeoWave Quickstart Guide Vector Demo image:geowave-icon-logo-cropped.png[width="28%"]
+_v${project.version}_
+
+== GeoWave Quickstart Guide Vector Demo image:geowave-icon-logo-cropped.png[width="28%"]
 
 In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
 

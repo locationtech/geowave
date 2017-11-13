@@ -83,7 +83,7 @@ Upon executing the command above, you should see a terminal output beginning wit
 [INFO] GeoWave Integration Tests
 [INFO]
 [INFO] ------------------------------------------------------------------------
-[INFO] Building GeoWave Parent POM 0.9.4-SNAPSHOT
+[INFO] Building GeoWave Parent POM ${project.version}
 [INFO] ------------------------------------------------------------------------
 ----
 

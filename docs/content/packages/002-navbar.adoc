@@ -1,0 +1,42 @@
+[[packages-navbar]]
+<<<
+
+:linkattrs:
+
+== GeoWave
+
+++++
+<!-- Start Navbar -->
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="index.html">GeoWave</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+							<li><a href="userguide.html#installation-from-rpm">Documentation</a></li>                        
+                            <li class="active"><a href="#packages" role="tab" data-toggle="tab">Packages</a></li>
+                            <li><a href="#release" role="tab" data-toggle="tab">Release RPMs</a></li>
+                            <li><a href="#dev" role="tab" data-toggle="tab">Development RPMs</a></li>
+							<li><a href="#release-jars" role="tab" data-toggle="tab">Release JARs</a></li>
+                            <li><a href="#dev-jars" role="tab" data-toggle="tab">Development JARs</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- End Navbar -->
+++++
+
+
+
+

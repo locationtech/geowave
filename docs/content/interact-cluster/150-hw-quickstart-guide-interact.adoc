@@ -2,7 +2,9 @@
 
 :linkattrs:
 
-= GeoWave Quickstart Guide Integrate with the Cluster image:geowave-icon-logo-cropped.png[width="28%"]
+_v${project.version}_
+
+== GeoWave Quickstart Guide Integrate with the Cluster image:geowave-icon-logo-cropped.png[width="28%"]
 
 If you have not successfully completed the link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration] section, please do so before continuing.
 
