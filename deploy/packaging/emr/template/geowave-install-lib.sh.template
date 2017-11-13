@@ -102,6 +102,7 @@ file { '/usr/local/geowave/tomcat8/bin/setenv.sh':
 	mode    => 644,
 	content => 'export JAVA_OPTS="${GEOSERVER_MEMORY}"',
 	require => Package['geowave-${GEOWAVE_VERSION}-apache-gwtomcat'],
+        notify  => Service['gwtomcat'],
 }
 EOF
 
