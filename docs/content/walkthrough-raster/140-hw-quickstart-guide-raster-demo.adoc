@@ -46,7 +46,9 @@ GDAL (Geospatial Data Abstraction Library) is an image processing library. We ne
 
 [source, bash]
 ----
-cd /mnt
+sudo mkdir /mnt/gdal
+
+cd /mnt/gdal
 
 sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
 
@@ -79,25 +81,26 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
 
 [source, bash]
 ----
-geowave config addstore - accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
+-i accumulo -u geowave -p geowave
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 . If running with EMR HBase
 
 [source, bash]
 ----
-geowave config addstore - hbase -z sandbox.hortonworks.com:2181 landsatraster --gwNamespace landsat_raster
+geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
 
-geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
 Add a spatial index.
 
 [source, bash]
 ----
-geowave config addindex - spatial spatial
+geowave config addindex -t spatial spatial
 ----
 
 Filter the dataset by calling analyze. In this example we look for Band 8 images that are in Berlin.

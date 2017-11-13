@@ -73,7 +73,7 @@ sandbox.hortonworks.com:2181
 [source, bash]
 ----
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t accumulo --zookeeper sandbox.hortonworks.com:2181 --instance accumulo \
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
 --user geowave --password geowave
 ----
 
@@ -82,7 +82,7 @@ geowave config addstore gdelt --gwNamespace geowave.gdelt \
 [source, bash]
 ----
 geowave config addstore gdelt --gwNamespace geowave.gdelt \
--t hbase --zookeeper sandbox.hortonworks.com:2181
+-t hbase --zookeeper $HOSTNAME:2181
 ----
 
 . Add a spatial index

@@ -75,24 +75,15 @@
 			<version>2.2.0.RELEASE</version>
 		</dependency>
 	</dependencies>
-	<!-- Tomcat Maven Plugin is added to facilitate testing the webapp without 
-		deploying to an actual server i.e. create a run config with tomcat7:run as 
-		a goal -->
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.tomcat.maven</groupId>
-					<artifactId>tomcat7-maven-plugin</artifactId>
-					<version>2.2</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
 	<profiles>
 		<profile>
 			<id>rest-services-war</id>
 			<dependencies>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-deploy</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-cli-geoserver</artifactId>
@@ -172,6 +163,19 @@
 			<build>
 				<plugins>
 					<plugin>
+						<!-- Tomcat Maven Plugin is added to facilitate testing the webapp 
+							without deploying to an actual server i.e. create a run config with tomcat7:run 
+							as a goal -->
+						<groupId>org.apache.tomcat.maven</groupId>
+						<artifactId>tomcat7-maven-plugin</artifactId>
+						<version>2.2</version>
+						<configuration>
+							<path>/restservices</path>
+							<useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
+							<ignorePackaging>true</ignorePackaging>
+						</configuration>
+					</plugin>
+					<plugin>
 						<!-- we shade this jar so that spark and mapreduce can be launched 
 							seamlessly -->
 						<groupId>org.apache.maven.plugins</groupId>
@@ -218,7 +222,7 @@
 										</transformer>
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-										
+
 										<!-- merge various spring files -->
 										<transformer
 											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
@@ -236,7 +240,7 @@
 											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.factories</resource>
 										</transformer>
-										
+
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
 										<transformer
