@@ -5,7 +5,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLStreamHandler;
 
-import mil.nga.giat.geowave.core.ingest.local.s3.S3URLConnection;
+import mil.nga.giat.geowave.core.ingest.s3.S3URLConnection;
 
 /**
  * @author jenshadlich@googlemail.com

@@ -52,8 +52,8 @@ import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.ingest.local.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
+import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;

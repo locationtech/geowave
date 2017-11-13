@@ -321,9 +321,12 @@ public class BasicMapReduceIT
 
 		// create temporary config file and use it for hdfs FS URL config
 
-		File configFile = File.createTempFile("test_mr", null);
+		File configFile = File.createTempFile(
+				"test_mr",
+				null);
 		ManualOperationParams operationParams = new ManualOperationParams();
-		operationParams.getContext().put(ConfigOptions.PROPERTIES_FILE_CONTEXT,
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
 		final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();

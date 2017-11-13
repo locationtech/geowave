@@ -40,26 +40,7 @@ public class ConfigHDFSCommand extends
 	public void execute(
 			OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.hortonworks.com:8020 )");
-		}
-		url = parameters.get(0);
-		Properties existingProps = getGeoWaveConfigProperties(params);
-
-		// all switches are optional
-		if (url != null) {
-			existingProps.setProperty(
-					HDFS_DEFAULTFS_URL,
-					url);
-		}
-
-		// Write properties file
-		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(params),
-				existingProps,
-				this.getClass(),
-				HDFS_DEFAULTFS_PREFIX);
+		computeResults(params);
 	}
 
 	public static String getHdfsUrl(
@@ -87,6 +68,27 @@ public class ConfigHDFSCommand extends
 	public Void computeResults(
 			OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <HDFS DefaultFS URL> (HDFS hostname:port or namenode HA nameservice, eg: sandbox.hortonworks.com:8020 )");
+		}
+		url = parameters.get(0);
+		Properties existingProps = getGeoWaveConfigProperties(params);
+
+		// all switches are optional
+		if (url != null) {
+			existingProps.setProperty(
+					HDFS_DEFAULTFS_URL,
+					url);
+		}
+
+		// Write properties file
+		ConfigOptions.writeProperties(
+				getGeoWaveConfigFile(params),
+				existingProps,
+				this.getClass(),
+				HDFS_DEFAULTFS_PREFIX);
+
 		return null;
 	}
 

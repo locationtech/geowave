@@ -74,8 +74,8 @@ public class MapReduceTestUtils
 		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
-		
-		//create temporary config file and use it for hdfs FS URL config
+
+		// create temporary config file and use it for hdfs FS URL config
 
 		File configFile = File.createTempFile(
 				"test_mr",
@@ -84,11 +84,11 @@ public class MapReduceTestUtils
 		operationParams.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		
+
 		final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();
 		configHdfs.setHdfsUrlParameter(env.getHdfs());
 		configHdfs.execute(operationParams);
-		
+
 		final LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
 		mrGw.setInputIndexOptions(indexOptions);

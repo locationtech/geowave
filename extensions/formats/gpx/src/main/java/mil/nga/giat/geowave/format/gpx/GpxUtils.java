@@ -113,7 +113,7 @@ public class GpxUtils
 			XMLStreamException {
 		final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
 		try (final InputStream fis = metadataFile.openStream(); final InputStream in = new BufferedInputStream(
-				fis);) {
+				fis)) {
 
 			final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 			XMLEventReader eventReader = null;

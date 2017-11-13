@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.local.s3;
+package mil.nga.giat.geowave.core.ingest.s3;
 
 import java.io.IOException;
 import java.net.URL;
