@@ -11,12 +11,14 @@
 package mil.nga.giat.geowave.format.gdelt;
 
 import java.io.File;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -191,10 +193,12 @@ public class GDELTUtils
 	}
 
 	public static boolean validate(
-			final File file ) {
-		return file.getName().toLowerCase(
+			final URL file ) {
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
-				"\\d{8}\\.export\\.csv\\.zip") || file.getName().toLowerCase(
+				"\\d{8}\\.export\\.csv\\.zip") || FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
 				"\\d{4,6}\\.zip");
 	}

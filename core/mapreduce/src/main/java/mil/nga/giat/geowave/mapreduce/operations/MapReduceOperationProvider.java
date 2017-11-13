@@ -17,6 +17,7 @@ public class MapReduceOperationProvider implements
 {
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
 		CopyCommand.class,
+		ConfigHDFSCommand.class
 	};
 
 	@Override

@@ -71,18 +71,16 @@ public class GPXIngestPluginTest
 		final Set<String> expectedSet = HelperClass.buildSet(expectedResults);
 
 		final GpxIngestPlugin pluggin = new GpxIngestPlugin();
-		pluggin.init(new File(
-				this.getClass().getClassLoader().getResource(
-						"metadata.xml").getPath()).getParentFile());
+		pluggin.init(this.getClass().getClassLoader().getResource(
+				"metadata.xml"));
 
 		final ByteArrayId indexId = new ByteArrayId(
 				"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(indexId);
 		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
-				new File(
-						this.getClass().getClassLoader().getResource(
-								"12345.xml").getPath()),
+				this.getClass().getClassLoader().getResource(
+						"12345.xml"),
 				indexIds,
 				"");
 

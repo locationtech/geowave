@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.format.twitter;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
@@ -27,6 +28,7 @@ import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -36,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.net.URL;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.util.ArrayList;
@@ -86,13 +89,13 @@ public class TwitterIngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {
+			final URL baseDirectory ) {
 
 	}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		return TwitterUtils.validate(file);
 	}
 
@@ -103,15 +106,15 @@ public class TwitterIngestPlugin extends
 
 	@Override
 	public WholeFile[] toAvroObjects(
-			final File input ) {
+			final URL input ) {
 		final WholeFile avroFile = new WholeFile();
-		avroFile.setOriginalFilePath(input.getAbsolutePath());
+		avroFile.setOriginalFilePath(input.getPath());
 		try {
-			avroFile.setOriginalFile(ByteBuffer.wrap(Files.readAllBytes(input.toPath())));
+			avroFile.setOriginalFile(ByteBuffer.wrap(IOUtils.toByteArray(input)));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
-					"Unable to read Twitter file: " + input.getAbsolutePath(),
+					"Unable to read Twitter file: " + input.getPath(),
 					e);
 			return new WholeFile[] {};
 		}

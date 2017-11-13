@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.mapreduce.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -65,6 +66,15 @@ public class CopyCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
+
+		if (options.getHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+			options.setHdfsHostPort(hdfsFSUrl);
+		}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

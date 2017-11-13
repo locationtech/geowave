@@ -161,11 +161,11 @@ public class GeoWaveBasicSpatialVectorIT extends
 		if ((nthreads > 0)) {
 			try {
 				testStats(
-						new File[] {
+						new URL[] {
 							new File(
-									HAIL_SHAPEFILE_FILE),
+									HAIL_SHAPEFILE_FILE).toURI().toURL(),
 							new File(
-									TORNADO_TRACKS_SHAPEFILE_FILE)
+									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
 						},
 						TestUtils.DEFAULT_SPATIAL_INDEX,
 						true);

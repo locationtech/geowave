@@ -1,0 +1,2 @@
+com.upplication.s3fs.S3FileSystemProvider
+hdfs.jsr203.HadoopFileSystemProvider

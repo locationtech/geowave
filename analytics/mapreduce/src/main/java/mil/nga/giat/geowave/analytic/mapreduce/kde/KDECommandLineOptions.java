@@ -37,7 +37,7 @@ public class KDECommandLineOptions
 	@Parameter(names = "--coverageName", required = true, description = "The coverage name")
 	private String coverageName;
 
-	@Parameter(names = "--hdfsHostPort", required = true, description = "The hdfs host port", converter = HdfsHostPortConverter.class)
+	@Parameter(names = "--hdfsHostPort", description = "The hdfs host port", converter = HdfsHostPortConverter.class)
 	private String hdfsHostPort;
 
 	@Parameter(names = "--jobSubmissionHostPort", required = true, description = "The job submission tracker")
