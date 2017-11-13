@@ -27,7 +27,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "addlayer", parentOperation = GeoServerSection.class)
@@ -35,8 +34,6 @@ import net.sf.json.JSONObject;
 public class GeoServerAddLayerCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	public static enum AddOption {
 		ALL,
 		RASTER,

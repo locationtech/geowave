@@ -10,6 +10,23 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_CS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_ALG;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_FILE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_TYPE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEY_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_SECURITY_PROTOCOL;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTMGR_ALG;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTMGR_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_FILE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PASS;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PROVIDER;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_TYPE;
+import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +53,6 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriBuilder;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -46,17 +62,15 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.glassfish.jersey.SslConfigurator;
+import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.glassfish.jersey.SslConfigurator;
-
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.beust.jcommander.ParameterException;
 
-import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.*;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;

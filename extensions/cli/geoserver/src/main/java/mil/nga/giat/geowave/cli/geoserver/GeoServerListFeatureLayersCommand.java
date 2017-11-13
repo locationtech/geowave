@@ -10,8 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -21,8 +19,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "listfl", parentOperation = GeoServerSection.class)
@@ -30,25 +26,23 @@ import net.sf.json.JSONObject;
 public class GeoServerListFeatureLayersCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
 	}, required = false, description = "Workspace Name")
-	private final String workspace = null;
+	private String workspace = null;
 
 	@Parameter(names = {
 		"-ds",
 		"--datastore"
 	}, required = false, description = "Datastore Name")
-	private final String datastore = null;
+	private String datastore = null;
 
 	@Parameter(names = {
 		"-g",
 		"--geowaveOnly"
 	}, required = false, description = "Show only GeoWave feature layers (default: false)")
-	private final Boolean geowaveOnly = false;
+	private Boolean geowaveOnly = false;
 
 	@Override
 	public void execute(

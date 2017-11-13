@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,16 +23,12 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 @GeowaveOperation(name = "rmcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer Coverage Store")
 public class GeoServerRemoveCoverageStoreCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-ws",
 		"--workspace"
@@ -41,7 +36,7 @@ public class GeoServerRemoveCoverageStoreCommand extends
 	private String workspace;
 
 	@Parameter(description = "<coverage store name>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<String>();
 	private String cvgstoreName = null;
 
 	@Override
