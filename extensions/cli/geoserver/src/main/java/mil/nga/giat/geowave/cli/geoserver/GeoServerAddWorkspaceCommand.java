@@ -30,8 +30,6 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 public class GeoServerAddWorkspaceCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(description = "<workspace name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;

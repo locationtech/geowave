@@ -10,8 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.geoserver;
 
-import java.io.File;
-
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -21,8 +19,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -31,8 +27,6 @@ import net.sf.json.JSONObject;
 public class GeoServerListDatastoresCommand extends
 		GeoServerCommand<String>
 {
-	private GeoServerRestClient geoserverClient = null;
-
 	@Parameter(names = {
 		"-ws",
 		"--workspace"

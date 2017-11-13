@@ -7,7 +7,7 @@ abstract public class GeoServerCommand<T> extends
 		ServiceEnabledCommand<T>
 {
 
-	private GeoServerRestClient geoserverClient = null;
+	protected GeoServerRestClient geoserverClient = null;
 
 	@Override
 	public boolean prepare(
