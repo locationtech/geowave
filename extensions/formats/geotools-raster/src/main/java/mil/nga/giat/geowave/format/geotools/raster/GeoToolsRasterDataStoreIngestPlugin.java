@@ -197,7 +197,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 
 				if (optionProvider.isSeparateBands() && (coverage.getNumSampleDimensions() > 1)) {
 					final String baseName = optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
-							: FilenameUtils.getBaseName(input.getPath());
+							: FilenameUtils.getName(input.getPath());
 					final double[][] nodata = optionProvider.getNodata(coverage.getNumSampleDimensions());
 					for (int b = 0; b < coverage.getNumSampleDimensions(); b++) {
 						final RasterDataAdapter adapter = new RasterDataAdapter(

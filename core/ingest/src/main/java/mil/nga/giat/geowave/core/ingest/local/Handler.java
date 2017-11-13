@@ -7,10 +7,6 @@ import java.net.URLStreamHandler;
 
 import mil.nga.giat.geowave.core.ingest.s3.S3URLConnection;
 
-/**
- * @author jenshadlich@googlemail.com
- */
-
 public class Handler extends
 		URLStreamHandler
 {

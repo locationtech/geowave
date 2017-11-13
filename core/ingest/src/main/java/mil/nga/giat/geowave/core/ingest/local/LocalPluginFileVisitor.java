@@ -134,7 +134,6 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			final Path path,
 			final BasicFileAttributes bfa )
 			throws IOException {
-		// final File file = path.toFile();
 		final URL file = path.toUri().toURL();
 		for (final PluginVisitor visitor : pluginVisitors) {
 			if (visitor.supportsFile(file)) {

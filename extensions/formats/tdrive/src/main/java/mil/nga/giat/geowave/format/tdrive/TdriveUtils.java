@@ -89,7 +89,6 @@ public class TdriveUtils
 
 	public static boolean validate(
 			final URL file ) {
-		// Scanner scanner = null;
 		try (Scanner scanner = new Scanner(
 				file.openStream(),
 				StringUtils.GEOWAVE_CHAR_SET.toString())) {

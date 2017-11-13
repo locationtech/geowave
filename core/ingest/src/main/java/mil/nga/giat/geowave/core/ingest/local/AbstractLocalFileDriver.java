@@ -157,7 +157,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				setURLStreamHandlerFactory();
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-				LOGGER.error("Error in setting up S3URLStreamHandle Factory");
+				LOGGER.error("Error in setting up S3URLStreamHandler Factory",e1);
 				return;
 			}
 
@@ -220,7 +220,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				}
 			}
 			catch (URISyntaxException e) {
-				LOGGER.error("Unable to ingest data, Inavlid HDFS Path");
+				LOGGER.error("Unable to ingest data, Inavlid HDFS Path",e);
 				return;
 			}
 		}
