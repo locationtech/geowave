@@ -101,12 +101,10 @@ public class MapReduceToGeowaveCommand extends
 	}
 
 	public void setParameters(
-			final String hdfsHostPort,
 			final String hdfsPath,
 			final String storeName,
 			final String commaSeparatedIndexes ) {
 		parameters = new ArrayList<String>();
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 		parameters.add(storeName);
 		parameters.add(commaSeparatedIndexes);

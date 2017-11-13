@@ -77,11 +77,9 @@ public class LocalToHdfsCommand extends
 
 	public void setParameters(
 			final String fileOrDirectory,
-			final String hdfsHostPort,
 			final String hdfsPath ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 	}
 

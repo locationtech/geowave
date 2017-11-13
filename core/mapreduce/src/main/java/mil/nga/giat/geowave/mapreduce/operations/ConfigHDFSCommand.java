@@ -9,8 +9,6 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
-import mil.nga.giat.geowave.core.cli.api.Command;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
@@ -22,7 +20,7 @@ public class ConfigHDFSCommand extends
 		ServiceEnabledCommand<Void>
 {
 
-	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defultFS";
+	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defaultFS";
 	private static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";
 
 	@Parameter(description = "<HDFS DefaultFS URL>")
@@ -77,6 +75,12 @@ public class ConfigHDFSCommand extends
 			hdfsFSUrl = "hdfs://" + hdfsFSUrl;
 		}
 		return hdfsFSUrl;
+	}
+
+	public void setHdfsUrlParameter(
+			String hdfsFsUrl ) {
+		parameters = new ArrayList<String>();
+		parameters.add(hdfsFsUrl);
 	}
 
 	@Override

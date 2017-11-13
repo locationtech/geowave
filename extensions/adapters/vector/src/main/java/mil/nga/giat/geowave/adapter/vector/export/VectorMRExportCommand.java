@@ -61,7 +61,6 @@ public class VectorMRExportCommand extends
 					"Requires arguments: <path to base directory to write to> <store name>");
 		}
 
-		// String hdfsHostPort = parameters.get(0);
 		String hdfsPath = parameters.get(0);
 		String storeName = parameters.get(1);
 
@@ -96,11 +95,9 @@ public class VectorMRExportCommand extends
 	}
 
 	public void setParameters(
-			String hdfsHostPort,
 			String hdfsPath,
 			String storeName ) {
 		this.parameters = new ArrayList<String>();
-		this.parameters.add(hdfsHostPort);
 		this.parameters.add(hdfsPath);
 		this.parameters.add(storeName);
 	}

@@ -101,13 +101,11 @@ public class LocalToMapReduceToGeowaveCommand extends
 
 	public void setParameters(
 			final String fileOrDirectory,
-			final String hdfsHostPort,
 			final String pathToBaseDirectory,
 			final String storeName,
 			final String indexList ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
 		parameters.add(pathToBaseDirectory);
 		parameters.add(storeName);
 		parameters.add(indexList);
