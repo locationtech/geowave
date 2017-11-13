@@ -32,9 +32,7 @@ node ('master') {
       mavenLocalRepo: "${env.WORKSPACE}/docker-root/.m2/repository/",
       mavenOpts: "-Xmx2g -Xms1g",
       options: [junitPublisher(disabled: true), findbugsPublisher(disabled: true)]) {
-      sh "echo ${env.MAVEN_OPTS}"
-      sh "echo \"-------------------------------------------------------\" "
-      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip -e"
+      sh "mvn deploy -DskipTests -Dfindbugs.skip -Dformatter.skip"
      }
   }
 
