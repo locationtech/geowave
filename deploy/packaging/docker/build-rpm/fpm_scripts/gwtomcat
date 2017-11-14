@@ -57,6 +57,9 @@ case "$1" in
     #Check for multiple pid's
     if (( $(count() { echo $#; }; count ${PID}) > 1 )); then
       logger -s "Detected multiple pids in ${pidfile}. Killing all pid's found in ${pidfile}"
+      #Attempt a graceful shutdown first
+      $CATALINA_HOME/bin/shutdown.sh
+      sleep 5
       for x in $PID
       do
         #if the process is running kill it and remove it from pidfile
