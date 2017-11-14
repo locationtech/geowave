@@ -38,11 +38,6 @@ public class GeoServerRemoveFeatureLayerCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <layer name>");
-		}
-
 		JCommander.getConsole().println(
 				computeResults(params));
 	}
@@ -51,6 +46,11 @@ public class GeoServerRemoveFeatureLayerCommand extends
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <layer name>");
+		}
+		
 		layerName = parameters.get(0);
 
 		final Response deleteLayerResponse = geoserverClient.deleteFeatureLayer(layerName);

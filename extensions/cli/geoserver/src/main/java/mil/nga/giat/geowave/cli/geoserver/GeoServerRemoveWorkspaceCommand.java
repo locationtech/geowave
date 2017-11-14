@@ -37,11 +37,6 @@ public class GeoServerRemoveWorkspaceCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <workspace name>");
-		}
-
 		JCommander.getConsole().println(
 				computeResults(params));
 	}
@@ -50,6 +45,11 @@ public class GeoServerRemoveWorkspaceCommand extends
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <workspace name>");
+		}
+
 		wsName = parameters.get(0);
 
 		final Response deleteWorkspaceResponse = geoserverClient.deleteWorkspace(wsName);
