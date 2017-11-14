@@ -32,35 +32,58 @@ RETVAL=0
 case "$1" in
   start)
     PID=`pidofproc -p ${pidfile} ${PROCESS_NAME}`
+
+    if (( $(count() { echo $#; }; count $PID) > 1 )); then
+      logger -s "Detected multiple pid's in ${pidfile}. Please run \"service ${PROCESS_NAME} stop\" first"
+      exit;
+    fi
     if [[ (-n ${PID}) && ($PID -gt 0) ]]; then
       logger -s "${PROCESS_NAME}(pid ${PID}) is  already running."
       exit;
     fi
-    if [ -f $CATALINA_HOME/bin/startup.sh ];
-      then
-        logger -s "Starting Tomcat"
-        /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/startup.sh -Dprocessname=${PROCESS_NAME}"
-        PID=`ps -eaf|grep processname=${PROCESS_NAME}|grep -v grep|awk '{print $2}'`
-        RETVAL=$?
-        [ $RETVAL = 0 ] && touch ${lockfile}
-        [ $RETVAL = 0 ] && echo "${PID}" > ${pidfile}
+    if [ -f $CATALINA_HOME/bin/startup.sh ]; then
+      logger -s "Starting Tomcat"
+      /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/startup.sh -Dprocessname=${PROCESS_NAME}"
+      PID=`ps -eaf|grep processname=${PROCESS_NAME}|grep -v grep|awk '{print $2}'`
+      RETVAL=$?
+      [ $RETVAL = 0 ] && touch ${lockfile}
+      [ $RETVAL = 0 ] && echo "${PID}" > ${pidfile}
     fi
     ;;
   stop)
     PID=`pidofproc -p ${pidfile} ${PROCESS_NAME}`
-    ## if PID valid run shutdown.sh
-    if [[ -z ${PID} ]];then
-        logger -s "${PROCESS_NAME} is not running."
-        exit;
+
+    #If tomcat crashes the pid file is no longer valid
+    #In the event of multiple pid's, kill the pid's in the pid file and delete it
+    #Check for multiple pid's
+    if (( $(count() { echo $#; }; count $PID) > 1 )); then
+      logger -s "Detected multiple pids in ${pidfile}. Killing all pid's found in ${pidfile}"
+      for x in $PID
+      do
+        #if the process is running kill it and remove it from pidfile
+        if ps -p $x > /dev/null
+        then
+          kill -9 $x
+          sed -e /$x/d -i ${pidfile}
+        fi
+      done
+      rm -f ${lockfile}
+      rm -f ${pidfile}
+      exit
     fi
 
-    if [[ (${PID} -gt 0) && (-f $CATALINA_HOME/bin/shutdown.sh) ]];
-      then
-        logger -s "Stopping Tomcat"
-        /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/shutdown.sh"
-        RETVAL=$?
-        [ $RETVAL = 0 ] && rm -f ${lockfile}
-        [ $RETVAL = 0 ] && rm -f ${pidfile}
+    ## if PID valid run shutdown.sh
+    if [[ -z ${PID} ]];then
+      logger -s "${PROCESS_NAME} is not running."
+      exit;
+    fi
+
+    if [[ (${PID} -gt 0) && (-f $CATALINA_HOME/bin/shutdown.sh) ]]; then
+      logger -s "Stopping Tomcat"
+      /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/shutdown.sh"
+      RETVAL=$?
+      [ $RETVAL = 0 ] && rm -f ${lockfile}
+      [ $RETVAL = 0 ] && rm -f ${pidfile}
     fi
     ;;
   status)
@@ -74,11 +97,10 @@ case "$1" in
     $0 start
     ;;
   version)
-    if [ -f $CATALINA_HOME/bin/version.sh ];
-      then
-        logger -s "Display Tomcat Version"
-        /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/version.sh"
-        RETVAL=$?
+    if [ -f $CATALINA_HOME/bin/version.sh ]; then
+      logger -s "Display Tomcat Version"
+      /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/version.sh"
+      RETVAL=$?
     fi
     ;;
   *)
