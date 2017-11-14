@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <hr>
 <br>
@@ -188,21 +188,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#init-java.io.File-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</code>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#supportsFile-java.io.File-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given
  extensions.</div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#toGeoWaveData-java.io.File-java.util.Collection-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/format/geotools/vector/GeoToolsVectorDataStoreIngestPlugin.html#toGeoWaveData-java.net.URL-java.util.Collection-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibility)</code>
 <div class="block">Convert from an expected input format to a data format that can be
@@ -277,19 +277,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </dl>
 </li>
 </ul>
-<a name="init-java.io.File-">
+<a name="init-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>public&nbsp;void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.io.File-">LocalPluginBase</a></code></span></div>
+<pre>public&nbsp;void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">LocalPluginBase</a></code></span></div>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.io.File-">init</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">init</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>baseDirectory</code> - The base directory provided as a command-line argument (if the
             argument is a file, the base directory given will be its
@@ -297,14 +297,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </dl>
 </li>
 </ul>
-<a name="supportsFile-java.io.File-">
+<a name="supportsFile-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>supportsFile</h4>
-<pre>public&nbsp;boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.io.File-">LocalPluginBase</a></code></span></div>
+<pre>public&nbsp;boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">LocalPluginBase</a></code></span></div>
 <div class="block">This method will be called for every file that matches the given
  extensions. It is an opportunity for the plugin to perform arbitrarily
  complex acceptance filtering on a per file basis, but it is important to
@@ -312,7 +312,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
  intensive and the directory of files to recurse is large.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.io.File-">supportsFile</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>file</code> - The file to determine if this plugin supports for ingestion</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -342,13 +342,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </dl>
 </li>
 </ul>
-<a name="toGeoWaveData-java.io.File-java.util.Collection-java.lang.String-">
+<a name="toGeoWaveData-java.net.URL-java.util.Collection-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toGeoWaveData</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveData(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;input,
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;toGeoWaveData(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input,
                                                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                                                                                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;visibility)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">IngestPluginBase</a></code></span></div>
@@ -356,9 +356,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
  directly ingested into GeoWave</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>input</code> - The expected input.</dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html#toGeoWaveData-I-java.util.Collection-java.lang.String-">toGeoWaveData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
 <dd><code>primaryIndexIds</code> - The set of index IDs specified via a commandline argument
             (this is typically either the default spatial index or default
             spatial-temporal index)</dd>

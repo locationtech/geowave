@@ -121,6 +121,7 @@ mil.nga.giat.geowave.core.ingest.kafka
 mil.nga.giat.geowave.core.ingest.local
 mil.nga.giat.geowave.core.ingest.operations
 mil.nga.giat.geowave.core.ingest.operations.options
+mil.nga.giat.geowave.core.ingest.s3
 mil.nga.giat.geowave.core.ingest.spi
 mil.nga.giat.geowave.core.store
 mil.nga.giat.geowave.core.store.adapter

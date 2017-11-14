@@ -165,7 +165,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html#toAvroObjects-java.io.File-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;f)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AbstractStageWholeFileToAvro.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;f)</code>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
@@ -189,7 +189,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.io.File-">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.io.File-">supportsFile</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.ingest.index.IndexProvider">
@@ -246,18 +246,18 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/A
 </dl>
 </li>
 </ul>
-<a name="toAvroObjects-java.io.File-">
+<a name="toAvroObjects-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toAvroObjects</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>[]&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;f)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.io.File-">AvroPluginBase</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>[]&nbsp;toAvroObjects(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;f)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.net.URL-">AvroPluginBase</a></code></span></div>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.io.File-">toAvroObjects</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html#toAvroObjects-java.net.URL-">toAvroObjects</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroPluginBase</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/WholeFile.html" title="class in mil.nga.giat.geowave.core.ingest.avro">WholeFile</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>f</code> - The file to convert to Avro</dd>
 <dt><span class="returnLabel">Returns:</span></dt>

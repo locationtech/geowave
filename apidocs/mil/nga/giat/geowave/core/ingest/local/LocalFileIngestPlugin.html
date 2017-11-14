@@ -99,7 +99,7 @@
 </dl>
 <dl>
 <dt>All Superinterfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></dd>
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
@@ -108,7 +108,7 @@
 <hr>
 <br>
 <pre>public interface <span class="typeNameLabel">LocalFileIngestPlugin&lt;O&gt;</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a></pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>,O&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/index/IndexProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.index">IndexProvider</a></pre>
 <div class="block">This is the primary plugin for directly ingesting data to GeoWave from local
  files. It will write any GeoWaveData that is emitted for any supported file.</div>
 </li>
@@ -128,7 +128,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Loc
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalPluginBase</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.io.File-">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.io.File-">supportsFile</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#getFileExtensionFilters--">getFileExtensionFilters</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">init</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.ingest.IngestPluginBase">

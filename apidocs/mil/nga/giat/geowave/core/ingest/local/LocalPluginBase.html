@@ -140,14 +140,14 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.io.File-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)</code>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.io.File-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalPluginBase.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given
  extensions.</div>
 </td>
@@ -182,30 +182,30 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="init-java.io.File-">
+<a name="init-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
-<pre>void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;baseDirectory)</pre>
+<pre>void&nbsp;init(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;url)</pre>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>baseDirectory</code> - The base directory provided as a command-line argument (if the
+<dd><code>url</code> - The base directory provided as a command-line argument (if the
             argument is a file, the base directory given will be its
             parent directory).</dd>
 </dl>
 </li>
 </ul>
-<a name="supportsFile-java.io.File-">
+<a name="supportsFile-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>supportsFile</h4>
-<pre>boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file)</pre>
+<pre>boolean&nbsp;supportsFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</pre>
 <div class="block">This method will be called for every file that matches the given
  extensions. It is an opportunity for the plugin to perform arbitrarily
  complex acceptance filtering on a per file basis, but it is important to

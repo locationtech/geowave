@@ -205,11 +205,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxUtils.html#parseOsmMetadata-java.io.File-">parseOsmMetadata</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;metadataFile)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxUtils.html#parseOsmMetadata-java.net.URL-">parseOsmMetadata</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;metadataFile)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxUtils.html#validateGpx-java.io.File-">validateGpx</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;gpxDocument)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxUtils.html#validateGpx-java.net.URL-">validateGpx</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;gpxDocument)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -338,13 +338,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="parseOsmMetadata-java.io.File-">
+<a name="parseOsmMetadata-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>parseOsmMetadata</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&gt;&nbsp;parseOsmMetadata(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;metadataFile)
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>,<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&gt;&nbsp;parseOsmMetadata(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;metadataFile)
                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/FileNotFoundException.html?is-external=true" title="class or interface in java.io">FileNotFoundException</a>,
                                                   <a href="http://docs.oracle.com/javase/7/docs/api/javax/xml/stream/XMLStreamException.html?is-external=true" title="class or interface in javax.xml.stream">XMLStreamException</a></pre>
 <dl>
@@ -390,13 +390,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public static&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;createGPXWaypointDataType()</pre>
 </li>
 </ul>
-<a name="validateGpx-java.io.File-">
+<a name="validateGpx-java.net.URL-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>validateGpx</h4>
-<pre>public static&nbsp;boolean&nbsp;validateGpx(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;gpxDocument)
+<pre>public static&nbsp;boolean&nbsp;validateGpx(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;gpxDocument)
                            throws <a href="http://docs.oracle.com/javase/7/docs/api/org/xml/sax/SAXException.html?is-external=true" title="class or interface in org.xml.sax">SAXException</a>,
                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>

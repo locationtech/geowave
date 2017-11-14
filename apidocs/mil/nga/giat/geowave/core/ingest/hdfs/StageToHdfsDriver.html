@@ -173,14 +173,15 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageToHdfsDriver.html#processFile-java.io.File-java.lang.String-mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin-mil.nga.giat.geowave.core.ingest.hdfs.StageRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageToHdfsDriver.html#processFile-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin-mil.nga.giat.geowave.core.ingest.hdfs.StageRunData-">processFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageRunData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs">StageRunData</a>&nbsp;runData)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageToHdfsDriver.html#runOperation-java.lang.String-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageToHdfsDriver.html#runOperation-java.lang.String-java.io.File-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -188,7 +189,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.ingest.local.<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-mil.nga.giat.geowave.core.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processInput-java.lang.String-java.util.Map-R-">processInput</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#checkIndexesAgainstProvider-java.lang.String-mil.nga.giat.geowave.core.ingest.DataAdapterProvider-java.util.List-">checkIndexesAgainstProvider</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processInput-java.lang.String-java.io.File-java.util.Map-R-">processInput</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -231,29 +232,30 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="processFile-java.io.File-java.lang.String-mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin-mil.nga.giat.geowave.core.ingest.hdfs.StageRunData-">
+<a name="processFile-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin-mil.nga.giat.geowave.core.ingest.hdfs.StageRunData-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>processFile</h4>
-<pre>protected&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;file,
+<pre>protected&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;&nbsp;plugin,
                            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageRunData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs">StageRunData</a>&nbsp;runData)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.io.File-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageRunData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs">StageRunData</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/avro/AvroFormatPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.avro">AvroFormatPlugin</a>&lt;?,?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/StageRunData.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs">StageRunData</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
-<a name="runOperation-java.lang.String-">
+<a name="runOperation-java.lang.String-java.io.File-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>runOperation</h4>
-<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath)</pre>
+<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</pre>
 </li>
 </ul>
 </li>
