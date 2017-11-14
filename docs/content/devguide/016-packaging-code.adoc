@@ -43,7 +43,7 @@ $ vi ~/.profile         [Press Enter]
 +
 [source]
 ----
-alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-0.9.5-SNAPSHOT-tools.jar mil.nga.giat.geowave.core.cli.GeoWaveMain"
+alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-${project.version}-tools.jar mil.nga.giat.geowave.core.cli.GeoWaveMain"
 ----
 +
 [NOTE]
@@ -65,5 +65,5 @@ Replace $GEOWAVE_HOME with the value of the GeoWave home directory or create an 
 $ source ~/.profile     [Press Enter]
 ----
 
-At this point, you can now run GeoWave Command Line Instructions. For a full list of these commands, please see the link:http://locationtech.github.io/geowave/commands.html[GeoWave CLI Appendix, window="_blank"].
+At this point, you can now run GeoWave Command Line Instructions. For a full list of these commands, please see the link:commands.html[GeoWave CLI Appendix, window="_blank"].
 

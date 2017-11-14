@@ -1,6 +1,8 @@
 [[commands-intro]]
 <<<
 
+:linkattrs:
+
 _v${project.version}_
 
 = GeoWave Command Line Controls image:geowave-icon-logo-cropped.png[width="28%"]
@@ -19,6 +21,6 @@ ifdef::backend-html5[]
 
 === icon:github[] https://github.com/locationtech/geowave[GitHub]
 
-=== icon:file-archive-o[] http://locationtech.github.io/geowave/packages.html[Packages]
+=== icon:file-archive-o[] link:packages.html[Packages]
 
 endif::backend-html5[]

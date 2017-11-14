@@ -1,0 +1,64 @@
+[[index-navbar]]
+<<<
+
+:linkattrs:
+
+++++
+<!-- Start Navbar -->
+    <div class="navbar-wrapper">
+        <div class="container">
+            <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">GeoWave</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li><a href="quickstart.html">Quickstart Guides</a></li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">Documentation <span class="caret"></span></a>
+                                <ul class="dropdown-menu multi-level" role="menu">
+                                    <li><a href="userguide.html">User Guide</a></li>
+									<li><a href="devguide.html">Developer Guide</a></li>
+									<li><a href="commands.html">CLI Commands</a></li>
+									<li class="divider"></li>
+									<li class="dropdown-submenu" id="releases_submenu">
+										<a href="#" class="dropdown-toggle" data-toggle="dropdown">Releases</a>
+									</li>
+                                </ul>
+                            </li>
+                            <li><a href="userguide.html#example-screenshots">Screenshots</a></li>
+                            <li><a href="userguide.html#installation-from-rpm">Installation</a></li>
+                            <li><a href="userguide.html#building-2">Building</a></li>
+                            <li><a href="userguide.html#ingest">Ingest</a></li>
+                            <li><a href="userguide.html#what-is-geowave">About</a></li>
+							<li><a href="packages.html">Packages</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">Source Code <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="apidocs/index.html">Javadoc</a></li>
+                                    <li><a href="https://github.com/locationtech/geowave/zipball/master">Zip (master)</a></li>
+                                    <li><a href="https://github.com/locationtech/geowave/tarball/master">Tar (master)</a></li>
+                                    <li class="divider"></li>
+                                    <li><a href="https://github.com/locationtech/geowave/">GitHub Project</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- End Navbar -->
+++++
+
+
+

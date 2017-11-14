@@ -10,7 +10,7 @@ $ geowave ingest listplugins
 
 [NOTE]
 ====
-You can add more by simply copying a desired plugin into the /usr/local/geowave/tools/plugins directory.
+You can add more by simply copying a desired plugin into the _/usr/local/geowave/tools/plugins_ directory.
 ====
 
 The above listplugins command should yield a result similar to what is shown below.
