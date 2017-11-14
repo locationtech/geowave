@@ -24,7 +24,8 @@ public class IngestOperationProvider implements
 		LocalToHdfsCommand.class,
 		LocalToKafkaCommand.class,
 		LocalToMapReduceToGeowaveCommand.class,
-		MapReduceToGeowaveCommand.class
+		MapReduceToGeowaveCommand.class,
+		ConfigAWSCommand.class
 	};
 
 	@Override

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.Collection;
 
 import org.slf4j.Logger;
@@ -58,11 +59,10 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 
 	@Override
 	public CloseableIterator<GeoWaveData<T>> toGeoWaveData(
-			final File input,
+			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
-		try (final InputStream inputStream = new FileInputStream(
-				input)) {
+		try (final InputStream inputStream = input.openStream()) {
 			return toGeoWaveDataInternal(
 					inputStream,
 					primaryIndexIds,

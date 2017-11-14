@@ -10,9 +10,11 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -22,10 +24,12 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.hdfs.StageToHdfsDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "localToHdfs", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Stage supported files in local file system to HDFS")
@@ -33,7 +37,7 @@ public class LocalToHdfsCommand extends
 		ServiceEnabledCommand<Void>
 {
 
-	@Parameter(description = "<file or directory> <hdfs host:port> <path to base directory to write to>")
+	@Parameter(description = "<file or directory> <path to base directory to write to>")
 	private List<String> parameters = new ArrayList<String>();
 
 	// This helper is used to load the list of format SPI plugins that will be
@@ -73,11 +77,9 @@ public class LocalToHdfsCommand extends
 
 	public void setParameters(
 			final String fileOrDirectory,
-			final String hdfsHostPort,
 			final String hdfsPath ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 	}
 
@@ -104,14 +106,18 @@ public class LocalToHdfsCommand extends
 			final OperationParams params )
 			throws Exception {
 		// Ensure we have all the required arguments
-		if (parameters.size() != 3) {
+		if (parameters.size() != 2) {
 			throw new ParameterException(
-					"Requires arguments: <file or directory> <hdfs host:port> <path to base directory to write to>");
+					"Requires arguments: <file or directory> <path to base directory to write to>");
 		}
-
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 		final String inputPath = parameters.get(0);
-		String hdfsHostPort = parameters.get(1);
-		final String basePath = parameters.get(2);
+		final String basePath = parameters.get(1);
 
 		// Ingest Plugins
 		final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();
@@ -124,7 +130,9 @@ public class LocalToHdfsCommand extends
 				localInputOptions);
 
 		// Execute
-		if (!driver.runOperation(inputPath)) {
+		if (!driver.runOperation(
+				inputPath,
+				configFile)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}

@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.adapter.raster.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -28,6 +29,7 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "resize", parentOperation = RasterSection.class)
 @Parameters(commandDescription = "Resize Raster Tiles")
@@ -89,7 +91,16 @@ public class ResizeCommand extends
 			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 		}
 
-		final RasterTileResizeJobRunner runner = new RasterTileResizeJobRunner(
+		if (options.getHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+			options.setHdfsHostPort(hdfsFSUrl);
+		}
+
+		RasterTileResizeJobRunner runner = new RasterTileResizeJobRunner(
 				inputStoreOptions,
 				outputStoreOptions,
 				options);

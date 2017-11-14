@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -36,6 +37,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "localToMrGW", parentOperation = IngestSection.class)
 @Parameters(commandDescription = "Copy supported files from local file system to HDFS and ingest from HDFS")
@@ -43,7 +45,7 @@ public class LocalToMapReduceToGeowaveCommand extends
 		ServiceEnabledCommand<Void>
 {
 
-	@Parameter(description = "<file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>")
+	@Parameter(description = "<file or directory> <path to base directory to write to> <store name> <comma delimited index/group list>")
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
@@ -85,9 +87,9 @@ public class LocalToMapReduceToGeowaveCommand extends
 			throws Exception {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 5) {
+		if (parameters.size() != 4) {
 			throw new ParameterException(
-					"Requires arguments: <file or directory> <hdfs host:port> <path to base directory to write to> <store name> <comma delimited index/group list>");
+					"Requires arguments: <file or directory> <path to base directory to write to> <store name> <comma delimited index/group list>");
 		}
 
 		computeResults(params);
@@ -99,13 +101,11 @@ public class LocalToMapReduceToGeowaveCommand extends
 
 	public void setParameters(
 			final String fileOrDirectory,
-			final String hdfsHostPort,
 			final String pathToBaseDirectory,
 			final String storeName,
 			final String indexList ) {
 		parameters = new ArrayList<String>();
 		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
 		parameters.add(pathToBaseDirectory);
 		parameters.add(storeName);
 		parameters.add(indexList);
@@ -175,13 +175,16 @@ public class LocalToMapReduceToGeowaveCommand extends
 		}
 
 		final String inputPath = parameters.get(0);
-		String hdfsHostPort = parameters.get(1);
-		final String basePath = parameters.get(2);
-		final String inputStoreName = parameters.get(3);
-		final String indexList = parameters.get(4);
+		String basePath = parameters.get(1);
+		String inputStoreName = parameters.get(2);
+		String indexList = parameters.get(3);
 
 		// Config file
-		final File configFile = getGeoWaveConfigFile(params);
+		File configFile = getGeoWaveConfigFile(params);
+		Properties configProperties = ConfigOptions.loadProperties(
+				configFile,
+				null);
+		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
@@ -221,7 +224,9 @@ public class LocalToMapReduceToGeowaveCommand extends
 					localInputOptions);
 
 			// Execute
-			if (!driver.runOperation(inputPath)) {
+			if (!driver.runOperation(
+					inputPath,
+					configFile)) {
 				throw new RuntimeException(
 						"Ingest failed to execute");
 			}

@@ -13,6 +13,8 @@ package mil.nga.giat.geowave.format.geotools.vector;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +36,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.commons.io.FilenameUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
@@ -88,22 +90,22 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	private static boolean isPropertiesFile(
-			File file ) {
-		return file.getName().toLowerCase(
+			URL file ) {
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).endsWith(
 				PROPERTIES_EXTENSION);
 	}
 
 	private static DataStore getDataStore(
-			final File file )
+			final URL file )
 			throws IOException {
 		final Map<Object, Object> map = new HashMap<>();
 		if (isPropertiesFile(file)) {
-			try (FileInputStream fis = new FileInputStream(
-					file)) {
+			try (InputStream fis = file.openStream()) {
 				Properties prop = new Properties();
 				prop.load(fis);
 				map.putAll(prop);
@@ -113,14 +115,14 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		}
 		map.put(
 				"url",
-				file.toURI().toURL());
+				file);
 		final DataStore dataStore = DataStoreFinder.getDataStore(map);
 		return dataStore;
 	}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		DataStore dataStore = null;
 		try {
 			dataStore = getDataStore(file);
@@ -130,7 +132,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		}
 		catch (final Exception e) {
 			LOGGER.info(
-					"GeoTools was unable to read data source for file '" + file.getAbsolutePath() + "'",
+					"GeoTools was unable to read data source for file '" + file.getPath() + "'",
 					e);
 		}
 		return dataStore != null;
@@ -144,7 +146,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
-			final File input,
+			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String visibility ) {
 		DataStore dataStore = null;
@@ -163,7 +165,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 			}
 			catch (IOException e) {
 				LOGGER.error(
-						"Unable to get feature tpes from datastore '" + input.getAbsolutePath() + "'",
+						"Unable to get feature tpes from datastore '" + input.getPath() + "'",
 						e);
 			}
 			if (names == null) {

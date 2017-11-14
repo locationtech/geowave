@@ -14,7 +14,7 @@ import com.beust.jcommander.Parameter;
 
 public class CopyCommandOptions
 {
-	@Parameter(names = "--hdfsHostPort", required = true, description = "The hdfs host port", converter = HdfsHostPortConverter.class)
+	@Parameter(names = "--hdfsHostPort", description = "The hdfs host port", converter = HdfsHostPortConverter.class)
 	private String hdfsHostPort;
 
 	@Parameter(names = "--jobSubmissionHostPort", required = true, description = "The job submission tracker")

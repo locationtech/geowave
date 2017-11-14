@@ -108,15 +108,15 @@ public class GpxUtils
 		"SF_SWITCH_NO_DEFAULT"
 	})
 	public static Map<Long, GpxTrack> parseOsmMetadata(
-			final File metadataFile )
+			final URL metadataFile )
 			throws FileNotFoundException,
 			XMLStreamException {
 		final Map<Long, GpxTrack> metadata = new HashMap<Long, GpxTrack>();
-		final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
-		XMLEventReader eventReader = null;
-		try (final FileInputStream fis = new FileInputStream(
-				metadataFile); final InputStream in = new BufferedInputStream(
-				fis);) {
+		try (final InputStream fis = metadataFile.openStream(); final InputStream in = new BufferedInputStream(
+				fis)) {
+
+			final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
+			XMLEventReader eventReader = null;
 			inputFactory.setProperty(
 					"javax.xml.stream.isSupportingExternalEntities",
 					false);
@@ -533,29 +533,38 @@ public class GpxUtils
 	}
 
 	public static boolean validateGpx(
-			final File gpxDocument )
+			final URL gpxDocument )
 			throws SAXException,
 			IOException {
-		final Source xmlFile = new StreamSource(
-				gpxDocument);
-		try {
-			SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
-			return true;
-		}
-		catch (final SAXException e) {
-			LOGGER.info(
-					"XML file '" + "' failed GPX 1.1 validation",
-					e);
+		try (InputStream in = gpxDocument.openStream()) {
+			final Source xmlFile = new StreamSource(
+					in);
 			try {
-				SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
+				SCHEMA_GPX_1_1_VALIDATOR.validate(xmlFile);
 				return true;
 			}
-			catch (final SAXException e2) {
+			catch (final SAXException e) {
 				LOGGER.info(
-						"XML file '" + "' failed GPX 1.0 validation",
-						e2);
+						"XML file '" + "' failed GPX 1.1 validation",
+						e);
+				try {
+					SCHEMA_GPX_1_0_VALIDATOR.validate(xmlFile);
+					return true;
+				}
+				catch (final SAXException e2) {
+					LOGGER.info(
+							"XML file '" + "' failed GPX 1.0 validation",
+							e2);
+				}
+				return false;
 			}
+		}
+		catch (IOException e) {
+			LOGGER.info(
+					"Unable read " + gpxDocument.getPath(),
+					e);
 			return false;
 		}
+
 	}
 }

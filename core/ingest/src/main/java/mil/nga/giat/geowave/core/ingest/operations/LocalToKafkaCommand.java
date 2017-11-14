@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.operations;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -128,8 +129,13 @@ public class LocalToKafkaCommand extends
 				ingestPlugins,
 				localInputOptions);
 
+		// Config file
+		File configFile = getGeoWaveConfigFile(params);
+
 		// Execute
-		if (!driver.runOperation(inputPath)) {
+		if (!driver.runOperation(
+				inputPath,
+				configFile)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");
 		}

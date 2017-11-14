@@ -89,7 +89,8 @@ public class KdeCommand extends
 		final KDEJobRunner runner = new KDEJobRunner(
 				kdeOptions,
 				inputStoreOptions,
-				outputStoreOptions);
+				outputStoreOptions,
+				configFile);
 		return runner;
 	}
 

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.mapreduce;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,11 +18,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 
 public class MapReduceTestUtils
@@ -68,8 +71,23 @@ public class MapReduceTestUtils
 			indexOptions.add(indexOption);
 		}
 		// Ingest Formats
+		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
 		ingestFormatOptions.selectPlugin(format);
+
+		// create temporary config file and use it for hdfs FS URL config
+
+		File configFile = File.createTempFile(
+				"test_mr",
+				null);
+		ManualOperationParams operationParams = new ManualOperationParams();
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+
+		final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();
+		configHdfs.setHdfsUrlParameter(env.getHdfs());
+		configHdfs.execute(operationParams);
 
 		final LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
@@ -77,17 +95,15 @@ public class MapReduceTestUtils
 		mrGw.setInputStoreOptions(dataStore);
 
 		mrGw.setPluginFormats(ingestFormatOptions);
-		final MapReduceTestEnvironment env = MapReduceTestEnvironment.getInstance();
 		mrGw.setParameters(
 				ingestFilePath,
-				env.getHdfs(),
 				env.getHdfsBaseDirectory(),
 				null,
 				null);
 		mrGw.getMapReduceOptions().setJobTrackerHostPort(
 				env.getJobtracker());
 
-		mrGw.execute(new ManualOperationParams());
+		mrGw.execute(operationParams);
 
 		progressLogger.interrupt();
 	}

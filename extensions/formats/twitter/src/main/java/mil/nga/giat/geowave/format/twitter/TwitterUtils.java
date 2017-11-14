@@ -11,12 +11,14 @@
 package mil.nga.giat.geowave.format.twitter;
 
 import java.io.File;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import org.apache.commons.io.FilenameUtils;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -108,8 +110,9 @@ public class TwitterUtils
 	}
 
 	public static boolean validate(
-			final File file ) {
-		return file.getName().toLowerCase(
+			final URL file ) {
+		return FilenameUtils.getName(
+				file.getPath()).toLowerCase(
 				Locale.ENGLISH).matches(
 				"\\d{8}-\\d{6}\\.txt\\.gz");
 	}

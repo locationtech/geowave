@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.FileVisitResult;
 import java.nio.file.FileVisitor;
 import java.nio.file.Path;
@@ -78,9 +79,9 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 		}
 
 		public boolean supportsFile(
-				final File file ) {
+				final URL file ) {
 			if ((pattern != null) && !pattern.matcher(
-					file.getName().toLowerCase(
+					file.getFile().toLowerCase(
 							Locale.ENGLISH)).matches()) {
 				return false;
 			}
@@ -133,7 +134,7 @@ public class LocalPluginFileVisitor<P extends LocalPluginBase, R> implements
 			final Path path,
 			final BasicFileAttributes bfa )
 			throws IOException {
-		final File file = path.toFile();
+		final URL file = path.toUri().toURL();
 		for (final PluginVisitor visitor : pluginVisitors) {
 			if (visitor.supportsFile(file)) {
 				driver.processFile(

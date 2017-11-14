@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.format.stanag4676;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -94,13 +95,21 @@ public class Stanag4676IngestPlugin extends
 
 	@Override
 	public void init(
-			final File baseDirectory ) {}
+			final URL baseDirectory ) {}
 
 	@Override
 	public boolean supportsFile(
-			final File file ) {
+			final URL file ) {
 		// TODO: consider checking for schema compliance
-		return file.length() > 0;
+		try {
+			return file.openConnection().getContentLength() > 0;
+		}
+		catch (IOException e) {
+			LOGGER.info(
+					"Unable to read URL for '" + file.getPath() + "'",
+					e);
+		}
+		return false;
 	}
 
 	@Override
@@ -120,7 +129,7 @@ public class Stanag4676IngestPlugin extends
 
 	@Override
 	public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
-			final File file,
+			final URL file,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		return ingestWithMapper().toGeoWaveData(

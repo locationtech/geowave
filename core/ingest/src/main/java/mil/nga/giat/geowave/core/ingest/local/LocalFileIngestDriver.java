@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,6 +24,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +71,8 @@ public class LocalFileIngestDriver extends
 	}
 
 	public boolean runOperation(
-			String inputPath ) {
+			String inputPath,
+			File configFile ) {
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
@@ -99,6 +102,7 @@ public class LocalFileIngestDriver extends
 
 			processInput(
 					inputPath,
+					configFile,
 					localFileIngestPlugins,
 					runData);
 
@@ -156,7 +160,7 @@ public class LocalFileIngestDriver extends
 
 	@Override
 	protected void processFile(
-			final File file,
+			final URL file,
 			final String typeName,
 			final LocalFileIngestPlugin<?> plugin,
 			final LocalIngestRunData ingestRunData )
@@ -164,7 +168,8 @@ public class LocalFileIngestDriver extends
 
 		LOGGER.info(String.format(
 				"Beginning ingest for file: [%s]",
-				file.getName()));
+				// file.getName()));
+				FilenameUtils.getName(file.getPath())));
 
 		// This loads up the primary indexes that are specified on the command
 		// line.
@@ -211,13 +216,13 @@ public class LocalFileIngestDriver extends
 		LOGGER.debug(String.format(
 				"Creating [%d] threads to ingest file: [%s]",
 				threads,
-				file.getName()));
+				FilenameUtils.getName(file.getPath())));
 		List<IngestTask> ingestTasks = new ArrayList<IngestTask>();
 		try {
 			for (int i = 0; i < threads; i++) {
 				String id = String.format(
 						"%s-%d",
-						file.getName(),
+						FilenameUtils.getName(file.getPath()),
 						i);
 				IngestTask task = new IngestTask(
 						id,
@@ -288,6 +293,6 @@ public class LocalFileIngestDriver extends
 
 		LOGGER.info(String.format(
 				"Finished ingest for file: [%s]",
-				file.getName()));
+				file.getFile()));
 	}
 }

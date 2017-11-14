@@ -10,14 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.analytic.mapreduce.kde;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
+import java.util.Properties;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.FileSystem;
@@ -41,6 +44,7 @@ import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
@@ -70,6 +74,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -87,14 +92,17 @@ public class KDEJobRunner extends
 	protected KDECommandLineOptions kdeCommandLineOptions;
 	protected DataStorePluginOptions inputDataStoreOptions;
 	protected DataStorePluginOptions outputDataStoreOptions;
+	protected File configFile;
 
 	public KDEJobRunner(
 			final KDECommandLineOptions kdeCommandLineOptions,
 			final DataStorePluginOptions inputDataStoreOptions,
-			final DataStorePluginOptions outputDataStoreOptions ) {
+			final DataStorePluginOptions outputDataStoreOptions,
+			final File configFile ) {
 		this.kdeCommandLineOptions = kdeCommandLineOptions;
 		this.inputDataStoreOptions = inputDataStoreOptions;
 		this.outputDataStoreOptions = outputDataStoreOptions;
+		this.configFile = configFile;
 	}
 
 	/**
@@ -134,10 +142,21 @@ public class KDEJobRunner extends
 			rasterResizeOutputDataStoreOptions = null;
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName();
 		}
+
+		if (kdeCommandLineOptions.getHdfsHostPort() == null) {
+
+			Properties configProperties = ConfigOptions.loadProperties(
+					configFile,
+					null);
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
+		}
+
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				kdeCommandLineOptions.getHdfsHostPort(),
 				kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
 				conf);
+
 		conf.setInt(
 				MAX_LEVEL_KEY,
 				kdeCommandLineOptions.getMaxLevel());

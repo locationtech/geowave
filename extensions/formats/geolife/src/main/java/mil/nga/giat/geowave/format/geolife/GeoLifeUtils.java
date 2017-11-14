@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.format.geolife;
 
 import java.io.File;
+import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -123,7 +124,7 @@ public class GeoLifeUtils
 	}
 
 	public static boolean validate(
-			final File file ) {
+			final URL file ) {
 		return true;
 	}
 }

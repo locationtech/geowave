@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.ingest.local;
 
 import java.io.File;
+import java.net.URL;
 
 /**
  * This is a base interface for any plugin that reads files from a local file
@@ -32,13 +33,13 @@ public interface LocalPluginBase
 	 * Initialize the plugin and give it the base directory that is provided by
 	 * the user.
 	 * 
-	 * @param baseDirectory
+	 * @param url
 	 *            The base directory provided as a command-line argument (if the
 	 *            argument is a file, the base directory given will be its
 	 *            parent directory).
 	 */
 	public void init(
-			File baseDirectory );
+			URL url );
 
 	/**
 	 * This method will be called for every file that matches the given
@@ -52,5 +53,5 @@ public interface LocalPluginBase
 	 * @return Whether the file is supported or not
 	 */
 	public boolean supportsFile(
-			File file );
+			URL file );
 }
