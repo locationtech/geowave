@@ -692,7 +692,7 @@
                                     <goal>process-asciidoc</goal>
                                 </goals>
                                 <configuration>
-                                    <sourceDirectory>${project.build.directory}/content/generate-epub-interact-cluster</sourceDirectory>
+                                    <sourceDirectory>${project.build.directory}/content/interact-cluster</sourceDirectory>
                                     <sourceDocumentName>interact-cluster.adoc</sourceDocumentName>
                                     <backend>epub3</backend>
                                     <sourceHighlighter>coderay</sourceHighlighter>
@@ -705,7 +705,7 @@
                                     <goal>process-asciidoc</goal>
                                 </goals>
                                 <configuration>
-                                    <sourceDirectory>${project.build.directory}/content/generate-epub-integrate-geoserver</sourceDirectory>
+                                    <sourceDirectory>${project.build.directory}/content/integrate-geoserver</sourceDirectory>
                                     <sourceDocumentName>integrate-geoserver.adoc</sourceDocumentName>
                                     <backend>epub3</backend>
                                     <sourceHighlighter>coderay</sourceHighlighter>
@@ -718,8 +718,8 @@
                                     <goal>process-asciidoc</goal>
                                 </goals>
                                 <configuration>
-                                    <sourceDirectory>${project.build.directory}/content/generate-epub-jupyter</sourceDirectory>
-                                    <sourceDocumentName>integrate-jupyter.adoc</sourceDocumentName>
+                                    <sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
+                                    <sourceDocumentName>jupyter.adoc</sourceDocumentName>
                                     <backend>epub3</backend>
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                 </configuration>

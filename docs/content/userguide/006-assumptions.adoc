@@ -33,5 +33,6 @@ Depending on the environment components being developed towards (e.g., requireme
 * link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] versions >= 2.3
 * link:http://cloudera.com/content/cloudera/en/home.html[Cloudera, window="_blank"] CDH5. GeoWave tests with CDH 5.9
 * link:http://hortonworks.com/hdp/[Hortonworks Data Platform, window="_blank"] 2.6+
-* link:http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging, window="_blank"] and link:https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/[Java Image I/O, window="_blank"] are also both required to be installed on the GeoServer instance(s) _as well_ as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.
+
+* link:http://www.oracle.com/technetwork/articles/javaee/jai-142803.html[Java Advanced Imaging, window="_blank"] and link:https://docs.oracle.com/javase/8/docs/technotes/guides/imageio[Java Image I/O, window="_blank"] are also both required to be installed on the GeoServer instance(s), as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.
 

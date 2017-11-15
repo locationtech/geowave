@@ -37,7 +37,7 @@ fi
 # Build and archive HTML/PDF docs
 if [[ ! -f $WORKSPACE/target/site-${GEOWAVE_VERSION}.tar.gz ]]; then
     mvn -q javadoc:aggregate $BUILD_ARGS "$@"
-    mvn -q -P pdfs,epubs,html -pl docs install $BUILD_ARGS "$@"
+    mvn -q -P pdf,epub,html -pl docs install $BUILD_ARGS "$@"
     tar -czf $WORKSPACE/target/site-${GEOWAVE_VERSION}.tar.gz -C $WORKSPACE/target site
 fi
 

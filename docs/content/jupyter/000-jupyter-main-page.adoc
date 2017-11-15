@@ -5,7 +5,9 @@ _v${project.version}_
 
 :linkattrs:
 
-= GeoWave Quickstart Guide: Jupyter Notebook image:geowave-icon-logo-cropped.png[width="28%"]
+= GeoWave Quickstart Guide: Jupyter Notebook
+
+image:geowave-icon-logo-cropped.png[scaledwidth="28%", width="28%", alt="GeoWave Logo", title="GeoWave Logo"]
 
 == Assumptions
 
@@ -15,7 +17,7 @@ This document assumes you understand how to create and configure an EMR cluster 
 
 If you wish to run both jupyter notebook demos you will need to increase the hardware specifications for your emr cluster slightly to support it.
 
-image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
+image::aws-gui-method-3.png[scaledwidth="100%", width="100%", alt="aws gui method"]
 
 Below are the recommended hardware settings to change for the cluster:
 
@@ -72,7 +74,7 @@ http://0.0.0.0:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f
 
 . Copy and paste the output url into your browser, and replace the "0.0.0.0" with the Master Public DNS of your EMR cluster.
 +
-image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+image::interacting-cluster-1.png[scaledwidth="100%", width="100%", alt="interacting-cluster-1"]
 
 .. The final url will look something like this:
 +

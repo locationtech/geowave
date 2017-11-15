@@ -40,5 +40,5 @@ For a reference guide for getting started with Maven, please reference the onlin
 Both are required to be installed on the GeoServer instance(s) as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), so this may be skipped in some cases.
 
 === External Components
-Depending on the environment components that are being developed towards and/or tested against, e.g., requirements, datastores, indices, etc., some external components will be beneficial. While this information is outside the scope of this document, you can find these requirements in the link:http://locationtech.github.io/geowave/userguide.html#assumptions[GeoWave User Guide, window="_blank"].
+Depending on the environment components that are being developed towards and/or tested against, e.g., requirements, datastores, indices, etc., some external components will be beneficial. While this information is outside the scope of this document, you can find these requirements in the link:userguide.html#assumptions[GeoWave User Guide, window="_blank"].
 

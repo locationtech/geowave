@@ -8,7 +8,7 @@ In order to store geometry, attributes, and other information, a format is requi
 
 ==== Feature Serialization
 
-image::serialization1.png[scaledwidth="75%",alt="Feature Serialization", title="Feature Serialization"]
+image::serialization1.png[scaledwidth="75%",width="75%",alt="Feature Serialization", title="Feature Serialization"]
 
 GeoWave allows developers to create their own data adapters. Adapters not only determine how the data is actually stored (serialization/deserialization), but also contain a hierarchy of attribute types. The reason for this hierarchy has to do with extensibility vs. optimization. A data adapter could theoretically take a dependency on ffmpeg, store the feature as metadata in a video stream, and persist that value to the database. All questions of sanity of this solution aside, there are some additional specific issues with the way fine grain filtering is done, specifically due to the iterators.
 
