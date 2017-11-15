@@ -10,15 +10,18 @@
 #-------------------------------------------------------------------------------
 #!/bin/bash
 
+GEOWAVE_VERSION="temp"
+VENDOR_VERSION="temp"
+GEOWAVE_TOOLS_HOME="/usr/local/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}/tools"
+
 # Setting up Hadoop env
 if [ -z "$HADOOP_HOME" ]; then
-  VENDOR_VERSION=$( cat $GEOWAVE_TOOLS_HOME/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
   if [[ $VENDOR_VERSION == apache ]]; then
     export HADOOP_HOME=/usr/lib/hadoop
   elif [[ $VENDOR_VERSION == hdp* ]]; then
     export HADOOP_HOME=/usr/hdp/current/hadoop-client
     export HDP_VERSION=$(hdp-select| grep  hadoop-hdfs-namenode| sed "s/hadoop-hdfs-namenode - //g")
-    export GEOWAVE_TOOL_JAVA_OPT="$GEOWAVE_TOOL_JAVA_OPT -Dhdp.version=${HDP_VERSION}"
+    export CATALINA_OPTS="$CATALINA_OPTS -Dhdp.version=${HDP_VERSION}"
   elif [[ $VENDOR_VERSION == cdh* ]]; then
     export HADOOP_HOME=/usr/lib/hadoop
   else
@@ -43,7 +46,6 @@ CLASSPATH=${HADOOP_CLASSPATH}
 
 # Setting up Spark env
 if [ -z "$SPARK_HOME" ]; then
-  VENDOR_VERSION=$( cat $GEOWAVE_TOOLS_HOME/geowave-tools-build.properties | grep -oi "vendor.version=\w*" | sed "s/vendor.version=//g")
   if [[ $VENDOR_VERSION == apache ]]; then
     export SPARK_HOME=/usr/lib/spark
   elif [[ $VENDOR_VERSION == hdp* ]]; then
