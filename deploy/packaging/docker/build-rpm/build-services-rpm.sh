@@ -98,6 +98,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v 
     --post-install ${FPM_SCRIPTS}/gwtomcat_post_install.sh \
     --pre-uninstall ${FPM_SCRIPTS}/gwtomcat_pre_uninstall.sh \
     --post-uninstall ${FPM_SCRIPTS}/gwtomcat_post_uninstall.sh \
+    ${FPM_SCRIPTS}/gwtomcat_tools.sh=${GEOWAVE_DIR}/tomcat8/bin/gwtomcat_tools.sh \
     ${FPM_SCRIPTS}/gwtomcat=/etc/init.d/gwtomcat \
     ${FPM_SCRIPTS}/gwtomcat_logrotate=/etc/logrotate.d/gwtomcat \
     tomcat8/=${GEOWAVE_DIR}/tomcat8/

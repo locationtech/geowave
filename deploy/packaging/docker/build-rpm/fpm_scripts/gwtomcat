@@ -32,7 +32,6 @@ RETVAL=0
 case "$1" in
   start)
     PID=$(cat ${pidfile})
-
     if (( $(count() { echo $#; }; count ${PID}) > 1 )); then
       logger -s "Detected multiple pid's in ${pidfile}. Please run \"service ${PROCESS_NAME} stop\" first"
       exit;
@@ -43,6 +42,7 @@ case "$1" in
     fi
     if [ -f $CATALINA_HOME/bin/startup.sh ]; then
       logger -s "Starting Tomcat"
+      . ${CATALINA_HOME}/bin/gwtomcat_tools.sh
       /bin/su -l ${TOMCAT_USER} -c "$CATALINA_HOME/bin/startup.sh -Dprocessname=${PROCESS_NAME}"
       PID=`ps -eaf|grep processname=${PROCESS_NAME}|grep -v grep|awk '{print $2}'`
       RETVAL=$?
