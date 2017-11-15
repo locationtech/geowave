@@ -13,8 +13,6 @@ SandBox
 [source, bash]
 ----
 geowave config geoserver sandbox.hortonworks.com:8993
-export HADOOP_HOME="/usr/hdp/2.6.0.3-8/hadoop/"
-service geowave restart
 ----
 
 EMR
@@ -22,7 +20,6 @@ EMR
 [source, bash]
 ----
 geowave config geoserver "$HOSTNAME:8000"
-service geowave restart
 ----
 
 Please allow 1-2 minutes for the GeoServer to restart before attempting to complete Add Layers and Styles.
