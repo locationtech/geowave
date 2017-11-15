@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.client.RegionLocator;
@@ -133,41 +134,37 @@ public class HBaseSplitsProvider extends
 		if ((query != null) && !query.isSupported(index)) {
 			return splits;
 		}
+
+		final String tableName = index.getId().getString();
+		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
+
+		// If stats is disabled, fullrange will be null
 		final ByteArrayRange fullrange = unwrapRange(getRangeMax(
 				index,
 				adapterStore,
 				statsStore,
 				authorizations));
 
-		final String tableName = index.getId().getString();
-		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-
 		// Build list of row ranges from query
-		List<ByteArrayRange> ranges = new ArrayList<ByteArrayRange>();
-		final List<ByteArrayRange> constraintRanges;
+		List<ByteArrayRange> ranges = null;
 		if (query != null) {
 			final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(indexStrategy);
 			if ((maxSplits != null) && (maxSplits > 0)) {
-				constraintRanges = DataStoreUtils.constraintsToByteArrayRanges(
+				ranges = DataStoreUtils.constraintsToByteArrayRanges(
 						indexConstraints,
 						indexStrategy,
 						maxSplits);
 			}
 			else {
-				constraintRanges = DataStoreUtils.constraintsToByteArrayRanges(
+				ranges = DataStoreUtils.constraintsToByteArrayRanges(
 						indexConstraints,
 						indexStrategy,
 						-1);
 			}
-			for (final ByteArrayRange constraintRange : constraintRanges) {
-				ranges.add(constraintRange);
-			}
 		}
-		else {
+		else if (fullrange != null) {
+			ranges = new ArrayList();
 			ranges.add(fullrange);
-			if (LOGGER.isTraceEnabled()) {
-				LOGGER.trace("Protected range: " + fullrange);
-			}
 		}
 
 		final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges = new HashMap<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>>();
@@ -178,11 +175,18 @@ public class HBaseSplitsProvider extends
 			return splits;
 		}
 
-		while (!ranges.isEmpty()) {
-			ranges = binRanges(
-					ranges,
+		if (ranges == null) { // full range w/o stats for min/max
+			binFullRange(
 					binnedRanges,
 					regionLocator);
+		}
+		else {
+			while (!ranges.isEmpty()) {
+				ranges = binRanges(
+						ranges,
+						binnedRanges,
+						regionLocator);
+			}
 		}
 
 		for (final Entry<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> locationEntry : binnedRanges
@@ -206,15 +210,11 @@ public class HBaseSplitsProvider extends
 									authorizations),
 							rowRange);
 
-					if (range.intersects(fullrange)) {
-						rangeList.add(constructRangeLocationPair(
-								rowRange,
-								hostname,
-								cardinality < 1 ? 1.0 : cardinality));
-					}
-					else {
-						LOGGER.info("Query split outside of range");
-					}
+					rangeList.add(constructRangeLocationPair(
+							rowRange,
+							hostname,
+							cardinality < 1 ? 1.0 : cardinality));
+
 					if (LOGGER.isTraceEnabled()) {
 						LOGGER.warn("Clipped range: " + rangeList.get(
 								rangeList.size() - 1).getRange());
@@ -235,6 +235,38 @@ public class HBaseSplitsProvider extends
 		return splits;
 	}
 
+	private static void binFullRange(
+			final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges,
+			final RegionLocator regionLocator )
+			throws IOException {
+
+		for (HRegionLocation location : regionLocator.getAllRegionLocations()) {
+			Map<HRegionInfo, List<ByteArrayRange>> regionInfoMap = binnedRanges.get(location);
+			if (regionInfoMap == null) {
+				regionInfoMap = new HashMap<HRegionInfo, List<ByteArrayRange>>();
+				binnedRanges.put(
+						location,
+						regionInfoMap);
+			}
+
+			final HRegionInfo regionInfo = location.getRegionInfo();
+			List<ByteArrayRange> rangeList = regionInfoMap.get(regionInfo);
+			if (rangeList == null) {
+				rangeList = new ArrayList<ByteArrayRange>();
+				regionInfoMap.put(
+						regionInfo,
+						rangeList);
+			}
+
+			final ByteArrayRange regionRange = new ByteArrayRange(
+					new ByteArrayId(
+							regionInfo.getStartKey()),
+					new ByteArrayId(
+							regionInfo.getEndKey()));
+			rangeList.add(regionRange);
+		}
+	}
+
 	private static List<ByteArrayRange> binRanges(
 			final List<ByteArrayRange> inputRanges,
 			final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges,
@@ -247,8 +279,10 @@ public class HBaseSplitsProvider extends
 		final ListIterator<ByteArrayRange> i = inputRanges.listIterator();
 		while (i.hasNext()) {
 			final ByteArrayRange range = i.next();
+			byte[] startKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getStart().getBytes();
+			byte[] endKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getEnd().getBytes();
 
-			final HRegionLocation location = regionLocator.getRegionLocation(range.getStart().getBytes());
+			final HRegionLocation location = regionLocator.getRegionLocation(startKey);
 
 			Map<HRegionInfo, List<ByteArrayRange>> regionInfoMap = binnedRanges.get(location);
 			if (regionInfoMap == null) {
@@ -268,8 +302,8 @@ public class HBaseSplitsProvider extends
 			}
 
 			if (regionInfo.containsRange(
-					range.getStart().getBytes(),
-					range.getEnd().getBytes())) {
+					startKey,
+					endKey)) {
 				rangeList.add(range);
 				i.remove();
 			}
@@ -285,7 +319,8 @@ public class HBaseSplitsProvider extends
 				final ByteArrayRange uncoveredRange = new ByteArrayRange(
 						new ByteArrayId(
 								regionInfo.getEndKey()),
-						range.getEnd());
+						new ByteArrayId(
+								endKey));
 
 				i.add(uncoveredRange);
 			}
