@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 
@@ -36,7 +37,8 @@ public class GeoServerListCoverageStoresCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	@Override

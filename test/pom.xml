@@ -312,11 +312,9 @@
 						<sourceDirectory>../analytics/mapreduce/target/munged/main</sourceDirectory>
 						<sourceDirectory>../analytics/spark/src/main/scala</sourceDirectory>
 						<sourceDirectory>../analytics/javaspark/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/api/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/client/src/main/java</sourceDirectory>
-						<sourceDirectory>../services/webapp/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
-						<sourceDirectory>../examples/src/main/java</sourceDirectory>
+						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>
 						<sourceDirectory>../test/src/main/java</sourceDirectory>
 					</sourceDirectories>
 				</configuration>
