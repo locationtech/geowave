@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.kafka;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,9 @@ public class KafkaTestEnvironment implements
 	public void setup()
 			throws Exception {
 		LOGGER.info("Starting up Kafka Server...");
+
+		FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
+
 		final boolean success = KafkaTestUtils.DEFAULT_LOG_DIR.mkdir();
 		if (!success) {
 			LOGGER.warn("Unable to create Kafka log dir [" + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath() + "]");
@@ -59,10 +63,7 @@ public class KafkaTestEnvironment implements
 		LOGGER.info("Shutting down Kafka Server...");
 		kafkaServer.shutdown();
 
-		final boolean success = KafkaTestUtils.DEFAULT_LOG_DIR.delete();
-		if (!success) {
-			LOGGER.warn("Unable to delete Kafka log dir [" + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath() + "]");
-		}
+		FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
 	}
 
 	@Override
