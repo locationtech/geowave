@@ -20,7 +20,7 @@
 . /etc/init.d/functions
 
 PROCESS_NAME=gwtomcat
-CATALINA_HOME="/usr/local/geowave/tomcat8/"
+CATALINA_HOME="/usr/local/geowave/tomcat8"
 TOMCAT_USER=geowave
  
 ##  Path to the pid, runnning info file
@@ -31,7 +31,7 @@ RETVAL=0
 
 case "$1" in
   start)
-    PID=$(cat ${pidfile})
+    PID=`pidofproc -p ${pidfile} ${PROCESS_NAME}`
     if (( $(count() { echo $#; }; count ${PID}) > 1 )); then
       logger -s "Detected multiple pid's in ${pidfile}. Please run \"service ${PROCESS_NAME} stop\" first"
       exit;
@@ -51,7 +51,7 @@ case "$1" in
     fi
     ;;
   stop)
-    PID=$(cat ${pidfile})
+    PID=`pidofproc -p ${pidfile} ${PROCESS_NAME}`
     #If tomcat crashes the pid file is no longer valid
     #In the event of multiple pid's, kill the pid's in the pid file and delete it
     #Check for multiple pid's
