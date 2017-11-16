@@ -108,6 +108,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 			IllegalAccessException {
 
 		Field factoryField = URL.class.getDeclaredField("factory");
+		// HP Fortify "Access Control" false positive
+		// The need to change the accessibility here is
+		// necessary, has been review and judged to be safe
 		factoryField.setAccessible(true);
 
 		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
@@ -118,6 +121,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		}
 		else {
 			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
+			// HP Fortify "Access Control" false positive
+			// The need to change the accessibility here is
+			// necessary, has been review and judged to be safe
 			lockField.setAccessible(true);
 			synchronized (lockField.get(null)) {
 
@@ -163,6 +169,11 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				return;
 			}
 
+			if (configProperties == null) {
+				LOGGER.error("Unable to load properties form " + configFile.getAbsolutePath());
+				return;
+			}
+			
 			String s3EndpointUrl = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
 			if (s3EndpointUrl == null) {
 				LOGGER.error("S3 endpoint URL is empty. Config using \"geowave config aws <s3 endpoint url>\"");
@@ -175,6 +186,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 					s3EndpointUrl = "s3://" + s3EndpointUrl;
 				}
 				FileSystem fs = FileSystems.newFileSystem(
+						// HP Fortify "Path Traversal" false positive
+						// What Fortify considers "user input" comes only
+						// from users with OS-level access anyway
 						new URI(
 								s3EndpointUrl + "/"),
 						new HashMap<String, Object>(),
@@ -215,6 +229,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 
 				URI uri = new URI(
 						hdfsFSUrl + hdfsInputPath);
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
 				path = Paths.get(uri);
 				if (!Files.exists(path)) {
 					LOGGER.error("Input path " + inputPath + " does not exist");
