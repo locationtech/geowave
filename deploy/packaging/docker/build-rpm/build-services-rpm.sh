@@ -85,6 +85,11 @@ fi
 chmod -R 777 $WORKSPACE/deploy
 
 echo "Creating tomcat rpm"
+#Create the gwtomcat_tools.sh script
+cp ${FPM_SCRIPTS}/gwtomcat_tools.sh.template ${FPM_SCRIPTS}/gwtomcat_tools.sh
+sed -i -e s/GEOWAVE_VERSION=\"temp\"/GEOWAVE_VERSION=\"${GEOWAVE_VERSION}\"/g ${FPM_SCRIPTS}/gwtomcat_tools.sh
+sed -i -e s/VENDOR_VERSION=\"temp\"/VENDOR_VERSION=\"${VENDOR_VERSION}\"/g ${FPM_SCRIPTS}/gwtomcat_tools.sh
+
 fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v ${GEOWAVE_VERSION} -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.$TIME_TAG.noarch.rpm --rpm-os linux --license "Apache Version 2.0" \
     -d java-1.8.0-openjdk \
@@ -98,10 +103,14 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat" -v 
     --post-install ${FPM_SCRIPTS}/gwtomcat_post_install.sh \
     --pre-uninstall ${FPM_SCRIPTS}/gwtomcat_pre_uninstall.sh \
     --post-uninstall ${FPM_SCRIPTS}/gwtomcat_post_uninstall.sh \
+    ${FPM_SCRIPTS}/gwtomcat_tools.sh=${GEOWAVE_DIR}/tomcat8/bin/gwtomcat_tools.sh \
     ${FPM_SCRIPTS}/gwtomcat=/etc/init.d/gwtomcat \
     ${FPM_SCRIPTS}/gwtomcat_logrotate=/etc/logrotate.d/gwtomcat \
     tomcat8/=${GEOWAVE_DIR}/tomcat8/
+
+#clean up the tmp scripts and move the rpm to the right place to be indexed
 echo "created tomcat rpm"
+rm -f ${FPM_SCRIPTS}/gwtomcat_tools.sh
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.${TIME_TAG}.noarch.rpm
 
 #grab the rest services war file
