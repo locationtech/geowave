@@ -1,0 +1,111 @@
+[[packages-scripts]]
+<<<
+
+:linkattrs:
+
+++++
+<script src="//code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+<script src="//cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
+<script>
+    // Pasted here just so we only have a single file to deploy
+    var S3List = (function () {
+
+        /* 2014 Jason Mulligan - license BSD-3 - http://filesizejs.com - 2.0.4 */
+        (function(p){function g(g,c){var b="",d=0,a,h,m,f,n,e,k,l;if(isNaN(g))throw Error("Invalid arguments");c=c||{};h=!0===c.bits;e=!0===c.unix;d=void 0!==c.base?c.base:e?2:10;n=void 0!==c.round?c.round:e?1:2;k=void 0!==c.spacer?c.spacer:e?"":" ";l=void 0!==c.suffixes?c.suffixes:{};f=Number(g);m=0>f;b=2<d?1E3:1024;m&&(f=-f);0===f?e?b="0":(a="B",b="0"+k+(l[a]||a)):(a=Math.floor(Math.log(f)/Math.log(1E3)),8<a&&(a=8),d=2===d?f/Math.pow(2,10*a):f/Math.pow(1E3,a),h&&(d*=8,d>b&&(d/=b,a++)),b=d.toFixed(0<a?n:
+                0),a=q[h?"bits":"bytes"][a],e?(h&&r.test(a)&&(a=a.toLowerCase()),a=a.charAt(0),e=b.replace(s,""),"B"===a?a="":h||"k"!==a||(a="K"),t.test(e)&&(b=parseInt(b,u).toString()),b+=k+(l[a]||a)):e||(b+=k+(l[a]||a)));m&&(b="-"+b);return b}var r=/b$/,u=10,s=/.*\./,t=/^0$/,q={bits:"B kb Mb Gb Tb Pb Eb Zb Yb".split(" "),bytes:"B kB MB GB TB PB EB ZB YB".split(" ")};"undefined"!==typeof exports?module.exports=g:"function"===typeof define?define(function(){return g}):p.filesize=g})(this);
+        // End filesize.js
+
+        function baseName(str) { return str.substring(str.lastIndexOf('/') + 1); }
+
+        function startsWith(item, prefix) { return (item.substring(0, prefix.length) === prefix); }
+
+        function isInSkipList(item, list) {
+            for(var i=0; i<list.length; i++) { if (item.indexOf(list[i]) > -1) return true; }
+            return false;
+        }
+
+        return function (opts) {
+            var _url = '';
+            var _skipList = [];
+            var _cache = { content: {}, timestamp: 0 };
+            var _cacheTimeout;
+            var _table = null;
+
+            this.load = function() { this.load(false); };
+            this.load = function(noCache) {
+                if(noCache || new Date().getTime() - _cache.timestamp > _cacheTimeout) {
+                    $.ajax({
+                        url: _url, type: "GET", dataType: "xml", async: false, success: this.loadCache
+                    });
+                }
+            };
+
+            this.loadCache = function(data) {
+                _cache.content = data;
+                _cache.timestamp = new Date().getTime();
+            };
+
+            this.refresh = function(eventHash) { this.refresh(eventHash, false); };
+            this.refresh = function(eventHash, nocache) {
+                this.load(nocache);
+                var buffer = [];
+                $(_cache.content).find("Contents").each(function () {
+                    var fileName = $(this).find('Key').text();
+                    var fileSize = $(this).find('Size').text();
+                    if (fileSize !== '0' && !isInSkipList(fileName, _skipList)) {
+                        if(startsWith(fileName, eventHash.substring(1) + '/')) {
+                            buffer.push([
+                                '<a href="' + _url + fileName + '" download="' + baseName(fileName)  + '" target="_blank">' + baseName(fileName) + '</a>',
+                                $(this).find('LastModified').text(),
+                                filesize($(this).find('Size').text())
+                            ]);
+                        }
+                    }
+                });
+
+                if(_table !== null) _table.api().destroy(); // Can't reload, have to recreate each time
+                _table = $('.file-listing').dataTable({
+                    "destroy": true,
+                    "lengthMenu": [[-1, 10, 25, 50], ["All", 10, 25, 50]],
+                    "order": [[1, "desc"]],
+                    "columnDefs": [
+                        {"targets": 0, "width": "50%"},
+                        {"targets": 2, "orderable": false}
+                    ],
+                    "data": buffer
+                });
+                $('.timestamp').html("Last Updated: " + new Date(_cache.timestamp).toISOString());
+            };
+
+            _url = opts.url || '';
+            _skipList = opts.list || [];
+            _cacheTimeout = opts.cache || 300000;
+        };
+    })();
+
+    $(function () {
+        var currentTab, REFRESH_INTERVAL = 900000;
+
+        var list = new S3List({
+            url: '//s3.amazonaws.com/geowave-rpms/',
+            list: ['repodata', '.html'],
+            cache: REFRESH_INTERVAL - 1
+        });
+
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            currentTab = e.target.hash;
+            list.refresh(currentTab); // #dev or #release etc.
+        });
+        $('.refresh').on('click', function() { list.refresh(currentTab, true); });
+        setInterval(function () { list.refresh(currentTab); }, REFRESH_INTERVAL);
+    });
+</script>
+++++
+
+++++
+</body>
+</html>
+++++
+
+

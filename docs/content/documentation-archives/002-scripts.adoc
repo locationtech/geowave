@@ -1,0 +1,28 @@
+[[documentation-archive-scripts]]
+<<<
+
+:linkattrs:
+
+++++
+<script type='text/javascript' src='js/jquery.min.js'></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script>
+$( document ).ready(function() {
+		var table= $('#archived-documentation');
+
+		var archivedReleases = {
+			"0.9.2.1" : "http://locationtech.github.io/geowave/previous-versions/0.9.2.1/documentation.html",
+			"0.9.1"   : "http://locationtech.github.io/geowave/previous-versions/0.9.1/documentation.html"
+		};
+
+		$.each( archivedReleases, function( releaseVersion, documentationLink ) {
+			var row = $('<tr/>');
+			$('<td/>').text(releaseVersion).appendTo(row);
+			$('<a/>').attr('href', documentationLink).text('Documentation').attr('target', '_blank').appendTo($('<td/>').appendTo(row));
+			row.appendTo(table);
+		});
+	});
+</script>
+++++
+
+

@@ -11,11 +11,11 @@ Boost is required when using the Jace bindings.
 
 === Prepackaged Source and Binaries
 
-There is a public link:http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo, window="_blank"] where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
+There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.
 
 === Generate Proxies and Build from Source
 
-If you want, you can generate and build the Jace proxies yourself. For more details on how to do this, please check out the link:http://locationtech.github.io/geowave/devguide.html#proxies[GeoWave Developer Guide, window="_blank"].
+If you want, you can generate and build the Jace proxies yourself. For more details on how to do this, please check out the link:devguide.html#proxies[GeoWave Developer Guide, window="_blank"].
 
 === Mapnik Plugin Configuration
 

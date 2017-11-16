@@ -1,0 +1,132 @@
+<<<
+
+:linkattrs:
+
+== GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
+
+In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command
+downloads those images and combines them to create a mosaic.
+
+=== Set-Up Environment Variables
+
+Download and source the GeoWave environment script.
+
+[NOTE]
+====
+If you have already done this in the Vector Demo, you can skip this step.
+====
+
+This script defines a number of the variables that will be used in future commands.
+
+. If running with the GeoWave Sandbox:
++
+[source, bash]
+----
+cd /mnt
+
+sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+
+source /mnt/geowave-env.sh
+----
+
+. If running with EMR:
++
+[source, bash]
+----
+cd /mnt
+
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
+
+source /mnt/geowave-env.sh
+----
+
+=== Download and Unpack the GDAL Library
+
+GDAL (Geospatial Data Abstraction Library) is an image processing library. We need to download the proper GDAL files to process the raster data. More info on GDAL can be found link:http://www.gdal.org[here, window="_blank"].
+
+[source, bash]
+----
+sudo mkdir /mnt/gdal
+
+cd /mnt/gdal
+
+sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+
+tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+----
+
+Set the path to the GDAL libraries.
+
+[source, bash]
+----
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/mnt
+----
+
+At this point, we should be ready to ingest the data.
+
+=== Config and Ingest.
+
+We need to create two GeoWave stores for this ingest. landsat_raster will store the raster images, and landsat_vector stores the vector metadata associated with those images. The images come from the https://landsat.usgs.gov/landsat-8[Landsat 8 Satellite].
+
+. If running with the GeoWave Sandbox:
+
+[source, bash]
+----
+geowave config addstore - hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
+
+geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector
+----
+
+. If running with EMR Accumulo:
+
+[source, bash]
+----
+geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
+-i accumulo -u geowave -p geowave
+
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+----
+
+. If running with EMR HBase
+
+[source, bash]
+----
+geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
+
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+----
+
+Add a spatial index.
+
+[source, bash]
+----
+geowave config addindex -t spatial spatial
+----
+
+Filter the dataset by calling analyze. In this example we look for Band 8 images that are in Berlin.
+
+[source, bash]
+----
+geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql  "INTERSECTS(shape,$GERMANY) AND band='B8' AND cloudCover>0" -ws /mnt/landsat
+
+geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" -ws /mnt/landsat
+----
+
+Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. Status can be monitored at using HBase or Accumulo web interface. See the link:interact-cluster.html[Interacting with the cluster, window="_blank"] section help doing so.
+More information on the landsat ingest and analyze commands can be found https://github.com/locationtech/geowave/tree/master/extensions/cli/landsat8[here].
+
+[source, bash]
+----
+geowave landsat ingest --nbestperspatial --nbestscenes 1 --usecachedscenes --cql "$BERLIN_BBOX AND band='B8' AND cloudCover>0" --crop --retainimages -ws /mnt/landsat --vectorstore landsatvector --pyramid --coverage berlin_mosaic  landsatraster spatial
+----
+
+=== Vector Demo
+
+- link:walkthrough-vector.html#[Vector Demo, window="_blank"]
+
+=== GeoServer Integration
+
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+
+=== Interacting with the cluster
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]

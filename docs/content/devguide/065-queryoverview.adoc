@@ -7,7 +7,7 @@ A query in GeoWave currently consists of a set of ranges on the dimensions of th
 [[query-overview]]
 === Overview
 
-image::queryoverview1.png[scaledwidth="80%",alt="Query Architecture", title="Query Architecture"]
+image::queryoverview1.png[scaledwidth="80%",width="80%",alt="Query Architecture", title="Query Architecture"]
 
 The query geometry is decomposed by GeoWave into a series of ranges on a one-dimensional number line based on a compact Hilbert space filling curve ordering. These ranges are sent through a batch scanner to all the tablet servers. These ranges represent the coarse grain filtering.
 

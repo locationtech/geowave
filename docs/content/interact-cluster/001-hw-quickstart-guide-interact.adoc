@@ -1,0 +1,97 @@
+<<<
+
+:linkattrs:
+
+== GeoWave Quickstart Guide Integrate with the Cluster image:geowave-icon-logo-cropped.png[width="28%"]
+
+[NOTE]
+====
+If you have not successfully completed the link:integrate-geoserver.html[GeoServer Integration, window="_blank"] section, please do so before continuing.
+====
+
+=== Enable Web Connections (EMR Only)
+
+Go to the Cluster List (“Services” dropdown, select EMR) and click on the cluster you created. Use the “Master public DNS”
+value as your hostname and the security key you assigned to the cluster to enable the web connection.
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+If you are unfamiliar how to do this click on the “Enable Web Connection” link for detailed instructions on how to enable the
+web connection for Linux or Windows.
+
+[NOTE]
+====
+You can also enable the web connection by adding a rule to your security group of Type: "All TCP" and source "Anywhere"
+====
+
+image::interacting-cluster-10.png[scaledwidth="100%",alt="select emr"]
+
+
+=== HBase Master View
+
+HBase status can be monitored via the HBase web interface at http://localhost:16010 (${Master_public_DNS}:16010 for EMR). The interface provides information on the number of reads/writes, requests per second, and the status of its servers. If HBase experiences any issues
+during the ingest, they will be reflected here.
+
+image::sandbox/hbase-overview.png[scaledwidth="100%",alt="select emr"]
+
+=== Accumulo View
+
+You can follow the progress of the data ingest and scan (kde) performed by the cluster on the accumulo web server.
+
+Open a new tab in your web browser and enter the Master public DNS of your cluster followed by :9995
+
+- Example: ec2-52-91-215-215.compute-1.amazonaws.com:9995
+
+You should see the following page:
+
+image::interacting-cluster-2.png[scaledwidth="100%",alt="select emr"]
+
+[NOTE]
+====
+This page is only available if you are using the Accumulo set-up
+====
+
+=== GeoServer
+
+The GeoServer web interface can be accessed in your browser:
+
+- http://localhost:8993/geoserver/web (Sandbox)
+
+- ${Master_public_DNS}:8000/geoserver/web (EMR)
+
+Login to see the layers.
+
+- **Username:** admin
+
+- **Password:** geoserver
+
+image::sandbox/geoserver-home.png[scaledwidth="100%",alt="select emr"]
+
+The homepage displays the layers, stores, and workspaces that were created in the demo.
+Select "Layer Preview" from the menu on the left side.
+
+image::sandbox/layer-preview.png[scaledwidth="100%",alt="select emr"]
+
+Click on the OpenLayers link by any of the layers to view any of the images. Clicking on the layer will give you the metadata associated with that point.
+
+**gdeltevent** - shows all of the gdelt events in a bounding box around Berlin as individual points.
+
+image::sandbox/point-view.png[scaledwidth="100%",alt="select emr"]
+
+**gdeltevent_kde** - a heat map produced using kernel density estimation in a bounding box around Berlin.
+
+image::sandbox/kde-view.png[scaledwidth="100%",alt="select emr"]
+
+**berlin_mosaic** - a mosaic created from the raster data that fit into our specifications. This mosaic is made of 5 images.
+
+image::sandbox/berlin-mosaic-view.png[scaledwidth="100%",alt="select emr"]
+
+**band/scene** - representations of the vector data associated with the images. The band and scene layers are identical in this demo.
+
+image::sandbox/scene-view.png[scaledwidth="100%",alt="select emr"]
+
+=== Back to the Demos
+
+- link:walkthrough-vector.html[Vector Demo, window="_blank"]
+- link:walkthrough-raster.html[Raster Demo, window="_blank"]
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]

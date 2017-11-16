@@ -1,0 +1,14 @@
+[[packages-imports]]
+<<<
+
+:linkattrs:
+
+++++
+	<link rel="stylesheet" type="text/css" href="stylesheets/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="stylesheets/carousel.css">
+	<link rel="stylesheet" type="text/css" href="stylesheets/geowave-packages.css">
+    <link rel="stylesheet" href="//cdn.datatables.net/1.10.4/css/jquery.dataTables.css">
+++++
+
+

@@ -9,16 +9,16 @@ The screenshots below are of data loaded from various attributed data sets into 
 (in some cases) by a GeoWave analytic process, and rendered by Geoserver.
 
 .Contents
-*  <<114-appendix-screenshots.adoc#screenshots-geolife, GeoLife>>
-** <<114-appendix-screenshots.adoc#screenshots-geolife-city, GeoLife at city scale>>
-** <<114-appendix-screenshots.adoc#screenshots-geolife-house, GeoLife at house scale>>
-*  <<114-appendix-screenshots.adoc#screenshots-osm-gpx, OpenStreetMap GPX Tracks>>
-** <<114-appendix-screenshots.adoc#screenshots-osm-gpx-continent, OSM GPX at continent scale>>
-** <<114-appendix-screenshots.adoc#screenshots-osm-gpx-world, OSM GPX at world scale>>
-*  <<114-appendix-screenshots.adoc#screenshots-tdrive, T-Drive>>
-** <<114-appendix-screenshots.adoc#screenshots-tdrive-city, T-drive at city scale>>
-** <<114-appendix-screenshots.adoc#screenshots-tdrive-block, T-drive at block scale>>
-** <<114-appendix-screenshots.adoc#screenshots-tdrive-house, T-drive at house scale>>
+*  <<010-screenshots.adoc#screenshots-geolife, GeoLife>>
+** <<010-screenshots.adoc#screenshots-geolife-city, GeoLife at city scale>>
+** <<010-screenshots.adoc#screenshots-geolife-house, GeoLife at house scale>>
+*  <<010-screenshots.adoc#screenshots-osm-gpx, OpenStreetMap GPX Tracks>>
+** <<010-screenshots.adoc#screenshots-osm-gpx-continent, OSM GPX at continent scale>>
+** <<010-screenshots.adoc#screenshots-osm-gpx-world, OSM GPX at world scale>>
+*  <<010-screenshots.adoc#screenshots-tdrive, T-Drive>>
+** <<010-screenshots.adoc#screenshots-tdrive-city, T-drive at city scale>>
+** <<010-screenshots.adoc#screenshots-tdrive-block, T-drive at block scale>>
+** <<010-screenshots.adoc#screenshots-tdrive-house, T-drive at house scale>>
 
 [[screenshots-geolife]]
 === GeoLife
