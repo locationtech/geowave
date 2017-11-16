@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>Set-Up Environment Variables</title>
+<title>GeoWave Quickstart Guide Raster Demo</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
@@ -419,6 +419,8 @@ href="images/geowave-icon-logo-small.png">
 <div id="header">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide Raster Demo <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
 <ul class="sectlevel2">
 <li><a href="#set-up-environment-variables">Set-Up Environment Variables</a></li>
 <li><a href="#download-and-unpack-the-gdal-library">Download and Unpack the GDAL Library</a></li>
@@ -427,20 +429,22 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#geoserver-integration">GeoServer Integration</a></li>
 <li><a href="#interacting-with-the-cluster">Interacting with the cluster</a></li>
 </ul>
+</li>
+</ul>
 </div>
 </div>
 <div id="content">
 <div id="preamble">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p>GeoWave Quickstart Guide Raster Demo <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></p>
 </div>
+</div>
+<div class="sect1">
+<h2 id="geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"><a class="anchor" href="#geowave-quickstart-guide-raster-demo-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide Raster Demo <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h2>
+<div class="sectionbody">
 <div class="paragraph">
 <p>In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command
 downloads those images and combines them to create a mosaic.</p>
-</div>
-</div>
 </div>
 <div class="sect2">
 <h3 id="set-up-environment-variables"><a class="anchor" href="#set-up-environment-variables"></a>Set-Up Environment Variables</h3>
@@ -588,7 +592,7 @@ geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cq
 </div>
 </div>
 <div class="paragraph">
-<p>Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. Status can be monitored at using HBase or Accumulo web interface. See the <a href="http://locationtech.github.io/geowave/interact-cluster.html#" target="_blank">Interacting with the cluster</a> section help doing so.
+<p>Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. Status can be monitored at using HBase or Accumulo web interface. See the <a href="interact-cluster.html" target="_blank">Interacting with the cluster</a> section help doing so.
 More information on the landsat ingest and analyze commands can be found <a href="https://github.com/locationtech/geowave/tree/master/extensions/cli/landsat8">here</a>.</p>
 </div>
 <div class="listingblock">
@@ -602,7 +606,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://locationtech.github.io/geowave/walkthrough-vector.html#">Vector Demo</a></p>
+<p><a href="walkthrough-vector.html#" target="_blank">Vector Demo</a></p>
 </li>
 </ul>
 </div>
@@ -612,7 +616,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://locationtech.github.io/geowave/integrate-geoserver.html#">GeoServer Integration</a></p>
+<p><a href="integrate-geoserver.html" target="_blank">GeoServer Integration</a></p>
 </li>
 </ul>
 </div>
@@ -622,15 +626,17 @@ More information on the landsat ingest and analyze commands can be found <a href
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://locationtech.github.io/geowave/interact-cluster.html#">Interacting with the cluster</a></p>
+<p><a href="interact-cluster.html" target="_blank">Interacting with the cluster</a></p>
 </li>
 </ul>
 </div>
 </div>
 </div>
+</div>
+</div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-16 17:53:37 +00:00
+Last updated 2017-11-16 21:00:40 +00:00
 </div>
 </div>
 </body>

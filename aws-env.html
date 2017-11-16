@@ -422,14 +422,14 @@ href="images/geowave-icon-logo-small.png">
 <ul class="sectlevel0">
 <li><a href="#geowave-quickstart-guide-aws-emr-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide AWS EMR Environment Setup <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
 <ul class="sectlevel1">
-<li><a href="#what-you-will-need">What you will need</a></li>
+<li><a href="#quickstart-guide-intro">What you will need</a></li>
 <li><a href="#creating-the-cluster">Creating the Cluster</a>
 <ul class="sectlevel2">
 <li><a href="#bootstrap-scripts">Bootstrap Scripts</a></li>
 <li><a href="#aws-cli-method">AWS CLI Method</a></li>
-<li><a href="#aws-gui-method">AWS GUI Method</a></li>
-<li><a href="#enabling-jupyter-support">Enabling Jupyter Support</a></li>
-<li><a href="#connecting-to-the-cluster">Connecting to the Cluster</a></li>
+<li><a href="#quickstart-guide-GUI">AWS GUI Method</a></li>
+<li><a href="#quickstart-enable-jupyter">Enabling Jupyter Support</a></li>
+<li><a href="#steps-overview">Connecting to the Cluster</a></li>
 <li><a href="#demo-links">Demo Links</a></li>
 </ul>
 </li>
@@ -460,7 +460,7 @@ href="images/geowave-icon-logo-small.png">
 </div>
 <h1 id="geowave-quickstart-guide-aws-emr-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-aws-emr-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide AWS EMR Environment Setup <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h1>
 <div class="sect1">
-<h2 id="what-you-will-need"><a class="anchor" href="#what-you-will-need"></a>What you will need</h2>
+<h2 id="quickstart-guide-intro"><a class="anchor" href="#quickstart-guide-intro"></a>What you will need</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -501,23 +501,22 @@ href="images/geowave-icon-logo-small.png">
 <h2 id="creating-the-cluster"><a class="anchor" href="#creating-the-cluster"></a>Creating the Cluster</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands
-to download, ingest, analyze and visualize the data.</p>
+<p>We will be using the GeoWave bootstrap script to provision our cluster. Then we will walk through the cli commands to download, ingest, analyze and visualize the data.</p>
 </div>
 <div style="page-break-after: always;"></div>
 <div class="sect2">
 <h3 id="bootstrap-scripts"><a class="anchor" href="#bootstrap-scripts"></a>Bootstrap Scripts</h3>
-<div class="paragraph">
+<div id="quickstart-guide-intro" class="paragraph">
 <p>GeoWave currently supports the use of either Accumulo or HBase, so the version of the bootstrap script you
 use when setting up your cluster will be dependent upon which system you want to use as your datastore. The bootstrap scripts help to set up geowave and your environment. Click on any of the links below to download the script.</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" target="_blank">http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh</a></p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh" target="_blank">http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
@@ -541,10 +540,10 @@ ones listed previously:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</a></p>
+<p>For Accumulo use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh" target="_blank">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 <li>
-<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</a></p>
+<p>For HBase use: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh" target="_blank">http://s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/hbase/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
@@ -765,7 +764,7 @@ follow the progress of your cluster’s creation.</p>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="aws-gui-method"><a class="anchor" href="#aws-gui-method"></a>AWS GUI Method</h3>
+<h3 id="quickstart-guide-GUI"><a class="anchor" href="#quickstart-guide-GUI"></a>AWS GUI Method</h3>
 <div class="paragraph">
 <p>Login to AWS and select EMR from the Services drop down menu.</p>
 </div>
@@ -775,11 +774,10 @@ follow the progress of your cluster’s creation.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the
-“Go to advanced options” link at the top of the page.</p>
+<p>Select the “Create cluster” button in the top left side of the page. Once the Create Cluster application opens select the “Go to advanced options” link at the top of the page.</p>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
+<div id="quickstart-guide-steo-1" class="paragraph">
 <p><strong>Step 1:</strong></p>
 </div>
 <div class="imageblock">
@@ -847,7 +845,7 @@ follow the progress of your cluster’s creation.</p>
 <p>---<br></p>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
+<div id="quickstart-guide-step-2" class="paragraph">
 <p><strong>Step 2:</strong></p>
 </div>
 <div class="imageblock">
@@ -962,7 +960,7 @@ follow the progress of your cluster’s creation.</p>
 </table>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
+<div id="quickstart-guide-step-3" class="paragraph">
 <p><strong>Step 3:</strong></p>
 </div>
 <div class="imageblock">
@@ -1125,7 +1123,7 @@ list of your available buckets and chose a script from there. Otherwise, type in
 <p>---<br></p>
 </div>
 <div style="page-break-after: always;"></div>
-<div class="paragraph">
+<div id="quickstart-guide-step-4" class="paragraph">
 <p><strong>Step 4:</strong></p>
 </div>
 <div class="imageblock">
@@ -1227,16 +1225,16 @@ list of your available buckets and chose a script from there. Otherwise, type in
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="enabling-jupyter-support"><a class="anchor" href="#enabling-jupyter-support"></a>Enabling Jupyter Support</h3>
+<h3 id="quickstart-enable-jupyter"><a class="anchor" href="#quickstart-enable-jupyter"></a>Enabling Jupyter Support</h3>
 <div class="paragraph">
 <p>Geowave also supports jupyter notebook development which you can enable by following the steps here
 before creating the cluster:
-- <a href="http://locationtech.github.io/geowave/jupyter.html#">Jupyter Quickstart</a></p>
+- <a href="jupyter.html" target="_blank">Jupyter Quickstart</a></p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 <div class="sect2">
-<h3 id="connecting-to-the-cluster"><a class="anchor" href="#connecting-to-the-cluster"></a>Connecting to the Cluster</h3>
+<h3 id="steps-overview"><a class="anchor" href="#steps-overview"></a>Connecting to the Cluster</h3>
 <div class="paragraph">
 <p>Once your cluster is running and bootstrapped, ssh into the cluster.</p>
 </div>
@@ -1276,16 +1274,16 @@ for the cluster to be setup and bootstrapped. This may take longer if you are us
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://locationtech.github.io/geowave/walkthrough-vector.html#">Vector Demo</a></p>
+<p><a href="walkthrough-vector.html" target="_blank">Vector Demo</a></p>
 </li>
 <li>
-<p><a href="http://locationtech.github.io/geowave/walkthrough-raster.html#">Raster Demo</a></p>
+<p><a href="walkthrough-raster.html" target="_blank">Raster Demo</a></p>
 </li>
 <li>
-<p><a href="http://locationtech.github.io/geowave/integrate-geoserver.html#">GeoServer Integration</a></p>
+<p><a href="integrate-geoserver.html" target="_blank">GeoServer Integration</a></p>
 </li>
 <li>
-<p><a href="http://locationtech.github.io/geowave/interact-cluster.html#">Interacting with the cluster</a></p>
+<p><a href="interact-cluster.html" target="_blank">Interacting with the cluster</a></p>
 </li>
 </ul>
 </div>
@@ -1299,7 +1297,7 @@ for the cluster to be setup and bootstrapped. This may take longer if you are us
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.6-SNAPSHOT from commit e9e99a02d06176bdcfd598f3acefb43be2ed646b.</p>
+<p>This documentation was generated for GeoWave version 0.9.6-SNAPSHOT from commit 9ffa50b1c143cabc37ebc56c98e4e2cc62f51f41.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1449,7 +1447,13 @@ remember, because you will need it to ssh into your cluster.</p>
 </div>
 </div>
 <div class="paragraph">
-<p>In the popup window, select SSH from the “Type” drop down, add your ip address in the the “Source” box, then click the “Save” button.</p>
+<p>In the popup window, select SSH from the “Type” drop down, Anywhere from the “Source” drop down, then click the “Save”
+button.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/create-security-group-3.png" alt="Create security group">
+</div>
 </div>
 <div class="paragraph">
 <p>For more detailed information on AWS EC2 Security Groups please see the Amazon documentation <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-network-security.html">here</a>.</p>
@@ -1467,7 +1471,7 @@ remember, because you will need it to ssh into your cluster.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-16 17:53:37 +00:00
+Last updated 2017-11-16 21:00:40 +00:00
 </div>
 </div>
 </body>

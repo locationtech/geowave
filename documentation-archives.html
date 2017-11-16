@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>GeoWave Quickstart Guide Sandbox Environment Setup</title>
+<title>GeoWave Documentation Archive</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
@@ -415,26 +415,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 type="image/png"
 href="images/geowave-icon-logo-small.png">
 </head>
-<body class="book toc2 toc-right">
+<body class="book">
 <div id="header">
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel0">
-<li><a href="#geowave-quickstart-guide-sandbox-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide Sandbox Environment Setup <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
-<ul class="sectlevel1">
-<li><a href="#introduction">Introduction</a></li>
-<li><a href="#setting-up-the-environment">Setting Up the Environment</a>
-<ul class="sectlevel2">
-<li><a href="#setting-up-the-virtualbox-image">Setting up the VirtualBox Image</a></li>
-<li><a href="#configure-sandbox">Configure Sandbox</a></li>
-<li><a href="#using-the-vm">Using the VM</a></li>
-<li><a href="#demo-links">Demo Links</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
 <div id="preamble">
@@ -445,224 +427,44 @@ href="images/geowave-icon-logo-small.png">
 </div>
 </div>
 </div>
-<h1 id="geowave-quickstart-guide-sandbox-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-sandbox-environment-setup-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide Sandbox Environment Setup <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h1>
 <div class="sect1">
-<h2 id="introduction"><a class="anchor" href="#introduction"></a>Introduction</h2>
+<h2 id="geowave-documentation-archive-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"><a class="anchor" href="#geowave-documentation-archive-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Documentation Archive <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The Sandbox Quickstart Guide is designed to allow a user to see some of the capabilities of the GeoWave library on a personal computer, even though GeoWave is primarily designed to be used with massive datasets that would require
-a much more powerful machine to process. The Sandbox VirtualBox image provided will allow a user to deploy a single node cluster where they can demo GeoWave on sets of vector and raster data.</p>
+<p>This page provides links to archived GeoWave release documentation, in the event that it is still needed to be referenced.</p>
 </div>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="setting-up-the-environment"><a class="anchor" href="#setting-up-the-environment"></a>Setting Up the Environment</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>The virtual image provided for this demo can be found at <a href="https://s3.amazonaws.com/geowave-vm/0.9.5/VirtualBox_HDP_Geowave_Sandbox_0.9.5.ova">here</a>. The image is a very large file (~14 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.</p>
-</div>
-<div class="sect2">
-<h3 id="setting-up-the-virtualbox-image"><a class="anchor" href="#setting-up-the-virtualbox-image"></a>Setting up the VirtualBox Image</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Open up your VirtualBox manager. If you do not have VirtualBox downloaded, do so <a href="https://www.virtualbox.org/wiki/Downloads" target="_blank">here</a>. This demo was tested against VirtualBox 5.1.26, you may experience trouble importing the virtual image on older versions.</p>
-</li>
-<li>
-<p>Click "File" and select "Import Appliance" from the dropdown.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/import-appliance.png" alt="select emr">
-</div>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Click on the folder icon, and navigate to <em>VirtualBox_HDP_GeoWave_Sandbox.ova</em> (the image that you downloaded).</p>
-</li>
-<li>
-<p>Select "Next" and then "Import"</p>
-<div class="ulist">
-<ul>
-<li>
-<p>This should take a couple of minutes</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Once the image has been imported, start it up from the manager. Every time you power the machine on it will ask you which version of Linux
-it should boot, pick the default/first option.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/vb-image.png" alt="select emr">
-</div>
-</div>
-<div class="paragraph">
-<p>The machine should power on shortly (this can take a few minutes). After it&#8217;s powered on you should see the screen below. This is the last
-time that you will have to interact directly with the VirtualBox. Make sure that the virtual machine is active for the duration of this demo.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/vb-image-2.png" alt="select emr">
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>VirtualBox Mangager has a feature that allows Virtual Machines to be started and operated in headless ( non-Graphical-User-Interface(GUI) ) mode. Since the Sandbox was setup as a non-GUI VM, it is recommended that users' run their GeoWave Sandbox Virtual Machine in headless mode when possible.</p>
-</div>
-<div class="paragraph">
-<p>To start a VM in headless mode, within the VirtualBox Manager screen, right-click on the Sandbox VM image that was imported, and select <em>Start</em> -&#8594; <em>Headless Start</em>. The VM status can be monitored through the <em>Preview</em> pane within the dashboard, and once the VM has started, you can configure your machine and interface with the VM as outlined in the steps below.</p>
-</div>
-</td>
-</tr>
+<table id="archived-documentation" class="tableblock frame-all grid-all spread">
+	<colgroup>
+		<col style="width: 28%;">
+		<col style="width: 71%;">
+	</colgroup>
+	<thead>
+		<tr>
+			<th class="tableblock halign-left valign-top">Release Version #</th>
+			<th class="tableblock halign-left valign-top">Link to Documentation</th>
+		</tr>
+	</thead>
 </table>
-</div>
 <div style="page-break-after: always;"></div>
-</div>
-<div class="sect2">
-<h3 id="configure-sandbox"><a class="anchor" href="#configure-sandbox"></a>Configure Sandbox</h3>
-<div class="paragraph">
-<p>Before you can configure the Sandbox, you will need to edit your hosts file to make sure that you can access the sandbox through your browser. You will need root or admin permissions to change these files.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Linux:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>/etc/hosts</code> file</p>
-</li>
-<li>
-<p><strong>Mac:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>/private/etc/hosts</code> file</p>
-</li>
-<li>
-<p><strong>Windows:</strong> Add the line <code>127.0.0.1  sandbox.hortonworks.com</code> to the <code>C:/Windows/System32/drivers/etc/hosts</code> file</p>
-</li>
-</ul>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Make sure that you save <code>hosts</code> as type "all files" and not as a .txt file. That should be how it appears in the /etc/ folder.</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/hosts-linux.png" alt="select emr">
-</div>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/hosts-windows.png" alt="select emr">
-</div>
-</div>
-<div class="paragraph">
-<p>After this you should be able to log into the Ambari Server at <a href="http://sandbox.hortonworks.com:8080" target="_blank">http://sandbox.hortonworks.com:8080</a></p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Username:</strong> raj_ops</p>
-</li>
-<li>
-<p><strong>Password:</strong> raj_ops</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>The Ambari server provides an interface that allows you to control which services you&#8217;d like to run in your environment. However, on start-up, the Sandbox automatically runs a number of unnecessary services.</p>
-</div>
-<div class="paragraph">
-<p>To best run this demo you should stop: <strong>Oozie, Flume, Ranger, Spark2,</strong> and <strong>Zeppelin Notebook</strong>. To stop a service, select it from the list on the left, click on "Service Actions," and select "Stop" from the dropdown menu.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/sandbox/ambari-gui.png" alt="select emr">
-</div>
-</div>
-<div style="page-break-after: always;"></div>
-</div>
-<div class="sect2">
-<h3 id="using-the-vm"><a class="anchor" href="#using-the-vm"></a>Using the VM</h3>
-<div class="paragraph">
-<p>After the Sandbox and virtual machine are configured, ssh into your machine. If you are using Windows it is recommended that you use <a href="http://www.putty.org/">PuTTY</a>.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Host Name:</strong> <a href="mailto:root@sandbox.hortonworks.com">root@sandbox.hortonworks.com</a></p>
-</li>
-<li>
-<p><strong>Port:</strong> 2222</p>
-</li>
-</ul>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">$ ssh root@sandbox.hortonworks.com -p 2222
-Warning: Permanently added 'sandbox.hortonworks.com,xxx.xxx.xxx.xxx' (ECDSA) to the list of known hosts.
-root@sandbox.hortonworks.com's password:</code></pre>
-</div>
-</div>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-note" title="Note"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>No key is necessary to access this machine</p>
-</div>
-</td>
-</tr>
-</table>
-</div>
-<div class="paragraph">
-<p>If you are using PuTTY, click open to continue.</p>
-</div>
-<div class="paragraph">
-<p>When prompted for a password, enter <code>geowave1</code>.</p>
-</div>
-</div>
-<div class="sect2">
-<h3 id="demo-links"><a class="anchor" href="#demo-links"></a>Demo Links</h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="walkthrough-vector.html" target="_blank">Vector Demo</a></p>
-</li>
-<li>
-<p><a href="walkthrough-raster.html" target="_blank">Raster Demo</a></p>
-</li>
-<li>
-<p><a href="integrate-geoserver.html" target="_blank">GeoServer Integration</a></p>
-</li>
-<li>
-<p><a href="interact-cluster.html" target="_blank">Interacting with the cluster</a></p>
-</li>
-</ul>
-</div>
-</div>
+<script type='text/javascript' src='js/jquery.min.js'></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script>
+$( document ).ready(function() {
+		var table= $('#archived-documentation');
+
+		var archivedReleases = {
+			"0.9.2.1" : "http://locationtech.github.io/geowave/previous-versions/0.9.2.1/documentation.html",
+			"0.9.1"   : "http://locationtech.github.io/geowave/previous-versions/0.9.1/documentation.html"
+		};
+
+		$.each( archivedReleases, function( releaseVersion, documentationLink ) {
+			var row = $('<tr/>');
+			$('<td/>').text(releaseVersion).appendTo(row);
+			$('<a/>').attr('href', documentationLink).text('Documentation').attr('target', '_blank').appendTo($('<td/>').appendTo(row));
+			row.appendTo(table);
+		});
+	});
+</script>
 </div>
 </div>
 </div>

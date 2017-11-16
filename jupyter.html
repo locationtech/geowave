@@ -420,24 +420,12 @@ href="images/geowave-icon-logo-small.png">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#geowave-quickstart-guide-jupyter-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide: Jupyter Notebook <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
+<li><a href="#geowave-quickstart-guide-jupyter-notebook">GeoWave Quickstart Guide: Jupyter Notebook</a>
 <ul class="sectlevel1">
 <li><a href="#assumptions">Assumptions</a></li>
-<li><a href="#configuring-spark">Configuring Spark</a></li>
-<li><a href="#recommended-hardware-settings">Recommended Hardware settings</a>
-<ul class="sectlevel2">
-<li><a href="#gdelt-demo-settings">GDELT Demo Settings</a></li>
-<li><a href="#gpx-demo-settings">GPX Demo Settings</a></li>
-</ul>
-</li>
+<li><a href="#recommended-hardware-settings">Recommended Hardware settings</a></li>
 <li><a href="#install-python-and-jupyter">Install Python and Jupyter</a></li>
-<li><a href="#connect-to-the-notebook-server">Connect to the notebook server</a></li>
-<li><a href="#appendices">Appendices</a>
-<ul class="sectlevel2">
-<li><a href="#modifying-spark-settings-on-jupyter-kernel">Modifying Spark settings on Jupyter kernel</a></li>
-<li><a href="#restarting-the-jupyter-daemon">Restarting the Jupyter Daemon</a></li>
-</ul>
-</li>
+<li><a href="#run-the-jupyter-notebook">Run the Jupyter notebook</a></li>
 </ul>
 </li>
 </ul>
@@ -452,43 +440,17 @@ href="images/geowave-icon-logo-small.png">
 </div>
 </div>
 </div>
-<h1 id="geowave-quickstart-guide-jupyter-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-jupyter-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide: Jupyter Notebook <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h1>
+<h1 id="geowave-quickstart-guide-jupyter-notebook" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-jupyter-notebook"></a>GeoWave Quickstart Guide: Jupyter Notebook</h1>
+<div class="openblock partintro">
+<div class="content">
+<span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="GeoWave Logo" width="28%" title="GeoWave Logo"></span>
+</div>
+</div>
 <div class="sect1">
 <h2 id="assumptions"><a class="anchor" href="#assumptions"></a>Assumptions</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="http://locationtech.github.io/geowave/aws-env.html#">Amazon Web Services EMR</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="configuring-spark"><a class="anchor" href="#configuring-spark"></a>Configuring Spark</h2>
-<div class="sectionbody">
-<div class="paragraph">
-<p>To better configure Spark for our demos we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called <code>maximizeResourceAllocation</code>. This option has to be provided at cluster creation as a configuration option given to Spark.
-For more information on how to set this option visit <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html">Configuring Spark</a>.</p>
-</div>
-<div class="admonitionblock warning">
-<table>
-<tr>
-<td class="icon">
-<i class="fa icon-warning" title="Warning"></i>
-</td>
-<td class="content">
-<div class="paragraph">
-<p>Setting this option on some smaller instances with HBase installed can cut the maximum available yarn resources in half (see <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hadoop-task-config.html">here</a> for memory config per instance type). <strong>AWS DOES NOT</strong> account for HBase being installed when using <code>maximizeResourceAllocation</code>.
-When running through Jupyter notebook there is no issue because we account for this ourselves, but if you want to use spark through the CLI or shell this can break spark unless you modify the <code>spark-defaults.conf</code> manually.</p>
-</div>
-</td>
-</tr>
-</table>
+<p>This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit the <a href="aws-env.html" target="_blank">Amazon Web Services EMR</a> quickstart guide.</p>
 </div>
 </div>
 </div>
@@ -496,15 +458,16 @@ When running through Jupyter notebook there is no issue because we account for t
 <h2 id="recommended-hardware-settings"><a class="anchor" href="#recommended-hardware-settings"></a>Recommended Hardware settings</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Currently, there are two notebook demos using differently sized data sets. If you wish to run either jupyter notebook demo you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified for the demos below.</p>
+<p>If you wish to run both jupyter notebook demos you will need to increase the hardware specifications for your emr cluster slightly to support it.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/aws-gui-method-3.png" alt="select emr">
+<img src="./images/aws-gui-method-3.png" alt="aws gui method" width="100%">
 </div>
 </div>
-<div class="sect2">
-<h3 id="gdelt-demo-settings"><a class="anchor" href="#gdelt-demo-settings"></a>GDELT Demo Settings</h3>
+<div class="paragraph">
+<p>Below are the recommended hardware settings to change for the cluster:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
@@ -549,53 +512,6 @@ When running through Jupyter notebook there is no issue because we account for t
 </ul>
 </div>
 </div>
-<div class="sect2">
-<h3 id="gpx-demo-settings"><a class="anchor" href="#gpx-demo-settings"></a>GPX Demo Settings</h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Root device EBS volume size</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Set this to at least 20gb</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Master</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Edit the Instance Type to be m4.2xlarge</p>
-</li>
-<li>
-<p>Do not touch the EBS Storage</p>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Core</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Edit the Instance Type to be m4.2xlarge</p>
-</li>
-<li>
-<p>Select 8 for the Instance count</p>
-</li>
-<li>
-<p>Do not touch the EBS Storage or Auto Scaling</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
 </div>
 <div class="sect1">
 <h2 id="install-python-and-jupyter"><a class="anchor" href="#install-python-and-jupyter"></a>Install Python and Jupyter</h2>
@@ -606,12 +522,13 @@ When running through Jupyter notebook there is no issue because we account for t
 <div class="ulist">
 <ul>
 <li>
-<p>Jupyter Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh</a></p>
+<p>Jupyter Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh" target="_blank">
+http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-jupyter.sh</a></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>This bootstrap script will install python, all necessary packages needed for the demos, create the jupyter kernel, and run the jupyter notebook server on port 9000 of your cluster. This script needs to be run as a bootstrap action when creating the EMR cluster.</p>
+<p>This bootstrap script will install python, all necessary packages needed for this demo, and create the jupyter kernel to run the notebooks. This script needs to be run as a bootstrap action when creating the EMR cluster.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -626,12 +543,13 @@ When running through Jupyter notebook there is no issue because we account for t
 <div class="ulist">
 <ul>
 <li>
-<p>Accumulo Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
+<p>Accumulo Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" target="_blank">
+http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>For more information on setting up bootstrap actions visit this link: <a href="http://locationtech.github.io/geowave/aws-env.html#">Amazon Web Services EMR</a></p>
+<p>For more information on setting up bootstrap actions visit the <a href="aws-env.html" target="_blank">Amazon Web Services EMR</a> quickstart guide.</p>
 </div>
 </td>
 </tr>
@@ -640,96 +558,78 @@ When running through Jupyter notebook there is no issue because we account for t
 </div>
 </div>
 <div class="sect1">
-<h2 id="connect-to-the-notebook-server"><a class="anchor" href="#connect-to-the-notebook-server"></a>Connect to the notebook server</h2>
+<h2 id="run-the-jupyter-notebook"><a class="anchor" href="#run-the-jupyter-notebook"></a>Run the Jupyter notebook</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>After your cluster has been created with the script above and is in the Waiting state, you are ready to connect to the notebook server and run the demo:</p>
+<p>After your cluster has been created with the script above, you are ready to connect to the cluster and run the demo. Once you are connected to the cluster run the commands below to launch the notebook server.</p>
 </div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/interacting-cluster-1.png" alt="select emr">
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>For more information on connecting to the EMR cluster follow the instructions in the <a href="aws-env.html" target="_blank">Amazon Web Services EMR</a> quickstart guide.</p>
 </div>
+</td>
+</tr>
+</table>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Use the master public dns of the cluster like below in your browser to connect to the notebook server.</p>
+<p>Launch the jupyter notebook server</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code>{master_public_dns}:9000</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">jupyter notebook ./notebooks --ip=0.0.0.0 --no-browser</code></pre>
 </div>
 </div>
-</li>
-<li>
-<p>Enter the default password <code>geowave</code> to gain access to the notebooks.</p>
-</li>
-<li>
-<p>Then simply select the demo notebook you wish to run and follow the instructions in the notebook to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="modifying-spark-settings-on-jupyter-kernel"><a class="anchor" href="#modifying-spark-settings-on-jupyter-kernel"></a>Modifying Spark settings on Jupyter kernel</h3>
-<div class="paragraph">
-<p>Our bootstrap scripts setup the Jupyter kernel to use yarn by default, and other spark configuration settings through the <code>kernel.json</code> file for the kernel itself. If for any reason you would like to change these settings, you can do so by modifying the <code>kernel.json</code> once you are connected to the cluster.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>SSH into the emr cluster</p>
-</li>
-<li>
-<p>Open the <code>kernel.json</code> file in your favorite text editor (vim, vi, nano) found at the following location</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p><code>/home/hadoop/.local/share/jupyter/kernels/pythonwithpixiedust22/kernel.json</code></p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Modify <code>PYSPARK_SUBMIT_ARGS</code> to contain whatever settings you need for spark.</p>
-</li>
-<li>
-<p>Restart the Jupyter Kernel (if running), or your settings will be applied the next time the kernel loads.</p>
-</li>
-</ol>
-</div>
-</div>
-<div class="sect2">
-<h3 id="restarting-the-jupyter-daemon"><a class="anchor" href="#restarting-the-jupyter-daemon"></a>Restarting the Jupyter Daemon</h3>
-<div class="paragraph">
-<p>The Jupyter notebook server is launched at cluster creation as a <a href="http://upstart.ubuntu.com/">Upstart</a> service. If Jupyter should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>SSH into the emr cluster</p>
-</li>
-<li>
-<p>Run the following commands</p>
+<p>This command will launch a jupyter notebook server from the cluster and output a link to connect to the server that will look like this:</p>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo stop jupyter
-sudo start jupyter</code></pre>
+<pre class="highlightjs highlight"><code>http://0.0.0.0:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f</code></pre>
 </div>
 </div>
 </li>
 </ol>
 </div>
+</li>
+<li>
+<p>Copy and paste the output url into your browser, and replace the "0.0.0.0" with the Master Public DNS of your EMR cluster.</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/interacting-cluster-1.png" alt="interacting-cluster-1" width="100%">
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The final url will look something like this:</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>http://ec2-34-226-244-139.compute-1.amazonaws.com:8888/?token=87a7c6eb2d2723b9f2999b7c0d57d66c9a82dd9eae94af8f</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>After connecting to the notebook server you should see a list of all notebooks in the browser. Select the geowave-gdelt demo notebook and follow the instructions there once the notebook loads to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-16 17:53:37 +00:00
+Last updated 2017-11-16 21:00:40 +00:00
 </div>
 </div>
 </body>

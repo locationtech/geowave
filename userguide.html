@@ -496,7 +496,7 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#running-from-emr">Running from EMR</a></li>
 <li><a href="#datastore-configuration">DataStore Configuration</a>
 <ul class="sectlevel2">
-<li><a href="#apache-accumulo-configuration">Apache Accumulo Configuration</a></li>
+<li><a href="#accumulo-config">Apache Accumulo Configuration</a></li>
 <li><a href="#bigtable-config">Google BigTable Configuration</a></li>
 <li><a href="#hbase-config">Apache HBase Configuration</a></li>
 </ul>
@@ -770,7 +770,7 @@ href="images/geowave-icon-logo-small.png">
 <p><a href="http://hortonworks.com/hdp/" target="_blank">Hortonworks Data Platform</a> 2.6+</p>
 </li>
 <li>
-<p><a href="http://www.oracle.com/technetwork/articles/javaee/jai-142803.html" target="<em>blank">Java Advanced Imaging</a> and <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/imageio/" target="_blank">Java Image I/O</a> are also both required to be installed on the GeoServer instance(s) _as well</em> as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.</p>
+<p><a href="http://www.oracle.com/technetwork/articles/javaee/jai-142803.html" target="_blank">Java Advanced Imaging</a> and <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/imageio" target="_blank">Java Image I/O</a> are also both required to be installed on the GeoServer instance(s), as well as on the Accumulo nodes. The Accumulo support is only required for certain functions (distributed rendering), - so this may be skipped in some cases.</p>
 </li>
 </ul>
 </div>
@@ -789,43 +789,43 @@ href="images/geowave-icon-logo-small.png">
 <div class="title">Contents</div>
 <ul>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-geolife">GeoLife</a></p>
+<p><a href="#screenshots-geolife">GeoLife</a></p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-geolife-city">GeoLife at city scale</a></p>
+<p><a href="#screenshots-geolife-city">GeoLife at city scale</a></p>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-geolife-house">GeoLife at house scale</a></p>
+<p><a href="#screenshots-geolife-house">GeoLife at house scale</a></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-osm-gpx">OpenStreetMap GPX Tracks</a></p>
+<p><a href="#screenshots-osm-gpx">OpenStreetMap GPX Tracks</a></p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-osm-gpx-continent">OSM GPX at continent scale</a></p>
+<p><a href="#screenshots-osm-gpx-continent">OSM GPX at continent scale</a></p>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-osm-gpx-world">OSM GPX at world scale</a></p>
+<p><a href="#screenshots-osm-gpx-world">OSM GPX at world scale</a></p>
 </li>
 </ul>
 </div>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-tdrive">T-Drive</a></p>
+<p><a href="#screenshots-tdrive">T-Drive</a></p>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-tdrive-city">T-drive at city scale</a></p>
+<p><a href="#screenshots-tdrive-city">T-drive at city scale</a></p>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-tdrive-block">T-drive at block scale</a></p>
+<p><a href="#screenshots-tdrive-block">T-drive at block scale</a></p>
 </li>
 <li>
-<p><a href="114-appendix-screenshots.html#screenshots-tdrive-house">T-drive at house scale</a></p>
+<p><a href="#screenshots-tdrive-house">T-drive at house scale</a></p>
 </li>
 </ul>
 </div>
@@ -1065,7 +1065,7 @@ href="images/geowave-icon-logo-small.png">
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the <a href="http://locationtech.github.io/geowave/devguide.html#building-code" target="_blank">GeoWave Developer Guide</a>.</p>
+<p>This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the <a href="devguide.html#building-code" target="_blank">GeoWave Developer Guide</a>.</p>
 </div>
 </td>
 </tr>
@@ -1074,7 +1074,7 @@ href="images/geowave-icon-logo-small.png">
 <div class="sect2">
 <h3 id="geowave-command-line-instructions"><a class="anchor" href="#geowave-command-line-instructions"></a>GeoWave Command Line Instructions</h3>
 <div class="paragraph">
-<p>GeoWave comes available with several levels of command-line functionality. In this section, we will provide a high-level overview of the commands and will also outline a few of the core functions available, though for a full exhaustive list of commands, please see the <a href="http://locationtech.github.io/geowave/commands.html" target="_blank">GeoWave CLI Appendix</a>.</p>
+<p>GeoWave comes available with several levels of command-line functionality. In this section, we will provide a high-level overview of the commands and will also outline a few of the core functions available, though for a full exhaustive list of commands, please see the <a href="commands.html" target="_blank">GeoWave CLI Appendix</a>.</p>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -1090,7 +1090,7 @@ href="images/geowave-icon-logo-small.png">
 <p>To test this, type 'geowave' (no quotes) and press enter.</p>
 </div>
 <div class="paragraph">
-<p>If a list of geowave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term, <em>'geowave: command not found'</em> is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the <a href="http://locationtech.github.io/geowave/devguide.html#packaging-code" target="_blank">GeoWave Developer Guide</a>.</p>
+<p>If a list of geowave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term, <em>'geowave: command not found'</em> is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the <a href="devguide.html#packaging-code" target="_blank">GeoWave Developer Guide</a>.</p>
 </div>
 <div class="paragraph">
 <p>If the alias system command is not registered, the full java command - ( e.g., java -cp {GEOWAVE_HOME} {GEOWAVE_JAR} ) - will need to be used in place of the 'geowave' alias.</p>
@@ -1320,7 +1320,7 @@ href="images/geowave-icon-logo-small.png">
 <p>In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store. Also, the ingest process requires an Index that is a definition of all the configured parameters that define how data is translated to Row IDs (how it is indexed). It also includes what common fields need to be maintained within the table to be used by fine-grained and secondary filters.</p>
 </div>
 <div class="paragraph">
-<p>The full list of GeoWave ingest commands can be found in the <a href="http://locationtech.github.io/geowave/commands.html#ingest-commands" target="_blank">GeoWave CLI Appendix</a>.</p>
+<p>The full list of GeoWave ingest commands can be found in the <a href="commands.html#ingest-commands" target="_blank">GeoWave CLI Appendix</a>.</p>
 </div>
 <div class="paragraph">
 <p>For examples and other details of running ingest commands, please be sure to check out the GeoWave QuickStart Guide Examples.</p>
@@ -1344,7 +1344,7 @@ href="images/geowave-icon-logo-small.png">
 </td>
 <td class="content">
 <div class="paragraph">
-<p>You can add more by simply copying a desired plugin into the /usr/local/geowave/tools/plugins directory.</p>
+<p>You can add more by simply copying a desired plugin into the <em>/usr/local/geowave/tools/plugins</em> directory.</p>
 </div>
 </td>
 </tr>
@@ -1694,7 +1694,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 </td>
 <td class="content">
 <div class="paragraph">
-<p>Building/Developing GeoWave analytics is outside the scope of this document. For details around how to build the GeoWave source and tools, please refer to the <a href="http://locationtech.github.io/geowave/devguide.html#building" target="_blank">GeoWave Developer Guide</a>.</p>
+<p>Building/Developing GeoWave analytics is outside the scope of this document. For details around how to build the GeoWave source and tools, please refer to the <a href="devguide.html#building" target="_blank">GeoWave Developer Guide</a>.</p>
 </div>
 </td>
 </tr>
@@ -1718,7 +1718,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 <div class="sect2">
 <h3 id="analytic-commands"><a class="anchor" href="#analytic-commands"></a>Analytic Commands</h3>
 <div class="paragraph">
-<p>The full list of GeoWave analytic commands, and any details associated with each, can be found in the <a href="http://locationtech.github.io/geowave/commands.html#analytic-commands" target="_blank">GeoWave CLI Appendix</a>.</p>
+<p>The full list of GeoWave analytic commands, and any details associated with each, can be found in the <a href="commands.html#analytic-commands" target="_blank">GeoWave CLI Appendix</a>.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -2114,7 +2114,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 <p>Empty - Each request is processed without additional authorization.</p>
 </li>
 <li>
-<p>JSON - The requester user name, extracted from the Security Context, is used as a key to find the user&#8217;s set of authorizations from a JSON file. The location of the JSON file is determined by the associated <em>Authorization Data URL</em> (e.g., <a href="file://opt/config/auth.json" class="bare">file://opt/config/auth.json</a>). An example of the contents of the JSON file is given below.</p>
+<p>JSON - The requester user name, extracted from the Security Context, is used as a key to find the user&#8217;s set of authorizations from a JSON file. The location of the JSON file is determined by the associated <em>Authorization Data URL</em> (e.g., <em>/opt/config/auth.json</em>). An example of the contents of the JSON file is given below.</p>
 </li>
 </ul>
 </div>
@@ -2173,7 +2173,7 @@ FeatureHyperLogLogStatistics$FeatureHyperLogLogConfig</a></p></td>
 <div class="sect2">
 <h3 id="overview-5"><a class="anchor" href="#overview-5"></a>Overview</h3>
 <div class="paragraph">
-<p>There is a public <a href="http://locationtech.github.io/geowave/packages.html" target="_blank">GeoWave RPM Repo</a> available with the distribution packages and vendors listed below. As you&#8217;ll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to be disabled so you can keep auto updates enabled. When ready to do an update, simply add <code>--enablerepo=geowave</code> to your command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks, and Apache). The RPMs have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo, geowave-cdh5-accumulo, geowave-apache-hbase, etc.)</p>
+<p>There is a public <a href="packages.html" target="_blank">GeoWave RPM Repo</a> available with the distribution packages and vendors listed below. As you&#8217;ll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to be disabled so you can keep auto updates enabled. When ready to do an update, simply add <code>--enablerepo=geowave</code> to your command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks, and Apache). The RPMs have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo, geowave-cdh5-accumulo, geowave-apache-hbase, etc.)</p>
 </div>
 </div>
 <div class="sect2">
@@ -2306,7 +2306,7 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 <div class="title">In the above table, replace the following:</div>
 <ul>
 <li>
-<p>$VERSION: Version of GeoWave source, e.g., 0.9.4</p>
+<p>$VERSION: Version of GeoWave source, e.g., 0.9.6-SNAPSHOT</p>
 </li>
 <li>
 <p>$VENDOR:  Distribution vendor abbreviation - from vendors table above, e.g., apache, cdh5, hdp2</p>
@@ -2317,7 +2317,7 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>For all vendors or packages for a particular version, replace with * (e.g., 'geowave-0.9.4-apache-*') for all apache apache packages in 0.9.4 version of GeoWave.</p>
+<p>For all vendors or packages for a particular version, replace with * (e.g., 'geowave-0.9.6-SNAPSHOT-apache-*') for all apache apache packages in 0.9.6-SNAPSHOT version of GeoWave.</p>
 </div>
 <div class="paragraph">
 <p>Note that only accumulo, hbase, jetty, tools, and single-host are vendor package rpm&#8217;s. All others are version RPMs.</p>
@@ -2374,7 +2374,7 @@ Current `best' version is /usr/local/geowave-0.9.3-hdp2.</code></pre>
 <h2 id="running-from-emr"><a class="anchor" href="#running-from-emr"></a>Running from EMR</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>For a step by step walkthrough of setting up GeoWave on an EMR cluster, please see our <a href="http://locationtech.github.io/geowave/quickstart.html" target="_blank">Quickstart Guide</a>.</p>
+<p>For a step by step walkthrough of setting up GeoWave on an EMR cluster, please see our <a href="quickstart.html" target="_blank">Quickstart Guide</a>.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -2403,7 +2403,7 @@ Current `best' version is /usr/local/geowave-0.9.3-hdp2.</code></pre>
 </div>
 <div style="page-break-after: always;"></div>
 <div class="sect2">
-<h3 id="apache-accumulo-configuration"><a class="anchor" href="#apache-accumulo-configuration"></a>Apache Accumulo Configuration</h3>
+<h3 id="accumulo-config"><a class="anchor" href="#accumulo-config"></a>Apache Accumulo Configuration</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -2535,11 +2535,11 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 <div class="listingblock">
 <div class="title">Compare version and timestamps of installed RPMs</div>
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[spohnae@c1-master ~]$ rpm -qa | grep geowave
-geowave-0.9.3-apache-core-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-jetty-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-accumulo-0.9.3-201602012009.noarch
-geowave-0.9.3-apache-tools-0.9.3-201602012009.noarch</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
+geowave-0.9.6-SNAPSHOT-apache-core-0.9.6-SNAPSHOT-201602012009.noarch
+geowave-0.9.6-SNAPSHOT-apache-jetty-0.9.6-SNAPSHOT-201602012009.noarch
+geowave-0.9.6-SNAPSHOT-apache-accumulo-0.9.6-SNAPSHOT-201602012009.noarch
+geowave-0.9.6-SNAPSHOT-apache-tools-0.9.6-SNAPSHOT-201602012009.noarch</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2628,13 +2628,13 @@ this artifact.</p>
 <div class="sect2">
 <h3 id="prepackaged-source-and-binaries"><a class="anchor" href="#prepackaged-source-and-binaries"></a>Prepackaged Source and Binaries</h3>
 <div class="paragraph">
-<p>There is a public <a href="http://locationtech.github.io/geowave/packages.html" target="_blank">GeoWave RPM Repo</a> where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
+<p>There is a public <a href="packages.html" target="_blank">GeoWave RPM Repo</a> where you can download a tarball for the GeoWave Jace bindings for your desired platform. If your platform is not available, there is a source tarball which can be used in conjunction with CMake to build the GeoWave Jace bindings for your desired platform.</p>
 </div>
 </div>
 <div class="sect2">
 <h3 id="generate-proxies-and-build-from-source"><a class="anchor" href="#generate-proxies-and-build-from-source"></a>Generate Proxies and Build from Source</h3>
 <div class="paragraph">
-<p>If you want, you can generate and build the Jace proxies yourself. For more details on how to do this, please check out the <a href="http://locationtech.github.io/geowave/devguide.html#proxies" target="_blank">GeoWave Developer Guide</a>.</p>
+<p>If you want, you can generate and build the Jace proxies yourself. For more details on how to do this, please check out the <a href="devguide.html#proxies" target="_blank">GeoWave Developer Guide</a>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -2766,11 +2766,11 @@ this artifact.</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '0.9.3'. We support concurrent installs but only one will be active at a time.</p>
+<p>The desired version of GeoWave to install, ex: '0.9.6-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
-<p>The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2. Check the <a href="http://locationtech.github.io/geowave/packages.html" target="_blank">available packages</a> site for currently supported hadoop distributions.</p>
+<p>The Hadoop framework vendor and version against which GeoWave was built. Examples would be cdh5 or hdp2. Check the <a href="packages.html" target="_blank">available packages</a> site for currently supported hadoop distributions.</p>
 </dd>
 <dt class="hdlist1">install_accumulo</dt>
 <dd>
@@ -2818,7 +2818,7 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '0.9.3',
+  geowave_version       =&gt; '0.9.6-SNAPSHOT',
   hadoop_vendor_version =&gt; 'apache',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -2842,7 +2842,7 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.9.3',
+    geowave_version       =&gt; '0.9.6-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -2856,7 +2856,7 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.9.3',
+    geowave_version       =&gt; '0.9.6-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -2868,7 +2868,7 @@ node 'c1-app-01' {
 <div class="sect2">
 <h3 id="puppet-script-management"><a class="anchor" href="#puppet-script-management"></a>Puppet script management</h3>
 <div class="paragraph">
-<p>As mentioned in the overview, the scripts are available from within the <a href="http://locationtech.github.io/geowave/packages.html" target="_blank">GeoWave source tar bundle</a> (Search for gz to filter the list). You could also use the RPM package to install and pick up future updates on your puppet server.</p>
+<p>As mentioned in the overview, the scripts are available from within the <a href="packages.html" target="_blank">GeoWave source tar bundle</a> (Search for gz to filter the list). You could also use the RPM package to install and pick up future updates on your puppet server.</p>
 </div>
 <div class="sect3">
 <h4 id="source-archive"><a class="anchor" href="#source-archive"></a>Source Archive</h4>
@@ -2899,7 +2899,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.4-SNAPSHOT from commit 3a3eed870675dcef4506877043325236d690f5b7.</p>
+<p>This documentation was generated for GeoWave version 0.9.6-SNAPSHOT.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3002,7 +3002,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <p>To test this, type 'geowave' (no quotes) and press Enter.</p>
 </div>
 <div class="paragraph">
-<p>If a list of GeoWave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term <em>'geowave: command not found'</em> is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the <a href="http://locationtech.github.io/geowave/devguide.html#packaging-code" target="_blank">GeoWave Developer Guide</a>.</p>
+<p>If a list of GeoWave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term <em>'geowave: command not found'</em> is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the <a href="devguide.html#packaging-code" target="_blank">GeoWave Developer Guide</a>.</p>
 </div>
 <div class="paragraph">
 <p>If the alias system command is not registered, the full java command - e.g. java -cp {GEOWAVE_HOME} {GEOWAVE_JAR}) will need to be used in place of the 'geowave' alias.</p>
@@ -3098,7 +3098,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-11-16 17:53:36 +00:00
+Last updated 2017-11-16 21:00:40 +00:00
 </div>
 </div>
 </body>
