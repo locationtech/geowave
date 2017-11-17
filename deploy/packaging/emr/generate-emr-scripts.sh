@@ -50,6 +50,7 @@ cp $TEMPLATE_ROOT/geowave-install-lib.sh.template $TEMPLATE_ROOT/geowave-install
 cp $TEMPLATE_ROOT/quickstart/geowave-env.sh.template $TARGET_ROOT/quickstart/geowave-env.sh
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
+cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh.template $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 
 # copy permanent resources that don't need a template
 cp $TEMPLATE_ROOT/quickstart/setup-geoserver-geowave-workspace.sh $TARGET_ROOT/quickstart/setup-geoserver-geowave-workspace.sh
@@ -69,6 +70,8 @@ sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TARGET_ROOT/quickstart/
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
+
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 
 for datastore in "${DATASTORES[@]}"
 do
@@ -104,4 +107,5 @@ rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh
 rm $TEMPLATE_ROOT/bootstrap-jupyter.sh
 rm $TEMPLATE_ROOT/create-configure-kernel.sh
+rm $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 
