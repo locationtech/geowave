@@ -64,7 +64,7 @@ echo $(cat "$SCRIPT_DIR/geowave-$DATASTORE_TOKEN-build.properties" | grep "proje
 
 # Test to see if datastore has been initialized by looking at hdfs contents
 determine_$DATASTORE_TOKEN_hdfs_root() {
-    DATASTORE_ROOT_DIRS=('/user/$DATASTORE_TOKEN' '/$DATASTORE_TOKEN' '/apps/$DATASTORE_TOKEN')
+    DATASTORE_ROOT_DIRS=('/$DATASTORE_TOKEN' '/user/$DATASTORE_TOKEN' '/apps/$DATASTORE_TOKEN')
     ROOT_DIR=
     for dir in "${DATASTORE_ROOT_DIRS[@]}"
     do
