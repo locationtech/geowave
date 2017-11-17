@@ -121,7 +121,7 @@ cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war res
 unzip -o geoserver-2.10.0-war.zip geoserver.war
 mkdir tmp && cd tmp
 jar -xf ../geoserver.war
-rm -rf data/layergropus/*
+rm -rf data/layergroups/*
 rm -rf data/workspaces/*
 mkdir data/workspaces/geowave
 cp $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-geoserver-${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar WEB-INF/lib/
