@@ -255,7 +255,6 @@
 			<properties>
 				<geotools.scope>provided</geotools.scope>
 				<container.extension>-geotools-container</container.extension>
-				<hbase.version>1.3.0</hbase.version>
 			</properties>
 			<dependencies>
 				<dependency>

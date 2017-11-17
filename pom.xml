@@ -55,7 +55,7 @@
 		<jersey.version>2.23.1</jersey.version>
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
-		<snappy.version>1.0.5</snappy.version>
+		<snappy.version>1.1.2.6</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
 		<fasterxml.jackson.version>2.6.5</fasterxml.jackson.version>
@@ -177,7 +177,7 @@
 			<dependency>
 				<groupId>org.xerial.snappy</groupId>
 				<artifactId>snappy-java</artifactId>
-				<version>1.0.5</version>
+				<version>${snappy.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.accumulo</groupId>
