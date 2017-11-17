@@ -1,0 +1,87 @@
+#!/bin/bash
+
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+
+JUPYTER_PASSWORD=${2-geowave}
+
+# I've externalized commands into library functions for clarity, download and source
+if [ ! -f /tmp/create-configure-kernel.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+fi
+source /tmp/create-configure-kernel.sh
+
+# The EMR customize hooks run _before_ everything else, so Spark is not yet ready
+THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+RUN_FLAG="${THIS_SCRIPT}.run"
+# On first boot skip past this script to allow EMR to set up the environment. Set a callback
+# which will poll for availability of Spark and then create the jupyter kernel
+if [ ! -f "$RUN_FLAG" ]; then
+	touch "$RUN_FLAG"
+	TIMEOUT= is_master && TIMEOUT=3 || TIMEOUT=4
+	echo "bash -x $(realpath "${BASH_SOURCE[0]}") > /tmp/bootstrap-jupyter.log" | at now + $TIMEOUT min
+	exit 0 # Bail and let EMR finish initializing
+fi
+
+# Install conda
+wget https://repo.continuum.io/miniconda/Miniconda3-4.2.12-Linux-x86_64.sh -O $HOME/miniconda.sh
+
+# Download example notebooks from s3
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/ $HOME/notebooks/
+
+# Modify the file permissions to allow execution within this shell
+chmod +x $HOME/miniconda.sh
+
+# Install miniconda and output directory to ~/conda
+$HOME/miniconda.sh -b -p $HOME/conda
+
+# Add Conda to the path
+printf '\nexport PATH=$HOME/conda/bin:$PATH' >> $HOME/.bashrc
+
+# Source the new PATH
+source $HOME/.bashrc
+
+# Setup conda to use the correct channel for pixiedust prerequisites
+conda config --set always_yes yes --set changeps1 no
+conda config -f --add channels conda-forge
+
+# Install the necessary components for jupyter and pixiedust
+conda install jupyter matplotlib numpy pandas pyyaml requests
+
+# cleanup
+rm ~/miniconda.sh
+
+echo bootstrap_conda.sh completed. PATH now: $PATH
+
+echo Performing pixiedust and jupyter kernel setup.
+
+# setup python 3.5 in the master and workers
+printf "\nexport PYSPARK_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+printf "\nexport PYSPARK_DRIVER_PYTHON=$HOME/conda/bin/python3.5" >> $HOME/.bashrc
+# This was added because Upstart doesn't capture user environment variables before loading jupyter
+printf "\nexport HOSTNAME=$HOSTNAME" >> $HOME/.bashrc
+source $HOME/.bashrc
+
+pip install --upgrade pip
+# Pandas added to install again because conda-forge misses correct pytz dependency version
+pip install  pixiedust ipywidgets ipyleaflet geomet pandas
+
+jupyter nbextension enable --py --sys-prefix ipyleaflet
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
+
+# generate empty config for notebook server
+jupyter notebook --generate-config
+
+# generate default password for server
+HASHED_PASSWORD=$(python -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))")
+
+printf "c.NotebookApp.password = u'$HASHED_PASSWORD'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
+
+# Install Jupyter Kernel components on master node
+if is_master ; then
+	install_kernel	
+fi
+
