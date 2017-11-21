@@ -37,12 +37,12 @@ public class GeoWaveSQLiteApiKeyDB extends
 	public void initApiKeyDatabase() {
 		String url = "jdbc:sqlite:" + dbPath + dbFileName;
 
-		try (Connection conn = DriverManager.getConnection(url)) {	
+		try (Connection conn = DriverManager.getConnection(url)) {
 			// SQL statement for creating a new table
 			String sql = "CREATE TABLE IF NOT EXISTS api_keys (\n" + "	id integer PRIMARY KEY,\n"
 					+ "	apiKey blob NOT NULL,\n" + "	username text NOT NULL\n" + ");";
-			
-			try(Statement stmnt = conn.createStatement()) {
+
+			try (Statement stmnt = conn.createStatement()) {
 				stmnt.execute(sql);
 			}
 		}
@@ -69,8 +69,11 @@ public class GeoWaveSQLiteApiKeyDB extends
 		try (Connection conn = DriverManager.getConnection(dbUrl)) {
 			final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
 			try (PreparedStatement query_stmnt = conn.prepareStatement(sql_query)) {
-				// HP Fortify "Authorization Bypass Through User-Controlled SQL Primary Key" false positive
-				// While the actor is passing a value that is used as a primary key look-up, the results
+				// HP Fortify
+				// "Authorization Bypass Through User-Controlled SQL Primary Key"
+				// false positive
+				// While the actor is passing a value that is used as a primary
+				// key look-up, the results
 				// of the statement are never accessible by the actor.
 				query_stmnt.setString(
 						1,
@@ -104,26 +107,28 @@ public class GeoWaveSQLiteApiKeyDB extends
 
 				// look up the api key from the db
 				try (Connection conn = DriverManager.getConnection(dbUrl)) {
-					
+
 					final String sql_query = "SELECT * FROM api_keys WHERE username=?;";
 					try (PreparedStatement query_stmnt = conn.prepareStatement(sql_query)) {
 						query_stmnt.setString(
 								1,
 								username);
 						try (ResultSet rs = query_stmnt.executeQuery()) {
-	
-							// There is no existing row, so we should generate a key
+
+							// There is no existing row, so we should generate a
+							// key
 							// for this user and add it to the table
 							if (!rs.next()) {
-								
+
 								// generate new api key
 								final UUID apiKey = UUID.randomUUID();
 								userKey = username + ":" + apiKey.toString();
-		
-								// SQL statement for inserting a new user/api key
+
+								// SQL statement for inserting a new user/api
+								// key
 								final String sql = "INSERT INTO api_keys (apiKey, username)\n" + "VALUES(?, ?);";
 								LOGGER.info("Inserting a new api key and user.");
-		
+
 								try (PreparedStatement stmnt = conn.prepareStatement(sql)) {
 									stmnt.setString(
 											1,
