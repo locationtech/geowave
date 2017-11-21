@@ -30,8 +30,6 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.ListCommand;
-import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.operations.FileUpload;
 
 /**
@@ -55,8 +53,6 @@ public class ApiRestletApplication extends
 		corsService.setAllowedCredentials(true);
 		getServices().add(
 				corsService);
-		//TODO this is a workaround for Issue #1250
-		new ListCommand().computeResults(new ManualOperationParams());
 	}
 
 	@Override

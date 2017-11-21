@@ -59,6 +59,12 @@ public class FileUpload extends
 			final RestletFileUpload upload = new RestletFileUpload(
 					factory);
 
+			final List<FileItem> fileList = upload.parseRepresentation(entity);
+			if (fileList.size() != 1) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST);
+			}
+			FileItem item = fileList.get(0);
 			// 3/ Request is parsed by the handler which generates a
 			// list of FileItems
 			final String tempDir = System.getProperty("java.io.tmpdir");
@@ -68,19 +74,13 @@ public class FileUpload extends
 			final File dir = new File(
 					tempDir);
 			final File filename = File.createTempFile(
-					"uploadedfile",
-					".tmp",
+					"uploadedfile-",
+					"-" + item.getName(),
 					dir);
 			result = new UploadedFile(
 					filename.getAbsolutePath());
-			final List<FileItem> fileList = upload.parseRepresentation(entity);
-			if (fileList.size() != 1) {
-				throw new ResourceException(
-						Status.CLIENT_ERROR_BAD_REQUEST);
-			}
 			FileUtils.copyInputStreamToFile(
-					fileList.get(
-							0).getInputStream(),
+					item.getInputStream(),
 					filename);
 		}
 		else {
