@@ -8,21 +8,37 @@
 	</parent>
 	<artifactId>geowave-analytic-spark</artifactId>
 	<name>GeoWave Spark Analytics</name>
+
 	<properties>
+		<java.version>1.8</java.version>
 		<scala.version>2.11.8</scala.version>
 	</properties>
+
 	<dependencies>
+		<dependency> <!-- Spark dependency -->
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.11</artifactId>
+			<version>${spark.version}</version>
+			<scope>compile</scope>
+		</dependency>
 		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-mllib_2.11</artifactId>
+			<version>${spark.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-mapreduce</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
+				<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.11</artifactId>
-			<version>${spark.version}</version>
-		</dependency>
-		<dependency>
+				<dependency>
 			<groupId>org.scalatest</groupId>
 			<artifactId>scalatest_2.11</artifactId>
 			<version>3.0.1</version>
@@ -34,13 +50,17 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>net.alchim31.maven</groupId>
-					<artifactId>scala-maven-plugin</artifactId>
-					<version>3.2.0</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.1</version>
+					<configuration>
+						<source>${java.version}</source>
+						<target>${java.version}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>net.alchim31.maven</groupId>
+					<artifactId>scala-maven-plugin</artifactId>
 					<version>3.2.0</version>
 				</plugin>
 			</plugins>
@@ -82,23 +102,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<configuration>
-					<encoding>UTF-8</encoding>
-					<target>2.3.2</target>
-					<source>2.3.2</source>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>compile</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>findbugs-maven-plugin</artifactId>
 				<configuration>
@@ -107,5 +110,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
