@@ -53,6 +53,8 @@ public class ApiRestletApplication extends
 		corsService.setAllowedCredentials(true);
 		getServices().add(
 				corsService);
+		//TODO this is a workaround for Issue #1250
+		new ListCommand().computeResults(new ManualOperationParams());
 	}
 
 	@Override
