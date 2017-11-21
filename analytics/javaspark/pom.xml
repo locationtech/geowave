@@ -11,6 +11,7 @@
 
 	<properties>
 		<java.version>1.8</java.version>
+		<scala.version>2.11.8</scala.version>
 	</properties>
 
 	<dependencies>
@@ -32,7 +33,17 @@
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>
-
+				<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-api</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+				<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.11</artifactId>
+			<version>3.0.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -47,7 +58,56 @@
 						<target>${java.version}</target>
 					</configuration>
 				</plugin>
+				<plugin>
+					<groupId>net.alchim31.maven</groupId>
+					<artifactId>scala-maven-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>net.alchim31.maven</groupId>
+				<artifactId>scala-maven-plugin</artifactId>
+				<configuration>
+					<jvmArgs>
+						<jvmArg>-Xms1024m</jvmArg>
+						<jvmArg>-Xmx8G</jvmArg>
+						<jvmArg>-Duser.timezone=UTC</jvmArg>
+						<jvmArg>-XX:MaxPermSize=1024m</jvmArg>
+					</jvmArgs>
+					<args>
+						<arg>-nowarn</arg>
+						<arg>-unchecked</arg>
+						<arg>-deprecation</arg>
+					</args>
+					<scalaVersion>${scala.version}</scalaVersion>
+				</configuration>
+				<executions>
+					<execution>
+						<id>scala-compile-first</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>add-source</goal>
+							<goal>compile</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>scala-test-compile</id>
+						<phase>process-test-resources</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>findbugs-maven-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
+			</plugin>
+		</plugins>
 	</build>
 </project>
