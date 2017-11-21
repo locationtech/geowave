@@ -55,7 +55,7 @@ public class GeoServerRemoveDatastoreCommand extends
 			throw new ParameterException(
 					"Requires argument: <datastore name>");
 		}
-		
+
 		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}

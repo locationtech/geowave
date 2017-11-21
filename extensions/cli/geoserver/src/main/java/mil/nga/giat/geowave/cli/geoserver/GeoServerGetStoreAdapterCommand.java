@@ -30,32 +30,32 @@ public class GeoServerGetStoreAdapterCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String storeName = null;
 
-    @Override
-    public void execute(
-            final OperationParams params )
-            throws Exception {
-        List<String> adapterList = computeResults(params);
+	@Override
+	public void execute(
+			final OperationParams params )
+			throws Exception {
+		List<String> adapterList = computeResults(params);
 
-        JCommander.getConsole().println(
-                "Store " + storeName + " has these adapters:");
-        for (final String adapterId : adapterList) {
-            JCommander.getConsole().println(
-                    adapterId);
-        }
-    }
+		JCommander.getConsole().println(
+				"Store " + storeName + " has these adapters:");
+		for (final String adapterId : adapterList) {
+			JCommander.getConsole().println(
+					adapterId);
+		}
+	}
 
-    @Override
-    public List<String> computeResults(
-            final OperationParams params )
-            throws Exception {
-        if (parameters.size() != 1) {
-            throw new ParameterException(
-                    "Requires argument: <store name>");
-        }
-        storeName = parameters.get(0);
-        final List<String> adapterList = geoserverClient.getStoreAdapters(
-                storeName,
-                null);
-        return adapterList;
-    }
+	@Override
+	public List<String> computeResults(
+			final OperationParams params )
+			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <store name>");
+		}
+		storeName = parameters.get(0);
+		final List<String> adapterList = geoserverClient.getStoreAdapters(
+				storeName,
+				null);
+		return adapterList;
+	}
 }

@@ -58,7 +58,7 @@ public class GeoServerSetLayerStyleCommand extends
 			throw new ParameterException(
 					"Requires argument: <layer name>");
 		}
-		
+
 		layerName = parameters.get(0);
 
 		final Response setLayerStyleResponse = geoserverClient.setLayerStyle(

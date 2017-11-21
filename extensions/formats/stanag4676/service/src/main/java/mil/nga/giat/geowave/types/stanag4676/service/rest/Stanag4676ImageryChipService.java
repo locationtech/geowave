@@ -579,7 +579,7 @@ public class Stanag4676ImageryChipService
 		}
 		return props;
 	}
-	
+
 	private static String getProperty(
 			final Properties props,
 			final String name ) {

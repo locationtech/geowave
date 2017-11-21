@@ -67,8 +67,8 @@ public class S3URLConnection extends
 				PROP_S3_HANDLER_SIGNER_OVERRIDE,
 				null);
 
-		final ClientConfiguration clientConfig = new ClientConfiguration()
-				.withProtocol("https".equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
+		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol("https"
+				.equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
 
 		if (userAgent != null) {
 			clientConfig.setUserAgent(userAgent);

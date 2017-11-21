@@ -262,8 +262,8 @@ public class ConfigGeoServerCommand extends
 				existingProps,
 				this.getClass(),
 				GEOSERVER_NAMESPACE_PREFIX);
-				GeoServerRestClient.invalidateInstance();
-		 
+		GeoServerRestClient.invalidateInstance();
+
 		// generate a return for rest calls
 		StringBuilder builder = new StringBuilder();
 		for (Object key : existingProps.keySet()) {
