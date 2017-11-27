@@ -11,7 +11,7 @@ _v${project.version}_
 
 This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit: 
 
-- link:aws-env.html#[Amazon Web Services EMR]
+- link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
 
 == Configuring Spark
 
@@ -56,7 +56,7 @@ image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
 
 To properly run and access GeoWave classes from the Zeppelin notebook we must configure the Zeppelin installation on emr before running. We've created a bootstrap script to do that for you that can be found here:
 
-- Zeppelin Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/jupyter/bootstrap-zeppelin.sh
+- Zeppelin Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/zeppelin/bootstrap-zeppelin.sh
 
 This bootstrap script will configure Zeppelin to access GeoWave classes, install the correct GeoWave jar file (more information in appendices), and setup other spark settings for Zeppelin. This script needs to be run as a bootstrap action when creating the EMR cluster.
 
@@ -66,7 +66,7 @@ It is recommended to use the Accumulo bootstrap script as the first bootstrap sc
 
 - Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
 
-For more information on setting up bootstrap actions visit this link:aws-env.html#[Amazon Web Services EMR]
+For more information on setting up bootstrap actions visit this link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
 ====
 
 == Connect to the notebook server
@@ -95,7 +95,7 @@ If you want to add a notebook from the url you will need to use the raw file lin
 
 === Restarting the Zeppelin Daemon
 
-The Zeppelin notebook server is launched at cluster creation as a link:http://upstart.ubuntu.com/[Upstart] service. If Zeppelin should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.
+The Zeppelin notebook server is launched at cluster creation as a link:http://upstart.ubuntu.com/[Upstart, window="_blank"] service. If Zeppelin should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.
 
 . SSH into the emr cluster
 . Run the following commands
@@ -109,7 +109,7 @@ sudo start zeppelin
 
 == Update GeoWave Jar file
 
-Due to a bug with Zeppelin on EMR a different build of GeoWave using Accumulo 1.7.x must be used on the cluster if you intend to use Accumulo Datastores. If you used the bootstrap script to setup the cluster for Zeppelin these steps are done automatically and you do not need to run the following steps in your cluster. If you want to package geowave locally and use that jar on your cluster follow the link:devguide.html#[developers guide] and run the following steps.
+Due to a bug with Zeppelin on EMR a different build of GeoWave using Accumulo 1.7.x must be used on the cluster if you intend to use Accumulo Datastores. If you used the bootstrap script to setup the cluster for Zeppelin these steps are done automatically and you do not need to run the following steps in your cluster. If you want to package geowave locally and use that jar on your cluster follow the link:devguide.html#[developers guide, window="_blank"] and run the following steps.
 
 . Run the following command to package the source with Accumulo 1.7.x
 +
