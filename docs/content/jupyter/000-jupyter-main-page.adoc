@@ -11,7 +11,7 @@ _v${project.version}_
 
 This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit: 
 
-- link:aws-env.html#[Amazon Web Services EMR]
+- link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
 
 == Configuring Spark
 
