@@ -51,6 +51,7 @@ cp $TEMPLATE_ROOT/quickstart/geowave-env.sh.template $TARGET_ROOT/quickstart/geo
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
 cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh.template $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+cp $TEMPLATE_ROOT/configure-zeppelin.sh.template $TEMPLATE_ROOT/configure-zeppelin.sh
 
 # copy permanent resources that don't need a template
 cp $TEMPLATE_ROOT/quickstart/setup-geoserver-geowave-workspace.sh $TARGET_ROOT/quickstart/setup-geoserver-geowave-workspace.sh
@@ -72,6 +73,8 @@ sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLAT
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/configure-zeppelin.sh
 
 for datastore in "${DATASTORES[@]}"
 do
@@ -102,10 +105,17 @@ mkdir -p $TARGET_ROOT/jupyter
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh
 
+# Copy zeppelin additions to separate generated folder
+# This will put scripts into separate zeppelin folder on s3 when published.
+mkdir -p $TARGET_ROOT/zeppelin
+cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh $TARGET_ROOT/zeppelin/bootstrap-zeppelin.sh
+cp $TEMPLATE_ROOT/configure-zeppelin.sh $TARGET_ROOT/zeppelin/configure-zeppelin.sh
+
 # clean up temporary templates
 rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh
 rm $TEMPLATE_ROOT/bootstrap-jupyter.sh
 rm $TEMPLATE_ROOT/create-configure-kernel.sh
 rm $TEMPLATE_ROOT/bootstrap-zeppelin.sh
+rm $TEMPLATE_ROOT/configure-zeppelin.sh
 

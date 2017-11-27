@@ -1,0 +1,113 @@
+#!/bin/bash
+
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+INTIAL_POLLING_INTERVAL=15 # This gets doubled for each attempt up to max_attempts
+
+# Parses a configuration file put in place by EMR to determine the role of this node
+
+is_master() {
+  if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Avoid race conditions and actually poll for availability of component dependencies
+# Credit: http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs/8351489#8351489
+with_backoff() {
+  local max_attempts=${ATTEMPTS-5}
+  local timeout=${INTIAL_POLLING_INTERVAL-1}
+  local attempt=0
+  local exitCode=0
+
+  while (( $attempt < $max_attempts ))
+  do
+    set +e
+    "$@"
+    exitCode=$?
+    set -e
+
+    if [[ $exitCode == 0 ]]
+    then
+      break
+    fi
+
+    echo "Retrying $@ in $timeout.." 1>&2
+    sleep $timeout
+    attempt=$(( attempt + 1 ))
+    timeout=$(( timeout * 2 ))
+  done
+
+  if [[ $exitCode != 0 ]]
+  then
+    echo "Fail: $@ failed to complete after $max_attempts attempts" 1>&2
+  fi
+
+  return $exitCode
+}
+
+is_geowave_available() {
+	geowave
+	return $?
+}
+
+wait_until_geowave_is_available() {
+	with_backoff is_geowave_available
+	if [ $? != 0 ]; then
+		echo "GeoWave not available before timeout. Exiting ..."
+		exit 1
+	fi
+}
+
+config_zep() {
+wait_until_geowave_is_available
+
+#Use jq to remove unnecessary keys
+GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
+ZEPPELIN_ENV=/usr/lib/zeppelin/conf/zeppelin-env.sh
+
+#Add geowave jar to submit --jars option
+jar_arg='--jars '${GEOWAVE_INSTALL}
+
+#Modifying default spark allocation properties to use max memory resources available with HBase
+YARN_SCHED_MAX=`xmllint --xpath 'string(//property[name="yarn.scheduler.maximum-allocation-mb"]/value)' /etc/hadoop/conf/yarn-site.xml`
+YARN_CONT_MAX=`xmllint --xpath 'string(//property[name="yarn.nodemanager.resource.memory-mb"]/value)' /etc/hadoop/conf/yarn-site.xml`
+echo "Yarn Scheduler Max Memory = ${YARN_SCHED_MAX}(MB)"
+echo "Yarn Container Max Memory = ${YARN_CONT_MAX}(MB)"
+
+MAX_MOD=0.9
+CONT_MOD=0.8
+#Use bc calculator to get new max and container memory and truncate floating result
+MOD_SCHED_MAX=$(echo "($YARN_SCHED_MAX*$MAX_MOD) / 1" | bc)
+MOD_CONT_MAX=$(echo "($YARN_CONT_MAX*$CONT_MOD) / 1" | bc)
+
+echo "Modified Yarn Scheduler Max Memory = ${MOD_SCHED_MAX}(MB)"
+echo "Modified Yarn Container Max Memory = ${MOD_CONT_MAX}(MB)"
+
+DRIVER_MEM="--driver-memory ${MOD_SCHED_MAX}M "
+EXECUTOR_MEM="--executor-memory ${MOD_CONT_MAX}M "
+
+submit_string=$DRIVER_MEM$EXECUTOR_MEM$jar_arg
+
+echo "New Spark Submit Options: ${submit_string}"
+
+# add spark submit options to zeppelin env
+replaceEscaped=$(sed 's/[&/\]/\\&/g' <<<"${submit_string}")
+sudo sed -i -e s/'$SPARK_SUBMIT_OPTIONS'/"$replaceEscaped"/g $ZEPPELIN_ENV
+
+# This was added because Upstart doesn't capture user environment variables before loading zeppelin
+# Cant use the printf command to insert into priviledged file instead use tee command to append
+# /dev/null prevents command from writing output to console
+printf "\nexport HOSTNAME=$HOSTNAME" | sudo tee --append $ZEPPELIN_ENV > /dev/null
+
+#TODO REPLACE WITH FINAL JAR LOCATION
+# Download geowave jar and install at correct location
+aws s3 cp s3://geowave-jupyter/geowave-deploy-accumulo17.jar /mnt/tmp/geowave-deploy-accumulo17.jar
+mkdir $HOME/backup/
+sudo mv $GEOWAVE_INSTALL $HOME/backup/
+sudo mv /mnt/tmp/geowave-deploy-accumulo17.jar $GEOWAVE_INSTALL
+
+return 0
+}
+
