@@ -91,14 +91,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.javaspark">mil.nga.giat.geowave.analytic.javaspark</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.javaspark.sparksql">mil.nga.giat.geowave.analytic.javaspark.sparksql</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.clustering">mil.nga.giat.geowave.analytic.mapreduce.clustering</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -112,6 +104,14 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.mapreduce.nn">mil.nga.giat.geowave.analytic.mapreduce.nn</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.spark">mil.nga.giat.geowave.analytic.spark</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.spark.sparksql">mil.nga.giat.geowave.analytic.spark.sparksql</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -241,96 +241,6 @@
 <td class="colLast"><span class="typeNameLabel">VectorExportMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/export/VectorExportMapper.html#map-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-org.opengis.feature.simple.SimpleFeature-org.apache.hadoop.mapreduce.Mapper.Context-">map</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
    org.opengis.feature.simple.SimpleFeature&nbsp;value,
    org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.javaspark">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/package-summary.html">mil.nga.giat.geowave.analytic.javaspark</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/package-summary.html">mil.nga.giat.geowave.analytic.javaspark</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-int-int-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
-                    int&nbsp;minSplits,
-                    int&nbsp;maxSplits)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/package-summary.html">mil.nga.giat.geowave.analytic.javaspark</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;com.vividsolutions.jts.geom.Point&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddFeatureCentroids-org.apache.spark.api.java.JavaPairRDD-">rddFeatureCentroids</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddFeatures-org.apache.spark.api.java.JavaPairRDD-">rddFeatures</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddFeatureVectors-org.apache.spark.api.java.JavaPairRDD-">rddFeatureVectors</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/GeoWaveRDD.html#rddFeatureVectors-org.apache.spark.api.java.JavaPairRDD-java.lang.String-mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange-">rddFeatureVectors</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;timeField,
-                 <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">ScaledTemporalRange</a>&nbsp;scaledRange)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.javaspark.sparksql">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/sparksql/package-summary.html">mil.nga.giat.geowave.analytic.javaspark.sparksql</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/sparksql/package-summary.html">mil.nga.giat.geowave.analytic.javaspark.sparksql</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleFeatureDataFrame.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/sparksql/SimpleFeatureDataFrame.html#getDataFrame-org.apache.spark.api.java.JavaPairRDD-">getDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleFeatureDataFrame.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/javaspark/sparksql/SimpleFeatureDataFrame.html#resetDataFrame-org.apache.spark.api.java.JavaPairRDD-">resetDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -524,6 +434,96 @@
 <td class="colLast"><span class="typeNameLabel">NNMapReduce.NNMapper.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/nn/NNMapReduce.NNMapper.html#map-mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey-java.lang.Object-org.apache.hadoop.mapreduce.Mapper.Context-">map</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>&nbsp;key,
    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;value,
    org.apache.hadoop.mapreduce.Mapper.Context&nbsp;context)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddForSimpleFeatures-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-int-int-">rddForSimpleFeatures</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                    int&nbsp;minSplits,
+                    int&nbsp;maxSplits)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;com.vividsolutions.jts.geom.Point&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddFeatureCentroids-org.apache.spark.api.java.JavaPairRDD-">rddFeatureCentroids</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddFeatures-org.apache.spark.api.java.JavaPairRDD-">rddFeatures</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddFeatureVectors-org.apache.spark.api.java.JavaPairRDD-">rddFeatureVectors</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.mllib.linalg.Vector&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#rddFeatureVectors-org.apache.spark.api.java.JavaPairRDD-java.lang.String-mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange-">rddFeatureVectors</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;timeField,
+                 <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">ScaledTemporalRange</a>&nbsp;scaledRange)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/package-summary.html">mil.nga.giat.geowave.analytic.spark.sparksql</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/package-summary.html">mil.nga.giat.geowave.analytic.spark.sparksql</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SimpleFeatureDataFrame.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#getDataFrame-org.apache.spark.api.java.JavaPairRDD-">getDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">SimpleFeatureDataFrame.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#resetDataFrame-org.apache.spark.api.java.JavaPairRDD-">resetDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
