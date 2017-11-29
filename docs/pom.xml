@@ -337,6 +337,24 @@
                         </goals>
                     </execution>
                     <execution>
+                        <id>generate-zeppelin</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <target>
+                                <fileset id="generate-index-file-zeppelin" dir="${project.basedir}/content/zeppelin" includes="*.adoc" />
+                                <!-- Abusing this a bit to do some simple templating, I have a file
+                                 list and need a list of asciidoc includes that look like include::000-titlepage.adoc[] -->
+                                <pathconvert pathsep="[]${line.separator}" property="asciidoc-files" refid="generate-index-file-zeppelin">
+                                    <map from="${project.basedir}/content/zeppelin/" to="include::" />
+                                </pathconvert>
+                                <echo file="${project.build.directory}/content/zeppelin/zeppelin.adoc">${asciidoc-files}[]</echo>
+                            </target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
                         <id>generate-commands</id>
                         <phase>generate-sources</phase>
                         <configuration>
@@ -558,6 +576,23 @@
                                 </configuration>
                             </execution>
                             <execution>
+                                <id>generate-pdf-zeppelin</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <sourceDirectory>${project.build.directory}/content/zeppelin</sourceDirectory>
+                                    <sourceDocumentName>zeppelin.adoc</sourceDocumentName>
+                                    <requires>
+                                        <require>asciidoctor-pdf</require>
+                                    </requires>
+                                    <backend>pdf</backend>
+                                    <compact>true</compact>
+                                    <sourceHighlighter>coderay</sourceHighlighter>
+                                </configuration>
+                            </execution>
+                            <execution>
                                 <id>generate-pdf-commands</id>
                                 <phase>generate-resources</phase>
                                 <goals>
@@ -720,6 +755,19 @@
                                 <configuration>
                                     <sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
                                     <sourceDocumentName>jupyter.adoc</sourceDocumentName>
+                                    <backend>epub3</backend>
+                                    <sourceHighlighter>coderay</sourceHighlighter>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-epub-zeppelin</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <sourceDirectory>${project.build.directory}/content/zeppelin</sourceDirectory>
+                                    <sourceDocumentName>zeppelin.adoc</sourceDocumentName>
                                     <backend>epub3</backend>
                                     <sourceHighlighter>coderay</sourceHighlighter>
                                 </configuration>
@@ -1020,6 +1068,30 @@
                                 <configuration>
                                     <sourceDirectory>${project.build.directory}/content/jupyter</sourceDirectory>
                                     <sourceDocumentName>jupyter.adoc</sourceDocumentName>
+                                    <backend>html5</backend>
+                                    <sourceHighlighter>highlightjs</sourceHighlighter>
+                                    <attributes>
+                                        <stylesdir>../geowave-index/stylesheets</stylesdir>
+                                        <stylesheet>geowave.css</stylesheet>
+                                        <imagesdir>./images</imagesdir>
+                                        <toc>right</toc>
+                                        <icons>font</icons>
+                                        <sectanchors>true</sectanchors>
+                                        <idprefix />
+                                        <idseparator>-</idseparator>
+                                        <docinfo1>true</docinfo1>
+                                    </attributes>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>generate-html-zeppelin</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>process-asciidoc</goal>
+                                </goals>
+                                <configuration>
+                                    <sourceDirectory>${project.build.directory}/content/zeppelin</sourceDirectory>
+                                    <sourceDocumentName>zeppelin.adoc</sourceDocumentName>
                                     <backend>html5</backend>
                                     <sourceHighlighter>highlightjs</sourceHighlighter>
                                     <attributes>

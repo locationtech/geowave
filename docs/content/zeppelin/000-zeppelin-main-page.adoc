@@ -1,0 +1,144 @@
+[[quickstart-zeppelin-page]]
+<<<
+
+_v${project.version}_
+
+:linkattrs:
+
+= GeoWave Quickstart Guide: Zeppelin Notebook image:geowave-icon-logo-cropped.png[width="28%"]
+
+== Assumptions
+
+This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit: 
+
+- link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
+
+== Configuring Spark
+
+To better configure Spark for our demos we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called `maximizeResourceAllocation`. This option has to be provided at cluster creation as a configuration option given to Spark. 
+For more information on how to set this option visit link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html[Configuring Spark].
+
+[WARNING]
+====
+Setting this option on some smaller instances with HBase installed can cut the maximum available yarn resources in half (see link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hadoop-task-config.html[here] for memory config per instance type). *AWS DOES NOT* account for HBase being installed when using `maximizeResourceAllocation`.
+When running through Zeppelin notebook there is no issue because we account for this ourselves, but if you want to use spark through the CLI or shell this can break spark unless you modify the `spark-defaults.conf` manually.
+====
+
+== Recommended Hardware settings
+
+Currently, there are two notebook demos using differently sized data sets. If you wish to run either zeppelin notebook demo you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified for the demos below.
+
+image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
+
+=== GDELT Demo Settings
+- Root device EBS volume size
+** Set this to at least 20gb
+- Master
+** Edit the Instance Type to be m4.2xlarge
+** Do not touch the EBS Storage
+- Core
+** Edit the Instance Type to be m4.2xlarge
+** Select 4 for the Instance count
+** Do not touch the EBS Storage or Auto Scaling
+
+=== GPX Demo Settings
+- Root device EBS volume size
+** Set this to at least 20gb
+- Master
+** Edit the Instance Type to be m4.2xlarge
+** Do not touch the EBS Storage
+- Core
+** Edit the Instance Type to be m4.2xlarge
+** Select 8 for the Instance count
+** Do not touch the EBS Storage or Auto Scaling
+
+== Configure Zeppelin
+
+To properly run and access GeoWave classes from the Zeppelin notebook we must configure the Zeppelin installation on emr before running. We've created a bootstrap script to do that for you that can be found here:
+
+- Zeppelin Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/zeppelin/bootstrap-zeppelin.sh
+
+This bootstrap script will configure Zeppelin to access GeoWave classes, install the correct GeoWave jar file (more information in appendices), and setup other spark settings for Zeppelin. This script needs to be run as a bootstrap action when creating the EMR cluster.
+
+[NOTE]
+====
+It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application (backed by S3) to add to your cluster from AWS. 
+
+- Accumulo Bootstrap: http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh
+
+For more information on setting up bootstrap actions visit this link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
+====
+
+== Connect to the notebook server
+
+After your cluster has been created with the script above and is in the Waiting state, you are ready to connect to the notebook server and run the demo:
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+. Use the master public dns of the cluster like below in your browser to connect to the notebook server.  
++
+[source]
+----
+{master_public_dns}:8890
+----
+. Import the example notebooks into Zeppelin
+.. Example notebooks found link:https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin[here]
++
+[NOTE]
+====
+If you want to add a notebook from the url you will need to use the raw file link on github.
+====
+  
+. Then simply select the demo notebook you wish to run and follow the instructions in the notebook to proceed through the demo.
+
+== Appendices
+
+=== Restarting the Zeppelin Daemon
+
+The Zeppelin notebook server is launched at cluster creation as a link:http://upstart.ubuntu.com/[Upstart, window="_blank"] service. If Zeppelin should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.
+
+. SSH into the emr cluster
+. Run the following commands
+
++
+[source, bash]
+----
+sudo stop zeppelin
+sudo start zeppelin
+----
+
+== Update GeoWave Jar file
+
+Due to a bug with Zeppelin on EMR a different build of GeoWave using Accumulo 1.7.x must be used on the cluster if you intend to use Accumulo Datastores. If you used the bootstrap script to setup the cluster for Zeppelin these steps are done automatically and you do not need to run the following steps in your cluster. If you want to package geowave locally and use that jar on your cluster follow the link:devguide.html#[developers guide, window="_blank"] and run the following steps.
+
+. Run the following command to package the source with Accumulo 1.7.x
++
+[source, bash]
+----
+mvn clean  package -DskipTests -Dfindbugs.skip -am -pl deploy -Pgeowave-tools-singlejar -Daccumulo.version=1.7.2 -Daccumulo.api=1.7
+----
+. Upload the newly created snapshot tools jar file located in `deploy/target/` of your geowave source directory to a s3 bucket accessible by the cluster. 
+. SSH into the emr cluster
+. Run the following commands
++
+[source,bash,subs="verbatim,attributes"]
+----
+aws s3 cp s3://insert_path_to_jar_here ~/
+mkdir ~/backup/
+sudo mv /usr/local/geowave/tools/geowave-tools-0.9.7-apache.jar ~/backup/
+sudo mv ~/insert_jar_file_here
+----
+
+Following these steps will allow you to maintain a backup jar, and update the jar used by Zeppelin. Simply restore the backup jar to the original location if you encounter errors after these steps. If you were running a Zeppelin notebook before running these steps you will need to restart the spark interpreter to update the jar file used by YARN.
+
+
+
+
+
+
+
+
+
+
+
+
