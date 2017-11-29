@@ -5,7 +5,7 @@
 <!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 1.5.2">
-<title>GeoWave Quickstart Guide</title>
+<title>GeoWave Quickstart Guide: Zeppelin Notebook</title>
 <style>
 /* Asciidoctor default stylesheet | MIT License | http://asciidoctor.org */
 @import "https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic|Noto+Serif:400,400italic,700,700italic|Droid+Sans+Mono:400";
@@ -420,12 +420,24 @@ href="images/geowave-icon-logo-small.png">
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel0">
-<li><a href="#geowave-quickstart-guide-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
+<li><a href="#geowave-quickstart-guide-zeppelin-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span">GeoWave Quickstart Guide: Zeppelin Notebook <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></a>
 <ul class="sectlevel1">
-<li><a href="#environment-options">Environment Options</a></li>
-<li><a href="#walkthroughs">Walkthroughs</a></li>
-<li><a href="#notebook-examples">Notebook Examples</a></li>
-<li><a href="#further-documentation">Further Documentation</a></li>
+<li><a href="#assumptions">Assumptions</a></li>
+<li><a href="#configuring-spark">Configuring Spark</a></li>
+<li><a href="#recommended-hardware-settings">Recommended Hardware settings</a>
+<ul class="sectlevel2">
+<li><a href="#gdelt-demo-settings">GDELT Demo Settings</a></li>
+<li><a href="#gpx-demo-settings">GPX Demo Settings</a></li>
+</ul>
+</li>
+<li><a href="#configure-zeppelin">Configure Zeppelin</a></li>
+<li><a href="#connect-to-the-notebook-server">Connect to the notebook server</a></li>
+<li><a href="#appendices">Appendices</a>
+<ul class="sectlevel2">
+<li><a href="#restarting-the-zeppelin-daemon">Restarting the Zeppelin Daemon</a></li>
+</ul>
+</li>
+<li><a href="#update-geowave-jar-file">Update GeoWave Jar file</a></li>
 </ul>
 </li>
 </ul>
@@ -440,81 +452,309 @@ href="images/geowave-icon-logo-small.png">
 </div>
 </div>
 </div>
-<h1 id="geowave-quickstart-guide-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h1>
-<div class="openblock partintro">
+<h1 id="geowave-quickstart-guide-zeppelin-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span" class="sect0"><a class="anchor" href="#geowave-quickstart-guide-zeppelin-notebook-span-class-image-img-src-images-geowave-icon-logo-cropped-png-alt-geowave-icon-logo-cropped-width-28-span"></a>GeoWave Quickstart Guide: Zeppelin Notebook <span class="image"><img src="./images/geowave-icon-logo-cropped.png" alt="geowave-icon-logo-cropped" width="28%"></span></h1>
+<div class="sect1">
+<h2 id="assumptions"><a class="anchor" href="#assumptions"></a>Assumptions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>This document assumes you understand how to create and configure an EMR cluster for GeoWave. If you need more information on the steps involved in setting up a cluster to support GeoWave visit:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="aws-env.html#" target="_blank">Amazon Web Services EMR</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="configuring-spark"><a class="anchor" href="#configuring-spark"></a>Configuring Spark</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To better configure Spark for our demos we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called <code>maximizeResourceAllocation</code>. This option has to be provided at cluster creation as a configuration option given to Spark.
+For more information on how to set this option visit <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html">Configuring Spark</a>.</p>
+</div>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>Setting this option on some smaller instances with HBase installed can cut the maximum available yarn resources in half (see <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hadoop-task-config.html">here</a> for memory config per instance type). <strong>AWS DOES NOT</strong> account for HBase being installed when using <code>maximizeResourceAllocation</code>.
+When running through Zeppelin notebook there is no issue because we account for this ourselves, but if you want to use spark through the CLI or shell this can break spark unless you modify the <code>spark-defaults.conf</code> manually.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="recommended-hardware-settings"><a class="anchor" href="#recommended-hardware-settings"></a>Recommended Hardware settings</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Currently, there are two notebook demos using differently sized data sets. If you wish to run either zeppelin notebook demo you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified for the demos below.</p>
+</div>
+<div class="imageblock">
 <div class="content">
-The GeoWave quickstart guide is designed to allow a new user to walkthrough a simple use case using the tools built
-into the GeoWave framework. We currently have both a vector and raster walkthough which can be run in and AWS EMR environment
-or on your local machine in a single node sandbox using VirtualBox. There are also Jupyter and Zeppelin Notebook examples for users
-looking try out GeoWave in that manner.
+<img src="./images/aws-gui-method-3.png" alt="select emr">
 </div>
 </div>
-<div class="sect1">
-<h2 id="environment-options"><a class="anchor" href="#environment-options"></a>Environment Options</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="gdelt-demo-settings"><a class="anchor" href="#gdelt-demo-settings"></a>GDELT Demo Settings</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="aws-env.html#">Amazon Web Services EMR</a></p>
+<p>Root device EBS volume size</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Set this to at least 20gb</p>
+</li>
+</ul>
+</div>
 </li>
 <li>
-<p><a href="sandbox-env.html#">Sandbox VirtualBox Image</a></p>
+<p>Master</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Edit the Instance Type to be m4.2xlarge</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Core</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Edit the Instance Type to be m4.2xlarge</p>
+</li>
+<li>
+<p>Select 4 for the Instance count</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage or Auto Scaling</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="gpx-demo-settings"><a class="anchor" href="#gpx-demo-settings"></a>GPX Demo Settings</h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Root device EBS volume size</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Set this to at least 20gb</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Master</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Edit the Instance Type to be m4.2xlarge</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Core</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Edit the Instance Type to be m4.2xlarge</p>
+</li>
+<li>
+<p>Select 8 for the Instance count</p>
+</li>
+<li>
+<p>Do not touch the EBS Storage or Auto Scaling</p>
+</li>
+</ul>
+</div>
 </li>
 </ul>
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
-<h2 id="walkthroughs"><a class="anchor" href="#walkthroughs"></a>Walkthroughs</h2>
+<h2 id="configure-zeppelin"><a class="anchor" href="#configure-zeppelin"></a>Configure Zeppelin</h2>
 <div class="sectionbody">
+<div class="paragraph">
+<p>To properly run and access GeoWave classes from the Zeppelin notebook we must configure the Zeppelin installation on emr before running. We&#8217;ve created a bootstrap script to do that for you that can be found here:</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
-<p><a href="walkthrough-vector.html#">Vector Demo</a></p>
-</li>
-<li>
-<p><a href="walkthrough-raster.html#">Raster Demo</a></p>
-</li>
-<li>
-<p><a href="integrate-geoserver.html#">GeoServer Integration</a></p>
-</li>
-<li>
-<p><a href="interact-cluster.html#">Interacting with the cluster</a></p>
+<p>Zeppelin Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/zeppelin/bootstrap-zeppelin.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/zeppelin/bootstrap-zeppelin.sh</a></p>
 </li>
 </ul>
 </div>
+<div class="paragraph">
+<p>This bootstrap script will configure Zeppelin to access GeoWave classes, install the correct GeoWave jar file (more information in appendices), and setup other spark settings for Zeppelin. This script needs to be run as a bootstrap action when creating the EMR cluster.</p>
 </div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>It is recommended to use the Accumulo bootstrap script as the first bootstrap script to setup your cluster. Doing so will let you use both HBase and Accumulo as long as you select HBase as a default application (backed by S3) to add to your cluster from AWS.</p>
 </div>
-<div class="sect1">
-<h2 id="notebook-examples"><a class="anchor" href="#notebook-examples"></a>Notebook Examples</h2>
-<div class="sectionbody">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="jupyter.html#">Jupyter</a></p>
-</li>
-<li>
-<p><a href="zeppelin.html#">Zeppelin</a></p>
+<p>Accumulo Bootstrap: <a href="http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh" class="bare">http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh</a></p>
 </li>
 </ul>
 </div>
-<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p>For more information on setting up bootstrap actions visit this <a href="aws-env.html#" target="_blank">Amazon Web Services EMR</a></p>
+</div>
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="further-documentation"><a class="anchor" href="#further-documentation"></a>Further Documentation</h2>
+<h2 id="connect-to-the-notebook-server"><a class="anchor" href="#connect-to-the-notebook-server"></a>Connect to the notebook server</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>More information on GeoWave, including the User/Developer Guides and further information on many of the commands run in these demos can be found below.</p>
+<p>After your cluster has been created with the script above and is in the Waiting state, you are ready to connect to the notebook server and run the demo:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/interacting-cluster-1.png" alt="select emr">
+</div>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Use the master public dns of the cluster like below in your browser to connect to the notebook server.</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code>{master_public_dns}:8890</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Import the example notebooks into Zeppelin</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Example notebooks found <a href="https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin">here</a></p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you want to add a notebook from the url you will need to use the raw file link on github.</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>Then simply select the demo notebook you wish to run and follow the instructions in the notebook to proceed through the demo.</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="appendices"><a class="anchor" href="#appendices"></a>Appendices</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="restarting-the-zeppelin-daemon"><a class="anchor" href="#restarting-the-zeppelin-daemon"></a>Restarting the Zeppelin Daemon</h3>
+<div class="paragraph">
+<p>The Zeppelin notebook server is launched at cluster creation as a <a href="http://upstart.ubuntu.com/" target="_blank">Upstart</a> service. If Zeppelin should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>SSH into the emr cluster</p>
+</li>
+<li>
+<p>Run the following commands</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">sudo stop zeppelin
+sudo start zeppelin</code></pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="update-geowave-jar-file"><a class="anchor" href="#update-geowave-jar-file"></a>Update GeoWave Jar file</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Due to a bug with Zeppelin on EMR a different build of GeoWave using Accumulo 1.7.x must be used on the cluster if you intend to use Accumulo Datastores. If you used the bootstrap script to setup the cluster for Zeppelin these steps are done automatically and you do not need to run the following steps in your cluster. If you want to package geowave locally and use that jar on your cluster follow the <a href="devguide.html#" target="_blank">developers guide</a> and run the following steps.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Run the following command to package the source with Accumulo 1.7.x</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">mvn clean  package -DskipTests -Dfindbugs.skip -am -pl deploy -Pgeowave-tools-singlejar -Daccumulo.version=1.7.2 -Daccumulo.api=1.7</code></pre>
+</div>
+</div>
+</li>
+<li>
+<p>Upload the newly created snapshot tools jar file located in <code>deploy/target/</code> of your geowave source directory to a s3 bucket accessible by the cluster.</p>
+</li>
+<li>
+<p>SSH into the emr cluster</p>
+</li>
+<li>
+<p>Run the following commands</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">aws s3 cp s3://insert_path_to_jar_here ~/
+mkdir ~/backup/
+sudo mv /usr/local/geowave/tools/geowave-tools-0.9.7-apache.jar ~/backup/
+sudo mv ~/insert_jar_file_here</code></pre>
+</div>
+</div>
+</li>
+</ol>
 </div>
 <div class="paragraph">
-<p><a href="userguide.html" target="_blank"><strong>User Guide</strong></a></p>
-</div>
-<div class="paragraph">
-<p><a href="devguide.html" target="_blank"><strong>Developer Guide</strong></a></p>
-</div>
-<div class="paragraph">
-<p><a href="commands.html" target="_blank"><strong>Command Line Controls</strong></a></p>
+<p>Following these steps will allow you to maintain a backup jar, and update the jar used by Zeppelin. Simply restore the backup jar to the original location if you encounter errors after these steps. If you were running a Zeppelin notebook before running these steps you will need to restart the spark interpreter to update the jar file used by YARN.</p>
 </div>
 </div>
 </div>
