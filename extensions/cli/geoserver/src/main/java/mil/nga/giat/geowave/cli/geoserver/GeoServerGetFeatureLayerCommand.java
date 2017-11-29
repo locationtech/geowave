@@ -50,7 +50,7 @@ public class GeoServerGetFeatureLayerCommand extends
 			throw new ParameterException(
 					"Requires argument: <layer name>");
 		}
-		
+
 		layerName = parameters.get(0);
 
 		final Response getLayerResponse = geoserverClient.getFeatureLayer(layerName);

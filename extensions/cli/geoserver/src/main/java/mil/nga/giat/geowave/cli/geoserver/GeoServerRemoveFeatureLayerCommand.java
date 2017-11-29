@@ -50,7 +50,7 @@ public class GeoServerRemoveFeatureLayerCommand extends
 			throw new ParameterException(
 					"Requires argument: <layer name>");
 		}
-		
+
 		layerName = parameters.get(0);
 
 		final Response deleteLayerResponse = geoserverClient.deleteFeatureLayer(layerName);

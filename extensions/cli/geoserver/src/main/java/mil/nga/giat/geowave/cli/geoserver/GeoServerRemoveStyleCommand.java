@@ -49,7 +49,7 @@ public class GeoServerRemoveStyleCommand extends
 			throw new ParameterException(
 					"Requires argument: <style name>");
 		}
-		
+
 		styleName = parameters.get(0);
 
 		final Response deleteStyleResponse = geoserverClient.deleteStyle(styleName);

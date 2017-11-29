@@ -84,7 +84,7 @@
 			<dependencies>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
-					<artifactId>geowave-analytic-javaspark</artifactId>
+					<artifactId>geowave-analytic-spark</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>

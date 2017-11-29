@@ -173,7 +173,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				LOGGER.error("Unable to load properties form " + configFile.getAbsolutePath());
 				return;
 			}
-			
+
 			String s3EndpointUrl = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
 			if (s3EndpointUrl == null) {
 				LOGGER.error("S3 endpoint URL is empty. Config using \"geowave config aws <s3 endpoint url>\"");
