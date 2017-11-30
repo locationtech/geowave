@@ -309,8 +309,7 @@
 						<sourceDirectory>../extensions/formats/gdelt/src/main/java</sourceDirectory>
 						<sourceDirectory>../analytics/api/target/munged/main</sourceDirectory>
 						<sourceDirectory>../analytics/mapreduce/target/munged/main</sourceDirectory>
-						<sourceDirectory>../analytics/spark/src/main/scala</sourceDirectory>
-						<sourceDirectory>../analytics/javaspark/src/main/java</sourceDirectory>
+						<sourceDirectory>../analytics/spark/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
 						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>
