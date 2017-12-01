@@ -91,9 +91,7 @@ public class AddIndexGroupCommand extends
 	private void addIndexGroup(
 			final OperationParams params ) {
 		final File propFile = getGeoWaveConfigFile(params);
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		final Properties existingProps = ConfigOptions.loadProperties(propFile);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(

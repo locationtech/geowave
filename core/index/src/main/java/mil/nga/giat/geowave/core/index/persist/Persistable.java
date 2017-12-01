@@ -33,4 +33,5 @@ public interface Persistable
 	 */
 	public void fromBinary(
 			byte[] bytes );
+
 }

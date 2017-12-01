@@ -148,19 +148,19 @@ public class OSMRunner extends
 		switch (ingestOptions.getMapperType()) {
 			case "NODE": {
 				configureSchema(Node.getClassSchema());
-				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getNodesBasePath();
+				inputAvroFile = ingestOptions.getNodesBasePath();
 				job.setMapperClass(OSMNodeMapper.class);
 				break;
 			}
 			case "WAY": {
 				configureSchema(Way.getClassSchema());
-				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getWaysBasePath();
+				inputAvroFile = ingestOptions.getWaysBasePath();
 				job.setMapperClass(OSMWayMapper.class);
 				break;
 			}
 			case "RELATION": {
 				configureSchema(Relation.getClassSchema());
-				inputAvroFile = ingestOptions.getNameNode() + "/" + ingestOptions.getRelationsBasePath();
+				inputAvroFile = ingestOptions.getRelationsBasePath();
 				job.setMapperClass(OSMRelationMapper.class);
 				break;
 			}

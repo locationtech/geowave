@@ -111,7 +111,9 @@ sudo start jupyter
 ----
 
 
+=== Github Jupyter Notebook links
 
+- Demo Notebooks: https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/jupyter
 
 
 

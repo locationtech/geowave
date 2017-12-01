@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.analytic.spark.sparksql.udf;
+package mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt;
 
 import java.io.Serializable;
 
@@ -13,18 +13,24 @@ public class GeomFunctionRegistry implements
 	private static final long serialVersionUID = -1729498500215830962L;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeomFunctionRegistry.class);
 
-	private static GeomEquals geomEqualsInstance = new GeomEquals();
-	private static GeomWithin geomWithinInstance = new GeomWithin();
-	private static GeomContains geomContainsInstance = new GeomContains();
-	private static GeomIntersects geomIntersectsInstance = new GeomIntersects();
-	private static GeomCrosses geomCrossesInstance = new GeomCrosses();
-	private static GeomTouches geomTouchesInstance = new GeomTouches();
-	private static GeomCovers geomCoversInstance = new GeomCovers();
-	private static GeomDisjoint geomDisjointInstance = new GeomDisjoint();
-	private static GeomOverlaps geomOverlapsInstance = new GeomOverlaps();
+	private static WKTGeomEquals geomEqualsInstance = new WKTGeomEquals();
+	private static WKTGeomWithin geomWithinInstance = new WKTGeomWithin();
+	private static WKTGeomContains geomContainsInstance = new WKTGeomContains();
+	private static WKTGeomIntersects geomIntersectsInstance = new WKTGeomIntersects();
+	private static WKTGeomCrosses geomCrossesInstance = new WKTGeomCrosses();
+	private static WKTGeomTouches geomTouchesInstance = new WKTGeomTouches();
+	private static WKTGeomCovers geomCoversInstance = new WKTGeomCovers();
+	private static WKTGeomDisjoint geomDisjointInstance = new WKTGeomDisjoint();
+	private static WKTGeomOverlaps geomOverlapsInstance = new WKTGeomOverlaps();
+	private static WKTGeomDistance geomDistanceInstance = new WKTGeomDistance();
 
 	public static void registerGeometryFunctions(
 			SparkSession spark ) {
+
+		spark.udf().register(
+				"geomDistance",
+				geomDistanceInstance,
+				DataTypes.DoubleType);
 
 		spark.udf().register(
 				"geomEquals",

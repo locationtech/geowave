@@ -105,6 +105,7 @@ public class GeoWaveJavaSparkKMeansIT
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
 		runner.setCqlFilter(CQL_FILTER);
+		runner.setMaster("local[*]");
 
 		// Attempt to set the time params
 		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(

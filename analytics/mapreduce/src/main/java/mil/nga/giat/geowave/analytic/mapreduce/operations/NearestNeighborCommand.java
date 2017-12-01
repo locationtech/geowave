@@ -120,9 +120,7 @@ public class NearestNeighborCommand extends
 
 		if (commonOptions.getMapReduceHdfsHostPort() == null) {
 
-			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
 		}

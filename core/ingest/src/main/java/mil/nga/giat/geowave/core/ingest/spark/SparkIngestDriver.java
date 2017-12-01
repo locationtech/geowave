@@ -83,26 +83,9 @@ public class SparkIngestDriver implements
 			SparkCommandLineOptions sparkOptions,
 			String basePath )
 			throws IOException {
-		return runOperation(
-				configFile,
-				ConfigOptions.loadProperties(
-						configFile,
-						null),
-				localInput,
-				inputStoreName,
-				indexList,
-				ingestOptions,
-				sparkOptions,
-				basePath);
-	}
 
-	public boolean runOperation(
-			File configFile,
-			Properties configProperties,
-			LocalInputCommandLineOptions localInput, String inputStoreName,
-			String indexList, VisibilityOptions ingestOptions,
-			SparkCommandLineOptions sparkOptions, String basePath)
-			throws IOException {
+		final Properties configProperties = ConfigOptions.loadProperties(configFile);
+
 		JavaSparkContext jsc = null;
 		SparkSession session = null;
 		int numExecutors;
@@ -496,7 +479,6 @@ public class SparkIngestDriver implements
 
 		if (urlStreamHandlerFactory == null) {
 			URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
-
 		}
 		else {
 			try {
