@@ -4,10 +4,20 @@ import java.io.File;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
+import org.restlet.Application;
+import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.Status;
+import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Get;
@@ -27,6 +37,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
+import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
@@ -40,7 +51,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	}
 
 	@Get("json")
-	public T restGet()
+	public Representation restGet()
 			throws Exception {
 		if (HttpMethod.GET.equals(operation.getMethod())) {
 			// TODO is this null correct?
@@ -53,7 +64,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	}
 
 	@Post("form:json")
-	public T restPost(
+	public Representation restPost(
 			final Representation request )
 			throws Exception {
 		if (HttpMethod.POST.equals(operation.getMethod())) {
@@ -69,7 +80,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	}
 
 	@Delete("form:json")
-	public T restDelete(
+	public Representation restDelete(
 			final Representation request )
 			throws Exception {
 		if (HttpMethod.DELETE.equals(operation.getMethod())) {
@@ -85,7 +96,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	}
 
 	@Patch("form:json")
-	public T restPatch(
+	public Representation restPatch(
 			final Representation request )
 			throws Exception {
 		if (HttpMethod.PATCH.equals(operation.getMethod())) {
@@ -100,7 +111,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	}
 
 	@Put("form:json")
-	public T restPut(
+	public Representation restPut(
 			final Representation request )
 			throws Exception {
 		if (HttpMethod.PUT.equals(operation.getMethod())) {
@@ -240,9 +251,9 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		return val;
 	}
 
-	private T handleRequest(
+	private Representation handleRequest(
 			final Form form )
-			throws Exception {
+			 {
 
 		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
 				.getFirstValue("config_file");
@@ -260,36 +271,78 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					form,
 					operation);
 		}
-		catch (final MissingArgumentException e) {
+		catch (final Exception e) {
+			LOGGER.error("Entered an error handling a request.", e.getMessage());
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
 					e.getMessage());
-			return null;
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = "exception occurred";
+			rm.data = e;
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
 		}
 
 		try {
 			operation.prepare(params);
-			Pair<ServiceStatus, T> result = operation.executeService(params);
-			switch (result.getLeft()) {
-				case OK:
-					setStatus(Status.SUCCESS_OK);
-					break;
-				case NOT_FOUND:
-					setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-					break;
-				case DUPLICATE:
-					setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-					break;
-				case INTERNAL_ERROR:
-					setStatus(Status.SERVER_ERROR_INTERNAL);
+			
+			if(operation.runAsync()) {
+				final Context appContext = Application.getCurrent().getContext();
+				final ExecutorService opPool = (ExecutorService)appContext.getAttributes().get("asyncOperationPool");
+				final ConcurrentHashMap<String, Future> opStatuses = (ConcurrentHashMap<String, Future>)appContext.getAttributes().get("asyncOperationStatuses");
+				
+				Callable <T> task = () -> {
+					Pair<ServiceStatus, T> res = operation.executeService(params);
+					return res.getRight();
+				};
+				final Future<T> futureResult = opPool.submit(task);
+				final UUID opId = UUID.randomUUID();
+				opStatuses.put(opId.toString(), futureResult);
+				setStatus(Status.SUCCESS_OK);
+				
+				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+				rm.status = RestOperationStatusMessage.StatusType.STARTED;
+				rm.message = "Async operation started with ID in data field. Check status at /operation_status?id=";
+				rm.data = opId.toString();
+				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+				return rep;
+			} else {
+				final Pair<ServiceStatus, T> result = operation.executeService(params);
+				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+				
+				switch (result.getLeft()) {
+					case OK:
+						rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
+						setStatus(Status.SUCCESS_OK);
+						break;
+					case NOT_FOUND:
+						rm.status = RestOperationStatusMessage.StatusType.ERROR;
+						setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+						break;
+					case DUPLICATE:
+						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+						break;
+					case INTERNAL_ERROR:
+						rm.status = RestOperationStatusMessage.StatusType.ERROR;
+						setStatus(Status.SERVER_ERROR_INTERNAL);
+				}
+				
+				rm.data = result.getRight();
+				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+				return rep;
 			}
-			return result.getRight();
 		}
 		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e);
-			throw e;
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = "exception occurred";
+			rm.data = e;
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
 		}
 	}
 

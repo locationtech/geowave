@@ -10,6 +10,10 @@ import java.util.HashSet;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 
 import javax.management.MBeanServer;
@@ -30,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.service.rest.operations.FileUpload;
 
 /**
  * This class provides the main webapp entry point
@@ -40,6 +43,8 @@ public class ApiRestletApplication extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(ApiRestletApplication.class);
 	private ArrayList<RestRoute> availableRoutes = null;
+	private ExecutorService asyncOperationPool = Executors.newFixedThreadPool(10);
+	private ConcurrentHashMap<String, Future> asyncOperationStatuses = new ConcurrentHashMap<String, Future>();
 
 	public ApiRestletApplication() {
 		super();
@@ -66,6 +71,12 @@ public class ApiRestletApplication extends
 		getContext().getAttributes().put(
 				"availableRoutes",
 				availableRoutes);
+		getContext().getAttributes().put(
+				"asyncOperationPool",
+				asyncOperationPool);
+		getContext().getAttributes().put(
+				"asyncOperationStatuses",
+				asyncOperationStatuses);
 
 		// actual mapping here
 		router.attachDefault(MainResource.class);
@@ -74,7 +85,10 @@ public class ApiRestletApplication extends
 				SwaggerResource.class);
 		router.attach(
 				"/v0/fileupload",
-				FileUpload.class);
+				FileUploadResource.class);
+		router.attach(
+				"/v0/operation_status",
+				AsyncOperationStatusResource.class);
 		attachApiRoutes(router);
 		return router;
 	}

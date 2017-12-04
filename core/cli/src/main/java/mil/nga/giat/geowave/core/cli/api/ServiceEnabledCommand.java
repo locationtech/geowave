@@ -24,6 +24,16 @@ public abstract class ServiceEnabledCommand<T> extends
 			throws Exception;
 
 	/**
+	 * this method provides a hint to the service running the command whether it
+	 * should be run asynchronously or not
+	 * 
+	 * @return should this method be run asynchronously
+	 */
+	public boolean runAsync() {
+		return false;
+	}
+
+	/**
 	 * the method to expose as a resource
 	 *
 	 * @return the HTTP method

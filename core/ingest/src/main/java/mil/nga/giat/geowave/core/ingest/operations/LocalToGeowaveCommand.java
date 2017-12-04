@@ -82,6 +82,11 @@ public class LocalToGeowaveCommand extends
 			final OperationParams params ) {
 		computeResults(params);
 	}
+	
+	@Override
+	public boolean runAsync() {
+		return true;
+	}
 
 	public List<String> getParameters() {
 		return parameters;

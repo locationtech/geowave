@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.service.rest.operations;
+package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.util.List;
@@ -17,7 +17,7 @@ import org.restlet.resource.ServerResource;
 /**
  * ServerResource to handle uploading files. Uses restlet fileupload.
  */
-public class FileUpload extends
+public class FileUploadResource extends
 		ServerResource
 {
 	private static class UploadedFile
