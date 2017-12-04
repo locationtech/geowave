@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":6,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -229,6 +229,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/Comma
 <div class="block">get the path to expose as a resource</div>
 </td>
 </tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">runAsync</a></span>()</code>
+<div class="block">this method provides a hint to the service running the command whether it
+ should be run asynchronously or not</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.DefaultOperation">
@@ -331,6 +338,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/Comma
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="runAsync--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>runAsync</h4>
+<pre>public&nbsp;boolean&nbsp;runAsync()</pre>
+<div class="block">this method provides a hint to the service running the command whether it
+ should be run asynchronously or not</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>should this method be run asynchronously</dd>
 </dl>
 </li>
 </ul>

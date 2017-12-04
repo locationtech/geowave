@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,18 +217,25 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#getParameters--">getParameters</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setCommonOptions-mil.nga.giat.geowave.analytic.mapreduce.operations.options.CommonOptions-">setCommonOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/options/CommonOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.operations.options">CommonOptions</a>&nbsp;commonOptions)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#runAsync--">runAsync</a></span>()</code>
+<div class="block">this method provides a hint to the service running the command whether it
+ should be run asynchronously or not</div>
+</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setInputStoreOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setCommonOptions-mil.nga.giat.geowave.analytic.mapreduce.operations.options.CommonOptions-">setCommonOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/options/CommonOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.operations.options">CommonOptions</a>&nbsp;commonOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setNnOptions-mil.nga.giat.geowave.analytic.mapreduce.operations.options.NearestNeighborOptions-">setNnOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/options/NearestNeighborOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.operations.options">NearestNeighborOptions</a>&nbsp;nnOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-">setInputStoreOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setNnOptions-mil.nga.giat.geowave.analytic.mapreduce.operations.options.NearestNeighborOptions-">setNnOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/options/NearestNeighborOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.operations.options">NearestNeighborOptions</a>&nbsp;nnOptions)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/NearestNeighborCommand.html#setParameters-java.lang.String-">setParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName)</code>&nbsp;</td>
 </tr>
@@ -305,6 +312,24 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="runAsync--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>runAsync</h4>
+<pre>public&nbsp;boolean&nbsp;runAsync()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from class:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">ServiceEnabledCommand</a></code></span></div>
+<div class="block">this method provides a hint to the service running the command whether it
+ should be run asynchronously or not</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">runAsync</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Void.html?is-external=true" title="class or interface in java.lang">Void</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>should this method be run asynchronously</dd>
 </dl>
 </li>
 </ul>

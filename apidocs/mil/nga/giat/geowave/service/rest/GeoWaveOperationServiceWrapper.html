@@ -176,23 +176,23 @@ extends org.restlet.resource.ServerResource</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a></code></td>
+<td class="colFirst"><code>org.restlet.representation.Representation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html#restDelete-org.restlet.representation.Representation-">restDelete</a></span>(org.restlet.representation.Representation&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a></code></td>
+<td class="colFirst"><code>org.restlet.representation.Representation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html#restGet--">restGet</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a></code></td>
+<td class="colFirst"><code>org.restlet.representation.Representation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html#restPatch-org.restlet.representation.Representation-">restPatch</a></span>(org.restlet.representation.Representation&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a></code></td>
+<td class="colFirst"><code>org.restlet.representation.Representation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html#restPost-org.restlet.representation.Representation-">restPost</a></span>(org.restlet.representation.Representation&nbsp;request)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a></code></td>
+<td class="colFirst"><code>org.restlet.representation.Representation</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html#restPut-org.restlet.representation.Representation-">restPut</a></span>(org.restlet.representation.Representation&nbsp;request)</code>&nbsp;</td>
 </tr>
 </table>
@@ -255,8 +255,8 @@ extends org.restlet.resource.ServerResource</pre>
 <li class="blockList">
 <h4>restGet</h4>
 <pre>@Get(value="json")
-public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a>&nbsp;restGet()
-                             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+public&nbsp;org.restlet.representation.Representation&nbsp;restGet()
+                                                                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -270,8 +270,8 @@ public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWave
 <li class="blockList">
 <h4>restPost</h4>
 <pre>@Post(value="form:json")
-public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a>&nbsp;restPost(org.restlet.representation.Representation&nbsp;request)
-                                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+public&nbsp;org.restlet.representation.Representation&nbsp;restPost(org.restlet.representation.Representation&nbsp;request)
+                                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -285,8 +285,8 @@ public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWave
 <li class="blockList">
 <h4>restDelete</h4>
 <pre>@Delete(value="form:json")
-public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a>&nbsp;restDelete(org.restlet.representation.Representation&nbsp;request)
-                                        throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+public&nbsp;org.restlet.representation.Representation&nbsp;restDelete(org.restlet.representation.Representation&nbsp;request)
+                                                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -300,8 +300,8 @@ public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWave
 <li class="blockList">
 <h4>restPatch</h4>
 <pre>@Patch(value="form:json")
-public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a>&nbsp;restPatch(org.restlet.representation.Representation&nbsp;request)
-                                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+public&nbsp;org.restlet.representation.Representation&nbsp;restPatch(org.restlet.representation.Representation&nbsp;request)
+                                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -315,8 +315,8 @@ public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWave
 <li class="blockList">
 <h4>restPut</h4>
 <pre>@Put(value="form:json")
-public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" title="type parameter in GeoWaveOperationServiceWrapper">T</a>&nbsp;restPut(org.restlet.representation.Representation&nbsp;request)
-                                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+public&nbsp;org.restlet.representation.Representation&nbsp;restPut(org.restlet.representation.Representation&nbsp;request)
+                                                                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
