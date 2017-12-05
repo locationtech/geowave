@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "aws", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for aws s3")
@@ -64,4 +65,19 @@ public class ConfigAWSCommand extends
 				AWS_S3_ENDPOINT_PREFIX);
 	}
 
+	public static String getS3Url(
+			Properties configProperties ) {
+
+		String s3EndpointUrl = configProperties.getProperty(ConfigAWSCommand.AWS_S3_ENDPOINT_URL);
+		if (s3EndpointUrl == null) {
+			throw new ParameterException(
+					"S3 endpoint URL is empty. Config using \"geowave config aws <s3 endpoint url>\"");
+		}
+
+		if (!s3EndpointUrl.contains("://")) {
+			s3EndpointUrl = "s3://" + s3EndpointUrl;
+		}
+
+		return s3EndpointUrl;
+	}
 }

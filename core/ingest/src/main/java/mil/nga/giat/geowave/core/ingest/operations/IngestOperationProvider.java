@@ -25,7 +25,8 @@ public class IngestOperationProvider implements
 		LocalToKafkaCommand.class,
 		LocalToMapReduceToGeowaveCommand.class,
 		MapReduceToGeowaveCommand.class,
-		ConfigAWSCommand.class
+		ConfigAWSCommand.class,
+		SparkToGeowaveCommand.class
 	};
 
 	@Override

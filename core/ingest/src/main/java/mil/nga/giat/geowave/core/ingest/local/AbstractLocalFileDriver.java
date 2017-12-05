@@ -101,7 +101,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		return valid;
 	}
 
-	private static void setURLStreamHandlerFactory()
+	public static void setURLStreamHandlerFactory()
 			throws NoSuchFieldException,
 			SecurityException,
 			IllegalArgumentException,
