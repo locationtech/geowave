@@ -22,41 +22,51 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
+
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.SparkToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.spark.SparkIngestDriver;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.junit.Assert;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public class TestUtils
 {
@@ -94,6 +104,9 @@ public class TestUtils
 			.createPrimaryIndex();
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex();
+
+	public static final String S3_INPUT_PATH = "s3://geowave-guide-sv/gdelt";
+	public static final String S3URL = "s3.amazonaws.com";
 
 	public static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -175,6 +188,140 @@ public class TestUtils
 				null);
 		localIngester.setThreads(nthreads);
 		localIngester.execute(new ManualOperationParams());
+
+		verifyStats(dataStore);
+
+	}
+
+	public static void testS3LocalIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String s3Url,
+			final String ingestFilePath,
+			final String format,
+			final int nthreads )
+			throws Exception {
+
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
+
+		// Ingest Formats
+		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin(format);
+
+		// Indexes
+		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		final List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+				indexTypes.length);
+		for (final String indexType : indexTypes) {
+			final IndexPluginOptions indexOption = new IndexPluginOptions();
+			indexOption.selectPlugin(indexType);
+			indexOptions.add(indexOption);
+		}
+
+		File configFile = File.createTempFile(
+				"test_s3_local_ingest",
+				null);
+		ManualOperationParams operationParams = new ManualOperationParams();
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+
+		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
+		configS3.setS3UrlParameter(s3Url);
+		configS3.execute(operationParams);
+
+		// Create the command and execute.
+		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+		localIngester.setPluginFormats(ingestFormatOptions);
+		localIngester.setInputIndexOptions(indexOptions);
+		localIngester.setInputStoreOptions(dataStore);
+		localIngester.setParameters(
+				ingestFilePath,
+				null,
+				null);
+		localIngester.setThreads(nthreads);
+		localIngester.execute(operationParams);
+
+		verifyStats(dataStore);
+
+	}
+
+	public static void testSparkIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String format )
+			throws Exception {
+		testSparkIngest(
+				dataStore,
+				dimensionalityType,
+				S3URL,
+				S3_INPUT_PATH,
+				format);
+
+	}
+
+	public static void testSparkIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String s3Url,
+			final String ingestFilePath,
+			final String format )
+			throws Exception {
+
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
+
+		// Indexes
+		final String indexes = dimensionalityType.getDimensionalityArg();
+		File configFile = File.createTempFile(
+				"test_spark_ingest",
+				null);
+		ManualOperationParams operationParams = new ManualOperationParams();
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+
+		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
+		configS3.setS3UrlParameter(s3Url);
+		configS3.execute(operationParams);
+
+		LocalInputCommandLineOptions localOptions = new LocalInputCommandLineOptions();
+		localOptions.setFormats(format);
+
+		SparkCommandLineOptions sparkOptions = new SparkCommandLineOptions();
+		sparkOptions.setAppName("SparkIngestTest");
+		sparkOptions.setMaster("local");
+		sparkOptions.setHost("localhost");
+
+		// Create the command and execute.
+		final SparkIngestDriver sparkIngester = new SparkIngestDriver();
+		Properties props = new Properties();
+		dataStore.save(
+				props,
+				DataStorePluginOptions.getStoreNamespace("test"));
+		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		for (String indexType : indexTypes) {
+			IndexPluginOptions pluginOptions = new IndexPluginOptions();
+			pluginOptions.selectPlugin(indexType);
+			pluginOptions.save(
+					props,
+					IndexPluginOptions.getIndexNamespace(indexType));
+		}
+		props.setProperty(
+				ConfigAWSCommand.AWS_S3_ENDPOINT_URL,
+				s3Url);
+		sparkIngester.runOperation(
+				null,
+				props,
+				localOptions,
+				"test",
+				indexes,
+				new VisibilityOptions(),
+				sparkOptions,
+				ingestFilePath);
 
 		verifyStats(dataStore);
 
