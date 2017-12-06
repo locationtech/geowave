@@ -81,7 +81,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		localInput = input;
 	}
 
-	protected boolean checkIndexesAgainstProvider(
+	public static boolean checkIndexesAgainstProvider(
 			String providerName,
 			DataAdapterProvider<?> adapterProvider,
 			List<IndexPluginOptions> indexOptions ) {
@@ -101,7 +101,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		return valid;
 	}
 
-	private static void setURLStreamHandlerFactory()
+	public static void setURLStreamHandlerFactory()
 			throws NoSuchFieldException,
 			SecurityException,
 			IllegalArgumentException,

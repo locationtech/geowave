@@ -10,6 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.local;
 
+import java.io.Serializable;
+
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
 
@@ -20,7 +22,8 @@ import com.beust.jcommander.Parameter;
  * ingestion to. The process will recurse a directory and filter by the
  * extensions if provided.
  */
-public class LocalInputCommandLineOptions
+public class LocalInputCommandLineOptions implements
+		Serializable
 {
 	@Parameter(names = {
 		"-x",
