@@ -131,7 +131,7 @@ public class LocalFileIngestDriver extends
 	 * Create a basic thread pool to ingest file data. We limit it to the amount
 	 * of threads specified on the command line.
 	 */
-	private void startExecutor() {
+	public void startExecutor() {
 		ingestExecutor = Executors.newFixedThreadPool(threads);
 	}
 
@@ -139,7 +139,7 @@ public class LocalFileIngestDriver extends
 	 * This function will wait for executing tasks to complete for up to 10
 	 * seconds.
 	 */
-	private void shutdownExecutor() {
+	public void shutdownExecutor() {
 		if (ingestExecutor != null) {
 			try {
 				ingestExecutor.shutdown();
@@ -159,7 +159,7 @@ public class LocalFileIngestDriver extends
 	}
 
 	@Override
-	protected void processFile(
+	public void processFile(
 			final URL file,
 			final String typeName,
 			final LocalFileIngestPlugin<?> plugin,

@@ -8,7 +8,6 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
 import java.net.URLStreamHandlerFactory;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystemNotFoundException;
@@ -28,31 +27,22 @@ import java.util.Properties;
 import java.util.Map.Entry;
 import java.nio.file.attribute.BasicFileAttributes;
 
-import org.apache.hadoop.hbase.TableExistsException;
-import org.apache.hadoop.ipc.RemoteException;
-import org.apache.commons.io.FilenameUtils;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.api.java.JavaRDD;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
-import mil.nga.giat.geowave.core.ingest.GeoWaveData;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
+import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.local.LocalPluginFileVisitor.PluginVisitor;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
@@ -88,15 +78,16 @@ public class SparkIngestIngestDriver implements
 			throws IOException {
 
 		final Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
-		
+				configFile, null);
+
 		JavaSparkContext jsc = null;
 		SparkSession session = null;
-		int numExecutors ;
-		int numCores ;
+		int numExecutors;
+		int numCores;
 		int numPartitions;
-		
+		Path inputPath;
+		String s3EndpointUrl = null;
+
 		if (jsc == null) {
 			String jar = "";
 			try {
@@ -110,174 +101,105 @@ public class SparkIngestIngestDriver implements
 			session = SparkSession.builder().appName(sparkOptions.getAppName())
 					.master(sparkOptions.getMaster())
 					.config("spark.driver.host", sparkOptions.getHost())
-					.config("spark.jars", jar)
-					.getOrCreate();
+					.config("spark.jars", jar).getOrCreate();
 
 			jsc = new JavaSparkContext(session.sparkContext());
 		}
-
+		boolean isS3 = basePath.startsWith("s3://");
+		boolean isHDFS = !isS3 && basePath.startsWith("hdfs://");
 		// If input path is S3
-		if (basePath.startsWith("s3://")) {
-			
-			String s3EndpointUrl = ConfigAWSCommand.getS3Url(configProperties);
-			
-			Path inpuPath = (S3Path) setUpS3Filesystem(configProperties, basePath,s3EndpointUrl);
-			if (inpuPath == null || !inpuPath.isAbsolute()) {
-				LOGGER.error("Error in accessing S3 Input path " + basePath);
-				close(jsc,session);
-				return false;
-			}
-			
-			List<Path> inputFileList = new ArrayList<Path>();
-			Files.walkFileTree(inpuPath, new SimpleFileVisitor<Path>() {
-			    
-			    @Override
-			    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-			      inputFileList.add(file);
-			      return FileVisitResult.CONTINUE;
-			    }
-			  });
-		
-			int numInputFiles  = inputFileList.size();
-	
-			if (sparkOptions.getNumExecutors() == 1) {
-				 numExecutors = (int) Math.ceil((double) numInputFiles / 8);
-			}
-			else{
-				numExecutors = sparkOptions.getNumExecutors();
-			}
-			
-			if (sparkOptions.getNumCores() == 1) {
-				 numCores = 4;
-			}
-			else{
-				numCores = sparkOptions.getNumCores();
-			}
-			
-			jsc.sc().conf().set("spark.executor.instances", Integer.toString(numExecutors));
-			jsc.sc().conf().set("spark.executor.cores", Integer.toString(numCores));
-		    numPartitions = numExecutors * numCores * 2;
-		    
-			JavaRDD<URI> FileRDD = jsc.parallelize(Lists.transform(
-					inputFileList, new Function<Path, URI>() {
+		if (isS3) {
 
-						@Override
-						public URI apply(Path arg0) {
-							return arg0.toUri();
-						}
-					}),numPartitions);
-			
-			FileRDD.foreachPartition(uri -> {
-			
-				S3FileSystem fs = initializeS3FS(s3EndpointUrl);
-				List<URI> inputFiles  = new ArrayList<URI>();
-				while(uri.hasNext()){
-					Path inputFile = (S3Path) fs.getPath(uri.next().toString().replaceFirst(s3EndpointUrl,""));
-					inputFiles.add(inputFile.toUri());
-				}
-				
-				processInput( configFile,localInput,inputStoreName, indexList, ingestOptions,configProperties,inputFiles.iterator());	
-			});
+			s3EndpointUrl = ConfigAWSCommand.getS3Url(configProperties);
+			inputPath = (S3Path) setUpS3Filesystem(configProperties, basePath,
+					s3EndpointUrl);
 		}
 		// If input path is HDFS
-		else if (basePath.startsWith("hdfs://")) {		
-	
+		else if (isHDFS) {
+
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
-			String hdfsInputPath = basePath.replaceFirst(
-					"hdfs://",
-					"/");
-
-			Path inpuPath = null;
-			try {
-
-				URI uri = new URI(
-						hdfsFSUrl + hdfsInputPath);
-				inpuPath = Paths.get(uri);
-				if (!Files.exists(inpuPath)) {
-					LOGGER.error("Input path " + basePath + " does not exist");
-					close(jsc,session);
-					return false;
-				}
-			}
-			catch (URISyntaxException e) {
-				LOGGER.error(
-						"Unable to ingest data, Inavlid HDFS Path",
-						e);
-				close(jsc,session);
-				return false;
-			}
-
-			List<Path> inputFileList = new ArrayList<Path>();
-			Files.walkFileTree(inpuPath, new SimpleFileVisitor<Path>() {
-			    
-			    @Override
-			    public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
-			      inputFileList.add(file);
-			      return FileVisitResult.CONTINUE;
-			    }
-			  });
-
-			int numInputFiles  = inputFileList.size();
-			
-			if (sparkOptions.getNumExecutors() == 1) {
-				 numExecutors = (int) Math.ceil((double) numInputFiles / 8);
-			}
-			else{
-				numExecutors = sparkOptions.getNumExecutors();
-			}
-			
-			if (sparkOptions.getNumCores() == 1) {
-				 numCores = 4;
-			}
-			else{
-				numCores = sparkOptions.getNumCores();
-			}
-			
-			jsc.sc().conf().set("spark.executor.instances", Integer.toString(numExecutors));
-			jsc.sc().conf().set("spark.executor.cores", Integer.toString(numCores));
-		    numPartitions = numExecutors * numCores * 2;
-		    
-			JavaRDD<URI> FileRDD = jsc.parallelize(Lists.transform(
-					inputFileList, new Function<Path, URI>() {
-
-						@Override
-						public URI apply(Path arg0) {
-							return arg0.toUri();
-						}
-					}),numPartitions);
-		
-			FileRDD.foreachPartition(uri -> {
-				
-				setHdfsURLStreamHandlerFactory();
-				processInput( configFile,localInput,inputStoreName, indexList, ingestOptions,configProperties,uri);	
-			});
-		}
-		else{
+			inputPath = setUpHDFSFilesystem(basePath, hdfsFSUrl);
+		} 
+		else {
 			LOGGER.warn("Spark ingest support only S3 or HDFS as input location");
-			close(jsc,session);
+			close(jsc, session);
 			return false;
 		}
-	
+
+		if ((inputPath == null) || (!Files.exists(inputPath))) {
+			LOGGER.error("Error in accessing Input path " + basePath);
+			close(jsc, session);
+			return false;
+		}
+
+		List<Path> inputFileList = new ArrayList<Path>();
+		Files.walkFileTree(inputPath, new SimpleFileVisitor<Path>() {
+
+			@Override
+			public FileVisitResult visitFile(Path file,
+					BasicFileAttributes attrs) throws IOException {
+				inputFileList.add(file);
+				return FileVisitResult.CONTINUE;
+			}
+		});
+
+		int numInputFiles = inputFileList.size();
+
+		if (sparkOptions.getNumExecutors() < 1) {
+			numExecutors = (int) Math.ceil((double) numInputFiles / 8);
+		} else {
+			numExecutors = sparkOptions.getNumExecutors();
+		}
+
+		if (sparkOptions.getNumCores() < 1) {
+			numCores = 4;
+		} else {
+			numCores = sparkOptions.getNumCores();
+		}
+
+		jsc.sc().conf().set("spark.executor.instances", Integer.toString(numExecutors));
+		jsc.sc().conf().set("spark.executor.cores", Integer.toString(numCores));
+		numPartitions = numExecutors * numCores * 2;
+
+		JavaRDD<URI> FileRDD = jsc.parallelize(
+				Lists.transform(inputFileList, new Function<Path, URI>() {
+
+					@Override
+					public URI apply(Path arg0) {
+						return arg0.toUri();
+					}
+				}), numPartitions);
+		if (isS3) {
+			final String s3FinalEndpointUrl = s3EndpointUrl;
+			FileRDD.foreachPartition(uri -> {
+
+				S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
+				List<URI> inputFiles = new ArrayList<URI>();
+				while (uri.hasNext()) {
+					Path inputFile = (S3Path) fs.getPath(uri.next().toString()
+							.replaceFirst(s3FinalEndpointUrl, ""));
+					inputFiles.add(inputFile.toUri());
+				}
+
+				processInput(configFile, localInput, inputStoreName, indexList,
+						ingestOptions, configProperties, inputFiles.iterator());
+			});
+		}
+		else if (isHDFS) {
+			FileRDD.foreachPartition(uri -> {
+
+				setHdfsURLStreamHandlerFactory();
+				processInput(configFile, localInput, inputStoreName, indexList,
+						ingestOptions, configProperties, uri);
+			});
+		}
+
 		if (jsc != null) {
-			close(jsc,session);
+			close(jsc, session);
 		}
 
 		return true;
 
-	}
-
-	public void close(
-			JavaSparkContext jsc,
-			SparkSession session ) {
-		if (jsc != null) {
-			jsc.close();
-			jsc = null;
-		}
-
-		if (session != null) {
-			session.close();
-			session = null;
-		}
 	}
 
 	public void processInput(
@@ -342,7 +264,7 @@ public class SparkIngestIngestDriver implements
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
 		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
-			if (!checkIndexesAgainstProvider(
+			if (!AbstractLocalFileDriver.checkIndexesAgainstProvider(
 					pluginEntry.getKey(),
 					pluginEntry.getValue(),
 					indexOptions)) {
@@ -357,15 +279,25 @@ public class SparkIngestIngestDriver implements
 					ingestOptions.getVisibility())));
 		}
 
+		LocalFileIngestDriver localIngestDriver = new LocalFileIngestDriver(
+				inputStoreOptions,
+				indexOptions,
+				localFileIngestPlugins,
+				ingestOptions,
+				localInput,
+				1);
+
+		localIngestDriver.startExecutor();
+
 		DataStore dataStore = inputStoreOptions.createDataStore();
 		try (LocalIngestRunData runData = new LocalIngestRunData(
 				adapters,
 				dataStore)) {
 
-			List<PluginVisitor> pluginVisitors = new ArrayList<PluginVisitor>(
+			List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors = new ArrayList<>(
 					localFileIngestPlugins.size());
 			for (final Entry<String, LocalFileIngestPlugin<?>> localPlugin : localFileIngestPlugins.entrySet()) {
-				pluginVisitors.add(new PluginVisitor(
+				pluginVisitors.add(new PluginVisitor<LocalFileIngestPlugin<?>>(
 						localPlugin.getValue(),
 						localPlugin.getKey(),
 						localInput.getExtensions()));
@@ -373,15 +305,13 @@ public class SparkIngestIngestDriver implements
 
 			while (inputFiles.hasNext()) {
 				final URL file = inputFiles.next().toURL();
-				for (final PluginVisitor visitor : pluginVisitors) {
+				for (final PluginVisitor<LocalFileIngestPlugin<?>> visitor : pluginVisitors) {
 					if (visitor.supportsFile(file)) {
-						processFile(
+						localIngestDriver.processFile(
 								file,
-								visitor.typeName,
-								visitor.localPlugin,
-								runData,
-								indexOptions,
-								ingestOptions);
+								visitor.getTypeName(),
+								visitor.getLocalPluginBase(),
+								runData);
 					}
 				}
 			}
@@ -394,209 +324,31 @@ public class SparkIngestIngestDriver implements
 			throw new MalformedURLException(
 					"Error in converting input path to URL for " + inputFiles);
 		}
-	}
-
-	protected void processFile(
-			final URL file,
-			final String typeName,
-			final LocalFileIngestPlugin<?> plugin,
-			final LocalIngestRunData ingestRunData,
-			final List<IndexPluginOptions> indexOptions,
-			VisibilityOptions ingestOptions )
-			throws IOException {
-
-		int count = 0;
-		long dbWriteMs = 0L;
-
-		Map<ByteArrayId, IndexWriter> indexWriters = new HashMap<ByteArrayId, IndexWriter>();
-		Map<ByteArrayId, AdapterToIndexMapping> adapterMappings = new HashMap<ByteArrayId, AdapterToIndexMapping>();
-
-		LOGGER.info(String.format(
-				"Beginning ingest for file: [%s]",
-				FilenameUtils.getName(file.getPath())));
-
-		// This loads up the primary indexes that are specified on the command
-		// line.
-		// Usually spatial or spatial-temporal
-		final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes = new HashMap<ByteArrayId, PrimaryIndex>();
-		for (final IndexPluginOptions dimensionType : indexOptions) {
-			final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
-			if (primaryIndex == null) {
-				LOGGER.error("Could not get index instance, getIndex() returned null;");
-				throw new IOException(
-						"Could not get index instance, getIndex() returned null");
-			}
-			specifiedPrimaryIndexes.put(
-					primaryIndex.getId(),
-					primaryIndex);
-		}
-
-		// This gets the list of required indexes from the Plugin.
-		// If for some reason a GeoWaveData specifies an index that isn't
-		// originally
-		// in the specifiedPrimaryIndexes list, then this array is used to
-		// determine
-		// if the Plugin supports it. If it does, then we allow the creation of
-		// the
-		// index.
-		final Map<ByteArrayId, PrimaryIndex> requiredIndexMap = new HashMap<ByteArrayId, PrimaryIndex>();
-		final PrimaryIndex[] requiredIndices = plugin.getRequiredIndices();
-		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
-			for (final PrimaryIndex requiredIndex : requiredIndices) {
-				requiredIndexMap.put(
-						requiredIndex.getId(),
-						requiredIndex);
-			}
-		}
-
-		// Read files until EOF from the command line.
-		try (CloseableIterator<?> geowaveDataIt = plugin.toGeoWaveData(
-				file,
-				specifiedPrimaryIndexes.keySet(),
-				ingestOptions.getVisibility())) {
-
-			while (geowaveDataIt.hasNext()) {
-				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-				try {
-					final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
-					if (adapter == null) {
-						LOGGER.warn(String.format(
-								"Adapter not found for [%s] file [%s]",
-								geowaveData.getValue(),
-								FilenameUtils.getName(file.getPath())));
-						continue;
-					}
-
-					// Ingest the data!
-					dbWriteMs += ingestData(
-							geowaveData,
-							adapter,
-							ingestRunData,
-							specifiedPrimaryIndexes,
-							requiredIndexMap,
-							indexWriters,
-							adapterMappings);
-
-					count++;
-
-				}
-				catch (Exception e) {
-					throw new RuntimeException(
-							"Interrupted ingesting GeoWaveData",
-							e);
-				}
-			}
-
-			LOGGER.debug(String.format(
-					"Finished ingest for file: [%s]; Ingested %d items in %d seconds",
-					FilenameUtils.getName(file.getPath()),
-					count,
-					(int) dbWriteMs / 1000));
-
-		}
-		finally {
-			// Clean up index writers
-			for (Entry<ByteArrayId, IndexWriter> writerEntry : indexWriters.entrySet()) {
-				try {
-					ingestRunData.releaseIndexWriter(
-							adapterMappings.get(writerEntry.getKey()),
-							writerEntry.getValue());
-				}
-				catch (Exception e) {
-					LOGGER.warn(
-							String.format(
-									"Could not return index writer: [%s]",
-									writerEntry.getKey()),
-							e);
-				}
-			}
-
-		}
-
-	}
-
-	private long ingestData(
-			GeoWaveData<?> geowaveData,
-			WritableDataAdapter adapter,
-			LocalIngestRunData runData,
-			Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
-			Map<ByteArrayId, PrimaryIndex> requiredIndexMap,
-			Map<ByteArrayId, IndexWriter> indexWriters,
-			Map<ByteArrayId, AdapterToIndexMapping> adapterMappings )
-			throws Exception {
-
-		try {
-
-			AdapterToIndexMapping mapping = adapterMappings.get(adapter.getAdapterId());
-
-			if (mapping == null) {
-				List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
-				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-					PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
-					if (index == null) {
-						index = requiredIndexMap.get(indexId);
-						if (index == null) {
-							LOGGER.warn(String.format(
-									"Index '%s' not found for %s",
-									indexId.getString(),
-									geowaveData.getValue()));
-							continue;
-						}
-					}
-					indices.add(index);
-				}
-				runData.addIndices(indices);
-				runData.addAdapter(adapter);
-
-				mapping = new AdapterToIndexMapping(
-						adapter.getAdapterId(),
-						indices.toArray(new PrimaryIndex[indices.size()]));
-				adapterMappings.put(
-						mapping.getAdapterId(),
-						mapping);
-
-				// If we have the index checked out already, use that.
-				if (!indexWriters.containsKey(mapping.getAdapterId())) {
-					indexWriters.put(
-							mapping.getAdapterId(),
-							runData.getIndexWriter(mapping));
-				}
-			}
-
-			// Write the data to the data store.
-			IndexWriter writer = indexWriters.get(mapping.getAdapterId());
-
-			// Time the DB write
-			long hack = System.currentTimeMillis();
-			writer.write(geowaveData.getValue());
-			long durMs = System.currentTimeMillis() - hack;
-
-			return durMs;
-		}
-		catch (RemoteException e) {
-			IOException ioe = e.unwrapRemoteException(TableExistsException.class);
-
-			if (ioe instanceof TableExistsException) {
-				LOGGER.debug("Table already exists" + e.getMessage());
-				return 0;
-			}
-			else {
-				throw new RuntimeException(
-						"Fatal remote error occured while trying write to an index writer.",
-						e);
-			}
-		}
 		catch (Exception e) {
-			// This should really never happen, because we don't limit the
-			// amount of items in the IndexWriter pool.
 			LOGGER.error(
-					"Fatal error occured while trying write to an index writer.",
+					"Error processing in processing input",
 					e);
 			throw new RuntimeException(
-					"Fatal error occured while trying write to an index writer.",
+					"Error processing in processing input",
 					e);
 		}
+		finally {
+			localIngestDriver.shutdownExecutor();
+		}
+	}
 
+	public void close(
+			JavaSparkContext jsc,
+			SparkSession session ) {
+		if (jsc != null) {
+			jsc.close();
+			jsc = null;
+		}
+
+		if (session != null) {
+			session.close();
+			session = null;
+		}
 	}
 
 	public Path setUpS3Filesystem(
@@ -616,11 +368,37 @@ public class SparkIngestIngestDriver implements
 			String s3InputPath = basePath.replaceFirst(
 					"s3://",
 					"/");
-			// path = (S3Path) fs.getPath(s3InputPath);
 			path = fs.getPath(s3InputPath);
 		}
 		catch (URISyntaxException e) {
 			LOGGER.error("Unable to ingest data, Inavlid S3 path");
+			return null;
+		}
+
+		return path;
+
+	}
+
+	public Path setUpHDFSFilesystem(
+			String basePath,
+			String hdfsFSUrl ) {
+
+		String hdfsInputPath = basePath.replaceFirst(
+				"hdfs://",
+				"/");
+
+		Path path = null;
+		try {
+
+			URI uri = new URI(
+					hdfsFSUrl + hdfsInputPath);
+			path = Paths.get(uri);
+
+		}
+		catch (URISyntaxException e) {
+			LOGGER.error(
+					"Unable to ingest data, Inavlid HDFS Path",
+					e);
 			return null;
 		}
 
@@ -692,26 +470,6 @@ public class SparkIngestIngestDriver implements
 						e1);
 			}
 		}
-	}
-
-	protected boolean checkIndexesAgainstProvider(
-			String providerName,
-			DataAdapterProvider<?> adapterProvider,
-			List<IndexPluginOptions> indexOptions ) {
-		boolean valid = true;
-		for (IndexPluginOptions option : indexOptions) {
-			if (!IngestUtils.isCompatible(
-					adapterProvider,
-					option)) {
-				// HP Fortify "Log Forging" false positive
-				// What Fortify considers "user input" comes only
-				// from users with OS-level access anyway
-				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName
-						+ "' does not support dimensionality '" + option.getType() + "'");
-				valid = false;
-			}
-		}
-		return valid;
 	}
 
 }

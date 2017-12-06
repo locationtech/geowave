@@ -31,6 +31,7 @@ import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.client.Table;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
+import org.apache.hadoop.ipc.RemoteException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -169,11 +170,15 @@ public class BasicHBaseOperations implements
 								desc);
 					}
 				}
-				catch (final Exception e) {
+				catch (RemoteException e) {
+					IOException ioe = e.unwrapRemoteException(TableExistsException.class);
 					// We can ignore TableExists on create
-					if (!(e instanceof TableExistsException)) {
+					if (!(ioe instanceof TableExistsException)) {
 						throw (e);
 					}
+				}
+				catch (final Exception e) {
+					throw (e);
 				}
 			}
 		}

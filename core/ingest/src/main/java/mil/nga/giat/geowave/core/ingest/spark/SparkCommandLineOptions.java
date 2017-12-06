@@ -28,13 +28,13 @@ public class SparkCommandLineOptions
 		"-e",
 		"--numexecutors"
 	}, description = "Number of executors")
-	private int numExecutors = 1;
+	private int numExecutors = -1;
 
 	@Parameter(names = {
 		"-c",
 		"--numcores"
 	}, description = "Number of cores")
-	private int numCores = 1;
+	private int numCores = -1;
 
 	public SparkCommandLineOptions() {}
 
