@@ -58,7 +58,7 @@ public class BasicHBaseOperations implements
 
 	private final Connection conn;
 	private final String tableNamespace;
-	private final boolean schemaUpdateEnabled;
+	private final boolean schemaUpdateEnabled = false; // KAM EXPERIMENTAL
 
 	public BasicHBaseOperations(
 			final Connection connection,
@@ -67,9 +67,10 @@ public class BasicHBaseOperations implements
 		conn = connection;
 		tableNamespace = geowaveNamespace;
 
-		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
-				"hbase.online.schema.update.enable",
-				false);
+		// KAM EXPERIMENTAL
+		// schemaUpdateEnabled = conn.getConfiguration().getBoolean(
+		// "hbase.online.schema.update.enable",
+		// false);
 	}
 
 	public BasicHBaseOperations(
@@ -80,9 +81,10 @@ public class BasicHBaseOperations implements
 				zookeeperInstances);
 		tableNamespace = geowaveNamespace;
 
-		schemaUpdateEnabled = conn.getConfiguration().getBoolean(
-				"hbase.online.schema.update.enable",
-				false);
+		// KAM EXPERIMENTAL
+		// schemaUpdateEnabled = conn.getConfiguration().getBoolean(
+		// "hbase.online.schema.update.enable",
+		// false);
 	}
 
 	public static BasicHBaseOperations createOperations(
