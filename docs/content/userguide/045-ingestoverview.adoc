@@ -9,6 +9,6 @@
 
 In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store. Also, the ingest process requires an Index that is a definition of all the configured parameters that define how data is translated to Row IDs (how it is indexed). It also includes what common fields need to be maintained within the table to be used by fine-grained and secondary filters.
 
-The full list of GeoWave ingest commands can be found in the link:http://locationtech.github.io/geowave/commands.html#ingest-commands[GeoWave CLI Appendix^, window="_blank"].
+The full list of GeoWave ingest commands can be found in the link:commands.html#ingest-commands[GeoWave CLI Appendix^, window="_blank"].
 
 For examples and other details of running ingest commands, please be sure to check out the GeoWave QuickStart Guide Examples.

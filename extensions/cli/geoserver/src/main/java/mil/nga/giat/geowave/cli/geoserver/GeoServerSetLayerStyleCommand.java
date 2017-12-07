@@ -19,6 +19,7 @@ import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
 
+import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -45,17 +46,19 @@ public class GeoServerSetLayerStyleCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <layer name>");
-		}
-
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	@Override
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <layer name>");
+		}
+
 		layerName = parameters.get(0);
 
 		final Response setLayerStyleResponse = geoserverClient.setLayerStyle(

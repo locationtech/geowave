@@ -24,6 +24,7 @@ Basically, GeoWave is working to bridge geospatial software with distributed com
 ## The Docs
 * Check out our [GeoWave io page](http://locationtech.github.io/geowave/) page for detailed documentation.
 * A [changelog is available](http://locationtech.github.io/geowave/changelog.html) which details the changes and features for each of our [github releases](https://github.com/locationtech/geowave/releases)
+* The underlying principles employed in GeoWave are outlined in recent academic publications to include largely the background theory in [Advances in Spatial and Temporal Databases 2017](https://link.springer.com/chapter/10.1007/978-3-319-64367-0_6) and a derivative, more applied paper in [FOSS4G Conference Proceedings 2017](http://scholarworks.umass.edu/cgi/viewcontent.cgi?article=1027&context=foss4g).
 
 ## The Software
 * We have a [RPM repository](http://locationtech.github.io/geowave/packages.html)

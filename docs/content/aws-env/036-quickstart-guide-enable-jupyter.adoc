@@ -1,8 +1,9 @@
 [[quickstart-enable-jupyter]]
 <<<
 
+[[quickstart-enable-jupyter]]
 === Enabling Jupyter Support
 
 Geowave also supports jupyter notebook development which you can enable by following the steps here
 before creating the cluster:
-- link:http://locationtech.github.io/geowave/jupyter.html#[Jupyter Quickstart]
+- link:jupyter.html[Jupyter Quickstart, window="_blank"]

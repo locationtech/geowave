@@ -16,11 +16,11 @@ This is due to the way big-table-based databases store the data – as a sorted 
 
 The goal is to provide a property that ensures values close in n-dimensional space are still close in 1-dimensional space. There are a few reasons for this, but primarily it’s so we can represent an n-dimensional range selector (bbox typically, but can be abstracted to a hyper-rectangle) as a smaller number of highly contiguous 1-dimensional ranges.
 
-image::sfc1.png[scaledwidth="100%",alt="Z-Curve: 2D -> 1D", title="Z-Order curve based dimensional decomposition"]
+image::sfc1.png[scaledwidth="100%",width="100%",alt="Z-Curve: 2D -> 1D", title="Z-Order curve based dimensional decomposition"]
 
 Fortunately, there is already a type of transform that describes this operation in mathematics called a “Space Filling Curve” (SFC). Different SFCs have different properties, but they all take an n-dimensional space and describe a set of steps to trace all points in a single sequence.
 
-image::curves.png[scaledwidth="100%",alt="Various space filling curves", title="Haverkort, Walderveen Locality and Bounding-Box Quality of Two-Dimensional Space-Filling Curves 2008 arXiv:0806.4787v2"]
+image::curves.png[scaledwidth="100%",width="100%",alt="Various space filling curves", title="Haverkort, Walderveen Locality and Bounding-Box Quality of Two-Dimensional Space-Filling Curves 2008 arXiv:0806.4787v2"]
 
 The trade-offs for the various curves are outside the scope of this user manual, but the paper cited for Figure two is an excellent starting point to start learning about these curves.
 
@@ -30,7 +30,7 @@ GeoWave supports two space filling curves: Z-Order and Hilbert, with the latter 
 
 The Hilbert curve is a bit more complex to work with than the Z-curve, both when calculating and when performing a decomposition. Nevertheless it is popular in certain areas in computer science where multiple variables need to be set in a linear order – process scheduling for one. A simplistic view of a standard projections of the earth mapped to a Hilbert curve would look something like the image below, which shows 4 bits of cardinality per dimension (how many buckets we have).
 
-image::hilbert1.png[scaledwidth="100%",alt="Hilbert SFC", title="Hilbert space filling curve superimposed over a projection of the earth"]
+image::hilbert1.png[scaledwidth="100%",width="100%",alt="Hilbert SFC", title="Hilbert space filling curve superimposed over a projection of the earth"]
 
 Note that the cardinality (number of buckets per dimensions) has an impact on the resolution of our Hilbert index. Here we map from -180 to +180 over 16 buckets so we have resolution of no better than 360/16, or 22.5 degrees for longitude (and incidentally 11.25 degrees for latitude). This doesn’t mean we can’t represent values more precisely than this. It just means that our initial (coarse) index (based on SFC ranges) can’t provide resolution any better than this. Adding more bits per dimensions will increase the precision of the SFC-based index.
 

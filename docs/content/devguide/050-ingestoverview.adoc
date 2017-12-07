@@ -12,4 +12,4 @@ The logic within the ingest process immediately ensures that the index and data 
 
 There is a Writer interface that the data store's AccumuloOperations will instantiate that specifies how the mutations will actually be written. The default implementation will wrap an Accumulo BatchWriter with this interface, but in some cases it could make sense to provide a custom implementation of the writer. This process is the same when using an HBase datastore. When performing a bulk ingest within the mapper or reducer of a job, it would be appropriate to define a writer to add the mutations to the context of the bulk ingest rather than writing live to Accumulo or HBase.
 
-The full list of GeoWave ingest commands can be found in the http://locationtech.github.io/geowave/commands.html#ingest-commands[GeoWave CLI Appendix^].
+The full list of GeoWave ingest commands can be found in the commands.html#ingest-commands[GeoWave CLI Appendix^].

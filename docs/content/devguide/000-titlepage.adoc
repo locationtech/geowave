@@ -17,10 +17,10 @@ ifdef::backend-html5[]
 
 === icon:file-pdf-o[] link:https://s3.amazonaws.com/geowave/latest/docs/devguide.pdf[PDF^, window="_blank"]
 
-=== icon:file-code-o[] link:https://s3.amazonaws.com/geowave/latest/docs/apidocs/index.html[Javadoc, window="_blank"]
+=== icon:file-code-o[] link:apidocs/index.html[Javadoc, window="_blank"]
 
 === icon:github[] link:https://github.com/locationtech/geowave[GitHub, window="_blank"]
 
-=== icon:file-archive-o[] link:http://locationtech.github.io/geowave/packages.html[Packages, window="_blank"]
+=== icon:file-archive-o[] link:packages.html[Packages, window="_blank"]
 
 endif::backend-html5[]

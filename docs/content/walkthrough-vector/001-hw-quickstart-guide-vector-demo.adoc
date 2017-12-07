@@ -1,0 +1,178 @@
+
+:linkattrs:
+
+== GeoWave Quickstart Guide Vector Demo image:geowave-icon-logo-cropped.png[width="28%"]
+
+In the Vector Demo, we use GeoWave to ingest and run a Kernel Density Estimation on a large set of media/broadcast data provided by the GDELT Project.
+
+=== Set-Up Environment Variables
+
+Download the GeoWave environment script. We will also download two .sld files to use later on in the guide.
+
+
+SandBox:
+
+[source, bash]
+----
+cd /mnt
+sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
+----
+
+EMR:
+
+[source, bash]
+----
+cd /mnt
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
+----
+
+This script defines a number of the variables that will be used in future commands, so we will source it here.
+
+[source, bash]
+----
+source /mnt/geowave-env.sh
+----
+
+=== Download GDELT Data
+
+We will be using data from the GDELT Project in this guide. For more information about the
+GDELT Project please visit their website link:http://www.gdeltproject.org/[here, window="_blank"].
+
+Download whatever gdelt data matches $TIME_REGEX. The example is set to 201602 by sourcing the geowave-env.sh script. **Please make sure that you
+have sourced the environment script before calling this command.**
+
+[source, bash]
+----
+sudo mkdir $STAGING_DIR/gdelt;cd $STAGING_DIR/gdelt
+sudo wget http://data.gdeltproject.org/events/md5sums
+for file in `cat md5sums | cut -d' ' -f3 | grep "^${TIME_REGEX}"` ; \
+do sudo wget http://data.gdeltproject.org/events/$file ; done
+md5sum -c md5sums 2>&1 | grep "^${TIME_REGEX}"
+cd $STAGING_DIR
+----
+
+After the data has been downloaded, we are ready to set up the store and index used to ingest the data.
+
+=== Config and Ingest
+
+. Add a GeoWave store
+.. If using Sandbox
++
+[source, bash]
+----
+geowave config addstore gdelt --gwNamespace geowave.gdelt -t hbase --zookeeper \
+sandbox.hortonworks.com:2181
+----
+
+.. If using EMR Accumulo
++
+[source, bash]
+----
+geowave config addstore gdelt --gwNamespace geowave.gdelt \
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo \
+--user geowave --password geowave
+----
+
+.. If using EMR HBase
++
+[source, bash]
+----
+geowave config addstore gdelt --gwNamespace geowave.gdelt \
+-t hbase --zookeeper $HOSTNAME:2181
+----
+
+. Add a spatial index
++
+[source, bash]
+----
+geowave config addindex -t spatial gdelt-spatial --partitionStrategy round_robin \
+--numPartitions $NUM_PARTITIONS
+----
+
+. Ingest the data into geowave
+.. If using Sandbox
++
+[source, bash]
+----
+geowave ingest localtogw /mnt/gdelt gdelt gdelt-spatial -f gdelt --gdelt.cql "INTERSECTS(geometry,$GERMANY)"
+----
+
+.. If using EMR
++
+[source, bash]
+----
+geowave ingest localtogw $STAGING_DIR/gdelt gdelt gdelt-spatial -f gdelt \
+--gdelt.cql "BBOX(geometry,${WEST},${SOUTH},${EAST},${NORTH})"
+----
+
+The ingest should take about ~3-5 minutes. Once the ingest has started, you can monitor HBase status at the link:interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"]. The ingest is complete when your terminal will accept user input.
+
+=== Kernel Density Estimation (KDE)
+
+Once the ingest has completed:
+
+. Add another store for the kde.
+.. If using Sandbox
++
+[source, bash]
+----
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+-t hbase --zookeeper $HOSTNAME:2181
+----
+
+.. If using EMR Accumulo
++
+[source, bash]
+----
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+-t accumulo --zookeeper $HOSTNAME:2181 --instance accumulo --user geowave --password geowave
+----
+
+.. If using EMR HBase
++
+[source, bash]
+----
+geowave config addstore gdelt-kde --gwNamespace geowave.kde_gdelt \
+-t hbase --zookeeper $HOSTNAME:2181
+----
+
+. Run the KDE analytic
+.. If using Sandbox
++
+[source, bash]
+----
+geowave analytic kde --featureType gdeltevent --minLevel 5 --maxLevel 26 \
+--minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS --coverageName gdeltevent_kde  \
+--hdfsHostPort sandbox.hortonworks.com:${HDFS_PORT} \
+--jobSubmissionHostPort sandbox.hortonworks.com:${RESOURCE_MAN_PORT} \
+--tileSize 1 gdelt gdelt-kde
+----
+
+.. If using EMR
++
+[source, bash]
+----
+geowave analytic kde --featureType gdeltevent --minLevel 5 \
+--maxLevel 26 --minSplits $NUM_PARTITIONS --maxSplits $NUM_PARTITIONS \
+--coverageName gdeltevent_kde --hdfsHostPort ${HOSTNAME}:${HDFS_PORT} \
+--jobSubmissionHostPort ${HOSTNAME}:${RESOURCE_MAN_PORT} --tileSize 1 gdelt gdelt-kde
+----
+
+The KDE can take 5-10 minutes to complete due to the size of the dataset. Once it starts, its progress will be displayed in the terminal. The HBase status can be monitored through the link:interact-cluster.html#hbase-master-view[HBase web interface, window="_blank"], or the Accumulo status at the link:interact-cluster.html#accumulo-view[Accumulo web interface, window="_blank"].
+
+Once the KDE has run its course successfully, you should be able to view the heatmap generated by it, as well as a map of all of the ingested data points. If you would like to do this before completing the Raster Demo, proceed to link:integrate-geoserver.html[Integrate with Geoserver, window="_blank"] and then to the link:interact-cluster.html#cluster-interaction[Interacting with the Cluster, window="_blank"] section. You will still be able to view the results for both demos after completing the Raster Demo.
+
+=== Raster Demo
+
+link:walkthrough-raster.html[Raster Demo, window="_blank"]
+
+=== GeoServer Integration
+
+- link:integrate-geoserver.html[GeoServer Integration, window="_blank"]
+
+=== Interacting with the cluster
+- link:interact-cluster.html[Interacting with the cluster, window="_blank"]

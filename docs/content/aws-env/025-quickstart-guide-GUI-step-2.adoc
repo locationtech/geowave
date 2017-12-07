@@ -1,6 +1,7 @@
 [[quickstart-guide-step-2]]
 <<<
 
+[[quickstart-guide-step-2]]
 *Step 2:*
 
 image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]

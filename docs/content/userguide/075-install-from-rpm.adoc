@@ -7,7 +7,7 @@
 
 === Overview
 
-There is a public link:http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo, window="_blank"] available with the distribution packages and vendors listed below. As you'll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to be disabled so you can keep auto updates enabled. When ready to do an update, simply add `--enablerepo=geowave` to your command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks, and Apache). The RPMs have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo, geowave-cdh5-accumulo, geowave-apache-hbase, etc.)
+There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] available with the distribution packages and vendors listed below. As you'll need to coordinate a restart of Accumulo to pick up changes to the GeoWave iterator classes the repos default to be disabled so you can keep auto updates enabled. When ready to do an update, simply add `--enablerepo=geowave` to your command. The packages are built for a number of different hadoop distributions (Cloudera, Hortonworks, and Apache). The RPMs have the vendor name embedded as the second portion of the rpm name (geowave-apache-accumulo, geowave-hdp2-accumulo, geowave-cdh5-accumulo, geowave-apache-hbase, etc.)
 
 
 === Examples
@@ -62,11 +62,11 @@ GeoWave RPMs
 [NOTE]
 ====
 .In the above table, replace the following:
-* $VERSION: Version of GeoWave source, e.g., 0.9.4
+* $VERSION: Version of GeoWave source, e.g., ${project.version}
 * $VENDOR:  Distribution vendor abbreviation - from vendors table above, e.g., apache, cdh5, hdp2
 * $PACKAGE: Package - see RPMs table above, i.e. accumulo, hbase, jetty, single-host, tools
 
-For all vendors or packages for a particular version, replace with * (e.g., 'geowave-0.9.4-apache-*') for all apache apache packages in 0.9.4 version of GeoWave.
+For all vendors or packages for a particular version, replace with * (e.g., 'geowave-${project.version}-apache-*') for all apache apache packages in ${project.version} version of GeoWave.
 
 Note that only accumulo, hbase, jetty, tools, and single-host are vendor package rpm's. All others are version RPMs.
 ====

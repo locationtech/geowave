@@ -16,7 +16,6 @@ import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GE
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_USER;
 import static mil.nga.giat.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
 
-import java.io.File;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +44,7 @@ import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 @GeowaveOperation(name = "geoserver", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a local configuration for GeoServer")
 public class ConfigGeoServerCommand extends
-		GeoServerCommand<Void>
+		ServiceEnabledCommand<String>
 {
 	@Parameter(names = {
 		"-u",
@@ -110,48 +109,8 @@ public class ConfigGeoServerCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <GeoServer URL>");
-		}
-		url = parameters.get(0);
-		final Properties existingProps = getGeoWaveConfigProperties(params);
-
-		// all switches are optional
-		if (url != null) {
-			existingProps.setProperty(
-					GEOSERVER_URL,
-					url);
-		}
-
-		if (getName() != null) {
-			existingProps.setProperty(
-					GEOSERVER_USER,
-					getName());
-		}
-
-		if (getPass() != null) {
-			existingProps.setProperty(
-					GEOSERVER_PASS,
-					getPass());
-		}
-
-		if (getWorkspace() != null) {
-			existingProps.setProperty(
-					GEOSERVER_WORKSPACE,
-					getWorkspace());
-		}
-
-		// save properties from ssl configurations
-		sslConfigOptions.saveProperties(existingProps);
-
-		// Write properties file
-		ConfigOptions.writeProperties(
-				getGeoWaveConfigFile(params),
-				existingProps,
-				this.getClass(),
-				GEOSERVER_NAMESPACE_PREFIX);
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	public String getName() {
@@ -258,14 +217,16 @@ public class ConfigGeoServerCommand extends
 	}
 
 	@Override
-	public Void computeResults(
+	public String computeResults(
 			final OperationParams params )
 			throws Exception {
-		final File propFile = getGeoWaveConfigFile(params);
 
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <GeoServer URL>");
+		}
+		url = parameters.get(0);
+		final Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// all switches are optional
 		if (url != null) {
@@ -292,11 +253,25 @@ public class ConfigGeoServerCommand extends
 					getWorkspace());
 		}
 
+		// save properties from ssl configurations
+		sslConfigOptions.saveProperties(existingProps);
+
 		// Write properties file
 		ConfigOptions.writeProperties(
-				propFile,
-				existingProps);
+				getGeoWaveConfigFile(params),
+				existingProps,
+				this.getClass(),
+				GEOSERVER_NAMESPACE_PREFIX);
 		GeoServerRestClient.invalidateInstance();
-		return null;
+
+		// generate a return for rest calls
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			if (key.toString().startsWith(
+					"geoserver")) {
+				builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+			}
+		}
+		return builder.toString();
 	}
 }

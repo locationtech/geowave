@@ -38,14 +38,12 @@ public class GeoWaveSQLiteApiKeyDB extends
 		String url = "jdbc:sqlite:" + dbPath + dbFileName;
 
 		try (Connection conn = DriverManager.getConnection(url)) {
-			if (conn != null) {
-				// SQL statement for creating a new table
-				String sql = "CREATE TABLE IF NOT EXISTS api_keys (\n" + "	id integer PRIMARY KEY,\n"
-						+ "	apiKey blob NOT NULL,\n" + "	username text NOT NULL\n" + ");";
+			// SQL statement for creating a new table
+			String sql = "CREATE TABLE IF NOT EXISTS api_keys (\n" + "	id integer PRIMARY KEY,\n"
+					+ "	apiKey blob NOT NULL,\n" + "	username text NOT NULL\n" + ");";
 
-				Statement stmnt = conn.createStatement();
+			try (Statement stmnt = conn.createStatement()) {
 				stmnt.execute(sql);
-				stmnt.close();
 			}
 		}
 		catch (SQLException e) {
@@ -69,30 +67,24 @@ public class GeoWaveSQLiteApiKeyDB extends
 		final String dbUrl = getDbUrl();
 		boolean found = false;
 		try (Connection conn = DriverManager.getConnection(dbUrl)) {
-			if (conn != null) {
-				final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
-				PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
+			final String sql_query = "SELECT * FROM api_keys WHERE apiKey=?;";
+			try (PreparedStatement query_stmnt = conn.prepareStatement(sql_query)) {
+				// HP Fortify
+				// "Authorization Bypass Through User-Controlled SQL Primary Key"
+				// false positive
+				// While the actor is passing a value that is used as a primary
+				// key look-up, the results
+				// of the statement are never accessible by the actor.
 				query_stmnt.setString(
 						1,
 						apiKey);
-				ResultSet rs = query_stmnt.executeQuery();
-				// There is no existing row, the apiKey is invalid
-				if (!rs.next()) {
-
-					// close resources we are done with
-					rs.close();
-					query_stmnt.close();
-					conn.close();
+				try (ResultSet rs = query_stmnt.executeQuery()) {
+					// If there is an existing row, the apiKey is valid
+					if (rs.next()) {
+						found = true;
+					}
 				}
-				else {
-					// found a key close resources
-					found = true;
-					rs.close();
-					query_stmnt.close();
-				}
-				conn.close();
 			}
-
 		}
 		catch (SQLException e) {
 			LOGGER.error(
@@ -115,49 +107,44 @@ public class GeoWaveSQLiteApiKeyDB extends
 
 				// look up the api key from the db
 				try (Connection conn = DriverManager.getConnection(dbUrl)) {
-					if (conn != null) {
-						final String sql_query = "SELECT * FROM api_keys WHERE username=?;";
-						PreparedStatement query_stmnt = conn.prepareStatement(sql_query);
+
+					final String sql_query = "SELECT * FROM api_keys WHERE username=?;";
+					try (PreparedStatement query_stmnt = conn.prepareStatement(sql_query)) {
 						query_stmnt.setString(
 								1,
 								username);
-						ResultSet rs = query_stmnt.executeQuery();
+						try (ResultSet rs = query_stmnt.executeQuery()) {
 
-						// There is no existing row, so we should generate a key
-						// for this user and add it to the table
-						if (!rs.next()) {
-							// close resources we are done with
-							rs.close();
-							query_stmnt.close();
+							// There is no existing row, so we should generate a
+							// key
+							// for this user and add it to the table
+							if (!rs.next()) {
 
-							// generate new api key
-							final UUID apiKey = UUID.randomUUID();
-							userKey = username + ":" + apiKey.toString();
+								// generate new api key
+								final UUID apiKey = UUID.randomUUID();
+								userKey = username + ":" + apiKey.toString();
 
-							// SQL statement for inserting a new user/api key
-							final String sql = "INSERT INTO api_keys (apiKey, username)\n" + "VALUES(?, ?);";
-							LOGGER.info("Inserting a new api key and user.");
+								// SQL statement for inserting a new user/api
+								// key
+								final String sql = "INSERT INTO api_keys (apiKey, username)\n" + "VALUES(?, ?);";
+								LOGGER.info("Inserting a new api key and user.");
 
-							PreparedStatement stmnt = conn.prepareStatement(sql);
-							stmnt.setString(
-									1,
-									apiKey.toString());
-							stmnt.setString(
-									2,
-									username);
-							stmnt.executeUpdate();
-							stmnt.close();
+								try (PreparedStatement stmnt = conn.prepareStatement(sql)) {
+									stmnt.setString(
+											1,
+											apiKey.toString());
+									stmnt.setString(
+											2,
+											username);
+									stmnt.executeUpdate();
+								}
+							}
+							else {
+								final String apiKeyStr = rs.getString("apiKey");
+								userKey = username + ":" + apiKeyStr;
+							}
 						}
-						else {
-							final String apiKeyStr = rs.getString("apiKey");
-							userKey = username + ":" + apiKeyStr;
-							// close resources we are done with
-							rs.close();
-							query_stmnt.close();
-						}
-						conn.close();
 					}
-
 				}
 				catch (SQLException e) {
 					LOGGER.error(

@@ -1,11 +1,10 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.6-SNAPSHOT</version>
+		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<restlet.version>2.3.9</restlet.version>
@@ -14,6 +13,12 @@
 	<artifactId>geowave-service-rest</artifactId>
 	<name>GeoWave Services Rest</name>
 	<dependencies>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>3.0.1</version>
+			<scope>provided</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
@@ -42,6 +47,10 @@
 					<groupId>org.raml</groupId>
 					<artifactId>raml-parser</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -53,11 +62,27 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-servlet</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api-2.5</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -91,7 +116,7 @@
 				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
-					<artifactId>geowave-analytic-javaspark</artifactId>
+					<artifactId>geowave-analytic-spark</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
@@ -170,6 +195,7 @@
 						<artifactId>tomcat7-maven-plugin</artifactId>
 						<version>2.2</version>
 						<configuration>
+							<delegate>false</delegate>
 							<path>/restservices</path>
 							<useSeparateTomcatClassLoader>true</useSeparateTomcatClassLoader>
 							<ignorePackaging>true</ignorePackaging>
@@ -209,8 +235,7 @@
 										</filter>
 									</filters>
 									<transformers>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
 											<manifestEntries>
 												<Specification-Title>GeoWave-REST-Services</Specification-Title>
 												<Specification-Vendor>LocationTech</Specification-Vendor>
@@ -220,41 +245,33 @@
 												<Implementation-Version>${project.version}</Implementation-Version>
 											</manifestEntries>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+										<transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
 
 										<!-- merge various spring files -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.handlers</resource>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.schemas</resource>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.provides</resource>
 										</transformer>
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/spring.factories</resource>
 										</transformer>
 
 										<!-- merges META-INF/javax.media.jai.registryFile.jai entries instead 
 											of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/javax.media.jai.registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jai entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jai</resource>
 										</transformer>
 										<!-- merges META-INF/registryFile.jaiext entries instead of overwriting -->
-										<transformer
-											implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+										<transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
 											<resource>META-INF/registryFile.jaiext</resource>
 										</transformer>
 									</transformers>

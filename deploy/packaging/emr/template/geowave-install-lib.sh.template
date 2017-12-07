@@ -82,17 +82,17 @@ repo_base_url => '$GEOWAVE_REPO_BASE_URL_TOKEN',
   repo_enabled  => 1,
 } ->
 class { 'geowave':
-	geowave_version        => '${GEOWAVE_VERSION}',
-	hadoop_vendor_version  => 'apache',
-	install_accumulo       => true,
-	install_app            => true,
-	install_restservices   => true,
-	install_gwgeoserver    => true,
-	http_port              => "${HTTP_PORT}",
-	ajp_port               => "${AJP_PORT}",
-        shutdown_port          => "${SHUTDOWN_PORT}",
-	set_public_dns         => ${SET_PUBLIC_DNS},
-	public_dns             => "${PUBLIC_DNS}"
+	geowave_version             => '${GEOWAVE_VERSION}',
+	hadoop_vendor_version       => 'apache',
+	install_$DATASTORE_TOKEN  	=> true,
+	install_app                 => true,
+	install_restservices        => true,
+	install_gwgeoserver         => true,
+	http_port                   => "${HTTP_PORT}",
+	ajp_port                    => "${AJP_PORT}",
+	shutdown_port               => "${SHUTDOWN_PORT}",
+	set_public_dns              => ${SET_PUBLIC_DNS},
+	public_dns                  => "${PUBLIC_DNS}:${HTTP_PORT}"
 }
 
 file { '/usr/local/geowave/tomcat8/bin/setenv.sh':

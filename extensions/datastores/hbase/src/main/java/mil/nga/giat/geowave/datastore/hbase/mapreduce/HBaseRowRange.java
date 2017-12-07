@@ -15,6 +15,8 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.io.InvalidObjectException;
 
+import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.io.WritableUtils;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -31,7 +33,49 @@ public class HBaseRowRange implements
 
 	public HBaseRowRange(
 			final ByteArrayRange range ) {
-		this.range = range;
+		if (range == null) {
+			infiniteStartKey = true;
+			infiniteEndKey = true;
+		}
+		else {
+			ByteArrayId start = range.getStart();
+			ByteArrayId end = range.getEnd();
+
+			boolean update = false;
+
+			if (start == null) {
+				start = new ByteArrayId(
+						HConstants.EMPTY_BYTE_ARRAY);
+				update = true;
+			}
+
+			if (end == null) {
+				end = new ByteArrayId(
+						HConstants.EMPTY_BYTE_ARRAY);
+				update = true;
+			}
+
+			if (update) {
+				this.range = new ByteArrayRange(
+						start,
+						end);
+			}
+			else {
+				this.range = range;
+			}
+
+			if (Bytes.equals(
+					range.getStart().getBytes(),
+					HConstants.EMPTY_BYTE_ARRAY)) {
+				infiniteStartKey = true;
+			}
+
+			if (Bytes.equals(
+					range.getEnd().getBytes(),
+					HConstants.EMPTY_BYTE_ARRAY)) {
+				infiniteEndKey = true;
+			}
+		}
 	}
 
 	public HBaseRowRange() {
@@ -85,16 +129,24 @@ public class HBaseRowRange implements
 		final int startKeyLen = WritableUtils.readVInt(in);
 		final int endKeyLen = WritableUtils.readVInt(in);
 
-		byte[] startBytes = null;
-		byte[] endBytes = null;
+		byte[] startBytes = new byte[0];
+		byte[] endBytes = new byte[0];
+		boolean verifyStartBeforeEnd = true;
 
 		if (!infiniteStartKey) {
 			startBytes = new byte[startKeyLen];
 			in.readFully(startBytes);
 		}
+		else {
+			verifyStartBeforeEnd = false;
+		}
+
 		if (!infiniteEndKey) {
 			endBytes = new byte[endKeyLen];
 			in.readFully(endBytes);
+		}
+		else {
+			verifyStartBeforeEnd = false;
 		}
 
 		range = new ByteArrayRange(
@@ -103,7 +155,7 @@ public class HBaseRowRange implements
 				new ByteArrayId(
 						endBytes));
 
-		if (range.getStart().compareTo(
+		if (verifyStartBeforeEnd && range.getStart().compareTo(
 				range.getEnd()) > 0) {
 			throw new InvalidObjectException(
 					"Start key must be less than end key in range (" + range.getStart().getHexString() + ", "

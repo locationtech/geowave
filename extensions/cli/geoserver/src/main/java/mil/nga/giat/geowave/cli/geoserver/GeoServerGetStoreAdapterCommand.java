@@ -34,14 +34,11 @@ public class GeoServerGetStoreAdapterCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <store name>");
-		}
+		List<String> adapterList = computeResults(params);
 
 		JCommander.getConsole().println(
 				"Store " + storeName + " has these adapters:");
-		for (final String adapterId : computeResults(params)) {
+		for (final String adapterId : adapterList) {
 			JCommander.getConsole().println(
 					adapterId);
 		}
@@ -51,8 +48,12 @@ public class GeoServerGetStoreAdapterCommand extends
 	public List<String> computeResults(
 			final OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <store name>");
+		}
 		storeName = parameters.get(0);
-		final ArrayList<String> adapterList = geoserverClient.getStoreAdapters(
+		final List<String> adapterList = geoserverClient.getStoreAdapters(
 				storeName,
 				null);
 		return adapterList;

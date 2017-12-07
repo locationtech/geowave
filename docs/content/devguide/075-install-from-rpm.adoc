@@ -1,6 +1,9 @@
 [[install-from-rpm]]
 <<<
+
+:linkattrs:
+
 == Installation from RPM
 
-There is a public link:http://locationtech.github.io/geowave/packages.html[GeoWave RPM Repo, window="_blank"] available with the various distribution packages available through GeoWave. The RPM Repo page will list the different packages and vendors available. For details and examples on how to search, install, and update GeoWave packages through command-line, please see the link:http://locationtech.github.io/geowave/userguide.html#install-from-rpm[GeoWave User Guide, window="_blank"].
+There is a public link:packages.html[GeoWave RPM Repo, window="_blank"] available with the various distribution packages available through GeoWave. The RPM Repo page will list the different packages and vendors available. For details and examples on how to search, install, and update GeoWave packages through command-line, please see the link:userguide.html#install-from-rpm[GeoWave User Guide, window="_blank"].
 

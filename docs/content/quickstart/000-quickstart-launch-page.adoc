@@ -13,16 +13,16 @@ or on your local machine in a single node sandbox using VirtualBox. There are al
 looking try out GeoWave in that manner.   
 
 == Environment Options
-- link:http://locationtech.github.io/geowave/aws-env.html#[Amazon Web Services EMR]
-- link:http://locationtech.github.io/geowave/sandbox-env.html#[Sandbox VirtualBox Image]
+- link:aws-env.html#[Amazon Web Services EMR]
+- link:sandbox-env.html#[Sandbox VirtualBox Image]
 
 == Walkthroughs
-- link:http://locationtech.github.io/geowave/walkthrough-vector.html#[Vector Demo]
-- link:http://locationtech.github.io/geowave/walkthrough-raster.html#[Raster Demo]
-- link:http://locationtech.github.io/geowave/integrate-geoserver.html#[GeoServer Integration]
-- link:http://locationtech.github.io/geowave/interact-cluster.html#[Interacting with the cluster]
+- link:walkthrough-vector.html#[Vector Demo]
+- link:walkthrough-raster.html#[Raster Demo]
+- link:integrate-geoserver.html#[GeoServer Integration]
+- link:interact-cluster.html#[Interacting with the cluster]
 
 == Notebook Examples
-- link:http://locationtech.github.io/geowave/jupyter.html#[Jupyter]
-- link:https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin[Zeppelin]
+- link:jupyter.html#[Jupyter]
+- link:zeppelin.html#[Zeppelin]
 

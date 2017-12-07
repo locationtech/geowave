@@ -62,13 +62,13 @@ public class S3URLConnection extends
 				null);
 		final String protocol = System.getProperty(
 				PROP_S3_HANDLER_PROTOCOL,
-				"https").toLowerCase();
+				"https");
 		final String signerOverride = System.getProperty(
 				PROP_S3_HANDLER_SIGNER_OVERRIDE,
 				null);
 
-		final ClientConfiguration clientConfig = new ClientConfiguration()
-				.withProtocol("https".equals(protocol) ? Protocol.HTTPS : Protocol.HTTP);
+		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol("https"
+				.equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
 
 		if (userAgent != null) {
 			clientConfig.setUserAgent(userAgent);

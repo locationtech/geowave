@@ -1,0 +1,30 @@
+#!/bin/bash
+
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+
+#I've externalized commands into library functions for clarity, download and source
+if [ ! -f /tmp/configure-zeppelin.sh ]; then
+        aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/zeppelin/configure-zeppelin.sh /tmp/configure-zeppelin.sh
+fi
+source /tmp/configure-zeppelin.sh
+
+# The EMR customize hooks run _before_ everything else, so Spark is not yet ready
+THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+RUN_FLAG="${THIS_SCRIPT}.run"
+# On first boot skip past this script to allow EMR to set up the environment. Set a callback
+# which will poll for availability of Zeppelin and then configure the zeppelin environment
+if [ ! -f "$RUN_FLAG" ]; then
+        touch "$RUN_FLAG"
+        TIMEOUT= is_master && TIMEOUT=3 || TIMEOUT=4
+        echo "bash -x $(realpath "${BASH_SOURCE[0]}") > /tmp/bootstrap-zeppelin.log" | at now + $TIMEOUT min
+        exit 0 # Bail and let EMR finish initializing
+fi
+
+# These steps have to be done after geowave has been installed
+if is_master ; then
+        config_zep
+fi
+
+echo "Zeppelin configured"
+
+

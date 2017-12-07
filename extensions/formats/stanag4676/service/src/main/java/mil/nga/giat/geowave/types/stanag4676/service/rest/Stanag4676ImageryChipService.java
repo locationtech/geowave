@@ -50,7 +50,6 @@ import mil.nga.giat.geowave.format.stanag4676.Stanag4676IngestPlugin;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChip;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import mil.nga.giat.geowave.format.stanag4676.image.ImageChipUtils;
-import mil.nga.giat.geowave.service.ServiceUtils;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -525,7 +524,7 @@ public class Stanag4676ImageryChipService
 		LOGGER.info("Creating datastore singleton for 4676 service.   conf prop filename: " + confPropFilename);
 		Properties props = null;
 		try (InputStream is = context.getResourceAsStream(confPropFilename)) {
-			props = ServiceUtils.loadProperties(is);
+			props = loadProperties(is);
 		}
 		catch (IOException e) {
 			LOGGER.error(
@@ -542,7 +541,7 @@ public class Stanag4676ImageryChipService
 			final Iterator<Object> it = keySet.iterator();
 			while (it.hasNext()) {
 				final String key = it.next().toString();
-				final String value = ServiceUtils.getProperty(
+				final String value = getProperty(
 						props,
 						key);
 				strMap.put(
@@ -563,5 +562,35 @@ public class Stanag4676ImageryChipService
 			LOGGER.error("Unable to create datastore for 4676 service");
 		}
 		return dataStore;
+	}
+
+	private static Properties loadProperties(
+			final InputStream is ) {
+		final Properties props = new Properties();
+		if (is != null) {
+			try {
+				props.load(is);
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Could not load properties from InputStream",
+						e);
+			}
+		}
+		return props;
+	}
+
+	private static String getProperty(
+			final Properties props,
+			final String name ) {
+		if (System.getProperty(name) != null) {
+			return System.getProperty(name);
+		}
+		else if (props.containsKey(name)) {
+			return props.getProperty(name);
+		}
+		else {
+			return null;
+		}
 	}
 }

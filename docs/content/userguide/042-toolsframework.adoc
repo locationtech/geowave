@@ -8,11 +8,11 @@ A plugin framework (using Service Provider Interface [SPI] based injection) is p
 
 [NOTE]
 ====
-This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the link:http://locationtech.github.io/geowave/devguide.html#building-code[GeoWave Developer Guide, window="_blank"].
+This section assumes that a GeoWave build is available. Building GeoWave from source is outside the scope of this document. For details on generating a GeoWave build, please reference the link:devguide.html#building-code[GeoWave Developer Guide, window="_blank"].
 ====
 
 === GeoWave Command Line Instructions
-GeoWave comes available with several levels of command-line functionality. In this section, we will provide a high-level overview of the commands and will also outline a few of the core functions available, though for a full exhaustive list of commands, please see the link:http://locationtech.github.io/geowave/commands.html[GeoWave CLI Appendix^, window="_blank"].
+GeoWave comes available with several levels of command-line functionality. In this section, we will provide a high-level overview of the commands and will also outline a few of the core functions available, though for a full exhaustive list of commands, please see the link:commands.html[GeoWave CLI Appendix^, window="_blank"].
 
 [NOTE]
 ====
@@ -20,7 +20,7 @@ It is assumed that a _geowave_ system command alias is registered in the termina
 
 To test this, type 'geowave' (no quotes) and press enter.
 
-If a list of geowave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term, __'geowave: command not found'__ is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the link:http://locationtech.github.io/geowave/devguide.html#packaging-code[GeoWave Developer Guide, window="_blank"].
+If a list of geowave options is returned, then the system command alias is available. Otherwise, if an error similar to or containing the term, __'geowave: command not found'__ is returned, the system command alias has not been registered. For details on how to register the 'geowave' system command alias, please refer to the link:devguide.html#packaging-code[GeoWave Developer Guide, window="_blank"].
 
 If the alias system command is not registered, the full java command - ( e.g., java -cp {GEOWAVE_HOME} {GEOWAVE_JAR} ) - will need to be used in place of the 'geowave' alias.
 ====

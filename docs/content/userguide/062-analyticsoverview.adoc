@@ -37,7 +37,7 @@ Example Usage: _yarn jar geowave-tools.jar analytic nn_
 
 [NOTE]
 ====
-Building/Developing GeoWave analytics is outside the scope of this document. For details around how to build the GeoWave source and tools, please refer to the link:http://locationtech.github.io/geowave/devguide.html#building[GeoWave Developer Guide, window="_blank"].
+Building/Developing GeoWave analytics is outside the scope of this document. For details around how to build the GeoWave source and tools, please refer to the link:devguide.html#building[GeoWave Developer Guide, window="_blank"].
 ====
 
 === Running

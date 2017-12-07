@@ -51,6 +51,11 @@ public class KdeCommand extends
 		computeResults(params);
 	}
 
+	@Override
+	public boolean runAsync() {
+		return true;
+	}
+
 	public KDEJobRunner createRunner(
 			final OperationParams params ) {
 		// Ensure we have all the required arguments

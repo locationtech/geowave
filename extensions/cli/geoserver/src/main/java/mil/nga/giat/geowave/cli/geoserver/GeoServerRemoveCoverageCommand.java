@@ -49,11 +49,6 @@ public class GeoServerRemoveCoverageCommand extends
 	public void execute(
 			final OperationParams params )
 			throws Exception {
-		if (parameters.size() != 1) {
-			throw new ParameterException(
-					"Requires argument: <coverage name>");
-		}
-
 		JCommander.getConsole().println(
 				computeResults(params));
 	}
@@ -62,6 +57,11 @@ public class GeoServerRemoveCoverageCommand extends
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
+		if (parameters.size() != 1) {
+			throw new ParameterException(
+					"Requires argument: <coverage name>");
+		}
+
 		if ((workspace == null) || workspace.isEmpty()) {
 			workspace = geoserverClient.getConfig().getWorkspace();
 		}

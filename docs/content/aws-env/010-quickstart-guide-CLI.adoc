@@ -67,7 +67,7 @@ cluster. There are many things that could still go wrong and cause the cluster t
 follow the progress of your cluster’s creation.
 ====
 
-Please view the <<steps-overview,Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.  
+Please view the <<steps-overview, Connecting to the Cluster>> section of this document for description of how to connect to your provisioned cluster.
 
 [NOTE]
 ====
@@ -75,5 +75,5 @@ If you used the quickstart version of bootstrap script the script will now setup
 
 The entire process takes approximately 25 minutes on a three node cluster.
 
-Please see the <<interacting-with-the-cluster,Interacting with the Cluster>> section of this document to see how the data can be visualized.
+Please see the <<interacting-with-the-cluster, Interacting with the Cluster>> section of this document to see how the data can be visualized.
 ====

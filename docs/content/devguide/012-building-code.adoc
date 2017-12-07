@@ -83,7 +83,7 @@ Upon executing the command above, you should see a terminal output beginning wit
 [INFO] GeoWave Integration Tests
 [INFO]
 [INFO] ------------------------------------------------------------------------
-[INFO] Building GeoWave Parent POM 0.9.4-SNAPSHOT
+[INFO] Building GeoWave Parent POM ${project.version}
 [INFO] ------------------------------------------------------------------------
 ----
 
@@ -113,7 +113,7 @@ In order to facilitate a more complete development environment, we now need to g
 There are several IDEs available, though this guide will assume use of Eclipse. If you are developing in a different IDE than Eclipse, there are likely guides on the internet to guide you through converting a Maven project into your IDE.
 ====
 
-Using the http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin], we can import maven projects into eclipse, and eclipse will automatically resolve/download dependencies listed in the pom.xml file for each project.
+Using the link:http://www.eclipse.org/m2e/[Eclipse Maven M2Eclipse plugin, window="_blank"], we can import maven projects into eclipse, and eclipse will automatically resolve/download dependencies listed in the pom.xml file for each project.
 
 [NOTE]
 ====
