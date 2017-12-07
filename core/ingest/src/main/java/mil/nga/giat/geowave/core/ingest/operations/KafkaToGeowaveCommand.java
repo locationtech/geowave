@@ -95,7 +95,7 @@ public class KafkaToGeowaveCommand extends
 
 		computeResults(params);
 	}
-	
+
 	@Override
 	public boolean runAsync() {
 		return true;

@@ -33,6 +33,7 @@ import org.apache.spark.sql.SparkSession;
 import org.apache.spark.api.java.JavaRDD;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
@@ -63,7 +64,7 @@ import com.upplication.s3fs.S3Path;
 public class SparkIngestIngestDriver implements
 		Serializable
 {
-
+	private static final long serialVersionUID = 6782922551345060398L;
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkIngestIngestDriver.class);
 
 	public SparkIngestIngestDriver() {
@@ -72,13 +73,17 @@ public class SparkIngestIngestDriver implements
 
 	public boolean runOperation(
 			File configFile,
-			LocalInputCommandLineOptions localInput, String inputStoreName,
-			String indexList, VisibilityOptions ingestOptions,
-			SparkCommandLineOptions sparkOptions, String basePath)
+			LocalInputCommandLineOptions localInput,
+			String inputStoreName,
+			String indexList,
+			VisibilityOptions ingestOptions,
+			SparkCommandLineOptions sparkOptions,
+			String basePath )
 			throws IOException {
 
 		final Properties configProperties = ConfigOptions.loadProperties(
-				configFile, null);
+				configFile,
+				null);
 
 		JavaSparkContext jsc = null;
 		SparkSession session = null;
@@ -91,118 +96,183 @@ public class SparkIngestIngestDriver implements
 		if (jsc == null) {
 			String jar = "";
 			try {
-				jar = SparkIngestIngestDriver.class.getProtectionDomain()
-						.getCodeSource().getLocation().toURI().getPath();
-			} catch (final URISyntaxException e) {
+				jar = SparkIngestIngestDriver.class
+						.getProtectionDomain()
+						.getCodeSource()
+						.getLocation()
+						.toURI()
+						.getPath();
+			}
+			catch (final URISyntaxException e) {
 				LOGGER.error(
-						"Unable to set jar location in spark configuration", e);
+						"Unable to set jar location in spark configuration",
+						e);
 			}
 
-			session = SparkSession.builder().appName(sparkOptions.getAppName())
-					.master(sparkOptions.getMaster())
-					.config("spark.driver.host", sparkOptions.getHost())
-					.config("spark.jars", jar).getOrCreate();
+			session = SparkSession
+					.builder()
+					.appName(
+							sparkOptions.getAppName())
+					.master(
+							sparkOptions.getMaster())
+					.config(
+							"spark.driver.host",
+							sparkOptions.getHost())
+					.config(
+							"spark.jars",
+							jar)
+					.getOrCreate();
 
-			jsc = new JavaSparkContext(session.sparkContext());
+			jsc = new JavaSparkContext(
+					session.sparkContext());
 		}
-		boolean isS3 = basePath.startsWith("s3://");
-		boolean isHDFS = !isS3 && basePath.startsWith("hdfs://");
+		boolean isS3 = basePath.startsWith(
+				"s3://");
+		boolean isHDFS = !isS3 && basePath.startsWith(
+				"hdfs://");
 		// If input path is S3
 		if (isS3) {
-
-			s3EndpointUrl = ConfigAWSCommand.getS3Url(configProperties);
-			inputPath = (S3Path) setUpS3Filesystem(configProperties, basePath,
+			s3EndpointUrl = ConfigAWSCommand.getS3Url(
+					configProperties);
+			inputPath = (S3Path) setUpS3Filesystem(
+					configProperties,
+					basePath,
 					s3EndpointUrl);
 		}
 		// If input path is HDFS
 		else if (isHDFS) {
-
-			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
-			inputPath = setUpHDFSFilesystem(basePath, hdfsFSUrl);
-		} 
+			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(
+					configProperties);
+			inputPath = setUpHDFSFilesystem(
+					basePath,
+					hdfsFSUrl);
+		}
 		else {
-			LOGGER.warn("Spark ingest support only S3 or HDFS as input location");
-			close(jsc, session);
+			LOGGER.warn(
+					"Spark ingest support only S3 or HDFS as input location");
+			close(
+					jsc,
+					session);
 			return false;
 		}
 
-		if ((inputPath == null) || (!Files.exists(inputPath))) {
-			LOGGER.error("Error in accessing Input path " + basePath);
-			close(jsc, session);
+		if ((inputPath == null) || (!Files.exists(
+				inputPath))) {
+			LOGGER.error(
+					"Error in accessing Input path " + basePath);
+			close(
+					jsc,
+					session);
 			return false;
 		}
 
 		List<Path> inputFileList = new ArrayList<Path>();
-		Files.walkFileTree(inputPath, new SimpleFileVisitor<Path>() {
+		Files.walkFileTree(
+				inputPath,
+				new SimpleFileVisitor<Path>() {
 
-			@Override
-			public FileVisitResult visitFile(Path file,
-					BasicFileAttributes attrs) throws IOException {
-				inputFileList.add(file);
-				return FileVisitResult.CONTINUE;
-			}
-		});
+					@Override
+					public FileVisitResult visitFile(
+							Path file,
+							BasicFileAttributes attrs )
+							throws IOException {
+						inputFileList.add(
+								file);
+						return FileVisitResult.CONTINUE;
+					}
+				});
 
 		int numInputFiles = inputFileList.size();
 
 		if (sparkOptions.getNumExecutors() < 1) {
-			numExecutors = (int) Math.ceil((double) numInputFiles / 8);
-		} else {
+			numExecutors = (int) Math.ceil(
+					(double) numInputFiles / 8);
+		}
+		else {
 			numExecutors = sparkOptions.getNumExecutors();
 		}
 
 		if (sparkOptions.getNumCores() < 1) {
 			numCores = 4;
-		} else {
+		}
+		else {
 			numCores = sparkOptions.getNumCores();
 		}
 
-		jsc.sc().conf().set("spark.executor.instances", Integer.toString(numExecutors));
-		jsc.sc().conf().set("spark.executor.cores", Integer.toString(numCores));
+		jsc.sc().conf().set(
+				"spark.executor.instances",
+				Integer.toString(
+						numExecutors));
+		jsc.sc().conf().set(
+				"spark.executor.cores",
+				Integer.toString(
+						numCores));
 		numPartitions = numExecutors * numCores * 2;
 
-		JavaRDD<URI> FileRDD = jsc.parallelize(
-				Lists.transform(inputFileList, new Function<Path, URI>() {
+		JavaRDD<URI> fileRDD = jsc.parallelize(
+				Lists.transform(
+						inputFileList,
+						new Function<Path, URI>() {
 
-					@Override
-					public URI apply(Path arg0) {
-						return arg0.toUri();
-					}
-				}), numPartitions);
+							@Override
+							public URI apply(
+									Path arg0 ) {
+								return arg0.toUri();
+							}
+						}),
+				numPartitions);
 		if (isS3) {
 			final String s3FinalEndpointUrl = s3EndpointUrl;
-			FileRDD.foreachPartition(uri -> {
+			fileRDD.foreachPartition(
+					uri -> {
+						S3FileSystem fs = initializeS3FS(
+								s3FinalEndpointUrl);
+						List<URI> inputFiles = new ArrayList<URI>();
+						while (uri.hasNext()) {
+							Path inputFile = (S3Path) fs.getPath(
+									uri.next().toString().replaceFirst(
+											s3FinalEndpointUrl,
+											""));
+							inputFiles.add(
+									inputFile.toUri());
+						}
 
-				S3FileSystem fs = initializeS3FS(s3FinalEndpointUrl);
-				List<URI> inputFiles = new ArrayList<URI>();
-				while (uri.hasNext()) {
-					Path inputFile = (S3Path) fs.getPath(uri.next().toString()
-							.replaceFirst(s3FinalEndpointUrl, ""));
-					inputFiles.add(inputFile.toUri());
-				}
-
-				processInput(configFile, localInput, inputStoreName, indexList,
-						ingestOptions, configProperties, inputFiles.iterator());
-			});
+						processInput(
+								configFile,
+								localInput,
+								inputStoreName,
+								indexList,
+								ingestOptions,
+								configProperties,
+								inputFiles.iterator());
+					});
 		}
 		else if (isHDFS) {
-			FileRDD.foreachPartition(uri -> {
-
-				setHdfsURLStreamHandlerFactory();
-				processInput(configFile, localInput, inputStoreName, indexList,
-						ingestOptions, configProperties, uri);
-			});
+			fileRDD.foreachPartition(
+					uri -> {
+						setHdfsURLStreamHandlerFactory();
+						processInput(
+								configFile,
+								localInput,
+								inputStoreName,
+								indexList,
+								ingestOptions,
+								configProperties,
+								uri);
+					});
 		}
 
 		if (jsc != null) {
-			close(jsc, session);
+			close(
+					jsc,
+					session);
 		}
 
 		return true;
 
 	}
 
-	public void processInput(
+	private static void processInput(
 			File configFile,
 			LocalInputCommandLineOptions localInput,
 			String inputStoreName,
@@ -211,7 +281,6 @@ public class SparkIngestIngestDriver implements
 			Properties configProperties,
 			Iterator<URI> inputFiles )
 			throws IOException {
-
 		// Based on the selected formats, select the format plugins
 		IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
 		// Based on the selected formats, select the format plugins
@@ -263,8 +332,7 @@ public class SparkIngestIngestDriver implements
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
 		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
-
-			if (!AbstractLocalFileDriver.checkIndexesAgainstProvider(
+			if (!IngestUtils.checkIndexesAgainstProvider(
 					pluginEntry.getKey(),
 					pluginEntry.getValue(),
 					indexOptions)) {
@@ -351,12 +419,11 @@ public class SparkIngestIngestDriver implements
 		}
 	}
 
-	public Path setUpS3Filesystem(
+	private static Path setUpS3Filesystem(
 			Properties configProperties,
 			String basePath,
 			String s3EndpointUrl )
 			throws IOException {
-
 		Path path = null;
 
 		try {
@@ -379,10 +446,9 @@ public class SparkIngestIngestDriver implements
 
 	}
 
-	public Path setUpHDFSFilesystem(
+	private static Path setUpHDFSFilesystem(
 			String basePath,
 			String hdfsFSUrl ) {
-
 		String hdfsInputPath = basePath.replaceFirst(
 				"hdfs://",
 				"/");
@@ -406,12 +472,11 @@ public class SparkIngestIngestDriver implements
 
 	}
 
-	public S3FileSystem initializeS3FS(
+	private static S3FileSystem initializeS3FS(
 			String s3EndpointUrl )
 			throws URISyntaxException {
-
 		try {
-			AbstractLocalFileDriver.setURLStreamHandlerFactory();
+			IngestUtils.setURLStreamHandlerFactory();
 		}
 		catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 			LOGGER.error(
@@ -428,7 +493,6 @@ public class SparkIngestIngestDriver implements
 					s3EndpointUrl)) != null) {
 				fs = new S3FileSystemProvider().getFileSystem(new URI(
 						s3EndpointUrl));
-
 			}
 		}
 		catch (FileSystemNotFoundException e) {
@@ -441,12 +505,11 @@ public class SparkIngestIngestDriver implements
 		return fs;
 	}
 
-	public static void setHdfsURLStreamHandlerFactory()
+	private static void setHdfsURLStreamHandlerFactory()
 			throws NoSuchFieldException,
 			SecurityException,
 			IllegalArgumentException,
 			IllegalAccessException {
-
 		Field factoryField = URL.class.getDeclaredField("factory");
 		factoryField.setAccessible(true);
 
@@ -454,7 +517,6 @@ public class SparkIngestIngestDriver implements
 
 		if (urlStreamHandlerFactory == null) {
 			URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
-
 		}
 		else {
 			try {
