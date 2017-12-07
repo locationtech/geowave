@@ -57,6 +57,8 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -1120,11 +1122,24 @@ public class AccumuloUtils
 			if (classLoader instanceof VFSClassLoader) {
 				final VFSClassLoader cl = (VFSClassLoader) classLoader;
 				final FileObject[] fileObjs = cl.getFileObjects();
-				final URL[] fileUrls = new URL[fileObjs.length];
+				final ArrayList<URL> fileList = new ArrayList();
+
 				for (int i = 0; i < fileObjs.length; i++) {
-					fileUrls[i] = new URL(
-							fileObjs[i].toString());
+					String fileStr = fileObjs[i].toString();
+					if (verifyProtocol(fileStr)) {
+						fileList.add(new URL(
+								fileStr));
+					}
+					else {
+						LOGGER.error("Failed to register class loader from: " + fileStr);
+					}
 				}
+
+				final URL[] fileUrls = new URL[fileList.size()];
+				for (int i = 0; i < fileList.size(); i++) {
+					fileUrls[i] = fileList.get(i);
+				}
+
 				final ClassLoader urlCL = java.security.AccessController
 						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
 							@Override
@@ -1135,10 +1150,47 @@ public class AccumuloUtils
 								return ucl;
 							}
 						});
+
 				SPIServiceRegistry.registerClassLoader(urlCL);
 			}
 			classLoaderInitialized = true;
 		}
+	}
+
+	private static boolean verifyProtocol(
+			String fileStr ) {
+		if (fileStr.contains("s3://")) {
+			try {
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+
+				return true;
+			}
+			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+				LOGGER.error(
+						"Error in setting up S3URLStreamHandler Factory",
+						e1);
+
+				return false;
+			}
+		}
+		else if (fileStr.contains("hdfs://")) {
+			try {
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
+
+				return true;
+			}
+			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+				LOGGER.error(
+						"Error in setting up HdfsUrlStreamHandler Factory",
+						e1);
+
+				return false;
+			}
+		}
+
+		LOGGER.error("Error: Unable to locate URLStreamHandler for " + fileStr);
+
+		return false;
 	}
 
 	public static byte[] toBinary(

@@ -10,53 +10,37 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.local;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.lang.reflect.Field;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLStreamHandler;
 import java.net.URLStreamHandlerFactory;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
-import java.nio.file.FileVisitResult;
-import java.nio.file.FileVisitor;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Properties;
-import java.lang.reflect.Field;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.ClientConfiguration;
-import com.amazonaws.Protocol;
-import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.S3Object;
 import com.upplication.s3fs.S3Path;
 
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
+import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
 import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 /**
@@ -101,42 +85,6 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		return valid;
 	}
 
-	private static void setURLStreamHandlerFactory()
-			throws NoSuchFieldException,
-			SecurityException,
-			IllegalArgumentException,
-			IllegalAccessException {
-
-		Field factoryField = URL.class.getDeclaredField("factory");
-		// HP Fortify "Access Control" false positive
-		// The need to change the accessibility here is
-		// necessary, has been review and judged to be safe
-		factoryField.setAccessible(true);
-
-		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
-
-		if (urlStreamHandlerFactory == null) {
-			URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
-
-		}
-		else {
-			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
-			// HP Fortify "Access Control" false positive
-			// The need to change the accessibility here is
-			// necessary, has been review and judged to be safe
-			lockField.setAccessible(true);
-			synchronized (lockField.get(null)) {
-
-				factoryField.set(
-						null,
-						null);
-				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
-						urlStreamHandlerFactory));
-			}
-		}
-
-	}
-
 	protected void processInput(
 			final String inputPath,
 			final File configFile,
@@ -160,7 +108,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
-				setURLStreamHandlerFactory();
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 				LOGGER.error(
@@ -210,9 +158,10 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is HDFS
 		else if (inputPath.startsWith("hdfs://")) {
 			try {
-				URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
 			}
-			catch (final Error e) {
+			catch (final Error | NoSuchFieldException | SecurityException | IllegalArgumentException
+					| IllegalAccessException e) {
 				LOGGER.error(
 						"Error in setStreamHandlerFactory for HDFS",
 						e);
