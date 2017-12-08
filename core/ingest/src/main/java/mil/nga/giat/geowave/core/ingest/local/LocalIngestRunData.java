@@ -118,12 +118,6 @@ public class LocalIngestRunData implements
 		indexWriterPool.close();
 	}
 
-	public static BlockingQueue<GeoWaveData<?>> createBlockingQueue(
-			int batchSize ) {
-		return new ArrayBlockingQueue<GeoWaveData<?>>(
-				batchSize);
-	}
-
 	/**
 	 * A factory implementing the default Apache Commons Pool interface to
 	 * return new instances of an index writer for a given primary index.

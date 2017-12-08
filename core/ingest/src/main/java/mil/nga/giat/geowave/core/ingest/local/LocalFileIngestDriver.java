@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,6 +31,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
@@ -78,7 +80,7 @@ public class LocalFileIngestDriver extends
 		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
 		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
-			if (!checkIndexesAgainstProvider(
+			if (!IngestUtils.checkIndexesAgainstProvider(
 					pluginEntry.getKey(),
 					pluginEntry.getValue(),
 					indexOptions)) {
@@ -131,7 +133,7 @@ public class LocalFileIngestDriver extends
 	 * Create a basic thread pool to ingest file data. We limit it to the amount
 	 * of threads specified on the command line.
 	 */
-	private void startExecutor() {
+	public void startExecutor() {
 		ingestExecutor = Executors.newFixedThreadPool(threads);
 	}
 
@@ -139,7 +141,7 @@ public class LocalFileIngestDriver extends
 	 * This function will wait for executing tasks to complete for up to 10
 	 * seconds.
 	 */
-	private void shutdownExecutor() {
+	public void shutdownExecutor() {
 		if (ingestExecutor != null) {
 			try {
 				ingestExecutor.shutdown();
@@ -159,7 +161,7 @@ public class LocalFileIngestDriver extends
 	}
 
 	@Override
-	protected void processFile(
+	public void processFile(
 			final URL file,
 			final String typeName,
 			final LocalFileIngestPlugin<?> plugin,
@@ -209,7 +211,7 @@ public class LocalFileIngestDriver extends
 		// there are no more items, at which point we will tell the workers to
 		// complete. Ingest batch size is the total max number of items to read
 		// from the file at a time for the worker threads to execute.
-		BlockingQueue<GeoWaveData<?>> queue = LocalIngestRunData.createBlockingQueue(INGEST_BATCH_SIZE);
+		BlockingQueue<GeoWaveData<?>> queue = createBlockingQueue(INGEST_BATCH_SIZE);
 
 		// Create our Jobs. We submit as many jobs as we have executors for.
 		// These folks will read our blocking queue
@@ -294,5 +296,11 @@ public class LocalFileIngestDriver extends
 		LOGGER.info(String.format(
 				"Finished ingest for file: [%s]",
 				file.getFile()));
+	}
+
+	private static BlockingQueue<GeoWaveData<?>> createBlockingQueue(
+			int batchSize ) {
+		return new ArrayBlockingQueue<GeoWaveData<?>>(
+				batchSize);
 	}
 }

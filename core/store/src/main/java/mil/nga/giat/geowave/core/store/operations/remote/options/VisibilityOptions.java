@@ -10,9 +10,12 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.operations.remote.options;
 
+import java.io.Serializable;
+
 import com.beust.jcommander.Parameter;
 
-public class VisibilityOptions
+public class VisibilityOptions implements
+		Serializable
 {
 	@Parameter(names = {
 		"-v",

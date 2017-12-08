@@ -70,7 +70,7 @@ public class LocalToKafkaCommand extends
 			throws Exception {
 		computeResults(params);
 	}
-	
+
 	@Override
 	public boolean runAsync() {
 		return true;

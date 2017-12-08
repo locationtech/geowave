@@ -95,7 +95,7 @@ public class MapReduceToGeowaveCommand extends
 
 		computeResults(params);
 	}
-	
+
 	@Override
 	public boolean runAsync() {
 		return true;

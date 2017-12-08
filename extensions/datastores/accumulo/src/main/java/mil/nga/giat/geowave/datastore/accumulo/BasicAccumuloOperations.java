@@ -310,7 +310,12 @@ public class BasicAccumuloOperations implements
 							partitionKeys);
 				}
 			}
-			catch (AccumuloException | AccumuloSecurityException | TableExistsException | TableNotFoundException e) {
+			catch (TableExistsException e) {
+				LOGGER.info(
+						"Unable to create table '" + qName + "'. Table already exists.",
+						e);
+			}
+			catch (AccumuloException | AccumuloSecurityException | TableNotFoundException e) {
 				LOGGER.warn(
 						"Unable to create table '" + qName + "'",
 						e);

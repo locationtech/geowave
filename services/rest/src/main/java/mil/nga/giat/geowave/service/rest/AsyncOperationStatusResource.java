@@ -22,7 +22,7 @@ public class AsyncOperationStatusResource extends
 		ServerResource
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncOperationStatusResource.class);
-	
+
 	@Get("json")
 	public Representation getStatus(
 			final Representation request ) {
@@ -51,7 +51,9 @@ public class AsyncOperationStatusResource extends
 			}
 		}
 		catch (final Exception e) {
-			LOGGER.error("Error exception: ", e.getMessage());
+			LOGGER.error(
+					"Error exception: ",
+					e.getMessage());
 			status.status = RestOperationStatusMessage.StatusType.ERROR;
 			status.message = "exception occurred";
 			status.data = e;

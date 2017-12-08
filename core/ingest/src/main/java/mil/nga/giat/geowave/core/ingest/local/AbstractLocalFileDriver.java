@@ -81,62 +81,6 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		localInput = input;
 	}
 
-	protected boolean checkIndexesAgainstProvider(
-			String providerName,
-			DataAdapterProvider<?> adapterProvider,
-			List<IndexPluginOptions> indexOptions ) {
-		boolean valid = true;
-		for (IndexPluginOptions option : indexOptions) {
-			if (!IngestUtils.isCompatible(
-					adapterProvider,
-					option)) {
-				// HP Fortify "Log Forging" false positive
-				// What Fortify considers "user input" comes only
-				// from users with OS-level access anyway
-				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName
-						+ "' does not support dimensionality '" + option.getType() + "'");
-				valid = false;
-			}
-		}
-		return valid;
-	}
-
-	private static void setURLStreamHandlerFactory()
-			throws NoSuchFieldException,
-			SecurityException,
-			IllegalArgumentException,
-			IllegalAccessException {
-
-		Field factoryField = URL.class.getDeclaredField("factory");
-		// HP Fortify "Access Control" false positive
-		// The need to change the accessibility here is
-		// necessary, has been review and judged to be safe
-		factoryField.setAccessible(true);
-
-		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
-
-		if (urlStreamHandlerFactory == null) {
-			URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
-
-		}
-		else {
-			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
-			// HP Fortify "Access Control" false positive
-			// The need to change the accessibility here is
-			// necessary, has been review and judged to be safe
-			lockField.setAccessible(true);
-			synchronized (lockField.get(null)) {
-
-				factoryField.set(
-						null,
-						null);
-				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
-						urlStreamHandlerFactory));
-			}
-		}
-
-	}
-
 	protected void processInput(
 			final String inputPath,
 			final File configFile,
@@ -160,7 +104,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
-				setURLStreamHandlerFactory();
+				IngestUtils.setURLStreamHandlerFactory();
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 				LOGGER.error(

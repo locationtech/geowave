@@ -70,7 +70,7 @@ public class LocalToHdfsCommand extends
 
 		computeResults(params);
 	}
-	
+
 	@Override
 	public boolean runAsync() {
 		return true;
