@@ -460,7 +460,7 @@ a much more powerful machine to process. The Sandbox VirtualBox image provided w
 <h2 id="setting-up-the-environment"><a class="anchor" href="#setting-up-the-environment"></a>Setting Up the Environment</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>The virtual image provided for this demo can be found at <a href="https://s3.amazonaws.com/geowave-vm/0.9.5/VirtualBox_HDP_Geowave_Sandbox_0.9.5.ova">here</a>. The image is a very large file (~14 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.</p>
+<p>The virtual image provided for this demo <a href="https://s3.amazonaws.com/geowave-vm/0.9.6/VirtualBox_HDP_Geowave_Sandbox_0.9.6.ova">can be found here</a>. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.</p>
 </div>
 <div class="sect2">
 <h3 id="setting-up-the-virtualbox-image"><a class="anchor" href="#setting-up-the-virtualbox-image"></a>Setting up the VirtualBox Image</h3>
@@ -482,7 +482,7 @@ a much more powerful machine to process. The Sandbox VirtualBox image provided w
 <div class="ulist">
 <ul>
 <li>
-<p>Click on the folder icon, and navigate to <em>VirtualBox_HDP_GeoWave_Sandbox.ova</em> (the image that you downloaded).</p>
+<p>Click on the folder icon, and navigate to <em>VirtualBox_HDP_GeoWave_Sandbox_0.9.6.ova</em> (the image that you downloaded).</p>
 </li>
 <li>
 <p>Select "Next" and then "Import"</p>
@@ -522,7 +522,7 @@ time that you will have to interact directly with the VirtualBox. Make sure that
 </td>
 <td class="content">
 <div class="paragraph">
-<p>VirtualBox Mangager has a feature that allows Virtual Machines to be started and operated in headless ( non-Graphical-User-Interface(GUI) ) mode. Since the Sandbox was setup as a non-GUI VM, it is recommended that users' run their GeoWave Sandbox Virtual Machine in headless mode when possible.</p>
+<p>VirtualBox Manager has a feature that allows Virtual Machines to be started and operated in headless ( non-Graphical-User-Interface(GUI) ) mode. Since the Sandbox was setup as a non-GUI VM, it is recommended that users' run their GeoWave Sandbox Virtual Machine in headless mode when possible.</p>
 </div>
 <div class="paragraph">
 <p>To start a VM in headless mode, within the VirtualBox Manager screen, right-click on the Sandbox VM image that was imported, and select <em>Start</em> -&#8594; <em>Headless Start</em>. The VM status can be monitored through the <em>Preview</em> pane within the dashboard, and once the VM has started, you can configure your machine and interface with the VM as outlined in the steps below.</p>
@@ -589,14 +589,11 @@ time that you will have to interact directly with the VirtualBox. Make sure that
 </ul>
 </div>
 <div class="paragraph">
-<p>The Ambari server provides an interface that allows you to control which services you&#8217;d like to run in your environment. However, on start-up, the Sandbox automatically runs a number of unnecessary services.</p>
-</div>
-<div class="paragraph">
-<p>To best run this demo you should stop: <strong>Oozie, Flume, Ranger, Spark2,</strong> and <strong>Zeppelin Notebook</strong>. To stop a service, select it from the list on the left, click on "Service Actions," and select "Stop" from the dropdown menu.</p>
+<p>The Ambari server provides an interface that allows you to control which services you&#8217;d like to run in your environment. You can start, stop, or check the status of services there.</p>
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/sandbox/ambari-gui.png" alt="select emr">
+<img src="./images/sandbox/ambari-gui.png" alt="ambari">
 </div>
 </div>
 <div style="page-break-after: always;"></div>
@@ -641,7 +638,7 @@ root@sandbox.hortonworks.com's password:</code></pre>
 <p>If you are using PuTTY, click open to continue.</p>
 </div>
 <div class="paragraph">
-<p>When prompted for a password, enter <code>geowave1</code>.</p>
+<p>When prompted for a password, enter <code>Geowave</code>.</p>
 </div>
 </div>
 <div class="sect2">
@@ -668,7 +665,7 @@ root@sandbox.hortonworks.com's password:</code></pre>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2017-12-08 13:33:28 +00:00
+Last updated 2017-12-09 18:10:40 +00:00
 </div>
 </div>
 </body>
