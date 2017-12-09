@@ -24,7 +24,7 @@ No key is necessary to access this machine
 
 If you are using PuTTY, click open to continue.
 
-When prompted for a password, enter `geowave1`.
+When prompted for a password, enter `Geowave`.
 
 === Demo Links
 

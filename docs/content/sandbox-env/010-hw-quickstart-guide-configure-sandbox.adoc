@@ -26,9 +26,6 @@ After this you should be able to log into the Ambari Server at link:http://sandb
 - **Username:** raj_ops
 - **Password:** raj_ops
 
-The Ambari server provides an interface that allows you to control which services you'd like to run in your environment. However, on start-up, the Sandbox automatically runs a number of unnecessary services. 
+The Ambari server provides an interface that allows you to control which services you'd like to run in your environment. You can start, stop, or check the status of services there.
 
-To best run this demo you should stop: **Oozie, Flume, Ranger, Spark2,** and **Zeppelin Notebook**. To stop a service, select it from the list on the left, click on "Service Actions," and select "Stop" from the dropdown menu. 
-
-image::sandbox/ambari-gui.png[scaledwidth="100%",alt="select emr"]
-
+image::sandbox/ambari-gui.png[scaledwidth="100%",alt="ambari"]
