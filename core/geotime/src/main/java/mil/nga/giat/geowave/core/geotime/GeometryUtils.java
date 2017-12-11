@@ -45,6 +45,7 @@ public class GeometryUtils
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
+	public static final String DEFAULT_CRS_STR = "EPSG:4326";
 
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
@@ -209,9 +210,9 @@ public class GeometryUtils
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The longitude range in EPSG:4326
+	 * @return The x range
 	 */
-	public static NumericData longitudeRangeFromGeometry(
+	public static NumericData xRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(
@@ -232,9 +233,9 @@ public class GeometryUtils
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The latitude range in EPSG:4326
+	 * @return The y range
 	 */
-	public static NumericData latitudeRangeFromGeometry(
+	public static NumericData yRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(

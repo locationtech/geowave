@@ -10,16 +10,27 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime.ingest;
 
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.beust.jcommander.Parameter;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
@@ -35,6 +46,7 @@ import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 public class SpatialDimensionalityTypeProvider implements
 		DimensionalityTypeProviderSpi
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
 	private final SpatialOptions options = new SpatialOptions();
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
@@ -93,17 +105,48 @@ public class SpatialDimensionalityTypeProvider implements
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
 			final SpatialOptions options ) {
+		NumericDimensionDefinition[] dimensions;
+		NumericDimensionField<?>[] fields;
+		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)){
+		dimensions = SPATIAL_DIMENSIONS;
+		fields = SPATIAL_FIELDS;
+		}
+		else{
+			try {
+				CoordinateReferenceSystem crs = CRS.decode(
+						options.crs,
+						true);
+				CoordinateSystem cs = crs.getCoordinateSystem();
+				dimensions = new NumericDimensionDefinition[cs.getDimension()];
+
+				fields = new NumericDimensionField[dimensions.length];
+				for (int d =0 ;d < dimensions.length;d++){
+					CoordinateSystemAxis csa = cs.getAxis(d);
+						dimensions[d]=new BasicDimensionDefinition(csa.getMinimumValue(), csa.getMaximumValue());
+							fields[d] = new CustomCRSSpatialField((byte)d, dimensions[d]);
+			}
+			}
+			catch (final FactoryException e) {
+				LOGGER.error(
+						"Unable to decode '"+options.crs+"' CRS",
+						e);
+				throw new RuntimeException(
+						"Unable to initialize '"+options.crs+"' object",
+						e);
+			}
+		}
 		return new CustomIdIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
-						SPATIAL_DIMENSIONS,
+						dimensions,
 						new int[] {
+								//TODO this is only valid for 2D coordinate systems, again consider the possibility of being flexible enough to handle n-dimensions
 							LONGITUDE_BITS,
 							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
-				new BasicIndexModel(
-						options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS),
-				new ByteArrayId(
+				new BasicIndexModel(//TODO append time to fields if storeTime
+						options.storeTime ? SPATIAL_TEMPORAL_FIELDS : fields),
+				new ByteArrayId(//TODO append CRS code to ID if its overridden 
 						options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID));
 	}
 
@@ -114,6 +157,11 @@ public class SpatialDimensionalityTypeProvider implements
 			"--storeTime"
 		}, required = false, description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
 		protected boolean storeTime = false;
+		
+		@Parameter(names = {
+				"-c","--crs"
+			}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
+			protected String crs = GeometryUtils.DEFAULT_CRS_STR ;
 	}
 
 	@Override
