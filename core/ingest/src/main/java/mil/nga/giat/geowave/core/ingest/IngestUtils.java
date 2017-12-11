@@ -18,6 +18,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
@@ -46,26 +47,49 @@ public class IngestUtils
 		return valid;
 	}
 
-	public static void setURLStreamHandlerFactory()
+	public static enum URLTYPE {
+		S3,
+		HDFS
+	}
+
+	private static boolean hasS3Handler = false;
+	private static boolean hasHdfsHandler = false;
+
+	public static void setURLStreamHandlerFactory(
+			URLTYPE urlType )
 			throws NoSuchFieldException,
 			SecurityException,
 			IllegalArgumentException,
 			IllegalAccessException {
+		// One-time init for each type
+		if (urlType == URLTYPE.S3 && hasS3Handler) {
+			return;
+		}
+		else if (urlType == URLTYPE.HDFS && hasHdfsHandler) {
+			return;
+		}
 
-		final Field factoryField = URL.class.getDeclaredField("factory");
+		Field factoryField = URL.class.getDeclaredField("factory");
 		// HP Fortify "Access Control" false positive
 		// The need to change the accessibility here is
 		// necessary, has been review and judged to be safe
 		factoryField.setAccessible(true);
 
-		final URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
+		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
 
 		if (urlStreamHandlerFactory == null) {
-			URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
+			if (urlType == URLTYPE.S3) {
+				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
+				hasS3Handler = true;
+			}
+			else { // HDFS
+				URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory());
+				hasHdfsHandler = true;
+			}
 
 		}
 		else {
-			final Field lockField = URL.class.getDeclaredField("streamHandlerLock");
+			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
 			// HP Fortify "Access Control" false positive
 			// The need to change the accessibility here is
 			// necessary, has been review and judged to be safe
@@ -75,11 +99,19 @@ public class IngestUtils
 				factoryField.set(
 						null,
 						null);
-				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
-						urlStreamHandlerFactory));
+
+				if (urlType == URLTYPE.S3) {
+					URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
+							urlStreamHandlerFactory));
+					hasS3Handler = true;
+				}
+				else { // HDFS
+					URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory(
+							urlStreamHandlerFactory));
+					hasHdfsHandler = true;
+				}
 			}
 		}
-
 	}
 
 	/**

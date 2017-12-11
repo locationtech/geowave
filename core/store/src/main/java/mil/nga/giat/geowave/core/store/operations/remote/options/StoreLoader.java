@@ -69,7 +69,7 @@ public class StoreLoader
 						configFile,
 						"^" + namespace),
 				namespace,
-				null);
+				configFile);
 	}
 
 	/**

@@ -34,6 +34,7 @@ import org.apache.spark.api.java.JavaRDD;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
@@ -476,7 +477,7 @@ public class SparkIngestIngestDriver implements
 			String s3EndpointUrl )
 			throws URISyntaxException {
 		try {
-			IngestUtils.setURLStreamHandlerFactory();
+			IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 		}
 		catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 			LOGGER.error(
