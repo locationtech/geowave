@@ -191,66 +191,72 @@ public class HBaseConstraintsQuery extends
 					limit);
 		}
 
-		// Aggregate without coprocessor
-		if ((options == null) || !options.isEnableCoprocessors()) {
-			final CloseableIterator<Object> it = super.internalQuery(
-					operations,
-					adapterStore,
-					maxResolutionSubsamplingPerDimension,
-					limit,
-					!isCommonIndexAggregation());
+		CloseableIterator<Object> responseIterator = null;
 
-			if ((it != null) && it.hasNext()) {
-				final Aggregation aggregationFunction = base.aggregation.getRight();
-				synchronized (aggregationFunction) {
+		// Use the coprocessor for aggregation?
+		if ((options != null) && options.isEnableCoprocessors()) {
+			// Verify if necessary
+			if (!options.isVerifyCoprocessors() || operations.verifyCoprocessor(
+					index.getId().getString(),
+					AggregationEndpoint.class.getName(),
+					options.getCoprocessorJar())) {
 
-					aggregationFunction.clearResult();
-					while (it.hasNext()) {
-						final Object input = it.next();
-						if (input != null) {
-							aggregationFunction.aggregate(input);
-						}
-					}
-					try {
-						it.close();
-					}
-					catch (final IOException e) {
-						LOGGER.warn(
-								"Unable to close hbase scanner",
-								e);
-					}
-
-					return new Wrapper(
-							Iterators.singletonIterator(aggregationFunction.getResult()));
-				}
+				responseIterator = aggregateWithCoprocessor(
+						operations,
+						adapterStore,
+						limit);
 			}
-
-			return new CloseableIterator.Empty();
 		}
 
-		// If we made it this far, we're using a coprocessor for aggregation
-		return aggregateWithCoprocessor(
+		// See if we're done
+		if (responseIterator != null) {
+			return responseIterator;
+		}
+
+		// Aggregate without coprocessor (either by choice or failure)
+		final CloseableIterator<Object> it = super.internalQuery(
 				operations,
 				adapterStore,
-				limit);
+				maxResolutionSubsamplingPerDimension,
+				limit,
+				!isCommonIndexAggregation());
+
+		if ((it != null) && it.hasNext()) {
+			final Aggregation aggregationFunction = base.aggregation.getRight();
+			synchronized (aggregationFunction) {
+
+				aggregationFunction.clearResult();
+				while (it.hasNext()) {
+					final Object input = it.next();
+					if (input != null) {
+						aggregationFunction.aggregate(input);
+					}
+				}
+				try {
+					it.close();
+				}
+				catch (final IOException e) {
+					LOGGER.warn(
+							"Unable to close hbase scanner",
+							e);
+				}
+
+				return new Wrapper(
+						Iterators.singletonIterator(aggregationFunction.getResult()));
+			}
+		}
+
+		return new CloseableIterator.Empty();
 	}
 
 	private CloseableIterator<Object> aggregateWithCoprocessor(
 			final BasicHBaseOperations operations,
 			final AdapterStore adapterStore,
 			final Integer limit ) {
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
+		final String tableName = index.getId().getString();
 		Mergeable total = null;
 
 		try {
-			// Use the row count coprocessor
-			if (options.isVerifyCoprocessors()) {
-				operations.verifyCoprocessor(
-						tableName,
-						AggregationEndpoint.class.getName(),
-						options.getCoprocessorJar());
-			}
-
 			final Aggregation aggregation = base.aggregation.getRight();
 
 			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
