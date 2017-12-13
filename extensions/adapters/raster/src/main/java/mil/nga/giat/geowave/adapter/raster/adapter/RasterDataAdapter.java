@@ -456,7 +456,7 @@ public class RasterDataAdapter implements
 		init();
 	}
 
-	private void staticInit() {
+	private synchronized void staticInit() {
 		if (!classInit) {
 			try {
 				SourceThresholdFixMosaicDescriptor.register(false);
