@@ -329,28 +329,41 @@ public class BasicHBaseOperations implements
 		return conn.getTable(getTableName(getQualifiedTableName(tableName)));
 	}
 
-	public void verifyCoprocessor(
+	public boolean verifyCoprocessor(
 			final String tableNameStr,
 			final String coprocessorName,
 			final String coprocessorJar ) {
+		Admin admin = null;
 		try {
-			final Admin admin = conn.getAdmin();
-			final TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
+			admin = conn.getAdmin();
+		}
+		catch (IOException ioe) {
+			LOGGER.error("Failed to retrieve HBaseAdmin from connection");
+			return false;
+		}
+
+		final TableName tableName = getTableName(getQualifiedTableName(tableNameStr));
+
+		try {
 			final HTableDescriptor td = admin.getTableDescriptor(tableName);
 
-			if (!td.hasCoprocessor(coprocessorName)) {
-				LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
+			if (td.hasCoprocessor(coprocessorName)) {
+				return true;
+			}
 
-				// if (!schemaUpdateEnabled &&
-				// !admin.isTableDisabled(tableName)) {
-				LOGGER.debug("- disable table...");
-				admin.disableTable(tableName);
-				// }
+			LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
+
+			synchronized (ADMIN_MUTEX) {
+				if (!schemaUpdateEnabled && !admin.isTableDisabled(tableName)) {
+					LOGGER.debug("- disable table...");
+					admin.disableTable(tableName);
+				}
 
 				LOGGER.debug("- add coprocessor...");
 
 				// Retrieve coprocessor jar path from config
 				if (coprocessorJar == null) {
+					LOGGER.debug("Coprocessor jar path: DEFAULT");
 					td.addCoprocessor(coprocessorName);
 				}
 				else {
@@ -369,18 +382,16 @@ public class BasicHBaseOperations implements
 						tableName,
 						td);
 
-				// if (!schemaUpdateEnabled) {
-				LOGGER.debug("- enable table...");
-				admin.enableTable(tableName);
+				if (!schemaUpdateEnabled && admin.isTableDisabled(tableName)) {
+					LOGGER.debug("- enable table...");
+					admin.enableTable(tableName);
+				}
 			}
-			// }
 
-			// if (schemaUpdateEnabled) {
-			int regionsLeft;
+			int regionsLeft = admin.getAlterStatus(
+					tableName).getFirst();
 
-			do {
-				regionsLeft = admin.getAlterStatus(
-						tableName).getFirst();
+			while (regionsLeft > 0) {
 				LOGGER.debug(regionsLeft + " regions remaining in table modify");
 
 				try {
@@ -391,19 +402,32 @@ public class BasicHBaseOperations implements
 							"Sleeping while coprocessor add interrupted",
 							e);
 				}
+
+				regionsLeft = admin.getAlterStatus(
+						tableName).getFirst();
 			}
-			while (regionsLeft > 0);
-			// }
 
 			LOGGER.debug("Successfully added coprocessor");
 		}
-		catch (
-
-		final IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Error verifying/adding coprocessor.",
 					e);
+
+			// In some cases, the table has been disabled, so enable it
+			try {
+				if (admin.isTableDisabled(tableName)) {
+					admin.enableTable(tableName);
+				}
+			}
+			catch (IOException ioe2) {
+				LOGGER.error("Could not re-enable table '" + tableName.getNameAsString() + "'");
+			}
+
+			return false;
 		}
+
+		return true;
 	}
 
 	@Override
