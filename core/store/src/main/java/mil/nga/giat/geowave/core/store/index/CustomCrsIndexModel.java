@@ -10,19 +10,21 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
+
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.StringUtils;
+
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is a concrete implementation of a common index model. Data
@@ -32,61 +34,29 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
  * fields.
  * 
  */
-public class BasicIndexModel implements
-		CommonIndexModel
+public class CustomCrsIndexModel extends BasicIndexModel
 {
-	protected NumericDimensionField<?>[] dimensions;
-	// the first dimension of a particular field ID will be the persistence
-	// model used
-	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
-	private transient String id;
 
-	public BasicIndexModel() {}
+	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCrsIndexModel.class);
+	private String crsCode;
 
-	public BasicIndexModel(
-			final NumericDimensionField<?>[] dimensions ) {
+	public CustomCrsIndexModel() {}
+
+	public CustomCrsIndexModel(
+			final NumericDimensionField<?>[] dimensions,String crsCode ) {
 		init(dimensions);
+		this.crsCode = crsCode;
 	}
 
+	public String getCrsCode() {
+		return crsCode;
+	}
+	
 	public void init(
-			final NumericDimensionField<?>[] dimensions ) {
-		this.dimensions = dimensions;
-		fieldIdToPeristenceMap = new HashMap<ByteArrayId, NumericDimensionField<?>>();
-		for (final NumericDimensionField<?> d : dimensions) {
-			if (!fieldIdToPeristenceMap.containsKey(d.getFieldId())) {
-				fieldIdToPeristenceMap.put(
-						d.getFieldId(),
-						d);
-			}
-		}
+			final NumericDimensionField<?>[] dimensions) {   
+		super.init(dimensions);
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public FieldWriter<Object, CommonIndexValue> getWriter(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
-		if (dimension != null) {
-			return (FieldWriter<Object, CommonIndexValue>) dimension.getWriter();
-		}
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public FieldReader<CommonIndexValue> getReader(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
-		if (dimension != null) {
-			return (FieldReader<CommonIndexValue>) dimension.getReader();
-		}
-		return null;
-	}
-
-	@Override
-	public NumericDimensionField<?>[] getDimensions() {
-		return dimensions;
-	}
 
 	@Override
 	public int hashCode() {
@@ -110,15 +80,16 @@ public class BasicIndexModel implements
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final BasicIndexModel other = (BasicIndexModel) obj;
+		final CustomCrsIndexModel other = (CustomCrsIndexModel) obj;
 		return Arrays.equals(
 				dimensions,
 				other.dimensions);
 	}
-
+	
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 4;
+		byte[] crsCodeBinary  = ByteArrayUtils.byteArrayFromString(crsCode);
+		int byteBufferLength = 4 + crsCodeBinary.length;
 		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
@@ -128,10 +99,12 @@ public class BasicIndexModel implements
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
 		buf.putInt(dimensions.length);
+		buf.putInt(crsCodeBinary.length);
 		for (final byte[] dimensionBinary : dimensionBinaries) {
 			buf.putInt(dimensionBinary.length);
 			buf.put(dimensionBinary);
 		}
+		buf.put(crsCodeBinary);
 		return buf.array();
 	}
 
@@ -140,20 +113,17 @@ public class BasicIndexModel implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numDimensions = buf.getInt();
+		final int crsCodeLength = buf.getInt();
 		dimensions = new NumericDimensionField[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
 			dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
 		}
+		final byte[] codeBytes = new byte[crsCodeLength];
+		buf.get(codeBytes);
+		crsCode = ByteArrayUtils.byteArrayToString(codeBytes);
 		init(dimensions);
 	}
 
-	@Override
-	public String getId() {
-		if (id == null) {
-			id = StringUtils.intToString(hashCode());
-		}
-		return id;
-	}
 }

@@ -17,6 +17,7 @@ public class CustomCRSSpatialField extends SpatialField {
 			final NumericDimensionDefinition baseDefinition,
 			final ByteArrayId fieldId) {
 		super(baseDefinition, fieldId);
+		this.axis = axis;
 	}
 
 	@Override

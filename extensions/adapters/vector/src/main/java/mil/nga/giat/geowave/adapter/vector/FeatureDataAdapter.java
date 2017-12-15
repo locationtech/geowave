@@ -22,14 +22,22 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
+import org.geotools.geometry.jts.JTS;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -62,7 +70,9 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
+import mil.nga.giat.geowave.core.store.index.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
@@ -131,6 +141,10 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 	private StatsManager statsManager;
 	private SecondaryIndexManager secondaryIndexManager;
 	private TimeDescriptors timeDescriptors = null;
+	private HashMap<String, MathTransform>  CrsTransformMap = new HashMap<String,MathTransform>();
+	private CoordinateReferenceSystem persistedCRS;
+	private CoordinateReferenceSystem indexCRS;
+	
 
 	// should change this anytime the serialized image changes. Stay negative.
 	// so 0xa0, 0xa1, 0xa2 etc.
@@ -221,7 +235,6 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
-
 	/**
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
@@ -239,6 +252,7 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler,
 			final VisibilityManagement<SimpleFeature> defaultVisibilityManagement) {
+
 		super(customIndexHandlers,
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
 				fieldVisiblityHandler, updateVisibility(featureType,
@@ -248,6 +262,56 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
+
+	@Override
+	public void init(PrimaryIndex... indices) throws RuntimeException {
+		// TODO get projection here, make sure if multiple indices are given
+		// that they match
+
+		String indexCrsCode = null;
+		for (PrimaryIndex primaryindx : indices) {
+			if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+				if (indexCrsCode == null) {
+					indexCrsCode = ((CustomCrsIndexModel) primaryindx
+							.getIndexModel()).getCrsCode();
+				}
+				// check if indexes have different CRS
+				if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx
+						.getIndexModel()).getCrsCode())) {
+					LOGGER.error("Multiple indices with different CRS is not supported");
+					throw new RuntimeException(
+							"Multiple indices with different CRS is not supported");
+				}
+			}
+		}
+
+		persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
+		if (persistedCRS == null) {
+			persistedCRS = GeoWaveGTDataStore.DEFAULT_CRS;
+		}
+
+		indexCRS = decodeCRS(indexCrsCode);
+		if (indexCRS.equals(persistedCRS)) {
+			reprojectedFeatureType = persistedFeatureType;
+		} else {
+			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
+					persistedFeatureType, indexCRS);
+			try {
+				transform = CRS.findMathTransform(persistedCRS, indexCRS, true);
+			} catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to create coordinate reference system transform",
+						e);
+			}
+
+		}
+
+		statsManager = new StatsManager(this, persistedFeatureType,
+				reprojectedFeatureType, transform);
+		secondaryIndexManager = new SecondaryIndexManager(this,
+				persistedFeatureType, statsManager);
+
+	}
 
 	/**
 	 * Helper method for establishing a visibility manager in the constructor
@@ -273,14 +337,19 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 	 *            - new feature type
 	 */
 	private void setFeatureType(final SimpleFeatureType featureType) {
+		
 		persistedFeatureType = featureType;
+		
 		// If the CRS for the new FeatureType is the DEFAULT_CRS, then setup the
 		// reprojected type based on the persisted type
 		
 		// TODO here we need to come up with a means to use the index and
 		// reproject geometries into the CRS defined by the index, not
 		// necessarily always EPSG:4326
-		if (GeoWaveGTDataStore.DEFAULT_CRS.equals(featureType
+		
+		//reprojectedFeatureType = persistedFeatureType;
+		
+		/*if (GeoWaveGTDataStore.DEFAULT_CRS.equals(featureType
 				.getCoordinateReferenceSystem())) {
 			reprojectedFeatureType = persistedFeatureType;
 		} else {
@@ -297,13 +366,13 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 							e);
 				}
 			}
-		}
+		}*/
 
 		resetTimeDescriptors();
-		statsManager = new StatsManager(this, persistedFeatureType,
+		/*statsManager = new StatsManager(this, persistedFeatureType,
 				reprojectedFeatureType, transform);
 		secondaryIndexManager = new SecondaryIndexManager(this,
-				persistedFeatureType, statsManager);
+				persistedFeatureType, statsManager);*/
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -711,7 +780,7 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 	@Override
 	public ByteArrayId getAdapterId() {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(reprojectedFeatureType.getTypeName()));
+				StringUtils.stringToBinary(persistedFeatureType.getTypeName()));
 	}
 
 	@Override
@@ -744,10 +813,25 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 	public AdapterPersistenceEncoding encode(final SimpleFeature entry,
 			final CommonIndexModel indexModel) {
 		
+		if(indexModel instanceof CustomCrsIndexModel){
+			if(transform != null){
+			  return super.encode(CRSTransform(entry,persistedFeatureType,
+					reprojectedFeatureType,
+					transform,indexModel),
+					indexModel);
+			}
+		}
+		
+		return super.encode(entry,indexModel);
+			
+	
 		//TODO from the index model we should be able to get the CRS, and at this point we need to transform the geometry within entry if it does not match CRSs
-		return super.encode(FeatureDataUtils.defaultCRSTransform(entry,
+		
+		
+		/*return super.encode(FeatureDataUtils.defaultCRSTransform(entry,
 				persistedFeatureType, reprojectedFeatureType, transform),
 				indexModel);
+	    */
 	}
 
 	@Override
@@ -911,4 +995,90 @@ public class FeatureDataAdapter extends AbstractDataAdapter<SimpleFeature>
 		modelToDimensionsMap.put(model.getId(), dimensionFieldIds);
 		return dimensionFieldIds;
 	}
+	
+public static CoordinateReferenceSystem decodeCRS(String crsCode){
+		
+		CoordinateReferenceSystem crs = null;
+		try {
+			 crs = CRS.decode(
+					 crsCode,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode '"+crsCode+"' CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize '"+crsCode+"' object",
+					e);
+		}
+		
+		return crs;
+		
+	}
+
+	protected SimpleFeature CRSTransform(final SimpleFeature entry,
+			final SimpleFeatureType persistedType,
+			final SimpleFeatureType reprojectedType,
+			final MathTransform transform ,
+			final CommonIndexModel indexModel) {
+
+		// TODO from the index model we should be able to get the CRS, and at
+		// this point we need to transform the geometry within entry if it does
+		// not match CRSs
+		CoordinateReferenceSystem entryCrs = entry.getFeatureType()
+				.getCoordinateReferenceSystem();
+	
+		SimpleFeature CRSEntry = entry;
+		MathTransform featureTransform = null;
+
+		if (entryCrs == null) {
+			entryCrs = GeoWaveGTDataStore.DEFAULT_CRS;
+		}
+
+		if(transform != null) {
+			// we can use the transform we have already calculated for this
+			// feature
+			featureTransform = transform;
+		}
+		else if (!entryCrs.equals(indexCRS)) {
+
+			featureTransform = CrsTransformMap.get(indexModel.getId());
+
+			if (featureTransform == null) {
+
+				try {
+					featureTransform = CRS.findMathTransform(entryCrs,
+							indexCRS, true);
+					CrsTransformMap.put(indexModel.getId(), featureTransform);
+				} catch (final FactoryException e) {
+					LOGGER.warn(
+							"Unable to find transform to specified CRS of the index, the feature geometry will remain in its original CRS",
+							e);
+				}
+
+			}
+		}
+			if (featureTransform != null) {
+				try {
+					
+					// this will clone the feature and retype it to Index CRS
+					CRSEntry = SimpleFeatureBuilder.retype(
+							entry,
+							reprojectedType);
+					
+					// this will transform the geometry
+					CRSEntry.setDefaultGeometry(JTS.transform(
+							(Geometry) entry.getDefaultGeometry(),
+							featureTransform));
+				} catch (MismatchedDimensionException | TransformException e) {
+					LOGGER.warn(
+							"Unable to perform transform to specified CRS of the index, the feature geometry will remain in its original CRS",
+							e);
+				}
+			}
+		
+		return CRSEntry;
+	}
+
 }
