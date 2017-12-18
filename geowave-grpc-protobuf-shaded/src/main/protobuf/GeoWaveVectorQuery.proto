@@ -1,0 +1,68 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "VectorQueryService";
+
+// Interface exported by the server.
+service VectorQuery {
+  // Standard query for accessing vector data
+  rpc VectorQuery(VectorQueryParameters) returns (stream Feature) {}
+  
+  // The following are API-based queries that provide lower-level access for advanced users
+  rpc CqlQuery(CQLQueryParameters) returns (stream Feature) {}
+  rpc SpatialQuery(SpatialQueryParameters) returns (stream Feature) {}
+  rpc SpatialTemporalQuery(SpatialTemporalQueryParameters) returns (stream Feature) {}
+}
+
+// Parameters for standard vector query
+message VectorQueryParameters {
+	string storeName = 1;	// required
+	bytes adapterId = 2;		// required
+	string query = 3;		// required
+}
+
+// Base query parameters as defined by AbstractGeoWaveQuery.java
+message BaseGeoWaveQueryParameters {
+	string storeName = 1;	// required
+	bytes indexId = 2;		// optional	
+	bytes adapterId = 3;		// optional
+}
+
+message TemporalConstraints {
+	string startTime = 1; //ISO format e.g. 2005-05-17T19:32:56Z
+	string endTime = 2;
+}
+
+// A CQL query string to be executed by the server
+message CQLQueryParameters {
+  BaseGeoWaveQueryParameters baseParams = 1;
+  string cql = 2;
+}
+
+message SpatialQueryParameters {
+	BaseGeoWaveQueryParameters baseParams = 1;
+	string geometry = 2;	//ISO 19107 Geometry text definition
+}
+
+message SpatialTemporalQueryParameters {
+	SpatialQueryParameters spatialParams = 1;
+	repeated TemporalConstraints temporalConstraints = 2;
+	string compareOperation = 3;	//see mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation for enum values to use here
+}
+
+//a feature in this case is just a map of string key value pairs (aka SimpleFeature)
+message Feature {
+	map<string, string> attributes = 1;
+}
+
