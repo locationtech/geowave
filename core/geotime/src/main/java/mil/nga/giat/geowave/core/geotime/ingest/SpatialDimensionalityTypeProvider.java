@@ -24,13 +24,13 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
@@ -47,7 +47,7 @@ public class SpatialDimensionalityTypeProvider implements
 		DimensionalityTypeProviderSpi
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
-	private final SpatialOptions options = new SpatialOptions();
+	private  SpatialOptions options = new SpatialOptions();
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
@@ -97,6 +97,10 @@ public class SpatialDimensionalityTypeProvider implements
 	public DimensionalityTypeOptions getOptions() {
 		return options;
 	}
+	
+	public void  setOptions(SpatialOptions options) {
+		this.options = options;
+	}
 
 	@Override
 	public PrimaryIndex createPrimaryIndex() {
@@ -108,18 +112,17 @@ public class SpatialDimensionalityTypeProvider implements
 		NumericDimensionDefinition[] dimensions;
 		boolean isDefaultCRS;
 		String crsCode = null;
-		NumericDimensionField<?>[] fields=null;;
+		NumericDimensionField<?>[] fields = null;
 		NumericDimensionField<?>[] fields_temporal = null;
 		CoordinateReferenceSystem crs = null;
-		
-		if (options.crs == null || options.crs.isEmpty()
-				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+
+		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_DIMENSIONS;
 			fields = SPATIAL_FIELDS;
 			isDefaultCRS = true;
 			crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
 			crsCode = "EPSG:4326";
-		} 
+		}
 		else {
 			crs = decodeCRS(options.crs);
 			CoordinateSystem cs = crs.getCoordinateSystem();
@@ -130,63 +133,76 @@ public class SpatialDimensionalityTypeProvider implements
 				fields_temporal = new NumericDimensionField[dimensions.length + 1];
 				for (int d = 0; d < dimensions.length; d++) {
 					CoordinateSystemAxis csa = cs.getAxis(d);
-					dimensions[d] = new BasicDimensionDefinition(
-							csa.getMinimumValue(), csa.getMaximumValue());
-					fields_temporal[d] = new CustomCRSSpatialField((byte) d,
-							dimensions[d]);
+					dimensions[d] = new CustomCRSSpatialDimension(
+							(byte) d,
+							csa.getMinimumValue(),
+							csa.getMaximumValue());
+					fields_temporal[d] = new CustomCRSSpatialField(
+							(CustomCRSSpatialDimension) dimensions[d]);
 				}
-				fields_temporal[dimensions.length] = new CustomCRSSpatialField(
-						(byte) dimensions.length, new TimeField(Unit.YEAR));
-			} 
+				// TODO shouldn't this be a time field
+				fields_temporal[dimensions.length] = new TimeField(
+						Unit.YEAR);
+			}
 			else {
 				fields = new NumericDimensionField[dimensions.length];
 				for (int d = 0; d < dimensions.length; d++) {
 					CoordinateSystemAxis csa = cs.getAxis(d);
-					dimensions[d] = new BasicDimensionDefinition(
-							csa.getMinimumValue(), csa.getMaximumValue());
-					fields[d] = new CustomCRSSpatialField((byte) d,
-							dimensions[d]);
+					dimensions[d] = new CustomCRSSpatialDimension(
+							(byte) d,
+							csa.getMinimumValue(),
+							csa.getMaximumValue());
+					fields[d] = new CustomCRSSpatialField(
+							(CustomCRSSpatialDimension) dimensions[d]);
 				}
 			}
 
 		}
-		
+
 		return new CustomIdIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						dimensions,
 						new int[] {
-								//TODO this is only valid for 2D coordinate systems, again consider the possibility of being flexible enough to handle n-dimensions
+							// TODO this is only valid for 2D coordinate
+							// systems, again consider the possibility of being
+							// flexible enough to handle n-dimensions
 							LONGITUDE_BITS,
 							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
-				new CustomCrsIndexModel(//TODO append time to fields if storeTime
-						options.storeTime ? (isDefaultCRS? SPATIAL_TEMPORAL_FIELDS : fields_temporal)  : fields, crsCode),
-				new ByteArrayId(//TODO append CRS code to ID if its overridden 
-						isDefaultCRS? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) : (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)+"_"+ crsCode.substring(crsCode.indexOf(":")+1))
-			 );
+				new CustomCrsIndexModel(
+						// TODO append time to fields if storeTime
+						options.storeTime ? (isDefaultCRS ? SPATIAL_TEMPORAL_FIELDS : fields_temporal) : fields,
+						crsCode),
+				new ByteArrayId(
+						// TODO append CRS code to ID if its overridden
+						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
+								: (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) + "_"
+										+ crsCode.substring(crsCode.indexOf(":") + 1)));
 	}
 
-	public static CoordinateReferenceSystem decodeCRS(String crsCode){
-		
+	public static CoordinateReferenceSystem decodeCRS(
+			String crsCode ) {
+
 		CoordinateReferenceSystem crs = null;
 		try {
-			 crs = CRS.decode(
-					 crsCode,
+			crs = CRS.decode(
+					crsCode,
 					true);
 		}
 		catch (final FactoryException e) {
 			LOGGER.error(
-					"Unable to decode '"+crsCode+"' CRS",
+					"Unable to decode '" + crsCode + "' CRS",
 					e);
 			throw new RuntimeException(
-					"Unable to initialize '"+crsCode+"' object",
+					"Unable to initialize '" + crsCode + "' object",
 					e);
 		}
-		
+
 		return crs;
-		
+
 	}
+
 	public static class SpatialOptions implements
 			DimensionalityTypeOptions
 	{
@@ -194,11 +210,16 @@ public class SpatialDimensionalityTypeProvider implements
 			"--storeTime"
 		}, required = false, description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
 		protected boolean storeTime = false;
-		
+
 		@Parameter(names = {
-				"-c","--crs"
-			}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
-			protected String crs = GeometryUtils.DEFAULT_CRS_STR ;
+			"-c",
+			"--crs"
+		}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
+		protected String crs = GeometryUtils.DEFAULT_CRS_STR;
+
+		public void setCrs(String crs) {
+			this.crs = crs;
+		}
 	}
 
 	@Override

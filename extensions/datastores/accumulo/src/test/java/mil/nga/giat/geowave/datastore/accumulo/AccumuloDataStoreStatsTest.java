@@ -762,6 +762,13 @@ public class AccumuloDataStoreStatsTest
 			}
 			return null;
 		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	private final static ByteArrayId[] SUPPORTED_STATS_IDS = new ByteArrayId[] {

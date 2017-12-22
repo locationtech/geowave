@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.geotime.store.query;
 
 import java.nio.ByteBuffer;
+import java.util.Collections;
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -42,6 +43,7 @@ public class SpatialQuery extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialQuery.class);
 	private Geometry queryGeometry;
+	private String crsCode;
 	CompareOperation compareOp = CompareOperation.INTERSECTS;
 	BasicQueryCompareOperation nonSpatialCompareOp = BasicQueryCompareOperation.INTERSECTS;
 
@@ -54,25 +56,43 @@ public class SpatialQuery extends
 	 */
 	public SpatialQuery(
 			final Geometry queryGeometry ) {
-		super(
-				GeometryUtils.basicConstraintsFromGeometry(queryGeometry));
-		this.queryGeometry = queryGeometry;
+		this(
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),queryGeometry);
 	}
 
 	public SpatialQuery(
 			final Constraints constraints,
 			final Geometry queryGeometry ) {
-		super(
-				constraints);
-		this.queryGeometry = queryGeometry;
+		this(constraints, queryGeometry,Collections.emptyMap());
 	}
 
 	public SpatialQuery(
 			final Geometry queryGeometry,
 			Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
-		super(
+		this(
 				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+				queryGeometry,
 				additionalConstraints);
+	}
+	public SpatialQuery(
+			final Geometry queryGeometry,
+			String crsCode) {
+		this(
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+				queryGeometry,
+				Collections.emptyMap(),crsCode,CompareOperation.INTERSECTS,
+				BasicQueryCompareOperation.INTERSECTS);
+	}
+	private SpatialQuery(
+			final Constraints constraints,
+			final Geometry queryGeometry,
+			Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
+		this(
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+				queryGeometry,
+				additionalConstraints, "EPSG:4326", //TODO replace hard-coded value with a centrally defined constant
+				CompareOperation.INTERSECTS,
+				BasicQueryCompareOperation.INTERSECTS);
 	}
 
 	/**
@@ -87,12 +107,9 @@ public class SpatialQuery extends
 	public SpatialQuery(
 			final Geometry queryGeometry,
 			final CompareOperation compareOp ) {
-		super(
-				GeometryUtils.basicConstraintsFromGeometry(queryGeometry));
-		this.queryGeometry = queryGeometry;
-		this.compareOp = compareOp;
+		this(
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),queryGeometry,compareOp);
 	}
-
 	/**
 	 * Convenience constructor can be used when you already have linear
 	 * constraints for the query. The queryGeometry and compareOp is used for
@@ -135,8 +152,21 @@ public class SpatialQuery extends
 			final Geometry queryGeometry,
 			final CompareOperation compareOp,
 			final BasicQueryCompareOperation nonSpatialCompareOp ) {
+		this(
+				constraints,queryGeometry, Collections.emptyMap(), "EPSG:4326" //TODO same
+				,compareOp, nonSpatialCompareOp);
+	}
+
+	public SpatialQuery(
+			final Constraints constraints,
+			final Geometry queryGeometry,
+			Map<ByteArrayId, FilterableConstraints> additionalConstraints, String crsCode,
+			final CompareOperation compareOp,
+			final BasicQueryCompareOperation nonSpatialCompareOp  ) {
 		super(
-				constraints);
+				constraints,nonSpatialCompareOp,
+				additionalConstraints);
+		this.crsCode = crsCode;
 		this.queryGeometry = queryGeometry;
 		this.compareOp = compareOp;
 		this.nonSpatialCompareOp = nonSpatialCompareOp;

@@ -618,21 +618,27 @@ public class BasicQuery implements
 
 	public BasicQuery(
 			final Constraints constraints ) {
-		this.constraints = constraints;
+		this(constraints, BasicQueryCompareOperation.INTERSECTS);
 	}
 
 	public BasicQuery(
 			final Constraints constraints,
 			final BasicQueryCompareOperation compareOp ) {
-		this.constraints = constraints;
-		this.compareOp = compareOp;
+		this(constraints, compareOp, Collections.emptyMap() );
 	}
 
 	public BasicQuery(
 			final Constraints constraints,
 			final Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
+		this(constraints, BasicQueryCompareOperation.INTERSECTS, additionalConstraints);
+	}
+	protected BasicQuery(
+			final Constraints constraints,
+			BasicQueryCompareOperation compareOp,
+			final Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
 		super();
 		this.constraints = constraints;
+		this.compareOp = compareOp;
 		this.additionalConstraints = additionalConstraints;
 	}
 
@@ -684,8 +690,8 @@ public class BasicQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
-		return constraints.getIndexConstraints(indexStrategy);
+			final PrimaryIndex primaryIndex ) {
+		return constraints.getIndexConstraints(primaryIndex.getIndexStrategy());
 	}
 
 	@Override

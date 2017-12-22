@@ -10,14 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
-
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 
@@ -34,7 +33,8 @@ import org.slf4j.LoggerFactory;
  * fields.
  * 
  */
-public class CustomCrsIndexModel extends BasicIndexModel
+public class CustomCrsIndexModel extends
+		BasicIndexModel
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCrsIndexModel.class);
@@ -43,7 +43,8 @@ public class CustomCrsIndexModel extends BasicIndexModel
 	public CustomCrsIndexModel() {}
 
 	public CustomCrsIndexModel(
-			final NumericDimensionField<?>[] dimensions,String crsCode ) {
+			final NumericDimensionField<?>[] dimensions,
+			String crsCode ) {
 		init(dimensions);
 		this.crsCode = crsCode;
 	}
@@ -51,12 +52,11 @@ public class CustomCrsIndexModel extends BasicIndexModel
 	public String getCrsCode() {
 		return crsCode;
 	}
-	
+
 	public void init(
-			final NumericDimensionField<?>[] dimensions) {   
+			final NumericDimensionField<?>[] dimensions ) {
 		super.init(dimensions);
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -85,11 +85,11 @@ public class CustomCrsIndexModel extends BasicIndexModel
 				dimensions,
 				other.dimensions);
 	}
-	
+
 	@Override
 	public byte[] toBinary() {
-		byte[] crsCodeBinary  = ByteArrayUtils.byteArrayFromString(crsCode);
-		int byteBufferLength = 4 + crsCodeBinary.length;
+		byte[] crsCodeBinary = StringUtils.stringToBinary(crsCode);
+		int byteBufferLength = 8 + crsCodeBinary.length;
 		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
@@ -122,7 +122,7 @@ public class CustomCrsIndexModel extends BasicIndexModel
 		}
 		final byte[] codeBytes = new byte[crsCodeLength];
 		buf.get(codeBytes);
-		crsCode = ByteArrayUtils.byteArrayToString(codeBytes);
+		crsCode = StringUtils.stringFromBinary(codeBytes);
 		init(dimensions);
 	}
 

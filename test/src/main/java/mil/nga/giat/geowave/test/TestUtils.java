@@ -45,6 +45,7 @@ import com.vividsolutions.jts.geom.Point;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -94,6 +95,16 @@ public class TestUtils
 			.createPrimaryIndex();
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex();
+	public static String CUSTOM_CRSCODE = "EPSG:3070";
+	
+	public static PrimaryIndex createCustomCRSPrimryIndex(){
+		 SpatialOptions so = new SpatialOptions();
+		 so.setCrs(CUSTOM_CRSCODE);
+		 SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider(); 
+		 sdp.setOptions(so);
+		 PrimaryIndex primaryIndex = sdp.createPrimaryIndex();
+		 return primaryIndex;
+	 }
 
 	public static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -145,6 +156,22 @@ public class TestUtils
 			final String ingestFilePath,
 			final String format,
 			final int nthreads ) {
+		testLocalIngest(
+				dataStore,
+				dimensionalityType,
+				null,
+				ingestFilePath,
+				format,
+				nthreads);
+	}
+
+	public static void testLocalIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String crsCode,
+			final String ingestFilePath,
+			final String format,
+			final int nthreads ) {
 
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
@@ -161,6 +188,9 @@ public class TestUtils
 		for (final String indexType : indexTypes) {
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
 			indexOption.selectPlugin(indexType);
+			if (crsCode != null) {
+				((SpatialOptions)indexOption.getIndexPlugin().getOptions()).setCrs(crsCode);
+			}
 			indexOptions.add(indexOption);
 		}
 

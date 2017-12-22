@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
@@ -25,6 +26,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
+import mil.nga.giat.geowave.core.store.index.CustomCrsIndexModel;
 
 public class GeoTimePersistableRegistry implements
 		PersistableRegistrySpi
@@ -72,9 +74,15 @@ public class GeoTimePersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 312,
 					SpatialQuery::new),
-					new PersistableIdAndConstructor(
-							(short) 312,
-							CustomCRSSpatialField::new)
+			new PersistableIdAndConstructor(
+					(short) 313,
+					CustomCRSSpatialField::new),
+			new PersistableIdAndConstructor(
+					(short) 314,
+					CustomCRSSpatialDimension::new),
+		    new PersistableIdAndConstructor(
+					(short) 315,
+					CustomCrsIndexModel::new)
 		};
 	}
 }

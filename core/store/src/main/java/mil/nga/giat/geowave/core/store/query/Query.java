@@ -17,6 +17,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
  * This interface fully describes a query
@@ -64,6 +65,6 @@ public interface Query
 	 *         constraints for the index
 	 */
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			NumericIndexStrategy indexStrategy );
+			PrimaryIndex primaryIndex );
 
 }

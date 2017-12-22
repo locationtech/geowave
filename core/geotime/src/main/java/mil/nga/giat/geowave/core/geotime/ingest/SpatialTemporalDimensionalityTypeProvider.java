@@ -12,16 +12,13 @@ package mil.nga.giat.geowave.core.geotime.ingest;
 
 import java.util.Locale;
 
-import org.apache.commons.lang3.StringUtils;
-
-import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
@@ -32,19 +29,50 @@ import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
+import org.apache.commons.lang3.StringUtils;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+
 public class SpatialTemporalDimensionalityTypeProvider implements
 		DimensionalityTypeProviderSpi
 {
-	private final SpatialTemporalOptions options = new SpatialTemporalOptions();
+	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
+	private final static SpatialTemporalOptions options = new SpatialTemporalOptions();
 	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
+
+	// TODO should we use different default IDs for all the different
+	// options, for now lets just use one
+	final static NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
+		new LongitudeField(),
+		new LatitudeField(
+				true),
+		new TimeField(
+				options.periodicity)
+	};
+	final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
+		new LongitudeDefinition(),
+		new LatitudeDefinition(
+				true),
+		new TimeDefinition(
+				options.periodicity)
+	};
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
 
@@ -77,23 +105,55 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	private static PrimaryIndex internalCreatePrimaryIndex(
 			final SpatialTemporalOptions options ) {
-		// TODO should we use different default IDs for all the different
-		// options, for now lets just use one
-		final NumericDimensionField[] fields = new NumericDimensionField[] {
-			new LongitudeField(),
-			new LatitudeField(
-					true),
-			new TimeField(
-					options.periodicity)
-		};
-		final NumericDimensionDefinition[] dimensions = new NumericDimensionDefinition[] {
-			new LongitudeDefinition(),
-			new LatitudeDefinition(
-					true),
-			new TimeDefinition(
-					options.periodicity)
-		};
-		final String combinedId = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
+
+		NumericDimensionDefinition[] dimensions;
+		NumericDimensionField<?>[] fields = null;
+		;
+		CoordinateReferenceSystem crs = null;
+		boolean isDefaultCRS;
+		String crsCode = null;
+
+		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+			dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
+			fields = SPATIAL_TEMPORAL_FIELDS;
+			isDefaultCRS = true;
+			crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
+			crsCode = "EPSG:4326";
+		}
+		else {
+			crs = decodeCRS(options.crs);
+			CoordinateSystem cs = crs.getCoordinateSystem();
+			isDefaultCRS = false;
+			crsCode = options.crs;
+			dimensions = new NumericDimensionDefinition[cs.getDimension() + 1];
+			fields = new NumericDimensionField[dimensions.length];
+
+			for (int d = 0; d < dimensions.length - 1; d++) {
+				CoordinateSystemAxis csa = cs.getAxis(d);
+				dimensions[d] = new CustomCRSSpatialDimension(
+						(byte) d,
+						csa.getMinimumValue(),
+						csa.getMaximumValue());
+				fields[d] = new CustomCRSSpatialField(
+						(CustomCRSSpatialDimension) dimensions[d]);
+			}
+
+			dimensions[dimensions.length - 1] = new TimeDefinition(
+					options.periodicity);
+			fields[dimensions.length - 1] = new TimeField(
+					options.periodicity);
+		}
+
+		String combinedArrayID;
+		if (isDefaultCRS) {
+			combinedArrayID = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
+		}
+		else {
+			combinedArrayID = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + (crsCode.substring(crsCode.indexOf(":") + 1))
+					+ "_" + options.bias + "_" + options.periodicity;
+		}
+		final String combinedId = combinedArrayID;
+
 		return new CustomIdIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						dimensions,
@@ -104,10 +164,33 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						},
 						SFCType.HILBERT,
 						options.maxDuplicates),
-				new BasicIndexModel(
-						fields),
+				new CustomCrsIndexModel(
+						fields,
+						crsCode),
 				new ByteArrayId(
 						combinedId));
+	}
+
+	public static CoordinateReferenceSystem decodeCRS(
+			String crsCode ) {
+
+		CoordinateReferenceSystem crs = null;
+		try {
+			crs = CRS.decode(
+					crsCode,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode '" + crsCode + "' CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize '" + crsCode + "' object",
+					e);
+		}
+
+		return crs;
+
 	}
 
 	@Override
@@ -134,6 +217,16 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			"--maxDuplicates"
 		}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
 		protected long maxDuplicates = -1;
+
+		@Parameter(names = {
+			"-c",
+			"--crs"
+		}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
+		protected String crs = GeometryUtils.DEFAULT_CRS_STR;
+		
+		public void setCrs(String crs) {
+			this.crs = crs;
+		}
 	}
 
 	public static enum Bias {

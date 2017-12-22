@@ -846,6 +846,13 @@ public class AccumuloOptionsTest
 			}
 			return null;
 		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 
 	public static class AnotherAdapter extends

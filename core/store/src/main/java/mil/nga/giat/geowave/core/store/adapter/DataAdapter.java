@@ -58,6 +58,7 @@ public interface DataAdapter<T> extends
 	public ByteArrayId getFieldIdForPosition(
 			CommonIndexModel model,
 			int position );
-	
-	public void init(PrimaryIndex ... indices);
+
+	public void init(
+			PrimaryIndex... indices );
 }

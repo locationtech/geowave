@@ -419,7 +419,12 @@ abstract public class AbstractGeoWaveBasicVectorIT
 						localFileIngest.getDataAdapters(null));
 				while (dataIterator.hasNext()) {
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
+					boolean needsInit = adapterCache.adapterExists(data.getAdapterId());
 					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
+					if (!needsInit){
+					adapter.init(index);
+					adapterCache.addAdapter(adapter);
+					}
 					// it should be a statistical data adapter
 					if (adapter instanceof StatisticsProvider) {
 						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
