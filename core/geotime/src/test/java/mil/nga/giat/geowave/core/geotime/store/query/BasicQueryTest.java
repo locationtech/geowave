@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompare
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
@@ -119,17 +120,15 @@ public class BasicQueryTest
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T14:00:00GMT-00:00"))
 		};
-		final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider()
-				.createPrimaryIndex()
-				.getIndexModel();
+		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
 		int pos = 0;
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
-			for (final QueryFilter filter : query.createFilters(model)) {
+			for (final QueryFilter filter : query.createFilters(index)) {
 				assertEquals(
 						"result: " + pos,
 						expectedResults[pos++],
 						filter.accept(
-								model,
+								index.getIndexModel(),
 								dataItem));
 			}
 		}

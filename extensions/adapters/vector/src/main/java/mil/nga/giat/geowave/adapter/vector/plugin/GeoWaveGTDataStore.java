@@ -71,23 +71,6 @@ public class GeoWaveGTDataStore extends
 {
 	/** Package logger */
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
-	public static final CoordinateReferenceSystem DEFAULT_CRS;
-
-	static {
-		try {
-			DEFAULT_CRS = CRS.decode(
-					"EPSG:4326",
-					true);
-		}
-		catch (final FactoryException e) {
-			LOGGER.error(
-					"Unable to decode EPSG:4326 CRS",
-					e);
-			throw new RuntimeException(
-					"Unable to initialize EPSG:4326 object",
-					e);
-		}
-	}
 
 	private FeatureListenerManager listenerManager = null;
 	protected AdapterStore adapterStore;

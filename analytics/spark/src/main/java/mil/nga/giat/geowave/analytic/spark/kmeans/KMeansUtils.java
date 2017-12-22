@@ -325,7 +325,7 @@ public class KMeansUtils
 					inputDataStore,
 					adapterId);
 
-			Envelope bbox = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.getGeoBounds(
+			Envelope bbox = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.getGeoBounds(
 					inputDataStore,
 					adapterId,
 					geomField);

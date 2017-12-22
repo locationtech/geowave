@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,12 +16,12 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -44,13 +44,11 @@ import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
@@ -141,7 +139,7 @@ public class CQLQuery implements
 			attrs = (Collection<String>) obj;
 		}
 		else {
-			attrs = new ArrayList<String>();
+			attrs = new ArrayList<>();
 		}
 		// assume the index can't handle spatial or temporal constraints if its
 		// null
@@ -179,7 +177,7 @@ public class CQLQuery implements
 					adapter.getTimeDescriptors()).getConstraints(cqlFilter);
 
 			if (geometryAndCompareOp != null) {
-				Geometry geometry = geometryAndCompareOp.getGeometry();
+				final Geometry geometry = geometryAndCompareOp.getGeometry();
 				final GeoConstraintsWrapper geoConstraints = GeometryUtils
 						.basicGeoConstraintsWrapperFromGeometry(geometry);
 
@@ -262,6 +260,9 @@ public class CQLQuery implements
 			final Query baseQuery,
 			final Filter filter,
 			final GeotoolsFeatureDataAdapter adapter ) {
+		// TODO consider ensuring the baseQuery amd the filter are in the
+		// coordinate reference system of the adapter
+		// only if the query has spatial predicate(s)
 		this.baseQuery = baseQuery;
 		cqlFilter = filter;
 		this.filter = new CQLQueryFilter(
@@ -271,14 +272,14 @@ public class CQLQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final CommonIndexModel indexModel ) {
+			final PrimaryIndex index ) {
 		List<QueryFilter> queryFilters;
 		// note, this assumes the CQL filter covers the baseQuery which *should*
 		// be a safe assumption, otherwise we need to add the
 		// baseQuery.createFilters to the list of query filters
-		queryFilters = new ArrayList<QueryFilter>();
+		queryFilters = new ArrayList<>();
 		if (filter != null) {
-			queryFilters = new ArrayList<QueryFilter>(
+			queryFilters = new ArrayList<>(
 					queryFilters);
 			queryFilters.add(filter);
 		}
@@ -296,9 +297,9 @@ public class CQLQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
+			final PrimaryIndex index ) {
 		if (baseQuery != null) {
-			return baseQuery.getIndexConstraints(indexStrategy);
+			return baseQuery.getIndexConstraints(index);
 		}
 		return Collections.emptyList();
 	}

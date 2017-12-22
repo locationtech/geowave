@@ -84,7 +84,7 @@ public class CQLQueryFilterTest
 
 		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
-		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex.getIndexModel());
+		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
 		final List<DistributableQueryFilter> dFilters = new ArrayList<DistributableQueryFilter>();
 		for (final QueryFilter filter : filters) {
 			dFilters.add((DistributableQueryFilter) filter);

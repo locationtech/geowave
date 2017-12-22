@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -25,17 +25,14 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class CQLQueryTest
 {
-	private static final NumericIndexStrategy SPATIAL_INDEX_STRATEGY = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexStrategy();
-	private static final NumericIndexStrategy SPATIAL_TEMPORAL_INDEX_STRATEGY = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexStrategy();
+	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex();
 	SimpleFeatureType type;
 	FeatureDataAdapter adapter;
 
@@ -57,8 +54,7 @@ public class CQLQueryTest
 				adapter,
 				null,
 				null);
-		final List<MultiDimensionalNumericData> constraints = query
-				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints.get(
 						0).getMinValuesPerDimension(),
@@ -85,7 +81,7 @@ public class CQLQueryTest
 				adapter,
 				null,
 				null);
-		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints.get(
 						0).getMinValuesPerDimension(),
@@ -110,7 +106,7 @@ public class CQLQueryTest
 				adapter,
 				null,
 				null);
-		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints.get(
 						0).getMinValuesPerDimension(),
@@ -136,7 +132,7 @@ public class CQLQueryTest
 				null,
 				null);
 		assertTrue(query.getIndexConstraints(
-				SPATIAL_INDEX_STRATEGY).isEmpty());
+				SPATIAL_INDEX).isEmpty());
 	}
 
 	@Test
@@ -148,7 +144,7 @@ public class CQLQueryTest
 				null,
 				null);
 		assertTrue(query.getIndexConstraints(
-				SPATIAL_TEMPORAL_INDEX_STRATEGY).isEmpty());
+				SPATIAL_TEMPORAL_INDEX).isEmpty());
 	}
 
 	@Test
@@ -160,7 +156,7 @@ public class CQLQueryTest
 				null,
 				null);
 		assertTrue(query.getIndexConstraints(
-				SPATIAL_TEMPORAL_INDEX_STRATEGY).isEmpty());
+				SPATIAL_TEMPORAL_INDEX).isEmpty());
 	}
 
 	@Test
@@ -177,8 +173,7 @@ public class CQLQueryTest
 				adapter,
 				null,
 				null);
-		final List<MultiDimensionalNumericData> constraints = query
-				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints.get(
 						0).getMinValuesPerDimension(),
@@ -200,8 +195,7 @@ public class CQLQueryTest
 				adapter,
 				null,
 				null);
-		final List<MultiDimensionalNumericData> constraints2 = query2
-				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints2 = query2.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints2.get(
 						0).getMinValuesPerDimension(),
@@ -225,8 +219,7 @@ public class CQLQueryTest
 						adapter,
 						null,
 						null);
-		final List<MultiDimensionalNumericData> constraints3 = query3
-				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints3 = query3.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints3.get(
 						0).getMinValuesPerDimension(),
@@ -250,8 +243,7 @@ public class CQLQueryTest
 						adapter,
 						null,
 						null);
-		final List<MultiDimensionalNumericData> constraints4 = query4
-				.getIndexConstraints(SPATIAL_TEMPORAL_INDEX_STRATEGY);
+		final List<MultiDimensionalNumericData> constraints4 = query4.getIndexConstraints(SPATIAL_TEMPORAL_INDEX);
 		assertTrue(Arrays.equals(
 				constraints4.get(
 						0).getMinValuesPerDimension(),

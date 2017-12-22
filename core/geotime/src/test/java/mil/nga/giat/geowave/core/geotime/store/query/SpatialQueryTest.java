@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.junit.Test;
 
@@ -178,14 +179,14 @@ public class SpatialQueryTest
 		};
 
 		int pos = 0;
-		final CommonIndexModel model = new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 		for (final IndexedPersistenceEncoding dataItem : data) {
-			for (final QueryFilter filter : queryCopy.createFilters(model)) {
+			for (final QueryFilter filter : queryCopy.createFilters(index)) {
 				assertEquals(
 						"result: " + pos,
 						expectedResults[pos++],
 						filter.accept(
-								model,
+								index.getIndexModel(),
 								dataItem));
 			}
 		}

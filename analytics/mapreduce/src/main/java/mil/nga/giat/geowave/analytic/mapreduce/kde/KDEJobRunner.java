@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,10 +16,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Properties;
-
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -44,12 +40,13 @@ import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
+import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
@@ -145,10 +142,10 @@ public class KDEJobRunner extends
 
 		if (kdeCommandLineOptions.getHdfsHostPort() == null) {
 
-			Properties configProperties = ConfigOptions.loadProperties(
+			final Properties configProperties = ConfigOptions.loadProperties(
 					configFile,
 					null);
-			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
+			final String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
 		}
 
@@ -235,7 +232,7 @@ public class KDEJobRunner extends
 				final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 						.accept(
 								new ExtractGeometryFilterVisitor(
-										GeoWaveGTDataStore.DEFAULT_CRS,
+										GeometryUtils.DEFAULT_CRS,
 										geometryAttribute),
 								null);
 				bbox = geoAndCompareOpData.getGeometry();

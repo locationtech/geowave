@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
@@ -35,7 +36,6 @@ import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-import mil.nga.giat.geowave.core.store.index.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -47,7 +47,7 @@ public class SpatialDimensionalityTypeProvider implements
 		DimensionalityTypeProviderSpi
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
-	private  SpatialOptions options = new SpatialOptions();
+	private SpatialOptions options = new SpatialOptions();
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
@@ -97,8 +97,9 @@ public class SpatialDimensionalityTypeProvider implements
 	public DimensionalityTypeOptions getOptions() {
 		return options;
 	}
-	
-	public void  setOptions(SpatialOptions options) {
+
+	public void setOptions(
+			SpatialOptions options ) {
 		this.options = options;
 	}
 
@@ -217,7 +218,8 @@ public class SpatialDimensionalityTypeProvider implements
 		}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
 		protected String crs = GeometryUtils.DEFAULT_CRS_STR;
 
-		public void setCrs(String crs) {
+		public void setCrs(
+				String crs ) {
 			this.crs = crs;
 		}
 	}

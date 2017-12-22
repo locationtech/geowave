@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,14 +14,15 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
+import org.junit.Test;
+import org.opengis.feature.simple.SimpleFeature;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -34,7 +35,6 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram.FixedBinNumericHistogramFactory;
@@ -51,9 +51,6 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
-import org.junit.Test;
-import org.opengis.feature.simple.SimpleFeature;
-
 public class ChooseBestMatchIndexQueryStrategyTest
 {
 	final PrimaryIndex IMAGE_CHIP_INDEX1 = new NullIndex(
@@ -66,19 +63,19 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
 		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
 
-		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<SimpleFeature>(
+		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<>(
 				temporalindex.getId(),
 				temporalindex.getId(),
 				new FixedBinNumericHistogramFactory(),
 				1024);
 
-		final RowRangeHistogramStatistics<SimpleFeature> rangeStats = new RowRangeHistogramStatistics<SimpleFeature>(
+		final RowRangeHistogramStatistics<SimpleFeature> rangeStats = new RowRangeHistogramStatistics<>(
 				spatialIndex.getId(),
 				spatialIndex.getId(),
 				new FixedBinNumericHistogramFactory(),
 				1024);
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		statsMap.put(
 				RowRangeHistogramStatistics.composeId(spatialIndex.getId()),
 				rangeStats);
@@ -120,10 +117,9 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		final BasicQuery query = new BasicQuery(
 				constraints);
 
-		final NumericIndexStrategy temporalIndexStrategy = new SpatialTemporalIndexBuilder()
-				.createIndex()
-				.getIndexStrategy();
-		final List<MultiDimensionalNumericData> tempConstraints = query.getIndexConstraints(temporalIndexStrategy);
+		final PrimaryIndex index = new SpatialTemporalIndexBuilder().createIndex();
+		final NumericIndexStrategy temporalIndexStrategy = index.getIndexStrategy();
+		final List<MultiDimensionalNumericData> tempConstraints = query.getIndexConstraints(index);
 
 		final List<ByteArrayRange> temporalRanges = DataStoreUtils.constraintsToByteArrayRanges(
 				tempConstraints,
@@ -150,9 +146,8 @@ public class ChooseBestMatchIndexQueryStrategyTest
 							Collections.<FieldInfo<?>> emptyList()),
 					null);
 		}
-
-		final NumericIndexStrategy indexStrategy = new SpatialTemporalIndexBuilder().createIndex().getIndexStrategy();
-		final List<MultiDimensionalNumericData> spatialConstraints = query.getIndexConstraints(indexStrategy);
+		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
+		final List<MultiDimensionalNumericData> spatialConstraints = query.getIndexConstraints(index);
 
 		final List<ByteArrayRange> spatialRanges = DataStoreUtils.constraintsToByteArrayRanges(
 				spatialConstraints,

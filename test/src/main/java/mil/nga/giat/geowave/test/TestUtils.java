@@ -96,15 +96,15 @@ public class TestUtils
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex();
 	public static String CUSTOM_CRSCODE = "EPSG:3070";
-	
-	public static PrimaryIndex createCustomCRSPrimryIndex(){
-		 SpatialOptions so = new SpatialOptions();
-		 so.setCrs(CUSTOM_CRSCODE);
-		 SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider(); 
-		 sdp.setOptions(so);
-		 PrimaryIndex primaryIndex = sdp.createPrimaryIndex();
-		 return primaryIndex;
-	 }
+
+	public static PrimaryIndex createCustomCRSPrimryIndex() {
+		SpatialOptions so = new SpatialOptions();
+		so.setCrs(CUSTOM_CRSCODE);
+		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+		sdp.setOptions(so);
+		PrimaryIndex primaryIndex = sdp.createPrimaryIndex();
+		return primaryIndex;
+	}
 
 	public static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -189,7 +189,7 @@ public class TestUtils
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
 			indexOption.selectPlugin(indexType);
 			if (crsCode != null) {
-				((SpatialOptions)indexOption.getIndexPlugin().getOptions()).setCrs(crsCode);
+				((SpatialOptions) indexOption.getIndexPlugin().getOptions()).setCrs(crsCode);
 			}
 			indexOptions.add(indexOption);
 		}

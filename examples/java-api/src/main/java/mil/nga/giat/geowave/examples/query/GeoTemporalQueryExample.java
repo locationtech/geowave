@@ -249,8 +249,8 @@ public class GeoTemporalQueryExample
 		final SpatialTemporalQuery query = new SpatialTemporalQuery(
 				DateUtilities.parseISO("2005-05-17T19:32:56Z"),
 				DateUtilities.parseISO("2005-05-17T22:32:56Z"),
-				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
+				mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
+						GeometryUtils.DEFAULT_CRS,
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								-77.03521,
 								38.8895)),
@@ -282,8 +282,8 @@ public class GeoTemporalQueryExample
 
 		final SpatialTemporalQuery query2 = new SpatialTemporalQuery(
 				tempotalIndexConstraints,
-				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
+				mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
+						GeometryUtils.DEFAULT_CRS,
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								-77.03521,
 								38.8895)),

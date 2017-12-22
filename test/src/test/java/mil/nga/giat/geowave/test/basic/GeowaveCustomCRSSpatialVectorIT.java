@@ -101,15 +101,16 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				"geotools-vector",
 				nthreads);
-try(CloseableIterator<Index<?,?>> it = dataStore.createIndexStore().getIndices()){
-	while (it.hasNext()){
-		Index i = it.next();
-		System.err.println(i.getId().getString());
-	}
-} catch (IOException e1) {
-	// TODO Auto-generated catch block
-	e1.printStackTrace();
-}
+		try (CloseableIterator<Index<?, ?>> it = dataStore.createIndexStore().getIndices()) {
+			while (it.hasNext()) {
+				Index i = it.next();
+				System.err.println(i.getId().getString());
+			}
+		}
+		catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		dur = (System.currentTimeMillis() - mark);
 		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
@@ -125,7 +126,7 @@ try(CloseableIterator<Index<?,?>> it = dataStore.createIndexStore().getIndices()
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					//TestUtils.DEFAULT_SPATIAL_INDEX,
+					// TestUtils.DEFAULT_SPATIAL_INDEX,
 					TestUtils.createCustomCRSPrimryIndex(),
 					"bounding box constraint only");
 
@@ -150,7 +151,7 @@ try(CloseableIterator<Index<?,?>> it = dataStore.createIndexStore().getIndices()
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					//TestUtils.DEFAULT_SPATIAL_INDEX,
+					// TestUtils.DEFAULT_SPATIAL_INDEX,
 					TestUtils.createCustomCRSPrimryIndex(),
 					"polygon constraint only");
 
@@ -173,7 +174,7 @@ try(CloseableIterator<Index<?,?>> it = dataStore.createIndexStore().getIndices()
 							new File(
 									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
 						},
-						//TestUtils.DEFAULT_SPATIAL_INDEX,
+						// TestUtils.DEFAULT_SPATIAL_INDEX,
 						TestUtils.createCustomCRSPrimryIndex(),
 						true);
 			}

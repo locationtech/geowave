@@ -124,7 +124,7 @@ public class ClusteringUtils
 		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 		final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
 				new SpatialQuery(
-						polygon).getIndexConstraints(index.getIndexStrategy()),
+						polygon).getIndexConstraints(index),
 				index.getIndexStrategy(),
 				-1);
 

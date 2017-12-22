@@ -456,7 +456,7 @@ public class ExtractGeometryFilterVisitor extends
 		}
 		Pair<Geometry, Double> geometryAndDegrees;
 		try {
-			geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
+			geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
 					crs,
 					geom,
 					filter.getDistanceUnits(),

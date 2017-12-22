@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -8,22 +8,23 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.index;
+package mil.nga.giat.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
-
+import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 
 /**
  * This class is a concrete implementation of a common index model. Data
@@ -31,7 +32,7 @@ import org.slf4j.LoggerFactory;
  * common for a given index. This way distributable filters will not need to
  * handle any adapter-specific transformation, but can use the common index
  * fields.
- * 
+ *
  */
 public class CustomCrsIndexModel extends
 		BasicIndexModel
@@ -39,20 +40,38 @@ public class CustomCrsIndexModel extends
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCrsIndexModel.class);
 	private String crsCode;
+	private CoordinateReferenceSystem crs;
 
 	public CustomCrsIndexModel() {}
 
 	public CustomCrsIndexModel(
 			final NumericDimensionField<?>[] dimensions,
-			String crsCode ) {
+			final String crsCode ) {
 		init(dimensions);
 		this.crsCode = crsCode;
+	}
+
+	public CoordinateReferenceSystem getCrs() {
+		if (crs == null) {
+			try {
+				crs = CRS.decode(
+						crsCode,
+						true);
+			}
+			catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to decode indexed crs",
+						e);
+			}
+		}
+		return crs;
 	}
 
 	public String getCrsCode() {
 		return crsCode;
 	}
 
+	@Override
 	public void init(
 			final NumericDimensionField<?>[] dimensions ) {
 		super.init(dimensions);
@@ -88,9 +107,9 @@ public class CustomCrsIndexModel extends
 
 	@Override
 	public byte[] toBinary() {
-		byte[] crsCodeBinary = StringUtils.stringToBinary(crsCode);
+		final byte[] crsCodeBinary = StringUtils.stringToBinary(crsCode);
 		int byteBufferLength = 8 + crsCodeBinary.length;
-		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
+		final List<byte[]> dimensionBinaries = new ArrayList<>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);

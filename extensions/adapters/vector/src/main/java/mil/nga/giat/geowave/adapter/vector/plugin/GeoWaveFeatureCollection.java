@@ -42,6 +42,7 @@ import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderResult;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -138,7 +139,7 @@ public class GeoWaveFeatureCollection extends
 						stats.getMaxX(),
 						stats.getMinY(),
 						stats.getMaxY(),
-						GeoWaveGTDataStore.DEFAULT_CRS);
+						GeometryUtils.DEFAULT_CRS);
 			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
@@ -171,14 +172,14 @@ public class GeoWaveFeatureCollection extends
 					180,
 					-90,
 					90,
-					GeoWaveGTDataStore.DEFAULT_CRS);
+					GeometryUtils.DEFAULT_CRS);
 		}
 		return new ReferencedEnvelope(
 				minx,
 				maxx,
 				miny,
 				maxy,
-				GeoWaveGTDataStore.DEFAULT_CRS);
+				GeometryUtils.DEFAULT_CRS);
 
 	}
 
@@ -336,7 +337,7 @@ public class GeoWaveFeatureCollection extends
 				SubsampleProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					SubsampleProcess.OUTPUT_BBOX)).transform(
-					GeoWaveGTDataStore.DEFAULT_CRS,
+					GeometryUtils.DEFAULT_CRS,
 					true);
 		}
 		return null;
@@ -356,7 +357,7 @@ public class GeoWaveFeatureCollection extends
 				.getLocalName();
 		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeoWaveGTDataStore.DEFAULT_CRS,
+				GeometryUtils.DEFAULT_CRS,
 				geomAtrributeName);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);

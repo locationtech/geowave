@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -43,11 +43,10 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -65,7 +64,7 @@ public class FeatureDataUtils
 			if (classLoaderInitialized) {
 				return;
 			}
-			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
+			final ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
 			LOGGER.info("Generating patched classloader");
 			if (classLoader instanceof VFSClassLoader) {
 				final VFSClassLoader cl = (VFSClassLoader) classLoader;
@@ -103,7 +102,7 @@ public class FeatureDataUtils
 		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
 		SimpleFeature defaultCRSEntry = entry;
 
-		if (!GeoWaveGTDataStore.DEFAULT_CRS.equals(crs)) {
+		if (!GeometryUtils.DEFAULT_CRS.equals(crs)) {
 			MathTransform featureTransform = null;
 			if ((persistedType.getCoordinateReferenceSystem() != null)
 					&& persistedType.getCoordinateReferenceSystem().equals(
@@ -118,7 +117,7 @@ public class FeatureDataUtils
 				try {
 					featureTransform = CRS.findMathTransform(
 							crs,
-							GeoWaveGTDataStore.DEFAULT_CRS,
+							GeometryUtils.DEFAULT_CRS,
 							true);
 				}
 				catch (final FactoryException e) {
@@ -157,8 +156,10 @@ public class FeatureDataUtils
 		// Some geometries do not have a CRS provided. Thus we default to
 		// urn:ogc:def:crs:EPSG::4326
 		final CoordinateSystem cs = crs == null ? null : crs.getCoordinateSystem();
-		if (cs != null && cs.getDimension() > 0) return cs.getAxis(
-				0).getDirection().name().toString();
+		if ((cs != null) && (cs.getDimension() > 0)) {
+			return cs.getAxis(
+					0).getDirection().name().toString();
+		}
 		return "EAST";
 	}
 
@@ -169,7 +170,7 @@ public class FeatureDataUtils
 			final String axis )
 			throws SchemaException {
 
-		SimpleFeatureType featureType = nameSpace != null && nameSpace.length() > 0 ? DataUtilities.createType(
+		SimpleFeatureType featureType = (nameSpace != null) && (nameSpace.length() > 0) ? DataUtilities.createType(
 				nameSpace,
 				typeName,
 				typeDescriptor) : DataUtilities.createType(
@@ -181,9 +182,9 @@ public class FeatureDataUtils
 		final String typeAxis = getAxis(crs);
 		// Default for EPSG:4326 is lat/long, If the provided type was
 		// long/lat, then re-establish the order
-		if (crs != null && crs.getIdentifiers().toString().contains(
+		if ((crs != null) && crs.getIdentifiers().toString().contains(
 				"EPSG:4326") && !lCaseAxis.equalsIgnoreCase(typeAxis)) {
-			SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
+			final SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 			builder.init(featureType);
 
 			try {
@@ -196,7 +197,7 @@ public class FeatureDataUtils
 								"EPSG:4326",
 								lCaseAxis.equals("east")));
 			}
-			catch (FactoryException e) {
+			catch (final FactoryException e) {
 				throw new SchemaException(
 						"Cannot decode EPSG:4326",
 						e);
@@ -207,20 +208,20 @@ public class FeatureDataUtils
 	}
 
 	public static SimpleFeature buildFeature(
-			SimpleFeatureType featureType,
-			Pair<String, Object>[] entries ) {
+			final SimpleFeatureType featureType,
+			final Pair<String, Object>[] entries ) {
 
-		List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
-		Object[] defaults = new Object[descriptors.size()];
+		final List<AttributeDescriptor> descriptors = featureType.getAttributeDescriptors();
+		final Object[] defaults = new Object[descriptors.size()];
 		int p = 0;
-		for (AttributeDescriptor descriptor : descriptors) {
+		for (final AttributeDescriptor descriptor : descriptors) {
 			defaults[p++] = descriptor.getDefaultValue();
 		}
 		final SimpleFeature newFeature = SimpleFeatureBuilder.build(
 				featureType,
 				defaults,
 				UUID.randomUUID().toString());
-		for (Pair<String, Object> entry : entries) {
+		for (final Pair<String, Object> entry : entries) {
 			newFeature.setAttribute(
 					entry.getKey(),
 					entry.getValue());
@@ -233,7 +234,7 @@ public class FeatureDataUtils
 			ByteArrayId adapterId ) {
 		// if no id provided, locate a single featureadapter
 		if (adapterId == null) {
-			List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
+			final List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
 			if (adapterIdList.size() == 1) {
 				adapterId = adapterIdList.get(0);
 			}
@@ -249,12 +250,12 @@ public class FeatureDataUtils
 			}
 		}
 
-		AdapterStore adapterStore = dataStore.createAdapterStore();
+		final AdapterStore adapterStore = dataStore.createAdapterStore();
 
-		DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
 
-		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
-			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
+			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
 			return gtAdapter.getFeatureType();
 		}
 
@@ -264,13 +265,13 @@ public class FeatureDataUtils
 	public static String getGeomField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		AdapterStore adapterStore = dataStore.createAdapterStore();
+		final AdapterStore adapterStore = dataStore.createAdapterStore();
 
-		DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
 
-		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
-			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
-			SimpleFeatureType featureType = gtAdapter.getFeatureType();
+		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
+			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+			final SimpleFeatureType featureType = gtAdapter.getFeatureType();
 
 			if (featureType.getGeometryDescriptor() != null) {
 				return featureType.getGeometryDescriptor().getLocalName();
@@ -283,18 +284,18 @@ public class FeatureDataUtils
 	public static String getTimeField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		AdapterStore adapterStore = dataStore.createAdapterStore();
+		final AdapterStore adapterStore = dataStore.createAdapterStore();
 
-		DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
 
-		if (adapter != null && adapter instanceof GeotoolsFeatureDataAdapter) {
-			GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
-			SimpleFeatureType featureType = gtAdapter.getFeatureType();
-			TimeDescriptors timeDescriptors = gtAdapter.getTimeDescriptors();
+		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
+			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+			final SimpleFeatureType featureType = gtAdapter.getFeatureType();
+			final TimeDescriptors timeDescriptors = gtAdapter.getTimeDescriptors();
 
 			// If not indexed, try to find a time field
-			if (timeDescriptors == null || !timeDescriptors.hasTime()) {
-				for (AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
+			if ((timeDescriptors == null) || !timeDescriptors.hasTime()) {
+				for (final AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
 					final Class<?> bindingClass = attrDesc.getType().getBinding();
 					if (TimeUtils.isTemporal(bindingClass)) {
 						return attrDesc.getLocalName();
@@ -317,12 +318,12 @@ public class FeatureDataUtils
 	}
 
 	public static int getFeatureAdapterCount(
-			DataStorePluginOptions dataStore ) {
-		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+			final DataStorePluginOptions dataStore ) {
+		final CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 		int featureAdapters = 0;
 
 		while (adapterIt.hasNext()) {
-			DataAdapter adapter = adapterIt.next();
+			final DataAdapter adapter = adapterIt.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapters++;
 			}
@@ -332,13 +333,13 @@ public class FeatureDataUtils
 	}
 
 	public static List<ByteArrayId> getFeatureAdapterIds(
-			DataStorePluginOptions dataStore ) {
-		ArrayList<ByteArrayId> featureAdapterIds = new ArrayList<>();
+			final DataStorePluginOptions dataStore ) {
+		final ArrayList<ByteArrayId> featureAdapterIds = new ArrayList<>();
 
-		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+		final CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 
 		while (adapterIt.hasNext()) {
-			DataAdapter adapter = adapterIt.next();
+			final DataAdapter adapter = adapterIt.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapterIds.add(adapter.getAdapterId());
 			}

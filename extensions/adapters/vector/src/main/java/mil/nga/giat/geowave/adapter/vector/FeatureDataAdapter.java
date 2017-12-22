@@ -51,6 +51,8 @@ import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -71,7 +73,6 @@ import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
-import mil.nga.giat.geowave.core.store.index.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
@@ -300,7 +301,7 @@ public class FeatureDataAdapter extends
 			String indexCrsCode ) {
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
 		if (persistedCRS == null) {
-			persistedCRS = GeoWaveGTDataStore.DEFAULT_CRS;
+			persistedCRS = GeometryUtils.DEFAULT_CRS;
 		}
 
 		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
@@ -841,7 +842,7 @@ public class FeatureDataAdapter extends
 		if (indexModel instanceof CustomCrsIndexModel) {
 			if (transform != null) {
 				return super.encode(
-						CRSTransform(
+						crsTransform(
 								entry,
 								persistedFeatureType,
 								reprojectedFeatureType,
@@ -1063,7 +1064,7 @@ public class FeatureDataAdapter extends
 
 	}
 
-	protected SimpleFeature CRSTransform(
+	protected SimpleFeature crsTransform(
 			final SimpleFeature entry,
 			final SimpleFeatureType persistedType,
 			final SimpleFeatureType reprojectedType,
@@ -1073,7 +1074,7 @@ public class FeatureDataAdapter extends
 		// TODO from the index model we should be able to get the CRS, and at
 		// this point we need to transform the geometry within entry if it does
 		// not match CRSs
-		SimpleFeature CRSEntry = entry;
+		SimpleFeature crsEntry = entry;
 
 		if (transform != null) {
 			// we can use the transform we have already calculated for this
@@ -1081,12 +1082,12 @@ public class FeatureDataAdapter extends
 			try {
 
 				// this will clone the feature and retype it to Index CRS
-				CRSEntry = SimpleFeatureBuilder.retype(
+				crsEntry = SimpleFeatureBuilder.retype(
 						entry,
 						reprojectedType);
 
 				// this will transform the geometry
-				CRSEntry.setDefaultGeometry(JTS.transform(
+				crsEntry.setDefaultGeometry(JTS.transform(
 						(Geometry) entry.getDefaultGeometry(),
 						transform));
 			}
@@ -1098,7 +1099,7 @@ public class FeatureDataAdapter extends
 			}
 		}
 
-		return CRSEntry;
+		return crsEntry;
 	}
 
 }

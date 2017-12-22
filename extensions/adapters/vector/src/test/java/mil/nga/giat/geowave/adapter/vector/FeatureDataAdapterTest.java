@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -43,11 +43,11 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -448,7 +448,7 @@ public class FeatureDataAdapterTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeoWaveGTDataStore.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
@@ -477,7 +477,7 @@ public class FeatureDataAdapterTest
 
 		assertEquals(
 				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
-				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
+				GeometryUtils.DEFAULT_CRS.getCoordinateSystem());
 	}
 
 	@Test
