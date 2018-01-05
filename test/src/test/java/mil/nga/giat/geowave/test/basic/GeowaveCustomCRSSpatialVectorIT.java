@@ -13,11 +13,13 @@ import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
+import org.geotools.referencing.CRS;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,20 +103,11 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				"geotools-vector",
 				nthreads);
-		try (CloseableIterator<Index<?, ?>> it = dataStore.createIndexStore().getIndices()) {
-			while (it.hasNext()) {
-				Index i = it.next();
-				System.err.println(i.getId().getString());
-			}
-		}
-		catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		
 		dur = (System.currentTimeMillis() - mark);
 		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
-
 		try {
+			CoordinateReferenceSystem crs = CRS.decode(TestUtils.CUSTOM_CRSCODE);
 			mark = System.currentTimeMillis();
 
 			testQuery(
@@ -126,20 +119,12 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					// TestUtils.DEFAULT_SPATIAL_INDEX,
-					TestUtils.createCustomCRSPrimryIndex(),
-					"bounding box constraint only");
+					TestUtils.createCustomCRSPrimaryIndex(),
+					"bounding box constraint only",
+					crs);
 
 			dur = (System.currentTimeMillis() - mark);
 			LOGGER.debug("BBOX query duration = " + dur + " ms.");
-		}
-		catch (final Exception e) {
-			e.printStackTrace();
-			TestUtils.deleteAll(dataStore);
-			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
-					+ e.getLocalizedMessage() + "'");
-		}
-		try {
 			mark = System.currentTimeMillis();
 
 			testQuery(
@@ -151,9 +136,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 						new File(
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
-					// TestUtils.DEFAULT_SPATIAL_INDEX,
-					TestUtils.createCustomCRSPrimryIndex(),
-					"polygon constraint only");
+					TestUtils.createCustomCRSPrimaryIndex(),
+					"polygon constraint only",crs);
 
 			dur = (System.currentTimeMillis() - mark);
 			LOGGER.debug("POLY query duration = " + dur + " ms.");
@@ -174,9 +158,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 							new File(
 									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
 						},
-						// TestUtils.DEFAULT_SPATIAL_INDEX,
-						TestUtils.createCustomCRSPrimryIndex(),
-						true);
+						TestUtils.createCustomCRSPrimaryIndex(),
+						true, CRS.decode(TestUtils.CUSTOM_CRSCODE));
 			}
 			catch (final Exception e) {
 				e.printStackTrace();
@@ -189,7 +172,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 		try {
 			testDeleteCQL(
 					CQL_DELETE_STR,
-					TestUtils.DEFAULT_SPATIAL_INDEX);
+					TestUtils.createCustomCRSPrimaryIndex());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
@@ -202,7 +185,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					TestUtils.DEFAULT_SPATIAL_INDEX);
+							TestUtils.createCustomCRSPrimaryIndex());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();

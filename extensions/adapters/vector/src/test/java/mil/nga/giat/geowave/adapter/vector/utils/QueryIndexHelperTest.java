@@ -539,16 +539,14 @@ public class QueryIndexHelperTest
 
 		// convert from EPSG:3785 to EPSG:4326 (convert to degrees lon/lat)
 		// approximately 180.0, 85.0
-		final SimpleFeature defaultCRSFeat = FeatureDataUtils.defaultCRSTransform(
+		final SimpleFeature defaultCRSFeat = FeatureDataUtils.crsTransform(
 				mercFeat,
-				geoMercType,
 				geoType,
 				transform);
 
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				dataAdapterId,
 				"geometry",
-				geoMercType,
 				geoType,
 				transform);
 

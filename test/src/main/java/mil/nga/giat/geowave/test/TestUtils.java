@@ -26,7 +26,6 @@ import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.slf4j.Logger;
@@ -35,8 +34,15 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -44,6 +50,7 @@ import com.vividsolutions.jts.geom.Point;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
@@ -97,7 +104,7 @@ public class TestUtils
 			.createPrimaryIndex();
 	public static String CUSTOM_CRSCODE = "EPSG:3070";
 
-	public static PrimaryIndex createCustomCRSPrimryIndex() {
+	public static PrimaryIndex createCustomCRSPrimaryIndex() {
 		SpatialOptions so = new SpatialOptions();
 		so.setCrs(CUSTOM_CRSCODE);
 		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
@@ -270,14 +277,36 @@ public class TestUtils
 				hashedCentroids,
 				expectedResultCount);
 	}
-
 	public static ExpectedResults getExpectedResults(
 			final URL[] expectedResultsResources )
+			throws IOException {
+		return getExpectedResults(expectedResultsResources, null);
+	}
+	public static MathTransform transformFromCrs(CoordinateReferenceSystem crs){
+		MathTransform mathTransform = null;
+		if (crs != null){
+			 try {
+				 mathTransform = CRS.findMathTransform(
+						GeometryUtils.DEFAULT_CRS,
+						crs,
+						true);
+			}
+			catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to create coordinate reference system transform",
+						e);
+			}
+		}
+		return mathTransform;
+	}
+	public static ExpectedResults getExpectedResults(
+			final URL[] expectedResultsResources, CoordinateReferenceSystem crs)
 			throws IOException {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		DataStore dataStore = null;
 		final Set<Long> hashedCentroids = new HashSet<Long>();
 		int expectedResultCount = 0;
+		MathTransform mathTransform = transformFromCrs(crs);
 		for (final URL expectedResultsResource : expectedResultsResources) {
 			map.put(
 					"url",
@@ -300,9 +329,13 @@ public class TestUtils
 				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
 					final SimpleFeature feature = featureIterator.next();
-					final long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
+					Geometry geometry = (Geometry) feature.getDefaultGeometry();
+					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(geometry, mathTransform) : geometry);
 					hashedCentroids.add(centroid);
 				}
+			} catch (MismatchedDimensionException | TransformException e) {
+				LOGGER.warn("Unable to transform geometry", e);
+				Assert.fail("Unable to transform geometry to CRS: " + crs != null ? crs.toString() : "unknown");
 			}
 			finally {
 				IOUtils.closeQuietly(featureIterator);

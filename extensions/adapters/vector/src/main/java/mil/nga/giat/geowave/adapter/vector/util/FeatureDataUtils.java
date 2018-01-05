@@ -91,6 +91,38 @@ public class FeatureDataUtils
 		}
 	}
 
+	public static SimpleFeature crsTransform(
+			final SimpleFeature entry,
+			final SimpleFeatureType reprojectedType,
+			final MathTransform transform){
+		SimpleFeature crsEntry = entry;
+
+		if (transform != null) {
+			// we can use the transform we have already calculated for this
+			// feature
+			try {
+
+				// this will clone the feature and retype it to Index CRS
+				crsEntry = SimpleFeatureBuilder.retype(
+						entry,
+						reprojectedType);
+
+				// this will transform the geometry
+				crsEntry.setDefaultGeometry(JTS.transform(
+						(Geometry) entry.getDefaultGeometry(),
+						transform));
+			}
+			catch (MismatchedDimensionException | TransformException e) {
+				LOGGER
+						.warn(
+								"Unable to perform transform to specified CRS of the index, the feature geometry will remain in its original CRS",
+								e);
+			}
+		}
+
+		return crsEntry;
+	}
+	
 	public static SimpleFeature defaultCRSTransform(
 			final SimpleFeature entry,
 			final SimpleFeatureType persistedType,
@@ -128,24 +160,7 @@ public class FeatureDataUtils
 				}
 			}
 			if (featureTransform != null) {
-				try {
-					// what should we do besides log a message when an entry
-					// can't be transformed to EPSG:4326 for some reason?
-					// this will clone the feature and retype it to EPSG:4326
-					defaultCRSEntry = SimpleFeatureBuilder.retype(
-							entry,
-							reprojectedType);
-					// this will transform the geometry
-					defaultCRSEntry.setDefaultGeometry(JTS.transform(
-							(Geometry) entry.getDefaultGeometry(),
-							featureTransform));
-				}
-				catch (MismatchedDimensionException | TransformException e) {
-					LOGGER
-							.warn(
-									"Unable to perform transform to EPSG:4326, the feature geometry will remain in its original CRS",
-									e);
-				}
+				defaultCRSEntry = crsTransform(defaultCRSEntry, reprojectedType, featureTransform);
 			}
 		}
 		return defaultCRSEntry;
