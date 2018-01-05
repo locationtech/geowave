@@ -103,7 +103,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 				TORNADO_TRACKS_SHAPEFILE_FILE,
 				"geotools-vector",
 				nthreads);
-		
+
 		dur = (System.currentTimeMillis() - mark);
 		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
 		try {
@@ -137,7 +137,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
 					},
 					TestUtils.createCustomCRSPrimaryIndex(),
-					"polygon constraint only",crs);
+					"polygon constraint only",
+					crs);
 
 			dur = (System.currentTimeMillis() - mark);
 			LOGGER.debug("POLY query duration = " + dur + " ms.");
@@ -159,7 +160,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
 						},
 						TestUtils.createCustomCRSPrimaryIndex(),
-						true, CRS.decode(TestUtils.CUSTOM_CRSCODE));
+						true,
+						CRS.decode(TestUtils.CUSTOM_CRSCODE));
 			}
 			catch (final Exception e) {
 				e.printStackTrace();
@@ -185,7 +187,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 			testDeleteSpatial(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-							TestUtils.createCustomCRSPrimaryIndex());
+					TestUtils.createCustomCRSPrimaryIndex());
 		}
 		catch (final Exception e) {
 			e.printStackTrace();

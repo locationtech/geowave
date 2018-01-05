@@ -277,16 +277,21 @@ public class TestUtils
 				hashedCentroids,
 				expectedResultCount);
 	}
+
 	public static ExpectedResults getExpectedResults(
 			final URL[] expectedResultsResources )
 			throws IOException {
-		return getExpectedResults(expectedResultsResources, null);
+		return getExpectedResults(
+				expectedResultsResources,
+				null);
 	}
-	public static MathTransform transformFromCrs(CoordinateReferenceSystem crs){
+
+	public static MathTransform transformFromCrs(
+			CoordinateReferenceSystem crs ) {
 		MathTransform mathTransform = null;
-		if (crs != null){
-			 try {
-				 mathTransform = CRS.findMathTransform(
+		if (crs != null) {
+			try {
+				mathTransform = CRS.findMathTransform(
 						GeometryUtils.DEFAULT_CRS,
 						crs,
 						true);
@@ -299,8 +304,10 @@ public class TestUtils
 		}
 		return mathTransform;
 	}
+
 	public static ExpectedResults getExpectedResults(
-			final URL[] expectedResultsResources, CoordinateReferenceSystem crs)
+			final URL[] expectedResultsResources,
+			CoordinateReferenceSystem crs )
 			throws IOException {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		DataStore dataStore = null;
@@ -330,11 +337,16 @@ public class TestUtils
 				while (featureIterator.hasNext()) {
 					final SimpleFeature feature = featureIterator.next();
 					Geometry geometry = (Geometry) feature.getDefaultGeometry();
-					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(geometry, mathTransform) : geometry);
+					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(
+							geometry,
+							mathTransform) : geometry);
 					hashedCentroids.add(centroid);
 				}
-			} catch (MismatchedDimensionException | TransformException e) {
-				LOGGER.warn("Unable to transform geometry", e);
+			}
+			catch (MismatchedDimensionException | TransformException e) {
+				LOGGER.warn(
+						"Unable to transform geometry",
+						e);
 				Assert.fail("Unable to transform geometry to CRS: " + crs != null ? crs.toString() : "unknown");
 			}
 			finally {

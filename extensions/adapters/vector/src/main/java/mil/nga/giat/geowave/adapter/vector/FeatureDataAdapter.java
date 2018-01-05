@@ -842,7 +842,10 @@ public class FeatureDataAdapter extends
 		if (indexModel instanceof CustomCrsIndexModel) {
 			if (transform != null) {
 				return super.encode(
-						FeatureDataUtils.crsTransform(entry,  reprojectedFeatureType, transform),
+						FeatureDataUtils.crsTransform(
+								entry,
+								reprojectedFeatureType,
+								transform),
 						indexModel);
 			}
 		}

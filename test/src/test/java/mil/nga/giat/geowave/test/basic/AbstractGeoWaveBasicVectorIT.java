@@ -110,20 +110,27 @@ abstract public class AbstractGeoWaveBasicVectorIT
 	}
 
 	abstract protected DataStorePluginOptions getDataStorePluginOptions();
+
 	protected void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
 			final PrimaryIndex index,
 			final String queryDescription )
 			throws Exception {
-		testQuery(savedFilterResource, expectedResultsResources, index, queryDescription, null);
+		testQuery(
+				savedFilterResource,
+				expectedResultsResources,
+				index,
+				queryDescription,
+				null);
 	}
+
 	protected void testQuery(
 			final URL savedFilterResource,
 			final URL[] expectedResultsResources,
 			final PrimaryIndex index,
 			final String queryDescription,
-			CoordinateReferenceSystem crs)
+			CoordinateReferenceSystem crs )
 			throws Exception {
 		LOGGER.info("querying " + queryDescription);
 		System.out.println("querying " + queryDescription);
@@ -137,7 +144,9 @@ abstract public class AbstractGeoWaveBasicVectorIT
 				new QueryOptions(
 						index),
 				query)) {
-			final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources, crs);
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(
+					expectedResultsResources,
+					crs);
 			int totalResults = 0;
 			final List<Long> actualCentroids = new ArrayList<Long>();
 			while (actualResults.hasNext()) {
@@ -406,17 +415,23 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			}
 		}
 	}
+
 	protected void testStats(
 			final URL[] inputFiles,
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
-		testStats(inputFiles, index, multithreaded, null);
+		testStats(
+				inputFiles,
+				index,
+				multithreaded,
+				null);
 	}
+
 	protected void testStats(
 			final URL[] inputFiles,
 			final PrimaryIndex index,
 			final boolean multithreaded,
-			CoordinateReferenceSystem crs) {
+			CoordinateReferenceSystem crs ) {
 		// In the multithreaded case, only test min/max and count. Stats will be
 		// ingested
 		// in a different order and will not match.
@@ -459,11 +474,16 @@ abstract public class AbstractGeoWaveBasicVectorIT
 								new UniformVisibilityWriter<SimpleFeature>(
 										new GlobalVisibilityHandler<SimpleFeature, Object>(
 												"")));
-						//transform data.getValue here using this code:
-						
+						// transform data.getValue here using this code:
+
 						cachedValues.entryIngested(
 								entryInfo,
-								mathTransform != null ? FeatureDataUtils.crsTransform(data.getValue(),  SimpleFeatureTypeBuilder.retype(data.getValue().getFeatureType(), crs), mathTransform): data.getValue());
+								mathTransform != null ? FeatureDataUtils.crsTransform(
+										data.getValue(),
+										SimpleFeatureTypeBuilder.retype(
+												data.getValue().getFeatureType(),
+												crs),
+										mathTransform) : data.getValue());
 					}
 				}
 			}

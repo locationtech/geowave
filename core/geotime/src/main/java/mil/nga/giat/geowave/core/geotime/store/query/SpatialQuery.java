@@ -304,11 +304,11 @@ public class SpatialQuery extends
 		}
 		else {
 			if (crs == null) {
-				
-				if((crsCode == null) || crsCode.isEmpty()){
+
+				if ((crsCode == null) || crsCode.isEmpty()) {
 					crsCode = GeometryUtils.DEFAULT_CRS_STR;
 				}
-				
+
 				try {
 					crs = CRS.decode(
 							crsCode,

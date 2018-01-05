@@ -94,7 +94,7 @@ public class FeatureDataUtils
 	public static SimpleFeature crsTransform(
 			final SimpleFeature entry,
 			final SimpleFeatureType reprojectedType,
-			final MathTransform transform){
+			final MathTransform transform ) {
 		SimpleFeature crsEntry = entry;
 
 		if (transform != null) {
@@ -122,7 +122,7 @@ public class FeatureDataUtils
 
 		return crsEntry;
 	}
-	
+
 	public static SimpleFeature defaultCRSTransform(
 			final SimpleFeature entry,
 			final SimpleFeatureType persistedType,
@@ -160,7 +160,10 @@ public class FeatureDataUtils
 				}
 			}
 			if (featureTransform != null) {
-				defaultCRSEntry = crsTransform(defaultCRSEntry, reprojectedType, featureTransform);
+				defaultCRSEntry = crsTransform(
+						defaultCRSEntry,
+						reprojectedType,
+						featureTransform);
 			}
 		}
 		return defaultCRSEntry;

@@ -95,7 +95,10 @@ public class FeatureBoundingBoxStatistics extends
 		// incorporate the bounding box of the entry's envelope
 		final Object o;
 		if ((reprojectedType != null) && (transform != null)) {
-			o = FeatureDataUtils.crsTransform(entry, reprojectedType, transform).getAttribute(
+			o = FeatureDataUtils.crsTransform(
+					entry,
+					reprojectedType,
+					transform).getAttribute(
 					getFieldName());
 		}
 		else {
