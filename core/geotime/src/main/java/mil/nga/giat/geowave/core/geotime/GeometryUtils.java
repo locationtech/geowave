@@ -56,7 +56,7 @@ public class GeometryUtils
 					DEFAULT_CRS_STR,
 					true);
 		}
-		catch (final FactoryException e) {
+		catch (final Exception e) {
 			LOGGER.error(
 					"Unable to decode " + DEFAULT_CRS_STR + " CRS",
 					e);

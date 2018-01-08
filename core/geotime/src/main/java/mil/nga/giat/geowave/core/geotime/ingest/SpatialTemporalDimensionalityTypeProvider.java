@@ -185,7 +185,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 					"Unable to decode '" + crsCode + "' CRS",
 					e);
 			throw new RuntimeException(
-					"Unable to initialize '" + crsCode + "' object",
+					"Unable to decode '" + crsCode + "' CRS",
 					e);
 		}
 
