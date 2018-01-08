@@ -117,7 +117,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
 			fields = SPATIAL_TEMPORAL_FIELDS;
 			isDefaultCRS = true;
-			crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
+			// crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
 			crsCode = "EPSG:4326";
 		}
 		else {

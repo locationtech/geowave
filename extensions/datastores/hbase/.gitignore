@@ -1,1 +1,2 @@
 src/main/java/mil/nga/giat/geowave/datastore/hbase/query/protobuf
+/target/

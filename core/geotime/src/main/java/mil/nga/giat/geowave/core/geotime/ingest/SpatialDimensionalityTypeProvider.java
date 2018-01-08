@@ -121,7 +121,7 @@ public class SpatialDimensionalityTypeProvider implements
 			dimensions = SPATIAL_DIMENSIONS;
 			fields = SPATIAL_FIELDS;
 			isDefaultCRS = true;
-			crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
+			// crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
 			crsCode = "EPSG:4326";
 		}
 		else {
