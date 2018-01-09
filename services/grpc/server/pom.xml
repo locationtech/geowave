@@ -6,7 +6,7 @@
 		<relativePath>../</relativePath>
 		<version>0.9.7-SNAPSHOT</version>
 	</parent>
-	<artifactId>geowave-service-grpc</artifactId>
+	<artifactId>geowave-grpc-server</artifactId>
 	<name>GeoWave gRPC services</name>
 	<dependencies>
 		<dependency>
