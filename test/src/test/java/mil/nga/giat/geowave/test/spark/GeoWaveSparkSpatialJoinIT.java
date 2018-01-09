@@ -19,6 +19,7 @@ import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.Column;
 import org.geotools.geometry.Envelope2D;
 import org.junit.AfterClass;
 import org.junit.Assert;
@@ -79,44 +80,16 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
-class PrettyPrintingMap<K, V> {
-    private Map<K, V> map;
-
-    public PrettyPrintingMap(Map<K, V> map) {
-        this.map = map;
-    }
-
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        Iterator<Entry<K, V>> iter = map.entrySet().iterator();
-        while (iter.hasNext()) {
-            Entry<K, V> entry = iter.next();
-            sb.append(entry.getKey());
-            sb.append('=').append('"');
-            sb.append(entry.getValue());
-            sb.append('"');
-            if (iter.hasNext()) {
-                sb.append(',').append(' ');
-            }
-        }
-        return sb.toString();
-
-    }
-}
-
 class SpatialJoin implements Serializable {
 	private SparkSession session;
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 	public JavaPairRDD<GeoWaveInputKey, String> joinResults = null;
 	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> finalResults = null;
+	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftJoined = null;
+	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightJoined = null;
 
 	public SpatialJoin(SparkSession spark) {
 		this.session = spark;
-	}
-	
-	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> getResults() {
-		//TODO: Implement
-		return null;
 	}
 	
 	public void performJoin(
@@ -138,14 +111,14 @@ class SpatialJoin implements Serializable {
 				sc, 
 				leftStore, 
 				null, 
-				new QueryOptions(leftAdapter));
+				new QueryOptions(leftAdapter)).reduceByKey((f1,f2) -> f1);
 		
 		
 		JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD = GeoWaveRDD.rddForSimpleFeatures(
 				sc, 
 				rightStore, 
 				null, 
-				new QueryOptions(rightAdapter));
+				new QueryOptions(rightAdapter)).reduceByKey((f1,f2) -> f1);
 
 		//Generate Index RDDs for each set of data.
 		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> leftIndex = this.indexData(leftRDD);
@@ -220,9 +193,28 @@ class SpatialJoin implements Serializable {
 			}
 
 		}
-		this.joinResults = this.joinResults.distinct();
+		//this.joinResults = this.joinResults.distinct();
+		this.joinResults = this.joinResults.reduceByKey(new Function2<String,String,String>() {
+
+			@Override
+			public String call(
+					String v1,
+					String v2 )
+					throws Exception {
+				return v1;
+			}
+			
+		});
 		
-		this.outputResultsToDataStore(leftStore, leftAdapterId, leftRDD, rightRDD);
+		//Final result features from spatial join (May contain duplicates)
+		this.leftJoined = this.joinResults.join(leftRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
+		
+
+		//Final result features from spatial join (May contain duplicates)
+		this.rightJoined = this.joinResults.join(rightRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
+		
+		//Function to write results to another datastore? 
+		//this.outputResultsToDataStore(leftStore, leftAdapterId, leftRDD, rightRDD);
 	}
 	
 	private void outputResultsToDataStore(DataStorePluginOptions outputStore,
@@ -230,14 +222,12 @@ class SpatialJoin implements Serializable {
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRDD,
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD) {
 		
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftJoined = this.joinResults.join(leftRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
-		
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightJoined = this.joinResults.join(rightRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> joinedRDD = leftJoined.union(rightJoined);
+
+		//JavaPairRDD<GeoWaveInputKey, SimpleFeature> joinedRDD = leftJoined.union(rightJoined);
 		
 		//SimpleFeatureDataFrame dataframe = new SimpleFeatureDataFrame(this.session);
 		//dataframe.init(outputStore, outputId);
-		this.finalResults = joinedRDD;
+		//this.finalResults = rightJoined;
 	}
 	
 	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> indexData(
@@ -462,13 +452,28 @@ class SpatialJoin implements Serializable {
 					}
 				}
 				
+				
 				return resultPairs.iterator();
 			}
 			
 		});
 
-		//Filter distinct id/geom pairs from matched results.
+		//Filter distinct id/geom pairs from match
 		finalMatches = finalMatches.distinct();
+		/*finalMatches = finalMatches.reduceByKey(new Function2<String,String,String>() {
+
+			@Override
+			public String call(
+					String v1,
+					String v2 )
+					throws Exception {
+				// TODO Auto-generated method stub
+				return v1;
+			}
+			
+		});*/
+		
+		
 		
 		return finalMatches;
 	}
@@ -605,10 +610,23 @@ public class GeoWaveSparkSpatialJoinIT extends
 		mark = System.currentTimeMillis();
 
 		long finalCount = 0;
+		Dataset<Row> df = null;
 		try {
 			join.performJoin(sc.sc(), dataStore, hail_adapter, dataStore, tornado_adapter, predicate);
 
-			finalCount = join.finalResults.count();
+			finalCount = join.rightJoined.count();
+			
+			SimpleFeatureDataFrame joinFrame = new SimpleFeatureDataFrame(spark);
+			
+			joinFrame.init(dataStore, tornado_adapter);
+			
+			df = joinFrame.getDataFrame(join.rightJoined);
+			
+			//finalCount = df.dropDuplicates().count();
+
+			//Column rbid_join = df.col("rbid");
+			//df = df.orderBy(rbid_join);
+
 		}
 		catch (IOException e) {
 			LOGGER.error("Could not perform join");
@@ -622,6 +640,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 		
 
 		long bruteCount = 0;
+		Dataset<Row> result = null;
 		mark = System.currentTimeMillis();
 		try {
 			SimpleFeatureDataFrame hailFrame = new SimpleFeatureDataFrame(spark);
@@ -649,11 +668,12 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 			tornadoFrame.getDataFrame(tornadoRDD).createOrReplaceTempView("tornado");
 			
-			Dataset<Row> result = spark.sql("select * from hail, tornado where geomIntersects(hail.geom,tornado.geom)");
-			
+			result = spark.sql("select tornado.* from hail, tornado where geomIntersects(hail.geom,tornado.geom)");
+			//Column rbid = result.col("rbid");
 			result = result.dropDuplicates();
 			bruteCount = result.count();
-			result.show(50);
+
+			//result = result.orderBy(rbid);
 			
 		}
 		catch (IOException e) {
@@ -665,6 +685,9 @@ public class GeoWaveSparkSpatialJoinIT extends
 		}
 		dur = (System.currentTimeMillis() - mark);
 		
+		//Display indexed join + brute force results ordered by rbid
+		df.show(50);
+		result.show(50);
 		LOGGER.warn("Indexed Joined Count= " + finalCount);
 		LOGGER.warn("Brute force join count= " + bruteCount);
 		LOGGER.warn("Indexed Join duration = " + indexJoinDur + " ms.");
