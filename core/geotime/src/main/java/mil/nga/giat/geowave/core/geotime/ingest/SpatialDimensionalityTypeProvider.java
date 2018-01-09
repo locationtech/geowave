@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -121,7 +122,6 @@ public class SpatialDimensionalityTypeProvider implements
 			dimensions = SPATIAL_DIMENSIONS;
 			fields = SPATIAL_FIELDS;
 			isDefaultCRS = true;
-			// crs = decodeCRS(GeometryUtils.DEFAULT_CRS_STR);
 			crsCode = "EPSG:4326";
 		}
 		else {
@@ -160,6 +160,18 @@ public class SpatialDimensionalityTypeProvider implements
 
 		}
 
+		BasicIndexModel indexModel = null;
+		if (isDefaultCRS) {
+			indexModel = new BasicIndexModel(
+					options.storeTime ? SPATIAL_TEMPORAL_FIELDS : SPATIAL_FIELDS);
+		}
+		else {
+
+			indexModel = new CustomCrsIndexModel(
+					options.storeTime ? fields_temporal : fields,
+					crsCode);
+		}
+
 		return new CustomIdIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						dimensions,
@@ -171,10 +183,13 @@ public class SpatialDimensionalityTypeProvider implements
 							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
-				new CustomCrsIndexModel(
-						// TODO append time to fields if storeTime
-						options.storeTime ? (isDefaultCRS ? SPATIAL_TEMPORAL_FIELDS : fields_temporal) : fields,
-						crsCode),
+				indexModel,
+				/*
+				 * new CustomCrsIndexModel( // TODO append time to fields if
+				 * storeTime options.storeTime ? (isDefaultCRS ?
+				 * SPATIAL_TEMPORAL_FIELDS : fields_temporal) : fields,
+				 * crsCode),
+				 */
 				new ByteArrayId(
 						// TODO append CRS code to ID if its overridden
 						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)

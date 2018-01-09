@@ -281,15 +281,32 @@ public class FeatureDataAdapter extends
 
 		String indexCrsCode = null;
 		for (PrimaryIndex primaryindx : indices) {
-			if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
-				if (indexCrsCode == null) {
+
+			// for first iteration
+			if (indexCrsCode == null) {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
 					indexCrsCode = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode();
 				}
-				// check if indexes have different CRS
-				if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode())) {
-					LOGGER.error("Multiple indices with different CRS is not supported");
-					throw new RuntimeException(
-							"Multiple indices with different CRS is not supported");
+				else {
+					indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+				}
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
 				}
 			}
 		}
@@ -300,6 +317,7 @@ public class FeatureDataAdapter extends
 	private void initCRS(
 			String indexCrsCode ) {
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
+
 		if (persistedCRS == null) {
 			persistedCRS = GeometryUtils.DEFAULT_CRS;
 		}
@@ -365,6 +383,7 @@ public class FeatureDataAdapter extends
 	private void setFeatureType(
 			final SimpleFeatureType featureType ) {
 		persistedFeatureType = featureType;
+		reprojectedFeatureType = persistedFeatureType;
 		resetTimeDescriptors();
 	}
 
@@ -839,17 +858,14 @@ public class FeatureDataAdapter extends
 			final SimpleFeature entry,
 			final CommonIndexModel indexModel ) {
 
-		if (indexModel instanceof CustomCrsIndexModel) {
-			if (transform != null) {
-				return super.encode(
-						FeatureDataUtils.crsTransform(
-								entry,
-								reprojectedFeatureType,
-								transform),
-						indexModel);
-			}
+		if (transform != null) {
+			return super.encode(
+					FeatureDataUtils.crsTransform(
+							entry,
+							reprojectedFeatureType,
+							transform),
+					indexModel);
 		}
-
 		return super.encode(
 				entry,
 				indexModel);
