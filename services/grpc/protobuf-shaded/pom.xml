@@ -8,6 +8,7 @@
 		<version>0.9.7-SNAPSHOT</version>
   </parent>
   <artifactId>geowave-grpc-protobuf-shaded</artifactId>
+	<name>GeoWave gRPC Protobuf Library with Proto3</name>
   <dependencies>	
 		<dependency>
 		  <groupId>io.grpc</groupId>
