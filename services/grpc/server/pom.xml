@@ -3,7 +3,7 @@
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
-		<relativePath>../</relativePath>
+		<relativePath>../../</relativePath>
 		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-grpc-server</artifactId>
