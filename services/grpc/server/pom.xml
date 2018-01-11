@@ -3,11 +3,11 @@
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
-		<relativePath>../</relativePath>
+		<relativePath>../../</relativePath>
 		<version>0.9.7-SNAPSHOT</version>
 	</parent>
-	<artifactId>geowave-service-grpc</artifactId>
-	<name>GeoWave gRPC services</name>
+	<artifactId>geowave-grpc-server</artifactId>
+	<name>GeoWave gRPC Server</name>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -17,6 +17,21 @@
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-grpc-protobuf-shaded</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-mapreduce</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-spark</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-geoserver</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -39,7 +54,7 @@
 		    <artifactId>reflections</artifactId>
 		    <version>0.9.11</version>
 		</dependency>
-		<dependency>
+		<!--  <dependency>
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
@@ -58,6 +73,6 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-adapter-raster</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency>-->
 	</dependencies>
 </project>

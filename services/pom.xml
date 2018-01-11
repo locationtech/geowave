@@ -12,5 +12,7 @@
 	<packaging>pom</packaging>
 	<modules>
 		<module>rest</module>
+		<module>grpc/server</module>
+		<module>grpc/protobuf-shaded</module>
 	</modules>
 </project>
