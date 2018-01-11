@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>com.google.protobuf.AbstractMessageLite.Builder&lt;BuilderType&gt;</li>
+<li>com.google.protobuf.AbstractMessageLite.Builder</li>
 <li>
 <ul class="inheritance">
 <li>com.google.protobuf.AbstractMessage.Builder&lt;BuilderType&gt;</li>
@@ -269,35 +269,42 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.google.protobuf.GeneratedMessage.Builder</h3>
-<code>addRepeatedField, clearField, getAllFields, getField, getFieldBuilder, getParentForChildren, getRepeatedField, getRepeatedFieldCount, getUnknownFields, hasField, isClean, markClean, mergeUnknownFields, newBuilderForField, onBuilt, onChanged, parseUnknownField, setField, setRepeatedField, setUnknownFields</code></li>
+<code>addRepeatedField, clearField, clearOneof, getAllFields, getField, getFieldBuilder, getOneofFieldDescriptor, getParentForChildren, getRepeatedField, getRepeatedFieldBuilder, getRepeatedFieldCount, getUnknownFields, hasField, hasOneof, internalGetMapField, internalGetMutableMapField, isClean, markClean, mergeUnknownFields, newBuilderForField, onBuilt, onChanged, parseUnknownField, setField, setRepeatedField, setUnknownFields</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.AbstractMessage.Builder">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.google.protobuf.AbstractMessage.Builder</h3>
-<code>findInitializationErrors, getInitializationErrorString, mergeDelimitedFrom, mergeDelimitedFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, newUninitializedMessageException</code></li>
+<code>findInitializationErrors, getInitializationErrorString, internalMergeFrom, mergeDelimitedFrom, mergeDelimitedFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, mergeFrom, newUninitializedMessageException, toString</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.AbstractMessageLite.Builder">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.google.protobuf.AbstractMessageLite.Builder</h3>
-<code>addAll, newUninitializedMessageException</code></li>
+<code>addAll, mergeFrom, newUninitializedMessageException</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
-<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.MessageOrBuilder">
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;com.google.protobuf.MessageOrBuilder</h3>
-<code>findInitializationErrors, getAllFields, getField, getInitializationErrorString, getRepeatedField, getRepeatedFieldCount, getUnknownFields, hasField</code></li>
+<code>findInitializationErrors, getAllFields, getField, getInitializationErrorString, getOneofFieldDescriptor, getRepeatedField, getRepeatedFieldCount, getUnknownFields, hasField, hasOneof</code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.MessageLite.Builder">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;com.google.protobuf.MessageLite.Builder</h3>
+<code>mergeFrom</code></li>
 </ul>
 </li>
 </ul>

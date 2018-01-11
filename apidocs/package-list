@@ -212,6 +212,8 @@ mil.nga.giat.geowave.mapreduce.input
 mil.nga.giat.geowave.mapreduce.operations
 mil.nga.giat.geowave.mapreduce.output
 mil.nga.giat.geowave.mapreduce.splits
+mil.nga.giat.geowave.service.grpc
+mil.nga.giat.geowave.service.grpc.protobuf
 mil.nga.giat.geowave.service.rest
 mil.nga.giat.geowave.service.rest.field
 mil.nga.giat.geowave.service.rest.operations
