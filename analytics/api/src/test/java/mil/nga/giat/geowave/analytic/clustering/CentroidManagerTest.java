@@ -93,6 +93,7 @@ public class CentroidManagerTest
 		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
+		adapter.init(index);
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();

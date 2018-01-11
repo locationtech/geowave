@@ -32,7 +32,9 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -95,15 +97,18 @@ public class NNMapReduceTest
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
+				ftype);
+		adapter.init(index);
+
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 
 		serializations();
 	}

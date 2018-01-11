@@ -610,7 +610,7 @@ public class CentroidManagerGeoWave<T> implements
 				AnalyticItemWrapper<T> item );
 	}
 
-	private static FeatureDataAdapter createFeatureAdapter(
+	private static SimpleFeatureType createFeatureAdapter(
 			final SimpleFeatureType featureType,
 			final Class<? extends Geometry> shapeClass ) {
 		try {
@@ -630,8 +630,7 @@ public class CentroidManagerGeoWave<T> implements
 							attr.getType().getBinding());
 				}
 			}
-			return new FeatureDataAdapter(
-					builder.buildFeatureType());
+			return builder.buildFeatureType();
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
@@ -662,14 +661,14 @@ public class CentroidManagerGeoWave<T> implements
 			ToSimpleFeatureConverter<T>
 	{
 
-		final FeatureDataAdapter adapter;
+		final SimpleFeatureType type;
 		final Object[] defaults;
 		final Class<? extends Geometry> shapeClass;
 
 		public SimpleFeatureConverter(
 				final FeatureDataAdapter adapter,
 				final Class<? extends Geometry> shapeClass ) {
-			this.adapter = createFeatureAdapter(
+			type = createFeatureAdapter(
 					adapter.getFeatureType(),
 					shapeClass);
 			int p = 0;
@@ -683,14 +682,14 @@ public class CentroidManagerGeoWave<T> implements
 
 		@Override
 		public SimpleFeatureType getFeatureType() {
-			return adapter.getFeatureType();
+			return type;
 		}
 
 		@Override
 		public SimpleFeature toSimpleFeature(
 				final AnalyticItemWrapper<T> item ) {
 			final SimpleFeature newFeature = SimpleFeatureBuilder.build(
-					adapter.getFeatureType(),
+					type,
 					defaults,
 					item.getID());
 			int i = 0;

@@ -316,6 +316,10 @@ public class FeatureDataAdapter extends
 
 	private void initCRS(
 			String indexCrsCode ) {
+		if (indexCrsCode == null || indexCrsCode.isEmpty()) {
+			// TODO make sure we handle null/empty to make it default
+			indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+		}
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
 
 		if (persistedCRS == null) {
@@ -324,7 +328,10 @@ public class FeatureDataAdapter extends
 
 		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
 		if (indexCRS.equals(persistedCRS)) {
-			reprojectedFeatureType = persistedFeatureType;
+			// reprojectedFeatureType = persistedFeatureType;
+			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
+					persistedFeatureType,
+					persistedCRS);
 			transform = null;
 		}
 		else {
@@ -383,7 +390,7 @@ public class FeatureDataAdapter extends
 	private void setFeatureType(
 			final SimpleFeatureType featureType ) {
 		persistedFeatureType = featureType;
-		reprojectedFeatureType = persistedFeatureType;
+		// reprojectedFeatureType = persistedFeatureType;
 		resetTimeDescriptors();
 	}
 
@@ -692,8 +699,14 @@ public class FeatureDataAdapter extends
 			namespaceBytes = new byte[0];
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
-		final byte[] indexCrsBytes = StringUtils.stringToBinary(CRS.toSRS(reprojectedFeatureType
-				.getCoordinateReferenceSystem()));
+		CoordinateReferenceSystem crs = reprojectedFeatureType.getCoordinateReferenceSystem();
+		byte[] indexCrsBytes;
+		if (crs != null) {
+			indexCrsBytes = StringUtils.stringToBinary(CRS.toSRS(crs));
+		}
+		else {
+			indexCrsBytes = new byte[0];
+		}
 		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
@@ -802,7 +815,7 @@ public class FeatureDataAdapter extends
 						e);
 			}
 			setFeatureType(myType);
-			initCRS(StringUtils.stringFromBinary(indexCrsBytes));
+			initCRS(indexCrsBytes.length > 0 ? StringUtils.stringFromBinary(indexCrsBytes) : null);
 			// advertise the reprojected type externally
 			return reprojectedFeatureType;
 		}
@@ -850,6 +863,9 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
+		if (reprojectedFeatureType == null) {
+			return persistedFeatureType;
+		}
 		return reprojectedFeatureType;
 	}
 

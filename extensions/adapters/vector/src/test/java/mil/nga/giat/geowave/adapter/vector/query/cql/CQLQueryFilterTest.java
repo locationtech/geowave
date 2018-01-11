@@ -74,15 +74,15 @@ public class CQLQueryFilterTest
 				exp1,
 				exp2,
 				false);
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
+		adapter.init(spatialIndex);
 		final CQLQuery cqlQuery = new CQLQuery(
 				null,
 				f,
 				adapter);
-
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
 
 		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
 		final List<DistributableQueryFilter> dFilters = new ArrayList<DistributableQueryFilter>();

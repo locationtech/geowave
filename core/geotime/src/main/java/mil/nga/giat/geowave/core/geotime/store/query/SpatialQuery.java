@@ -138,7 +138,7 @@ public class SpatialQuery extends
 			final Geometry queryGeometry,
 			final Map<ByteArrayId, FilterableConstraints> additionalConstraints ) {
 		this(
-				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
+				constraints,
 				queryGeometry,
 				additionalConstraints,
 				null,

@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -143,6 +144,17 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 					options.periodicity);
 		}
 
+		BasicIndexModel indexModel = null;
+		if (isDefaultCRS) {
+			indexModel = new BasicIndexModel(
+					fields);
+		}
+		else {
+			indexModel = new CustomCrsIndexModel(
+					fields,
+					crsCode);
+		}
+
 		String combinedArrayID;
 		if (isDefaultCRS) {
 			combinedArrayID = DEFAULT_SPATIAL_TEMPORAL_ID_STR + "_" + options.bias + "_" + options.periodicity;
@@ -163,9 +175,10 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						},
 						SFCType.HILBERT,
 						options.maxDuplicates),
-				new CustomCrsIndexModel(
-						fields,
-						crsCode),
+				indexModel,
+				/*
+				 * new CustomCrsIndexModel( fields, crsCode),
+				 */
 				new ByteArrayId(
 						combinedId));
 	}

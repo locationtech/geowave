@@ -128,7 +128,7 @@ public class AvroFeatureDataAdapterTest
 			throws IOException {
 
 		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
-
+		adapter.init(index);
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
@@ -240,6 +240,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
 				"EPSG:4326"));
@@ -305,6 +307,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -349,6 +353,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -410,6 +416,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -462,6 +470,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -542,6 +552,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -606,7 +618,8 @@ public class AvroFeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();

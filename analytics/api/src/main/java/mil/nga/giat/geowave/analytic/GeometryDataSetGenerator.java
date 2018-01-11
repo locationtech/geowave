@@ -182,6 +182,7 @@ public class GeometryDataSetGenerator
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureData.get(
 						0).getFeatureType());
+		adapter.init(index);
 		final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
 				featureData.get(
 						0).getFeatureType());

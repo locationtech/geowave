@@ -174,7 +174,13 @@ public class GeoWaveGTDataStore extends
 			adapter.setNamespace(featureNameSpaceURI.toString());
 		}
 
-		adapterStore.addAdapter(adapter);
+		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+			// it is questionable whether createSchema *should* write the
+			// adapter to the store, it is missing the proper index information
+			// at this stage
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			adapterStore.addAdapter(adapter);
+		}
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(

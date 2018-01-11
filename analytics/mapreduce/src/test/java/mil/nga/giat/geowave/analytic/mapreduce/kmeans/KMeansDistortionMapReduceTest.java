@@ -84,7 +84,6 @@ public class KMeansDistortionMapReduceTest
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
 	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
 
@@ -102,7 +101,7 @@ public class KMeansDistortionMapReduceTest
 						CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
 				FeatureCentroidDistanceFn.class,
 				DistanceFn.class);
-
+		testObjectAdapter.init(index);
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				testObjectAdapter);

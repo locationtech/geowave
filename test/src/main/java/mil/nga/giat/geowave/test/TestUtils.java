@@ -347,7 +347,7 @@ public class TestUtils
 				LOGGER.warn(
 						"Unable to transform geometry",
 						e);
-				Assert.fail("Unable to transform geometry to CRS: " + crs != null ? crs.toString() : "unknown");
+				Assert.fail("Unable to transform geometry to CRS: " + crs.toString());
 			}
 			finally {
 				IOUtils.closeQuietly(featureIterator);

@@ -43,10 +43,12 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
 import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -209,10 +211,12 @@ public class ConvexHullJobRunnerTest
 		runTimeProperties.store(
 				StoreParam.INPUT_STORE,
 				store);
-
+		FeatureDataAdapter adapter = new FeatureDataAdapter(
+				ftype);
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		adapter.init(index);
 		pluginOptions.createAdapterStore().addAdapter(
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 	}
 
 	@Test

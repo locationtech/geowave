@@ -78,7 +78,7 @@ public class DistortionGroupManagementTest
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		adapter = new FeatureDataAdapter(
 				ftype);
-
+		adapter.init(index);
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 

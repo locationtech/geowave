@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.analytic;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -124,8 +125,12 @@ public class AnalyticFeature
 						extraDim,
 						Double.class);
 			}
-			return new FeatureDataAdapter(
+			FeatureDataAdapter adapter = new FeatureDataAdapter(
 					builder.buildFeatureType());
+			// TODO any consumers of this method will not be able to utilize
+			// custom CRS
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			return adapter;
 		}
 		catch (final Exception e) {
 			LOGGER.warn(

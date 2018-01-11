@@ -44,6 +44,9 @@ public class CQLQueryTest
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,when:Date,pid:String");
 		adapter = new FeatureDataAdapter(
 				type);
+		adapter.init(
+				SPATIAL_INDEX,
+				SPATIAL_TEMPORAL_INDEX);
 	}
 
 	@Test
@@ -168,6 +171,7 @@ public class CQLQueryTest
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,start:Date,end:Date,pid:String");
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
+		adapter.init(SPATIAL_INDEX);
 		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
