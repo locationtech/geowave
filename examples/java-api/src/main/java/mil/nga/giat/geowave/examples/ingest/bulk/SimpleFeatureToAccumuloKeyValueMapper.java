@@ -66,6 +66,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 			InterruptedException {
 
 		simpleFeature = parseGeonamesValue(value);
+		adapter.init(index);
 
 		// build Geowave-formatted Accumulo [Key,Value] pairs
 		keyValuePairs = generator.constructKeyValuePairs(
