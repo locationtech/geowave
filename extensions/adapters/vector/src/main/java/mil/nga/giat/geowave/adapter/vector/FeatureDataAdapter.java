@@ -351,6 +351,10 @@ public class FeatureDataAdapter extends
 			}
 
 		}
+		
+		LOGGER.warn("persistedCRS: "+persistedCRS.toString());
+		LOGGER.warn("indexCRS: "+indexCRS.toString());
+		LOGGER.warn("transform: "+transform.toString());
 
 		statsManager = new StatsManager(
 				this,
