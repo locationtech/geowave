@@ -14,6 +14,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -129,7 +130,7 @@ public class AnalyticFeature
 					builder.buildFeatureType());
 			// TODO any consumers of this method will not be able to utilize
 			// custom CRS
-			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 			return adapter;
 		}
 		catch (final Exception e) {

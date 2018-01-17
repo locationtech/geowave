@@ -18,6 +18,7 @@ import java.util.Date;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryAdapter;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time.TimeRange;
@@ -190,7 +191,8 @@ public class SpatialTemporalQueryTest
 								34)
 					})
 		};
-		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialTemporalOptions());
 		int pos = 0;
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : queryCopy.createFilters(index)) {

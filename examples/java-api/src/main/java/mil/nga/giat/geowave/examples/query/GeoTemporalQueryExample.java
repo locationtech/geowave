@@ -41,6 +41,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
@@ -70,7 +71,8 @@ public class GeoTemporalQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static AccumuloDataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	private static final FeatureDataAdapter adapter = new FeatureDataAdapter(
 			getPointSimpleFeatureType());
 

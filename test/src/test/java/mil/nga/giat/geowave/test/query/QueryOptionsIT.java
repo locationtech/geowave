@@ -32,6 +32,7 @@ import com.vividsolutions.jts.geom.Envelope;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -71,7 +72,8 @@ public class QueryOptionsIT
 			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 					GUADALAJARA,
 					ATLANTA)));
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,

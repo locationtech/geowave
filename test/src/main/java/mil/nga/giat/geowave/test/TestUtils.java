@@ -52,8 +52,9 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
@@ -99,17 +100,16 @@ public class TestUtils
 	public static final String TEST_CASE_BASE = "data/";
 
 	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialOptions());
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	public static String CUSTOM_CRSCODE = "EPSG:3070";
 
 	public static PrimaryIndex createCustomCRSPrimaryIndex() {
-		SpatialOptions so = new SpatialOptions();
-		so.setCrs(CUSTOM_CRSCODE);
 		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
-		sdp.setOptions(so);
-		PrimaryIndex primaryIndex = sdp.createPrimaryIndex();
+		SpatialOptions so = sdp.createOptions();
+		so.setCrs(CUSTOM_CRSCODE);
+		PrimaryIndex primaryIndex = sdp.createPrimaryIndex(so);
 		return primaryIndex;
 	}
 
@@ -196,7 +196,7 @@ public class TestUtils
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
 			indexOption.selectPlugin(indexType);
 			if (crsCode != null) {
-				((SpatialOptions) indexOption.getIndexPlugin().getOptions()).setCrs(crsCode);
+				((SpatialOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
 			}
 			indexOptions.add(indexOption);
 		}

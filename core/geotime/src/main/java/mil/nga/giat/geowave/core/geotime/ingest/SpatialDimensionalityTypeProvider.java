@@ -18,8 +18,6 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.Parameter;
-
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -41,14 +39,12 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
-		DimensionalityTypeProviderSpi
+		DimensionalityTypeProviderSpi<SpatialOptions>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
-	private SpatialOptions options = new SpatialOptions();
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	private static final int LONGITUDE_BITS = 31;
 	private static final int LATITUDE_BITS = 31;
@@ -95,17 +91,13 @@ public class SpatialDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public DimensionalityTypeOptions getOptions() {
-		return options;
-	}
-
-	public void setOptions(
-			SpatialOptions options ) {
-		this.options = options;
+	public SpatialOptions createOptions() {
+		return new SpatialOptions();
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex() {
+	public PrimaryIndex createPrimaryIndex(
+			SpatialOptions options ) {
 		return internalCreatePrimaryIndex(options);
 	}
 
@@ -217,26 +209,6 @@ public class SpatialDimensionalityTypeProvider implements
 
 		return crs;
 
-	}
-
-	public static class SpatialOptions implements
-			DimensionalityTypeOptions
-	{
-		@Parameter(names = {
-			"--storeTime"
-		}, required = false, description = "The index will store temporal values.  This allows it to slightly more efficiently run spatial-temporal queries although if spatial-temporal queries are a common use case, a separate spatial-temporal index is recommended.")
-		protected boolean storeTime = false;
-
-		@Parameter(names = {
-			"-c",
-			"--crs"
-		}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
-		protected String crs = GeometryUtils.DEFAULT_CRS_STR;
-
-		public void setCrs(
-				String crs ) {
-			this.crs = crs;
-		}
 	}
 
 	@Override

@@ -45,7 +45,9 @@ import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.util.QueryIndexHelper;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
@@ -58,9 +60,10 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
 public class QueryIndexHelperTest
 {
-	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	final ByteArrayId dataAdapterId = new ByteArrayId(
 			"123");
 

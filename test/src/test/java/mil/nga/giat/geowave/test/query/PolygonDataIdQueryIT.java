@@ -33,6 +33,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -54,7 +55,8 @@ public class PolygonDataIdQueryIT
 	private static FeatureDataAdapter dataAdapter;
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
 	private static final String DATA_ID = "dataId";
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,

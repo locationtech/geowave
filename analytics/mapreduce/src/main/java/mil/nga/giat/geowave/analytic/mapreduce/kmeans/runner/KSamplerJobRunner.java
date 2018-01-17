@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.sample.function.RandomSamplingRankFunction;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -130,7 +131,8 @@ public class KSamplerJobRunner extends
 
 		runTimeProperties.storeIfEmpty(
 				SampleParameters.Sample.INDEX_ID,
-				new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex().getId());
+				new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialTemporalOptions()).getId());
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					GlobalParameters.Global.BATCH_ID,

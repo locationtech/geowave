@@ -18,6 +18,7 @@ import java.util.UUID;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -74,7 +75,8 @@ public class CQLQueryFilterTest
 				exp1,
 				exp2,
 				false);
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);

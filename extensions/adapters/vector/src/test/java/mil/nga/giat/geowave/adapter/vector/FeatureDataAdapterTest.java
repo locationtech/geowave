@@ -49,6 +49,7 @@ import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurat
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
@@ -116,7 +117,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
@@ -137,7 +139,8 @@ public class FeatureDataAdapterTest
 				});
 		final AdapterPersistenceEncoding persistenceEncoding = dataAdapter.encode(
 				newFeature,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getIndexModel());
 
 		GeometryWrapper wrapper = null;
 		for (final PersistentValue<?> pv : persistenceEncoding.getCommonData().getValues()) {
@@ -167,7 +170,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -213,7 +217,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -276,7 +281,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -330,7 +336,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -413,7 +420,8 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -483,7 +491,8 @@ public class FeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -518,7 +527,8 @@ public class FeatureDataAdapterTest
 		config.updateType(sfType);
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				sfType);
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		Assert.assertTrue(dataAdapter.getSupportedSecondaryIndices().size() == 3);
 	}

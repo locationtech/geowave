@@ -349,13 +349,13 @@ public class FeatureDataAdapter extends
 						"Unable to create coordinate reference system transform",
 						e);
 			}
-			
-			LOGGER.warn("persistedCRS: "+persistedCRS.toString());
-			LOGGER.warn("indexCRS: "+indexCRS.toString());
-			LOGGER.warn("transform: "+transform.toString());
+
+			LOGGER.warn("persistedCRS: " + persistedCRS.toString());
+			LOGGER.warn("indexCRS: " + indexCRS.toString());
+			LOGGER.warn("transform: " + transform.toString());
 
 		}
-	
+
 		statsManager = new StatsManager(
 				this,
 				persistedFeatureType,

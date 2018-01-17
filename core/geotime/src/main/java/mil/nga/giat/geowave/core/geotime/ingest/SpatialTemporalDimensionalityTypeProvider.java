@@ -35,7 +35,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 import org.apache.commons.lang3.StringUtils;
@@ -48,14 +47,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.IStringConverter;
-import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 public class SpatialTemporalDimensionalityTypeProvider implements
-		DimensionalityTypeProviderSpi
+		DimensionalityTypeProviderSpi<SpatialTemporalOptions>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
-	private final static SpatialTemporalOptions options = new SpatialTemporalOptions();
 	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
 
 	// TODO should we use different default IDs for all the different
@@ -65,14 +62,14 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		new LatitudeField(
 				true),
 		new TimeField(
-				options.periodicity)
+				SpatialTemporalOptions.DEFAULT_PERIODICITY)
 	};
 	final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
 				true),
 		new TimeDefinition(
-				options.periodicity)
+				SpatialTemporalOptions.DEFAULT_PERIODICITY)
 	};
 
 	public SpatialTemporalDimensionalityTypeProvider() {}
@@ -95,12 +92,13 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public DimensionalityTypeOptions getOptions() {
-		return options;
+	public SpatialTemporalOptions createOptions() {
+		return new SpatialTemporalOptions();
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex() {
+	public PrimaryIndex createPrimaryIndex(
+			SpatialTemporalOptions options ) {
 		return internalCreatePrimaryIndex(options);
 	}
 
@@ -211,35 +209,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			GeometryWrapper.class,
 			Time.class
 		};
-	}
-
-	public static class SpatialTemporalOptions implements
-			DimensionalityTypeOptions
-	{
-		@Parameter(names = {
-			"--period"
-		}, required = false, description = "The periodicity of the temporal dimension.  Because time is continuous, it is binned at this interval.", converter = UnitConverter.class)
-		protected Unit periodicity = Unit.YEAR;
-
-		@Parameter(names = {
-			"--bias"
-		}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
-		protected Bias bias = Bias.BALANCED;
-		@Parameter(names = {
-			"--maxDuplicates"
-		}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
-		protected long maxDuplicates = -1;
-
-		@Parameter(names = {
-			"-c",
-			"--crs"
-		}, required = false, description = "The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.")
-		protected String crs = GeometryUtils.DEFAULT_CRS_STR;
-
-		public void setCrs(
-				String crs ) {
-			this.crs = crs;
-		}
 	}
 
 	public static enum Bias {

@@ -46,6 +46,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.transaction.MemoryTransactions
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
@@ -178,7 +179,7 @@ public class GeoWaveGTDataStore extends
 			// it is questionable whether createSchema *should* write the
 			// adapter to the store, it is missing the proper index information
 			// at this stage
-			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 			adapterStore.addAdapter(adapter);
 		}
 	}
@@ -378,7 +379,7 @@ public class GeoWaveGTDataStore extends
 		}
 
 		if (currentSelectionsList.isEmpty())
-			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 
 		return currentSelectionsList.toArray(new PrimaryIndex[currentSelectionsList.size()]);
 	}

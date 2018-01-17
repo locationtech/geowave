@@ -19,6 +19,7 @@ import java.util.Date;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time.TimeRange;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -120,7 +121,8 @@ public class BasicQueryTest
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T14:00:00GMT-00:00"))
 		};
-		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialTemporalOptions());
 		int pos = 0;
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : query.createFilters(index)) {

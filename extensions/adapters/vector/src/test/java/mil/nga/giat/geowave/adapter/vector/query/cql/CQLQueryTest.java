@@ -24,15 +24,18 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class CQLQueryTest
 {
-	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	SimpleFeatureType type;
 	FeatureDataAdapter adapter;
 

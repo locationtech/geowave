@@ -221,8 +221,8 @@ public class BasicMapReduceIT
 				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
-		
-		for(WritableDataAdapter<SimpleFeature> adapter: adapters){
+
+		for (WritableDataAdapter<SimpleFeature> adapter : adapters) {
 			adapter.init(TestUtils.DEFAULT_SPATIAL_INDEX);
 		}
 
