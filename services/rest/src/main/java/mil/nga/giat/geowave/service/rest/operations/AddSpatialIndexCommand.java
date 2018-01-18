@@ -65,7 +65,7 @@ public class AddSpatialIndexCommand extends
 
 		pluginOptions.selectPlugin("spatial");
 		pluginOptions.setBasicIndexOptions(basicIndexOptions);
-		// pluginOptions.setDimensionalityTypeOptions(opts);
+		pluginOptions.setDimensionalityTypeOptions(opts);
 		return true;
 	}
 

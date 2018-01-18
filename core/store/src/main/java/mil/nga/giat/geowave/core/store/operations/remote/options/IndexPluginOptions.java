@@ -88,6 +88,11 @@ public class IndexPluginOptions extends
 		return this.indexOptions;
 	}
 
+	public void setDimensionalityTypeOptions(
+			DimensionalityTypeOptions indexOptions ) {
+		this.indexOptions = indexOptions;
+	}
+
 	@Override
 	public String getType() {
 		return indexType;

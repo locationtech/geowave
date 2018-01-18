@@ -64,7 +64,7 @@ public class AddSpatialTemporalIndexCommand extends
 
 		pluginOptions.selectPlugin("spatial_temporal");
 		pluginOptions.setBasicIndexOptions(basicIndexOptions);
-		// pluginOptions.setDimensionalityTypeOptions(opts);
+		pluginOptions.setDimensionalityTypeOptions(opts);
 		// Successfully prepared.
 		return true;
 	}
