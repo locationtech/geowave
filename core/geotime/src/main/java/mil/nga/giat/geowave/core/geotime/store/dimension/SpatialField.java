@@ -29,7 +29,7 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 abstract public class SpatialField implements
 		NumericDimensionField<GeometryWrapper>
 {
-	private NumericDimensionDefinition baseDefinition;
+	protected NumericDimensionDefinition baseDefinition;
 	private final GeometryAdapter geometryAdapter;
 	private ByteArrayId fieldId;
 

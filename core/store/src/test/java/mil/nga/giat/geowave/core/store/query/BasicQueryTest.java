@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
@@ -50,8 +52,6 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 
-import org.junit.Test;
-
 public class BasicQueryTest
 {
 
@@ -61,7 +61,7 @@ public class BasicQueryTest
 	@Test
 	public void testIsSupported() {
 		final ConstraintSet cs1 = new ConstraintSet();
-		PrimaryIndex index = new CustomIdIndex(
+		final PrimaryIndex index = new CustomIdIndex(
 				new ExampleNumericIndexStrategy(),
 				new BasicIndexModel(
 						new NumericDimensionField[] {
@@ -107,8 +107,16 @@ public class BasicQueryTest
 
 	@Test
 	public void testIntersectCasesWithPersistence() {
-
-		final List<MultiDimensionalNumericData> expectedResults = new ArrayList<MultiDimensionalNumericData>();
+		final PrimaryIndex index = new CustomIdIndex(
+				new ExampleNumericIndexStrategy(),
+				new BasicIndexModel(
+						new NumericDimensionField[] {
+							new ExampleDimensionOne(),
+							new ExampleDimensionTwo()
+						}),
+				new ByteArrayId(
+						"22"));
+		final List<MultiDimensionalNumericData> expectedResults = new ArrayList<>();
 		expectedResults.add(new BasicNumericDataset(
 				new NumericData[] {
 					new ConstrainedIndexValue(
@@ -159,14 +167,14 @@ public class BasicQueryTest
 
 		assertEquals(
 				expectedResults,
-				query.getIndexConstraints(new ExampleNumericIndexStrategy()));
+				query.getIndexConstraints(index));
 
 	}
 
 	@Test
 	public void testDisjointCasesWithPersistence() {
 
-		final List<MultiDimensionalNumericData> expectedResults = new ArrayList<MultiDimensionalNumericData>();
+		final List<MultiDimensionalNumericData> expectedResults = new ArrayList<>();
 		expectedResults.add(new BasicNumericDataset(
 				new NumericData[] {
 					new ConstrainedIndexValue(
@@ -242,22 +250,26 @@ public class BasicQueryTest
 				constraints).toBinary();
 		final BasicQuery query = new BasicQuery();
 		query.fromBinary(image);
-
+		final PrimaryIndex index = new CustomIdIndex(
+				new ExampleNumericIndexStrategy(),
+				new BasicIndexModel(
+						new NumericDimensionField[] {
+							new ExampleDimensionOne(),
+							new ExampleDimensionTwo()
+						}),
+				new ByteArrayId(
+						"22"));
 		assertEquals(
 				expectedResults,
-				query.getIndexConstraints(new ExampleNumericIndexStrategy()));
+				query.getIndexConstraints(index));
 
-		final List<QueryFilter> filters = query.createFilters(new BasicIndexModel(
-				new NumericDimensionField[] {
-					new ExampleDimensionOne(),
-					new ExampleDimensionTwo()
-				}));
+		final List<QueryFilter> filters = query.createFilters(index);
 
 		assertEquals(
 				1,
 				filters.size());
 
-		final Map<ByteArrayId, ConstrainedIndexValue> fieldIdToValueMap = new HashMap<ByteArrayId, ConstrainedIndexValue>();
+		final Map<ByteArrayId, ConstrainedIndexValue> fieldIdToValueMap = new HashMap<>();
 		fieldIdToValueMap.put(
 				new ByteArrayId(
 						"one"),
@@ -448,8 +460,8 @@ public class BasicQueryTest
 
 		@Override
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-				MultiDimensionalNumericData dataRange,
-				IndexMetaData... hints ) {
+				final MultiDimensionalNumericData dataRange,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 	}

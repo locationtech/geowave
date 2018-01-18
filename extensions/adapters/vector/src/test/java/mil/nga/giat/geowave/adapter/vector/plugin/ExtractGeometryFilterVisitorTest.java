@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -29,13 +29,14 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 
 public class ExtractGeometryFilterVisitorTest
 {
 	final String geomAttributeName = "geom";
 	final ExtractGeometryFilterVisitor visitorWithDescriptor = new ExtractGeometryFilterVisitor(
-			GeoWaveGTDataStore.DEFAULT_CRS,
+			GeometryUtils.DEFAULT_CRS,
 			geomAttributeName);
 
 	@Test
@@ -44,10 +45,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"DWITHIN(%s, POINT(-122.7668 0.4979), 233.7, meters)",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -58,7 +59,7 @@ public class ExtractGeometryFilterVisitorTest
 						null);
 		final Geometry geometry = result.getGeometry();
 		assertNotNull(geometry);
-		for (Coordinate coord : geometry.getCoordinates()) {
+		for (final Coordinate coord : geometry.getCoordinates()) {
 
 			assertEquals(
 					233.7,
@@ -67,7 +68,7 @@ public class ExtractGeometryFilterVisitorTest
 							new Coordinate(
 									-122.7668,
 									0.4979),
-							GeoWaveGTDataStore.DEFAULT_CRS),
+							GeometryUtils.DEFAULT_CRS),
 					2);
 		}
 	}
@@ -78,10 +79,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"DWITHIN(%s, POINT(179.9998 0.79), 13.7, kilometers)",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -92,7 +93,7 @@ public class ExtractGeometryFilterVisitorTest
 						null);
 		final Geometry geometry = result.getGeometry();
 		assertNotNull(geometry);
-		for (Coordinate coord : geometry.getCoordinates()) {
+		for (final Coordinate coord : geometry.getCoordinates()) {
 
 			assertEquals(
 					13707.1,
@@ -101,7 +102,7 @@ public class ExtractGeometryFilterVisitorTest
 							new Coordinate(
 									179.9999,
 									0.79),
-							GeoWaveGTDataStore.DEFAULT_CRS),
+							GeometryUtils.DEFAULT_CRS),
 					2000);
 		}
 	}
@@ -112,10 +113,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"BBOX(%s, 0, 0, 10, 25)",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -142,10 +143,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"INTERSECTS(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -172,10 +173,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"OVERLAPS(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -202,10 +203,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"EQUALS(geom, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -232,10 +233,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"CROSSES(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -262,10 +263,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"TOUCHES(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -292,10 +293,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"WITHIN(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -322,10 +323,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"CONTAINS(geom, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -352,10 +353,10 @@ public class ExtractGeometryFilterVisitorTest
 			TransformException,
 			ParseException {
 
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"DISJOINT(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -380,11 +381,11 @@ public class ExtractGeometryFilterVisitorTest
 		// we are testing to see if we are able to combine simple geometric
 		// relations with similar predicates
 		// into a single query geometry/predicate
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"INTERSECTS(%s, POLYGON((0 0, 0 50, 20 50, 20 0, 0 0))) AND BBOX(%s, 0, 0, 10, 25)",
 				geomAttributeName,
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -418,13 +419,13 @@ public class ExtractGeometryFilterVisitorTest
 		// predicates into one but
 		// we can combine geometries for the purpose of deriving linear
 		// constraints
-		Filter filter = CQL
+		final Filter filter = CQL
 				.toFilter(String
 						.format(
 								"INTERSECTS(%s, POLYGON((0 0, 0 50, 20 50, 20 0, 0 0))) AND CROSSES(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 								geomAttributeName,
 								geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -458,13 +459,13 @@ public class ExtractGeometryFilterVisitorTest
 		// predicates into one but
 		// we can combine geometries for the purpose of deriving linear
 		// constraints
-		Filter filter = CQL
+		final Filter filter = CQL
 				.toFilter(String
 						.format(
 								"OVERLAPS(%s, POLYGON((0 0, 0 50, 20 50, 20 0, 0 0))) OR TOUCHES(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0)))",
 								geomAttributeName,
 								geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -496,10 +497,10 @@ public class ExtractGeometryFilterVisitorTest
 		// to extract query geometry. Note, that returned predicate is null
 		// since we can't represent
 		// CQL expression fully into single query geometry and predicate
-		Filter filter = CQL.toFilter(String.format(
+		final Filter filter = CQL.toFilter(String.format(
 				"CROSSES(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0))) AND location == 'abc'",
 				geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 
@@ -531,12 +532,12 @@ public class ExtractGeometryFilterVisitorTest
 		// The ExtractGeometryFilterVisitor class should only extracts
 		// geometric constrains associated with the specified attribute name and
 		// ignore others.
-		Filter filter = CQL
+		final Filter filter = CQL
 				.toFilter(String
 						.format(
 								"INTERSECTS(%s, POLYGON((0 0, 0 25, 10 25, 10 0, 0 0))) AND INTERSECTS(geomOtherAttr, POLYGON((0 0, 0 5, 5 5, 5 0, 0 0)))",
 								geomAttributeName));
-		Query query = new Query(
+		final Query query = new Query(
 				"type",
 				filter);
 

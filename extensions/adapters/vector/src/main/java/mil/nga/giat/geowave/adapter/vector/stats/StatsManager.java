@@ -141,7 +141,6 @@ public class StatsManager
 				FeatureBoundingBoxStatistics statObj = new FeatureBoundingBoxStatistics(
 						adapterID,
 						fieldName,
-						persistedType,
 						reprojectedType,
 						transform);
 				addStats(

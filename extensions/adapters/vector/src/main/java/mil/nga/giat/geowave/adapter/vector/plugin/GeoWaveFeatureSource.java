@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransa
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
@@ -119,7 +120,7 @@ public class GeoWaveFeatureSource extends
 				maxx,
 				miny,
 				maxy,
-				GeoWaveGTDataStore.DEFAULT_CRS);
+				GeometryUtils.DEFAULT_CRS);
 	}
 
 	@SuppressWarnings("rawtypes")

@@ -76,12 +76,21 @@ public class IndexPluginOptions extends
 				throw new ParameterException(
 						"Unknown index type specified");
 			}
-			indexOptions = indexPlugin.getOptions();
+			indexOptions = indexPlugin.createOptions();
 		}
 		else {
 			indexPlugin = null;
 			indexOptions = null;
 		}
+	}
+
+	public DimensionalityTypeOptions getDimensionalityOptions() {
+		return this.indexOptions;
+	}
+
+	public void setDimensionalityTypeOptions(
+			DimensionalityTypeOptions indexOptions ) {
+		this.indexOptions = indexOptions;
 	}
 
 	@Override
@@ -91,11 +100,6 @@ public class IndexPluginOptions extends
 
 	public int getNumPartitions() {
 		return basicIndexOptions.numPartitions;
-	}
-
-	public void setDimensionalityTypeOptions(
-			DimensionalityTypeOptions indexOptions ) {
-		this.indexOptions = indexOptions;
 	}
 
 	public String getNameOverride() {
@@ -111,7 +115,7 @@ public class IndexPluginOptions extends
 	}
 
 	public PrimaryIndex createPrimaryIndex() {
-		final PrimaryIndex index = indexPlugin.createPrimaryIndex();
+		final PrimaryIndex index = indexPlugin.createPrimaryIndex(indexOptions);
 		return wrapIndexWithOptions(
 				index,
 				this);

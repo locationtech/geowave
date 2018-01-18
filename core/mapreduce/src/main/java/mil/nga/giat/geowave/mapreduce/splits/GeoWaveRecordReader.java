@@ -118,7 +118,7 @@ public abstract class GeoWaveRecordReader<T> extends
 			final List<RangeLocationPair> ranges = split.getRanges(i);
 			List<QueryFilter> queryFilters = null;
 			if (query != null) {
-				queryFilters = query.createFilters(i.getIndexModel());
+				queryFilters = query.createFilters(i);
 			}
 			for (final RangeLocationPair r : ranges) {
 				final QueryOptions rangeQueryOptions = new QueryOptions(

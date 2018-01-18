@@ -46,6 +46,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.transaction.MemoryTransactions
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
@@ -71,23 +72,6 @@ public class GeoWaveGTDataStore extends
 {
 	/** Package logger */
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
-	public static final CoordinateReferenceSystem DEFAULT_CRS;
-
-	static {
-		try {
-			DEFAULT_CRS = CRS.decode(
-					"EPSG:4326",
-					true);
-		}
-		catch (final FactoryException e) {
-			LOGGER.error(
-					"Unable to decode EPSG:4326 CRS",
-					e);
-			throw new RuntimeException(
-					"Unable to initialize EPSG:4326 object",
-					e);
-		}
-	}
 
 	private FeatureListenerManager listenerManager = null;
 	protected AdapterStore adapterStore;
@@ -191,7 +175,13 @@ public class GeoWaveGTDataStore extends
 			adapter.setNamespace(featureNameSpaceURI.toString());
 		}
 
-		adapterStore.addAdapter(adapter);
+		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+			// it is questionable whether createSchema *should* write the
+			// adapter to the store, it is missing the proper index information
+			// at this stage
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
+			adapterStore.addAdapter(adapter);
+		}
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(
@@ -389,7 +379,7 @@ public class GeoWaveGTDataStore extends
 		}
 
 		if (currentSelectionsList.isEmpty())
-			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 
 		return currentSelectionsList.toArray(new PrimaryIndex[currentSelectionsList.size()]);
 	}

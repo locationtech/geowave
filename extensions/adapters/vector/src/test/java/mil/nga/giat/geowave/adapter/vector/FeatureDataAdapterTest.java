@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -43,18 +43,20 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 public class FeatureDataAdapterTest
@@ -115,9 +117,13 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
 				"EPSG:4326"));
+
 		@SuppressWarnings("unchecked")
 		final SimpleFeature newFeature = FeatureDataUtils.buildFeature(
 				schema,
@@ -133,7 +139,8 @@ public class FeatureDataAdapterTest
 				});
 		final AdapterPersistenceEncoding persistenceEncoding = dataAdapter.encode(
 				newFeature,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getIndexModel());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getIndexModel());
 
 		GeometryWrapper wrapper = null;
 		for (final PersistentValue<?> pv : persistenceEncoding.getCommonData().getValues()) {
@@ -163,6 +170,9 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -207,6 +217,9 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -268,6 +281,9 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -320,6 +336,9 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -401,6 +420,9 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -448,7 +470,7 @@ public class FeatureDataAdapterTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeoWaveGTDataStore.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
@@ -469,7 +491,9 @@ public class FeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final FeatureDataAdapter dataAdapterCopy = new FeatureDataAdapter();
@@ -477,7 +501,7 @@ public class FeatureDataAdapterTest
 
 		assertEquals(
 				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
-				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
+				GeometryUtils.DEFAULT_CRS.getCoordinateSystem());
 	}
 
 	@Test
@@ -503,6 +527,9 @@ public class FeatureDataAdapterTest
 		config.updateType(sfType);
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				sfType);
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
+		dataAdapter.init(spatialIndex);
 		Assert.assertTrue(dataAdapter.getSupportedSecondaryIndices().size() == 3);
 	}
 
