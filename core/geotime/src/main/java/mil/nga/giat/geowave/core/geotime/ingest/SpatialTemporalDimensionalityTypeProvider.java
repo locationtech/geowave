@@ -174,9 +174,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						SFCType.HILBERT,
 						options.maxDuplicates),
 				indexModel,
-				/*
-				 * new CustomCrsIndexModel( fields, crsCode),
-				 */
 				new ByteArrayId(
 						combinedId));
 	}

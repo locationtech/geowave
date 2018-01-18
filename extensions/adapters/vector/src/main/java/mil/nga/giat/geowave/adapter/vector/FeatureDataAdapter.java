@@ -328,7 +328,6 @@ public class FeatureDataAdapter extends
 
 		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
 		if (indexCRS.equals(persistedCRS)) {
-			// reprojectedFeatureType = persistedFeatureType;
 			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
 					persistedFeatureType,
 					persistedCRS);
@@ -349,11 +348,6 @@ public class FeatureDataAdapter extends
 						"Unable to create coordinate reference system transform",
 						e);
 			}
-
-			LOGGER.warn("persistedCRS: " + persistedCRS.toString());
-			LOGGER.warn("indexCRS: " + indexCRS.toString());
-			LOGGER.warn("transform: " + transform.toString());
-
 		}
 
 		statsManager = new StatsManager(
@@ -890,15 +884,6 @@ public class FeatureDataAdapter extends
 				entry,
 				indexModel);
 
-		// TODO from the index model we should be able to get the CRS, and at
-		// this point we need to transform the geometry within entry if it does
-		// not match CRSs
-
-		/*
-		 * return super.encode(FeatureDataUtils.defaultCRSTransform(entry,
-		 * persistedFeatureType, reprojectedFeatureType, transform),
-		 * indexModel);
-		 */
 	}
 
 	@Override

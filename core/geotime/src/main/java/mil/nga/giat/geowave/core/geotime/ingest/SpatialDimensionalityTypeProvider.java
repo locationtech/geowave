@@ -176,12 +176,6 @@ public class SpatialDimensionalityTypeProvider implements
 						},
 						SFCType.HILBERT),
 				indexModel,
-				/*
-				 * new CustomCrsIndexModel( // TODO append time to fields if
-				 * storeTime options.storeTime ? (isDefaultCRS ?
-				 * SPATIAL_TEMPORAL_FIELDS : fields_temporal) : fields,
-				 * crsCode),
-				 */
 				new ByteArrayId(
 						// TODO append CRS code to ID if its overridden
 						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
