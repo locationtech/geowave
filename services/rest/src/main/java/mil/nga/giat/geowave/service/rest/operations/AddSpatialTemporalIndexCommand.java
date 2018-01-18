@@ -28,7 +28,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
@@ -64,7 +64,7 @@ public class AddSpatialTemporalIndexCommand extends
 
 		pluginOptions.selectPlugin("spatial_temporal");
 		pluginOptions.setBasicIndexOptions(basicIndexOptions);
-		pluginOptions.setDimensionalityTypeOptions(opts);
+		// pluginOptions.setDimensionalityTypeOptions(opts);
 		// Successfully prepared.
 		return true;
 	}
