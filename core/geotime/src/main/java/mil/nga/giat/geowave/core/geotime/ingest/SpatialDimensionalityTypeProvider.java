@@ -133,7 +133,6 @@ public class SpatialDimensionalityTypeProvider implements
 					fields_temporal[d] = new CustomCRSSpatialField(
 							(CustomCRSSpatialDimension) dimensions[d]);
 				}
-				// TODO shouldn't this be a time field
 				fields_temporal[dimensions.length] = new TimeField(
 						Unit.YEAR);
 			}

@@ -107,7 +107,6 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 		NumericDimensionDefinition[] dimensions;
 		NumericDimensionField<?>[] fields = null;
-		;
 		CoordinateReferenceSystem crs = null;
 		boolean isDefaultCRS;
 		String crsCode = null;

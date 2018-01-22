@@ -612,7 +612,7 @@ public class CentroidManagerGeoWave<T> implements
 				AnalyticItemWrapper<T> item );
 	}
 
-	private static SimpleFeatureType createFeatureAdapter(
+	private static SimpleFeatureType createFeatureType(
 			final SimpleFeatureType featureType,
 			final Class<? extends Geometry> shapeClass ) {
 		try {
@@ -670,7 +670,7 @@ public class CentroidManagerGeoWave<T> implements
 		public SimpleFeatureConverter(
 				final FeatureDataAdapter adapter,
 				final Class<? extends Geometry> shapeClass ) {
-			type = createFeatureAdapter(
+			type = createFeatureType(
 					adapter.getFeatureType(),
 					shapeClass);
 			int p = 0;

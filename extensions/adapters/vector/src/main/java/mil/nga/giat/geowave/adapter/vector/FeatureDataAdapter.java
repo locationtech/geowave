@@ -388,7 +388,6 @@ public class FeatureDataAdapter extends
 	private void setFeatureType(
 			final SimpleFeatureType featureType ) {
 		persistedFeatureType = featureType;
-		// reprojectedFeatureType = persistedFeatureType;
 		resetTimeDescriptors();
 	}
 
