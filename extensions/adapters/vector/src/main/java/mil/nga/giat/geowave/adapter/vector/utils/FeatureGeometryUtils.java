@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -41,21 +41,21 @@ import com.vividsolutions.jts.geom.MultiPolygon;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
-public class GeometryUtils
+public class FeatureGeometryUtils
 {
 
-	private static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(FeatureGeometryUtils.class);
 
 	/**
 	 * Build a buffer around a geometry
-	 * 
+	 *
 	 * @param crs
 	 * @param geometry
 	 * @param distanceUnits
@@ -103,7 +103,7 @@ public class GeometryUtils
 	 * crossing). Adjust for crossings with a multi-polygon instance where each
 	 * contained polygon represents a portion of the provided geometry longitude
 	 * value. Clip hemisphere crossings (fix TBD).
-	 * 
+	 *
 	 * @param crs
 	 * @param geometry
 	 * @return
@@ -123,11 +123,11 @@ public class GeometryUtils
 
 	/**
 	 * Adjust geometry so that coordinates fit into long/lat bounds.
-	 * 
+	 *
 	 * Split date-line crossing polygons.
-	 * 
+	 *
 	 * For now, clip hemisphere crossing portions of the polygon.
-	 * 
+	 *
 	 * @param geometry
 	 * @return list valid polygons
 	 */
@@ -135,7 +135,7 @@ public class GeometryUtils
 			final CoordinateReferenceSystem crs,
 			final Geometry geometry ) {
 
-		final List<Polygon> replacements = new ArrayList<Polygon>();
+		final List<Polygon> replacements = new ArrayList<>();
 		if (geometry instanceof MultiPolygon) {
 			final MultiPolygon multi = (MultiPolygon) geometry;
 			for (int i = 0; i < multi.getNumGeometries(); i++) {
@@ -171,12 +171,12 @@ public class GeometryUtils
 	 * Produce a set of polygons for each region of the map corrected for date
 	 * line and hemisphere crossings. Due to the complexity of going around the
 	 * hemisphere, clip the range.
-	 * 
+	 *
 	 * Consider a polygon that cross both the hemisphere in the north and the
 	 * date line in the west (-182 92, -182 88, -178 88, -178 92, -182 92). The
 	 * result is two polygons: (-180 90, -180 88, -178 88, -178 90, -180 90)
 	 * (180 90, 180 88, 178 88, 178 90, 180 90)
-	 * 
+	 *
 	 * @param modifier
 	 * @param geometry
 	 *            - a geometry that may cross date line and/or hemispheres.
@@ -186,10 +186,10 @@ public class GeometryUtils
 			final Coordinate modifier,
 			final Geometry geometry ) {
 		final Coordinate[] geoCoords = geometry.getCoordinates();
-		final List<Polygon> polygons = new LinkedList<Polygon>();
-		final Geometry world = GeometryUtils.world(
+		final List<Polygon> polygons = new LinkedList<>();
+		final Geometry world = FeatureGeometryUtils.world(
 				geometry.getFactory(),
-				GeoWaveGTDataStore.DEFAULT_CRS);
+				GeometryUtils.DEFAULT_CRS);
 
 		// First do the polygon unchanged world
 		final Geometry worldIntersections = world.intersection(geometry);
@@ -231,7 +231,7 @@ public class GeometryUtils
 	 * reference systems's coordinate system. 'x' coordinate is wrapped around
 	 * date line. 'y' and 'z' coordinate are clipped. At some point, this
 	 * function will be adjusted to project 'y' appropriately.
-	 * 
+	 *
 	 * @param crs
 	 * @param coord
 	 * @return
@@ -255,7 +255,7 @@ public class GeometryUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param coord1
 	 * @param coord2
 	 *            subtracted from coord1
@@ -272,10 +272,10 @@ public class GeometryUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * update modifier for each axis of the coordinate where the modifier's axis
 	 * is less extreme than the provides coordinate
-	 * 
+	 *
 	 * @param modifier
 	 * @param cood
 	 */
@@ -294,7 +294,7 @@ public class GeometryUtils
 	/**
 	 * Build a modifier that, when added to the coordinates of a polygon, moves
 	 * invalid sections of the polygon to a valid portion of the map.
-	 * 
+	 *
 	 * @param crs
 	 * @param coords
 	 * @return
@@ -320,7 +320,7 @@ public class GeometryUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param val
 	 *            the value
 	 * @param crs
@@ -335,9 +335,12 @@ public class GeometryUtils
 		final CoordinateSystem coordinateSystem = crs.getCoordinateSystem();
 		if (coordinateSystem.getDimension() > axis) {
 			final CoordinateSystemAxis coordinateAxis = coordinateSystem.getAxis(axis);
-			if (val < coordinateAxis.getMinimumValue())
+			if (val < coordinateAxis.getMinimumValue()) {
 				return coordinateAxis.getMinimumValue();
-			else if (val > coordinateAxis.getMaximumValue()) return coordinateAxis.getMaximumValue();
+			}
+			else if (val > coordinateAxis.getMaximumValue()) {
+				return coordinateAxis.getMaximumValue();
+			}
 		}
 		return val;
 	}
@@ -346,7 +349,7 @@ public class GeometryUtils
 	 * This is perhaps a brain dead approach to do this, but it does handle wrap
 	 * around cases. Also supports cases where the wrap around occurs many
 	 * times.
-	 * 
+	 *
 	 * @param val
 	 *            the value
 	 * @param crs
@@ -375,7 +378,7 @@ public class GeometryUtils
 
 	/**
 	 * Convert meters to decimal degrees based on widest point
-	 * 
+	 *
 	 * @throws TransformException
 	 */
 	private static double distanceToDegrees(
@@ -463,7 +466,7 @@ public class GeometryUtils
 	/**
 	 * Return a multi-polygon representing the bounded map regions split by the
 	 * axis
-	 * 
+	 *
 	 * @param factory
 	 * @param crs
 	 * @return
@@ -479,9 +482,9 @@ public class GeometryUtils
 			final ByteArrayId adapterId,
 			final String geomField ) {
 		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
-		ByteArrayId geoStatId = FeatureBoundingBoxStatistics.composeId(geomField);
+		final ByteArrayId geoStatId = FeatureBoundingBoxStatistics.composeId(geomField);
 
-		DataStatistics<?> geoStat = statisticsStore.getDataStatistics(
+		final DataStatistics<?> geoStat = statisticsStore.getDataStatistics(
 				adapterId,
 				geoStatId,
 				null);

@@ -398,6 +398,7 @@ public class SecondaryIndexIT
 		dataAdapter = new FeatureDataAdapter(
 				schema);
 		index = TestUtils.DEFAULT_SPATIAL_INDEX;
+		dataAdapter.init(index);
 		try (@SuppressWarnings("unchecked")
 		final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
 				dataAdapter,

@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -132,7 +133,7 @@ public class AccumuloOptionsTest
 	public void testIndexOptions()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		accumuloOptions.setCreateTable(false);
@@ -238,7 +239,7 @@ public class AccumuloOptionsTest
 	public void testLocalityGroups()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
@@ -330,7 +331,7 @@ public class AccumuloOptionsTest
 	public void testAdapterOptions()
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 		accumuloOptions.setPersistAdapter(false);
 
@@ -451,7 +452,7 @@ public class AccumuloOptionsTest
 	@Test
 	public void testDeleteAll()
 			throws IOException {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final WritableDataAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
 		final WritableDataAdapter<TestGeometry> adapter1 = new AnotherAdapter();
 
@@ -845,6 +846,13 @@ public class AccumuloOptionsTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 

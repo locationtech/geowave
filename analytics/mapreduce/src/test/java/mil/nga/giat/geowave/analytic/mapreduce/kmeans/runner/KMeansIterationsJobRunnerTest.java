@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
 import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -75,7 +76,8 @@ public class KMeansIterationsJobRunnerTest
 				"centroid");
 		propertyMgt.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 		propertyMgt.store(
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
 				new Double(
@@ -282,7 +284,8 @@ public class KMeansIterationsJobRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+							new SpatialOptions()).getId();
 				}
 
 				@Override

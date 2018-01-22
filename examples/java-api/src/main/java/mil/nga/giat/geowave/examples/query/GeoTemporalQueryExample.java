@@ -41,6 +41,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
@@ -70,7 +71,8 @@ public class GeoTemporalQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static AccumuloDataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialTemporalOptions());
 	private static final FeatureDataAdapter adapter = new FeatureDataAdapter(
 			getPointSimpleFeatureType());
 
@@ -249,8 +251,8 @@ public class GeoTemporalQueryExample
 		final SpatialTemporalQuery query = new SpatialTemporalQuery(
 				DateUtilities.parseISO("2005-05-17T19:32:56Z"),
 				DateUtilities.parseISO("2005-05-17T22:32:56Z"),
-				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
+				mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
+						GeometryUtils.DEFAULT_CRS,
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								-77.03521,
 								38.8895)),
@@ -282,8 +284,8 @@ public class GeoTemporalQueryExample
 
 		final SpatialTemporalQuery query2 = new SpatialTemporalQuery(
 				tempotalIndexConstraints,
-				mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
+				mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
+						GeometryUtils.DEFAULT_CRS,
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 								-77.03521,
 								38.8895)),

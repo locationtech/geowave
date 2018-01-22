@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -74,8 +74,8 @@ public class AccumuloConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(index) : null,
+				query != null ? query.createFilters(index) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
@@ -144,7 +144,8 @@ public class AccumuloConstraintsQuery extends
 						QueryFilterIterator.QUERY_ITERATOR_NAME,
 						AggregationIterator.class);
 			}
-			if (!(base.aggregation.getRight() instanceof CommonIndexAggregation) && base.aggregation.getLeft() != null) {
+			if (!(base.aggregation.getRight() instanceof CommonIndexAggregation)
+					&& (base.aggregation.getLeft() != null)) {
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
 						ByteArrayUtils.byteArrayToString(AccumuloUtils.toBinary(base.aggregation.getLeft())));

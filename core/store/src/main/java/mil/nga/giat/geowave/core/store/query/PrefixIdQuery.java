@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,20 +15,19 @@ import java.util.Collections;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.filter.PrefixIdQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class PrefixIdQuery implements
 		Query
 {
-	private ByteArrayId rowPrefix;
+	private final ByteArrayId rowPrefix;
 
 	public PrefixIdQuery(
-			ByteArrayId rowPrefix ) {
+			final ByteArrayId rowPrefix ) {
 		this.rowPrefix = rowPrefix;
 	}
 
@@ -38,8 +37,8 @@ public class PrefixIdQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			CommonIndexModel indexModel ) {
-		List<QueryFilter> filters = new ArrayList<QueryFilter>();
+			final PrimaryIndex index ) {
+		final List<QueryFilter> filters = new ArrayList<>();
 		filters.add(new PrefixIdQueryFilter(
 				rowPrefix));
 		return filters;
@@ -47,13 +46,13 @@ public class PrefixIdQuery implements
 
 	@Override
 	public boolean isSupported(
-			Index index ) {
+			final Index index ) {
 		return true;
 	}
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
+			final PrimaryIndex index ) {
 		return Collections.emptyList();
 	}
 
