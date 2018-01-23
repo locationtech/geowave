@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.core.store.spi</div>
-<h2 title="Interface DimensionalityTypeProviderSpi" class="title">Interface DimensionalityTypeProviderSpi</h2>
+<h2 title="Interface DimensionalityTypeProviderSpi" class="title">Interface DimensionalityTypeProviderSpi&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a>&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">DimensionalityTypeProviderSpi</span></pre>
+<pre>public interface <span class="typeNameLabel">DimensionalityTypeProviderSpi&lt;T extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a>&gt;</span></pre>
 <div class="block">This interface can be injected using SPI to determine which supported index
  for an ingest type will be used.</div>
 </li>
@@ -127,31 +127,31 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex--">createPrimaryIndex</a></span>()</code>
-<div class="block">This will return the primary index that match the options</div>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="type parameter in DimensionalityTypeProviderSpi">T</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createOptions--">createOptions</a></span>()</code>
+<div class="block">These are options specific to the type of index being exposed by this SPI
+ plugin.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex-T-">createPrimaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="type parameter in DimensionalityTypeProviderSpi">T</a>&nbsp;options)</code>
+<div class="block">This will return the primary index that match the options</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></span>()</code>
 <div class="block">if the registered dimensionality types are listed by a user, this can
  provide a user-friendly description for each</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeName--">getDimensionalityTypeName</a></span>()</code>
 <div class="block">This will represent the name for the dimensionality type that is
  registered with the ingest framework and presented as a dimensionality
  type option via the commandline.</div>
-</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getOptions--">getOptions</a></span>()</code>
-<div class="block">These are options specific to the type of index being exposed by this SPI
- plugin.</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
@@ -247,13 +247,15 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="createPrimaryIndex--">
+<a name="createPrimaryIndex-mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions-">
+<!--   -->
+</a><a name="createPrimaryIndex-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createPrimaryIndex</h4>
-<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex()</pre>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="type parameter in DimensionalityTypeProviderSpi">T</a>&nbsp;options)</pre>
 <div class="block">This will return the primary index that match the options</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
@@ -261,13 +263,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="getOptions--">
+<a name="createOptions--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getOptions</h4>
-<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a>&nbsp;getOptions()</pre>
+<h4>createOptions</h4>
+<pre><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="type parameter in DimensionalityTypeProviderSpi">T</a>&nbsp;createOptions()</pre>
 <div class="block">These are options specific to the type of index being exposed by this SPI
  plugin.</div>
 <dl>

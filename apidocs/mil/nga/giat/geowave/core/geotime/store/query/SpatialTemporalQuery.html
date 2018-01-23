@@ -198,10 +198,17 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-java.lang.String-">SpatialTemporalQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
+                    com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                     com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
@@ -209,6 +216,12 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <div class="block">Applies the set of temporal constraints to the boundaries of the provided
  polygon.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html#SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-java.lang.String-">SpatialTemporalQuery</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
+                    com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -241,14 +254,14 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.geotime.store.query.<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-">createQueryFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#createQueryFilter-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-mil.nga.giat.geowave.core.store.dimension.NumericDimensionField:A-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createQueryFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#getIndexConstraints-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getIndexConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#getQueryGeometry--">getQueryGeometry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html#toBinary--">toBinary</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.query.BasicQuery">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.query.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html" title="class in mil.nga.giat.geowave.core.store.query">BasicQuery</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#createFilters-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">createFilters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getIndexConstraints-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">getIndexConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexConstraints-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexQueryConstraints-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryQueryFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#secondaryIndexSupports-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">secondaryIndexSupports</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createFilters</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexConstraints-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryIndexQueryConstraints-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryIndexQueryConstraints</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#getSecondaryQueryFilter-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">getSecondaryQueryFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isExact--">isExact</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#secondaryIndexSupports-mil.nga.giat.geowave.core.store.index.SecondaryIndex-">secondaryIndexSupports</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/query/BasicQuery.html#setExact-boolean-">setExact</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -291,6 +304,18 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
                             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</pre>
 </li>
 </ul>
+<a name="SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SpatialTemporalQuery</h4>
+<pre>public&nbsp;SpatialTemporalQuery(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;startTime,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Date.html?is-external=true" title="class or interface in java.util">Date</a>&nbsp;endTime,
+                            com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</pre>
+</li>
+</ul>
 <a name="SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-">
 <!--   -->
 </a>
@@ -299,6 +324,17 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store
 <h4>SpatialTemporalQuery</h4>
 <pre>public&nbsp;SpatialTemporalQuery(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
                             com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry)</pre>
+</li>
+</ul>
+<a name="SpatialTemporalQuery-mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints-com.vividsolutions.jts.geom.Geometry-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>SpatialTemporalQuery</h4>
+<pre>public&nbsp;SpatialTemporalQuery(<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalConstraints.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalConstraints</a>&nbsp;constraints,
+                            com.vividsolutions.jts.geom.Geometry&nbsp;queryGeometry,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</pre>
 </li>
 </ul>
 <a name="SpatialTemporalQuery-java.util.Date-java.util.Date-com.vividsolutions.jts.geom.Geometry-mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation-">

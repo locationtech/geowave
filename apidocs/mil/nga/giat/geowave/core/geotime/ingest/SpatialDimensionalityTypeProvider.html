@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":9};
+var methods = {"i0":10,"i1":10,"i2":9,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">SpatialDimensionalityTypeProvider</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -137,10 +137,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
 <tr class="altColor">
 <td class="colFirst"><code>static class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialIndexBuilder.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider.SpatialIndexBuilder</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider.SpatialOptions</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -202,19 +198,30 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createPrimaryIndex--">createPrimaryIndex</a></span>()</code>
-<div class="block">This will return the primary index that match the options</div>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createOptions--">createOptions</a></span>()</code>
+<div class="block">These are options specific to the type of index being exposed by this SPI
+ plugin.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#createPrimaryIndex-mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions-">createPrimaryIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</code>
+<div class="block">This will return the primary index that match the options</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>static org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#decodeCRS-java.lang.String-">decodeCRS</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></span>()</code>
 <div class="block">if the registered dimensionality types are listed by a user, this can
  provide a user-friendly description for each</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getDimensionalityTypeName--">getDimensionalityTypeName</a></span>()</code>
 <div class="block">This will represent the name for the dimensionality type that is
@@ -222,28 +229,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  type option via the commandline.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getOptions--">getOptions</a></span>()</code>
-<div class="block">These are options specific to the type of index being exposed by this SPI
- plugin.</div>
-</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getPriority--">getPriority</a></span>()</code>
 <div class="block">If there are multiple acceptable dimensionality types, the one with the
  highest priority will be used</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#getRequiredIndexTypes--">getRequiredIndexTypes</a></span>()</code>
 <div class="block">return a set of classes that can be indexed by this index provider, used
  for compatibility checking with an adapter provider</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">isSpatial</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
@@ -336,7 +336,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  dimensionality type as much as possible.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeName--">getDimensionalityTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeName--">getDimensionalityTypeName</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the name of this dimensionality type</dd>
 </dl>
@@ -354,7 +354,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  provide a user-friendly description for each</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getDimensionalityTypeDescription--">getDimensionalityTypeDescription</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the user-friendly description</dd>
 </dl>
@@ -372,45 +372,54 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  highest priority will be used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getPriority--">getPriority</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getPriority--">getPriority</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a priority value, any integer will work, it is merely important
          to consider values relative to each other</dd>
 </dl>
 </li>
 </ul>
-<a name="getOptions--">
+<a name="createOptions--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeOptions.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeOptions</a>&nbsp;getOptions()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getOptions--">DimensionalityTypeProviderSpi</a></code></span></div>
+<h4>createOptions</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;createOptions()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createOptions--">DimensionalityTypeProviderSpi</a></code></span></div>
 <div class="block">These are options specific to the type of index being exposed by this SPI
  plugin.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getOptions--">getOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createOptions--">createOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 </dl>
 </li>
 </ul>
-<a name="createPrimaryIndex--">
+<a name="createPrimaryIndex-mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createPrimaryIndex</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex()</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex--">DimensionalityTypeProviderSpi</a></code></span></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;createPrimaryIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&nbsp;options)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex-T-">DimensionalityTypeProviderSpi</a></code></span></div>
 <div class="block">This will return the primary index that match the options</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex--">createPrimaryIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#createPrimaryIndex-T-">createPrimaryIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the primary index</dd>
 </dl>
+</li>
+</ul>
+<a name="decodeCRS-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>decodeCRS</h4>
+<pre>public static&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;decodeCRS(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crsCode)</pre>
 </li>
 </ul>
 <a name="getRequiredIndexTypes--">
@@ -425,7 +434,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/Dim
  for compatibility checking with an adapter provider</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes--">getRequiredIndexTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html#getRequiredIndexTypes--">getRequiredIndexTypes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/spi/DimensionalityTypeProviderSpi.html" title="interface in mil.nga.giat.geowave.core.store.spi">DimensionalityTypeProviderSpi</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a>&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the classes that are indexable by this index provider</dd>
 </dl>

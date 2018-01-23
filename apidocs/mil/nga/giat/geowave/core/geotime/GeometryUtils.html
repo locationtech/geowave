@@ -151,6 +151,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#DEFAULT_CRS">DEFAULT_CRS</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#DEFAULT_CRS_STR">DEFAULT_CRS_STR</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>static com.vividsolutions.jts.geom.GeometryFactory</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#GEOMETRY_FACTORY">GEOMETRY_FACTORY</a></span></code>&nbsp;</td>
 </tr>
@@ -240,14 +248,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#latitudeRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">latitudeRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">Generate a latitude range from a JTS geometry</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#xRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">xRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<div class="block">Generate a longitude range from a JTS geometry</div>
 </td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#longitudeRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">longitudeRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
-<div class="block">Generate a longitude range from a JTS geometry</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/geotime/GeometryUtils.html#yRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">yRangeFromGeometry</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</code>
+<div class="block">Generate a latitude range from a JTS geometry</div>
 </td>
 </tr>
 </table>
@@ -275,10 +283,32 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="GEOMETRY_FACTORY">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>GEOMETRY_FACTORY</h4>
 <pre>public static final&nbsp;com.vividsolutions.jts.geom.GeometryFactory GEOMETRY_FACTORY</pre>
+</li>
+</ul>
+<a name="DEFAULT_CRS_STR">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>DEFAULT_CRS_STR</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> DEFAULT_CRS_STR</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.core.geotime.GeometryUtils.DEFAULT_CRS_STR">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+<a name="DEFAULT_CRS">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>DEFAULT_CRS</h4>
+<pre>public static final&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem DEFAULT_CRS</pre>
 </li>
 </ul>
 </li>
@@ -380,35 +410,35 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="longitudeRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="xRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>longitudeRangeFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;longitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<h4>xRangeFromGeometry</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;xRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Generate a longitude range from a JTS geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>geometry</code> - The JTS geometry</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The longitude range in EPSG:4326</dd>
+<dd>The x range</dd>
 </dl>
 </li>
 </ul>
-<a name="latitudeRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
+<a name="yRangeFromGeometry-com.vividsolutions.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>latitudeRangeFromGeometry</h4>
-<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;latitudeRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
+<h4>yRangeFromGeometry</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/sfc/data/NumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">NumericData</a>&nbsp;yRangeFromGeometry(com.vividsolutions.jts.geom.Geometry&nbsp;geometry)</pre>
 <div class="block">Generate a latitude range from a JTS geometry</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>geometry</code> - The JTS geometry</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>The latitude range in EPSG:4326</dd>
+<dd>The y range</dd>
 </dl>
 </li>
 </ul>

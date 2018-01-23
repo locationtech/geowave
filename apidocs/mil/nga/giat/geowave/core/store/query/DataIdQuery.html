@@ -158,7 +158,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html#createFilters-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">createFilters</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html#createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createFilters</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
 <div class="block">This is a list of filters (either client filters or distributed filters)
  which will be applied to the result set.</div>
 </td>
@@ -173,7 +173,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html#getIndexConstraints-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">getIndexConstraints</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html#getIndexConstraints-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getIndexConstraints</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>
 <div class="block">Return a set of constraints to apply to the primary index based on the
  indexing strategy used.</div>
 </td>
@@ -252,14 +252,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;getDataIds()</pre>
 </li>
 </ul>
-<a name="createFilters-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">
+<a name="createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createFilters</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;createFilters(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#createFilters-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">Query</a></code></span></div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;createFilters(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">Query</a></code></span></div>
 <div class="block">This is a list of filters (either client filters or distributed filters)
  which will be applied to the result set. QueryFilters of type
  DistributableQueryFilter will automatically be distributed across nodes,
@@ -268,10 +268,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
  index will only enable coarse-grained filtering.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#createFilters-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">createFilters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>indexModel</code> - This can be used by the filters to determine the common fields
-            in the index</dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createFilters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A list of the query filters</dd>
 </dl>
@@ -298,14 +295,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 </dl>
 </li>
 </ul>
-<a name="getIndexConstraints-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">
+<a name="getIndexConstraints-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getIndexConstraints</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#getIndexConstraints-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">Query</a></code></span></div>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getIndexConstraints(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#getIndexConstraints-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">Query</a></code></span></div>
 <div class="block">Return a set of constraints to apply to the primary index based on the
  indexing strategy used. The ordering of dimensions within the index
  stategy must match the order of dimensions in the numeric data returned
@@ -313,9 +310,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
  query.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#getIndexConstraints-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">getIndexConstraints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#getIndexConstraints-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getIndexConstraints</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>indexStrategy</code> - The index strategy used to generate the constraints for</dd>
+<dd><code>index</code> - The index used to generate the constraints for</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A multi-dimensional numeric data set that represents the
          constraints for the index</dd>

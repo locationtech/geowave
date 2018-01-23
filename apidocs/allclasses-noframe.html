@@ -403,6 +403,9 @@
 <li><a href="mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters</a></li>
 <li><a href="mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></li>
 <li><a href="mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf"><span class="interfaceName">CQLQueryParametersOrBuilder</span></a></li>
+<li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/CustomCrsIndexModel.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">CustomCrsIndexModel</a></li>
+<li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/CustomCRSSpatialDimension.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">CustomCRSSpatialDimension</a></li>
+<li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/CustomCRSSpatialField.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">CustomCRSSpatialField</a></li>
 <li><a href="mil/nga/giat/geowave/core/store/index/CustomIdIndex.html" title="class in mil.nga.giat.geowave.core.store.index">CustomIdIndex</a></li>
 <li><a href="mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter"><span class="interfaceName">DataAdapter</span></a></li>
 <li><a href="mil/nga/giat/geowave/core/store/util/DataAdapterAndIndexCache.html" title="class in mil.nga.giat.geowave.core.store.util">DataAdapterAndIndexCache</a></li>
@@ -537,6 +540,7 @@
 <li><a href="mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.FeatureFixedBinConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics.FeatureFixedBinConfig</a></li>
 <li><a href="mil/nga/giat/geowave/analytic/distance/FeatureGeometryDistanceFn.html" title="class in mil.nga.giat.geowave.analytic.distance">FeatureGeometryDistanceFn</a></li>
 <li><a href="mil/nga/giat/geowave/adapter/vector/FeatureGeometryHandler.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureGeometryHandler</a></li>
+<li><a href="mil/nga/giat/geowave/adapter/vector/utils/FeatureGeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">FeatureGeometryUtils</a></li>
 <li><a href="mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics</a></li>
 <li><a href="mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig</a></li>
 <li><a href="mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics</a></li>
@@ -638,7 +642,6 @@
 <li><a href="mil/nga/giat/geowave/core/geotime/store/field/GeometrySerializationProvider.html" title="class in mil.nga.giat.geowave.core.geotime.store.field">GeometrySerializationProvider</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/field/GeometrySerializationProvider.GeometryReader.html" title="class in mil.nga.giat.geowave.core.geotime.store.field">GeometrySerializationProvider.GeometryReader</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/field/GeometrySerializationProvider.GeometryWriter.html" title="class in mil.nga.giat.geowave.core.geotime.store.field">GeometrySerializationProvider.GeometryWriter</a></li>
-<li><a href="mil/nga/giat/geowave/adapter/vector/utils/GeometryUtils.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">GeometryUtils</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/GeometryUtils.html" title="class in mil.nga.giat.geowave.core.geotime">GeometryUtils</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/GeometryUtils.GeoConstraintsWrapper.html" title="class in mil.nga.giat.geowave.core.geotime">GeometryUtils.GeoConstraintsWrapper</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/GeometryWrapper.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">GeometryWrapper</a></li>
@@ -1458,9 +1461,9 @@
 <li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/SpatialArrayField.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">SpatialArrayField</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialIndexBuilder.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider.SpatialIndexBuilder</a></li>
-<li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialDimensionalityTypeProvider.SpatialOptions</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/dimension/SpatialField.html" title="class in mil.nga.giat.geowave.core.geotime.store.dimension">SpatialField</a></li>
 <li><a href="mil/nga/giat/geowave/analytic/model/SpatialIndexModelBuilder.html" title="class in mil.nga.giat.geowave.analytic.model">SpatialIndexModelBuilder</a></li>
+<li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialOptions</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/query/SpatialQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialQuery</a></li>
 <li><a href="mil/nga/giat/geowave/examples/query/SpatialQueryExample.html" title="class in mil.nga.giat.geowave.examples.query">SpatialQueryExample</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.html" title="class in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter</a></li>
@@ -1474,8 +1477,8 @@
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.Bias.html" title="enum in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.Bias</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.BiasConverter.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.BiasConverter</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder</a></li>
-<li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.SpatialTemporalOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.SpatialTemporalOptions</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.UnitConverter.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalDimensionalityTypeProvider.UnitConverter</a></li>
+<li><a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalOptions.html" title="class in mil.nga.giat.geowave.core.geotime.ingest">SpatialTemporalOptions</a></li>
 <li><a href="mil/nga/giat/geowave/core/geotime/store/query/SpatialTemporalQuery.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">SpatialTemporalQuery</a></li>
 <li><a href="mil/nga/giat/geowave/service/grpc/protobuf/SpatialTemporalQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">SpatialTemporalQueryParameters</a></li>
 <li><a href="mil/nga/giat/geowave/service/grpc/protobuf/SpatialTemporalQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">SpatialTemporalQueryParameters.Builder</a></li>
