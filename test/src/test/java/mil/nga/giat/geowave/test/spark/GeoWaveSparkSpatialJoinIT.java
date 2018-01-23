@@ -1,52 +1,24 @@
 package mil.nga.giat.geowave.test.spark;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
-import java.net.URL;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.FlatMapFunction;
-import org.apache.spark.api.java.function.Function;
-import org.apache.spark.api.java.function.Function2;
-import org.apache.spark.api.java.function.PairFlatMapFunction;
-import org.apache.spark.api.java.function.PairFunction;
-import org.apache.spark.api.java.function.VoidFunction;
-import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.Column;
-import org.geotools.geometry.Envelope2D;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.geometry.BoundingBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import jersey.repackaged.com.google.common.collect.Iterators;
-import scala.Tuple2;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.function.Consumer;
-
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.index.Index;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -54,31 +26,14 @@ import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
-import scala.Console;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomIntersects;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
-import mil.nga.giat.geowave.core.index.sfc.tiered.SingleTierSubStrategy;
-import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
-import mil.nga.giat.geowave.datastore.hbase.cli.HBaseMiniCluster;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoin;
 
 @RunWith(GeoWaveITRunner.class)
@@ -86,18 +41,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		AbstractGeoWaveBasicVectorIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
-	private static final String HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE + "hail-box-filter.shp";
-	private static final String HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE = HAIL_TEST_CASE_PACKAGE
-			+ "hail-polygon-filter.shp";
-
-	private static final String TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-box-filter.shp";
-	private static final String TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE = TORNADO_TRACKS_TEST_CASE_PACKAGE
-			+ "tornado_tracks-polygon-filter.shp";
-
-	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
-	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
-	private static final String CQL_DELETE_STR = "STATE = 'TX'";
 	
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.HBASE
@@ -223,7 +166,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 					null, 
 					new QueryOptions(hailAdapter));
 			hailFrame.init(dataStore, hail_adapter);
-			
 			hailFrame.getDataFrame(hailRDD).createOrReplaceTempView("hail");
 			
 			
@@ -233,8 +175,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 					null, 
 					new QueryOptions(tornadoAdapter));
 			tornadoFrame.init(dataStore, tornado_adapter);
-
 			tornadoFrame.getDataFrame(tornadoRDD).createOrReplaceTempView("tornado");
+			
 			tornadoBruteResults = session.sql("select tornado.* from hail, tornado where geomIntersects(hail.geom,tornado.geom)");
 			tornadoBruteResults = tornadoBruteResults.dropDuplicates();
 			tornadoBruteCount = tornadoBruteResults.count();
@@ -256,7 +198,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		LOGGER.warn("Indexed Tornado join count= " + tornadoIndexedCount);
 		LOGGER.warn("Indexed Hail join count= " + hailIndexedCount);
 		LOGGER.warn("Indexed join duration = " + indexJoinDur + " ms.");
-		
 		
 		LOGGER.warn("Brute tornado join count= " + tornadoBruteCount);
 		LOGGER.warn("Brute hail join count= " + hailBruteCount);

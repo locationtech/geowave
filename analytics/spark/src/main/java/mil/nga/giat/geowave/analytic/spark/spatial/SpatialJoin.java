@@ -8,11 +8,8 @@ import java.util.List;
 
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
-import org.apache.spark.api.java.function.Function;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.broadcast.Broadcast;
-import org.apache.spark.sql.SparkSession;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.geometry.BoundingBox;
 import org.slf4j.Logger;
@@ -25,10 +22,8 @@ import jersey.repackaged.com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -53,7 +48,6 @@ public class SpatialJoin implements Serializable {
 	List<Tuple2<Byte, JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>>>> leftDataTiers = new ArrayList<>();
 	List<Tuple2<Byte, JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>>>> rightDataTiers = new ArrayList<>();
 	
-	
 	//Final joined pair RDDs
 	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftJoined = null;
 	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightJoined = null;
@@ -71,9 +65,13 @@ public class SpatialJoin implements Serializable {
 		SpatialDimensionalityTypeProvider provider = new SpatialDimensionalityTypeProvider();
 		PrimaryIndex index = provider.createPrimaryIndex();
 		TieredSFCIndexStrategy strategy = (TieredSFCIndexStrategy) index.getIndexStrategy();
+		GeomReader reader = new GeomReader();
 		
 		ClassTag<TieredSFCIndexStrategy> tieredClassTag = scala.reflect.ClassTag$.MODULE$.apply(TieredSFCIndexStrategy.class);
-		Broadcast<TieredSFCIndexStrategy> broadcastVar = sc.broadcast(strategy, tieredClassTag);
+		Broadcast<TieredSFCIndexStrategy> broadcastStrategy = sc.broadcast(strategy, tieredClassTag);
+		
+		ClassTag<GeomReader> readerClassTag = scala.reflect.ClassTag$.MODULE$.apply(GeomReader.class);
+		Broadcast<GeomReader> broadcastReader = sc.broadcast(reader, readerClassTag);
 
 		DataAdapter<?> leftAdapter = leftStore.createAdapterStore().getAdapter(leftAdapterId);
 		DataAdapter<?> rightAdapter = rightStore.createAdapterStore().getAdapter(rightAdapterId);
@@ -91,25 +89,24 @@ public class SpatialJoin implements Serializable {
 				null, 
 				new QueryOptions(rightAdapter)).reduceByKey((f1,f2) -> f1);
 
-		//Generate Index RDDs for each set of data.
 		rightRDD.cache();
 		leftRDD.cache();
 		
-		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> leftIndex = this.indexData(leftRDD, broadcastVar);
-		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> rightIndex = this.indexData(rightRDD, broadcastVar);
+		//Generate Index RDDs for each set of data.
+		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> leftIndex = this.indexData(leftRDD, broadcastStrategy);
+		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> rightIndex = this.indexData(rightRDD, broadcastStrategy);
 		
 		
 		long leftCount = leftIndex.count();
 		long rightCount = rightIndex.count();
-		
 		if(leftCount == 0 || rightCount == 0) {
 			LOGGER.error("No features for one index");
 			return;
 		}
 		
+		//This function creates a list of tiers that actually contain data for each set.
 		this.collectDataTiers(leftIndex, rightIndex, strategy);
 		
-
 		//Iterate through tiers and join each tier containing data from each set.
 		int leftTiersCount = this.leftDataTiers.size();
 		int rightTiersCount = this.rightDataTiers.size();
@@ -133,16 +130,14 @@ public class SpatialJoin implements Serializable {
 				//We found a tier on the right with geometry to test against.
 				//Reproject one of the data sets to the coarser tier
 				if(leftTierId > rightTierId) {
-					leftTier = this.reprojectToTier(leftTier, rightTierId, broadcastVar);
+					leftTier = this.reprojectToTier(leftTier, rightTierId, broadcastStrategy, broadcastReader);
 				} else if (leftTierId < rightTierId) {
-					rightTier = this.reprojectToTier(rightTier, leftTierId, broadcastVar);
+					rightTier = this.reprojectToTier(rightTier, leftTierId, broadcastStrategy, broadcastReader);
 				}
 
 				//Once we have each tier and index at same resolution then join and compare each of the sets
 				JavaPairRDD<GeoWaveInputKey, String> finalTierMatches = this.joinAndCompareTiers(leftTier,rightTier, predicate);
 				
-				long finalTierCount = finalTierMatches.count();
-				//LOGGER.warn("Left Tier: " + leftTierId + " Right Tier: " + rightTierId + " Match Count= " + finalTierCount );
 				//Combine each tier into a final list of matches for all tiers
 				if(this.joinResults == null) {
 					this.joinResults = finalTierMatches;
@@ -161,22 +156,7 @@ public class SpatialJoin implements Serializable {
 		
 		this.leftJoined = this.joinResults.join(leftRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
 		this.rightJoined = this.joinResults.join(rightRDD).mapToPair( t -> new Tuple2<GeoWaveInputKey,SimpleFeature>(t._1(),t._2._2()) );
-		
-		//Function to write results to another datastore? 
-		//this.outputResultsToDataStore(leftStore, leftAdapterId, leftRDD, rightRDD);
-	}
-	
-	private void outputResultsToDataStore(DataStorePluginOptions outputStore,
-			ByteArrayId outputId,
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRDD,
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD) {
-		
 
-		//JavaPairRDD<GeoWaveInputKey, SimpleFeature> joinedRDD = leftJoined.union(rightJoined);
-		
-		//SimpleFeatureDataFrame dataframe = new SimpleFeatureDataFrame(this.session);
-		//dataframe.init(outputStore, outputId);
-		//this.finalResults = rightJoined;
 	}
 	
 	private void collectDataTiers(
@@ -184,8 +164,6 @@ public class SpatialJoin implements Serializable {
 			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> rightIndex,
 			TieredSFCIndexStrategy strategy) {
 		
-		
-
 		SubStrategy[] tierStrategies = strategy.getSubStrategies();
 		int tierCount = tierStrategies.length;
 		byte minTierId = (byte) 0;
@@ -218,7 +196,7 @@ public class SpatialJoin implements Serializable {
 	
 	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> indexData(
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> data,
-			Broadcast<TieredSFCIndexStrategy> broadcastVar)
+			Broadcast<TieredSFCIndexStrategy> broadcastStrategy)
 	{
 		//Flat map is used because each pair can potentially yield 1+ output rows within rdd.
 		//Instead of storing whole feature on index maybe just output Key + Bounds
@@ -235,13 +213,12 @@ public class SpatialJoin implements Serializable {
 				//Pull feature to index from tuple
 				SimpleFeature inputFeature = t._2;
 				
-				GeomWriter writer = new GeomWriter();
 				Geometry geom = (Geometry)inputFeature.getDefaultGeometry();
 				if(geom == null) {
 					LOGGER.warn("Null Geometry Found");
 					return result.iterator();
 				}
-				String geomString = writer.write(geom);
+				String geomString = geom.toText();
 				
 				//Extract bounding box from input feature
 				BoundingBox bounds = inputFeature.getBounds();
@@ -261,7 +238,7 @@ public class SpatialJoin implements Serializable {
 				
 				//Convert the data to how the api expects and index using strategy above
 				BasicNumericDataset convertedBounds = new BasicNumericDataset(boundsRange);
-				List<ByteArrayId> insertIds = broadcastVar.getValue().getInsertionIds(convertedBounds);
+				List<ByteArrayId> insertIds = broadcastStrategy.value().getInsertionIds(convertedBounds);
 				
 				//Sometimes the result can span more than one row/cell of a tier
 				//When we span more than one row each individual get added as a separate output pair
@@ -287,7 +264,8 @@ public class SpatialJoin implements Serializable {
 	
 	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> reprojectToTier(JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, String>> tierIndex, 
 			byte targetTierId,
-			Broadcast<TieredSFCIndexStrategy> broadcastVar) {
+			Broadcast<TieredSFCIndexStrategy> broadcastStrategy, 
+			Broadcast<GeomReader> broadcastReader) {
 		return tierIndex.flatMapToPair(new PairFlatMapFunction<Tuple2<ByteArrayId,Tuple2<GeoWaveInputKey, String>>,ByteArrayId,Tuple2<GeoWaveInputKey, String>>() {
 
 			@Override
@@ -297,9 +275,9 @@ public class SpatialJoin implements Serializable {
 				
 				List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, String>>> reprojected = new ArrayList<>();
 
-				SubStrategy[] strats = broadcastVar.getValue().getSubStrategies();
+				SubStrategy[] strats = broadcastStrategy.value().getSubStrategies();
 				
-				if(broadcastVar.getValue().tierExists(targetTierId) == false) {
+				if(broadcastStrategy.value().tierExists(targetTierId) == false) {
 					LOGGER.warn("Tier does not exist in strategy!");
 					return reprojected.iterator();
 				}
@@ -313,12 +291,10 @@ public class SpatialJoin implements Serializable {
 						break;
 					}
 				}
-		
-				//Pull feature to index from tuple
-				GeomReader gReader = new GeomReader();
 				
 				//Parse geom from string
-				Geometry geom = gReader.read(t._2._2());
+				Geometry geom = broadcastReader.value().read(t._2._2());
+				
 				NumericRange xRange = new NumericRange(geom.getEnvelopeInternal().getMinX(), geom.getEnvelopeInternal().getMaxX());
 				NumericRange yRange = new NumericRange(geom.getEnvelopeInternal().getMinY(), geom.getEnvelopeInternal().getMaxY());
 				NumericData[] boundsRange = {
