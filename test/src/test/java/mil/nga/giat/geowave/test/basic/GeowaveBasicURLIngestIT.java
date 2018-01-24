@@ -55,7 +55,7 @@ public class GeowaveBasicURLIngestIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialVectorIT.class);
 
 	private final static String S3URL = "s3.amazonaws.com";
-	protected static final String GDELT_INPUT_FILE_URL= "s3://geowave-guide-sv/gdelt/20160202.export.CSV.zip";
+	protected static final String GDELT_INPUT_FILE_URL= "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
 	private static final int GDELT_URL_COUNT = 224482;
 
 

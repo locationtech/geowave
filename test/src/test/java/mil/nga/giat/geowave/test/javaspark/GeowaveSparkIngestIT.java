@@ -63,7 +63,7 @@ public class GeowaveSparkIngestIT extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeowaveSparkIngestIT.class);
 	private final static String S3URL = "s3.amazonaws.com";
-	protected static final String GDELT_INPUT_FILES = "s3://geowave-guide-sv/gdelt";
+	protected static final String GDELT_INPUT_FILES = "s3://geowave-test/data/gdelt";
 	private static final int GDELT_COUNT = 448675;
 
 
