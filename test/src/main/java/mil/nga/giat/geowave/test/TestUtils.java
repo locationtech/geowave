@@ -105,7 +105,7 @@ public class TestUtils
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex();
 
-	public static final String S3_INPUT_PATH = "s3://geowave-guide-sv/gdelt";
+	public static final String S3_INPUT_PATH = "s3://geowave-test/data/gdelt";
 	public static final String S3URL = "s3.amazonaws.com";
 
 	public static boolean isYarn() {
