@@ -146,8 +146,7 @@ public class KDEJobRunner extends
 		if (kdeCommandLineOptions.getHdfsHostPort() == null) {
 
 			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+					configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
 		}

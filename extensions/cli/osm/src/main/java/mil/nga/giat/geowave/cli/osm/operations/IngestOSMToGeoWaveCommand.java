@@ -119,11 +119,9 @@ public class IngestOSMToGeoWaveCommand extends
 	}
 
 	public void setParameters(
-			final String hdfsHostPort,
 			final String hdfsPath,
 			final String storeName ) {
 		parameters = new ArrayList<String>();
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 		parameters.add(storeName);
 	}
@@ -154,9 +152,7 @@ public class IngestOSMToGeoWaveCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		if (!basePath.startsWith("/")) {

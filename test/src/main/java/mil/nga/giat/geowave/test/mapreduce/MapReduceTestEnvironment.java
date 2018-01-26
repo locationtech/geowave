@@ -20,6 +20,9 @@ import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.TestUtils;
 
@@ -43,6 +46,8 @@ public class MapReduceTestEnvironment implements
 	private String hdfs;
 	private boolean hdfsProtocol;
 	private String hdfsBaseDirectory;
+	private ManualOperationParams operationParams;
+	private File configFile;
 
 	private MapReduceTestEnvironment() {}
 
@@ -56,6 +61,18 @@ public class MapReduceTestEnvironment implements
 
 			hdfsBaseDirectory = TestUtils.TEMP_DIR.toURI().toURL().toString() + "/" + HDFS_BASE_DIRECTORY;
 			hdfsProtocol = false;
+			// create temporary config file and use it for hdfs FS URL config
+			configFile = File.createTempFile(
+					"test_mr",
+					null);
+			operationParams = new ManualOperationParams();
+			operationParams.getContext().put(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT,
+					configFile);
+
+			final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();
+			configHdfs.setHdfsUrlParameter(hdfs);
+			configHdfs.execute(operationParams);
 		}
 		else {
 			hdfsBaseDirectory = HDFS_BASE_DIRECTORY;
@@ -89,6 +106,10 @@ public class MapReduceTestEnvironment implements
 				}
 				finally {
 					if (fs != null) fs.close();
+				}
+				if (configFile != null && configFile.exists()) {
+					configFile.delete();
+					configFile = null;
 				}
 			}
 			else {
@@ -141,6 +162,10 @@ public class MapReduceTestEnvironment implements
 	public void setHdfsBaseDirectory(
 			String hdfsBaseDirectory ) {
 		this.hdfsBaseDirectory = hdfsBaseDirectory;
+	}
+
+	public ManualOperationParams getOperationParams() {
+		return operationParams;
 	}
 
 	@Override

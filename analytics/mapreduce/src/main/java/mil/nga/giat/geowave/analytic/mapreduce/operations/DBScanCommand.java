@@ -122,8 +122,7 @@ public class DBScanCommand extends
 		if (commonOptions.getMapReduceHdfsHostPort() == null) {
 
 			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+					configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
 		}

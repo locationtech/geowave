@@ -82,9 +82,7 @@ public class ListCommand extends
 					filter);
 		}
 		else {
-			p = ConfigOptions.loadProperties(
-					f,
-					null);
+			p = ConfigOptions.loadProperties(f);
 		}
 		return new ImmutablePair<>(
 				f.getName(),

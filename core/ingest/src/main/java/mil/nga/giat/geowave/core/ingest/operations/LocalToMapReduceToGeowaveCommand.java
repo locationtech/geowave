@@ -186,9 +186,7 @@ public class LocalToMapReduceToGeowaveCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load input store.

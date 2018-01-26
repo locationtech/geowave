@@ -273,12 +273,22 @@ public class ConfigOptions
 				null,
 				null);
 	}
-
 	/**
 	 * This helper function will load the properties file, or return null if it
 	 * can't. It's designed to be used by other commands.
 	 * 
 	 * @param delimiter
+	 */
+	public static Properties loadProperties(
+			final File configFile ) {
+		return loadProperties(configFile, null);
+	}
+	/**
+	 * This helper function will load the properties file, or return null if it
+	 * can't. It's designed to be used by other commands.
+	 * 
+	 * @param delimiter the delimiter
+	 * @param pattern filter by a regex pattern
 	 */
 	public static Properties loadProperties(
 			final File configFile,

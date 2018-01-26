@@ -94,8 +94,7 @@ public class ResizeCommand extends
 		if (options.getHdfsHostPort() == null) {
 
 			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+					configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			options.setHdfsHostPort(hdfsFSUrl);
 		}

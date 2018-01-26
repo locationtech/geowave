@@ -102,9 +102,7 @@ public class SetCommand extends
 			final OperationParams params ) {
 
 		final File f = getGeoWaveConfigFile(params);
-		final Properties p = ConfigOptions.loadProperties(
-				f,
-				null);
+		final Properties p = ConfigOptions.loadProperties(f);
 
 		String key = null;
 		String value = null;

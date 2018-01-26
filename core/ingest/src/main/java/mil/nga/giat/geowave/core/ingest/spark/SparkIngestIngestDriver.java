@@ -82,9 +82,7 @@ public class SparkIngestIngestDriver implements
 			String basePath )
 			throws IOException {
 
-		final Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties configProperties = ConfigOptions.loadProperties(configFile);
 
 		JavaSparkContext jsc = null;
 		SparkSession session = null;
