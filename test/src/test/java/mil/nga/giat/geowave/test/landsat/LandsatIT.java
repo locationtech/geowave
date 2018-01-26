@@ -150,10 +150,10 @@ public class LandsatIT
 	@Test
 	public void testMosaic()
 			throws Exception {
-		
+
 		// Skip this test if we're on a Mac
-        org.junit.Assume.assumeTrue(isNotMac());
-        
+		org.junit.Assume.assumeTrue(isNotMac());
+
 		JAIExt.initJAIEXT();
 		MapProjection.SKIP_SANITY_CHECKS = true;
 		TestUtils.deleteAll(dataStoreOptions);
@@ -257,8 +257,8 @@ public class LandsatIT
 				0.005);
 		MapProjection.SKIP_SANITY_CHECKS = false;
 	}
-	
-	 private static boolean isNotMac() {
-	        return !SystemUtils.IS_OS_MAC;
-	    }
+
+	private static boolean isNotMac() {
+		return !SystemUtils.IS_OS_MAC;
+	}
 }

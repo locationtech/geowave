@@ -66,7 +66,6 @@ public class GeowaveSparkIngestIT extends
 	protected static final String GDELT_INPUT_FILES = "s3://geowave-test/data/gdelt";
 	private static final int GDELT_COUNT = 448675;
 
-
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.HBASE
@@ -152,12 +151,15 @@ public class GeowaveSparkIngestIT extends
 								+ "' as its total count statistic",
 						countStat.getCount(),
 						resultCount);
-			
-				 assertEquals( "'" + adapter.getAdapterId().getString() +
-				  "' adapter entries ingested does not match expected count",
-				  new Integer(GDELT_COUNT),
-				  new Integer( resultCount));
-				 
+
+				assertEquals(
+						"'" + adapter.getAdapterId().getString()
+								+ "' adapter entries ingested does not match expected count",
+						new Integer(
+								GDELT_COUNT),
+						new Integer(
+								resultCount));
+
 				adapterCount++;
 			}
 		}

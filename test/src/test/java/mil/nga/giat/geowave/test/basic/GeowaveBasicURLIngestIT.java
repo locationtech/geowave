@@ -55,9 +55,8 @@ public class GeowaveBasicURLIngestIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialVectorIT.class);
 
 	private final static String S3URL = "s3.amazonaws.com";
-	protected static final String GDELT_INPUT_FILE_URL= "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
+	protected static final String GDELT_INPUT_FILE_URL = "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
 	private static final int GDELT_URL_COUNT = 224482;
-
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
@@ -144,12 +143,15 @@ public class GeowaveBasicURLIngestIT extends
 								+ "' as its total count statistic",
 						countStat.getCount(),
 						resultCount);
-			
-				 assertEquals( "'" + adapter.getAdapterId().getString() +
-				  "' adapter entries ingested does not match expected count",
-				  new Integer(GDELT_URL_COUNT),
-				  new Integer( resultCount));
-				 
+
+				assertEquals(
+						"'" + adapter.getAdapterId().getString()
+								+ "' adapter entries ingested does not match expected count",
+						new Integer(
+								GDELT_URL_COUNT),
+						new Integer(
+								resultCount));
+
 				adapterCount++;
 			}
 		}
