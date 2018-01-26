@@ -18,8 +18,10 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLStreamHandlerFactory;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -108,32 +110,52 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				return;
 			}
 
-			try {
+			if (!s3EndpointUrl.contains("://")) {
+				s3EndpointUrl = "s3://" + s3EndpointUrl;
+			}
 
-				if (!s3EndpointUrl.contains("://")) {
-					s3EndpointUrl = "s3://" + s3EndpointUrl;
-				}
-				FileSystem fs = FileSystems.newFileSystem(
-						// HP Fortify "Path Traversal" false positive
-						// What Fortify considers "user input" comes only
-						// from users with OS-level access anyway
+			FileSystem fs;
+			try {
+				// HP Fortify "Path Traversal" false positive
+				// What Fortify considers "user input" comes only
+				// from users with OS-level access anyway
+				fs = FileSystems.newFileSystem(
 						new URI(
 								s3EndpointUrl + "/"),
 						new HashMap<String, Object>(),
 						Thread.currentThread().getContextClassLoader());
-				String s3InputPath = inputPath.replaceFirst(
-						"s3://",
-						"/");
-				path = (S3Path) fs.getPath(s3InputPath);
-				if (!path.isAbsolute()) {
-					LOGGER.error("Input path " + inputPath + " does not exist");
-					return;
-				}
 			}
 			catch (URISyntaxException e) {
 				LOGGER.error("Unable to ingest data, Inavlid S3 path");
 				return;
 			}
+			catch (FileSystemAlreadyExistsException e) {
+				LOGGER.info("File system " + s3EndpointUrl + "already exists");
+				try {
+					fs = FileSystems.getFileSystem(new URI(
+							s3EndpointUrl + "/"));
+				}
+				catch (URISyntaxException e1) {
+					LOGGER.error("Unable to ingest data, Inavlid S3 path");
+					return;
+				}
+			}
+
+			String s3InputPath = inputPath.replaceFirst(
+					"s3://",
+					"/");
+			try {
+				path = (S3Path) fs.getPath(s3InputPath);
+			}
+			catch (InvalidPathException e) {
+				LOGGER.error("Input valid input path " + inputPath);
+				return;
+			}
+			if (!path.isAbsolute()) {
+				LOGGER.error("Input path " + inputPath + " does not exist");
+				return;
+			}
+
 		}
 		// If input path is HDFS
 		else if (inputPath.startsWith("hdfs://")) {
