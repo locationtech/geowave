@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -48,7 +49,7 @@ public class DistortionGroupManagementTest
 
 	final GeometryFactory factory = new GeometryFactory();
 	final SimpleFeatureType ftype;
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 
 	final FeatureDataAdapter adapter;
 	final DataStore dataStore;
@@ -78,7 +79,7 @@ public class DistortionGroupManagementTest
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		adapter = new FeatureDataAdapter(
 				ftype);
-
+		adapter.init(index);
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 

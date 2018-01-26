@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,11 +48,28 @@ public class GeometryUtils
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
+	public static final String DEFAULT_CRS_STR = "EPSG:4326";
+	public static final CoordinateReferenceSystem DEFAULT_CRS;
+	static {
+		try {
+			DEFAULT_CRS = CRS.decode(
+					DEFAULT_CRS_STR,
+					true);
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to decode " + DEFAULT_CRS_STR + " CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize " + DEFAULT_CRS_STR + " object",
+					e);
+		}
+	}
 
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
 
-		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> set = new LinkedList<>();
 		constructListOfConstraintSetsFromGeometry(
 				geometry,
 				set,
@@ -69,7 +89,7 @@ public class GeometryUtils
 	public static GeoConstraintsWrapper basicGeoConstraintsWrapperFromGeometry(
 			final Geometry geometry ) {
 
-		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> set = new LinkedList<>();
 		final boolean geometryConstraintsExactMatch = constructListOfConstraintSetsFromGeometry(
 				geometry,
 				set,
@@ -138,7 +158,7 @@ public class GeometryUtils
 				env.getMinY(),
 				env.getMaxY());
 
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
@@ -187,7 +207,7 @@ public class GeometryUtils
 		final NumericData longitude = new NumericValue(
 				longitudeDegrees);
 
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
@@ -209,9 +229,9 @@ public class GeometryUtils
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The longitude range in EPSG:4326
+	 * @return The x range
 	 */
-	public static NumericData longitudeRangeFromGeometry(
+	public static NumericData xRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(
@@ -232,9 +252,9 @@ public class GeometryUtils
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The latitude range in EPSG:4326
+	 * @return The y range
 	 */
-	public static NumericData latitudeRangeFromGeometry(
+	public static NumericData yRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(

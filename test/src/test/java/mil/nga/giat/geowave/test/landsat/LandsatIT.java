@@ -261,4 +261,5 @@ public class LandsatIT
 	private static boolean isNotMac() {
 		return !SystemUtils.IS_OS_MAC;
 	}
+
 }

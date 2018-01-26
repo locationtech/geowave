@@ -22,14 +22,23 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.ReferenceIdentifier;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
+import org.geotools.geometry.jts.JTS;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
 
+import com.vividsolutions.jts.geom.Geometry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
@@ -42,6 +51,8 @@ import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -63,6 +74,7 @@ import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
@@ -132,10 +144,9 @@ public class FeatureDataAdapter extends
 	private StatsManager statsManager;
 	private SecondaryIndexManager secondaryIndexManager;
 	private TimeDescriptors timeDescriptors = null;
-
 	// should change this anytime the serialized image changes. Stay negative.
 	// so 0xa0, 0xa1, 0xa2 etc.
-	final static byte VERSION = (byte) 0xa2;
+	final static byte VERSION = (byte) 0xa3;
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
@@ -230,7 +241,6 @@ public class FeatureDataAdapter extends
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
-
 	/**
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
@@ -248,6 +258,7 @@ public class FeatureDataAdapter extends
 			final List<PersistentIndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> customIndexHandlers,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler,
 			final VisibilityManagement<SimpleFeature> defaultVisibilityManagement ) {
+
 		super(
 				customIndexHandlers,
 				new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(),
@@ -260,6 +271,95 @@ public class FeatureDataAdapter extends
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
+
+	@Override
+	public void init(
+			PrimaryIndex... indices )
+			throws RuntimeException {
+		// TODO get projection here, make sure if multiple indices are given
+		// that they match
+
+		String indexCrsCode = null;
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrsCode == null) {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					indexCrsCode = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode();
+				}
+				else {
+					indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+				}
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
+
+		initCRS(indexCrsCode);
+	}
+
+	private void initCRS(
+			String indexCrsCode ) {
+		if (indexCrsCode == null || indexCrsCode.isEmpty()) {
+			// TODO make sure we handle null/empty to make it default
+			indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+		}
+		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
+
+		if (persistedCRS == null) {
+			persistedCRS = GeometryUtils.DEFAULT_CRS;
+		}
+
+		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
+		if (indexCRS.equals(persistedCRS)) {
+			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
+					persistedFeatureType,
+					persistedCRS);
+			transform = null;
+		}
+		else {
+			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
+					persistedFeatureType,
+					indexCRS);
+			try {
+				transform = CRS.findMathTransform(
+						persistedCRS,
+						indexCRS,
+						true);
+			}
+			catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to create coordinate reference system transform",
+						e);
+			}
+		}
+
+		statsManager = new StatsManager(
+				this,
+				persistedFeatureType,
+				reprojectedFeatureType,
+				transform);
+		secondaryIndexManager = new SecondaryIndexManager(
+				this,
+				persistedFeatureType,
+				statsManager);
+	}
 
 	/**
 	 * Helper method for establishing a visibility manager in the constructor
@@ -288,41 +388,7 @@ public class FeatureDataAdapter extends
 	private void setFeatureType(
 			final SimpleFeatureType featureType ) {
 		persistedFeatureType = featureType;
-		// If the CRS for the new FeatureType is the DEFAULT_CRS, then setup the
-		// reprojected type based on the persisted type
-
-		if (GeoWaveGTDataStore.DEFAULT_CRS.equals(featureType.getCoordinateReferenceSystem())) {
-			reprojectedFeatureType = persistedFeatureType;
-		}
-		else {
-			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
-					featureType,
-					GeoWaveGTDataStore.DEFAULT_CRS);
-			if (featureType.getCoordinateReferenceSystem() != null) {
-				try {
-					transform = CRS.findMathTransform(
-							featureType.getCoordinateReferenceSystem(),
-							GeoWaveGTDataStore.DEFAULT_CRS,
-							true);
-				}
-				catch (final FactoryException e) {
-					LOGGER.warn(
-							"Unable to create coordinate reference system transform",
-							e);
-				}
-			}
-		}
-
 		resetTimeDescriptors();
-		statsManager = new StatsManager(
-				this,
-				persistedFeatureType,
-				reprojectedFeatureType,
-				transform);
-		secondaryIndexManager = new SecondaryIndexManager(
-				this,
-				persistedFeatureType,
-				statsManager);
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -630,25 +696,35 @@ public class FeatureDataAdapter extends
 			namespaceBytes = new byte[0];
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
+		CoordinateReferenceSystem crs = reprojectedFeatureType.getCoordinateReferenceSystem();
+		byte[] indexCrsBytes;
+		if (crs != null) {
+			indexCrsBytes = StringUtils.stringToBinary(CRS.toSRS(crs));
+		}
+		else {
+			indexCrsBytes = new byte[0];
+		}
 		final byte[] secondaryIndexBytes = PersistenceUtils.toBinary(secondaryIndexManager);
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + typeNameBytes.length
-				+ namespaceBytes.length + attrBytes.length + axisBytes.length + secondaryIndexBytes.length + 21);
+		final ByteBuffer buf = ByteBuffer.allocate(encodedTypeBytes.length + indexCrsBytes.length
+				+ typeNameBytes.length + namespaceBytes.length + attrBytes.length + axisBytes.length
+				+ secondaryIndexBytes.length + 25);
 
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
+		buf.putInt(indexCrsBytes.length);
 		buf.putInt(namespaceBytes.length);
 		buf.putInt(attrBytes.length);
 		buf.putInt(axisBytes.length);
 		buf.putInt(encodedTypeBytes.length);
 		buf.put(typeNameBytes);
+		buf.put(indexCrsBytes);
 		buf.put(namespaceBytes);
 		buf.put(attrBytes);
 		buf.put(axisBytes);
 		buf.put(encodedTypeBytes);
 		buf.put(secondaryIndexBytes);
-
 		return buf.array();
 	}
 
@@ -678,12 +754,14 @@ public class FeatureDataAdapter extends
 			LOGGER.warn("Mismatched Feature Data Adapter version");
 		}
 		final byte[] typeNameBytes = new byte[buf.getInt()];
+		final byte[] indexCrsBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
 
 		final byte[] attrBytes = new byte[buf.getInt()];
 		final byte[] axisBytes = new byte[buf.getInt()];
 		final byte[] encodedTypeBytes = new byte[buf.getInt()];
 		buf.get(typeNameBytes);
+		buf.get(indexCrsBytes);
 		buf.get(namespaceBytes);
 		buf.get(attrBytes);
 		buf.get(axisBytes);
@@ -698,7 +776,7 @@ public class FeatureDataAdapter extends
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
 		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-				- namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 21];
+				- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
@@ -734,7 +812,7 @@ public class FeatureDataAdapter extends
 						e);
 			}
 			setFeatureType(myType);
-
+			initCRS(indexCrsBytes.length > 0 ? StringUtils.stringFromBinary(indexCrsBytes) : null);
 			// advertise the reprojected type externally
 			return reprojectedFeatureType;
 		}
@@ -752,7 +830,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public ByteArrayId getAdapterId() {
 		return new ByteArrayId(
-				StringUtils.stringToBinary(reprojectedFeatureType.getTypeName()));
+				StringUtils.stringToBinary(persistedFeatureType.getTypeName()));
 	}
 
 	@Override
@@ -782,6 +860,9 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public SimpleFeatureType getFeatureType() {
+		if (reprojectedFeatureType == null) {
+			return persistedFeatureType;
+		}
 		return reprojectedFeatureType;
 	}
 
@@ -789,13 +870,19 @@ public class FeatureDataAdapter extends
 	public AdapterPersistenceEncoding encode(
 			final SimpleFeature entry,
 			final CommonIndexModel indexModel ) {
+
+		if (transform != null) {
+			return super.encode(
+					FeatureDataUtils.crsTransform(
+							entry,
+							reprojectedFeatureType,
+							transform),
+					indexModel);
+		}
 		return super.encode(
-				FeatureDataUtils.defaultCRSTransform(
-						entry,
-						persistedFeatureType,
-						reprojectedFeatureType,
-						transform),
+				entry,
 				indexModel);
+
 	}
 
 	@Override
@@ -972,4 +1059,27 @@ public class FeatureDataAdapter extends
 				dimensionFieldIds);
 		return dimensionFieldIds;
 	}
+
+	public static CoordinateReferenceSystem decodeCRS(
+			String crsCode ) {
+
+		CoordinateReferenceSystem crs = null;
+		try {
+			crs = CRS.decode(
+					crsCode,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode '" + crsCode + "' CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize '" + crsCode + "' object",
+					e);
+		}
+
+		return crs;
+
+	}
+
 }

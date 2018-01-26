@@ -144,7 +144,7 @@ public class DistortionGroupManagement
 
 		@Override
 		public List<QueryFilter> createFilters(
-				final CommonIndexModel indexModel ) {
+				final PrimaryIndex index ) {
 			return Collections.<QueryFilter> singletonList(new BatchIdFilter(
 					batchId));
 		}
@@ -157,7 +157,7 @@ public class DistortionGroupManagement
 
 		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
-				final NumericIndexStrategy indexStrategy ) {
+				final PrimaryIndex index ) {
 			return Collections.emptyList();
 		}
 
@@ -493,6 +493,13 @@ public class DistortionGroupManagement
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 }

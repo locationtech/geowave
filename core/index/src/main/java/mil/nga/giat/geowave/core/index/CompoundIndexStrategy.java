@@ -397,6 +397,8 @@ public class CompoundIndexStrategy implements
 		}
 		int twosDefsPosition = 0;
 		for (final NumericDimensionDefinition definition : strategy2Definitions) {
+			// TODO this implies that no two dimension definitions can equal
+			// each other within a single strategy, seems very presumptuous
 			final int pos = definitions.indexOf(definition);
 			if (pos >= 0) {
 				strategy2Mappings[pos] = twosDefsPosition;

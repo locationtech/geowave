@@ -34,6 +34,7 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -202,7 +203,7 @@ public class ComparisonStatsJobRunner extends
 								ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
 								ComparisonAccumuloStatsReducer.NAME_PER_BAND,
 								null),
-						new SpatialDimensionalityTypeProvider().createPrimaryIndex());
+						new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 				return ingester.waitForCompletion(true);
 
 			}

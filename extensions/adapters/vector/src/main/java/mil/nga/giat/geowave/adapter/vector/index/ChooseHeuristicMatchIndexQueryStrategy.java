@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -65,8 +65,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
 						continue;
 					}
-					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx
-							.getIndexStrategy());
+					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx);
 					if (IndexUtils.isFullTableScan(queryRanges)) {
 						// keep this is as a default in case all indices
 						// result in a full table scan
@@ -76,7 +75,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 					}
 					else {
 						double currentBitsUsed = 0;
-						int currentDimensionCount = nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
+						final int currentDimensionCount = nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
 
 						if (currentDimensionCount >= bestIndexDimensionCount) {
 							for (final MultiDimensionalNumericData qr : queryRanges) {
@@ -90,7 +89,8 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 										dataRangePerDimension);
 							}
 
-							if (currentDimensionCount > bestIndexDimensionCount || currentBitsUsed > bestIndexBitsUsed) {
+							if ((currentDimensionCount > bestIndexDimensionCount)
+									|| (currentBitsUsed > bestIndexBitsUsed)) {
 								bestIndexBitsUsed = currentBitsUsed;
 								bestIndexDimensionCount = currentDimensionCount;
 								bestIdx = nextIdx;

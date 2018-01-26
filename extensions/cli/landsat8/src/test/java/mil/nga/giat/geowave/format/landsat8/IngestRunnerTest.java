@@ -16,6 +16,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 
+import org.apache.commons.lang.SystemUtils;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -41,6 +42,10 @@ public class IngestRunnerTest
 	@BeforeClass
 	public static void setup()
 			throws IOException {
+
+		// Skip this test if we're on a Mac
+		org.junit.Assume.assumeTrue(isNotMac());
+
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
@@ -48,6 +53,10 @@ public class IngestRunnerTest
 		InstallGdal.main(new String[] {
 			System.getenv("GDAL_DIR")
 		});
+	}
+
+	private static boolean isNotMac() {
+		return !SystemUtils.IS_OS_MAC;
 	}
 
 	@Test

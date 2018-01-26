@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -23,7 +23,6 @@ import java.util.List;
 import org.junit.Test;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
@@ -40,8 +39,6 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -51,8 +48,6 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
-import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -69,7 +64,7 @@ public class MemoryDataStoreTest
 				new MockComponents.TestIndexModel());
 		final String namespace = "test_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
-		MemoryRequiredOptions reqOptions = new MemoryRequiredOptions();
+		final MemoryRequiredOptions reqOptions = new MemoryRequiredOptions();
 		reqOptions.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
 				reqOptions);
@@ -80,7 +75,7 @@ public class MemoryDataStoreTest
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
 			public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-					ByteArrayId fieldId ) {
+					final ByteArrayId fieldId ) {
 				return new GlobalVisibilityHandler(
 						"aaa&bbb");
 			}
@@ -244,7 +239,7 @@ public class MemoryDataStoreTest
 						"tm2"));
 		final String namespace = "test2_" + getClass().getName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
-		MemoryRequiredOptions opts = new MemoryRequiredOptions();
+		final MemoryRequiredOptions opts = new MemoryRequiredOptions();
 		opts.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
 				opts);
@@ -255,7 +250,7 @@ public class MemoryDataStoreTest
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
 			public FieldVisibilityHandler<Integer, Object> getFieldVisibilityHandler(
-					ByteArrayId fieldId ) {
+					final ByteArrayId fieldId ) {
 				return new GlobalVisibilityHandler(
 						"aaa&bbb");
 			}
@@ -459,12 +454,15 @@ public class MemoryDataStoreTest
 			final int count,
 			final NumericRange range ) {
 		while (statIt.hasNext()) {
-			DataStatistics<Integer> stat = (DataStatistics<Integer>) statIt.next();
-			if (stat instanceof CountDataStatistics && ((CountDataStatistics) stat).getCount() != count)
+			final DataStatistics<Integer> stat = (DataStatistics<Integer>) statIt.next();
+			if ((stat instanceof CountDataStatistics) && (((CountDataStatistics) stat).getCount() != count)) {
 				return false;
-			else if (stat instanceof IntegerRangeDataStatistics
-					&& (((IntegerRangeDataStatistics) stat).getMin() != range.getMin() || ((IntegerRangeDataStatistics) stat)
-							.getMax() != range.getMax())) return false;
+			}
+			else if ((stat instanceof IntegerRangeDataStatistics)
+					&& ((((IntegerRangeDataStatistics) stat).getMin() != range.getMin()) || (((IntegerRangeDataStatistics) stat)
+							.getMax() != range.getMax()))) {
+				return false;
+			}
 		}
 		return true;
 	}
@@ -514,9 +512,9 @@ public class MemoryDataStoreTest
 
 		@Override
 		public List<QueryFilter> createFilters(
-				final CommonIndexModel indexModel ) {
+				final PrimaryIndex index ) {
 			return Arrays.asList((QueryFilter) new TestQueryFilter(
-					indexModel,
+					index.getIndexModel(),
 					min,
 					max));
 		}
@@ -529,7 +527,7 @@ public class MemoryDataStoreTest
 
 		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
-				final NumericIndexStrategy indexStrategy ) {
+				final PrimaryIndex index ) {
 			return Collections.<MultiDimensionalNumericData> singletonList(new BasicNumericDataset(
 					new NumericData[] {
 						new NumericRange(

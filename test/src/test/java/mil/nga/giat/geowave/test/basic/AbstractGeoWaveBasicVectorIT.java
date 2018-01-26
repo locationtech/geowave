@@ -21,14 +21,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.math.util.MathUtils;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -38,6 +39,7 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
@@ -115,6 +117,21 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final PrimaryIndex index,
 			final String queryDescription )
 			throws Exception {
+		testQuery(
+				savedFilterResource,
+				expectedResultsResources,
+				index,
+				queryDescription,
+				null);
+	}
+
+	protected void testQuery(
+			final URL savedFilterResource,
+			final URL[] expectedResultsResources,
+			final PrimaryIndex index,
+			final String queryDescription,
+			CoordinateReferenceSystem crs )
+			throws Exception {
 		LOGGER.info("querying " + queryDescription);
 		System.out.println("querying " + queryDescription);
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
@@ -127,7 +144,9 @@ abstract public class AbstractGeoWaveBasicVectorIT
 				new QueryOptions(
 						index),
 				query)) {
-			final ExpectedResults expectedResults = TestUtils.getExpectedResults(expectedResultsResources);
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(
+					expectedResultsResources,
+					crs);
 			int totalResults = 0;
 			final List<Long> actualCentroids = new ArrayList<Long>();
 			while (actualResults.hasNext()) {
@@ -401,6 +420,18 @@ abstract public class AbstractGeoWaveBasicVectorIT
 			final URL[] inputFiles,
 			final PrimaryIndex index,
 			final boolean multithreaded ) {
+		testStats(
+				inputFiles,
+				index,
+				multithreaded,
+				null);
+	}
+
+	protected void testStats(
+			final URL[] inputFiles,
+			final PrimaryIndex index,
+			final boolean multithreaded,
+			CoordinateReferenceSystem crs ) {
 		// In the multithreaded case, only test min/max and count. Stats will be
 		// ingested
 		// in a different order and will not match.
@@ -409,6 +440,7 @@ abstract public class AbstractGeoWaveBasicVectorIT
 		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(index.getId());
+		MathTransform mathTransform = TestUtils.transformFromCrs(crs);
 		for (final URL inputFile : inputFiles) {
 			LOGGER.warn("Calculating stats from file '" + inputFile.getPath() + "' - this may take several minutes...");
 			try (final CloseableIterator<GeoWaveData<SimpleFeature>> dataIterator = localFileIngest.toGeoWaveData(
@@ -419,7 +451,12 @@ abstract public class AbstractGeoWaveBasicVectorIT
 						localFileIngest.getDataAdapters(null));
 				while (dataIterator.hasNext()) {
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
+					boolean needsInit = adapterCache.adapterExists(data.getAdapterId());
 					final WritableDataAdapter<SimpleFeature> adapter = data.getAdapter(adapterCache);
+					if (!needsInit) {
+						adapter.init(index);
+						adapterCache.addAdapter(adapter);
+					}
 					// it should be a statistical data adapter
 					if (adapter instanceof StatisticsProvider) {
 						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
@@ -437,9 +474,16 @@ abstract public class AbstractGeoWaveBasicVectorIT
 								new UniformVisibilityWriter<SimpleFeature>(
 										new GlobalVisibilityHandler<SimpleFeature, Object>(
 												"")));
+						// transform data.getValue here using this code:
+
 						cachedValues.entryIngested(
 								entryInfo,
-								data.getValue());
+								mathTransform != null ? FeatureDataUtils.crsTransform(
+										data.getValue(),
+										SimpleFeatureTypeBuilder.retype(
+												data.getValue().getFeatureType(),
+												crs),
+										mathTransform) : data.getValue());
 					}
 				}
 			}

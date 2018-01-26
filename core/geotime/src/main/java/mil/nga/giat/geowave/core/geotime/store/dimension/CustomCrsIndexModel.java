@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -8,21 +8,23 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.index;
+package mil.nga.giat.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.data.field.FieldReader;
-import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
+import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 
 /**
  * This class is a concrete implementation of a common index model. Data
@@ -30,62 +32,49 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
  * common for a given index. This way distributable filters will not need to
  * handle any adapter-specific transformation, but can use the common index
  * fields.
- * 
+ *
  */
-public class BasicIndexModel implements
-		CommonIndexModel
+public class CustomCrsIndexModel extends
+		BasicIndexModel
 {
-	protected NumericDimensionField<?>[] dimensions;
-	// the first dimension of a particular field ID will be the persistence
-	// model used
-	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
-	private transient String id;
 
-	public BasicIndexModel() {}
+	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCrsIndexModel.class);
+	private String crsCode;
+	private CoordinateReferenceSystem crs;
 
-	public BasicIndexModel(
-			final NumericDimensionField<?>[] dimensions ) {
+	public CustomCrsIndexModel() {}
+
+	public CustomCrsIndexModel(
+			final NumericDimensionField<?>[] dimensions,
+			final String crsCode ) {
 		init(dimensions);
+		this.crsCode = crsCode;
 	}
 
-	public void init(
-			final NumericDimensionField<?>[] dimensions ) {
-		this.dimensions = dimensions;
-		fieldIdToPeristenceMap = new HashMap<ByteArrayId, NumericDimensionField<?>>();
-		for (final NumericDimensionField<?> d : dimensions) {
-			if (!fieldIdToPeristenceMap.containsKey(d.getFieldId())) {
-				fieldIdToPeristenceMap.put(
-						d.getFieldId(),
-						d);
+	public CoordinateReferenceSystem getCrs() {
+		if (crs == null) {
+			try {
+				crs = CRS.decode(
+						crsCode,
+						true);
+			}
+			catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to decode indexed crs",
+						e);
 			}
 		}
+		return crs;
 	}
 
-	@SuppressWarnings("unchecked")
-	@Override
-	public FieldWriter<Object, CommonIndexValue> getWriter(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
-		if (dimension != null) {
-			return (FieldWriter<Object, CommonIndexValue>) dimension.getWriter();
-		}
-		return null;
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public FieldReader<CommonIndexValue> getReader(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
-		if (dimension != null) {
-			return (FieldReader<CommonIndexValue>) dimension.getReader();
-		}
-		return null;
+	public String getCrsCode() {
+		return crsCode;
 	}
 
 	@Override
-	public NumericDimensionField<?>[] getDimensions() {
-		return dimensions;
+	public void init(
+			final NumericDimensionField<?>[] dimensions ) {
+		super.init(dimensions);
 	}
 
 	@Override
@@ -110,7 +99,7 @@ public class BasicIndexModel implements
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final BasicIndexModel other = (BasicIndexModel) obj;
+		final CustomCrsIndexModel other = (CustomCrsIndexModel) obj;
 		return Arrays.equals(
 				dimensions,
 				other.dimensions);
@@ -118,8 +107,9 @@ public class BasicIndexModel implements
 
 	@Override
 	public byte[] toBinary() {
-		int byteBufferLength = 4;
-		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
+		final byte[] crsCodeBinary = StringUtils.stringToBinary(crsCode);
+		int byteBufferLength = 8 + crsCodeBinary.length;
+		final List<byte[]> dimensionBinaries = new ArrayList<>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);
@@ -128,10 +118,12 @@ public class BasicIndexModel implements
 		}
 		final ByteBuffer buf = ByteBuffer.allocate(byteBufferLength);
 		buf.putInt(dimensions.length);
+		buf.putInt(crsCodeBinary.length);
 		for (final byte[] dimensionBinary : dimensionBinaries) {
 			buf.putInt(dimensionBinary.length);
 			buf.put(dimensionBinary);
 		}
+		buf.put(crsCodeBinary);
 		return buf.array();
 	}
 
@@ -140,20 +132,17 @@ public class BasicIndexModel implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int numDimensions = buf.getInt();
+		final int crsCodeLength = buf.getInt();
 		dimensions = new NumericDimensionField[numDimensions];
 		for (int i = 0; i < numDimensions; i++) {
 			final byte[] dim = new byte[buf.getInt()];
 			buf.get(dim);
 			dimensions[i] = (NumericDimensionField<?>) PersistenceUtils.fromBinary(dim);
 		}
+		final byte[] codeBytes = new byte[crsCodeLength];
+		buf.get(codeBytes);
+		crsCode = StringUtils.stringFromBinary(codeBytes);
 		init(dimensions);
 	}
 
-	@Override
-	public String getId() {
-		if (id == null) {
-			id = StringUtils.intToString(hashCode());
-		}
-		return id;
-	}
 }

@@ -35,7 +35,6 @@ public class FeatureBoundingBoxStatistics extends
 	private static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FEATURE_BBOX");
 
-	private SimpleFeatureType persistedType;
 	private SimpleFeatureType reprojectedType;
 	private MathTransform transform;
 
@@ -50,14 +49,12 @@ public class FeatureBoundingBoxStatistics extends
 				dataAdapterId,
 				statisticsId,
 				null,
-				null,
 				null);
 	}
 
 	public FeatureBoundingBoxStatistics(
 			final ByteArrayId dataAdapterId,
 			final String statisticsId,
-			final SimpleFeatureType persistedType,
 			final SimpleFeatureType reprojectedType,
 			final MathTransform transform ) {
 		super(
@@ -65,7 +62,6 @@ public class FeatureBoundingBoxStatistics extends
 				composeId(
 						STATS_TYPE.getString(),
 						statisticsId));
-		this.persistedType = persistedType;
 		this.reprojectedType = reprojectedType;
 		this.transform = transform;
 	}
@@ -98,10 +94,9 @@ public class FeatureBoundingBoxStatistics extends
 			final SimpleFeature entry ) {
 		// incorporate the bounding box of the entry's envelope
 		final Object o;
-		if ((persistedType != null) && (reprojectedType != null) && (transform != null)) {
-			o = FeatureDataUtils.defaultCRSTransform(
+		if ((reprojectedType != null) && (transform != null)) {
+			o = FeatureDataUtils.crsTransform(
 					entry,
-					persistedType,
 					reprojectedType,
 					transform).getAttribute(
 					getFieldName());
@@ -123,7 +118,6 @@ public class FeatureBoundingBoxStatistics extends
 		return new FeatureBoundingBoxStatistics(
 				dataAdapterId,
 				getFieldName(),
-				persistedType,
 				reprojectedType,
 				transform);
 	}

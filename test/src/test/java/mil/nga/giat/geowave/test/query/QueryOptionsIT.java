@@ -31,10 +31,13 @@ import com.vividsolutions.jts.geom.Envelope;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -69,6 +72,8 @@ public class QueryOptionsIT
 			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 					GUADALAJARA,
 					ATLANTA)));
+	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
@@ -84,8 +89,10 @@ public class QueryOptionsIT
 		type2 = getSimpleFeatureType("type2");
 		dataAdapter1 = new FeatureDataAdapter(
 				type1);
+		dataAdapter1.init(index);
 		dataAdapter2 = new FeatureDataAdapter(
 				type2);
+		dataAdapter2.init(index);
 	}
 
 	@Before
