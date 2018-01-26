@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -216,18 +216,36 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileMultiThreaded-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileMultiThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                        <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                        <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#processFileSingleThreaded-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">processFileSingleThreaded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#runOperation-java.lang.String-java.io.File-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputPath,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#shutdownExecutor--">shutdownExecutor</a></span>()</code>
 <div class="block">This function will wait for executing tasks to complete for up to 10
  seconds.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestDriver.html#startExecutor--">startExecutor</a></span>()</code>
 <div class="block">Create a basic thread pool to ingest file data.</div>
@@ -394,7 +412,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <a name="processFile-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>processFile</h4>
 <pre>public&nbsp;void&nbsp;processFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
@@ -405,6 +423,44 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/Abs
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html#processFile-java.net.URL-java.lang.String-P-R-">processFile</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/AbstractLocalFileDriver.html" title="class in mil.nga.giat.geowave.core.ingest.local">AbstractLocalFileDriver</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="processFileSingleThreaded-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>processFileSingleThreaded</h4>
+<pre>public&nbsp;void&nbsp;processFileSingleThreaded(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                      <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                                      <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)
+                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="processFileMultiThreaded-java.net.URL-java.lang.String-mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData-java.util.Map-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>processFileMultiThreaded</h4>
+<pre>public&nbsp;void&nbsp;processFileMultiThreaded(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                     <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalFileIngestPlugin.html" title="interface in mil.nga.giat.geowave.core.ingest.local">LocalFileIngestPlugin</a>&lt;?&gt;&nbsp;plugin,
+                                     <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalIngestRunData</a>&nbsp;ingestRunData,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;specifiedPrimaryIndexes,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&gt;&nbsp;requiredIndexMap)
+                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
