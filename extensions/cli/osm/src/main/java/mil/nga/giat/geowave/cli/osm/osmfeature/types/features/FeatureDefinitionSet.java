@@ -42,10 +42,8 @@ public class FeatureDefinitionSet
 {
 	public final static List<String> GeneralizedFeatures = Collections.unmodifiableList(new ArrayList<String>());
 	public final static List<FeatureDefinition> Features = (new ArrayList<FeatureDefinition>());
-	public final static Map<String, FeatureDataAdapter> featureAdapters = Collections
-			.unmodifiableMap(new HashMap<String, FeatureDataAdapter>());
-	public final static Map<String, SimpleFeatureType> featureTypes = Collections
-			.unmodifiableMap(new HashMap<String, SimpleFeatureType>());
+	public final static Map<String, FeatureDataAdapter> featureAdapters = new HashMap(new HashMap<String, FeatureDataAdapter>());
+	public final static Map<String, SimpleFeatureType> featureTypes = new HashMap(new HashMap<String, SimpleFeatureType>());
 	private final static Object MUTEX = new Object();
 	private static boolean initialized = false;
 	private static final Logger LOGGER = LoggerFactory.getLogger(FeatureDefinitionSet.class);

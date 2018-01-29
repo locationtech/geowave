@@ -155,10 +155,10 @@ public class IngestOSMToGeoWaveCommand extends
 		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
-		if (!basePath.startsWith("/")) {
-			throw new ParameterException(
-					"HDFS Base path must start with forward slash /");
-		}
+		//if (!basePath.startsWith("/")) {
+			//throw new ParameterException(
+					//"HDFS Base path must start with forward slash /");
+		//}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

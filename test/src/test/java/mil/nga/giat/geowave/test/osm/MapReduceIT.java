@@ -22,6 +22,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.cli.osm.operations.IngestOSMToGeoWaveCommand;
 import mil.nga.giat.geowave.cli.osm.operations.StageOSMToHDFSCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -55,9 +56,7 @@ public class MapReduceIT
 			"osm").getAbsoluteFile().toString();
 
 	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -68,7 +67,7 @@ public class MapReduceIT
 				new File(
 						TEST_DATA_ZIP_RESOURCE_PATH));
 		data.extractAll(TEST_DATA_BASE_DIR);
-
+		
 	}
 
 	@Test
@@ -90,9 +89,9 @@ public class MapReduceIT
 		StageOSMToHDFSCommand stage = new StageOSMToHDFSCommand();
 		stage.setParameters(
 				TEST_DATA_BASE_DIR,
-				mrEnv.getHdfs(),
-				hdfsPath);
-		stage.execute(new ManualOperationParams());
+				hdfsPath
+				);
+		stage.execute(mrEnv.getOperationParams());
 
 		Connector conn = new ZooKeeperInstance(
 				accumuloEnv.getAccumuloInstance(),
@@ -107,10 +106,8 @@ public class MapReduceIT
 		conn.securityOperations().changeUserAuthorizations(
 				accumuloEnv.getAccumuloUser(),
 				auth);
-
 		IngestOSMToGeoWaveCommand ingest = new IngestOSMToGeoWaveCommand();
 		ingest.setParameters(
-				mrEnv.getHdfs(),
 				hdfsPath,
 				null);
 		ingest.setInputStoreOptions(dataStoreOptions);
@@ -121,17 +118,17 @@ public class MapReduceIT
 		// Execute for node's ways, and relations.
 		ingest.getIngestOptions().setMapperType(
 				"NODE");
-		ingest.execute(new ManualOperationParams());
+		ingest.execute(mrEnv.getOperationParams());
 		System.out.println("finished accumulo ingest Node");
 
 		ingest.getIngestOptions().setMapperType(
 				"WAY");
-		ingest.execute(new ManualOperationParams());
+		ingest.execute(mrEnv.getOperationParams());
 		System.out.println("finished accumulo ingest Way");
 
 		ingest.getIngestOptions().setMapperType(
 				"RELATION");
-		ingest.execute(new ManualOperationParams());
+		ingest.execute(mrEnv.getOperationParams());
 		System.out.println("finished accumulo ingest Relation");
 	}
 }
