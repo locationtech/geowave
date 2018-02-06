@@ -23,10 +23,7 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.cli.osm.mapreduce.Convert.OSMConversionRunner;
-import mil.nga.giat.geowave.cli.osm.mapreduce.Ingest.OSMRunner;
 import mil.nga.giat.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
-import mil.nga.giat.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
@@ -34,6 +31,9 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.format.osm.convert.OSMConversionRunner;
+import mil.nga.giat.geowave.format.osm.feature.types.FeatureDefinitionSet;
+import mil.nga.giat.geowave.format.osm.ingest.OSMRunner;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)

@@ -26,13 +26,13 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.ParametersDelegate;
 
-import mil.nga.giat.geowave.cli.osm.parser.OsmPbfParser;
-import mil.nga.giat.geowave.cli.osm.parser.OsmPbfParserOptions;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.format.osm.parser.OsmPbfParser;
+import mil.nga.giat.geowave.format.osm.parser.OsmPbfParserOptions;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "stage", parentOperation = OSMSection.class)

@@ -27,9 +27,11 @@
 		<module>formats/twitter</module>
 		<module>formats/stanag4676/format</module>
 		<module>formats/stanag4676/service</module>
+		<module>formats/osm</module>
 		<module>cli/debug</module>
 		<module>cli/geoserver</module>
 		<module>cli/osm</module>
 		<module>cli/landsat8</module>
+		
 	</modules>
 </project>

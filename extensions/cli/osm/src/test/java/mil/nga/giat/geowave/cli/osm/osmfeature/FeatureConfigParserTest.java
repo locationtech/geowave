@@ -10,9 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.cli.osm.osmfeature;
 
-import mil.nga.giat.geowave.cli.osm.osmfeature.FeatureConfigParser;
-
 import org.junit.Test;
+
+import mil.nga.giat.geowave.format.osm.feature.FeatureConfigParser;
 
 import java.io.File;
 import java.io.FileInputStream;
