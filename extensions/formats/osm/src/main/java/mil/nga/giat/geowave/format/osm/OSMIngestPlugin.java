@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.format.osm;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
@@ -23,7 +24,10 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.jaitools.jts.CoordinateSequence2D;
@@ -231,8 +235,33 @@ public class OSMIngestPlugin extends
 
 		mil.nga.giat.geowave.format.osm.parser.OsmAvroBinaryParser parser = new mil.nga.giat.geowave.format.osm.parser.OsmAvroBinaryParser();
 		
-		try {
+		
+		//TODO: This feels extremely unnecessary? Maybe just read into ByteBufferBacked output stream, and use from there?
+		final Configuration conf = new Configuration();
+		conf.set(
+				"fs.defaultFS",
+				hdfsHostPort);
+		conf.set(
+				"fs.hdfs.impl",
+				org.apache.hadoop.hdfs.DistributedFileSystem.class.getName());
+		final Path hdfsBaseDirectory = new Path(
+				basePath);
 
+		try (final FileSystem fs = FileSystem.get(
+				conf)) {
+			if (!fs.exists(
+					hdfsBaseDirectory)) {
+				fs.mkdirs(
+						hdfsBaseDirectory);
+			}
+		}
+		catch (final IOException e) {
+			LOGGER.error(
+					"Unable to create remote HDFS directory",
+					e);
+		}
+		
+		try {
 			//TODO: How do I get hdfs ingest directory?
 			nodeOut = fs.create(nodesPath);
 			wayOut = fs.create(waysPath);
@@ -262,6 +291,7 @@ public class OSMIngestPlugin extends
 		
 		//After this point pbf file should be expanded to nodes/ways/relations on hdfs
 		
+		//TODO: Loop through and process all nodes/ways/relations in directories
 		
 				return null;
 	}

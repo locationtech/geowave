@@ -65,7 +65,7 @@ public class OSMIngestUtils {
 		return type;
 	}
 	
-	public String mappingContents = "{\n"
+	public static String mappingContents = "{\n"
 			+ "  \"generalized_tables\": {\n"
 			+ "    \"waterareas_gen1\": {\n"
 			+ "      \"source\": \"waterareas\",\n"

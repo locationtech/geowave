@@ -62,7 +62,7 @@ public class NodeDataAdapter implements
 	@Override
 	public ByteArrayId getDataId(
 			final Node entry ) {
-		return null
+		return null;
 	}
 
 	@Override
