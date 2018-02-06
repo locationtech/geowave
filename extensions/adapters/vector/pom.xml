@@ -50,6 +50,10 @@
 			<artifactId>gt-wps</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-wms</artifactId>
 			<exclusions>
