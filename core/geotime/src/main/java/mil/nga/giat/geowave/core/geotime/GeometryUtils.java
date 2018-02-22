@@ -31,7 +31,10 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
@@ -222,6 +225,19 @@ public class GeometryUtils
 						false));
 		return new ConstraintSet(
 				constraintsPerDimension);
+	}
+
+	public static MultiDimensionalNumericData getBoundsFromEnvelope(
+			Envelope envelope ) {
+		final NumericRange[] boundsPerDimension = new NumericRange[2];
+		boundsPerDimension[0] = new NumericRange(
+				envelope.getMinX(),
+				envelope.getMaxX());
+		boundsPerDimension[1] = new NumericRange(
+				envelope.getMinY(),
+				envelope.getMaxY());
+		return new BasicNumericDataset(
+				boundsPerDimension);
 	}
 
 	/**

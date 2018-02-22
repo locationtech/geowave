@@ -24,6 +24,7 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -128,6 +129,16 @@ public abstract class SplitsProvider
 		for (final IntermediateSplitInfo split : splits) {
 			retVal.add(split.toFinalSplit());
 		}
+
+		/*
+		 * for (InputSplit i : retVal){ System.err.println("start " + new
+		 * ByteArrayId
+		 * (((GeoWaveInputSplit)i).getRangeLocationPairInstance().getRange
+		 * ().getStartKey()).getHexString()); System.err.println("end " + new
+		 * ByteArrayId
+		 * (((GeoWaveInputSplit)i).getRangeLocationPairInstance().getRange
+		 * ().getEndKey()).getHexString()); }
+		 */
 		return retVal;
 	}
 

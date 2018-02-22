@@ -39,6 +39,7 @@ import org.opengis.parameter.InvalidParameterValueException;
 import org.opengis.parameter.ParameterNotFoundException;
 import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -63,6 +64,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
@@ -229,7 +231,8 @@ public class RasterIngestRunner extends
 				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
 						.getConstraints(
 								filter,
-								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								// GeoWaveGTRasterFormat.DEFAULT_CRS,
+								getIndexCRS(indices),
 								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
 				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
@@ -292,6 +295,45 @@ public class RasterIngestRunner extends
 				coverage,
 				reader,
 				geotiffFile);
+	}
+
+	private CoordinateReferenceSystem getIndexCRS(
+			PrimaryIndex[] indices ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrs == null) {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					indexCrs = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs();
+				}
+				else {
+					indexCrs = GeoWaveGTRasterFormat.DEFAULT_CRS;
+				}
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrs.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrs.equals(GeoWaveGTRasterFormat.DEFAULT_CRS)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
+
+		return indexCrs;
 	}
 
 	private static double getNoDataValue(

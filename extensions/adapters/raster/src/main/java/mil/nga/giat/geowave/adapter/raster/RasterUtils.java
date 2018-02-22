@@ -49,7 +49,6 @@ import javax.media.jai.TiledImage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -95,6 +94,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -170,7 +170,7 @@ public class RasterUtils
 			final double avgSpan = (projectedReferenceEnvelope.getSpan(0) + projectedReferenceEnvelope.getSpan(1)) / 2;
 			final MathTransform gridCrsToWorldCrs = CRS.findMathTransform(
 					gridCoverage.getCoordinateReferenceSystem(),
-					GeoWaveGTRasterFormat.DEFAULT_CRS,
+					projectedReferenceEnvelope.getCoordinateReferenceSystem(),
 					true);
 			final Coordinate[] polyCoords = getWorldCoordinates(
 					sampleEnvelope.getMinimum(0),
@@ -966,15 +966,58 @@ public class RasterUtils
 			final double[] maxPerBand,
 			final String[] namePerBand,
 			final WritableRaster raster ) {
+		return createCoverageTypeDouble(
+				coverageName,
+				westLon,
+				eastLon,
+				southLat,
+				northLat,
+				minPerBand,
+				maxPerBand,
+				namePerBand,
+				raster,
+				GeometryUtils.DEFAULT_CRS_STR);
+	}
+
+	public static GridCoverage2D createCoverageTypeDouble(
+			final String coverageName,
+			final double westLon,
+			final double eastLon,
+			final double southLat,
+			final double northLat,
+			final double[] minPerBand,
+			final double[] maxPerBand,
+			final String[] namePerBand,
+			final WritableRaster raster,
+			final String crsCode ) {
 		final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
 		Envelope mapExtent;
+
+		CoordinateReferenceSystem crs = null;
+		if (crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+			crs = GeometryUtils.DEFAULT_CRS;
+		}
+		else {
+			try {
+				crs = CRS.decode(crsCode);
+			}
+			catch (FactoryException e) {
+				LOGGER.error(
+						"Unable to decode " + crsCode + " CRS",
+						e);
+				throw new RuntimeException(
+						"Unable to initialize " + crsCode + " object",
+						e);
+			}
+		}
 		try {
 			mapExtent = new ReferencedEnvelope(
 					westLon,
 					eastLon,
 					southLat,
 					northLat,
-					GeoWaveGTRasterFormat.DEFAULT_CRS);
+					// GeoWaveGTRasterFormat.DEFAULT_CRS
+					crs);
 		}
 		catch (final IllegalArgumentException e) {
 			LOGGER.warn(

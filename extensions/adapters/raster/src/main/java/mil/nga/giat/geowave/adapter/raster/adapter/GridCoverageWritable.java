@@ -14,7 +14,13 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
+
 import org.apache.hadoop.io.Writable;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
 /**
  * This class is used by GridCoverageDataAdapter to persist GridCoverages. The
@@ -29,6 +35,7 @@ public class GridCoverageWritable implements
 	private double maxX;
 	private double minY;
 	private double maxY;
+	private CoordinateReferenceSystem crs;
 
 	protected GridCoverageWritable() {}
 
@@ -37,25 +44,18 @@ public class GridCoverageWritable implements
 			final double minX,
 			final double maxX,
 			final double minY,
-			final double maxY ) {
+			final double maxY,
+			final CoordinateReferenceSystem crs ) {
 		this.rasterTile = rasterTile;
 		this.minX = minX;
 		this.maxX = maxX;
 		this.minY = minY;
 		this.maxY = maxY;
+		this.crs = crs;
 	}
 
-	public void set(
-			final RasterTile rasterTile,
-			final double minX,
-			final double maxX,
-			final double minY,
-			final double maxY ) {
-		this.rasterTile = rasterTile;
-		this.minX = minX;
-		this.maxX = maxX;
-		this.minY = minY;
-		this.maxY = maxY;
+	public CoordinateReferenceSystem getCrs() {
+		return crs;
 	}
 
 	public RasterTile getRasterTile() {
@@ -91,6 +91,23 @@ public class GridCoverageWritable implements
 		maxX = input.readDouble();
 		minY = input.readDouble();
 		maxY = input.readDouble();
+		int crsStrSize = input.readInt();
+
+		if (crsStrSize > 0) {
+			byte[] crsStrBytes = new byte[crsStrSize];
+			input.readFully(crsStrBytes);
+			String crsStr = StringUtils.stringFromBinary(crsStrBytes);
+			try {
+				crs = CRS.decode(crsStr);
+			}
+			catch (FactoryException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		else {
+			crs = GeometryUtils.DEFAULT_CRS;
+		}
 	}
 
 	@Override
@@ -104,5 +121,8 @@ public class GridCoverageWritable implements
 		output.writeDouble(maxX);
 		output.writeDouble(minY);
 		output.writeDouble(maxY);
+		String crsStr = crs == null || GeometryUtils.DEFAULT_CRS.equals(crs) ? "" : crs.getName().getCode();
+		output.writeInt(crsStr.length());
+		output.write(StringUtils.stringToBinary(crsStr));
 	}
 }

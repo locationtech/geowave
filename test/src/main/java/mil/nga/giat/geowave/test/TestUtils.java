@@ -103,7 +103,26 @@ public class TestUtils
 			.createPrimaryIndex(new SpatialOptions());
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex(new SpatialTemporalOptions());
-	public static String CUSTOM_CRSCODE = "EPSG:3070";
+	// public static String CUSTOM_CRSCODE = "EPSG:3070";
+	public static String CUSTOM_CRSCODE = "EPSG:4240";
+	// public static String CUSTOM_CRSCODE = "EPSG:3857";
+
+	public static final CoordinateReferenceSystem CUSTOM_CRS;
+
+	static {
+		try {
+			CUSTOM_CRS = CRS.decode(
+					CUSTOM_CRSCODE,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode " + CUSTOM_CRSCODE + "CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize " + CUSTOM_CRSCODE + " CRS");
+		}
+	}
 
 	public static PrimaryIndex createCustomCRSPrimaryIndex() {
 		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();

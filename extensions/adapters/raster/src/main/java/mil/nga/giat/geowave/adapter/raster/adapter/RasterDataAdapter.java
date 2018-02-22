@@ -82,6 +82,7 @@ import org.opengis.geometry.Envelope;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.datum.PixelInCell;
+import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.opengis.util.InternationalString;
 
@@ -106,6 +107,8 @@ import mil.nga.giat.geowave.adapter.raster.stats.RasterFootprintStatistics;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -185,6 +188,7 @@ public class RasterDataAdapter implements
 	private RootMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
 	private Interpolation interpolation;
+	private MathTransform transform;
 
 	public RasterDataAdapter() {}
 
@@ -494,6 +498,11 @@ public class RasterDataAdapter implements
 	public Iterator<GridCoverage> convertToIndex(
 			final PrimaryIndex index,
 			final GridCoverage gridCoverage ) {
+		/*
+		 * if
+		 * (RasterDataAdapter.this.getCoverageName().equals("TEST_COVERAGE4")){
+		 * System.err.println("Attempting"); }
+		 */
 		final HierarchicalNumericIndexStrategy indexStrategy = CompoundHierarchicalIndexStrategyWrapper
 				.findHierarchicalStrategy(index.getIndexStrategy());
 		if (indexStrategy != null) {
@@ -510,22 +519,40 @@ public class RasterDataAdapter implements
 					gridCoverage.getCoordinateReferenceSystem());
 
 			ReferencedEnvelope projectedReferenceEnvelope = sampleReferencedEnvelope;
-			if (!GeoWaveGTRasterFormat.DEFAULT_CRS.equals(sourceCrs)) {
+
+			CoordinateReferenceSystem indexCrs = null;
+			boolean defaultCRS;
+			if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+				indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
+				defaultCRS = false;
+			}
+			else {
+				indexCrs = GeoWaveGTRasterFormat.DEFAULT_CRS;
+				defaultCRS = true;
+			}
+
+			if (!indexCrs.equals(sourceCrs)) {
 				try {
 					projectedReferenceEnvelope = sampleReferencedEnvelope.transform(
-							GeoWaveGTRasterFormat.DEFAULT_CRS,
+							indexCrs,
 							true);
 				}
 				catch (TransformException | FactoryException e) {
 					LOGGER.warn(
-							"Unable to transform envelope of grid coverage to EPSG:4326",
+							"Unable to transform envelope of grid coverage to Index CRS",
 							e);
 				}
 			}
+			final MultiDimensionalNumericData bounds;
+			if (defaultCRS) {
+				bounds = GeometryUtils.basicConstraintSetFromEnvelope(
+						projectedReferenceEnvelope).getIndexConstraints(
+						indexStrategy);
+			}
+			else {
+				bounds = GeometryUtils.getBoundsFromEnvelope(projectedReferenceEnvelope);
+			}
 
-			final MultiDimensionalNumericData bounds = GeometryUtils.basicConstraintSetFromEnvelope(
-					projectedReferenceEnvelope).getIndexConstraints(
-					indexStrategy);
 			final GridEnvelope gridEnvelope = gridCoverage.getGridGeometry().getGridRange();
 			// only one set of constraints..hence reference '0' element
 			final double[] tileRangePerDimension = new double[bounds.getDimensionCount()];
@@ -607,14 +634,15 @@ public class RasterDataAdapter implements
 							RasterUtils.getFootprint(
 									projectedReferenceEnvelope,
 									gridCoverage),
-							interpolation));
+							interpolation,
+							projectedReferenceEnvelope.getCoordinateReferenceSystem()));
 		}
 		LOGGER.warn("Strategy is not an instance of HierarchicalNumericIndexStrategy : "
 				+ index.getIndexStrategy().getClass().getName());
 		return Collections.<GridCoverage> emptyList().iterator();
 	}
 
-	private static class MosaicPerPyramidLevelBuilder implements
+	private class MosaicPerPyramidLevelBuilder implements
 			Converter<SubStrategy, GridCoverage>
 	{
 		private final MultiDimensionalNumericData originalBounds;
@@ -623,6 +651,7 @@ public class RasterDataAdapter implements
 		private final double[] backgroundValuesPerBand;
 		private final Geometry footprint;
 		private final Interpolation defaultInterpolation;
+		private final CoordinateReferenceSystem crs;
 
 		public MosaicPerPyramidLevelBuilder(
 				final MultiDimensionalNumericData originalBounds,
@@ -630,13 +659,15 @@ public class RasterDataAdapter implements
 				final int tileSize,
 				final double[] backgroundValuesPerBand,
 				final Geometry footprint,
-				final Interpolation defaultInterpolation ) {
+				final Interpolation defaultInterpolation,
+				CoordinateReferenceSystem crs ) {
 			this.originalBounds = originalBounds;
 			this.originalData = originalData;
 			this.tileSize = tileSize;
 			this.backgroundValuesPerBand = backgroundValuesPerBand;
 			this.footprint = footprint;
 			this.defaultInterpolation = defaultInterpolation;
+			this.crs = crs;
 		}
 
 		@Override
@@ -678,6 +709,10 @@ public class RasterDataAdapter implements
 							minDP[0] = originalBounds.getMinValuesPerDimension()[d];
 							maxDP[0] = originalBounds.getMaxValuesPerDimension()[d];
 						}
+						else if (dimensions[d] instanceof CustomCRSSpatialDimension) {
+							minDP[d] = originalBounds.getMinValuesPerDimension()[d];
+							maxDP[d] = originalBounds.getMaxValuesPerDimension()[d];
+						}
 					}
 
 					final Envelope originalEnvelope = new GeneralEnvelope(
@@ -690,7 +725,7 @@ public class RasterDataAdapter implements
 							maxesPerDimension[longitudeIndex],
 							minsPerDimension[latitudeIndex],
 							maxesPerDimension[latitudeIndex],
-							GeoWaveGTRasterFormat.DEFAULT_CRS);
+							crs);
 					final AffineTransform worldToScreenTransform = RendererUtilities.worldToScreenTransform(
 							mapExtent,
 							new Rectangle(
@@ -707,7 +742,7 @@ public class RasterDataAdapter implements
 												tileSize)),
 								PixelInCell.CELL_CORNER,
 								gridToCRS,
-								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								crs,
 								null);
 
 						final double[] tileRes = pyramidLevel
@@ -786,7 +821,7 @@ public class RasterDataAdapter implements
 											tileEnvelope.getMaximum(0),
 											tileEnvelope.getMinimum(1),
 											tileEnvelope.getMaximum(1)),
-									GeoWaveGTRasterFormat.DEFAULT_CRS);
+									crs);
 							final Geometry tileJTSGeometry = new GeometryFactory().toGeometry(tileReferencedEnvelope);
 							if (!footprint.contains(tileJTSGeometry)) {
 								tileInterpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
@@ -794,7 +829,7 @@ public class RasterDataAdapter implements
 						}
 						GridCoverage resampledCoverage = (GridCoverage) RasterUtils.getCoverageOperations().resample(
 								originalData,
-								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								crs,
 								insertionIdGeometry,
 								tileInterpolation,
 								backgroundValuesPerBand);
@@ -867,6 +902,10 @@ public class RasterDataAdapter implements
 							// hash for each tile and merge strategies will work
 							// correctly)
 						}
+						/*
+						 * if (RasterDataAdapter.this.getCoverageName().equals(
+						 * "TEST_COVERAGE4")){ System.err.println("Success"); }
+						 */
 						return new FitToIndexGridCoverage(
 								resampledCoverage,
 								insertionId,
@@ -881,6 +920,10 @@ public class RasterDataAdapter implements
 						LOGGER.warn(
 								"Unable to calculate transformation for grid coordinates on write",
 								e);
+					}
+					if (RasterDataAdapter.this.getCoverageName().equals(
+							"TEST_COVERAGE4")) {
+						System.err.println("Fail");
 					}
 					return null;
 				}
@@ -964,12 +1007,23 @@ public class RasterDataAdapter implements
 		if ((minX == null) || (minY == null) || (maxX == null) || (maxY == null)) {
 			return null;
 		}
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+			indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
+		}
+		else {
+			indexCrs = GeoWaveGTRasterFormat.DEFAULT_CRS;
+		}
+
 		final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
 				minsPerDimension[0],
 				maxesPerDimension[0],
 				minsPerDimension[1],
 				maxesPerDimension[1],
-				GeoWaveGTRasterFormat.DEFAULT_CRS);
+				indexCrs);
+		// GeoWaveGTRasterFormat.DEFAULT_CRS);
 		try {
 			return prepareCoverage(
 					rasterTile,
@@ -1168,7 +1222,8 @@ public class RasterDataAdapter implements
 											image).getBounds()),
 							PixelInCell.CELL_CORNER,
 							gridToCRS,
-							GeoWaveGTRasterFormat.DEFAULT_CRS,
+							// GeoWaveGTRasterFormat.DEFAULT_CRS,
+							mapExtent.getCoordinateReferenceSystem(),
 							null),
 					bands,
 					null,
@@ -1906,7 +1961,8 @@ public class RasterDataAdapter implements
 						env.getMinimum(0),
 						env.getMaximum(0),
 						env.getMinimum(1),
-						env.getMaximum(1));
+						env.getMaximum(1),
+						env.getCoordinateReferenceSystem());
 			}
 
 			@Override
@@ -1917,7 +1973,7 @@ public class RasterDataAdapter implements
 						writable.getMaxX(),
 						writable.getMinY(),
 						writable.getMaxY(),
-						GeoWaveGTRasterFormat.DEFAULT_CRS);
+						writable.getCrs());
 				try {
 					return prepareCoverage(
 							writable.getRasterTile(),
@@ -2079,6 +2135,37 @@ public class RasterDataAdapter implements
 	public void init(
 			PrimaryIndex... indices ) {
 		// TODO Auto-generated method stub
+		String indexCrsCode = null;
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrsCode == null) {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					indexCrsCode = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode();
+				}
+				else {
+					indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
+				}
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
 
 	}
 }
