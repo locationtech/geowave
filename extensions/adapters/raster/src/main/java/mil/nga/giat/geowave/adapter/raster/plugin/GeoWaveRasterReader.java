@@ -274,7 +274,7 @@ public class GeoWaveRasterReader extends
 				crs = ((CustomCrsIndexModel) indices[0].getIndexModel()).getCrs();
 			}
 			else {
-				crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
+				crs = GeometryUtils.DEFAULT_CRS;
 			}
 			crsCache.put(
 					coverageName,
@@ -406,7 +406,6 @@ public class GeoWaveRasterReader extends
 							bboxStats.getWidth(),
 							bboxStats.getHeight()));
 			env.setCoordinateReferenceSystem(getCoordinateReferenceSystem(coverageName));
-			// env.setCoordinateReferenceSystem(GeoWaveGTRasterFormat.DEFAULT_CRS);
 			return env;
 		}
 		return null;
@@ -415,14 +414,12 @@ public class GeoWaveRasterReader extends
 	@Override
 	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
 		return getDefaultCrs();
-		// return GeoWaveGTRasterFormat.DEFAULT_CRS;
 	}
 
 	@Override
 	public CoordinateReferenceSystem getCoordinateReferenceSystem(
 			final String coverageName ) {
 		return getCrsForCoverage(coverageName);
-		// return GeoWaveGTRasterFormat.DEFAULT_CRS;
 	}
 
 	@Override

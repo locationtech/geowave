@@ -144,31 +144,16 @@ public class KDEJobRunner extends
 			}
 		}
 
-		String inputCrsCode;
-		String outputCrsCode;
-		CoordinateReferenceSystem inputIndexCrs = null;
-		CoordinateReferenceSystem outputIndexCrs = null;
-
-		if (inputPrimaryIndex.getIndexModel() instanceof CustomCrsIndexModel) {
-			inputCrsCode = ((CustomCrsIndexModel) inputPrimaryIndex.getIndexModel()).getCrsCode();
-			inputIndexCrs = ((CustomCrsIndexModel) inputPrimaryIndex.getIndexModel()).getCrs();
-		}
-		else {
-			inputIndexCrs = GeometryUtils.DEFAULT_CRS;
-			inputCrsCode = GeometryUtils.DEFAULT_CRS_STR;
-		}
+		CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
+		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
 
 		PrimaryIndex outputPrimaryIndex = outputIndex;
+		CoordinateReferenceSystem outputIndexCrs=null;
+		String outputCrsCode=null;
+		
 		if (outputPrimaryIndex != null) {
-
-			if (outputPrimaryIndex.getIndexModel() instanceof CustomCrsIndexModel) {
-				outputCrsCode = ((CustomCrsIndexModel) outputPrimaryIndex.getIndexModel()).getCrsCode();
-				outputIndexCrs = ((CustomCrsIndexModel) outputPrimaryIndex.getIndexModel()).getCrs();
-			}
-			else {
-				outputIndexCrs = GeometryUtils.DEFAULT_CRS;
-				outputCrsCode = GeometryUtils.DEFAULT_CRS_STR;
-			}
+			outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
+			outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
 		}
 		else {
 			SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
@@ -416,18 +401,7 @@ public class KDEJobRunner extends
 			else {
 				job2Success = false;
 			}
-			CloseableIterator<Object> obj = outputDataStoreOptions.createDataStore().query(
-					new QueryOptions(
-							new ByteArrayId(
-									kdeCoverageName),
-							outputIndex.getId()),
-					null);
-			int i = 0;
-			while (obj.hasNext()) {
-				obj.next();
-				i++;
-			}
-			System.err.println("there are '" + i + "' tiles");
+			
 			if (rasterResizeOutputDataStoreOptions != null) {
 				// delegate to resize command to wrap it up with the correctly
 				// requested tile size

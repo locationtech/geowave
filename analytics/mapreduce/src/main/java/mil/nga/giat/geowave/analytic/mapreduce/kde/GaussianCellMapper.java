@@ -149,7 +149,6 @@ public class GaussianCellMapper extends
 					pt = ((Geometry) geomObj).getCentroid();
 				}
 				else {
-					// MathTransform transform = null;
 					if (transform == null) {
 
 						try {

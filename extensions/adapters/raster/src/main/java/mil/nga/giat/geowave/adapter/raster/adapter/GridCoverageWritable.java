@@ -21,6 +21,8 @@ import org.apache.hadoop.io.Writable;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
 
 /**
  * This class is used by GridCoverageDataAdapter to persist GridCoverages. The
@@ -121,8 +123,9 @@ public class GridCoverageWritable implements
 		output.writeDouble(maxX);
 		output.writeDouble(minY);
 		output.writeDouble(maxY);
-		String crsStr = crs == null || GeometryUtils.DEFAULT_CRS.equals(crs) ? "" : crs.getName().getCode();
+		String crsStr = crs == null || GeometryUtils.DEFAULT_CRS.equals(crs) ? "" : CRS.toSRS(crs);
 		output.writeInt(crsStr.length());
 		output.write(StringUtils.stringToBinary(crsStr));
 	}
+
 }

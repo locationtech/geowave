@@ -32,12 +32,14 @@ import com.vividsolutions.jts.io.WKBWriter;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
@@ -369,5 +371,23 @@ public class GeometryUtils
 		public Geometry getGeometry() {
 			return jtsBounds;
 		}
+	}
+	
+	public static CoordinateReferenceSystem getIndexCrs(PrimaryIndex index){
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+			indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
+		}
+		else {
+			indexCrs = GeometryUtils.DEFAULT_CRS;
+		}
+		return indexCrs;
+	}
+	
+	public static String getCrsCode(CoordinateReferenceSystem crs){
+		
+		return(CRS.toSRS(crs));
 	}
 }

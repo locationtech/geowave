@@ -130,7 +130,7 @@ public class CustomCRSKDERasterResizeIT
 		TestUtils.testLocalIngest(
 				inputDataStorePluginOptions,
 				DimensionalityType.SPATIAL,
-				TestUtils.CUSTOM_CRSCODE,
+				"EPSG:4901",
 				KDE_SHAPEFILE_FILE,
 				"geotools-vector",
 				1);
@@ -146,7 +146,7 @@ public class CustomCRSKDERasterResizeIT
 		String outputIndex = "raster-spatial";
 		final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
 		outputIndexOptions.selectPlugin("spatial");
-		((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs(TestUtils.CUSTOM_CRSCODE);
+		((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
 		// use the min level to define the request boundary because it is the
 		// most coarse grain
@@ -363,11 +363,6 @@ public class CustomCRSKDERasterResizeIT
 						expectedResults[0][0].length,
 						rasters[i].getNumBands());
 			}
-			int nanExpectedMissed = 0;
-			int nanActualMissed = 0;
-			int nanMatched = 0;
-			int wayOffValues = 0;
-			int closeEnoughValues = 0;
 			for (int x = 0; x < rasters[i].getWidth(); x++) {
 				for (int y = 0; y < rasters[i].getHeight(); y++) {
 					for (int b = 0; b < rasters[i].getNumBands(); b++) {
@@ -387,52 +382,9 @@ public class CustomCRSKDERasterResizeIT
 									new Double(
 											sample));
 						}
-						if (!initialResults) {
-							if (Double.isNaN(expectedResults[x][y][b]) || Double.isNaN(sample)) {
-								if (Double.isNaN(expectedResults[x][y][b]) && Double.isNaN(sample)) {
-									nanMatched++;
-								}
-								else if (Double.isNaN(expectedResults[x][y][b])) {
-									nanExpectedMissed++;
-								}
-								else {
-									nanActualMissed++;
-								}
-							}
-							else if (!MathUtils.equals(
-									expectedResults[x][y][b],
-									sample,
-									0.1)) {
-								wayOffValues++;
-								Assert.assertEquals(
-										"The sample does not match the expected sample value for the coverage " + i
-												+ " at x=" + x + ",y=" + y + ",b=" + b,
-										new Double(
-												expectedResults[x][y][b]),
-										new Double(
-												sample));
-
-							}
-							else {
-								closeEnoughValues++;
-							}
-						}
 					}
 				}
 			}
-			/*
-			 * if (!initialResults){ System.err.println("good: " +
-			 * (closeEnoughValues + nanMatched)); System.err.println("bad: " +
-			 * (nanExpectedMissed + nanActualMissed +wayOffValues));
-			 * System.err.println("pct: " + (double)(closeEnoughValues +
-			 * nanMatched) / (double)(closeEnoughValues + nanMatched +
-			 * nanExpectedMissed + nanActualMissed +wayOffValues));
-			 * System.err.println("nanExp: " + nanExpectedMissed );
-			 * System.err.println("nanAct: " + nanActualMissed );
-			 * System.err.println("nanMatch: " + nanMatched);
-			 * System.err.println("valuesClose: " + closeEnoughValues);
-			 * System.err.println("valuesWayOff: " + wayOffValues); }
-			 */
 		}
 		return expectedResults;
 	}

@@ -56,6 +56,7 @@ import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.processing.Operations;
+import org.geotools.factory.Hints;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
@@ -63,6 +64,7 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
 import org.geotools.referencing.operation.matrix.MatrixFactory;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
@@ -78,6 +80,7 @@ import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.datum.PixelInCell;
+import org.opengis.referencing.operation.CoordinateOperationFactory;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
@@ -113,7 +116,14 @@ public class RasterUtils
 					RenderingHints.KEY_DITHERING,
 					RenderingHints.VALUE_DITHER_ENABLE).put(
 					JAI.KEY_BORDER_EXTENDER,
-					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).build());
+					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).put(
+					Hints.LENIENT_DATUM_SHIFT,
+					Boolean.TRUE).build());
+
+	public final static CoordinateOperationFactory OPERATION_FACTORY = new BufferedCoordinateOperationFactory(
+			new Hints(
+					Hints.LENIENT_DATUM_SHIFT,
+					Boolean.TRUE));
 	private static Operations resampleOperations;
 	private final static Logger LOGGER = LoggerFactory.getLogger(RasterUtils.class);
 	private static final int MIN_SEGMENTS = 5;
@@ -936,7 +946,7 @@ public class RasterUtils
 					eastLon,
 					southLat,
 					northLat,
-					GeoWaveGTRasterFormat.DEFAULT_CRS);
+					GeometryUtils.DEFAULT_CRS);
 		}
 		catch (final IllegalArgumentException e) {
 			LOGGER.warn(
@@ -1016,7 +1026,6 @@ public class RasterUtils
 					eastLon,
 					southLat,
 					northLat,
-					// GeoWaveGTRasterFormat.DEFAULT_CRS
 					crs);
 		}
 		catch (final IllegalArgumentException e) {

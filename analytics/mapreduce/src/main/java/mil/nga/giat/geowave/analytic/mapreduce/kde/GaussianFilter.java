@@ -178,10 +178,6 @@ public class GaussianFilter
 			numXPosts,
 			numYPosts
 		};
-		/*
-		 * final ValueRange[] valueRangePerDimension = new ValueRange[] { new
-		 * ValueRange( -180, 180), new ValueRange( -90, 90) };
-		 */
 		final double[] minsPerDimension = new double[] {
 			minX,
 			minY
