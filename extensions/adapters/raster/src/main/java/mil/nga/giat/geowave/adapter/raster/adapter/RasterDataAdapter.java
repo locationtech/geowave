@@ -626,7 +626,7 @@ public class RasterDataAdapter implements
 		return Collections.<GridCoverage> emptyList().iterator();
 	}
 
-	private class MosaicPerPyramidLevelBuilder implements
+	private static class MosaicPerPyramidLevelBuilder implements
 			Converter<SubStrategy, GridCoverage>
 	{
 		private final MultiDimensionalNumericData originalBounds;
@@ -987,7 +987,7 @@ public class RasterDataAdapter implements
 		if (wgs84 && ((minX == null) || (minY == null) || (maxX == null) || (maxY == null))) {
 			return null;
 		}
-		
+
 		CoordinateReferenceSystem indexCrs = GeometryUtils.getIndexCrs(index);
 		final ReferencedEnvelope mapExtent = new ReferencedEnvelope(
 				minsPerDimension[0],

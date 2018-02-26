@@ -145,7 +145,7 @@ public class GaussianCellMapper extends
 			}
 			final Object geomObj = value.getDefaultGeometry();
 			if ((geomObj != null) && (geomObj instanceof Geometry)) {
-				if (inputCrsCode == outputCrsCode) {
+				if (inputCrsCode.equals(outputCrsCode)) {
 					pt = ((Geometry) geomObj).getCentroid();
 				}
 				else {

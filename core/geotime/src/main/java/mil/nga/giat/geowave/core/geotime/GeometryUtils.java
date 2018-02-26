@@ -372,8 +372,9 @@ public class GeometryUtils
 			return jtsBounds;
 		}
 	}
-	
-	public static CoordinateReferenceSystem getIndexCrs(PrimaryIndex index){
+
+	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex index ) {
 
 		CoordinateReferenceSystem indexCrs = null;
 
@@ -385,9 +386,10 @@ public class GeometryUtils
 		}
 		return indexCrs;
 	}
-	
-	public static String getCrsCode(CoordinateReferenceSystem crs){
-		
-		return(CRS.toSRS(crs));
+
+	public static String getCrsCode(
+			CoordinateReferenceSystem crs ) {
+
+		return (CRS.toSRS(crs));
 	}
 }

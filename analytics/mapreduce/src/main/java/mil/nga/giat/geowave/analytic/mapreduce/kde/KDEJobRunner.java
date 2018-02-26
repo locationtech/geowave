@@ -148,9 +148,9 @@ public class KDEJobRunner extends
 		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
 
 		PrimaryIndex outputPrimaryIndex = outputIndex;
-		CoordinateReferenceSystem outputIndexCrs=null;
-		String outputCrsCode=null;
-		
+		CoordinateReferenceSystem outputIndexCrs = null;
+		String outputCrsCode = null;
+
 		if (outputPrimaryIndex != null) {
 			outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
 			outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
@@ -401,7 +401,7 @@ public class KDEJobRunner extends
 			else {
 				job2Success = false;
 			}
-			
+
 			if (rasterResizeOutputDataStoreOptions != null) {
 				// delegate to resize command to wrap it up with the correctly
 				// requested tile size
