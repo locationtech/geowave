@@ -14,16 +14,9 @@ import com.beust.jcommander.ParametersDelegate;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
 import mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions;
-import mil.nga.giat.geowave.core.ingest.spark.SparkIngestIngestDriver;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.ingest.spark.SparkIngestDriver;
 import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
 
 @GeowaveOperation(name = "sparkToGW", parentOperation = IngestSection.class)
@@ -39,12 +32,10 @@ public class SparkToGeowaveCommand extends
 	private VisibilityOptions ingestOptions = new VisibilityOptions();
 
 	@ParametersDelegate
-	private SparkCommandLineOptions SparkOptions = new SparkCommandLineOptions();
+	private SparkCommandLineOptions sparkOptions = new SparkCommandLineOptions();
 
 	@ParametersDelegate
 	private LocalInputCommandLineOptions localInputOptions = new LocalInputCommandLineOptions();
-
-	private DataStorePluginOptions inputStoreOptions = null;
 
 	@Override
 	public boolean prepare(
@@ -96,12 +87,12 @@ public class SparkToGeowaveCommand extends
 	}
 
 	public SparkCommandLineOptions getSparkOptions() {
-		return SparkOptions;
+		return sparkOptions;
 	}
 
 	public void setSparkOptions(
-			final SparkCommandLineOptions SparkOptions ) {
-		this.SparkOptions = SparkOptions;
+			final SparkCommandLineOptions sparkOptions ) {
+		this.sparkOptions = sparkOptions;
 	}
 
 	public LocalInputCommandLineOptions getLocalInputOptions() {
@@ -111,15 +102,6 @@ public class SparkToGeowaveCommand extends
 	public void setLocalInputOptions(
 			final LocalInputCommandLineOptions localInputOptions ) {
 		this.localInputOptions = localInputOptions;
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	@Override
@@ -140,7 +122,7 @@ public class SparkToGeowaveCommand extends
 		final File configFile = getGeoWaveConfigFile(params);
 
 		// Driver
-		final SparkIngestIngestDriver driver = new SparkIngestIngestDriver();
+		final SparkIngestDriver driver = new SparkIngestDriver();
 
 		// Execute
 		if (!driver.runOperation(
@@ -149,7 +131,7 @@ public class SparkToGeowaveCommand extends
 				inputStoreName,
 				indexList,
 				ingestOptions,
-				SparkOptions,
+				sparkOptions,
 				inputPath)) {
 			throw new RuntimeException(
 					"Ingest failed to execute");

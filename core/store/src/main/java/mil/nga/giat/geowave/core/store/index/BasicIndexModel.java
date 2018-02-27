@@ -84,7 +84,7 @@ public class BasicIndexModel implements
 	}
 
 	@Override
-	public NumericDimensionField<?>[] getDimensions() {
+	public NumericDimensionField<? extends CommonIndexValue>[] getDimensions() {
 		return dimensions;
 	}
 
