@@ -66,8 +66,8 @@ public class ServicesTestEnvironment implements
 	protected static final String GEOSERVER_CONTEXT_PATH = "/geoserver";
 	protected static final String GEOSERVER_BASE_URL = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH;
 	protected static final String GEOSERVER_REST_PATH = GEOSERVER_BASE_URL + "/rest";
-	protected static final String GEOWAVE_WAR_DIR = "target/geowave-services";
-	protected static final String GEOWAVE_CONTEXT_PATH = "/geowave-services";
+	protected static final String GEOWAVE_WAR_DIR = "target/restservices";
+	protected static final String GEOWAVE_CONTEXT_PATH = "/restservices/v0";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
 	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
@@ -214,13 +214,12 @@ public class ServicesTestEnvironment implements
 				gwWebapp.setWar(warDir.getAbsolutePath());
 
 				final WebAppContext restWebapp = new WebAppContext();
-				restWebapp.setContextPath("/reststuff");
-				restWebapp.setWar("target/reststuff");
+				restWebapp.setContextPath("/restservices");
+				restWebapp.setWar("target/restservices");
 
 				jettyServer.setHandlers(new WebAppContext[] {
 					gsWebapp,
 					restWebapp,
-					gwWebapp
 				});
 				gsWebapp.setTempDirectory(TestUtils.TEMP_DIR);
 				// this allows to send large SLD's from the styles form
