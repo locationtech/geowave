@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.slf4j.Logger;
@@ -599,6 +600,55 @@ public class TestUtils
 					file,
 					str);
 		}
+	}
+
+	/**
+	 * 
+	 * @param testName
+	 *            Name of the test that we are starting.
+	 */
+	public static void printStartOfTest(
+			Logger LOGGER,
+			String testName ) {
+		// Format
+		String paddedName = StringUtils.center(
+				"STARTING " + testName,
+				37);
+		// Print
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* " + paddedName + " *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	/**
+	 * 
+	 * @param testName
+	 *            Name of the test that we are starting.
+	 * @param startMillis
+	 *            The time (millis) that the test started.
+	 */
+	public static void printEndOfTest(
+			Logger LOGGER,
+			String testName,
+			long startMillis ) {
+		// Get Elapsed Time
+		double elapsedS = (System.currentTimeMillis() - startMillis) / 1000.;
+		// Format
+		String paddedName = StringUtils.center(
+				"FINISHED " + testName,
+				37);
+		String paddedElapsed = StringUtils.center(
+				elapsedS + "s elapsed.",
+				37);
+		// Print
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* " + paddedName + " *");
+		LOGGER.warn("* " + paddedElapsed + " *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	/**
