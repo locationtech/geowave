@@ -542,7 +542,6 @@ public class KDEJobRunner extends
 			final String coverageName,
 			final PrimaryIndex index )
 			throws Exception {
-		// final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				AccumuloKDEReducer.NUM_BANDS,

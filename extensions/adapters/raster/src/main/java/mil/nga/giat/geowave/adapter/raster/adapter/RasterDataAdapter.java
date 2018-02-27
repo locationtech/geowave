@@ -2105,37 +2105,6 @@ public class RasterDataAdapter implements
 	public void init(
 			PrimaryIndex... indices ) {
 		// TODO Auto-generated method stub
-		String indexCrsCode = null;
-		for (PrimaryIndex primaryindx : indices) {
-
-			// for first iteration
-			if (indexCrsCode == null) {
-				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
-					indexCrsCode = ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode();
-				}
-				else {
-					indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
-				}
-			}
-			else {
-				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
-					// check if indexes have different CRS
-					if (!indexCrsCode.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrsCode())) {
-						LOGGER.error("Multiple indices with different CRS is not supported");
-						throw new RuntimeException(
-								"Multiple indices with different CRS is not supported");
-					}
-					else {
-						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
-							LOGGER.error("Multiple indices with different CRS is not supported");
-							throw new RuntimeException(
-									"Multiple indices with different CRS is not supported");
-						}
-
-					}
-				}
-			}
-		}
-
 	}
+
 }

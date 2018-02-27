@@ -1004,7 +1004,7 @@ public class RasterUtils
 		Envelope mapExtent;
 
 		CoordinateReferenceSystem crs = null;
-		if (crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+		if (crsCode == null || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
 			crs = GeometryUtils.DEFAULT_CRS;
 		}
 		else {

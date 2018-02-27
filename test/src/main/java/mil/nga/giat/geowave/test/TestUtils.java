@@ -103,9 +103,6 @@ public class TestUtils
 			.createPrimaryIndex(new SpatialOptions());
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createPrimaryIndex(new SpatialTemporalOptions());
-	// public static String CUSTOM_CRSCODE = "EPSG:3070";
-	// public static String CUSTOM_CRSCODE = "EPSG:4240";
-	// public static String CUSTOM_CRSCODE = "EPSG:4901";
 	// CRS for Web Mercator
 	public static String CUSTOM_CRSCODE = "EPSG:3857";
 

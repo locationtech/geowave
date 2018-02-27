@@ -135,14 +135,6 @@ public class CustomCRSKDERasterResizeIT
 				"geotools-vector",
 				1);
 
-		// File configFile = File.createTempFile(
-		// "test_kde_resize",
-		// null);
-		// ManualOperationParams operationParams = new ManualOperationParams();
-		// operationParams.getContext().put(
-		// ConfigOptions.PROPERTIES_FILE_CONTEXT,
-		// configFile);
-		//
 		String outputIndex = "raster-spatial";
 		final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
 		outputIndexOptions.selectPlugin("spatial");
@@ -257,9 +249,8 @@ public class CustomCRSKDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					TestUtils.createCustomCRSPrimaryIndex().getId().getString()
-			// TestUtils.DEFAULT_SPATIAL_INDEX.getId().toString()
-					);
+					TestUtils.createCustomCRSPrimaryIndex().getId().getString());
+
 			// due to time considerations when running the test, downsample to
 			// at most 2 powers of 2 lower
 			int targetRes = (MAX_TILE_SIZE_POWER_OF_2 - i);

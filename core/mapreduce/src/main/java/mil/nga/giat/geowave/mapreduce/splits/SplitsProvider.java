@@ -129,16 +129,6 @@ public abstract class SplitsProvider
 		for (final IntermediateSplitInfo split : splits) {
 			retVal.add(split.toFinalSplit());
 		}
-
-		/*
-		 * for (InputSplit i : retVal){ System.err.println("start " + new
-		 * ByteArrayId
-		 * (((GeoWaveInputSplit)i).getRangeLocationPairInstance().getRange
-		 * ().getStartKey()).getHexString()); System.err.println("end " + new
-		 * ByteArrayId
-		 * (((GeoWaveInputSplit)i).getRangeLocationPairInstance().getRange
-		 * ().getEndKey()).getHexString()); }
-		 */
 		return retVal;
 	}
 

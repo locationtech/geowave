@@ -270,12 +270,7 @@ public class GeoWaveRasterReader extends
 		PrimaryIndex[] indices = adapterMapping.getIndices(geowaveIndexStore);
 
 		if (indices != null && indices.length > 0) {
-			if (indices[0].getIndexModel() instanceof CustomCrsIndexModel) {
-				crs = ((CustomCrsIndexModel) indices[0].getIndexModel()).getCrs();
-			}
-			else {
-				crs = GeometryUtils.DEFAULT_CRS;
-			}
+			crs = GeometryUtils.getIndexCrs(indices[0]);
 			crsCache.put(
 					coverageName,
 					crs);

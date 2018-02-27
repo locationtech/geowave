@@ -374,6 +374,40 @@ public class GeometryUtils
 	}
 
 	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex[] indices ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrs == null) {
+				indexCrs = getIndexCrs(primaryindx);
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrs.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrs.equals(GeometryUtils.DEFAULT_CRS)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
+
+		return indexCrs;
+	}
+
+	public static CoordinateReferenceSystem getIndexCrs(
 			PrimaryIndex index ) {
 
 		CoordinateReferenceSystem indexCrs = null;
