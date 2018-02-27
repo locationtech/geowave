@@ -73,7 +73,7 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 
 	@Test
 	public void testMultiThreadedIngestAndQuerySpatialPointsAndLines() {
-		testIngestAndQuerySpatialPointsAndLines(4);
+		testIngestAndQuerySpatialPointsAndLines(1);
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
@@ -150,25 +150,23 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 					+ "'");
 		}
 
-		if ((nthreads > 0)) {
-			try {
-				testStats(
-						new URL[] {
-							new File(
-									HAIL_SHAPEFILE_FILE).toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
-						},
-						TestUtils.createCustomCRSPrimaryIndex(),
-						true,
-						CRS.decode(TestUtils.CUSTOM_CRSCODE));
-			}
-			catch (final Exception e) {
-				e.printStackTrace();
-				TestUtils.deleteAll(dataStore);
-				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
-						+ e.getLocalizedMessage() + "'");
-			}
+		try {
+			testStats(
+					new URL[] {
+						new File(
+								HAIL_SHAPEFILE_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
+					},
+					TestUtils.createCustomCRSPrimaryIndex(),
+					false,
+					CRS.decode(TestUtils.CUSTOM_CRSCODE));
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {

@@ -94,7 +94,8 @@ public class FeatureBoundingBoxStatistics extends
 			final SimpleFeature entry ) {
 		// incorporate the bounding box of the entry's envelope
 		final Object o;
-		if ((reprojectedType != null) && (transform != null)) {
+		if ((reprojectedType != null) && (transform != null) && !reprojectedType.getCoordinateReferenceSystem().equals(
+				entry.getType().getCoordinateReferenceSystem())) {
 			o = FeatureDataUtils.crsTransform(
 					entry,
 					reprojectedType,
