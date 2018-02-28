@@ -6,4 +6,4 @@ RUN yum -y install asciidoc rpm-build unzip xmlto zip wget && \
     yum clean all
 
 RUN gem install --no-ri --no-rdoc fpm
-
+ 
