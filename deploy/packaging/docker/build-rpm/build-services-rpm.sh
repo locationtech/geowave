@@ -55,10 +55,15 @@ cd services_tmp
 
 #grab the geoserver war file and tomcat tarball
 #Check if the files already exists before grabbing them
-GEOSERVER_VERSION="$(mvn -q -Dexec.executable="echo" -Dexec.args='${geoserver.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec $BUILD_ARGS)"
+GEOSERVER_VERSION=$(cat $WORKSPACE/deploy/target/geoserver_version.txt)
 if [ ! -f geoserver-$GEOSERVER_VERSION-war.zip ]; then
   echo "Downloading geoserver-$GEOSERVER_VERSION-war"
-  wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip
+  if [[ $(curl -I --write-out %{http_code} --silent --output /dev/null  https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip) == 200 ]]; then
+    echo "Downloading from Geoserver Bucket"
+    wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip
+  else
+    echo "Downloading from Geoserver.org"
+    wget -q https://build.geoserver.org/geoserver/release/$GEOSERVER_VERSION/geoserver-$GEOSERVER_VERSION-war.zip
 fi
 
 if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
