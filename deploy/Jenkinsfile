@@ -14,12 +14,12 @@ node ('master') {
     checkout scm
   }
   // Mark the create docker image 'stage'
-  stage('Create Docker Image'){
+//  stage('Create Docker Image'){
     // Build the docker container
-    sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
-    sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
-    sh 'docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile deploy/packaging/docker'
-  }
+//    sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
+//    sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
+//    sh 'docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile deploy/packaging/docker'
+//  }
 
   stage('Maven Deploy'){
     dir("${env.WORKSPACE}/docker-root") {
