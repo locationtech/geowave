@@ -1,0 +1,101 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+import "GeoWaveReturnTypes.proto";
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "AnalyticMapreduceService";
+
+service AnalyticMapreduce { 
+	 rpc DBScanCommand(DBScanCommandParameters) returns (VoidResponse) {} 
+	 rpc KdeCommand(KdeCommandParameters) returns (VoidResponse) {} 
+	 rpc NearestNeighborCommand(NearestNeighborCommandParameters) returns (VoidResponse) {} 
+}
+
+message DBScanCommandParameters {
+	repeated string parameters = 1;
+	string mapReduceConfigFile = 2;
+	string mapReduceHdfsBaseDir = 3;
+	string mapReduceHdfsHostPort = 4;
+	string mapReduceJobtrackerHostPort = 5;
+	string mapReduceYarnResourceManager = 6;
+	string commonDistanceFunctionClass = 7;
+	repeated string authorizations = 8;
+	repeated string adapterIds = 9;
+	string indexId = 10;
+	string extractMaxInputSplit = 11;
+	string extractMinInputSplit = 12;
+	string extractQuery = 13;
+	string outputOutputFormat = 14;
+	string inputFormatClass = 15;
+	string inputHdfsPath = 16;
+	string outputReducerCount = 17;
+	string outputHdfsOutputPath = 18;
+	string partitioningDistanceThresholds = 19;
+	string partitioningGeometricDistanceUnit = 20;
+	string clusteringMaxIterations = 21;
+	string clusteringMinimumSize = 22;
+	string globalBatchId = 23;
+	string hullDataTypeId = 24;
+	string hullProjectionClass = 25;
+	string outputDataNamespaceUri = 26;
+	string outputDataTypeId = 27;
+	string outputIndexId = 28;
+	string partitionMaxMemberSelection = 29;
+	string partitionPartitionerClass = 30;
+	string partitionPartitionDecreaseRate = 31;
+	string partitionMaxDistance = 32;
+	string partitionPartitionPrecision = 33;
+	string partitionSecondaryPartitionerClass = 34;
+}
+
+message KdeCommandParameters {
+	repeated string parameters = 1;
+	string featureType = 2;
+	string indexId = 3;
+	int32 minLevel = 4;
+	int32 maxLevel = 5;
+	int32 minSplits = 6;
+	int32 maxSplits = 7;
+	string coverageName = 8;
+	string hdfsHostPort = 9;
+	string jobTrackerOrResourceManHostPort = 10;
+	int32 tileSize = 11;
+	string cqlFilter = 12;
+}
+
+message NearestNeighborCommandParameters {
+	repeated string parameters = 1;
+	string mapReduceConfigFile = 2;
+	string mapReduceHdfsBaseDir = 3;
+	string mapReduceHdfsHostPort = 4;
+	string mapReduceJobtrackerHostPort = 5;
+	string mapReduceYarnResourceManager = 6;
+	string commonDistanceFunctionClass = 7;
+	repeated string authorizations = 8;
+	repeated string adapterIds = 9;
+	string indexId = 10;
+	string extractMaxInputSplit = 11;
+	string extractMinInputSplit = 12;
+	string extractQuery = 13;
+	string outputOutputFormat = 14;
+	string inputFormatClass = 15;
+	string inputHdfsPath = 16;
+	string outputReducerCount = 17;
+	string outputHdfsOutputPath = 18;
+	string partitionMaxMemberSelection = 19;
+	string partitionPartitionerClass = 20;
+	string partitionMaxDistance = 21;
+	string partitionPartitionPrecision = 22;
+	string partitioningDistanceThresholds = 23;
+	string partitioningGeometricDistanceUnit = 24;
+	string partitionSecondaryPartitionerClass = 25;
+}

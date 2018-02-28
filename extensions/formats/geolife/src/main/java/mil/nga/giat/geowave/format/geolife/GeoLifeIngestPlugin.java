@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils;
+import mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
@@ -200,11 +200,11 @@ public class GeoLifeIngestPlugin extends
 					continue;
 				}
 
-				currLat = GeometryUtils.adjustCoordinateDimensionToRange(
+				currLat = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[0]),
 						crs,
 						1);
-				currLng = GeometryUtils.adjustCoordinateDimensionToRange(
+				currLng = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[1]),
 						crs,
 						0);

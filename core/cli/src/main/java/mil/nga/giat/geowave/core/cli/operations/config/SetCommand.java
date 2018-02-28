@@ -46,10 +46,9 @@ public class SetCommand extends
 
 	@Parameter(names = {
 		"--password"
-	}, description = "boolean (true|false) - specify if the value being set is a password and should be encrypted in the configurations")
-	private String password = null;
+	}, description = "Specify if the value being set is a password and should be encrypted in the configurations")
+	private Boolean password = false;
 
-	private boolean isPassword;
 	private boolean isRestCall = true;
 
 	ServiceStatus status = ServiceStatus.OK;
@@ -57,9 +56,6 @@ public class SetCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-		if ((password != null) && !"".equals(password.trim())) {
-			isPassword = Boolean.parseBoolean(password.trim());
-		}
 		isRestCall = false;
 		computeResults(params);
 	}
@@ -102,9 +98,7 @@ public class SetCommand extends
 			final OperationParams params ) {
 
 		final File f = getGeoWaveConfigFile(params);
-		final Properties p = ConfigOptions.loadProperties(
-				f,
-				null);
+		final Properties p = ConfigOptions.loadProperties(f);
 
 		String key = null;
 		String value = null;
@@ -117,7 +111,7 @@ public class SetCommand extends
 					parameters.get(0),
 					"=");
 			key = parts[0];
-			if (!isRestCall && isPassword) {
+			if (!isRestCall && password) {
 				value = converter.convert(parts[1]);
 			}
 			else {
@@ -126,7 +120,7 @@ public class SetCommand extends
 		}
 		else if (parameters.size() == 2) {
 			key = parameters.get(0);
-			if (!isRestCall && isPassword) {
+			if (!isRestCall && password) {
 				value = converter.convert(parameters.get(1));
 
 			}
@@ -139,7 +133,7 @@ public class SetCommand extends
 					"Requires: <name> <value>");
 		}
 
-		if (isPassword) {
+		if (password) {
 			// check if encryption is enabled in configuration
 			if (Boolean.parseBoolean(p.getProperty(
 					Constants.ENCRYPTION_ENABLED_KEY,

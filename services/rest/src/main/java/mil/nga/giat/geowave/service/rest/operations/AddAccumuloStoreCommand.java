@@ -29,8 +29,8 @@ import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddAccumuloStoreCommand extends
@@ -96,9 +96,7 @@ public class AddAccumuloStoreCommand extends
 		}
 		final File propFile = getGeoWaveConfigFile(params);
 
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		final Properties existingProps = ConfigOptions.loadProperties(propFile);
 
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {

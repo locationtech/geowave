@@ -10,7 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store;
 
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -34,8 +34,8 @@ public interface DataStore
 	 * @return Returns the index writer which can be used for batch write
 	 *         operations
 	 */
-	public <T> IndexWriter createWriter(
-			DataAdapter<T> adapter,
+	public <T> IndexWriter<T> createWriter(
+			WritableDataAdapter<T> adapter,
 			PrimaryIndex... index )
 			throws MismatchedIndexToAdapterMapping;
 
@@ -82,5 +82,4 @@ public interface DataStore
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query );
-
 }

@@ -56,9 +56,7 @@ public abstract class GeoWaveBaseConverter<T> extends
 			propertyFile = ConfigOptions.getDefaultPropertyFile();
 		}
 		if (propertyFile != null && propertyFile.exists()) {
-			setProperties(ConfigOptions.loadProperties(
-					propertyFile,
-					null));
+			setProperties(ConfigOptions.loadProperties(propertyFile));
 		}
 	}
 

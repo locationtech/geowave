@@ -64,6 +64,29 @@ public class PersistenceUtils
 		return new byte[0];
 	}
 
+	public static byte[] toClassId(
+			final String className ) {
+		if (className == null || className.isEmpty()) {
+			return new byte[0];
+		}
+		Short classId;
+		try {
+			classId = PersistableFactory.getInstance().getClassIdMapping().get(
+					Class.forName(className));
+			if (classId != null) {
+				final ByteBuffer buf = ByteBuffer.allocate(2);
+				buf.putShort(classId);
+				return buf.array();
+			}
+		}
+		catch (ClassNotFoundException e) {
+			LOGGER.warn(
+					"Unable to find class",
+					e);
+		}
+		return new byte[0];
+	}
+
 	public static Persistable fromClassId(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);

@@ -52,7 +52,7 @@ public class KafkaIngestRunData implements
 	}
 
 	public synchronized IndexWriter getIndexWriter(
-			final DataAdapter<?> adapter,
+			final WritableDataAdapter<?> adapter,
 			final PrimaryIndex... requiredIndices )
 			throws MismatchedIndexToAdapterMapping {
 		IndexWriter indexWriter = adapterIdToWriterCache.get(adapter.getAdapterId());

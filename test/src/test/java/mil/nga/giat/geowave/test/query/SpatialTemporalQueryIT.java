@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,22 +12,16 @@ package mil.nga.giat.geowave.test.query;
 
 import java.io.Closeable;
 import java.io.IOException;
-import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.ServiceLoader;
 import java.util.Set;
+import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -41,6 +35,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -61,10 +57,10 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.PartitionStrategy;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -73,6 +69,11 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
+@GeoWaveTestStore(value = {
+	GeoWaveStoreType.ACCUMULO,
+	GeoWaveStoreType.CASSANDRA,
+	GeoWaveStoreType.HBASE
+})
 public class SpatialTemporalQueryIT
 {
 	private static final SimpleDateFormat CQL_DATE_FORMAT = new SimpleDateFormat(
@@ -82,6 +83,7 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
+	private static final String TEST_DAY_RANGE_NAMESPACE = "TEST_DAY_RANGE";
 	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
 			10).setPeriodicity(
@@ -100,11 +102,6 @@ public class SpatialTemporalQueryIT
 	private GeoWaveGTDataStore geowaveGtDataStore;
 	private PrimaryIndex currentGeotoolsIndex;
 
-	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
-	})
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalQueryIT.class);
@@ -112,6 +109,7 @@ public class SpatialTemporalQueryIT
 
 	@BeforeClass
 	public static void startTimer() {
+		CQL_DATE_FORMAT.setTimeZone(TimeZone.getTimeZone("GMT"));
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -136,8 +134,8 @@ public class SpatialTemporalQueryIT
 	public void initSpatialTemporalTestData()
 			throws IOException,
 			GeoWavePluginException {
-
 		dataStore = dataStoreOptions.createDataStore();
+
 		SimpleFeatureTypeBuilder builder = new SimpleFeatureTypeBuilder();
 		builder.setName("simpletimestamp");
 		builder.add(
@@ -148,6 +146,10 @@ public class SpatialTemporalQueryIT
 				Date.class);
 		timeStampAdapter = new FeatureDataAdapter(
 				builder.buildFeatureType());
+		timeStampAdapter.init(
+				YEAR_INDEX,
+				MONTH_INDEX,
+				DAY_INDEX);
 
 		builder = new SimpleFeatureTypeBuilder();
 		builder.setName("simpletimerange");
@@ -162,6 +164,10 @@ public class SpatialTemporalQueryIT
 				Date.class);
 		timeRangeAdapter = new FeatureDataAdapter(
 				builder.buildFeatureType());
+		timeRangeAdapter.init(
+				YEAR_INDEX,
+				MONTH_INDEX,
+				DAY_INDEX);
 
 		Calendar cal = getInitialDayCalendar();
 		final GeometryFactory geomFactory = new GeometryFactory();
@@ -174,12 +180,13 @@ public class SpatialTemporalQueryIT
 				YEAR_INDEX,
 				MONTH_INDEX,
 				DAY_INDEX);
-
+		// time ranges for days isn't tested so we don't have to deal with
+		// ingesting into the day index, the multi-year test case (requiring
+		// 1000+ partitions)
 		final IndexWriter rangeWriters = dataStore.createWriter(
 				timeRangeAdapter,
 				YEAR_INDEX,
-				MONTH_INDEX,
-				DAY_INDEX);
+				MONTH_INDEX);
 
 		try {
 			for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal
@@ -198,14 +205,6 @@ public class SpatialTemporalQueryIT
 				timeWriters.write(feature);
 			}
 
-			ingestTimeRangeData(
-					cal,
-					rangeWriters,
-					featureTimeRangeBuilder,
-					cal.getActualMinimum(Calendar.DAY_OF_MONTH),
-					cal.getActualMaximum(Calendar.DAY_OF_MONTH),
-					Calendar.DAY_OF_MONTH,
-					"day");
 			cal = getInitialMonthCalendar();
 			for (int month = cal.getActualMinimum(Calendar.MONTH); month <= cal.getActualMaximum(Calendar.MONTH); month++) {
 				cal.set(
@@ -312,33 +311,11 @@ public class SpatialTemporalQueryIT
 									final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 									final BasicQuery query,
 									final PrimaryIndex[] indices ) {
-								final ServiceLoader<IndexQueryStrategySPI> ldr = ServiceLoader
-										.load(IndexQueryStrategySPI.class);
-								final Iterator<IndexQueryStrategySPI> it = ldr.iterator();
-								final List<Index<?, ?>> indexList = new ArrayList<Index<?, ?>>();
-
-								for (final PrimaryIndex index : indices) {
-									indexList.add(index);
-								}
-								while (it.hasNext()) {
-									final IndexQueryStrategySPI strategy = it.next();
-									final CloseableIterator<Index<?, ?>> indexStrategyIt = strategy.getIndices(
-											stats,
-											query,
-											indices);
-									Assert.assertTrue(
-											"Index Strategy '" + strategy.toString()
-													+ "' must at least choose one index.",
-											indexStrategyIt.hasNext());
-								}
 								return new CloseableIteratorWrapper<Index<?, ?>>(
 										new Closeable() {
-
 											@Override
 											public void close()
-													throws IOException {
-
-											}
+													throws IOException {}
 										},
 										(Iterator) Collections.singleton(
 												currentGeotoolsIndex).iterator());
@@ -734,24 +711,6 @@ public class SpatialTemporalQueryIT
 				timeRangeAdapter.getAdapterId().getString(),
 				"startTime",
 				"endTime");
-	}
-
-	@Test
-	public void testTimeRangeAcrossBinsDay()
-			throws IOException,
-			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(DAY_INDEX);
-		currentGeotoolsIndex = DAY_INDEX;
-		options.setAdapter(timeRangeAdapter);
-		final Calendar cal = getInitialDayCalendar();
-		testTimeRangeAcrossBins(
-				cal,
-				Calendar.DAY_OF_MONTH,
-				cal.getActualMinimum(Calendar.DAY_OF_MONTH),
-				cal.getActualMaximum(Calendar.DAY_OF_MONTH),
-				options,
-				"day");
 	}
 
 	@Test

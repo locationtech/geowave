@@ -1,0 +1,98 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+import "GeoWaveReturnTypes.proto";
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "CoreIngestService";
+
+service CoreIngest { 
+	 rpc MapReduceToGeowaveCommand(MapReduceToGeowaveCommandParameters) returns (VoidResponse) {} 
+	 rpc LocalToHdfsCommand(LocalToHdfsCommandParameters) returns (VoidResponse) {} 
+	 rpc LocalToKafkaCommand(LocalToKafkaCommandParameters) returns (VoidResponse) {} 
+	 rpc ListPluginsCommand(ListPluginsCommandParameters) returns (RepeatedStringResponse) {} 
+	 rpc SparkToGeowaveCommand(SparkToGeowaveCommandParameters) returns (VoidResponse) {} 
+	 rpc LocalToGeowaveCommand(LocalToGeowaveCommandParameters) returns (VoidResponse) {} 
+	 rpc LocalToMapReduceToGeowaveCommand(LocalToMapReduceToGeowaveCommandParameters) returns (VoidResponse) {} 
+	 rpc KafkaToGeowaveCommand(KafkaToGeowaveCommandParameters) returns (VoidResponse) {} 
+}
+
+message MapReduceToGeowaveCommandParameters {
+	repeated string parameters = 1;
+	string visibility = 2;
+	string jobTrackerHostPort = 3;
+	string resourceManager = 4;
+	repeated string extensions = 5;
+	string formats = 6;
+}
+
+message LocalToHdfsCommandParameters {
+	repeated string parameters = 1;
+	repeated string extensions = 2;
+	string formats = 3;
+}
+
+message LocalToKafkaCommandParameters {
+	repeated string parameters = 1;
+	string metadataBrokerList = 2;
+	string requestRequiredAcks = 3;
+	string producerType = 4;
+	string serializerClass = 5;
+	string retryBackoffMs = 6;
+	repeated string extensions = 7;
+	string formats = 8;
+}
+
+message ListPluginsCommandParameters {
+}
+
+message SparkToGeowaveCommandParameters {
+	repeated string parameters = 1;
+	string visibility = 2;
+	string appName = 3;
+	string host = 4;
+	string master = 5;
+	int32 numExecutors = 6;
+	int32 numCores = 7;
+	repeated string extensions = 8;
+	string formats = 9;
+}
+
+message LocalToGeowaveCommandParameters {
+	repeated string parameters = 1;
+	string visibility = 2;
+	repeated string extensions = 3;
+	string formats = 4;
+	int32 threads = 5;
+}
+
+message LocalToMapReduceToGeowaveCommandParameters {
+	repeated string parameters = 1;
+	string visibility = 2;
+	string jobTrackerHostPort = 3;
+	string resourceManager = 4;
+	repeated string extensions = 5;
+	string formats = 6;
+}
+
+message KafkaToGeowaveCommandParameters {
+	repeated string parameters = 1;
+	string visibility = 2;
+	string groupId = 3;
+	string zookeeperConnect = 4;
+	string autoOffsetReset = 5;
+	string fetchMessageMaxBytes = 6;
+	string consumerTimeoutMs = 7;
+	bool reconnectOnTimeout = 8;
+	int32 batchSize = 9;
+	repeated string extensions = 10;
+	string formats = 11;
+}

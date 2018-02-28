@@ -35,6 +35,11 @@ include::manpages/config/geowave-addindexgrp.txt[]
 
 include::manpages/config/geowave-addstore.txt[]
 
+[[config-aws]]
+==== *geowave config aws*
+
+include::manpages/config/geowave-aws.txt[]
+
 [[config-cpindex]]
 ==== *geowave config cpindex*
 
@@ -49,6 +54,11 @@ include::manpages/config/geowave-cpstore.txt[]
 ==== *geowave config geoserver*
 
 include::manpages/config/geowave-geoserver.txt[]
+
+[[config-hdfs]]
+==== *geowave config hdfs*
+
+include::manpages/config/geowave-hdfs.txt[]
 
 [[config-list]]
 ==== *geowave config list*

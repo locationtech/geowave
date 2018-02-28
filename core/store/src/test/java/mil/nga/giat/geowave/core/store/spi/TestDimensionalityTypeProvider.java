@@ -38,12 +38,13 @@ public class TestDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex() {
+	public PrimaryIndex createPrimaryIndex(
+			DimensionalityTypeOptions options ) {
 		return null;
 	}
 
 	@Override
-	public DimensionalityTypeOptions getOptions() {
+	public DimensionalityTypeOptions createOptions() {
 		return null;
 	}
 

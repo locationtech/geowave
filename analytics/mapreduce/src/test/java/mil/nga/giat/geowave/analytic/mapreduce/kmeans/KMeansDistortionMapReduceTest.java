@@ -24,7 +24,9 @@ import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -50,14 +52,15 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -65,9 +68,10 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 public class KMeansDistortionMapReduceTest
 {
-	private static final String TEST_NAMESPACE = "test";
 	MapDriver<GeoWaveInputKey, ObjectWritable, Text, CountofDoubleWritable> mapDriver;
 	ReduceDriver<Text, CountofDoubleWritable, GeoWaveOutputKey, DistortionEntry> reduceDriver;
+	@Rule
+	public TestName name = new TestName();
 
 	final String batchId = "b1";
 
@@ -83,8 +87,7 @@ public class KMeansDistortionMapReduceTest
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
+	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
 
@@ -102,7 +105,7 @@ public class KMeansDistortionMapReduceTest
 						CommonParameters.Common.DISTANCE_FUNCTION_CLASS),
 				FeatureCentroidDistanceFn.class,
 				DistanceFn.class);
-
+		testObjectAdapter.init(index);
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				testObjectAdapter);
@@ -114,7 +117,8 @@ public class KMeansDistortionMapReduceTest
 		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				ftype.getTypeName());
@@ -138,7 +142,8 @@ public class KMeansDistortionMapReduceTest
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
+		opts.setGeowaveNamespace(namespace);
 		PersistableStore store = new PersistableStore(
 				pluginOptions);
 
@@ -229,7 +234,6 @@ public class KMeansDistortionMapReduceTest
 			throws IOException {
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setInsertionId(null);
 		inputKey.setAdapterId(testObjectAdapter.getAdapterId());
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));

@@ -29,9 +29,11 @@ import mil.nga.giat.geowave.analytic.param.CommonParameters;
 import mil.nga.giat.geowave.analytic.param.StoreParameters;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -118,13 +120,13 @@ public class ClusteringUtils
 	 * Method takes in a polygon and generates the corresponding ranges in a
 	 * GeoWave spatial index
 	 */
-	protected static List<ByteArrayRange> getGeoWaveRangesForQuery(
+	protected static QueryRanges getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-		final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 				new SpatialQuery(
-						polygon).getIndexConstraints(index.getIndexStrategy()),
+						polygon).getIndexConstraints(index),
 				index.getIndexStrategy(),
 				-1);
 

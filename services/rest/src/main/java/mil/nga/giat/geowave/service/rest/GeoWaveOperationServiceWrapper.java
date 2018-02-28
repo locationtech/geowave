@@ -44,10 +44,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
 	private final ServiceEnabledCommand<T> operation;
+	private final String initContextConfigFile;
 
 	public GeoWaveOperationServiceWrapper(
-			final ServiceEnabledCommand<T> operation ) {
+			final ServiceEnabledCommand<T> operation,
+			final String initContextConfigFile ) {
 		this.operation = operation;
+		this.initContextConfigFile = initContextConfigFile;
 	}
 
 	@Get("json")
@@ -259,7 +262,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				.getFirstValue("config_file");
 
 		final File configFile = (configFileParameter != null) ? new File(
-				configFileParameter) : ConfigOptions.getDefaultPropertyFile();
+				configFileParameter) : (initContextConfigFile != null) ? new File(
+						initContextConfigFile) : ConfigOptions.getDefaultPropertyFile();
 
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(

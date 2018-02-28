@@ -16,14 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
-import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -39,6 +31,19 @@ import org.opengis.filter.expression.Expression;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
+
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
+import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
+import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
+import mil.nga.giat.geowave.core.store.filter.QueryFilter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class CQLQueryFilterTest
 {
@@ -74,17 +79,18 @@ public class CQLQueryFilterTest
 				exp1,
 				exp2,
 				false);
+		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
+		adapter.init(spatialIndex);
 		final CQLQuery cqlQuery = new CQLQuery(
 				null,
 				f,
 				adapter);
 
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
-
-		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex.getIndexModel());
+		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
 		final List<DistributableQueryFilter> dFilters = new ArrayList<DistributableQueryFilter>();
 		for (final QueryFilter filter : filters) {
 			dFilters.add((DistributableQueryFilter) filter);
@@ -95,12 +101,34 @@ public class CQLQueryFilterTest
 
 		assertTrue(dFilterList.accept(
 				spatialIndex.getIndexModel(),
-				DataStoreUtils.getEncodings(
+				getEncodings(
 						spatialIndex,
 						adapter.encode(
 								createFeature(),
 								spatialIndex.getIndexModel())).get(
 						0)));
+	}
+
+	private static List<IndexedAdapterPersistenceEncoding> getEncodings(
+			final PrimaryIndex index,
+			final AdapterPersistenceEncoding encoding ) {
+		final InsertionIds ids = encoding.getInsertionIds(index);
+		final ArrayList<IndexedAdapterPersistenceEncoding> encodings = new ArrayList<IndexedAdapterPersistenceEncoding>();
+
+		for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
+			for (final ByteArrayId sortKey : partitionIds.getSortKeys()) {
+				encodings.add(new IndexedAdapterPersistenceEncoding(
+						encoding.getAdapterId(),
+						encoding.getDataId(),
+						partitionIds.getPartitionKey(),
+						sortKey,
+						ids.getSize(),
+						encoding.getCommonData(),
+						encoding.getUnknownData(),
+						encoding.getAdapterExtendedData()));
+			}
+		}
+		return encodings;
 	}
 
 	private SimpleFeature createFeature() {

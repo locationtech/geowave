@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,18 +14,18 @@ import java.nio.ByteBuffer;
 import java.util.List;
 
 import org.apache.commons.lang3.ArrayUtils;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public class DuplicateEntryCount<T> extends
 		AbstractDataStatistics<T> implements
-		DeleteCallback<T>
+		DeleteCallback<T, GeoWaveRow>
 {
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"DUPLICATE_ENTRY_COUNT");
@@ -95,42 +95,43 @@ public class DuplicateEntryCount<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		if (entryHasDuplicates(entryInfo)) {
-			entriesWithDuplicates++;
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		if (kvs.length > 0) {
+			if (entryHasDuplicates(kvs[0])) {
+				entriesWithDuplicates++;
+			}
 		}
 	}
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		if (entryHasDuplicates(entryInfo)) {
-			entriesWithDuplicates--;
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		if (kvs.length > 0) {
+			if (entryHasDuplicates(kvs[0])) {
+				entriesWithDuplicates--;
+			}
 		}
 	}
 
 	@Override
 	public void merge(
 			final Mergeable merge ) {
-		if (merge != null && merge instanceof DuplicateEntryCount) {
+		if ((merge != null) && (merge instanceof DuplicateEntryCount)) {
 			entriesWithDuplicates += ((DuplicateEntryCount) merge).entriesWithDuplicates;
 		}
 	}
 
 	private static boolean entryHasDuplicates(
-			final DataStoreEntryInfo entryInfo ) {
-		if ((entryInfo != null) && (entryInfo.getRowIds() != null)) {
-			return entryInfo.getRowIds().size() > 1;
-		}
-		return false;
+			final GeoWaveRow kv ) {
+		return kv.getNumberOfDuplicates() > 0;
 	}
 
 	public static DuplicateEntryCount getDuplicateCounts(
 			final PrimaryIndex index,
 			final List<ByteArrayId> adapterIdsToQuery,
-			DataStatisticsStore statisticsStore,
+			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		DuplicateEntryCount combinedDuplicateCount = null;
 		for (final ByteArrayId adapterId : adapterIdsToQuery) {
@@ -152,9 +153,10 @@ public class DuplicateEntryCount<T> extends
 	 * Convert Duplicate Count statistics to a JSON object
 	 */
 
+	@Override
 	public JSONObject toJSONObject()
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());

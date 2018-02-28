@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -44,7 +44,7 @@ import org.junit.runners.model.Statement;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
@@ -63,6 +63,9 @@ public class GeoWaveITRunner extends
 
 	public static final String STORE_TYPE_ENVIRONMENT_VARIABLE_NAME = "STORE_TYPE";
 	public static final String STORE_TYPE_PROPERTY_NAME = "testStoreType";
+
+	public static final String DATASTORE_OPTIONS_ENVIRONMENT_VARIABLE_NAME = "STORE_OPTIONS";
+	public static final String DATASTORE_OPTIONS_PROPERTY_NAME = "testStoreOptions";
 
 	@Override
 	protected Statement withBeforeClasses(
@@ -113,15 +116,18 @@ public class GeoWaveITRunner extends
 	{
 		private final Map<String, GeoWaveStoreType> fieldNameStoreTypePair;
 		private final String nameSuffix;
+		private final String[] profileOptions;
 
 		private TestClassRunnerForStoreTypes(
 				final Class<?> type,
-				final Map<String, GeoWaveStoreType> fieldNameStoreTypePair )
+				final Map<String, GeoWaveStoreType> fieldNameStoreTypePair,
+				final String[] profileOptions )
 				throws InitializationError {
 			super(
 					type);
 
 			this.fieldNameStoreTypePair = fieldNameStoreTypePair;
+			this.profileOptions = profileOptions;
 
 			final StringBuilder nameBldr = new StringBuilder();
 			for (final Entry<String, GeoWaveStoreType> e : fieldNameStoreTypePair.entrySet()) {
@@ -132,7 +138,13 @@ public class GeoWaveITRunner extends
 						e.getValue().toString()).append(
 						")");
 			}
-
+			if (profileOptions != null && profileOptions.length > 0) {
+				nameBldr.append(
+						"; options=").append(
+						"\"" + String.join(
+								",",
+								profileOptions) + "\"");
+			}
 			nameSuffix = nameBldr.toString();
 		}
 
@@ -185,7 +197,9 @@ public class GeoWaveITRunner extends
 									GeoWaveTestStore.class)));
 				}
 			}
+
 			final Object testClassInstance = getTestClass().getJavaClass().newInstance();
+
 			for (final Pair<Field, GeoWaveTestStore> field : fieldsAndStorePairs) {
 				final GeoWaveStoreType type = fieldNameStoreTypePair.get(field.getLeft().getName());
 				field.getLeft().setAccessible(
@@ -194,8 +208,10 @@ public class GeoWaveITRunner extends
 				field.getLeft().set(
 						testClassInstance,
 						type.getTestEnvironment().getDataStoreOptions(
-								store));
+								store,
+								profileOptions));
 			}
+
 			return testClassInstance;
 		}
 
@@ -330,13 +346,42 @@ public class GeoWaveITRunner extends
 			}
 		}
 
-		// Create a test runner for each store type / config
-		for (final GeoWaveStoreRunnerConfig config : configs) {
-			final TestClassRunnerForStoreTypes runner = new TestClassRunnerForStoreTypes(
-					getTestClass().getJavaClass(),
-					config.fieldNameStoreTypePair);
-			runners.add(runner);
+		// Get the set of profile options from the profile, if any
+		final String[][] profileOptionSets = getProfileOptionSets();
+
+		// Iterate through option sets to create runners
+		for (final String[] profileOptions : profileOptionSets) {
+			// Create a test runner for each store type / config
+			for (final GeoWaveStoreRunnerConfig config : configs) {
+				final TestClassRunnerForStoreTypes runner = new TestClassRunnerForStoreTypes(
+						getTestClass().getJavaClass(),
+						config.fieldNameStoreTypePair,
+						profileOptions);
+				runners.add(runner);
+			}
 		}
+	}
+
+	private String[][] getProfileOptionSets() {
+		String optionsStr = System.getenv(DATASTORE_OPTIONS_ENVIRONMENT_VARIABLE_NAME);
+		if (!TestUtils.isSet(optionsStr)) {
+			optionsStr = System.getProperty(DATASTORE_OPTIONS_PROPERTY_NAME);
+		}
+
+		String[][] profileOptions = null;
+		if (TestUtils.isSet(optionsStr)) {
+			final String[] optionSets = optionsStr.split("!");
+			profileOptions = new String[optionSets.length][];
+
+			for (int i = 0; i < optionSets.length; i++) {
+				profileOptions[i] = optionSets[i].split(",");
+			}
+		}
+
+		if (profileOptions == null) {
+			profileOptions = new String[1][];
+		}
+		return profileOptions;
 	}
 
 	private boolean containsAnnotationForType(
@@ -484,7 +529,7 @@ public class GeoWaveITRunner extends
 			throws Exception {
 		synchronized (MUTEX) {
 			if (!DEFER_CLEANUP.get()) {
-				// Tearodwn in reverse
+				// Teardown in reverse
 				final List<TestEnvironment> envs = Arrays.asList(testEnvs);
 				final ListIterator<TestEnvironment> it = envs.listIterator(envs.size());
 				while (it.hasPrevious()) {

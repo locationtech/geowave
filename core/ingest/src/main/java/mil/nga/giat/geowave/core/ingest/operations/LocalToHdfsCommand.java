@@ -117,9 +117,7 @@ public class LocalToHdfsCommand extends
 		}
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 		final String inputPath = parameters.get(0);
 		final String basePath = parameters.get(1);

@@ -36,12 +36,12 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
-import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
+import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 
 @GeowaveOperation(name = "fullscanMinimal", parentOperation = DebugSection.class)
 @Parameters(commandDescription = "full table scan without any iterators or deserialization")
@@ -52,7 +52,7 @@ public class MinimalFullTable extends
 	private static Logger LOGGER = LoggerFactory.getLogger(MinimalFullTable.class);
 
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = "--indexId", required = true, description = "The name of the index (optional)")
 	private String indexId;
@@ -81,16 +81,17 @@ public class MinimalFullTable extends
 
 		final String storeType = storeOptions.getDataStorePlugin().getType();
 
-		if (storeType.equals(AccumuloDataStore.TYPE)) {
+		if (storeType.equals(AccumuloStoreFactoryFamily.TYPE)) {
 			try {
 				final AccumuloRequiredOptions opts = (AccumuloRequiredOptions) storeOptions.getFactoryOptions();
 
-				final AccumuloOperations ops = new BasicAccumuloOperations(
+				final AccumuloOperations ops = new AccumuloOperations(
 						opts.getZookeeper(),
 						opts.getInstance(),
 						opts.getUser(),
 						opts.getPassword(),
-						opts.getGeowaveNamespace());
+						opts.getGeowaveNamespace(),
+						(AccumuloOptions) opts.getStoreOptions());
 
 				long results = 0;
 				final BatchScanner scanner = ops.createBatchScanner(indexId);
@@ -113,7 +114,7 @@ public class MinimalFullTable extends
 						e);
 			}
 		}
-		else if (storeType.equals(HBaseDataStore.TYPE)) {
+		else if (storeType.equals(HBaseStoreFactoryFamily.TYPE)) {
 			throw new UnsupportedOperationException(
 					"full scan for store type " + storeType + " not yet implemented.");
 		}

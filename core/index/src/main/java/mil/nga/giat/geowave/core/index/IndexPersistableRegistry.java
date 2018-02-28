@@ -125,6 +125,15 @@ public class IndexPersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 127,
 					XZHierarchicalIndexMetaData::new),
+			new PersistableIdAndConstructor(
+					(short) 128,
+					InsertionIds::new),
+			new PersistableIdAndConstructor(
+					(short) 129,
+					PartitionIndexStrategyWrapper::new),
+			new PersistableIdAndConstructor(
+					(short) 130,
+					SinglePartitionInsertionIds::new),
 		};
 	}
 }

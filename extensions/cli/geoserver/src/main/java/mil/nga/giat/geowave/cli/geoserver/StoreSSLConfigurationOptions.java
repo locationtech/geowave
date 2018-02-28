@@ -13,13 +13,11 @@ import org.slf4j.LoggerFactory;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.cli.converters.OptionalPasswordConverter;
-import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 
 /**
  *
  */
-public abstract class StoreSSLConfigurationOptions extends
-		BaseDataStoreOptions
+public abstract class StoreSSLConfigurationOptions
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(StoreSSLConfigurationOptions.class);
 

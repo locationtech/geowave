@@ -38,7 +38,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -58,8 +58,7 @@ public class GeoWaveJavaSparkKMeansIT
 	protected static final String CQL_FILTER = "BBOX(the_geom, -100, 30, -90, 40)";
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions inputDataStore;
 
@@ -105,6 +104,7 @@ public class GeoWaveJavaSparkKMeansIT
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
 		runner.setCqlFilter(CQL_FILTER);
+		runner.setMaster("local[*]");
 
 		// Attempt to set the time params
 		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(

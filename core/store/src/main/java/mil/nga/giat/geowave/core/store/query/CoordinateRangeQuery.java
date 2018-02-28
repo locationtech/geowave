@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -19,8 +19,8 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.Index;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 
 public class CoordinateRangeQuery implements
@@ -29,9 +29,18 @@ public class CoordinateRangeQuery implements
 	private NumericIndexStrategy indexStrategy;
 	private MultiDimensionalCoordinateRangesArray[] coordinateRanges;
 
+	public CoordinateRangeQuery() {}
+
+	public CoordinateRangeQuery(
+			final NumericIndexStrategy indexStrategy,
+			final MultiDimensionalCoordinateRangesArray[] coordinateRanges ) {
+		this.indexStrategy = indexStrategy;
+		this.coordinateRanges = coordinateRanges;
+	}
+
 	@Override
 	public List<QueryFilter> createFilters(
-			final CommonIndexModel indexModel ) {
+			final PrimaryIndex index ) {
 		return Collections.singletonList(new CoordinateRangeQueryFilter(
 				indexStrategy,
 				coordinateRanges));
@@ -46,7 +55,7 @@ public class CoordinateRangeQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final NumericIndexStrategy indexStrategy ) {
+			final PrimaryIndex index ) {
 		// TODO should we consider implementing this?
 		return Collections.EMPTY_LIST;
 	}

@@ -33,6 +33,7 @@ public class AdapterPersistenceEncoding extends
 				adapterId,
 				dataId,
 				null,
+				null,
 				0,
 				commonData,
 				new PersistentDataset<byte[]>(),

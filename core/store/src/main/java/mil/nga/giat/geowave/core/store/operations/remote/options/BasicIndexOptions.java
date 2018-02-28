@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.core.store.operations.remote.options;
 
 import com.beust.jcommander.Parameter;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.PartitionStrategy;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
 
 public class BasicIndexOptions
 {

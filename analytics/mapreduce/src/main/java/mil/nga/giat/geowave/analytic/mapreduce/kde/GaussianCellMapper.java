@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.hadoop.io.DoubleWritable;
@@ -23,8 +24,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -38,6 +45,10 @@ public class GaussianCellMapper extends
 	protected int maxLevel;
 	protected Filter filter;
 	protected Map<Integer, LevelStore> levelStoreMap;
+	protected ValueRange[] valueRangePerDimension;
+	protected String inputCrsCode;
+	protected String outputCrsCode;
+	protected MathTransform transform;
 
 	@Override
 	protected void setup(
@@ -51,6 +62,27 @@ public class GaussianCellMapper extends
 		maxLevel = context.getConfiguration().getInt(
 				KDEJobRunner.MAX_LEVEL_KEY,
 				25);
+		valueRangePerDimension = new ValueRange[] {
+			new ValueRange(
+					context.getConfiguration().getDouble(
+							KDEJobRunner.X_MIN_KEY,
+							-180),
+					context.getConfiguration().getDouble(
+							KDEJobRunner.X_MAX_KEY,
+							180)),
+			new ValueRange(
+					context.getConfiguration().getDouble(
+							KDEJobRunner.Y_MIN_KEY,
+							-90),
+					context.getConfiguration().getDouble(
+							KDEJobRunner.Y_MAX_KEY,
+							90))
+		};
+		inputCrsCode = context.getConfiguration().get(
+				KDEJobRunner.INPUT_CRSCODE_KEY);
+		outputCrsCode = context.getConfiguration().get(
+				KDEJobRunner.OUTPUT_CRSCODE_KEY);
+
 		final String cql = context.getConfiguration().get(
 				CQL_FILTER_KEY);
 		if ((cql != null) && !cql.isEmpty()) {
@@ -106,13 +138,52 @@ public class GaussianCellMapper extends
 			throws IOException,
 			InterruptedException {
 		Point pt = null;
+		Geometry transformedGeometry = null;
 		if (value != null) {
 			if ((filter != null) && !filter.evaluate(value)) {
 				return;
 			}
 			final Object geomObj = value.getDefaultGeometry();
 			if ((geomObj != null) && (geomObj instanceof Geometry)) {
-				pt = ((Geometry) geomObj).getCentroid();
+				if (inputCrsCode.equals(outputCrsCode)) {
+					pt = ((Geometry) geomObj).getCentroid();
+				}
+				else {
+					if (transform == null) {
+
+						try {
+							transform = CRS.findMathTransform(
+									CRS.decode(
+											inputCrsCode,
+											true),
+									CRS.decode(
+											outputCrsCode,
+											true),
+									true);
+						}
+						catch (FactoryException e) {
+							LOGGER.error(
+									"Unable to decode " + inputCrsCode + " CRS",
+									e);
+							throw new RuntimeException(
+									"Unable to initialize " + inputCrsCode + " object",
+									e);
+						}
+					}
+
+					try {
+						transformedGeometry = JTS.transform(
+								(Geometry) geomObj,
+								transform);
+						pt = transformedGeometry.getCentroid();
+					}
+					catch (MismatchedDimensionException | TransformException e) {
+						LOGGER
+								.warn(
+										"Unable to perform transform to specified CRS of the index, the feature geometry will remain in its original CRS",
+										e);
+					}
+				}
 			}
 		}
 		if ((pt == null) || pt.isEmpty()) {
@@ -122,21 +193,24 @@ public class GaussianCellMapper extends
 			incrementLevelStore(
 					level,
 					pt,
-					value);
+					value,
+					valueRangePerDimension);
 		}
 	}
 
 	protected void incrementLevelStore(
 			final int level,
 			final Point pt,
-			final SimpleFeature feature ) {
+			final SimpleFeature feature,
+			final ValueRange[] valueRangePerDimension ) {
 		final LevelStore levelStore = levelStoreMap.get(level);
 		GaussianFilter.incrementPt(
 				pt.getY(),
 				pt.getX(),
 				levelStore.counter,
 				levelStore.numXPosts,
-				levelStore.numYPosts);
+				levelStore.numYPosts,
+				valueRangePerDimension);
 	}
 
 	public static class LevelStore

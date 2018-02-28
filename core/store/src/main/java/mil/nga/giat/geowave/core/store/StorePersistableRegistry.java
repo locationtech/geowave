@@ -14,7 +14,6 @@ import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.MaxDuplicatesStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
@@ -23,8 +22,8 @@ import mil.nga.giat.geowave.core.store.filter.BasicQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.DataIdQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
+import mil.nga.giat.geowave.core.store.filter.InsertionIdQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.PrefixIdQueryFilter;
-import mil.nga.giat.geowave.core.store.filter.RowIdQueryFilter;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
@@ -33,7 +32,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.numeric.NumberRangeFilter;
 import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
-import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.DateRangeFilter;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextExactMatchFilter;
@@ -66,9 +64,6 @@ public class StorePersistableRegistry implements
 					(short) 203,
 					MaxDuplicatesStatistics::new),
 			new PersistableIdAndConstructor(
-					(short) 204,
-					RowRangeDataStatistics::new),
-			new PersistableIdAndConstructor(
 					(short) 205,
 					RowRangeHistogramStatistics::new),
 			new PersistableIdAndConstructor(
@@ -96,9 +91,6 @@ public class StorePersistableRegistry implements
 					(short) 213,
 					PrefixIdQueryFilter::new),
 			new PersistableIdAndConstructor(
-					(short) 214,
-					RowIdQueryFilter::new),
-			new PersistableIdAndConstructor(
 					(short) 215,
 					BasicIndexModel::new),
 			new PersistableIdAndConstructor(
@@ -122,9 +114,6 @@ public class StorePersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 222,
 					NumericFieldIndexStrategy::new),
-			new PersistableIdAndConstructor(
-					(short) 223,
-					NumericIndexStrategy::new),
 			new PersistableIdAndConstructor(
 					(short) 224,
 					DateRangeFilter::new),
@@ -157,7 +146,10 @@ public class StorePersistableRegistry implements
 					CountAggregation::new),
 			new PersistableIdAndConstructor(
 					(short) 234,
-					DataStatisticsAggregation::new)
+					DataStatisticsAggregation::new),
+			new PersistableIdAndConstructor(
+					(short) 235,
+					InsertionIdQueryFilter::new)
 		};
 	}
 }

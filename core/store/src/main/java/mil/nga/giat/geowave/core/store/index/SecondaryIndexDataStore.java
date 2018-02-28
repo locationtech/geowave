@@ -10,13 +10,11 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index;
 
-import java.util.List;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
 /**
@@ -40,8 +38,8 @@ public interface SecondaryIndexDataStore
 	 * @param indexedAttributeValue
 	 * @param adapterId
 	 * @param indexedAttributeFieldId
-	 * @param primaryIndexId
-	 * @param primaryIndexRowId
+	 * @param primaryIndexPartitionKey
+	 * @param primaryIndexSortKey
 	 * @param attributeVisibility
 	 */
 	public void storeJoinEntry(
@@ -50,7 +48,8 @@ public interface SecondaryIndexDataStore
 			ByteArrayId adapterId,
 			ByteArrayId indexedAttributeFieldId,
 			ByteArrayId primaryIndexId,
-			ByteArrayId primaryIndexRowId,
+			ByteArrayId primaryIndexPartitionKey,
+			ByteArrayId primaryIndexSortKey,
 			ByteArrayId attributeVisibility );
 
 	/**
@@ -62,8 +61,7 @@ public interface SecondaryIndexDataStore
 	 * @param adapterId
 	 * @param indexedAttributeFieldId
 	 * @param dataId
-	 * @param attributeVisibility
-	 * @param attributes
+	 * @param originalFields
 	 */
 	public void storeEntry(
 			ByteArrayId secondaryIndexId,
@@ -71,8 +69,7 @@ public interface SecondaryIndexDataStore
 			ByteArrayId adapterId,
 			ByteArrayId indexedAttributeFieldId,
 			ByteArrayId dataId,
-			ByteArrayId attributeVisibility,
-			List<FieldInfo<?>> attributes );
+			GeoWaveValue... originalFields );
 
 	/**
 	 * Execute a query against the given secondary index
@@ -94,20 +91,21 @@ public interface SecondaryIndexDataStore
 			final String... authorizations );
 
 	public void deleteJoinEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryIndexRowId );
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId primaryIndexPartitionKey,
+			ByteArrayId primaryIndexSortKey,
+			ByteArrayId attributeVisibility );
 
 	public void deleteEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId dataId,
-			final List<FieldInfo<?>> attributes );
+			ByteArrayId secondaryIndexId,
+			ByteArrayId indexedAttributeValue,
+			ByteArrayId adapterId,
+			ByteArrayId indexedAttributeFieldId,
+			ByteArrayId dataId,
+			GeoWaveValue... originalFields );
 
 	public void flush();
 

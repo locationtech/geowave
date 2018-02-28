@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.geotools.feature.type.BasicFeatureTypes;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -30,6 +32,7 @@ import mil.nga.giat.geowave.analytic.AnalyticItemWrapper;
 import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -42,6 +45,9 @@ import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class CentroidManagerTest
 {
+	@Rule
+	public TestName name = new TestName();
+
 	private void ingest(
 			final DataStore dataStore,
 			final FeatureDataAdapter adapter,
@@ -52,7 +58,6 @@ public class CentroidManagerTest
 				adapter,
 				index)) {
 			writer.write(feature);
-			writer.close();
 		}
 	}
 
@@ -90,10 +95,11 @@ public class CentroidManagerTest
 				1,
 				0);
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
-		final String namespace = "test_" + getClass().getName();
+		adapter.init(index);
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace(namespace);

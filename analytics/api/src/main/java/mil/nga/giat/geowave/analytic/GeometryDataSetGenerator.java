@@ -45,6 +45,7 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import mil.nga.giat.geowave.analytic.distance.DistanceFn;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -178,10 +179,11 @@ public class GeometryDataSetGenerator
 			final DataStore dataStore,
 			final List<SimpleFeature> featureData )
 			throws IOException {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureData.get(
 						0).getFeatureType());
+		adapter.init(index);
 		final SimpleFeatureBuilder featureBuilder = new SimpleFeatureBuilder(
 				featureData.get(
 						0).getFeatureType());

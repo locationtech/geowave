@@ -24,11 +24,12 @@ import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.SchemaConverter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 public class SqlResultsWriter
 {
@@ -69,7 +70,8 @@ public class SqlResultsWriter
 				featureType);
 
 		final DataStore featureStore = outputDataStore.createDataStore();
-		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider()
+				.createPrimaryIndex(new SpatialOptions());
 
 		GeomReader geomReader = new GeomReader();
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -34,7 +34,7 @@ import com.vividsolutions.jts.io.WKBWriter;
 import mil.nga.giat.geowave.adapter.vector.avro.AttributeValues;
 import mil.nga.giat.geowave.adapter.vector.avro.AvroSimpleFeature;
 import mil.nga.giat.geowave.adapter.vector.avro.FeatureDefinition;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
@@ -45,7 +45,7 @@ public class AvroFeatureUtils
 			3);
 
 	private static final DecoderFactory DECODER_FACTORY = DecoderFactory.get();
-	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<AvroSimpleFeature>();
+	private static final SpecificDatumReader<AvroSimpleFeature> DATUM_READER = new SpecificDatumReader<>();
 	private static final WKBReader WKB_READER = new WKBReader();
 
 	private AvroFeatureUtils() {}
@@ -53,7 +53,7 @@ public class AvroFeatureUtils
 	/**
 	 * Add the attributes, types and classifications for the SimpleFeatureType
 	 * to the provided FeatureDefinition
-	 * 
+	 *
 	 * @param fd
 	 *            - existing Feature Definition (or new one if null)
 	 * @param sft
@@ -76,11 +76,11 @@ public class AvroFeatureUtils
 		}
 		fd.setFeatureTypeName(sft.getTypeName());
 
-		final List<String> attributes = new ArrayList<String>(
+		final List<String> attributes = new ArrayList<>(
 				sft.getAttributeCount());
-		final List<String> types = new ArrayList<String>(
+		final List<String> types = new ArrayList<>(
 				sft.getAttributeCount());
-		final List<String> classifications = new ArrayList<String>(
+		final List<String> classifications = new ArrayList<>(
 				sft.getAttributeCount());
 
 		for (final AttributeDescriptor attr : sft.getAttributeDescriptors()) {
@@ -104,7 +104,7 @@ public class AvroFeatureUtils
 	/**
 	 * If a classification exists for this attribute name then use it If not
 	 * then use the provided default classification
-	 * 
+	 *
 	 * @param localName
 	 *            - attribute name
 	 * @param defaultClassifications
@@ -140,7 +140,7 @@ public class AvroFeatureUtils
 
 	/**
 	 * Create an AttributeValue from the SimpleFeature's attributes
-	 * 
+	 *
 	 * @param sf
 	 * @param sft
 	 * @return
@@ -150,7 +150,7 @@ public class AvroFeatureUtils
 			final SimpleFeatureType sft ) {
 		final AttributeValues attributeValue = new AttributeValues();
 
-		final List<ByteBuffer> values = new ArrayList<ByteBuffer>(
+		final List<ByteBuffer> values = new ArrayList<>(
 				sft.getAttributeCount());
 
 		attributeValue.setFid(sf.getID());
@@ -175,7 +175,7 @@ public class AvroFeatureUtils
 	/***
 	 * Deserialize byte array into an AvroSimpleFeature then convert to a
 	 * SimpleFeature
-	 * 
+	 *
 	 * @param avroData
 	 *            serialized bytes of a AvroSimpleFeature
 	 * @return Collection of GeoTools SimpleFeature instances.
@@ -203,7 +203,7 @@ public class AvroFeatureUtils
 			final FeatureDefinition featureDefinition )
 			throws ClassNotFoundException {
 		final SimpleFeatureTypeBuilder sftb = new SimpleFeatureTypeBuilder();
-		sftb.setCRS(GeoWaveGTDataStore.DEFAULT_CRS);
+		sftb.setCRS(GeometryUtils.DEFAULT_CRS);
 		sftb.setName(featureDefinition.getFeatureTypeName());
 		final List<String> featureTypes = featureDefinition.getAttributeTypes();
 		final List<String> featureNames = featureDefinition.getAttributeNames();
@@ -254,7 +254,7 @@ public class AvroFeatureUtils
 
 	/***
 	 * Deserialize byte stream into an AvroSimpleFeature
-	 * 
+	 *
 	 * @param avroData
 	 *            serialized bytes of AvroSimpleFeature
 	 * @param avroObjectToReuse

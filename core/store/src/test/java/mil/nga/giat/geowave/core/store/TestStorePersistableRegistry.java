@@ -17,7 +17,6 @@ import mil.nga.giat.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestDimensionField;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestIndexModel;
 import mil.nga.giat.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
-import mil.nga.giat.geowave.core.store.memory.MemoryStoreUtilsTest.TestStringAdapter;
 import mil.nga.giat.geowave.core.store.query.BasicQueryTest.ExampleDimensionOne;
 import mil.nga.giat.geowave.core.store.query.BasicQueryTest.ExampleNumericIndexStrategy;
 
@@ -48,12 +47,9 @@ public class TestStorePersistableRegistry implements
 					TestIndexModel::new),
 			new PersistableIdAndConstructor(
 					(short) 10206,
-					TestStringAdapter::new),
-			new PersistableIdAndConstructor(
-					(short) 10207,
 					ExampleNumericIndexStrategy::new),
 			new PersistableIdAndConstructor(
-					(short) 10208,
+					(short) 10207,
 					ExampleDimensionOne::new)
 		};
 	}

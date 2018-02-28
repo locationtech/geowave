@@ -20,7 +20,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
 /**
  * This class fully describes everything necessary to index data within GeoWave
@@ -37,7 +37,7 @@ import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
  */
 
 public class SecondaryIndex<T> implements
-		Index<FilterableConstraints, List<FieldInfo<?>>>
+		Index<FilterableConstraints, List<PersistentValue<?>>>
 {
 	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private FieldIndexStrategy<?, ?> indexStrategy;

@@ -45,7 +45,6 @@ public class ZookeeperTestEnvironment implements
 	@Override
 	public void setup()
 			throws Exception {
-
 		if (!TestUtils.isSet(zookeeper)) {
 			zookeeper = System.getProperty(ZK_PROPERTY_NAME);
 

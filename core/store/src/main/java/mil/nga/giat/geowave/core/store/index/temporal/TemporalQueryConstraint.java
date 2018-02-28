@@ -16,6 +16,7 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 
@@ -55,8 +56,8 @@ public class TemporalQueryConstraint implements
 			final ByteArrayId fieldId,
 			final Date start,
 			final Date end,
-			boolean inclusiveLow,
-			boolean inclusiveHigh ) {
+			final boolean inclusiveLow,
+			final boolean inclusiveHigh ) {
 		super();
 		this.fieldId = fieldId;
 		this.start = start;
@@ -85,19 +86,13 @@ public class TemporalQueryConstraint implements
 				inclusiveHigh);
 	}
 
-	/**
-	 * Creates a collection of range values based on start and end times for
-	 * this constraint
-	 * 
-	 * @return
-	 */
-
-	public List<ByteArrayRange> getRange() {
-		return Collections.singletonList(new ByteArrayRange(
-				new ByteArrayId(
-						TemporalIndexStrategy.toIndexByte(start)),
-				new ByteArrayId(
-						TemporalIndexStrategy.toIndexByte(end))));
+	public QueryRanges getQueryRanges() {
+		return new QueryRanges(
+				new ByteArrayRange(
+						new ByteArrayId(
+								TemporalIndexStrategy.toIndexByte(start)),
+						new ByteArrayId(
+								TemporalIndexStrategy.toIndexByte(end))));
 	}
 
 	/**
@@ -116,9 +111,9 @@ public class TemporalQueryConstraint implements
 
 	@Override
 	public FilterableConstraints intersect(
-			FilterableConstraints constraints ) {
+			final FilterableConstraints constraints ) {
 		if (constraints instanceof TemporalQueryConstraint) {
-			TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
+			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
 			if (fieldId.equals(filterConstraints.fieldId)) {
 				Date newStart = start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start;
 				Date newEnd = end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end;
@@ -159,9 +154,9 @@ public class TemporalQueryConstraint implements
 
 	@Override
 	public FilterableConstraints union(
-			FilterableConstraints constraints ) {
+			final FilterableConstraints constraints ) {
 		if (constraints instanceof TemporalQueryConstraint) {
-			TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
+			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
 			if (fieldId.equals(filterConstraints.fieldId)) {
 				Date newStart = start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start;
 				Date newEnd = end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end;

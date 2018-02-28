@@ -16,8 +16,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 import org.opengis.feature.simple.SimpleFeature;
@@ -148,8 +147,8 @@ public class FeatureCountMinSketchStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final SimpleFeature entry ) {
+			final SimpleFeature entry,
+			final GeoWaveRow... rows ) {
 		final Object o = entry.getAttribute(getFieldName());
 		if (o == null) {
 			return;

@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.store.metadata.AbstractGeowavePersistence;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class AccumuloVersionQuery
 {
@@ -33,12 +33,11 @@ public class AccumuloVersionQuery
 	public String queryVersion() {
 		// this just creates it if it doesn't exist
 		accumuloOperations.createTable(
-				AbstractGeowavePersistence.METADATA_TABLE,
+				AbstractGeoWavePersistence.METADATA_TABLE,
 				true,
-				true,
-				null);
+				true);
 		try {
-			final Scanner scanner = accumuloOperations.createScanner(AbstractGeowavePersistence.METADATA_TABLE);
+			final Scanner scanner = accumuloOperations.createScanner(AbstractGeoWavePersistence.METADATA_TABLE);
 			scanner.addScanIterator(new IteratorSetting(
 					25,
 					VersionIterator.class));

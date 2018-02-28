@@ -25,7 +25,6 @@ import com.vividsolutions.jts.geom.Geometry;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
@@ -34,7 +33,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -154,7 +153,7 @@ public class KMeansRunner
 		}
 
 		final QueryOptions queryOptions = new QueryOptions();
-		queryOptions.setAdapter(featureAdapterIds);
+		queryOptions.setAdapterIds(featureAdapterIds);
 
 		// This is required due to some funkiness in GeoWaveInputFormat
 		final AdapterStore adapterStore = inputDataStore.createAdapterStore();
@@ -187,7 +186,7 @@ public class KMeansRunner
 					final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 							.accept(
 									new ExtractGeometryFilterVisitor(
-											GeoWaveGTDataStore.DEFAULT_CRS,
+											GeometryUtils.DEFAULT_CRS,
 											geometryAttribute),
 									null);
 					bbox = geoAndCompareOpData.getGeometry();
@@ -260,7 +259,7 @@ public class KMeansRunner
 	}
 
 	public void setUseTime(
-			Boolean useTime ) {
+			final Boolean useTime ) {
 		this.useTime = useTime;
 	}
 
@@ -269,7 +268,7 @@ public class KMeansRunner
 	}
 
 	public void setCentroidTypeName(
-			String centroidTypeName ) {
+			final String centroidTypeName ) {
 		this.centroidTypeName = centroidTypeName;
 	}
 
@@ -278,7 +277,7 @@ public class KMeansRunner
 	}
 
 	public void setHullTypeName(
-			String hullTypeName ) {
+			final String hullTypeName ) {
 		this.hullTypeName = hullTypeName;
 	}
 
@@ -287,7 +286,7 @@ public class KMeansRunner
 	}
 
 	public void setGenerateHulls(
-			Boolean generateHulls ) {
+			final Boolean generateHulls ) {
 		this.generateHulls = generateHulls;
 	}
 
@@ -296,7 +295,7 @@ public class KMeansRunner
 	}
 
 	public void setComputeHullData(
-			Boolean computeHullData ) {
+			final Boolean computeHullData ) {
 		this.computeHullData = computeHullData;
 	}
 
@@ -318,12 +317,12 @@ public class KMeansRunner
 	}
 
 	public void setOutputDataStore(
-			DataStorePluginOptions outputDataStore ) {
+			final DataStorePluginOptions outputDataStore ) {
 		this.outputDataStore = outputDataStore;
 	}
 
 	public void setJavaSparkContext(
-			JavaSparkContext jsc ) {
+			final JavaSparkContext jsc ) {
 		this.jsc = jsc;
 	}
 

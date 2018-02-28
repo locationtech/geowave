@@ -25,7 +25,9 @@ import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
 import org.apache.hadoop.mrunit.types.Pair;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.slf4j.Logger;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -43,12 +45,13 @@ import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -56,10 +59,11 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 public class KSamplerMapReduceTest
 {
-	private static final String TEST_NAMESPACE = "test";
 	MapDriver<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> mapDriver;
 	ReduceDriver<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, TestObject> reduceDriver;
 	final TestObjectDataAdapter testObjectAapter = new TestObjectDataAdapter();
+	@Rule
+	public TestName name = new TestName();
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
@@ -125,7 +129,8 @@ public class KSamplerMapReduceTest
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
+		opts.setGeowaveNamespace(namespace);
 		PersistableStore store = new PersistableStore(
 				pluginOptions);
 
@@ -135,7 +140,8 @@ public class KSamplerMapReduceTest
 
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString());
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+						new SpatialOptions()).getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				"altoids");

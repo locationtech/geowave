@@ -38,16 +38,17 @@ import com.vividsolutions.jts.geom.Polygon;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 /**
  * This class is intended to provide a self-contained, easy-to-follow example of
@@ -62,7 +63,8 @@ public class GeotoolsQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static DataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(
@@ -147,13 +149,16 @@ public class GeotoolsQueryExample
 
 		accumulo.start();
 
+		final AccumuloOptions options = new AccumuloOptions();
 		dataStore = new AccumuloDataStore(
-				new BasicAccumuloOperations(
+				new AccumuloOperations(
 						accumulo.getZooKeepers(),
 						accumulo.getInstanceName(),
 						ACCUMULO_USER,
 						ACCUMULO_PASSWORD,
-						TABLE_NAMESPACE));
+						TABLE_NAMESPACE,
+						options),
+				options);
 	}
 
 	private static void ingestCannedData()

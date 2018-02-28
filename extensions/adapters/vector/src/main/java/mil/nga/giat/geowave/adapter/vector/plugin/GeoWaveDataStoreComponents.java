@@ -64,6 +64,14 @@ public class GeoWaveDataStoreComponents
 		this.transactionAllocator = transactionAllocator;
 	}
 
+	public void initForWrite() {
+		// this is ensuring the adapter is properly initialized with the
+		// indicies and writing it to the adapterStore, in cases where the
+		// featuredataadapter was created from geotools datastore's createSchema
+		adapter.init(adapterIndices);
+		gtStore.adapterStore.addAdapter(adapter);
+	}
+
 	public IndexStore getIndexStore() {
 		return indexStore;
 	}
@@ -109,7 +117,6 @@ public class GeoWaveDataStoreComponents
 		dataStore.delete(
 				options,
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						adapter.getDataId(feature)));
 	}
 
@@ -126,8 +133,7 @@ public class GeoWaveDataStoreComponents
 				options,
 				new DataIdQuery(
 						new ByteArrayId(
-								StringUtils.stringToBinary(fid)),
-						adapter.getAdapterId()));
+								StringUtils.stringToBinary(fid))));
 
 	}
 

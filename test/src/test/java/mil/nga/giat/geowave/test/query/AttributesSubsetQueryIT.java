@@ -38,31 +38,41 @@ import com.vividsolutions.jts.geom.Envelope;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class AttributesSubsetQueryIT
+public class AttributesSubsetQueryIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AttributesSubsetQueryIT.class);
 
 	private static SimpleFeatureType simpleFeatureType;
 	private static FeatureDataAdapter dataAdapter;
 
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStore;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStore;
+	}
 
 	// constants for attributes of SimpleFeatureType
 	private static final String CITY_ATTRIBUTE = "city";
@@ -70,6 +80,9 @@ public class AttributesSubsetQueryIT
 	private static final String POPULATION_ATTRIBUTE = "population";
 	private static final String LAND_AREA_ATTRIBUTE = "landArea";
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
+
+	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	private static final Collection<String> ALL_ATTRIBUTES = Arrays.asList(
 			CITY_ATTRIBUTE,
@@ -100,6 +113,8 @@ public class AttributesSubsetQueryIT
 
 		dataAdapter = new FeatureDataAdapter(
 				simpleFeatureType);
+
+		dataAdapter.init(index);
 
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");

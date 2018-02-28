@@ -1,10 +1,11 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.7-SNAPSHOT</version>
+		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-adapter-vector</artifactId>
 	<name>Geowave Vector Adapter</name>
@@ -50,6 +51,10 @@
 			<artifactId>gt-wps</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.geotools</groupId>
+			<artifactId>gt-shapefile</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.geoserver</groupId>
 			<artifactId>gs-wms</artifactId>
 			<exclusions>
@@ -66,21 +71,10 @@
 		<dependency>
 			<groupId>com.aol.simplereact</groupId>
 			<artifactId>cyclops-react</artifactId>
-			<version>1.0.0-RC4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>jcl-over-slf4j</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.geotools</groupId>
 			<artifactId>gt-render</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.geotools</groupId>
-			<artifactId>gt-epsg-wkt</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>com.clearspring.analytics</groupId>
@@ -105,10 +99,10 @@
 	</dependencies>
 	<build>
 		<plugins>
-      		<plugin>
-        		<groupId>org.apache.avro</groupId>
-        		<artifactId>avro-maven-plugin</artifactId>
-      		</plugin>
-    	</plugins>
+			<plugin>
+				<groupId>org.apache.avro</groupId>
+				<artifactId>avro-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
 	</build>
 </project>

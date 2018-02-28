@@ -14,35 +14,37 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
 
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
-public class ScanCallbackList<T> implements
-		ScanCallback<T>,
+public class ScanCallbackList<T, R extends GeoWaveRow> implements
+		ScanCallback<T, R>,
 		Closeable
 {
-	private final List<ScanCallback<T>> callbacks;
+	private final List<ScanCallback<T, R>> callbacks;
 
 	public ScanCallbackList(
-			final List<ScanCallback<T>> callbacks ) {
+			final List<ScanCallback<T, R>> callbacks ) {
 		this.callbacks = callbacks;
 	}
 
 	@Override
 	public void entryScanned(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		for (final ScanCallback<T> callback : callbacks) {
+			final T entry,
+			final R rows ) {
+		for (final ScanCallback<T, R> callback : callbacks) {
 			callback.entryScanned(
-					entryInfo,
-					entry);
+					entry,
+					rows);
 		}
 	}
 
 	@Override
 	public void close()
 			throws IOException {
-		for (final ScanCallback<T> callback : callbacks) {
-			if (callback instanceof Closeable) ((Closeable) callback).close();
+		for (final ScanCallback<T, R> callback : callbacks) {
+			if (callback instanceof Closeable) {
+				((Closeable) callback).close();
+			}
 		}
 	}
 

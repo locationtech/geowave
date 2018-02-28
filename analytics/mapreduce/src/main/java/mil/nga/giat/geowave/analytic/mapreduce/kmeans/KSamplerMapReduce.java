@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.analytic.param.SampleParameters;
 import mil.nga.giat.geowave.analytic.sample.function.RandomSamplingRankFunction;
 import mil.nga.giat.geowave.analytic.sample.function.SamplingRankFunction;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputMapper;
@@ -167,7 +168,7 @@ public class KSamplerMapReduce
 								1.0 - rank, // sorts in ascending order
 								key.getDataId().getBytes())));
 				outputKey.setAdapterId(key.getAdapterId());
-				outputKey.setInsertionId(key.getInsertionId());
+				outputKey.setGeoWaveKey(key.getGeoWaveKey());
 				context.write(
 						outputKey,
 						currentValue);
@@ -331,7 +332,8 @@ public class KSamplerMapReduce
 			final ByteArrayId indexId = new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(
 							SampleParameters.Sample.INDEX_ID,
-							new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId().getString())));
+							new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+									new SpatialOptions()).getId().getString())));
 			indexIds = new ArrayList<ByteArrayId>();
 			indexIds.add(indexId);
 			try {

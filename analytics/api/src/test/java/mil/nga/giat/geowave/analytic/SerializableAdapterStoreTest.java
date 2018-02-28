@@ -20,8 +20,11 @@ import java.io.ObjectOutputStream;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 
 import org.geotools.feature.type.BasicFeatureTypes;
@@ -41,11 +44,15 @@ public class SerializableAdapterStoreTest
 				},
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
+
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
+				ftype);
+		adapter.init(index);
 		final SerializableAdapterStore store = new SerializableAdapterStore(
 				new MemoryAdapterStore(
 						new DataAdapter<?>[] {
-							new FeatureDataAdapter(
-									ftype)
+							adapter
 						}));
 
 		final ByteArrayId id = new ByteArrayId(

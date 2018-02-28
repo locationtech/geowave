@@ -13,6 +13,7 @@ import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Set;
 
 import org.apache.commons.lang3.text.WordUtils;
 import org.reflections.Reflections;
@@ -40,12 +41,16 @@ public class GeowaveOperationGrpcGenerator
 			+ " ******************************************************************************/\n"
 			+ "syntax = \"proto3\";\n";
 
-	private static final String options = "option java_multiple_files = true;\n"
-			+ protobufPackage
+	private static final String options = "option java_multiple_files = true;\n" + protobufPackage
 			+ "option java_outer_classname = \"&OUTER_CLASSNAME&\";\n";
+
+	private static String outputBasePath = "";
 
 	public static void main(
 			final String[] args ) {
+
+		if (args.length > 0) outputBasePath = args[0];
+
 		GeowaveOperationGrpcGenerator g = new GeowaveOperationGrpcGenerator();
 		try {
 			g.parseOperationsForApiRoutes();
@@ -72,32 +77,52 @@ public class GeowaveOperationGrpcGenerator
 		final HashMap<String, ArrayList<String>> rpcInputMessages = new HashMap<String, ArrayList<String>>();
 		final HashMap<String, String> retMessages = new HashMap<String, String>();
 
-		for (final Class<? extends ServiceEnabledCommand> operation : new Reflections(
-				"mil.nga.giat.geowave").getSubTypesOf(ServiceEnabledCommand.class)) {
+		Set<Class<? extends ServiceEnabledCommand>> t = null;
+		try {
+			t = new Reflections(
+					"mil.nga.giat.geowave").getSubTypesOf(ServiceEnabledCommand.class);
+		}
+		catch (Exception e) {
+			LOGGER.debug(e.getMessage());
+		}
+
+		if (t == null) {
+			LOGGER.debug("No operations found");
+			return;
+		}
+
+		for (final Class<? extends ServiceEnabledCommand> operation : t) {
 
 			if (!Modifier.isAbstract(operation.getModifiers())) {
-				// Tokenize the package name so we can store the operations 
+				// Tokenize the package name so we can store the operations
 				// according to their original package names
 				final String packageName = operation.getPackage().getName();
-				final String [] packageToks = packageName.split("\\.");
+				final String[] packageToks = packageName.split("\\.");
 				String serviceName = "";
-				for(int i = 0; i < packageToks.length; i++) {
-					if(packageToks[i].equalsIgnoreCase("geowave")) {
-						//this special case is specifically for CoreMapreduce (which is packaged as ..geowave.mapreduce for some reason)
-						if(packageToks[i+2].equalsIgnoreCase("operations"))
-							serviceName = "Core"+WordUtils.capitalize(packageToks[i+1]);
+				for (int i = 0; i < packageToks.length; i++) {
+					if (packageToks[i].equalsIgnoreCase("geowave")) {
+						// this special case is specifically for CoreMapreduce
+						// (which is packaged as ..geowave.mapreduce for some
+						// reason)
+						if (packageToks[i + 2].equalsIgnoreCase("operations"))
+							serviceName = "Core" + WordUtils.capitalize(packageToks[i + 1]);
 						else
-							serviceName = WordUtils.capitalize(packageToks[i+1]) +  WordUtils.capitalize(packageToks[i+2]);
-						if(!rpcs.containsKey(serviceName)) {
-							rpcs.put(serviceName, new ArrayList<String>());
-							rpcInputMessages.put(serviceName, new ArrayList<String>());
+							serviceName = WordUtils.capitalize(packageToks[i + 1])
+									+ WordUtils.capitalize(packageToks[i + 2]);
+						if (!rpcs.containsKey(serviceName)) {
+							rpcs.put(
+									serviceName,
+									new ArrayList<String>());
+							rpcInputMessages.put(
+									serviceName,
+									new ArrayList<String>());
 							break;
-						}	
+						}
 					}
 				}
-	
-				LOGGER.info("Parsing operation: "+operation.getName());
-				
+
+				LOGGER.info("Parsing operation: " + operation.getName());
+
 				// tokenize the operation name so we can generate a name for
 				// the RPC
 				final String[] rpcNameToks = operation.getName().split(
@@ -113,8 +138,7 @@ public class GeowaveOperationGrpcGenerator
 				while (parentClass != null) {
 
 					try {
-						paramType = ((ParameterizedType) parentClass.getGenericSuperclass())
-								.getActualTypeArguments()[0];
+						paramType = ((ParameterizedType) parentClass.getGenericSuperclass()).getActualTypeArguments()[0];
 						success = true;
 					}
 					catch (final Exception e) {
@@ -147,8 +171,11 @@ public class GeowaveOperationGrpcGenerator
 							retType);
 				}
 
-				final String rpc = "\t rpc " + rpcName + "(" + rpcName + "Parameters) returns (" + responseName + ") {} \n";
-				rpcs.get(serviceName).add(rpc);
+				final String rpc = "\t rpc " + rpcName + "(" + rpcName + "Parameters) returns (" + responseName
+						+ ") {} \n";
+				rpcs.get(
+						serviceName).add(
+						rpc);
 				final ProcessOperationResult pr = new ProcessOperationResult();
 				pr.message = "\nmessage " + rpcName + "Parameters {";
 				pr.currFieldPosition = 1;
@@ -161,25 +188,30 @@ public class GeowaveOperationGrpcGenerator
 								pr);
 						opClass = opClass.getSuperclass();
 					}
-				} catch (final IOException e) {
+				}
+				catch (final IOException e) {
 					LOGGER.error(
 							"Exception encountered processing operations",
 							e);
 				}
 				pr.message += "\n}\n";
-				rpcInputMessages.get(serviceName).add(pr.message);
+				rpcInputMessages.get(
+						serviceName).add(
+						pr.message);
 			}
 		}
 
-		//write out all the service files
+		// write out all the service files
 		Iterator it = rpcs.entrySet().iterator();
 		while (it.hasNext()) {
 			HashMap.Entry pair = (HashMap.Entry) it.next();
-			final String currServiceName = (String)pair.getKey();
+			final String currServiceName = (String) pair.getKey();
 			ArrayList<String> rpcList = (ArrayList<String>) pair.getValue();
 			ArrayList<String> rpcInputMessageList = (ArrayList<String>) rpcInputMessages.get(currServiceName);
-			
-			String serviceFilename = "../protobuf-shaded/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
+
+			String serviceFilename = outputBasePath + "/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
+			// "../protobuf-shaded/src/main/protobuf/GeoWave" + pair.getKey() +
+			// ".proto";
 			Writer serviceWriter = null;
 			try {
 				serviceWriter = new OutputStreamWriter(
@@ -192,38 +224,43 @@ public class GeowaveOperationGrpcGenerator
 						"Exception encountered opening file stream",
 						e);
 			}
-			
-			// first write header
-			final String serviceHeader = header + "import \"GeoWaveReturnTypes.proto\";\n" + options.replace("&OUTER_CLASSNAME&", currServiceName+"Service");
-			try {
-				serviceWriter.write(serviceHeader + "\n");
 
-				// write out service definition
-				serviceWriter.write("service " + currServiceName + " { \n");
-				
-				//write out rpcs for this service
-				for(int i = 0; i < rpcList.size(); i++) {
-					serviceWriter.write(rpcList.get(i));
+			// first write header
+			final String serviceHeader = header + "import \"GeoWaveReturnTypes.proto\";\n" + options.replace(
+					"&OUTER_CLASSNAME&",
+					currServiceName + "Service");
+			try {
+				if (serviceWriter != null) {
+					serviceWriter.write(serviceHeader + "\n");
+
+					// write out service definition
+					serviceWriter.write("service " + currServiceName + " { \n");
+
+					// write out rpcs for this service
+					for (int i = 0; i < rpcList.size(); i++) {
+						serviceWriter.write(rpcList.get(i));
+					}
+
+					// end service definition
+					serviceWriter.write("}\n");
+
+					for (int i = 0; i < rpcInputMessageList.size(); i++) {
+						serviceWriter.write(rpcInputMessageList.get(i));
+					}
 				}
-				
-				//end service definition
-				serviceWriter.write("}\n");
-				
-				for(int i = 0; i < rpcInputMessageList.size(); i++) {
-					serviceWriter.write(rpcInputMessageList.get(i));
-				}
-			} catch (final IOException e) {
+			}
+			catch (final IOException e) {
 				LOGGER.error(
 						"Exception encountered writing proto file",
 						e);
-			} finally  {
+			}
+			finally {
 				safeClose(serviceWriter);
 			}
-			
-			
+
 		}
-		
-		String serviceReturnFilename = "../protobuf-shaded/src/main/protobuf/GeoWaveReturnTypes.proto";
+
+		String serviceReturnFilename = outputBasePath + "/src/main/protobuf/GeoWaveReturnTypes.proto";
 		Writer serviceReturnWriter = null;
 		try {
 			serviceReturnWriter = new OutputStreamWriter(
@@ -236,25 +273,29 @@ public class GeowaveOperationGrpcGenerator
 					"Exception encountered opening file stream",
 					e);
 		}
-		
-		try {				
-			// write out proto file for the service return types
-			// this file is included/imported by all the service definition files
-			serviceReturnWriter.write(header+protobufPackage);
 
-			it = retMessages.entrySet().iterator();
-			while (it.hasNext()) {
-				HashMap.Entry pair = (HashMap.Entry) it.next();
-				serviceReturnWriter.write((String) pair.getValue());
+		try {
+			// write out proto file for the service return types
+			// this file is included/imported by all the service definition
+			// files
+			if (serviceReturnWriter != null) {
+				serviceReturnWriter.write(header + protobufPackage);
+
+				it = retMessages.entrySet().iterator();
+				while (it.hasNext()) {
+					HashMap.Entry pair = (HashMap.Entry) it.next();
+					serviceReturnWriter.write((String) pair.getValue());
+				}
 			}
-		} catch (final IOException e) {
+		}
+		catch (final IOException e) {
 			LOGGER.error(
 					"Exception encountered writing proto file",
 					e);
-		} finally {
+		}
+		finally {
 			safeClose(serviceReturnWriter);
 		}
-			
 
 	}
 

@@ -1,0 +1,182 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+import "GeoWaveReturnTypes.proto";
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "CliGeoserverService";
+
+service CliGeoserver { 
+	 rpc GeoServerGetCoverageStoreCommand(GeoServerGetCoverageStoreCommandParameters) returns (StringResponse) {} 
+	 rpc ConfigGeoServerCommand(ConfigGeoServerCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerListCoveragesCommand(GeoServerListCoveragesCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerListFeatureLayersCommand(GeoServerListFeatureLayersCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddFeatureLayerCommand(GeoServerAddFeatureLayerCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveCoverageStoreCommand(GeoServerRemoveCoverageStoreCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerGetStoreAdapterCommand(GeoServerGetStoreAdapterCommandParameters) returns (RepeatedStringResponse) {} 
+	 rpc GeoServerListDatastoresCommand(GeoServerListDatastoresCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerGetFeatureLayerCommand(GeoServerGetFeatureLayerCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerGetStyleCommand(GeoServerGetStyleCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddLayerCommand(GeoServerAddLayerCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerListWorkspacesCommand(GeoServerListWorkspacesCommandParameters) returns (RepeatedStringResponse) {} 
+	 rpc GeoServerListStylesCommand(GeoServerListStylesCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerGetCoverageCommand(GeoServerGetCoverageCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveStyleCommand(GeoServerRemoveStyleCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveWorkspaceCommand(GeoServerRemoveWorkspaceCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddWorkspaceCommand(GeoServerAddWorkspaceCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerGetDatastoreCommand(GeoServerGetDatastoreCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddCoverageStoreCommand(GeoServerAddCoverageStoreCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveFeatureLayerCommand(GeoServerRemoveFeatureLayerCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerSetLayerStyleCommand(GeoServerSetLayerStyleCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveCoverageCommand(GeoServerRemoveCoverageCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddStyleCommand(GeoServerAddStyleCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddDatastoreCommand(GeoServerAddDatastoreCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerAddCoverageCommand(GeoServerAddCoverageCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerListCoverageStoresCommand(GeoServerListCoverageStoresCommandParameters) returns (StringResponse) {} 
+	 rpc GeoServerRemoveDatastoreCommand(GeoServerRemoveDatastoreCommandParameters) returns (StringResponse) {} 
+}
+
+message GeoServerGetCoverageStoreCommandParameters {
+	string workspace = 1;
+	repeated string parameters = 2;
+}
+
+message ConfigGeoServerCommandParameters {
+	string username = 1;
+	string pass = 2;
+	string workspace = 3;
+	repeated string parameters = 4;
+}
+
+message GeoServerListCoveragesCommandParameters {
+	string workspace = 1;
+	repeated string parameters = 2;
+}
+
+message GeoServerListFeatureLayersCommandParameters {
+	string workspace = 1;
+	string datastore = 2;
+	bool geowaveOnly = 3;
+}
+
+message GeoServerAddFeatureLayerCommandParameters {
+	string workspace = 1;
+	string datastore = 2;
+	repeated string parameters = 3;
+}
+
+message GeoServerRemoveCoverageStoreCommandParameters {
+	string workspace = 1;
+	repeated string parameters = 2;
+}
+
+message GeoServerGetStoreAdapterCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerListDatastoresCommandParameters {
+	string workspace = 1;
+}
+
+message GeoServerGetFeatureLayerCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerGetStyleCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerAddLayerCommandParameters {
+	string workspace = 1;
+	string addOption = 2;
+	string adapterId = 3;
+	string style = 4;
+	repeated string parameters = 5;
+}
+
+message GeoServerListWorkspacesCommandParameters {
+}
+
+message GeoServerListStylesCommandParameters {
+}
+
+message GeoServerGetCoverageCommandParameters {
+	string workspace = 1;
+	string cvgstore = 2;
+	repeated string parameters = 3;
+}
+
+message GeoServerRemoveStyleCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerRemoveWorkspaceCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerAddWorkspaceCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerGetDatastoreCommandParameters {
+	string workspace = 1;
+	repeated string parameters = 2;
+}
+
+message GeoServerAddCoverageStoreCommandParameters {
+	string workspace = 1;
+	string coverageStore = 2;
+	bool equalizeHistogramOverride = 3;
+	string interpolationOverride = 4;
+	bool scaleTo8Bit = 5;
+	repeated string parameters = 6;
+}
+
+message GeoServerRemoveFeatureLayerCommandParameters {
+	repeated string parameters = 1;
+}
+
+message GeoServerSetLayerStyleCommandParameters {
+	string styleName = 1;
+	repeated string parameters = 2;
+}
+
+message GeoServerRemoveCoverageCommandParameters {
+	string workspace = 1;
+	string cvgstore = 2;
+	repeated string parameters = 3;
+}
+
+message GeoServerAddStyleCommandParameters {
+	string stylesld = 1;
+	repeated string parameters = 2;
+}
+
+message GeoServerAddDatastoreCommandParameters {
+	string workspace = 1;
+	string datastore = 2;
+	repeated string parameters = 3;
+}
+
+message GeoServerAddCoverageCommandParameters {
+	string workspace = 1;
+	string cvgstore = 2;
+	repeated string parameters = 3;
+}
+
+message GeoServerListCoverageStoresCommandParameters {
+	string workspace = 1;
+}
+
+message GeoServerRemoveDatastoreCommandParameters {
+	string workspace = 1;
+	repeated string parameters = 2;
+}

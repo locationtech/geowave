@@ -1,0 +1,47 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+import "GeoWaveReturnTypes.proto";
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "AnalyticSparkService";
+
+service AnalyticSpark { 
+	 rpc SparkSqlCommand(SparkSqlCommandParameters) returns (VoidResponse) {} 
+	 rpc KmeansSparkCommand(KmeansSparkCommandParameters) returns (VoidResponse) {} 
+}
+
+message SparkSqlCommandParameters {
+	repeated string parameters = 1;
+	string csvOutputFile = 2;
+	string outputStoreName = 3;
+	string outputTypeName = 4;
+	int32 showResults = 5;
+}
+
+message KmeansSparkCommandParameters {
+	repeated string parameters = 1;
+	string appName = 2;
+	string host = 3;
+	string master = 4;
+	int32 numClusters = 5;
+	int32 numIterations = 6;
+	string epsilon = 7;
+	bool useTime = 8;
+	bool generateHulls = 9;
+	bool computeHullData = 10;
+	string cqlFilter = 11;
+	string adapterId = 12;
+	int32 minSplits = 13;
+	int32 maxSplits = 14;
+	string centroidTypeName = 15;
+	string hullTypeName = 16;
+}

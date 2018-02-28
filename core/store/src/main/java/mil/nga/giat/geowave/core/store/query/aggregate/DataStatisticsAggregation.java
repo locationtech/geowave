@@ -33,9 +33,7 @@ public class DataStatisticsAggregation<T> implements
 	@Override
 	public void aggregate(
 			final T entry ) {
-		statisticsResult.entryIngested(
-				null,
-				entry);
+		statisticsResult.entryIngested(entry);
 	}
 
 	@Override

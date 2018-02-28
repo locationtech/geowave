@@ -1,0 +1,93 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
+syntax = "proto3";
+import "GeoWaveReturnTypes.proto";
+option java_multiple_files = true;
+option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
+option java_outer_classname = "CoreStoreService";
+
+service CoreStore { 
+	 rpc RemoveStoreCommand(RemoveStoreCommandParameters) returns (StringResponse) {} 
+	 rpc RecalculateStatsCommand(RecalculateStatsCommandParameters) returns (VoidResponse) {} 
+	 rpc CalculateStatCommand(CalculateStatCommandParameters) returns (VoidResponse) {} 
+	 rpc VersionCommand(VersionCommandParameters) returns (VoidResponse) {} 
+	 rpc RemoveIndexGroupCommand(RemoveIndexGroupCommandParameters) returns (StringResponse) {} 
+	 rpc ClearCommand(ClearCommandParameters) returns (VoidResponse) {} 
+	 rpc ListIndexCommand(ListIndexCommandParameters) returns (StringResponse) {} 
+	 rpc RemoveAdapterCommand(RemoveAdapterCommandParameters) returns (VoidResponse) {} 
+	 rpc RemoveIndexCommand(RemoveIndexCommandParameters) returns (StringResponse) {} 
+	 rpc RemoveStatCommand(RemoveStatCommandParameters) returns (VoidResponse) {} 
+	 rpc AddIndexGroupCommand(AddIndexGroupCommandParameters) returns (VoidResponse) {} 
+	 rpc ListStatsCommand(ListStatsCommandParameters) returns (StringResponse) {} 
+	 rpc ListAdapterCommand(ListAdapterCommandParameters) returns (StringResponse) {} 
+}
+
+message RemoveStoreCommandParameters {
+	repeated string parameters = 1;
+}
+
+message RecalculateStatsCommandParameters {
+	string adapterId = 1;
+	repeated string parameters = 2;
+	string authorizations = 3;
+	bool jsonFormatFlag = 4;
+}
+
+message CalculateStatCommandParameters {
+	repeated string parameters = 1;
+	string authorizations = 2;
+	bool jsonFormatFlag = 3;
+}
+
+message VersionCommandParameters {
+	repeated string parameters = 1;
+}
+
+message RemoveIndexGroupCommandParameters {
+	repeated string parameters = 1;
+}
+
+message ClearCommandParameters {
+	repeated string parameters = 1;
+}
+
+message ListIndexCommandParameters {
+	repeated string parameters = 1;
+}
+
+message RemoveAdapterCommandParameters {
+	repeated string parameters = 1;
+}
+
+message RemoveIndexCommandParameters {
+	repeated string parameters = 1;
+}
+
+message RemoveStatCommandParameters {
+	repeated string parameters = 1;
+	string authorizations = 2;
+	bool jsonFormatFlag = 3;
+}
+
+message AddIndexGroupCommandParameters {
+	repeated string parameters = 1;
+}
+
+message ListStatsCommandParameters {
+	string adapterId = 1;
+	repeated string parameters = 2;
+	string authorizations = 3;
+	bool jsonFormatFlag = 4;
+}
+
+message ListAdapterCommandParameters {
+	repeated string parameters = 1;
+}

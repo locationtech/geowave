@@ -26,8 +26,8 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "mrexport", parentOperation = VectorSection.class)
@@ -66,9 +66,7 @@ public class VectorMRExportCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
 
 		// Attempt to load store.

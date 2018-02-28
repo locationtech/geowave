@@ -31,8 +31,8 @@ public class GeoWaveGrpcOperationParser
 		}
 		else if ((type != null) && ((Class<?>) type).isEnum()) {
 			return "string";
-			//TODO investigate this!
-			//return "enum";
+			// TODO investigate this!
+			// return "enum";
 		}
 		else if ((type == List.class)) {
 			return "repeated";

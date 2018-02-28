@@ -20,8 +20,8 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
 public class IngestUtils
 {

@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -32,6 +33,7 @@ public interface MapReduceDataStore extends
 			DistributableQuery query,
 			QueryOptions queryOptions,
 			AdapterStore adapterStore,
+			AdapterIndexMappingStore aimStore,
 			DataStatisticsStore statsStore,
 			IndexStore indexStore,
 			boolean isOutputWritable,
@@ -43,6 +45,7 @@ public interface MapReduceDataStore extends
 			DistributableQuery query,
 			QueryOptions queryOptions,
 			AdapterStore adapterStore,
+			AdapterIndexMappingStore aimStore,
 			DataStatisticsStore statsStore,
 			IndexStore indexStore,
 			Integer minSplits,

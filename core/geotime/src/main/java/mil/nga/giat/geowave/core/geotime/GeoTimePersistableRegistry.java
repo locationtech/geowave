@@ -14,6 +14,9 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.SpatialArrayField;
@@ -22,7 +25,10 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.Time.Timestamp;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeArrayField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements
@@ -70,7 +76,25 @@ public class GeoTimePersistableRegistry implements
 					SpatialQueryFilter::new),
 			new PersistableIdAndConstructor(
 					(short) 312,
-					SpatialQuery::new)
+					SpatialQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 313,
+					CustomCRSSpatialField::new),
+			new PersistableIdAndConstructor(
+					(short) 314,
+					CustomCRSSpatialDimension::new),
+		    new PersistableIdAndConstructor(
+					(short) 315,
+					CustomCrsIndexModel::new),
+			new PersistableIdAndConstructor(
+					(short) 316,
+					IndexOnlySpatialQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 317,
+					SpatialTemporalQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 318,
+					TemporalQuery::new),
 		};
 	}
 }

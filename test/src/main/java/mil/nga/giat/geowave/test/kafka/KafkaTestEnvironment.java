@@ -49,6 +49,7 @@ public class KafkaTestEnvironment implements
 		if (!success) {
 			LOGGER.warn("Unable to create Kafka log dir [" + KafkaTestUtils.DEFAULT_LOG_DIR.getAbsolutePath() + "]");
 		}
+
 		final KafkaConfig config = KafkaTestUtils.getKafkaBrokerConfig();
 		kafkaServer = new KafkaServerStartable(
 				config);
@@ -63,7 +64,7 @@ public class KafkaTestEnvironment implements
 		LOGGER.info("Shutting down Kafka Server...");
 		kafkaServer.shutdown();
 
-		FileUtils.deleteDirectory(KafkaTestUtils.DEFAULT_LOG_DIR);
+		FileUtils.forceDeleteOnExit(KafkaTestUtils.DEFAULT_LOG_DIR);
 	}
 
 	@Override

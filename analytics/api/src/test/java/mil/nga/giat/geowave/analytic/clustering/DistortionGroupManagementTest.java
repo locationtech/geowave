@@ -18,7 +18,9 @@ import java.util.List;
 
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -32,6 +34,7 @@ import mil.nga.giat.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
 import mil.nga.giat.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -45,10 +48,11 @@ import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class DistortionGroupManagementTest
 {
-
+	@Rule
+	public TestName name = new TestName();
 	final GeometryFactory factory = new GeometryFactory();
 	final SimpleFeatureType ftype;
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 
 	final FeatureDataAdapter adapter;
 	final DataStore dataStore;
@@ -64,7 +68,6 @@ public class DistortionGroupManagementTest
 				adapter,
 				index)) {
 			writer.write(entry);
-			writer.close();
 		}
 	}
 
@@ -78,8 +81,8 @@ public class DistortionGroupManagementTest
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 		adapter = new FeatureDataAdapter(
 				ftype);
-
-		final String namespace = "test_" + getClass().getName();
+		adapter.init(index);
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 
 		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();

@@ -11,7 +11,7 @@
 package mil.nga.giat.geowave.core.store.adapter.statistics;
 
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
  * 
@@ -25,8 +25,8 @@ public class EmptyStatisticVisibility<T> implements
 
 	@Override
 	public byte[] getVisibility(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			final GeoWaveRow... kvs ) {
 		return new byte[0];
 	}
 

@@ -21,11 +21,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
 
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskedFieldInfoComparator;
-
 public class BitmaskUtilsTest
 {
 	final static BitSet zeroth = new BitSet();
@@ -115,45 +110,39 @@ public class BitmaskUtilsTest
 	public void testCompositeSortOrder() {
 
 		// generate meaningless fieldInfo to transform
-		final FieldInfo<?> original = new FieldInfo<Object>(
-				new PersistentValue<Object>(
-						null, // will be overwritten by
-								// BitmaskUtils.transformField() below
-						null), // unused in this instance
-				null, // unused in this instance
-				null); // unused in this instance
+		final Object original = new Object();
 
 		// clone original fieldInfo overwriting dataValue.id with bitmask
-		final Pair<Integer, FieldInfo<?>> field0 = new ImmutablePair(
+		final Pair<Integer, ?> field0 = new ImmutablePair(
 				0,
 				original);
-		final Pair<Integer, FieldInfo<?>> field1 = new ImmutablePair(
+		final Pair<Integer, ?> field1 = new ImmutablePair(
 				1,
 				original);
-		final Pair<Integer, FieldInfo<?>> field2 = new ImmutablePair(
+		final Pair<Integer, ?> field2 = new ImmutablePair(
 				2,
 				original);
-		final Pair<Integer, FieldInfo<?>> field3 = new ImmutablePair(
+		final Pair<Integer, ?> field3 = new ImmutablePair(
 				3,
 				original);
-		final Pair<Integer, FieldInfo<?>> field4 = new ImmutablePair(
+		final Pair<Integer, ?> field4 = new ImmutablePair(
 				4,
 				original);
-		final Pair<Integer, FieldInfo<?>> field5 = new ImmutablePair(
+		final Pair<Integer, ?> field5 = new ImmutablePair(
 				5,
 				original);
-		final Pair<Integer, FieldInfo<?>> field6 = new ImmutablePair(
+		final Pair<Integer, ?> field6 = new ImmutablePair(
 				6,
 				original);
-		final Pair<Integer, FieldInfo<?>> field7 = new ImmutablePair(
+		final Pair<Integer, ?> field7 = new ImmutablePair(
 				7,
 				original);
-		final Pair<Integer, FieldInfo<?>> field8 = new ImmutablePair(
+		final Pair<Integer, ?> field8 = new ImmutablePair(
 				8,
 				original);
 
 		// construct list in wrong order
-		final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = Arrays.asList(
+		final List<Pair<Integer, ?>> fieldInfoList = Arrays.asList(
 				field8,
 				field7,
 				field6,
@@ -167,7 +156,7 @@ public class BitmaskUtilsTest
 		// sort in place and ensure list sorts correctly
 		Collections.sort(
 				fieldInfoList,
-				new BitmaskedFieldInfoComparator());
+				new BitmaskedPairComparator());
 
 		Assert.assertTrue(field0.equals(fieldInfoList.get(0)));
 		Assert.assertTrue(field1.equals(fieldInfoList.get(1)));

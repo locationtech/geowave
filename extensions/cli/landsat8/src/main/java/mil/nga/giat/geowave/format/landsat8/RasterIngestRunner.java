@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -39,6 +39,7 @@ import org.opengis.parameter.InvalidParameterValueException;
 import org.opengis.parameter.ParameterNotFoundException;
 import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -62,14 +63,16 @@ import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorRe
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 public class RasterIngestRunner extends
 		DownloadRunner
@@ -228,7 +231,7 @@ public class RasterIngestRunner extends
 				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
 						.getConstraints(
 								filter,
-								GeoWaveGTRasterFormat.DEFAULT_CRS,
+								GeometryUtils.getIndexCrs(indices),
 								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
 				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {
@@ -247,7 +250,7 @@ public class RasterIngestRunner extends
 								coverage);
 						try {
 							final MathTransform transform = CRS.findMathTransform(
-									GeoWaveGTDataStore.DEFAULT_CRS,
+									GeometryUtils.DEFAULT_CRS,
 									coverage.getCoordinateReferenceSystem(),
 									true);
 							params.parameter(
@@ -556,14 +559,7 @@ public class RasterIngestRunner extends
 						return;
 					}
 				}
-				try {
-					writer.write(mergedCoverage);
-				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Unable to write merged coverage",
-							e);
-				}
+				writer.write(mergedCoverage);
 				lastSceneBands.clear();
 				if (!ingestOptions.isRetainImages()) {
 					for (final BandData b : sceneData.values()) {

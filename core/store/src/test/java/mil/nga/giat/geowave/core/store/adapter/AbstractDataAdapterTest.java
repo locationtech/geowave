@@ -61,6 +61,7 @@ public class AbstractDataAdapterTest
 						testEncoding.getAdapterId(),
 						testEncoding.getDataId(),
 						null,
+						null,
 						1,
 						testEncoding.getCommonData(),
 						new PersistentDataset<byte[]>(),

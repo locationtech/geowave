@@ -30,9 +30,9 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -233,15 +233,12 @@ public class GeoWaveInputFormat<T> extends
 			InterruptedException {
 		final Map<String, String> configOptions = getStoreOptionsMap(context);
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
-		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
-			final QueryOptions queryOptions = getQueryOptions(context);
-			final QueryOptions rangeQueryOptions = new QueryOptions(
-					queryOptions);
 			return (RecordReader<GeoWaveInputKey, T>) ((MapReduceDataStore) dataStore).createRecordReader(
 					getQuery(context),
-					rangeQueryOptions,
-					adapterStore,
+					getQueryOptions(context),
+					getJobContextAdapterStore(context),
+					getJobContextAdapterIndexMappingStore(context),
 					getJobContextDataStatisticsStore(context),
 					getJobContextIndexStore(context),
 					isOutputWritable(
@@ -309,16 +306,12 @@ public class GeoWaveInputFormat<T> extends
 			InterruptedException {
 		final Map<String, String> configOptions = getStoreOptionsMap(context);
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
-		final AdapterStore adapterStore = getJobContextAdapterStore(context);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
-			final QueryOptions queryOptions = getQueryOptions(context);
-			final QueryOptions rangeQueryOptions = new QueryOptions(
-					queryOptions);
-
 			return ((MapReduceDataStore) dataStore).getSplits(
 					getQuery(context),
-					rangeQueryOptions,
-					adapterStore,
+					getQueryOptions(context),
+					getJobContextAdapterStore(context),
+					getJobContextAdapterIndexMappingStore(context),
 					getJobContextDataStatisticsStore(context),
 					getJobContextIndexStore(context),
 					getMinimumSplitCount(context),
