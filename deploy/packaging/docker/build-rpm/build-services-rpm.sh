@@ -36,7 +36,7 @@ done
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
 FPM_SCRIPTS="${WORKSPACE}/deploy/packaging/docker/build-rpm/fpm_scripts"
 GEOWAVE_DIR="/usr/local/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}"
-GEOSERVER_VERSION=$(cat $WORKSPACE/deploy/target/geoserver_version.txt)
+GEOSERVER_VERSION=$(cat $WORKSPACE/deploy/target/version_geoserver.txt)
 
 echo "---------------------------------------------------------------"
 echo "      Building Services RPMS with the following settings"

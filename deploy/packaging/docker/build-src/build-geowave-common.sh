@@ -26,7 +26,7 @@ GEOWAVE_VERSION="$(echo ${GEOWAVE_VERSION_STR} | sed -e 's/"//g' -e 's/-SNAPSHOT
 echo $GEOWAVE_VERSION > $WORKSPACE/deploy/target/version.txt
 set -x
 GEOSERVER_VERSION="$(mvn -q -Dexec.executable="echo" -Dexec.args='${geoserver.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec $BUILD_ARGS)"
-echo $GEOSERVER_VERSION > $WORKSPACE/deploy/target/geoserver_version.txt
+echo $GEOSERVER_VERSION > $WORKSPACE/deploy/target/version_geoserver.txt
 set +x
 if [[ "$GEOWAVE_VERSION_STR" =~ "-SNAPSHOT" ]]
 then
