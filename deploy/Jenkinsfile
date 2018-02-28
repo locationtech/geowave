@@ -14,12 +14,12 @@ node ('master') {
     checkout scm
   }
   // Mark the create docker image 'stage'
-//  stage('Create Docker Image'){
+  stage('Create Docker Image'){
     // Build the docker container
-//    sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
-//    sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
-//    sh 'docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile deploy/packaging/docker'
-//  }
+    sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
+    sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
+    sh 'docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile deploy/packaging/docker'
+  }
 
   stage('Maven Deploy'){
     dir("${env.WORKSPACE}/docker-root") {
@@ -41,19 +41,19 @@ node ('master') {
     sh 'deploy/packaging/docker/docker-build-rpms.sh'
   }
 
-//  stage('Clean bucket and local space'){
-//    sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
-//  }
+  stage('Clean bucket and local space'){
+    sh "deploy/scripts/clean-up.py ${env.WORKSPACE}"
+  }
 
   // Deploy to geowave-rpms
   stage('Deploying to s3://geowave-rpms/'){
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       echo 'Build type determined as Dev. Sync will delete content on s3.'
-//      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
+      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
     } else if (build_type == "release" ) {
       echo 'Build type determined as Release. Sync will not delete content on s3.'
-//      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
     }
@@ -64,7 +64,7 @@ node ('master') {
     if ( build_type == "dev" ) {
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
-//        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
       // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
       }
     }
@@ -72,7 +72,7 @@ node ('master') {
       def version  = readFile('deploy/target/version.txt').trim()
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
-//        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
       // $DOCKERROOT/.m2 and upload to upload s3://geowave/mvn-cache/release/mvn-repo-cache-version.tar.gz
       }
     } else {
