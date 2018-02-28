@@ -296,33 +296,6 @@ public class RasterIngestRunner extends
 				geotiffFile);
 	}
 
-	/*
-	 * private CoordinateReferenceSystem getIndexCRS( PrimaryIndex[] indices ) {
-	 * 
-	 * CoordinateReferenceSystem indexCrs = null;
-	 * 
-	 * for (PrimaryIndex primaryindx : indices) {
-	 * 
-	 * // for first iteration if (indexCrs == null) { if
-	 * (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) { indexCrs =
-	 * ((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs(); } else {
-	 * indexCrs = GeoWaveGTRasterFormat.DEFAULT_CRS; } } else { if
-	 * (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) { // check
-	 * if indexes have different CRS if (!indexCrs.equals(((CustomCrsIndexModel)
-	 * primaryindx.getIndexModel()).getCrs())) {
-	 * LOGGER.error("Multiple indices with different CRS is not supported");
-	 * throw new RuntimeException(
-	 * "Multiple indices with different CRS is not supported"); } else { if
-	 * (!indexCrs.equals(GeoWaveGTRasterFormat.DEFAULT_CRS)) {
-	 * LOGGER.error("Multiple indices with different CRS is not supported");
-	 * throw new RuntimeException(
-	 * "Multiple indices with different CRS is not supported"); }
-	 * 
-	 * } } } }
-	 * 
-	 * return indexCrs; }
-	 */
-
 	private static double getNoDataValue(
 			final SimpleFeature band ) {
 		final String bandName = band.getAttribute(

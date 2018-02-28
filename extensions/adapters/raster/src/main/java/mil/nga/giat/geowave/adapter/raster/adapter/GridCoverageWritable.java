@@ -23,6 +23,8 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This class is used by GridCoverageDataAdapter to persist GridCoverages. The
@@ -32,6 +34,7 @@ import org.opengis.referencing.cs.CoordinateSystemAxis;
 public class GridCoverageWritable implements
 		Writable
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(GridCoverageWritable.class);
 	private RasterTile rasterTile;
 	private double minX;
 	private double maxX;
@@ -103,8 +106,12 @@ public class GridCoverageWritable implements
 				crs = CRS.decode(crsStr);
 			}
 			catch (FactoryException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				LOGGER.error(
+						"Unable to decode " + crsStr + " CRS",
+						e);
+				throw new RuntimeException(
+						"Unable to decode " + crsStr + " CRS",
+						e);
 			}
 		}
 		else {
