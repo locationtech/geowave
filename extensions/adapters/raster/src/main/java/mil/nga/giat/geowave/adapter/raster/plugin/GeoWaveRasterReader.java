@@ -19,8 +19,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -31,7 +33,6 @@ import javax.media.jai.Interpolation;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
@@ -70,7 +71,9 @@ import mil.nga.giat.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStra
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramStatistics;
 import mil.nga.giat.geowave.adapter.raster.stats.OverviewStatistics;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -86,6 +89,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
+import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.Query;
@@ -112,6 +116,8 @@ public class GeoWaveRasterReader extends
 	private IndexStore geowaveIndexStore;
 
 	private AdapterIndexMappingStore geowaveAdapterIndexMappingStore;
+	protected Map<String, CoordinateReferenceSystem> crsCache = new HashMap<String, CoordinateReferenceSystem>();
+	protected CoordinateReferenceSystem defaultCrs;
 
 	private AuthorizationSPI authorizationSPI;
 
@@ -204,9 +210,9 @@ public class GeoWaveRasterReader extends
 		geowaveStatisticsStore = config.getDataStatisticsStore();
 		geowaveIndexStore = config.getIndexStore();
 		geowaveAdapterIndexMappingStore = config.getAdapterIndexMappingStore();
-		crs = GeoWaveGTRasterFormat.DEFAULT_CRS;
 		authorizationSPI = config.getAuthorizationFactory().create(
 				config.getAuthorizationURL());
+
 	}
 
 	/**
@@ -226,6 +232,50 @@ public class GeoWaveRasterReader extends
 		this(
 				source,
 				null);
+	}
+
+	protected CoordinateReferenceSystem getDefaultCrs() {
+		if (defaultCrs != null) {
+			return defaultCrs;
+		}
+		if (!crsCache.isEmpty()) {
+			defaultCrs = crsCache.values().iterator().next();
+		}
+		else {
+			String[] coverageNames = getGridCoverageNames();
+			for (String coverageName : coverageNames) {
+				CoordinateReferenceSystem crs = getCrsForCoverage(coverageName);
+				if (crs != null) {
+					defaultCrs = crs;
+					break;
+				}
+			}
+		}
+		if (defaultCrs != null) {
+			return defaultCrs;
+		}
+		// if no data has been ingested yet with a CRS, this is the best guess
+		// we can make
+		return GeometryUtils.DEFAULT_CRS;
+	}
+
+	protected CoordinateReferenceSystem getCrsForCoverage(
+			String coverageName ) {
+		CoordinateReferenceSystem crs = crsCache.get(coverageName);
+		if (crs != null) {
+			return crs;
+		}
+		AdapterToIndexMapping adapterMapping = geowaveAdapterIndexMappingStore.getIndicesForAdapter(new ByteArrayId(
+				coverageName));
+		PrimaryIndex[] indices = adapterMapping.getIndices(geowaveIndexStore);
+
+		if (indices != null && indices.length > 0) {
+			crs = GeometryUtils.getIndexCrs(indices[0]);
+			crsCache.put(
+					coverageName,
+					crs);
+		}
+		return crs;
 	}
 
 	@Override
@@ -350,7 +400,7 @@ public class GeoWaveRasterReader extends
 							bboxStats.getMinY(),
 							bboxStats.getWidth(),
 							bboxStats.getHeight()));
-			env.setCoordinateReferenceSystem(GeoWaveGTRasterFormat.DEFAULT_CRS);
+			env.setCoordinateReferenceSystem(getCoordinateReferenceSystem(coverageName));
 			return env;
 		}
 		return null;
@@ -358,13 +408,13 @@ public class GeoWaveRasterReader extends
 
 	@Override
 	public CoordinateReferenceSystem getCoordinateReferenceSystem() {
-		return GeoWaveGTRasterFormat.DEFAULT_CRS;
+		return getDefaultCrs();
 	}
 
 	@Override
 	public CoordinateReferenceSystem getCoordinateReferenceSystem(
 			final String coverageName ) {
-		return GeoWaveGTRasterFormat.DEFAULT_CRS;
+		return getCrsForCoverage(coverageName);
 	}
 
 	@Override
@@ -538,7 +588,7 @@ public class GeoWaveRasterReader extends
 				interpolation,
 				dim,
 				state,
-				crs,
+				getCoordinateReferenceSystem(coverageName),
 				getOriginalEnvelope(coverageName));
 
 		return coverage;

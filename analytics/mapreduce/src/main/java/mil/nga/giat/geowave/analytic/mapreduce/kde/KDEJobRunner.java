@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -35,8 +36,13 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
+import org.geotools.referencing.CRS;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.filter.Filter;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.cs.CoordinateSystem;
+import org.opengis.referencing.cs.CoordinateSystemAxis;
+import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,6 +50,7 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
+import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
@@ -53,9 +60,13 @@ import mil.nga.giat.geowave.core.cli.parser.CommandLineOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -90,16 +101,25 @@ public class KDEJobRunner extends
 	protected DataStorePluginOptions inputDataStoreOptions;
 	protected DataStorePluginOptions outputDataStoreOptions;
 	protected File configFile;
+	protected PrimaryIndex outputIndex;
+	public static final String X_MIN_KEY = "X_MIN";
+	public static final String X_MAX_KEY = "X_MAX";
+	public static final String Y_MIN_KEY = "Y_MIN";
+	public static final String Y_MAX_KEY = "Y_MAX";
+	public static final String INPUT_CRSCODE_KEY = "INPUT_CRS";
+	public static final String OUTPUT_CRSCODE_KEY = "OUTPUT_CRS";
 
 	public KDEJobRunner(
 			final KDECommandLineOptions kdeCommandLineOptions,
 			final DataStorePluginOptions inputDataStoreOptions,
 			final DataStorePluginOptions outputDataStoreOptions,
-			final File configFile ) {
+			final File configFile,
+			final PrimaryIndex outputIndex ) {
 		this.kdeCommandLineOptions = kdeCommandLineOptions;
 		this.inputDataStoreOptions = inputDataStoreOptions;
 		this.outputDataStoreOptions = outputDataStoreOptions;
 		this.configFile = configFile;
+		this.outputIndex = outputIndex;
 	}
 
 	/**
@@ -112,6 +132,52 @@ public class KDEJobRunner extends
 		if (conf == null) {
 			conf = new Configuration();
 			setConf(conf);
+		}
+
+		PrimaryIndex inputPrimaryIndex = null;
+		final CloseableIterator<Index<?, ?>> it1 = inputDataStoreOptions.createIndexStore().getIndices();
+		while (it1.hasNext()) {
+			Index<?, ?> index = it1.next();
+			if (index instanceof PrimaryIndex) {
+				inputPrimaryIndex = (PrimaryIndex) index;
+				break;
+			}
+		}
+
+		CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
+		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
+
+		PrimaryIndex outputPrimaryIndex = outputIndex;
+		CoordinateReferenceSystem outputIndexCrs = null;
+		String outputCrsCode = null;
+
+		if (outputPrimaryIndex != null) {
+			outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
+			outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
+		}
+		else {
+			SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+			SpatialOptions so = sdp.createOptions();
+			so.setCrs(inputCrsCode);
+			outputPrimaryIndex = sdp.createPrimaryIndex(so);
+			outputIndexCrs = inputIndexCrs;
+			outputCrsCode = inputCrsCode;
+		}
+
+		CoordinateSystem cs = outputIndexCrs.getCoordinateSystem();
+		CoordinateSystemAxis csx = cs.getAxis(0);
+		CoordinateSystemAxis csy = cs.getAxis(1);
+		double xMax = csx.getMaximumValue();
+		double xMin = csx.getMinimumValue();
+		double yMax = csy.getMaximumValue();
+		double yMin = csy.getMinimumValue();
+
+		if (xMax == Double.POSITIVE_INFINITY || xMin == Double.NEGATIVE_INFINITY || yMax == Double.POSITIVE_INFINITY
+				|| yMin == Double.NEGATIVE_INFINITY) {
+			LOGGER
+					.error("Raster KDE resize with raster primary index CRS dimensions min/max equal to positive infinity or negative infinity is not supported");
+			throw new RuntimeException(
+					"Raster KDE resize with raster primary index CRS dimensions min/max equal to positive infinity or negative infinity is not supported");
 		}
 
 		DataStorePluginOptions rasterResizeOutputDataStoreOptions;
@@ -168,6 +234,25 @@ public class KDEJobRunner extends
 					GaussianCellMapper.CQL_FILTER_KEY,
 					kdeCommandLineOptions.getCqlFilter());
 		}
+		conf.setDouble(
+				X_MIN_KEY,
+				xMin);
+		conf.setDouble(
+				X_MAX_KEY,
+				xMax);
+		conf.setDouble(
+				Y_MIN_KEY,
+				yMin);
+		conf.setDouble(
+				Y_MAX_KEY,
+				yMax);
+		conf.set(
+				INPUT_CRSCODE_KEY,
+				inputCrsCode);
+		conf.set(
+				OUTPUT_CRSCODE_KEY,
+				outputCrsCode);
+
 		preJob1Setup(conf);
 		final Job job = new Job(
 				conf);
@@ -303,7 +388,8 @@ public class KDEJobRunner extends
 						conf,
 						statsReducer,
 						outputDataStoreOptions.getGeowaveNamespace(),
-						kdeCoverageName);
+						kdeCoverageName,
+						outputPrimaryIndex);
 				job2Success = statsReducer.waitForCompletion(true);
 				if (job2Success) {
 					postJob2Success = postJob2Actions(
@@ -315,9 +401,11 @@ public class KDEJobRunner extends
 			else {
 				job2Success = false;
 			}
+
 			if (rasterResizeOutputDataStoreOptions != null) {
 				// delegate to resize command to wrap it up with the correctly
 				// requested tile size
+
 				final ResizeCommand resizeCommand = new ResizeCommand();
 
 				// We're going to override these anyway.
@@ -451,9 +539,9 @@ public class KDEJobRunner extends
 			final Configuration conf,
 			final Job statsReducer,
 			final String statsNamespace,
-			final String coverageName )
+			final String coverageName,
+			final PrimaryIndex index )
 			throws Exception {
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				AccumuloKDEReducer.NUM_BANDS,

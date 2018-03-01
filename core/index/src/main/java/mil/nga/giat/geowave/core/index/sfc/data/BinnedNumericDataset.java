@@ -120,6 +120,7 @@ public class BinnedNumericDataset implements
 		if (dimensionDefinitions.length == 0) {
 			return new BinnedNumericDataset[0];
 		}
+
 		final BinRange[][] binRangesPerDimension = getBinnedRangesPerDimension(
 				numericData,
 				dimensionDefinitions);

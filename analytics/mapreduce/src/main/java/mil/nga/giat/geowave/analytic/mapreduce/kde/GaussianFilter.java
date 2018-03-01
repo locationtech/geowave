@@ -40,12 +40,12 @@ public class GaussianFilter
 	// 0.2186801
 	// };
 
-	private static class ValueRange
+	public static class ValueRange
 	{
 		private final double min;
 		private final double max;
 
-		private ValueRange(
+		public ValueRange(
 				final double min,
 				final double max ) {
 			this.min = min;
@@ -75,7 +75,8 @@ public class GaussianFilter
 			final double lon,
 			final CellCounter results,
 			final int numXPosts,
-			final int numYPosts ) {
+			final int numYPosts,
+			final ValueRange[] valueRangePerDimension ) {
 		incrementBBox(
 				lon,
 				lon,
@@ -84,7 +85,8 @@ public class GaussianFilter
 				results,
 				numXPosts,
 				numYPosts,
-				1);
+				1,
+				valueRangePerDimension);
 	}
 
 	public static void incrementPt(
@@ -93,7 +95,8 @@ public class GaussianFilter
 			final CellCounter results,
 			final int numXPosts,
 			final int numYPosts,
-			double contributionScaleFactor ) {
+			double contributionScaleFactor,
+			final ValueRange[] valueRangePerDimension ) {
 		incrementBBox(
 				lon,
 				lon,
@@ -102,7 +105,8 @@ public class GaussianFilter
 				results,
 				numXPosts,
 				numYPosts,
-				contributionScaleFactor);
+				contributionScaleFactor,
+				valueRangePerDimension);
 	}
 
 	public static void incrementPtFast(
@@ -165,21 +169,14 @@ public class GaussianFilter
 			final CellCounter results,
 			final int numXPosts,
 			final int numYPosts,
-			double contributionScaleFactor ) {
+			double contributionScaleFactor,
+			final ValueRange[] valueRangePerDimension ) {
 		final int numDimensions = 2;
 		final double[] minBinLocationPerDimension = new double[numDimensions];
 		final double[] maxBinLocationPerDimension = new double[numDimensions];
 		final int[] binsPerDimension = new int[] {
 			numXPosts,
 			numYPosts
-		};
-		final ValueRange[] valueRangePerDimension = new ValueRange[] {
-			new ValueRange(
-					-180,
-					180),
-			new ValueRange(
-					-90,
-					90)
 		};
 		final double[] minsPerDimension = new double[] {
 			minX,
