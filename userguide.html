@@ -752,7 +752,7 @@ href="images/geowave-icon-logo-small.png">
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://geoserver.org/" target="_blank">GeoServer</a> instance &gt;= 2.10.0</p>
+<p><a href="http://geoserver.org/" target="_blank">GeoServer</a> instance &gt;= 2.12.1</p>
 </li>
 <li>
 <p><a href="https://accumulo.apache.org/" target="_blank">Apache Accumulo</a> version 1.5 or greater is required. 1.5.x, 1.6.x, 1.7.x, 1.8.x, have all been tested.</p>
@@ -2274,8 +2274,8 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Command Line Tools (ingest, etc.)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-jetty</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer components installed into /usr/local/geowave/geoserver and available at, e.g., <a href="http://localhost:8000/geoserver/web" class="bare">http://localhost:8000/geoserver/web</a></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-$VENDOR-gwtomcat</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">GeoServer components installed into /usr/local/geowave/geoserver and available at, e.g., <a href="http://localhost:8080/geoserver/web" class="bare">http://localhost:8080/geoserver/web</a></p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">geowave-$VERSION-puppet</p></td>
@@ -2786,7 +2786,7 @@ this artifact.</p>
 </dd>
 <dt class="hdlist1">http_port</dt>
 <dd>
-<p>The port on which the Jetty application server will run - defaults to 8080.</p>
+<p>The port on which the Tomcat application server will run - defaults to 8080.</p>
 </dd>
 <dt class="hdlist1">repo_base_url</dt>
 <dd>
@@ -3098,7 +3098,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-03-01 16:01:49 +00:00
+Last updated 2018-03-01 17:01:05 +00:00
 </div>
 </div>
 </body>

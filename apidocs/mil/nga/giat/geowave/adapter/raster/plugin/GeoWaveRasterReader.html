@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":9};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -142,6 +142,14 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.opengis.referencing.crs.CoordinateReferenceSystem&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#crsCache">crsCache</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#defaultCrs">defaultCrs</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected static org.opengis.referencing.operation.CoordinateOperationFactory</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#OPERATION_FACTORY">OPERATION_FACTORY</a></span></code>&nbsp;</td>
 </tr>
@@ -158,7 +166,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <!--   -->
 </a>
 <h3>Fields inherited from interface&nbsp;org.geotools.coverage.grid.io.GridCoverage2DReader</h3>
-<code>ELEVATION_DOMAIN, ELEVATION_DOMAIN_MAXIMUM, ELEVATION_DOMAIN_MINIMUM, ELEVATION_DOMAIN_RESOLUTION, FILE_SOURCE_PROPERTY, HAS_ELEVATION_DOMAIN, HAS_TIME_DOMAIN, REPROJECTING_READER, TIME_DOMAIN, TIME_DOMAIN_MAXIMUM, TIME_DOMAIN_MINIMUM, TIME_DOMAIN_RESOLUTION</code></li>
+<code>ELEVATION_DOMAIN, ELEVATION_DOMAIN_MAXIMUM, ELEVATION_DOMAIN_MINIMUM, ELEVATION_DOMAIN_RESOLUTION, FILE_SOURCE_PROPERTY, HAS_ELEVATION_DOMAIN, HAS_TIME_DOMAIN, MULTICRS_READER, REPROJECTING_READER, SOURCE_URL_PROPERTY, TIME_DOMAIN, TIME_DOMAIN_MAXIMUM, TIME_DOMAIN_MINIMUM, TIME_DOMAIN_RESOLUTION</code></li>
 </ul>
 </li>
 </ul>
@@ -213,112 +221,120 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getCoordinateReferenceSystem-java.lang.String-">getCoordinateReferenceSystem</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code>protected org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getCrsForCoverage-java.lang.String-">getCrsForCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>protected org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getDefaultCrs--">getDefaultCrs</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.opengis.parameter.ParameterDescriptor&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getDynamicParameters--">getDynamicParameters</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;org.opengis.parameter.ParameterDescriptor&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getDynamicParameters-java.lang.String-">getDynamicParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.Format</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getFormat--">getFormat</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getGridCoverageCount--">getGridCoverageCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getGridCoverageNames--">getGridCoverageNames</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>javax.media.jai.ImageLayout</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getImageLayout--">getImageLayout</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>javax.media.jai.ImageLayout</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getImageLayout-java.lang.String-">getImageLayout</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getMetadataNames--">getMetadataNames</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getMetadataNames-java.lang.String-">getMetadataNames</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getMetadataValue-java.lang.String-">getMetadataValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getMetadataValue-java.lang.String-java.lang.String-">getMetadataValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getNumOverviews--">getNumOverviews</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getNumOverviews-java.lang.String-">getNumOverviews</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>org.geotools.geometry.GeneralEnvelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalEnvelope--">getOriginalEnvelope</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>org.geotools.geometry.GeneralEnvelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalEnvelope-java.lang.String-">getOriginalEnvelope</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i20" class="altColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridEnvelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalGridRange--">getOriginalGridRange</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridEnvelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalGridRange-java.lang.String-">getOriginalGridRange</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i22" class="altColor">
 <td class="colFirst"><code>org.opengis.referencing.operation.MathTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalGridToWorld-org.opengis.referencing.datum.PixelInCell-">getOriginalGridToWorld</a></span>(org.opengis.referencing.datum.PixelInCell&nbsp;pixInCell)</code>&nbsp;</td>
 </tr>
-<tr id="i21" class="rowColor">
+<tr id="i23" class="rowColor">
 <td class="colFirst"><code>org.opengis.referencing.operation.MathTransform</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getOriginalGridToWorld-java.lang.String-org.opengis.referencing.datum.PixelInCell-">getOriginalGridToWorld</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                       org.opengis.referencing.datum.PixelInCell&nbsp;pixInCell)</code>&nbsp;</td>
 </tr>
-<tr id="i22" class="altColor">
+<tr id="i24" class="altColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getReadingResolutions-org.geotools.coverage.grid.io.OverviewPolicy-double:A-">getReadingResolutions</a></span>(org.geotools.coverage.grid.io.OverviewPolicy&nbsp;policy,
                      double[]&nbsp;requestedResolution)</code>&nbsp;</td>
 </tr>
-<tr id="i23" class="rowColor">
+<tr id="i25" class="rowColor">
 <td class="colFirst"><code>double[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getReadingResolutions-java.lang.String-org.geotools.coverage.grid.io.OverviewPolicy-double:A-">getReadingResolutions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                      org.geotools.coverage.grid.io.OverviewPolicy&nbsp;policy,
                      double[]&nbsp;requestedResolution)</code>&nbsp;</td>
 </tr>
-<tr id="i24" class="altColor">
+<tr id="i26" class="altColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getResolutionLevels--">getResolutionLevels</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i25" class="rowColor">
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code>double[][]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#getResolutionLevels-java.lang.String-">getResolutionLevels</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</code>&nbsp;</td>
 </tr>
-<tr id="i26" class="altColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>org.geotools.coverage.grid.GridCoverage2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#read-org.opengis.parameter.GeneralParameterValue:A-">read</a></span>(org.opengis.parameter.GeneralParameterValue[]&nbsp;parameters)</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i29" class="rowColor">
 <td class="colFirst"><code>org.geotools.coverage.grid.GridCoverage2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#read-java.lang.String-org.opengis.parameter.GeneralParameterValue:A-">read</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
     org.opengis.parameter.GeneralParameterValue[]&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr id="i28" class="altColor">
+<tr id="i30" class="altColor">
 <td class="colFirst"><code>org.geotools.coverage.grid.GridCoverage2D</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#renderGridCoverage-java.lang.String-java.awt.Rectangle-org.geotools.geometry.GeneralEnvelope-java.awt.Color-java.awt.Color-javax.media.jai.Interpolation-">renderGridCoverage</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Rectangle.html?is-external=true" title="class or interface in java.awt">Rectangle</a>&nbsp;dim,
@@ -327,7 +343,7 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/Color.html?is-external=true" title="class or interface in java.awt">Color</a>&nbsp;outputTransparentColor,
                   javax.media.jai.Interpolation&nbsp;interpolation)</code>&nbsp;</td>
 </tr>
-<tr id="i29" class="rowColor">
+<tr id="i31" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReader.html#transformRequestEnvelope-mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReaderState-org.opengis.referencing.crs.CoordinateReferenceSystem-">transformRequestEnvelope</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/plugin/GeoWaveRasterReaderState.html" title="class in mil.nga.giat.geowave.adapter.raster.plugin">GeoWaveRasterReaderState</a>&nbsp;state,
                         org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>
@@ -378,6 +394,24 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <!--   -->
 </a>
 <h3>Field Detail</h3>
+<a name="crsCache">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>crsCache</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,org.opengis.referencing.crs.CoordinateReferenceSystem&gt; crsCache</pre>
+</li>
+</ul>
+<a name="defaultCrs">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultCrs</h4>
+<pre>protected&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem defaultCrs</pre>
+</li>
+</ul>
 <a name="OPERATION_FACTORY">
 <!--   -->
 </a>
@@ -458,6 +492,24 @@ implements org.geotools.coverage.grid.io.GridCoverage2DReader</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getDefaultCrs--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDefaultCrs</h4>
+<pre>protected&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;getDefaultCrs()</pre>
+</li>
+</ul>
+<a name="getCrsForCoverage-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getCrsForCoverage</h4>
+<pre>protected&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;getCrsForCoverage(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coverageName)</pre>
+</li>
+</ul>
 <a name="getFormat--">
 <!--   -->
 </a>

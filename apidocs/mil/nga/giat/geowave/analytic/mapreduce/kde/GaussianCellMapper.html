@@ -173,16 +173,32 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#filter">filter</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#inputCrsCode">inputCrsCode</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.LevelStore.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianCellMapper.LevelStore</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#levelStoreMap">levelStoreMap</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#maxLevel">maxLevel</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#minLevel">minLevel</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#outputCrsCode">outputCrsCode</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected org.opengis.referencing.operation.MathTransform</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#transform">transform</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#valueRangePerDimension">valueRangePerDimension</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -218,9 +234,10 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#incrementLevelStore-int-com.vividsolutions.jts.geom.Point-org.opengis.feature.simple.SimpleFeature-">incrementLevelStore</a></span>(int&nbsp;level,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.html#incrementLevelStore-int-com.vividsolutions.jts.geom.Point-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange:A-">incrementLevelStore</a></span>(int&nbsp;level,
                    com.vividsolutions.jts.geom.Point&nbsp;pt,
-                   org.opengis.feature.simple.SimpleFeature&nbsp;feature)</code>&nbsp;</td>
+                   org.opengis.feature.simple.SimpleFeature&nbsp;feature,
+                   <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>protected void</code></td>
@@ -311,10 +328,46 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 <a name="levelStoreMap">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>levelStoreMap</h4>
 <pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>,<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.LevelStore.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianCellMapper.LevelStore</a>&gt; levelStoreMap</pre>
+</li>
+</ul>
+<a name="valueRangePerDimension">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>valueRangePerDimension</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[] valueRangePerDimension</pre>
+</li>
+</ul>
+<a name="inputCrsCode">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>inputCrsCode</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> inputCrsCode</pre>
+</li>
+</ul>
+<a name="outputCrsCode">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>outputCrsCode</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> outputCrsCode</pre>
+</li>
+</ul>
+<a name="transform">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>transform</h4>
+<pre>protected&nbsp;org.opengis.referencing.operation.MathTransform transform</pre>
 </li>
 </ul>
 </li>
@@ -392,7 +445,7 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 </dl>
 </li>
 </ul>
-<a name="incrementLevelStore-int-com.vividsolutions.jts.geom.Point-org.opengis.feature.simple.SimpleFeature-">
+<a name="incrementLevelStore-int-com.vividsolutions.jts.geom.Point-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -400,7 +453,8 @@ extends org.apache.hadoop.mapreduce.Mapper&lt;<a href="../../../../../../../mil/
 <h4>incrementLevelStore</h4>
 <pre>protected&nbsp;void&nbsp;incrementLevelStore(int&nbsp;level,
                                    com.vividsolutions.jts.geom.Point&nbsp;pt,
-                                   org.opengis.feature.simple.SimpleFeature&nbsp;feature)</pre>
+                                   org.opengis.feature.simple.SimpleFeature&nbsp;feature,
+                                   <a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianFilter.ValueRange.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">GaussianFilter.ValueRange</a>[]&nbsp;valueRangePerDimension)</pre>
 </li>
 </ul>
 </li>

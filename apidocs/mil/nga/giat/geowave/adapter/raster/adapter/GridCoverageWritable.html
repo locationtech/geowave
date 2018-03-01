@@ -143,11 +143,12 @@ implements org.apache.hadoop.io.Writable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#GridCoverageWritable-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-">GridCoverageWritable</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#GridCoverageWritable-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">GridCoverageWritable</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
                     double&nbsp;minX,
                     double&nbsp;maxX,
                     double&nbsp;minY,
-                    double&nbsp;maxY)</code>&nbsp;</td>
+                    double&nbsp;maxY,
+                    org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -165,36 +166,32 @@ implements org.apache.hadoop.io.Writable</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxX--">getMaxX</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>org.opengis.referencing.crs.CoordinateReferenceSystem</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getCrs--">getCrs</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxY--">getMaxY</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxX--">getMaxX</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinX--">getMinX</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMaxY--">getMaxY</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinY--">getMinY</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinX--">getMinX</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getMinY--">getMinY</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#getRasterTile--">getRasterTile</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#readFields-java.io.DataInput-">readFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;input)</code>&nbsp;</td>
-</tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#set-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-">set</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-   double&nbsp;minX,
-   double&nbsp;maxX,
-   double&nbsp;minY,
-   double&nbsp;maxY)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/GridCoverageWritable.html#readFields-java.io.DataInput-">readFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -231,7 +228,7 @@ implements org.apache.hadoop.io.Writable</pre>
 <pre>protected&nbsp;GridCoverageWritable()</pre>
 </li>
 </ul>
-<a name="GridCoverageWritable-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-">
+<a name="GridCoverageWritable-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-org.opengis.referencing.crs.CoordinateReferenceSystem-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -241,7 +238,8 @@ implements org.apache.hadoop.io.Writable</pre>
                             double&nbsp;minX,
                             double&nbsp;maxX,
                             double&nbsp;minY,
-                            double&nbsp;maxY)</pre>
+                            double&nbsp;maxY,
+                            org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs)</pre>
 </li>
 </ul>
 </li>
@@ -252,17 +250,13 @@ implements org.apache.hadoop.io.Writable</pre>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="set-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-double-double-double-double-">
+<a name="getCrs--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>set</h4>
-<pre>public&nbsp;void&nbsp;set(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-                double&nbsp;minX,
-                double&nbsp;maxX,
-                double&nbsp;minY,
-                double&nbsp;maxY)</pre>
+<h4>getCrs</h4>
+<pre>public&nbsp;org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;getCrs()</pre>
 </li>
 </ul>
 <a name="getRasterTile--">
