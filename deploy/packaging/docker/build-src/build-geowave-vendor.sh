@@ -38,6 +38,9 @@ mvn clean
 # Throughout the build, capture jace artifacts to support testing
 mkdir -p $WORKSPACE/deploy/target/geowave-c++/bin
 
+GEOSERVER_VERSION="$(mvn -q -Dexec.executable="echo" -Dexec.args='${geoserver.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec $BUILD_ARGS)"
+echo $GEOSERVER_VERSION > $WORKSPACE/deploy/target/geoserver_version.txt
+
 GEOWAVE_VERSION_STR="$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec)"
 GEOWAVE_VERSION="$(echo ${GEOWAVE_VERSION_STR} | sed -e 's/"//g' -e 's/-SNAPSHOT//g')"
 echo $GEOWAVE_VERSION > $WORKSPACE/deploy/target/version.txt
