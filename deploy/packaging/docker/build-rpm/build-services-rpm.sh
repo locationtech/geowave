@@ -65,6 +65,7 @@ if [ ! -f geoserver-$GEOSERVER_VERSION-war.zip ]; then
   else
     echo "Downloading from Geoserver.org"
     wget -q https://build.geoserver.org/geoserver/release/$GEOSERVER_VERSION/geoserver-$GEOSERVER_VERSION-war.zip
+    aws s3 cp geoserver-$GEOSERVER_VERSION-war.zip s3://geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip
   fi
 fi
 
