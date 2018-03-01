@@ -34,4 +34,4 @@ Leveraging the GeoTools infrastructure, GeoWave supports ingesting any DataSourc
 * geojson
 * wfs
 
-For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 9.0).
+For a current list of supported formats, refer to the link:http://docs.geotools.org/stable/userguide/faq.html["GeoTools User Guide", window="_blank"]. Reference the version of GeoTools that GeoWave was built against (currently 18.1).

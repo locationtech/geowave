@@ -15,15 +15,18 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
 import java.net.URISyntaxException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.media.jai.Interpolation;
 
+import org.apache.commons.math.util.MathUtils;
 import org.apache.hadoop.util.ToolRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.referencing.CRS;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -36,12 +39,19 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.operations.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
@@ -60,7 +70,7 @@ import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 	// GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.HBASE
 })
-public class KDERasterResizeIT
+public class CustomCRSKDERasterResizeIT
 {
 	private static final String TEST_COVERAGE_NAME_PREFIX = "TEST_COVERAGE";
 	private static final String TEST_RESIZE_COVERAGE_NAME_PREFIX = "TEST_RESIZE";
@@ -95,23 +105,22 @@ public class KDERasterResizeIT
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING KDERasterResizeIT     *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("-------------------------------------------------");
+		LOGGER.warn("*                                               *");
+		LOGGER.warn("*         RUNNING CustomCRSKDERasterResizeIT    *");
+		LOGGER.warn("*                                               *");
+		LOGGER.warn("-------------------------------------------------");
 	}
 
 	@AfterClass
 	public static void reportTest() {
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED KDERasterResizeIT       *");
-		LOGGER
-				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
-						+ "s elapsed.                 *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("------------------------------------------------");
+		LOGGER.warn("*                                              *");
+		LOGGER.warn("*      FINISHED CustomCRSKDERasterResizeIT     *");
+		LOGGER.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+				+ "s elapsed.                               *");
+		LOGGER.warn("*                                              *");
+		LOGGER.warn("------------------------------------------------");
 	}
 
 	@Test
@@ -121,8 +130,16 @@ public class KDERasterResizeIT
 		TestUtils.testLocalIngest(
 				inputDataStorePluginOptions,
 				DimensionalityType.SPATIAL,
+				"EPSG:4901",
 				KDE_SHAPEFILE_FILE,
+				"geotools-vector",
 				1);
+
+		String outputIndex = "raster-spatial";
+		final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
+		outputIndexOptions.selectPlugin("spatial");
+		((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
+
 		// use the min level to define the request boundary because it is the
 		// most coarse grain
 		final double decimalDegreesPerCellMinLevel = 180.0 / Math.pow(
@@ -159,6 +176,8 @@ public class KDERasterResizeIT
 			command.setInputStoreOptions(inputDataStorePluginOptions);
 			command.setOutputStoreOptions(outputDataStorePluginOptions);
 
+			command.getKdeOptions().setOutputIndex(
+					outputIndex);
 			command.getKdeOptions().setFeatureType(
 					KDE_FEATURE_TYPE_NAME);
 			command.getKdeOptions().setMinLevel(
@@ -179,6 +198,7 @@ public class KDERasterResizeIT
 					(int) Math.pow(
 							2,
 							i));
+			command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
 
 			ToolRunner.run(
 					command.createRunner(new ManualOperationParams()),
@@ -229,7 +249,8 @@ public class KDERasterResizeIT
 			command.getOptions().setOutputCoverageName(
 					resizeTileSizeCoverageName);
 			command.getOptions().setIndexId(
-					TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString());
+					TestUtils.createCustomCRSPrimaryIndex().getId().getString());
+
 			// due to time considerations when running the test, downsample to
 			// at most 2 powers of 2 lower
 			int targetRes = (MAX_TILE_SIZE_POWER_OF_2 - i);

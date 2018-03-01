@@ -532,10 +532,13 @@ abstract public class AbstractGeoWaveBasicVectorIT
 					// statistics will match!
 					if (multithreaded) {
 						if (!(expectedStat.getStatisticsId().getString().startsWith(
-								FeatureNumericRangeStatistics.STATS_TYPE + "#") || expectedStat
+								FeatureNumericRangeStatistics.STATS_TYPE.getString() + "#")
+								|| expectedStat.getStatisticsId().equals(
+										CountDataStatistics.STATS_TYPE) || expectedStat
 								.getStatisticsId()
-								.equals(
-										CountDataStatistics.STATS_TYPE))) {
+								.getString()
+								.startsWith(
+										"FEATURE_BBOX"))) {
 							continue;
 						}
 					}

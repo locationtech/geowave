@@ -49,6 +49,18 @@ public class KDECommandLineOptions
 	@Parameter(names = "--cqlFilter", description = "An optional CQL filter applied to the input data")
 	private String cqlFilter;
 
+	@Parameter(names = "--outputIndex", description = "An optional index for output datastore. Only spatial index type is supported")
+	private String outputIndex;
+
+	public String getOutputIndex() {
+		return outputIndex;
+	}
+
+	public void setOutputIndex(
+			String outputIndex ) {
+		this.outputIndex = outputIndex;
+	}
+
 	public KDECommandLineOptions() {}
 
 	public String getIndexId() {

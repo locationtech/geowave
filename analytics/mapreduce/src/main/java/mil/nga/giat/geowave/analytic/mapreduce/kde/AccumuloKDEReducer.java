@@ -22,6 +22,7 @@ import org.opengis.coverage.grid.GridCoverage;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -130,6 +131,8 @@ public class AccumuloKDEReducer extends
 	private int numYTiles;
 	private String coverageName;
 	protected List<ByteArrayId> indexList;
+	protected ValueRange[] valueRangePerDimension;
+	protected String crsCode;
 
 	@Override
 	protected void reduce(
@@ -187,7 +190,8 @@ public class AccumuloKDEReducer extends
 								MINS_PER_BAND,
 								MAXES_PER_BAND,
 								NAME_PER_BAND,
-								raster));
+								raster,
+								crsCode));
 				currentKey++;
 			}
 		}
@@ -202,10 +206,16 @@ public class AccumuloKDEReducer extends
 		final int yTile = yPost / KDEJobRunner.TILE_SIZE;
 		final int x = (xPost % KDEJobRunner.TILE_SIZE);
 		final int y = (yPost % KDEJobRunner.TILE_SIZE);
-		final double tileWestLon = ((xTile * 360.0) / numXTiles) - 180.0;
-		final double tileSouthLat = ((yTile * 180.0) / numYTiles) - 90.0;
-		final double tileEastLon = tileWestLon + (360.0 / numXTiles);
-		final double tileNorthLat = tileSouthLat + (180.0 / numYTiles);
+		final double xMin = valueRangePerDimension[0].getMin();
+		final double xMax = valueRangePerDimension[0].getMax();
+		final double yMin = valueRangePerDimension[1].getMin();
+		final double yMax = valueRangePerDimension[1].getMax();
+		final double crsWidth = xMax - xMin;
+		final double crsHeight = yMax - yMin;
+		final double tileWestLon = ((xTile * crsWidth) / numXTiles) + xMin;
+		final double tileSouthLat = ((yTile * crsHeight) / numYTiles) + yMin;
+		final double tileEastLon = tileWestLon + (crsWidth / numXTiles);
+		final double tileNorthLat = tileSouthLat + (crsHeight / numYTiles);
 		return new TileInfo(
 				tileWestLon,
 				tileEastLon,
@@ -236,6 +246,25 @@ public class AccumuloKDEReducer extends
 		coverageName = context.getConfiguration().get(
 				KDEJobRunner.COVERAGE_NAME_KEY,
 				"");
+		valueRangePerDimension = new ValueRange[] {
+			new ValueRange(
+					context.getConfiguration().getDouble(
+							KDEJobRunner.X_MIN_KEY,
+							-180),
+					context.getConfiguration().getDouble(
+							KDEJobRunner.X_MAX_KEY,
+							180)),
+			new ValueRange(
+					context.getConfiguration().getDouble(
+							KDEJobRunner.Y_MIN_KEY,
+							-90),
+					context.getConfiguration().getDouble(
+							KDEJobRunner.Y_MAX_KEY,
+							90))
+		};
+		crsCode = context.getConfiguration().get(
+				KDEJobRunner.OUTPUT_CRSCODE_KEY);
+
 		numLevels = (maxLevels - minLevels) + 1;
 		level = context.getConfiguration().getInt(
 				"mapred.task.partition",

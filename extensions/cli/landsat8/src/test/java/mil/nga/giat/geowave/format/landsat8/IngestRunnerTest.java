@@ -80,6 +80,8 @@ public class IngestRunnerTest
 		ingestOptions.setScale(100);
 
 		VectorOverrideCommandLineOptions vectorOverrideOptions = new VectorOverrideCommandLineOptions();
+		vectorOverrideOptions.setVectorStore("memorystore2");
+		vectorOverrideOptions.setVectorIndex("spatialindex,spatempindex");
 
 		IngestRunner runner = new IngestRunner(
 				analyzeOptions,

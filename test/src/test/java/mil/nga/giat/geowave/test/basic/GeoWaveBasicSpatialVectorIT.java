@@ -158,24 +158,22 @@ public class GeoWaveBasicSpatialVectorIT extends
 					+ "'");
 		}
 
-		if ((nthreads > 0)) {
-			try {
-				testStats(
-						new URL[] {
-							new File(
-									HAIL_SHAPEFILE_FILE).toURI().toURL(),
-							new File(
-									TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
-						},
-						TestUtils.DEFAULT_SPATIAL_INDEX,
-						true);
-			}
-			catch (final Exception e) {
-				e.printStackTrace();
-				TestUtils.deleteAll(dataStore);
-				Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
-						+ e.getLocalizedMessage() + "'");
-			}
+		try {
+			testStats(
+					new URL[] {
+						new File(
+								HAIL_SHAPEFILE_FILE).toURI().toURL(),
+						new File(
+								TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
+					},
+					TestUtils.DEFAULT_SPATIAL_INDEX,
+					true);
+		}
+		catch (final Exception e) {
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box stats on spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 
 		try {

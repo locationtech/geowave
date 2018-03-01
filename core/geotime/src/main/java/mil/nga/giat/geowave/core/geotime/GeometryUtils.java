@@ -31,10 +31,15 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
@@ -224,6 +229,19 @@ public class GeometryUtils
 				constraintsPerDimension);
 	}
 
+	public static MultiDimensionalNumericData getBoundsFromEnvelope(
+			Envelope envelope ) {
+		final NumericRange[] boundsPerDimension = new NumericRange[2];
+		boundsPerDimension[0] = new NumericRange(
+				envelope.getMinX(),
+				envelope.getMaxX());
+		boundsPerDimension[1] = new NumericRange(
+				envelope.getMinY(),
+				envelope.getMaxY());
+		return new BasicNumericDataset(
+				boundsPerDimension);
+	}
+
 	/**
 	 * Generate a longitude range from a JTS geometry
 	 *
@@ -353,5 +371,59 @@ public class GeometryUtils
 		public Geometry getGeometry() {
 			return jtsBounds;
 		}
+	}
+
+	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex[] indices ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrs == null) {
+				indexCrs = getIndexCrs(primaryindx);
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrs.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrs.equals(GeometryUtils.DEFAULT_CRS)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
+
+		return indexCrs;
+	}
+
+	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex index ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+			indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
+		}
+		else {
+			indexCrs = GeometryUtils.DEFAULT_CRS;
+		}
+		return indexCrs;
+	}
+
+	public static String getCrsCode(
+			CoordinateReferenceSystem crs ) {
+
+		return (CRS.toSRS(crs));
 	}
 }

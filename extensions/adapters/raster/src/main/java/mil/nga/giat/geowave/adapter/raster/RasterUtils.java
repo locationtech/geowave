@@ -49,7 +49,6 @@ import javax.media.jai.TiledImage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -57,6 +56,7 @@ import org.geotools.coverage.TypeMap;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridCoverageFactory;
 import org.geotools.coverage.processing.Operations;
+import org.geotools.factory.Hints;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
 import org.geotools.geometry.GeneralEnvelope;
@@ -64,6 +64,7 @@ import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.image.ImageWorker;
 import org.geotools.referencing.CRS;
+import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
 import org.geotools.referencing.operation.builder.GridToEnvelopeMapper;
 import org.geotools.referencing.operation.matrix.MatrixFactory;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
@@ -79,6 +80,7 @@ import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.datum.PixelInCell;
+import org.opengis.referencing.operation.CoordinateOperationFactory;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
@@ -95,6 +97,7 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
@@ -113,7 +116,14 @@ public class RasterUtils
 					RenderingHints.KEY_DITHERING,
 					RenderingHints.VALUE_DITHER_ENABLE).put(
 					JAI.KEY_BORDER_EXTENDER,
-					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).build());
+					BorderExtender.createInstance(BorderExtender.BORDER_COPY)).put(
+					Hints.LENIENT_DATUM_SHIFT,
+					Boolean.TRUE).build());
+
+	public final static CoordinateOperationFactory OPERATION_FACTORY = new BufferedCoordinateOperationFactory(
+			new Hints(
+					Hints.LENIENT_DATUM_SHIFT,
+					Boolean.TRUE));
 	private static Operations resampleOperations;
 	private final static Logger LOGGER = LoggerFactory.getLogger(RasterUtils.class);
 	private static final int MIN_SEGMENTS = 5;
@@ -170,7 +180,7 @@ public class RasterUtils
 			final double avgSpan = (projectedReferenceEnvelope.getSpan(0) + projectedReferenceEnvelope.getSpan(1)) / 2;
 			final MathTransform gridCrsToWorldCrs = CRS.findMathTransform(
 					gridCoverage.getCoordinateReferenceSystem(),
-					GeoWaveGTRasterFormat.DEFAULT_CRS,
+					projectedReferenceEnvelope.getCoordinateReferenceSystem(),
 					true);
 			final Coordinate[] polyCoords = getWorldCoordinates(
 					sampleEnvelope.getMinimum(0),
@@ -936,7 +946,7 @@ public class RasterUtils
 					eastLon,
 					southLat,
 					northLat,
-					GeoWaveGTRasterFormat.DEFAULT_CRS);
+					GeometryUtils.DEFAULT_CRS);
 		}
 		catch (final IllegalArgumentException e) {
 			LOGGER.warn(
@@ -966,15 +976,57 @@ public class RasterUtils
 			final double[] maxPerBand,
 			final String[] namePerBand,
 			final WritableRaster raster ) {
+		return createCoverageTypeDouble(
+				coverageName,
+				westLon,
+				eastLon,
+				southLat,
+				northLat,
+				minPerBand,
+				maxPerBand,
+				namePerBand,
+				raster,
+				GeometryUtils.DEFAULT_CRS_STR);
+	}
+
+	public static GridCoverage2D createCoverageTypeDouble(
+			final String coverageName,
+			final double westLon,
+			final double eastLon,
+			final double southLat,
+			final double northLat,
+			final double[] minPerBand,
+			final double[] maxPerBand,
+			final String[] namePerBand,
+			final WritableRaster raster,
+			final String crsCode ) {
 		final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
 		Envelope mapExtent;
+
+		CoordinateReferenceSystem crs = null;
+		if (crsCode == null || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+			crs = GeometryUtils.DEFAULT_CRS;
+		}
+		else {
+			try {
+				crs = CRS.decode(crsCode);
+			}
+			catch (FactoryException e) {
+				LOGGER.error(
+						"Unable to decode " + crsCode + " CRS",
+						e);
+				throw new RuntimeException(
+						"Unable to initialize " + crsCode + " object",
+						e);
+			}
+		}
 		try {
 			mapExtent = new ReferencedEnvelope(
 					westLon,
 					eastLon,
 					southLat,
 					northLat,
-					GeoWaveGTRasterFormat.DEFAULT_CRS);
+					crs);
 		}
 		catch (final IllegalArgumentException e) {
 			LOGGER.warn(

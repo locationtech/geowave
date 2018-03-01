@@ -34,8 +34,6 @@ Now re-start Tomcat.
 
 [NOTE]
 ====
-If you used the RPMs to build and install GeoWave, then GeoSever will have already been deployed via Jetty. The jar file is installed in '/usr/local/geowave/geoserver/webapps/geoserver/WEB-INF/lib/'.
-
-You can restart Jetty by restarting the GeoWave service.
+Previous versions of the GeoWave RPMs (0.9.5 and below) used Jetty instead of Tomcat. 
 ====
 
