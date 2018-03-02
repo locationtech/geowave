@@ -127,7 +127,7 @@ cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war res
 
 #get geoserver the war files ready
 #unpack it in tmp dir
-unzip -o geoserver-2.10.0-war.zip geoserver.war
+unzip -o geoserver-$GEOSERVER_VERSION-war.zip geoserver.war
 mkdir tmp && cd tmp
 jar -xf ../geoserver.war
 rm -rf data/layergroups/*
