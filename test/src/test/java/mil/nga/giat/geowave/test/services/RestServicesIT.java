@@ -30,26 +30,10 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
-
-import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
-import mil.nga.giat.geowave.core.store.config.ConfigOption;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
-import mil.nga.giat.geowave.service.client.IngestServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
-import mil.nga.giat.geowave.test.TestDataStoreOptions;
-import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -62,17 +46,17 @@ public class RestServicesIT
 
 	private static ConfigServiceClient configServiceClient;
 
-	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
-	})
-	protected DataStorePluginOptions dataStoreOptions;
+	// @GeoWaveTestStore({
+	// GeoWaveStoreType.ACCUMULO,
+	// GeoWaveStoreType.BIGTABLE,
+	// GeoWaveStoreType.HBASE
+	// })
+	// protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
 
 	@BeforeClass
-	public static void StartTest() {
+	public static void setup() {
 		// ZipUtils.unZipFile(
 		// new File(
 		// GeoWaveServicesIT.class.getClassLoader().getResource(

@@ -18,12 +18,12 @@ import java.security.PrivilegedAction;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FileUtils;
-import org.mortbay.jetty.Connector;
-import org.mortbay.jetty.Server;
-import org.mortbay.jetty.bio.SocketConnector;
-import org.mortbay.jetty.webapp.WebAppClassLoader;
-import org.mortbay.jetty.webapp.WebAppContext;
-import org.mortbay.xml.XmlConfiguration;
+import org.eclipse.jetty.server.Connector;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.ServerConnector;
+import org.eclipse.jetty.server.handler.ContextHandlerCollection;
+import org.eclipse.jetty.webapp.WebAppClassLoader;
+import org.eclipse.jetty.webapp.WebAppContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public class ServicesTestEnvironment implements
 	private static String[] PARENT_CLASSLOADER_LIBRARIES = new String[] {
 		"hbase",
 		"hadoop",
-		"protobuf"
+		"protobuf",
 	};
 
 	protected static final int JETTY_PORT = 9011;
@@ -115,10 +115,10 @@ public class ServicesTestEnvironment implements
 				// delete old workspace configuration if it's still there
 				jettyServer = new Server();
 
-				final SocketConnector conn = new SocketConnector();
+				final ServerConnector conn = new ServerConnector(jettyServer);
 				conn.setPort(JETTY_PORT);
 				conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
-				conn.setMaxIdleTime(MAX_IDLE_TIME);
+				conn.setIdleTimeout(MAX_IDLE_TIME);
 				conn.setSoLingerTime(SO_LINGER_TIME);
 				jettyServer.setConnectors(new Connector[] {
 					conn
@@ -135,15 +135,14 @@ public class ServicesTestEnvironment implements
 								TEST_GEOSERVER_LOG_PROPERTIES_PATH));
 				final WebAppContext gsWebapp = new WebAppContext();
 				gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
-				gsWebapp.setWar(GEOSERVER_WAR_DIR);
-
+				gsWebapp.setResourceBase(GEOSERVER_WAR_DIR);
+				
 				final WebAppClassLoader classLoader = AccessController
 						.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
 							@Override
 							public WebAppClassLoader run() {
 								try {
-									return new WebAppClassLoader(
-											gsWebapp);
+									return new WebAppClassLoader(gsWebapp);
 								}
 								catch (final IOException e) {
 									LOGGER.error(
@@ -201,38 +200,15 @@ public class ServicesTestEnvironment implements
 				// version, slated for hadoop 3.x)
 				gsWebapp.setParentLoaderPriority(false);
 
-				final File warDir = new File(
-						GEOWAVE_WAR_DIR);
-
-				// update the config file
-				ServicesTestUtils.writeConfigFile(new File(
-						warDir,
-						"/WEB-INF/config.properties"));
-
-				final WebAppContext gwWebapp = new WebAppContext();
-				gwWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
-				gwWebapp.setWar(warDir.getAbsolutePath());
-
-				final WebAppContext restWebapp = new WebAppContext();
-				restWebapp.setContextPath("/restservices");
-				restWebapp.setWar("target/restservices");
-
-				jettyServer.setHandlers(new WebAppContext[] {
-					gsWebapp,
-					restWebapp,
-				});
+				 final WebAppContext restWebapp = new WebAppContext();
+				 restWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
+				 restWebapp.setWar(GEOWAVE_WAR_DIR);
+				
+				jettyServer.setHandler( new ContextHandlerCollection(gsWebapp, restWebapp));
 				gsWebapp.setTempDirectory(TestUtils.TEMP_DIR);
-				// this allows to send large SLD's from the styles form
+				// // this allows to send large SLD's from the styles form
 				gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
 						MAX_FORM_CONTENT_SIZE);
-
-				final String jettyConfigFile = System.getProperty("jetty.config.file");
-				if (jettyConfigFile != null) {
-					LOGGER.info("Loading Jetty config from file: " + jettyConfigFile);
-					(new XmlConfiguration(
-							new FileInputStream(
-									jettyConfigFile))).configure(jettyServer);
-				}
 
 				jettyServer.start();
 				while (!jettyServer.isRunning() && !jettyServer.isStarted()) {
