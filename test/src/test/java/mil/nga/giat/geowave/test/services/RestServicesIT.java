@@ -41,16 +41,9 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePlugin
 import mil.nga.giat.geowave.format.gpx.GpxUtils;
 import mil.nga.giat.geowave.service.ConfigService;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
-import mil.nga.giat.geowave.service.client.IngestServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
-import mil.nga.giat.geowave.test.TestDataStoreOptions;
-import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -63,18 +56,18 @@ public class RestServicesIT
 
 	private static ConfigServiceClient configServiceClient;
 
-	@GeoWaveTestStore({
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
-	})
-	protected DataStorePluginOptions dataStoreOptions;
+	// @GeoWaveTestStore({
+	// GeoWaveStoreType.ACCUMULO,
+	// GeoWaveStoreType.BIGTABLE,
+	// GeoWaveStoreType.HBASE
+	// })
+	// protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
 	private final static String testName = "RestServicesIT";
 
 	@BeforeClass
-	public static void StartTest() {
+	public static void setup() {
 		// ZipUtils.unZipFile(
 		// new File(
 		// GeoWaveServicesIT.class.getClassLoader().getResource(
