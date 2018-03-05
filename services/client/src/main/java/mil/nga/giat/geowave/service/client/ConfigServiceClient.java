@@ -61,10 +61,10 @@ public class ConfigServiceClient
 
 	// }
 
-	public JSONObject list() {
+	public Response list() {
 		final Response resp = configService.list();
 		resp.bufferEntity();
-		return JSONObject.fromObject(resp.readEntity(String.class));
+		return resp;
 	}
 
 	public Response addHBaseStore(
