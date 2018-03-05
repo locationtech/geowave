@@ -39,6 +39,7 @@ import mil.nga.giat.geowave.core.store.config.ConfigOption;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.format.gpx.GpxUtils;
+import mil.nga.giat.geowave.service.ConfigService;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -70,6 +71,7 @@ public class RestServicesIT
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
+	private final static String testName = "RestServicesIT";
 
 	@BeforeClass
 	public static void StartTest() {
@@ -81,29 +83,21 @@ public class RestServicesIT
 		configServiceClient = new ConfigServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING RestServicesIT     *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		TestUtils.printStartOfTest(
+				LOGGER,
+				testName);
 	}
 
 	@AfterClass
 	public static void reportTest() {
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED RestServicesIT       *");
-		LOGGER
-				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
-						+ "s elapsed.                 *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		TestUtils.printEndOfTest(
+				LOGGER,
+				testName,
+				startMillis);
 	}
 
 	@Test
-	public void testServices()
-			throws IOException,
-			SchemaException {
-
+	public void testServices() {
+		System.out.println(configServiceClient.list());
 	}
 }
