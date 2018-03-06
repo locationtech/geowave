@@ -27,7 +27,7 @@ At minimum, an existing GeoWave build or RPM is required. For building the GeoWa
 Depending on the environment components being developed towards (e.g., requirements, datastores, indices, etc), the following are not all required, though constraints are listed below for which versions are supported by GeoWave.
 
 [options="compact"]
-* link:http://geoserver.org/[GeoServer, window="_blank"] instance >= 2.10.0
+* link:http://geoserver.org/[GeoServer, window="_blank"] instance >= 2.12.1
 * link:https://accumulo.apache.org/[Apache Accumulo, window="_blank"] version 1.5 or greater is required. 1.5.x, 1.6.x, 1.7.x, 1.8.x, have all been tested.
 * link:https://hbase.apache.org/[Apache HBase, window="_blank"] >= 1.2.1
 * link:http://hadoop.apache.org/[Apache Hadoop, window="_blank"] versions >= 2.3

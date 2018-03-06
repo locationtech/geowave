@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 public class BasicIndexModel implements
 		CommonIndexModel
 {
-	private NumericDimensionField<?>[] dimensions;
+	protected NumericDimensionField<?>[] dimensions;
 	// the first dimension of a particular field ID will be the persistence
 	// model used
 	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
@@ -48,7 +48,7 @@ public class BasicIndexModel implements
 		init(dimensions);
 	}
 
-	private void init(
+	public void init(
 			final NumericDimensionField<?>[] dimensions ) {
 		this.dimensions = dimensions;
 		fieldIdToPeristenceMap = new HashMap<ByteArrayId, NumericDimensionField<?>>();
@@ -84,7 +84,7 @@ public class BasicIndexModel implements
 	}
 
 	@Override
-	public NumericDimensionField<?>[] getDimensions() {
+	public NumericDimensionField<? extends CommonIndexValue>[] getDimensions() {
 		return dimensions;
 	}
 

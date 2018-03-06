@@ -1,6 +1,26 @@
 #!groovy 
 
 node ('master') {
+    def maven = tool 'maven-3.5.2'
+    stage('Parameterize') {
+    if(!params.overwrite_parameters || "${params.overwrite_parameters}" == "Yes") {
+      properties(
+        [
+          [$class: 'BuildDiscarderProperty', strategy: [$class: 'LogRotator', artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5']],
+          [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
+            [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket name to push rpms to'],
+            [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Bucket to push maven cache to'],
+            [$class: 'StringParameterDefinition', name: 'local_repo_dir', defaultValue: '/var/www/geowave-efs/html/repos/snapshots', description: 'Path on the local filesystem to the repo'],
+            [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
+            ]
+          ],
+          disableConcurrentBuilds(),
+        ]
+      )
+      currentBuild.result = 'ABORTED'
+      error('Parameters Reset')
+    }
+  }
   // Setting java home for the withMaven block
   jdk = tool name: 'JDK18'
   env.JAVA_HOME = "${jdk}"
@@ -23,7 +43,7 @@ node ('master') {
 
   stage('Maven Deploy'){
     dir("${env.WORKSPACE}/docker-root") {
-      sh "aws s3 cp s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz . --quiet"
+      sh "aws s3 cp s3://${params.cache_bucket}/mvn-cache/mvn-repo-cache-latest.tar.gz . --quiet"
       sh "tar xfz mvn-repo-cache-latest.tar.gz"
       sh "rm mvn-repo-cache-latest.tar.gz"
     }
@@ -38,7 +58,9 @@ node ('master') {
 
   // Mark the build artifacts 'stage'....
   stage('Build and Publish RPMs'){
-    sh 'deploy/packaging/docker/docker-build-rpms.sh'
+    withEnv(["LOCAL_REPO_DIR={ params.local_repo_dir }"]) {
+      sh 'deploy/packaging/docker/docker-build-rpms.sh'
+    }
   }
 
   stage('Clean bucket and local space'){
@@ -50,10 +72,10 @@ node ('master') {
     def build_type = readFile('deploy/target/build-type.txt').trim()
     if ( build_type == "dev" ) {
       echo 'Build type determined as Dev. Sync will delete content on s3.'
-      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/ --delete'
+      sh "aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://${params.rpm_bucket}/ --delete"
     } else if (build_type == "release" ) {
       echo 'Build type determined as Release. Sync will not delete content on s3.'
-      sh 'aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://geowave-rpms/'
+      sh "aws s3 sync /var/www/geowave-efs/html/repos/snapshots/geowave/ s3://${params.rpm_bucket}/"
     } else {
       error("ERROR: Could not determine build type. Unable to upload rpm's.")
     }
@@ -64,15 +86,15 @@ node ('master') {
     if ( build_type == "dev" ) {
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz .m2"
-        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
-      // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-latest.tar.gz s3://${params.cache_bucket}/mvn-cache/mvn-repo-cache-latest.tar.gz --quiet"
+     // upload to upload s3://geowave/mvn-cache/dev/mvn-repo-cache-latest.tar.gz
       }
     }
     else if (build_type == "release" ){
       def version  = readFile('deploy/target/version.txt').trim()
       dir("${env.WORKSPACE}/docker-root") {
         sh "tar czf ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz .m2"
-        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://geowave/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
+        sh "aws s3 cp ${env.WORKSPACE}/deploy/target/mvn-repo-cache-${version}.tar.gz s3://${params.cache_bucket}/mvn-cache/mvn-repo-cache-${version}.tar.gz --quiet"
       // $DOCKERROOT/.m2 and upload to upload s3://geowave/mvn-cache/release/mvn-repo-cache-version.tar.gz
       }
     } else {

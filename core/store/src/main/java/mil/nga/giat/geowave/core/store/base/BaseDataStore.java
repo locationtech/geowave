@@ -109,6 +109,7 @@ public abstract class BaseDataStore
 			final DataAdapter<T> adapter,
 			final PrimaryIndex... indices )
 			throws MismatchedIndexToAdapterMapping {
+		adapter.init(indices);
 		store(adapter);
 
 		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(

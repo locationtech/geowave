@@ -18,6 +18,7 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianCellMapper;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter;
+import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -68,7 +69,8 @@ public class ComparisonGaussianCellMapper extends
 	protected void incrementLevelStore(
 			final int level,
 			final Point pt,
-			final SimpleFeature feature ) {
+			final SimpleFeature feature,
+			final ValueRange[] valueRangePerDimension ) {
 		final Object obj = feature.getAttribute(timeAttribute);
 		if ((obj != null) && (obj instanceof Date)) {
 			double contribution = 0;
@@ -181,7 +183,8 @@ public class ComparisonGaussianCellMapper extends
 					levelStore.counter,
 					levelStore.numXPosts,
 					levelStore.numYPosts,
-					contribution);
+					contribution,
+					valueRangePerDimension);
 		}
 	}
 }

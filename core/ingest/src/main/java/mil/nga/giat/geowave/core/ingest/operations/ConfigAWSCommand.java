@@ -80,4 +80,10 @@ public class ConfigAWSCommand extends
 
 		return s3EndpointUrl;
 	}
+
+	public void setS3UrlParameter(
+			String s3EndpointUrl ) {
+		parameters = new ArrayList<String>();
+		parameters.add(s3EndpointUrl);
+	}
 }

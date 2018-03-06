@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,9 +18,6 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
-import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -32,6 +29,9 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
+
+import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class FeatureWritableTest
 {
@@ -45,7 +45,7 @@ public class FeatureWritableTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeoWaveGTDataStore.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
@@ -59,13 +59,13 @@ public class FeatureWritableTest
 				Long.class);
 
 		// build the type
-		SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
+		final SimpleFeatureBuilder builder = new SimpleFeatureBuilder(
 				typeBuilder.buildFeatureType());
 
 		final SimpleFeatureType featureType = builder.getFeatureType();
 
 		@SuppressWarnings("unchecked")
-		SimpleFeature newFeature = FeatureDataUtils.buildFeature(
+		final SimpleFeature newFeature = FeatureDataUtils.buildFeature(
 				featureType,
 				new Pair[] {
 					Pair.of(
@@ -79,7 +79,7 @@ public class FeatureWritableTest
 
 				});
 
-		FeatureWritable writable = new FeatureWritable(
+		final FeatureWritable writable = new FeatureWritable(
 				featureType,
 				newFeature);
 

@@ -22,11 +22,34 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Properties;
 import java.util.Set;
+
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
+import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
+import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions;
+import mil.nga.giat.geowave.core.ingest.spark.SparkIngestDriver;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.query.DistributableQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.hadoop.fs.FileUtil;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.slf4j.Logger;
@@ -35,28 +58,24 @@ import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
+import org.geotools.geometry.jts.JTS;
+import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.geometry.MismatchedDimensionException;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.opengis.referencing.operation.MathTransform;
+import org.opengis.referencing.operation.TransformException;
 
 import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
-import mil.nga.giat.geowave.core.ingest.operations.LocalToGeowaveCommand;
-import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.ListStatsCommand;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.query.DistributableQuery;
-import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 
 public class TestUtils
 {
@@ -91,9 +110,39 @@ public class TestUtils
 	public static final String TEST_CASE_BASE = "data/";
 
 	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialOptions());
 	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex();
+			.createPrimaryIndex(new SpatialTemporalOptions());
+	// CRS for Web Mercator
+	public static String CUSTOM_CRSCODE = "EPSG:3857";
+
+	public static final CoordinateReferenceSystem CUSTOM_CRS;
+
+	static {
+		try {
+			CUSTOM_CRS = CRS.decode(
+					CUSTOM_CRSCODE,
+					true);
+		}
+		catch (final FactoryException e) {
+			LOGGER.error(
+					"Unable to decode " + CUSTOM_CRSCODE + "CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize " + CUSTOM_CRSCODE + " CRS");
+		}
+	}
+
+	public static PrimaryIndex createCustomCRSPrimaryIndex() {
+		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+		SpatialOptions so = sdp.createOptions();
+		so.setCrs(CUSTOM_CRSCODE);
+		PrimaryIndex primaryIndex = sdp.createPrimaryIndex(so);
+		return primaryIndex;
+	}
+
+	public static final String S3_INPUT_PATH = "s3://geowave-test/data/gdelt";
+	public static final String S3URL = "s3.amazonaws.com";
 
 	public static boolean isYarn() {
 		return VersionUtil.compareVersions(
@@ -145,6 +194,68 @@ public class TestUtils
 			final String ingestFilePath,
 			final String format,
 			final int nthreads ) {
+		testLocalIngest(
+				dataStore,
+				dimensionalityType,
+				null,
+				ingestFilePath,
+				format,
+				nthreads);
+	}
+
+	public static void testLocalIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String crsCode,
+			final String ingestFilePath,
+			final String format,
+			final int nthreads ) {
+
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
+
+		// Ingest Formats
+		final IngestFormatPluginOptions ingestFormatOptions = new IngestFormatPluginOptions();
+		ingestFormatOptions.selectPlugin(format);
+
+		// Indexes
+		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		final List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+				indexTypes.length);
+		for (final String indexType : indexTypes) {
+			final IndexPluginOptions indexOption = new IndexPluginOptions();
+			indexOption.selectPlugin(indexType);
+			if (crsCode != null) {
+				((SpatialOptions) indexOption.getDimensionalityOptions()).setCrs(crsCode);
+			}
+			indexOptions.add(indexOption);
+		}
+
+		// Create the command and execute.
+		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
+		localIngester.setPluginFormats(ingestFormatOptions);
+		localIngester.setInputIndexOptions(indexOptions);
+		localIngester.setInputStoreOptions(dataStore);
+		localIngester.setParameters(
+				ingestFilePath,
+				null,
+				null);
+		localIngester.setThreads(nthreads);
+		localIngester.execute(new ManualOperationParams());
+
+		verifyStats(dataStore);
+
+	}
+
+	public static void testS3LocalIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String s3Url,
+			final String ingestFilePath,
+			final String format,
+			final int nthreads )
+			throws Exception {
 
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
@@ -164,6 +275,18 @@ public class TestUtils
 			indexOptions.add(indexOption);
 		}
 
+		File configFile = File.createTempFile(
+				"test_s3_local_ingest",
+				null);
+		ManualOperationParams operationParams = new ManualOperationParams();
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+
+		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
+		configS3.setS3UrlParameter(s3Url);
+		configS3.execute(operationParams);
+
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
@@ -174,7 +297,86 @@ public class TestUtils
 				null,
 				null);
 		localIngester.setThreads(nthreads);
-		localIngester.execute(new ManualOperationParams());
+		localIngester.execute(operationParams);
+
+		verifyStats(dataStore);
+
+	}
+
+	public static void testSparkIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String format )
+			throws Exception {
+		testSparkIngest(
+				dataStore,
+				dimensionalityType,
+				S3URL,
+				S3_INPUT_PATH,
+				format);
+
+	}
+
+	public static void testSparkIngest(
+			final DataStorePluginOptions dataStore,
+			final DimensionalityType dimensionalityType,
+			final String s3Url,
+			final String ingestFilePath,
+			final String format )
+			throws Exception {
+
+		// ingest a shapefile (geotools type) directly into GeoWave using the
+		// ingest framework's main method and pre-defined commandline arguments
+
+		// Indexes
+		final String indexes = dimensionalityType.getDimensionalityArg();
+		File configFile = File.createTempFile(
+				"test_spark_ingest",
+				null);
+		ManualOperationParams operationParams = new ManualOperationParams();
+		operationParams.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+
+		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
+		configS3.setS3UrlParameter(s3Url);
+		configS3.execute(operationParams);
+
+		LocalInputCommandLineOptions localOptions = new LocalInputCommandLineOptions();
+		localOptions.setFormats(format);
+
+		SparkCommandLineOptions sparkOptions = new SparkCommandLineOptions();
+		sparkOptions.setAppName("SparkIngestTest");
+		sparkOptions.setMaster("local");
+		sparkOptions.setHost("localhost");
+
+		// Create the command and execute.
+		final SparkIngestDriver sparkIngester = new SparkIngestDriver();
+		Properties props = new Properties();
+		dataStore.save(
+				props,
+				DataStorePluginOptions.getStoreNamespace("test"));
+		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
+				",");
+		for (String indexType : indexTypes) {
+			IndexPluginOptions pluginOptions = new IndexPluginOptions();
+			pluginOptions.selectPlugin(indexType);
+			pluginOptions.save(
+					props,
+					IndexPluginOptions.getIndexNamespace(indexType));
+		}
+		props.setProperty(
+				ConfigAWSCommand.AWS_S3_ENDPOINT_URL,
+				s3Url);
+		sparkIngester.runOperation(
+				null,
+				props,
+				localOptions,
+				"test",
+				indexes,
+				new VisibilityOptions(),
+				sparkOptions,
+				ingestFilePath);
 
 		verifyStats(dataStore);
 
@@ -244,10 +446,39 @@ public class TestUtils
 	public static ExpectedResults getExpectedResults(
 			final URL[] expectedResultsResources )
 			throws IOException {
+		return getExpectedResults(
+				expectedResultsResources,
+				null);
+	}
+
+	public static MathTransform transformFromCrs(
+			CoordinateReferenceSystem crs ) {
+		MathTransform mathTransform = null;
+		if (crs != null) {
+			try {
+				mathTransform = CRS.findMathTransform(
+						GeometryUtils.DEFAULT_CRS,
+						crs,
+						true);
+			}
+			catch (final FactoryException e) {
+				LOGGER.warn(
+						"Unable to create coordinate reference system transform",
+						e);
+			}
+		}
+		return mathTransform;
+	}
+
+	public static ExpectedResults getExpectedResults(
+			final URL[] expectedResultsResources,
+			CoordinateReferenceSystem crs )
+			throws IOException {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		DataStore dataStore = null;
 		final Set<Long> hashedCentroids = new HashSet<Long>();
 		int expectedResultCount = 0;
+		MathTransform mathTransform = transformFromCrs(crs);
 		for (final URL expectedResultsResource : expectedResultsResources) {
 			map.put(
 					"url",
@@ -270,9 +501,18 @@ public class TestUtils
 				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
 					final SimpleFeature feature = featureIterator.next();
-					final long centroid = hashCentroid((Geometry) feature.getDefaultGeometry());
+					Geometry geometry = (Geometry) feature.getDefaultGeometry();
+					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(
+							geometry,
+							mathTransform) : geometry);
 					hashedCentroids.add(centroid);
 				}
+			}
+			catch (MismatchedDimensionException | TransformException e) {
+				LOGGER.warn(
+						"Unable to transform geometry",
+						e);
+				Assert.fail("Unable to transform geometry to CRS: " + crs.toString());
 			}
 			finally {
 				IOUtils.closeQuietly(featureIterator);

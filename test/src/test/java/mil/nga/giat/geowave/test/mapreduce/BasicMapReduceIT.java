@@ -222,6 +222,10 @@ public class BasicMapReduceIT
 				OSM_GPX_INPUT_DIR);
 		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
+		for (WritableDataAdapter<SimpleFeature> adapter : adapters) {
+			adapter.init(TestUtils.DEFAULT_SPATIAL_INDEX);
+		}
+
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
 		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, ExpectedResults>();
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {

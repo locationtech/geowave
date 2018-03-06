@@ -36,11 +36,13 @@ done
 GEOWAVE_VERSION=$(cat $WORKSPACE/deploy/target/version.txt)
 FPM_SCRIPTS="${WORKSPACE}/deploy/packaging/docker/build-rpm/fpm_scripts"
 GEOWAVE_DIR="/usr/local/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}"
+GEOSERVER_VERSION=$(cat $WORKSPACE/deploy/target/geoserver_version.txt)
 
 echo "---------------------------------------------------------------"
 echo "      Building Services RPMS with the following settings"
 echo "---------------------------------------------------------------"
 echo "GEOWAVE_VERSION=${GEOWAVE_VERSION}"
+echo "GEOSERVER_VERSION=${GEOSERVER_VERSION}"
 echo "TIME_TAG=${TIME_TAG}"
 echo "BUILD_ARGS=${BUILD_ARGS}"
 echo "VENDOR_VERSION=${VENDOR_VERSION}"
@@ -55,9 +57,16 @@ cd services_tmp
 
 #grab the geoserver war file and tomcat tarball
 #Check if the files already exists before grabbing them
-if [ ! -f geoserver-2.10.0-war.zip ]; then
-  echo "Downloading geoserver-2.10.0-war"
-  wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-2.10.0-war.zip
+if [ ! -f geoserver-$GEOSERVER_VERSION-war.zip ]; then
+  echo "Downloading geoserver-$GEOSERVER_VERSION-war"
+  if [[ $(curl -I --write-out %{http_code} --silent --output /dev/null  https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip) == 200 ]]; then
+    echo "Downloading from Geoserver Bucket"
+    wget -q https://s3.amazonaws.com/geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip
+  else
+    echo "Downloading from Geoserver.org"
+    wget -q https://build.geoserver.org/geoserver/release/$GEOSERVER_VERSION/geoserver-$GEOSERVER_VERSION-war.zip
+    aws s3 cp geoserver-$GEOSERVER_VERSION-war.zip s3://geowave/third-party-downloads/geoserver/geoserver-$GEOSERVER_VERSION-war.zip
+  fi
 fi
 
 if [ ! -f apache-tomcat-8.5.20.tar.gz ]; then
@@ -118,7 +127,7 @@ cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war res
 
 #get geoserver the war files ready
 #unpack it in tmp dir
-unzip -o geoserver-2.10.0-war.zip geoserver.war
+unzip -o geoserver-$GEOSERVER_VERSION-war.zip geoserver.war
 mkdir tmp && cd tmp
 jar -xf ../geoserver.war
 rm -rf data/layergroups/*

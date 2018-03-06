@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
@@ -70,9 +71,8 @@ public class PersistenceEncodingTest
 				Unit.YEAR),
 	};
 
-	private static final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex()
-			.getIndexModel();
+	private static final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+			new SpatialTemporalOptions()).getIndexModel();
 
 	private static final NumericIndexStrategy strategy = TieredSFCIndexFactory.createSingleTierStrategy(
 			SPATIAL_TEMPORAL_DIMENSIONS,
@@ -536,6 +536,13 @@ public class PersistenceEncodingTest
 				}
 			}
 			return null;
+		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
 		}
 	}
 

@@ -38,6 +38,7 @@ import com.vividsolutions.jts.geom.Polygon;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
@@ -62,7 +63,8 @@ public class GeotoolsQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static DataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider()
+			.createPrimaryIndex(new SpatialOptions());
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(

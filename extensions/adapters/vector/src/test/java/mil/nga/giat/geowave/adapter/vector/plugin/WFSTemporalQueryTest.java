@@ -39,6 +39,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 
 public class WFSTemporalQueryTest extends
 		BaseDataStoreTest
@@ -58,7 +59,7 @@ public class WFSTemporalQueryTest extends
 			GeoWavePluginException {
 		dataStore = createDataStore();
 		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex());
+				.createPrimaryIndex(new SpatialOptions()));
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");

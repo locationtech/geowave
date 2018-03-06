@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -42,9 +42,9 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -84,7 +84,7 @@ public class AvroFeatureDataAdapterTest
 			ParseException {
 
 		final StoreFactoryFamilySpi storeFactoryFamily = new MemoryStoreFactoryFamily();
-		StoreFactoryOptions opts = storeFactoryFamily.getDataStoreFactory().createOptionsInstance();
+		final StoreFactoryOptions opts = storeFactoryFamily.getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace("test_avro");
 		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
 				opts);
@@ -128,7 +128,7 @@ public class AvroFeatureDataAdapterTest
 			throws IOException {
 
 		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
-
+		adapter.init(index);
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
@@ -156,8 +156,8 @@ public class AvroFeatureDataAdapterTest
 
 		final int numFeatures = 10;
 
-		final List<SimpleFeature> data = new ArrayList<SimpleFeature>();
-		final Map<Integer, SimpleFeature> dataMap = new HashMap<Integer, SimpleFeature>();
+		final List<SimpleFeature> data = new ArrayList<>();
+		final Map<Integer, SimpleFeature> dataMap = new HashMap<>();
 		// Write data using the whole feature data adapter
 		for (int i = 0; i < numFeatures; i++) {
 
@@ -240,6 +240,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
 				"EPSG:4326"));
@@ -305,6 +307,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -349,6 +353,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -410,6 +416,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -462,6 +470,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -542,6 +552,8 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -585,7 +597,7 @@ public class AvroFeatureDataAdapterTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeoWaveGTDataStore.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
@@ -606,7 +618,8 @@ public class AvroFeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-
+		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
 		final AvroFeatureDataAdapter dataAdapterCopy = new AvroFeatureDataAdapter();
@@ -614,6 +627,6 @@ public class AvroFeatureDataAdapterTest
 
 		assertEquals(
 				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
-				GeoWaveGTDataStore.DEFAULT_CRS.getCoordinateSystem());
+				GeometryUtils.DEFAULT_CRS.getCoordinateSystem());
 	}
 }

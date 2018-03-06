@@ -18,7 +18,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  * for an ingest type will be used.
  * 
  */
-public interface DimensionalityTypeProviderSpi
+public interface DimensionalityTypeProviderSpi<T extends DimensionalityTypeOptions>
 {
 	/**
 	 * return a set of classes that can be indexed by this index provider, used
@@ -61,7 +61,8 @@ public interface DimensionalityTypeProviderSpi
 	 * 
 	 * @return the primary index
 	 */
-	public PrimaryIndex createPrimaryIndex();
+	public PrimaryIndex createPrimaryIndex(
+			T options );
 
 	/**
 	 * These are options specific to the type of index being exposed by this SPI
@@ -69,5 +70,5 @@ public interface DimensionalityTypeProviderSpi
 	 * 
 	 * @return
 	 */
-	public DimensionalityTypeOptions getOptions();
+	public T createOptions();
 }

@@ -32,8 +32,10 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -207,6 +209,192 @@ public class LocalFileIngestDriver extends
 			}
 		}
 
+		if (threads == 1) {
+
+			processFileSingleThreaded(
+					file,
+					typeName,
+					plugin,
+					ingestRunData,
+					specifiedPrimaryIndexes,
+					requiredIndexMap);
+
+		}
+		else {
+
+			processFileMultiThreaded(
+					file,
+					typeName,
+					plugin,
+					ingestRunData,
+					specifiedPrimaryIndexes,
+					requiredIndexMap);
+		}
+
+		LOGGER.info(String.format(
+				"Finished ingest for file: [%s]",
+				file.getFile()));
+	}
+
+	public void processFileSingleThreaded(
+			final URL file,
+			final String typeName,
+			final LocalFileIngestPlugin<?> plugin,
+			final LocalIngestRunData ingestRunData,
+			final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
+			final Map<ByteArrayId, PrimaryIndex> requiredIndexMap )
+			throws IOException {
+
+		int count = 0;
+		long dbWriteMs = 0L;
+		Map<ByteArrayId, IndexWriter> indexWriters = new HashMap<ByteArrayId, IndexWriter>();
+		Map<ByteArrayId, AdapterToIndexMapping> adapterMappings = new HashMap<ByteArrayId, AdapterToIndexMapping>();
+
+		// Read files until EOF from the command line.
+		try (CloseableIterator<?> geowaveDataIt = plugin.toGeoWaveData(
+				file,
+				specifiedPrimaryIndexes.keySet(),
+				ingestOptions.getVisibility())) {
+
+			while (geowaveDataIt.hasNext()) {
+				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
+				try {
+					final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+					if (adapter == null) {
+						LOGGER.warn(String.format(
+								"Adapter not found for [%s] file [%s]",
+								geowaveData.getValue(),
+								FilenameUtils.getName(file.getPath())));
+						continue;
+					}
+
+					// Ingest the data!
+					dbWriteMs += ingestData(
+							geowaveData,
+							adapter,
+							ingestRunData,
+							specifiedPrimaryIndexes,
+							requiredIndexMap,
+							indexWriters,
+							adapterMappings);
+
+					count++;
+
+				}
+				catch (Exception e) {
+					throw new RuntimeException(
+							"Interrupted ingesting GeoWaveData",
+							e);
+				}
+			}
+
+			LOGGER.debug(String.format(
+					"Finished ingest for file: [%s]; Ingested %d items in %d seconds",
+					FilenameUtils.getName(file.getPath()),
+					count,
+					(int) dbWriteMs / 1000));
+
+		}
+		finally {
+			// Clean up index writers
+			for (Entry<ByteArrayId, IndexWriter> writerEntry : indexWriters.entrySet()) {
+				try {
+					ingestRunData.releaseIndexWriter(
+							adapterMappings.get(writerEntry.getKey()),
+							writerEntry.getValue());
+				}
+				catch (Exception e) {
+					LOGGER.warn(
+							String.format(
+									"Could not return index writer: [%s]",
+									writerEntry.getKey()),
+							e);
+				}
+			}
+
+		}
+	}
+
+	private long ingestData(
+			GeoWaveData<?> geowaveData,
+			WritableDataAdapter adapter,
+			LocalIngestRunData runData,
+			Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
+			Map<ByteArrayId, PrimaryIndex> requiredIndexMap,
+			Map<ByteArrayId, IndexWriter> indexWriters,
+			Map<ByteArrayId, AdapterToIndexMapping> adapterMappings )
+			throws Exception {
+
+		try {
+
+			AdapterToIndexMapping mapping = adapterMappings.get(adapter.getAdapterId());
+
+			if (mapping == null) {
+				List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+				for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
+					PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
+					if (index == null) {
+						index = requiredIndexMap.get(indexId);
+						if (index == null) {
+							LOGGER.warn(String.format(
+									"Index '%s' not found for %s",
+									indexId.getString(),
+									geowaveData.getValue()));
+							continue;
+						}
+					}
+					indices.add(index);
+				}
+				runData.addIndices(indices);
+				runData.addAdapter(adapter);
+
+				mapping = new AdapterToIndexMapping(
+						adapter.getAdapterId(),
+						indices.toArray(new PrimaryIndex[indices.size()]));
+				adapterMappings.put(
+						mapping.getAdapterId(),
+						mapping);
+
+				// If we have the index checked out already, use that.
+				if (!indexWriters.containsKey(mapping.getAdapterId())) {
+					indexWriters.put(
+							mapping.getAdapterId(),
+							runData.getIndexWriter(mapping));
+				}
+			}
+
+			// Write the data to the data store.
+			IndexWriter writer = indexWriters.get(mapping.getAdapterId());
+
+			// Time the DB write
+			long hack = System.currentTimeMillis();
+			writer.write(geowaveData.getValue());
+			long durMs = System.currentTimeMillis() - hack;
+
+			return durMs;
+		}
+		catch (Exception e) {
+			// This should really never happen, because we don't limit the
+			// amount of items in the IndexWriter pool.
+			LOGGER.error(
+					"Fatal error occured while trying write to an index writer.",
+					e);
+			throw new RuntimeException(
+					"Fatal error occured while trying write to an index writer.",
+					e);
+		}
+
+	}
+
+	public void processFileMultiThreaded(
+			final URL file,
+			final String typeName,
+			final LocalFileIngestPlugin<?> plugin,
+			final LocalIngestRunData ingestRunData,
+			final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
+			final Map<ByteArrayId, PrimaryIndex> requiredIndexMap )
+			throws IOException {
+
 		// Create our queue. We will post GeoWaveData items to these queue until
 		// there are no more items, at which point we will tell the workers to
 		// complete. Ingest batch size is the total max number of items to read
@@ -293,9 +481,6 @@ public class LocalFileIngestDriver extends
 			}
 		}
 
-		LOGGER.info(String.format(
-				"Finished ingest for file: [%s]",
-				file.getFile()));
 	}
 
 	private static BlockingQueue<GeoWaveData<?>> createBlockingQueue(
@@ -303,4 +488,5 @@ public class LocalFileIngestDriver extends
 		return new ArrayBlockingQueue<GeoWaveData<?>>(
 				batchSize);
 	}
+
 }

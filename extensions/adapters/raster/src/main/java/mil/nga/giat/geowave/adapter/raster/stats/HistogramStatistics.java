@@ -181,6 +181,8 @@ public class HistogramStatistics extends
 			}
 		}
 		else {
+			// this is a condition that isn't going to be exercised typically in
+			// any code, but at this point we will assume default CRS
 			footprint = RasterUtils.getFootprint(
 					entry,
 					GeoWaveGTRasterFormat.DEFAULT_CRS);

@@ -9,7 +9,7 @@ RUN yum -y install epel-release && \
     cd ~
 
 RUN cd /tmp && \
-    wget http://dl.fedoraproject.org/pub/epel/6/x86_64/hatools-2.14-1.1.el6.x86_64.rpm && \
+    wget https://s3.amazonaws.com/geowave/third-party-downloads/hatools/hatools-2.14-1.1.el6.x86_64.rpm && \
     yum -y install hatools-2.14-1.1.el6.x86_64.rpm && \
     rm -rf hatools-2.14-1.1.el6.x86_64.rpm && \
     cd ~

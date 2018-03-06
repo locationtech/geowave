@@ -38,6 +38,7 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -297,7 +298,7 @@ public class KDERasterResizeIT
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.readFromConfigParams(str.toString()));
 
-		queryEnvelope.setCoordinateReferenceSystem(GeoWaveGTRasterFormat.DEFAULT_CRS);
+		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.DEFAULT_CRS);
 		final Raster[] rasters = new Raster[numCoverages];
 		int coverageCount = 0;
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {

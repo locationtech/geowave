@@ -73,8 +73,8 @@ public class HBaseConstraintsQuery extends
 		this(
 				adapterIds,
 				index,
-				query != null ? query.getIndexConstraints(index.getIndexStrategy()) : null,
-				query != null ? query.createFilters(index.getIndexModel()) : null,
+				query != null ? query.getIndexConstraints(index) : null,
+				query != null ? query.createFilters(index) : null,
 				clientDedupeFilter,
 				scanCallback,
 				aggregation,
