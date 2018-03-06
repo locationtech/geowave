@@ -1,4 +1,5 @@
 FROM centos:centos7
+ARG third_party_deps_path
 
 RUN yum -y install epel-release && \
     yum -y install createrepo unzip zip wget && \
@@ -9,7 +10,7 @@ RUN yum -y install epel-release && \
     cd ~
 
 RUN cd /tmp && \
-    wget https://s3.amazonaws.com/geowave/third-party-downloads/hatools/hatools-2.14-1.1.el6.x86_64.rpm && \
+    wget ${third_party_deps_path}/hatools/hatools-2.14-1.1.el6.x86_64.rpm && \
     yum -y install hatools-2.14-1.1.el6.x86_64.rpm && \
     rm -rf hatools-2.14-1.1.el6.x86_64.rpm && \
     cd ~

@@ -10,6 +10,7 @@ node ('master') {
           [$class: 'ParametersDefinitionProperty', parameterDefinitions: [
             [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket name to push rpms to'],
             [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Bucket to push maven cache to'],
+            [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
             [$class: 'StringParameterDefinition', name: 'local_repo_dir', defaultValue: '/var/www/geowave-efs/html/repos/snapshots', description: 'Path on the local filesystem to the repo'],
             [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
             ]
@@ -38,7 +39,7 @@ node ('master') {
     // Build the docker container
     sh 'docker build -t locationtech/geowave-centos7-java8-build -f deploy/packaging/docker/geowave-centos7-java8-build.dockerfile deploy/packaging/docker'
     sh 'docker build -t locationtech/geowave-centos7-rpm-build -f deploy/packaging/docker/geowave-centos7-rpm-build.dockerfile deploy/packaging/docker'
-    sh 'docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile deploy/packaging/docker'
+    sh "docker build -t locationtech/geowave-centos7-publish -f deploy/packaging/docker/geowave-centos7-publish.dockerfile --build-arg third_party_deps_path=${ params.third_party_deps_path } deploy/packaging/docker"
   }
 
   stage('Maven Deploy'){
