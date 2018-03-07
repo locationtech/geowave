@@ -73,6 +73,7 @@ abstract class BaseQuery
 			final Integer limit ) {
 		return operations.createReader(new ReaderParams(
 				index,
+				adapterStore,
 				adapterIds,
 				maxResolutionSubsamplingPerDimension,
 				getAggregation(),

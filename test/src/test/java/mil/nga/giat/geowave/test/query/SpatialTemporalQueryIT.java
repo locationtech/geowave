@@ -71,7 +71,8 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @RunWith(GeoWaveITRunner.class)
 @GeoWaveTestStore(value = {
 	GeoWaveStoreType.ACCUMULO,
-	GeoWaveStoreType.HBASE
+	GeoWaveStoreType.HBASE,
+	GeoWaveStoreType.DYNAMODB
 })
 public class SpatialTemporalQueryIT
 {

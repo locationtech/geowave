@@ -231,6 +231,7 @@ public class GeoWaveRecordReader<T> extends
 		try {
 			final Reader reader = operations.createReader(new RecordReaderParams(
 					index,
+					adapterStore,
 					rangeQueryOptions.getValidAdapterIds(
 							adapterStore,
 							aimStore),

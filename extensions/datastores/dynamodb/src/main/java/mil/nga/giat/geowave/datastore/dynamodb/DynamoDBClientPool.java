@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.ClientConfiguration;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClientBuilder;
 import com.beust.jcommander.ParameterException;
 
 public class DynamoDBClientPool
@@ -26,31 +28,32 @@ public class DynamoDBClientPool
 		return singletonInstance;
 	}
 
-	private final Map<DynamoDBOptions, AmazonDynamoDBAsyncClient> clientCache = new HashMap<DynamoDBOptions, AmazonDynamoDBAsyncClient>();
+	private final Map<DynamoDBOptions, AmazonDynamoDBAsync> clientCache = new HashMap<>();
 
-	public synchronized AmazonDynamoDBAsyncClient getClient(
+	public synchronized AmazonDynamoDBAsync getClient(
 			final DynamoDBOptions options ) {
-		AmazonDynamoDBAsyncClient client = clientCache.get(options);
+		AmazonDynamoDBAsync client = clientCache.get(options);
 		if (client == null) {
 
-			if (options.getRegion() == null && (options.getEndpoint() == null || options.getEndpoint().isEmpty())) {
+			if ((options.getRegion() == null) && ((options.getEndpoint() == null) || options.getEndpoint().isEmpty())) {
 				throw new ParameterException(
 						"Compulsory to specify either the region or the endpoint");
 			}
 
-			if (options.getRegion() != null && (options.getEndpoint() != null && !options.getEndpoint().isEmpty())) {
-				LOGGER.error("Both region and endpoint specified, considering region ");
-			}
-
-			ClientConfiguration clientConfig = options.getClientConfig();
-			if (options.getRegion() == null) {
-				client = new AmazonDynamoDBAsyncClient(
-						clientConfig).withEndpoint(options.getEndpoint());
+			final ClientConfiguration clientConfig = options.getClientConfig();
+			final AmazonDynamoDBAsyncClientBuilder builder = AmazonDynamoDBAsyncClientBuilder
+					.standard()
+					.withClientConfiguration(
+							clientConfig);
+			if ((options.getEndpoint() != null) && (options.getEndpoint().length() > 0)) {
+				builder.withEndpointConfiguration(new EndpointConfiguration(
+						options.getEndpoint(),
+						options.getRegion() != null ? options.getRegion().getName() : "local"));
 			}
 			else {
-				client = new AmazonDynamoDBAsyncClient(
-						clientConfig).withRegion(options.getRegion());
+				builder.withRegion(options.getRegion());
 			}
+			client = builder.build();
 			clientCache.put(
 					options,
 					client);

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -16,6 +17,7 @@ abstract public class BaseReaderParams
 {
 
 	private final PrimaryIndex index;
+	private final AdapterStore adapterStore;
 	private final List<ByteArrayId> adapterIds;
 	private final double[] maxResolutionSubsamplingPerDimension;
 	private final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
@@ -26,6 +28,7 @@ abstract public class BaseReaderParams
 
 	public BaseReaderParams(
 			final PrimaryIndex index,
+			final AdapterStore adapterStore,
 			final List<ByteArrayId> adapterIds,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
@@ -34,6 +37,7 @@ abstract public class BaseReaderParams
 			final Integer limit,
 			final String... additionalAuthorizations ) {
 		this.index = index;
+		this.adapterStore = adapterStore;
 		this.adapterIds = adapterIds;
 		this.maxResolutionSubsamplingPerDimension = maxResolutionSubsamplingPerDimension;
 		this.aggregation = aggregation;
@@ -45,6 +49,10 @@ abstract public class BaseReaderParams
 
 	public PrimaryIndex getIndex() {
 		return index;
+	}
+
+	public AdapterStore getAdapterStore() {
+		return adapterStore;
 	}
 
 	public List<ByteArrayId> getAdapterIds() {

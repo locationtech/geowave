@@ -74,7 +74,7 @@ public class DynamoDBStatisticsIterator implements
 	}
 
 	protected GeoWaveMetadata statsToMetadata(
-			DataStatistics<?> stats ) {
+			final DataStatistics<?> stats ) {
 		return new GeoWaveMetadata(
 				stats.getStatisticsId().getBytes(),
 				stats.getDataAdapterId().getBytes(),

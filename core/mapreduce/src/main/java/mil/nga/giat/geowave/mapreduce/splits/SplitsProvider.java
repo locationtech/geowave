@@ -178,32 +178,52 @@ public class SplitsProvider
 			}
 		}
 
+		RowRangeHistogramStatistics<?> statistics = getHistStats(
+				index,
+				adapters,
+				adapterStore,
+				statsStore,
+				statsCache,
+				authorizations);
+
+		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
 		if (ranges == null) {
-			return splits;
+			// Try to get ranges from histogram statistics
+			TreeSet<ByteArrayId> partitionKeys = statistics.getPartitionKeys();
+			for (ByteArrayId partitionKey : partitionKeys) {
+				final GeoWaveRowRange gwRange = new GeoWaveRowRange(
+						partitionKey.getBytes(),
+						null,
+						null,
+						true,
+						true);
+				final double cardinality = getCardinality(
+						statistics,
+						gwRange,
+						index.getIndexStrategy().getPartitionKeyLength());
+				rangeList.add(new RangeLocationPair(
+						gwRange,
+						cardinality < 1 ? 1.0 : cardinality));
+			}
+		}
+		else {
+			for (final ByteArrayRange range : ranges) {
+				final GeoWaveRowRange gwRange = SplitsProvider.toRowRange(
+						range,
+						partitionKeyLength);
+
+				final double cardinality = getCardinality(
+						statistics,
+						gwRange,
+						index.getIndexStrategy().getPartitionKeyLength());
+
+				rangeList.add(new RangeLocationPair(
+						gwRange,
+						cardinality < 1 ? 1.0 : cardinality));
+			}
 		}
 
 		final Map<ByteArrayId, SplitInfo> splitInfo = new HashMap<ByteArrayId, SplitInfo>();
-		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
-		for (final ByteArrayRange range : ranges) {
-			final GeoWaveRowRange gwRange = SplitsProvider.toRowRange(
-					range,
-					partitionKeyLength);
-
-			final double cardinality = getCardinality(
-					getHistStats(
-							index,
-							adapters,
-							adapterStore,
-							statsStore,
-							statsCache,
-							authorizations),
-					gwRange,
-					index.getIndexStrategy().getPartitionKeyLength());
-
-			rangeList.add(new RangeLocationPair(
-					gwRange,
-					cardinality < 1 ? 1.0 : cardinality));
-		}
 
 		if (!rangeList.isEmpty()) {
 			splitInfo.put(

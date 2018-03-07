@@ -5,7 +5,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.iterators.LazyIteratorChain;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
@@ -15,12 +15,12 @@ public class LazyPaginatedQuery extends
 {
 	private QueryResult currentResult;
 	private final QueryRequest request;
-	private final AmazonDynamoDBAsyncClient dynamoDBClient;
+	private final AmazonDynamoDBAsync dynamoDBClient;
 
 	public LazyPaginatedQuery(
 			final QueryResult currentResult,
 			final QueryRequest request,
-			final AmazonDynamoDBAsyncClient dynamoDBClient ) {
+			final AmazonDynamoDBAsync dynamoDBClient ) {
 		this.currentResult = currentResult;
 		this.request = request;
 		this.dynamoDBClient = dynamoDBClient;

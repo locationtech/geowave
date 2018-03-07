@@ -3,7 +3,6 @@ package mil.nga.giat.geowave.datastore.dynamodb;
 import mil.nga.giat.geowave.core.store.BaseDataStoreFamily;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 
 public class DynamoDBStoreFactoryFamily extends
 		BaseDataStoreFamily

@@ -26,7 +26,7 @@ public class DynamoDBFactoryHelper implements
 		try {
 			return DynamoDBOperations.createOperations((DynamoDBOptions) options);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"Unable to create DynamoDB operations from config options",
 					e);

@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.amazonaws.handlers.AsyncHandler;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
@@ -22,34 +22,34 @@ public class AsyncPaginatedScan extends
 	private static final int MAX_ASYNC_SCAN_RESULTS = 100;
 	private static int totalAsyncRequestsInProgress = 0;
 
-	private final AmazonDynamoDBAsyncClient dynamoDBClient;
+	private final AmazonDynamoDBAsync dynamoDBClient;
 	private final Object monitorLock = new Object();
-	private Deque<ScanResult> asyncScanResults;
+	private final Deque<ScanResult> asyncScanResults;
 	private ScanRequest lastRequest;
 	private int asyncRequestsInProgress;
 
 	/**
 	 * The async paginated query is a much more complicated but asynchronous
 	 * version of the paginated query
-	 * 
+	 *
 	 * As soon a async paginated query is fired, multiple asynchronous query
 	 * requests are fired in tandem across different async paginated queries.
-	 * 
+	 *
 	 * A max of "MAX_ASYNC_SCAN_RESULTS" can be in progress at any time
-	 * 
+	 *
 	 */
 	public AsyncPaginatedScan(
 			final ScanRequest request,
-			final AmazonDynamoDBAsyncClient dynamoDBClient ) {
-		this.lastRequest = request;
+			final AmazonDynamoDBAsync dynamoDBClient ) {
+		lastRequest = request;
 		this.dynamoDBClient = dynamoDBClient;
 
 		/**
 		 * Link list because we need to store null values Queues like ArrayDeque
 		 * don't support null value insertion
 		 */
-		this.asyncScanResults = new LinkedList<>();
-		this.asyncRequestsInProgress = 0;
+		asyncScanResults = new LinkedList<>();
+		asyncRequestsInProgress = 0;
 
 		checkAndAsyncScan();
 	}
@@ -57,23 +57,24 @@ public class AsyncPaginatedScan extends
 	/**
 	 * Get the next query data If the last request is equal to null then we have
 	 * no more query requests to fire
-	 * 
+	 *
 	 * If asyncQueryResults is not empty, we have already fetched the next query
 	 * data that can be read immediately
-	 * 
+	 *
 	 * If due to max async query limit, we couldn't fire async requests, we fire
 	 * the request now
 	 */
+	@Override
 	protected Iterator<? extends Map<String, AttributeValue>> nextIterator(
-			int arg0 ) {
+			final int arg0 ) {
 
 		synchronized (monitorLock) {
-			if (lastRequest == null && asyncScanResults.isEmpty()) {
+			if ((lastRequest == null) && asyncScanResults.isEmpty()) {
 				return null;
 			}
 
 			ScanResult result = null;
-			if (lastRequest != null && asyncRequestsInProgress == 0) {
+			if ((lastRequest != null) && (asyncRequestsInProgress == 0)) {
 				makeAsyncScan();
 			}
 
@@ -81,7 +82,7 @@ public class AsyncPaginatedScan extends
 				try {
 					monitorLock.wait();
 				}
-				catch (InterruptedException e) {
+				catch (final InterruptedException e) {
 					LOGGER.error("Exception in Async paginated query " + e);
 					e.printStackTrace();
 				}
@@ -119,7 +120,7 @@ public class AsyncPaginatedScan extends
 	 * Fire the async query On success, we check to see if we can fire any more
 	 * queries We continue to fire queries until the global max is reached or we
 	 * have asynchronously fired all queries
-	 * 
+	 *
 	 * Any waiting threads are signaled here
 	 */
 	private void makeAsyncScan() {
@@ -135,7 +136,7 @@ public class AsyncPaginatedScan extends
 						 */
 						@Override
 						public void onError(
-								Exception exception ) {
+								final Exception exception ) {
 							LOGGER.error(
 									"Query async failed with Exception ",
 									exception);
@@ -154,14 +155,14 @@ public class AsyncPaginatedScan extends
 						 */
 						@Override
 						public void onSuccess(
-								ScanRequest request,
-								ScanResult result ) {
+								final ScanRequest request,
+								final ScanResult result ) {
 
 							synchronized (monitorLock) {
 								--asyncRequestsInProgress;
 								decTotalAsyncRequestsInProgress();
 
-								if (result.getLastEvaluatedKey() != null && !result.getLastEvaluatedKey().isEmpty()) {
+								if ((result.getLastEvaluatedKey() != null) && !result.getLastEvaluatedKey().isEmpty()) {
 									lastRequest.setExclusiveStartKey(result.getLastEvaluatedKey());
 									checkAndAsyncScan();
 								}

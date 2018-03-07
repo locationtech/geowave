@@ -23,7 +23,7 @@ class RegionConvertor implements
 
 	@Override
 	public Regions convert(
-			String regionName ) {
+			final String regionName ) {
 		return Regions.fromName(regionName);
 	}
 
@@ -39,12 +39,13 @@ class ProtocolConvertor implements
 
 	@Override
 	public Protocol convert(
-			String protocolName ) {
-		String protocolLowerCase = protocolName.toLowerCase();
-		if (!protocolLowerCase.equals("http") && !protocolLowerCase.equals("https"))
+			final String protocolName ) {
+		final String protocolLowerCase = protocolName.toLowerCase();
+		if (!protocolLowerCase.equals("http") && !protocolLowerCase.equals("https")) {
 			throw new ParameterException(
 					"Value " + protocolName + "can not be converted to Protocol. "
 							+ "Available values are: http and https.");
+		}
 
 		return Protocol.valueOf(protocolLowerCase);
 	}
@@ -90,7 +91,7 @@ public class DynamoDBOptions extends
 		}
 	};
 
-	private ClientConfiguration clientConfig = new ClientConfiguration();
+	private final ClientConfiguration clientConfig = new ClientConfiguration();
 
 	public ClientConfiguration getClientConfig() {
 		clientConfig.setCacheResponseMetadata(enableCacheResponseMetadata);

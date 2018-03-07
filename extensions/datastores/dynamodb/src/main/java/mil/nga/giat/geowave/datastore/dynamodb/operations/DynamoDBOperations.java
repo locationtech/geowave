@@ -10,7 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.model.AmazonDynamoDBException;
 import com.amazonaws.services.dynamodbv2.model.AttributeDefinition;
 import com.amazonaws.services.dynamodbv2.model.CreateTableRequest;
@@ -44,7 +44,7 @@ import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBClientPool;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOptions;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.DynamoDBRowMergingIterator;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
@@ -59,7 +59,7 @@ public class DynamoDBOperations implements
 	public static final String METADATA_TIMESTAMP_KEY = "T";
 	public static final String METADATA_VALUE_KEY = "V";
 
-	private final AmazonDynamoDBAsyncClient client;
+	private final AmazonDynamoDBAsync client;
 	private final String gwNamespace;
 	private final DynamoDBOptions options;
 	public static Map<String, Boolean> tableExistsCache = new HashMap<>();
@@ -83,7 +83,7 @@ public class DynamoDBOperations implements
 		return options;
 	}
 
-	public AmazonDynamoDBAsyncClient getClient() {
+	public AmazonDynamoDBAsync getClient() {
 		return client;
 	}
 
@@ -93,8 +93,8 @@ public class DynamoDBOperations implements
 	}
 
 	public String getMetadataTableName(
-			MetadataType metadataType ) {
-		String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
+			final MetadataType metadataType ) {
+		final String tableName = metadataType.name() + "_" + AbstractGeoWavePersistence.METADATA_TABLE;
 		return getQualifiedTableName(tableName);
 	}
 
@@ -106,7 +106,7 @@ public class DynamoDBOperations implements
 		final String qName = getQualifiedTableName(tableName);
 		final ByteArrayId adapterIdObj = new ByteArrayId(
 				adapterId);
-		final Set<ByteArrayId> dataIdsSet = new HashSet<ByteArrayId>(
+		final Set<ByteArrayId> dataIdsSet = new HashSet<>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
 			dataIdsSet.add(new ByteArrayId(
@@ -115,12 +115,11 @@ public class DynamoDBOperations implements
 		final ScanRequest request = new ScanRequest(
 				qName);
 		final ScanResult scanResult = client.scan(request);
-		final Iterator<DynamoDBRow> everything = Iterators.transform(
+		final Iterator<DynamoDBRow> everything = new DynamoDBRowMergingIterator(
 				new LazyPaginatedScan(
 						scanResult,
 						request,
-						client),
-				new GuavaRowTranslationHelper());
+						client));
 		return Iterators.filter(
 				everything,
 				new Predicate<DynamoDBRow>() {
@@ -150,7 +149,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean indexExists(
-			ByteArrayId indexId )
+			final ByteArrayId indexId )
 			throws IOException {
 		try {
 			return TableStatus.ACTIVE.name().equals(
@@ -167,24 +166,24 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean deleteAll(
-			ByteArrayId indexId,
-			ByteArrayId adapterId,
-			String... additionalAuthorizations ) {
+			final ByteArrayId indexId,
+			final ByteArrayId adapterId,
+			final String... additionalAuthorizations ) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public boolean insureAuthorizations(
-			String clientUser,
-			String... authorizations ) {
+			final String clientUser,
+			final String... authorizations ) {
 		return true;
 	}
 
 	@Override
 	public Writer createWriter(
-			ByteArrayId indexId,
-			ByteArrayId adapterId ) {
+			final ByteArrayId indexId,
+			final ByteArrayId adapterId ) {
 		final String qName = getQualifiedTableName(indexId.getString());
 
 		final DynamoDBWriter writer = new DynamoDBWriter(
@@ -238,7 +237,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public MetadataWriter createMetadataWriter(
-			MetadataType metadataType ) {
+			final MetadataType metadataType ) {
 		final String tableName = getMetadataTableName(metadataType);
 
 		if (options.getStoreOptions().isCreateTable()) {
@@ -290,7 +289,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public MetadataReader createMetadataReader(
-			MetadataType metadataType ) {
+			final MetadataType metadataType ) {
 		return new DynamoDBMetadataReader(
 				this,
 				options.getBaseOptions(),
@@ -299,7 +298,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public MetadataDeleter createMetadataDeleter(
-			MetadataType metadataType ) {
+			final MetadataType metadataType ) {
 		return new DynamoDBMetadataDeleter(
 				this,
 				metadataType);
@@ -307,7 +306,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public Reader createReader(
-			ReaderParams readerParams ) {
+			final ReaderParams readerParams ) {
 		return new DynamoDBReader(
 				readerParams,
 				this);
@@ -315,7 +314,7 @@ public class DynamoDBOperations implements
 
 	@Override
 	public Reader createReader(
-			RecordReaderParams recordReaderParams ) {
+			final RecordReaderParams recordReaderParams ) {
 		return new DynamoDBReader(
 				recordReaderParams,
 				this);
@@ -323,8 +322,8 @@ public class DynamoDBOperations implements
 
 	@Override
 	public Deleter createDeleter(
-			ByteArrayId indexId,
-			String... authorizations )
+			final ByteArrayId indexId,
+			final String... authorizations )
 			throws Exception {
 		return new DynamoDBDeleter(
 				this,
@@ -333,21 +332,16 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean mergeData(
-			PrimaryIndex index,
-			AdapterStore adapterStore,
-			AdapterIndexMappingStore adapterIndexMappingStore ) {
+			final PrimaryIndex index,
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public AdapterStore getAdapterStore() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public boolean metadataExists(
-			MetadataType type )
+			final MetadataType type )
 			throws IOException {
 		try {
 			return TableStatus.ACTIVE.name().equals(

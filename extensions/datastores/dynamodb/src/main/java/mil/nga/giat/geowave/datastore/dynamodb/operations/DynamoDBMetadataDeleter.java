@@ -1,6 +1,5 @@
 package mil.nga.giat.geowave.datastore.dynamodb.operations;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
@@ -8,8 +7,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.amazonaws.services.dynamodbv2.model.DeleteItemResult;
-import com.amazonaws.services.dynamodbv2.model.DeleteRequest;
 
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.MetadataDeleter;
@@ -41,7 +38,7 @@ public class DynamoDBMetadataDeleter implements
 			final MetadataQuery metadata ) {
 		// the nature of metadata deleter is that primary ID is always
 		// well-defined and it is deleting a single entry at a time
-		String tableName = operations.getQualifiedTableName(AbstractGeoWavePersistence.METADATA_TABLE);
+		final String tableName = operations.getQualifiedTableName(AbstractGeoWavePersistence.METADATA_TABLE);
 
 		final Map<String, AttributeValue> key = new HashMap<>();
 		key.put(

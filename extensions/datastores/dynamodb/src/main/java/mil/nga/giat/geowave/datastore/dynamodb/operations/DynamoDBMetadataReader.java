@@ -25,6 +25,8 @@ import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBStatisticsIterator;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBUtils.NoopClosableIteratorWrapper;
+import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
+import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 
 public class DynamoDBMetadataReader implements
 		MetadataReader
@@ -37,7 +39,7 @@ public class DynamoDBMetadataReader implements
 	public DynamoDBMetadataReader(
 			final DynamoDBOperations operations,
 			final DataStoreOptions options,
-			MetadataType metadataType ) {
+			final MetadataType metadataType ) {
 		this.operations = operations;
 		this.options = options;
 		this.metadataType = metadataType;
@@ -45,8 +47,8 @@ public class DynamoDBMetadataReader implements
 
 	@Override
 	public CloseableIterator<GeoWaveMetadata> query(
-			MetadataQuery query ) {
-		String tableName = operations.getMetadataTableName(metadataType);
+			final MetadataQuery query ) {
+		final String tableName = operations.getMetadataTableName(metadataType);
 
 		if (query.hasPrimaryId()) {
 			final QueryRequest queryRequest = new QueryRequest(
@@ -72,7 +74,10 @@ public class DynamoDBMetadataReader implements
 
 			if (metadataType == MetadataType.STATS) {
 				return new DynamoDBStatisticsIterator(
-						queryResult.getItems().iterator());
+						new LazyPaginatedQuery(
+								queryResult,
+								queryRequest,
+								operations.getClient()));
 			}
 
 			return new CloseableIteratorWrapper<>(
@@ -110,7 +115,10 @@ public class DynamoDBMetadataReader implements
 
 		if (metadataType == MetadataType.STATS) {
 			return new DynamoDBStatisticsIterator(
-					scanResult.getItems().iterator());
+					new LazyPaginatedScan(
+							scanResult,
+							scan,
+							operations.getClient()));
 		}
 
 		return new CloseableIteratorWrapper<>(

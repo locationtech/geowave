@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.amazonaws.AmazonWebServiceRequest;
 import com.amazonaws.handlers.AsyncHandler;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsyncClient;
+import com.amazonaws.services.dynamodbv2.AmazonDynamoDBAsync;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.BatchWriteItemRequest;
 import com.amazonaws.services.dynamodbv2.model.BatchWriteItemResult;
@@ -43,11 +43,11 @@ public class DynamoDBWriter implements
 	};
 	private final List<WriteRequest> batchedItems = new ArrayList<>();
 	private final String tableName;
-	private final AmazonDynamoDBAsyncClient client;
-	private final Map<AmazonWebServiceRequest, Future> futureMap = new Hashtable<>();
+	private final AmazonDynamoDBAsync client;
+	private final Map<AmazonWebServiceRequest, Future<?>> futureMap = new Hashtable<>();
 
 	public DynamoDBWriter(
-			final AmazonDynamoDBAsyncClient client,
+			final AmazonDynamoDBAsync client,
 			final String tableName ) {
 		this.client = client;
 		this.tableName = tableName;
@@ -62,7 +62,7 @@ public class DynamoDBWriter implements
 	@Override
 	public void write(
 			final GeoWaveRow[] rows ) {
-		final List<WriteRequest> mutations = new ArrayList<WriteRequest>();
+		final List<WriteRequest> mutations = new ArrayList<>();
 
 		for (final GeoWaveRow row : rows) {
 			mutations.addAll(rowToMutations(row));
@@ -231,7 +231,7 @@ public class DynamoDBWriter implements
 			 * If its asynchronous, wait for future jobs to complete before we
 			 * consider flush complete
 			 */
-			for (final Future future : futureMap.values()) {
+			for (final Future<?> future : futureMap.values()) {
 				if (!future.isDone() && !future.isCancelled()) {
 					try {
 						future.get();
@@ -257,7 +257,7 @@ public class DynamoDBWriter implements
 
 		final byte[] rowId = DynamoDBRow.getRangeKey(row);
 
-		final Map<String, AttributeValue> map = new HashMap<String, AttributeValue>();
+		final Map<String, AttributeValue> map = new HashMap<>();
 
 		byte[] partitionKey = row.getPartitionKey();
 		if ((partitionKey == null) || (partitionKey.length == 0)) {
@@ -277,6 +277,12 @@ public class DynamoDBWriter implements
 			map.put(
 					DynamoDBRow.GW_FIELD_MASK_KEY,
 					new AttributeValue().withB(ByteBuffer.wrap(value.getFieldMask())));
+
+			if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
+				map.put(
+						DynamoDBRow.GW_VISIBILITY_KEY,
+						new AttributeValue().withB(ByteBuffer.wrap(value.getVisibility())));
+			}
 
 			map.put(
 					DynamoDBRow.GW_VALUE_KEY,
