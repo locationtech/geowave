@@ -17,7 +17,7 @@
 trap 'chmod -R 777 $WORKSPACE' EXIT
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 
-GEOWAVE_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec | sed -e 's/"//g' -e 's/-SNAPSHOT//g')
+GEOWAVE_VERSION=$(mvn -q -Dexec.executable="echo" -Dexec.args='${project.version}' --non-recursive -f $WORKSPACE/pom.xml exec:exec $BUILD_ARGS "$@" | sed -e 's/"//g' -e 's/-SNAPSHOT//g')
 # Set a default version
 VENDOR_VERSION=apache
 
