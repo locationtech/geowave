@@ -151,9 +151,24 @@ if [ $? -ne 0 ]; then
     echo >&2 "Unable to change ownership of the $DATASTORE_LIB_DIR directory in hdfs. Aborting."; exit 1;
 fi
 
+#Find hbase conf path
+if [[ -x "$(command -v hbase)" ]]
+    PATHS=$(hbase classpath)
+    IFS=':' read -ra CLASSPATHS <<< "$PATHS"
+
+    for i in "${CLASSPATHS[@]}"
+    do
+      if [[ $i = *"hbase/conf" ]]; then
+         CONFPATH=$i
+         break
+      fi
+    done    
+fi
+
 GOTELEM=0
 # If using Hbase on AWS, scan hbase configs, find configured bucket and copy library over.
-if [[ -x "$(command -v aws)" ]] && [ -f /etc/hbase/conf/hbase-site.xml ]; then
+if [[ -x "$(command -v aws)" ]] && [ ! -z "$CONFPATH" ] && [[ -e "$CONFPATH/hbase-site.xml" ]]; then
+
   while read_dom; do
     if [[ -z  "$(echo -e "${CONTENT}" | tr -d '[:space:]')"  ]]; then
       continue;
@@ -173,5 +188,5 @@ if [[ -x "$(command -v aws)" ]] && [ -f /etc/hbase/conf/hbase-site.xml ]; then
     if [ $GOTELEM -eq 1 ]; then
       break
     fi
-  done < /etc/hbase/conf/hbase-site.xml
+  done < $CONFPATH/hbase-site.xml
 fi
