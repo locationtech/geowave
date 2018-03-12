@@ -124,6 +124,11 @@
 				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-cli-theia</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-format-4676</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -181,11 +186,6 @@
 									<goal>shade</goal>
 								</goals>
 								<configuration>
-									<artifactSet>
-										<excludes>
-											<exclude>com.sun.jersey</exclude>
-										</excludes>
-									</artifactSet>
 									<filters>
 										<filter>
 											<artifact>junit:junit</artifact>
