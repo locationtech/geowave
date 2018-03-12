@@ -67,7 +67,7 @@ public class ServicesTestEnvironment implements
 	protected static final String GEOSERVER_BASE_URL = JETTY_BASE_URL + GEOSERVER_CONTEXT_PATH;
 	protected static final String GEOSERVER_REST_PATH = GEOSERVER_BASE_URL + "/rest";
 	protected static final String GEOWAVE_WAR_DIR = "target/restservices";
-	protected static final String GEOWAVE_CONTEXT_PATH = "/restservices/v0";
+	protected static final String GEOWAVE_CONTEXT_PATH = "/restservices";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
 	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
@@ -115,7 +115,8 @@ public class ServicesTestEnvironment implements
 				// delete old workspace configuration if it's still there
 				jettyServer = new Server();
 
-				final ServerConnector conn = new ServerConnector(jettyServer);
+				final ServerConnector conn = new ServerConnector(
+						jettyServer);
 				conn.setPort(JETTY_PORT);
 				conn.setAcceptQueueSize(ACCEPT_QUEUE_SIZE);
 				conn.setIdleTimeout(MAX_IDLE_TIME);
@@ -136,13 +137,14 @@ public class ServicesTestEnvironment implements
 				final WebAppContext gsWebapp = new WebAppContext();
 				gsWebapp.setContextPath(GEOSERVER_CONTEXT_PATH);
 				gsWebapp.setResourceBase(GEOSERVER_WAR_DIR);
-				
+
 				final WebAppClassLoader classLoader = AccessController
 						.doPrivileged(new PrivilegedAction<WebAppClassLoader>() {
 							@Override
 							public WebAppClassLoader run() {
 								try {
-									return new WebAppClassLoader(gsWebapp);
+									return new WebAppClassLoader(
+											gsWebapp);
 								}
 								catch (final IOException e) {
 									LOGGER.error(
@@ -200,11 +202,13 @@ public class ServicesTestEnvironment implements
 				// version, slated for hadoop 3.x)
 				gsWebapp.setParentLoaderPriority(false);
 
-				 final WebAppContext restWebapp = new WebAppContext();
-				 restWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
-				 restWebapp.setWar(GEOWAVE_WAR_DIR);
-				
-				jettyServer.setHandler( new ContextHandlerCollection(gsWebapp, restWebapp));
+				final WebAppContext restWebapp = new WebAppContext();
+				restWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
+				restWebapp.setWar(GEOWAVE_WAR_DIR);
+
+				jettyServer.setHandler(new ContextHandlerCollection(
+						gsWebapp,
+						restWebapp));
 				gsWebapp.setTempDirectory(TestUtils.TEMP_DIR);
 				// // this allows to send large SLD's from the styles form
 				gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(

@@ -15,89 +15,147 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/config")
+@Path("/v0/config")
 public interface ConfigService
 {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/list")
-	public Response list();
+	public Response list(
+			@QueryParam("filter") String filters );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addstore/hbase")
 	public Response addHBaseStore(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("zookeeper") String zookeeper,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("geowaveNamespace") String geowaveNamespace,
+			@QueryParam("disableServiceSide") Boolean disableServiceSide,
+			@QueryParam("coprocessorjar") String coprocessorjar,
+			@QueryParam("persistAdapter") Boolean persistAdapter,
+			@QueryParam("persistIndex") Boolean persistIndex,
+			@QueryParam("persistDataStatistics") Boolean persistDataStatistics,
+			@QueryParam("createTable") Boolean createTable,
+			@QueryParam("useAltIndex") Boolean useAltIndex,
+			@QueryParam("enableBlockCache") Boolean enableBlockCache );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addstore/accumulo")
 	public Response addAccumuloStore(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("zookeeper") String zookeeper,
+			@QueryParam("username") String username,
+			@QueryParam("password") String password,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("geowaveNamespace") String geowaveNamespace,
+			@QueryParam("useLocalityGroups") Boolean useLocalityGroups,
+			@QueryParam("persistAdapter") Boolean persistAdapter,
+			@QueryParam("persistIndex") Boolean persistIndex,
+			@QueryParam("persistDataStatistics") Boolean persistDataStatistics,
+			@QueryParam("createTable") Boolean createTable,
+			@QueryParam("useAltIndex") Boolean useAltIndex,
+			@QueryParam("enableBlockCache") Boolean enableBlockCache );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addstore/bigtable")
 	public Response addBigTableStore(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("scanCacheSize") Integer scanCacheSize,
+			@QueryParam("projectId") String projectId,
+			@QueryParam("instanceId") String instanceId,
+			@QueryParam("geowaveNamespace") String geowaveNamespace,
+			@QueryParam("useLocalityGroups") Boolean useLocalityGroups,
+			@QueryParam("persistAdapter") Boolean persistAdapter,
+			@QueryParam("persistIndex") Boolean persistIndex,
+			@QueryParam("persistDataStatistics") Boolean persistDataStatistics,
+			@QueryParam("createTable") Boolean createTable,
+			@QueryParam("useAltIndex") Boolean useAltIndex,
+			@QueryParam("enableBlockCache") Boolean enableBlockCache );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addindex/spatial")
 	public Response addSpatialIndex(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("nameOverride") String nameOverride,
+			@QueryParam("numPartitions") Integer numPartitions,
+			@QueryParam("partitionStrategy") String partitionStrategy,
+			@QueryParam("storeTime") Boolean storeTime,
+			@QueryParam("crs") String crs );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addindex/spatial_temporal")
 	public Response addSpatialTemporalIndex(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("nameOverride") String nameOverride,
+			@QueryParam("numPartitions") Integer numPartitions,
+			@QueryParam("partitionStrategy") String partitionStrategy,
+			@QueryParam("periodicity") String periodicity,
+			@QueryParam("bias") String bias,
+			@QueryParam("maxDuplicates") Long maxDuplicates,
+			@QueryParam("crs") String crs );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/geoserver")
 	public Response configGeoServer(
-			FormDataMultiPart multipart );
+			@QueryParam("GeoServer_URL") String GeoServer_URL,
+			@QueryParam("username") String username,
+			@QueryParam("pass") String pass,
+			@QueryParam("workspace") String workspace,
+			@QueryParam("sslSecurityProtocol") String sslSecurityProtocol,
+			@QueryParam("sslTrustStorePath") String sslTrustStorePath,
+			@QueryParam("sslTrustStorePassword") String sslTrustStorePassword,
+			@QueryParam("sslTrustStoreType") String sslTrustStoreType,
+			@QueryParam("sslTruststoreProvider") String sslTruststoreProvider,
+			@QueryParam("sslTrustManagerAlgorithm") String sslTrustManagerAlgorithm,
+			@QueryParam("sslTrustManagerProvider") String sslTrustManagerProvider,
+			@QueryParam("sslKeyStorePath") String sslKeyStorePath,
+			@QueryParam("sslKeyStorePassword") String sslKeyStorePassword,
+			@QueryParam("sslKeyStoreProvider") String sslKeyStoreProvider,
+			@QueryParam("sslKeyPassword") String sslKeyPassword,
+			@QueryParam("sslKeyStoreType") String sslKeyStoreType,
+			@QueryParam("sslKeyManagerAlgorithm") String sslKeyManagerAlgorithm,
+			@QueryParam("sslKeyManagerProvider") String sslKeyManagerProvider );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/hdfs")
 	public Response configHDFS(
-			FormDataMultiPart multipart );
+			@QueryParam("HDFS_DefaultFS_URL") String HDFS_DefaultFS_URL );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmindex")
 	public Response removeIndex(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmstore")
 	public Response removeStore(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmindexgrp")
 	public Response removeIndexGroup(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/set")
 	public Response set(
-			FormDataMultiPart multipart );
+			@QueryParam("name") String name,
+			@QueryParam("value") String value,
+			@QueryParam("password") Boolean password );
 }

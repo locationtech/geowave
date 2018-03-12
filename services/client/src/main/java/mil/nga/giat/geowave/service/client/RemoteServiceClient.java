@@ -64,31 +64,21 @@ public class RemoteServiceClient
 
 	public Response listAdapter(
 			final String store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		final Response resp = remoteService.listAdapter(multiPart);
+
+		final Response resp = remoteService.listAdapter(store_name);
 		return resp;
 	}
 
 	public Response listIndex(
 			final String store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		final Response resp = remoteService.listIndex(multiPart);
+		final Response resp = remoteService.listIndex(store_name);
 		return resp;
 	}
 
 	public Response version(
 			final String store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		final Response resp = remoteService.version(multiPart);
+
+		final Response resp = remoteService.version(store_name);
 		return resp;
 	}
 
@@ -107,26 +97,11 @@ public class RemoteServiceClient
 			final String adapterId,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		if (adapterId != null) {
-			multiPart.field(
-					"adapterId",
-					adapterId);
-		}
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (jsonFormatFlag != null) {
-			multiPart.field(
-					"jsonFormatFlag",
-					jsonFormatFlag.toString());
-		}
-		final Response resp = remoteService.listStats(multiPart);
+		final Response resp = remoteService.listStats(
+				store_name,
+				adapterId,
+				authorizations,
+				jsonFormatFlag);
 		return resp;
 	}
 
@@ -149,38 +124,20 @@ public class RemoteServiceClient
 			final String statId,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		multiPart.field(
-				"adapterId",
-				adapterId);
-		multiPart.field(
-				"statId",
-				statId);
 
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (jsonFormatFlag != null) {
-			multiPart.field(
-					"jsonFormatFlag",
-					jsonFormatFlag.toString());
-		}
-		final Response resp = remoteService.calcStat(multiPart);
+		final Response resp = remoteService.calcStat(
+				store_name,
+				adapterId,
+				statId,
+				authorizations,
+				jsonFormatFlag);
 		return resp;
 	}
 
 	public Response clear(
 			final String store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		final Response resp = remoteService.clear(multiPart);
+
+		final Response resp = remoteService.clear(store_name);
 		return resp;
 	}
 
@@ -199,40 +156,22 @@ public class RemoteServiceClient
 			final String adapterId,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		if (adapterId != null) {
-			multiPart.field(
-					"adapterId",
-					adapterId);
-		}
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (jsonFormatFlag != null) {
-			multiPart.field(
-					"jsonFormatFlag",
-					jsonFormatFlag.toString());
-		}
-		final Response resp = remoteService.recalcStats(multiPart);
+
+		final Response resp = remoteService.recalcStats(
+				store_name,
+				adapterId,
+				authorizations,
+				jsonFormatFlag);
 		return resp;
 	}
 
 	public Response removeAdapter(
 			final String store_name,
 			final String adapterId ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		multiPart.field(
-				"adapteId",
+
+		final Response resp = remoteService.removeAdapter(
+				store_name,
 				adapterId);
-		final Response resp = remoteService.removeAdapter(multiPart);
 		return resp;
 	}
 
@@ -242,27 +181,13 @@ public class RemoteServiceClient
 			final String statId,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
-		multiPart.field(
-				"adapteId",
-				adapterId);
-		multiPart.field(
-				"statId",
-				statId);
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (jsonFormatFlag != null) {
-			multiPart.field(
-					"jsonFormatFlag",
-					jsonFormatFlag.toString());
-		}
-		final Response resp = remoteService.removeStat(multiPart);
+
+		final Response resp = remoteService.removeStat(
+				store_name,
+				adapterId,
+				statId,
+				authorizations,
+				jsonFormatFlag);
 		return resp;
 	}
 

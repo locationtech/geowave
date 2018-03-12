@@ -42,16 +42,10 @@ public class GeoServerServiceClient
 	public Response getCoverageStore(
 			final String coverage_store_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"coverage_store_name",
-				coverage_store_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.getCoverageStore(multiPart);
+
+		final Response resp = geoServerService.getCoverageStore(
+				coverage_store_name,
+				workspace);
 		return resp;
 	}
 
@@ -67,19 +61,10 @@ public class GeoServerServiceClient
 			final String coverage_name,
 			final String workspace ) {
 
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"cvgstore",
-				cvgstore);
-		multiPart.field(
-				"coverage_name",
-				coverage_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.getCoverage(multiPart);
+		final Response resp = geoServerService.getCoverage(
+				cvgstore,
+				coverage_name,
+				workspace);
 		return resp;
 	}
 
@@ -96,15 +81,9 @@ public class GeoServerServiceClient
 			final String datastore_name,
 			final String workspace ) {
 		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"datastore_name",
-				datastore_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.getDataStore(multiPart);
+		final Response resp = geoServerService.getDataStore(
+				datastore_name,
+				workspace);
 		return resp;
 	}
 
@@ -117,46 +96,29 @@ public class GeoServerServiceClient
 
 	public Response getFeatureLayer(
 			final String layer_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"layer_name",
-				layer_name);
 
-		final Response resp = geoServerService.getFeatureLayer(multiPart);
+		final Response resp = geoServerService.getFeatureLayer(layer_name);
 		return resp;
 	}
 
 	public Response getStoreAdapters(
 			final String store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				store_name);
 
-		final Response resp = geoServerService.getStoreAdapters(multiPart);
+		final Response resp = geoServerService.getStoreAdapters(store_name);
 		return resp;
 	}
 
 	public Response getStyle(
 			final String style_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"style_name",
-				style_name);
 
-		final Response resp = geoServerService.getStyle(multiPart);
+		final Response resp = geoServerService.getStyle(style_name);
 		return resp;
 	}
 
 	public Response listCoverageStores(
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.listCoverageStores(multiPart);
+
+		final Response resp = geoServerService.listCoverageStores(workspace);
 		return resp;
 	}
 
@@ -167,16 +129,9 @@ public class GeoServerServiceClient
 	public Response listCoverages(
 			final String coverage_store_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"coverage_store_name",
-				coverage_store_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.listCoverages(multiPart);
+		final Response resp = geoServerService.listCoverages(
+				coverage_store_name,
+				workspace);
 		return resp;
 	}
 
@@ -189,13 +144,7 @@ public class GeoServerServiceClient
 
 	public Response listDataStores(
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		final Response resp = geoServerService.listDataStores(multiPart);
+		final Response resp = geoServerService.listDataStores(workspace);
 		return resp;
 	}
 
@@ -207,23 +156,11 @@ public class GeoServerServiceClient
 			final String workspace,
 			final String datastore,
 			final Boolean geowaveOnly ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		if (datastore != null) {
-			multiPart.field(
-					"datastore",
-					datastore);
-		}
-		if (geowaveOnly != null) {
-			multiPart.field(
-					"geowaveOnly",
-					geowaveOnly.toString());
-		}
-		final Response resp = geoServerService.listFeatureLayers(multiPart);
+
+		final Response resp = geoServerService.listFeatureLayers(
+				workspace,
+				datastore,
+				geowaveOnly);
 		return resp;
 	}
 
@@ -249,31 +186,13 @@ public class GeoServerServiceClient
 			final Boolean equalizerHistogramOverride,
 			final String interpolationOverride,
 			final Boolean scaleTo8Bit ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"GeoWave_store_name",
-				GeoWave_store_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		if (equalizerHistogramOverride != null) {
-			multiPart.field(
-					"equalizerHistogramOverride",
-					equalizerHistogramOverride.toString());
-		}
-		if (workspace != null) {
-			multiPart.field(
-					"interpolationOverride",
-					interpolationOverride);
-		}
-		if (workspace != null) {
-			multiPart.field(
-					"scaleTo8Bit",
-					scaleTo8Bit.toString());
-		}
-		final Response resp = geoServerService.addCoverageStore(multiPart);
+
+		final Response resp = geoServerService.addCoverageStore(
+				GeoWave_store_name,
+				workspace,
+				equalizerHistogramOverride,
+				interpolationOverride,
+				scaleTo8Bit);
 		return resp;
 	}
 
@@ -291,20 +210,11 @@ public class GeoServerServiceClient
 			final String cvgstore,
 			final String coverage_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"cvgstore",
-				cvgstore);
-		multiPart.field(
-				"coverage_name",
-				coverage_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
 
-		final Response resp = geoServerService.addCoverage(multiPart);
+		final Response resp = geoServerService.addCoverage(
+				cvgstore,
+				coverage_name,
+				workspace);
 		return resp;
 	}
 
@@ -321,21 +231,11 @@ public class GeoServerServiceClient
 			final String GeoWave_store_name,
 			final String workspace,
 			final String datastore ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"GeoWave_store_name",
-				GeoWave_store_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		if (datastore != null) {
-			multiPart.field(
-					"datastore",
-					datastore);
-		}
-		final Response resp = geoServerService.addDataStore(multiPart);
+
+		final Response resp = geoServerService.addDataStore(
+				GeoWave_store_name,
+				workspace,
+				datastore);
 		return resp;
 	}
 
@@ -351,21 +251,11 @@ public class GeoServerServiceClient
 			final String datastore,
 			final String layer_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
-		multiPart.field(
-				"datastore",
-				datastore);
-		multiPart.field(
-				"layer_name",
-				layer_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-
-		final Response resp = geoServerService.addFeatureLayer(multiPart);
+		final Response resp = geoServerService.addFeatureLayer(
+				datastore,
+				layer_name,
+				workspace);
 		return resp;
 	}
 
@@ -384,34 +274,13 @@ public class GeoServerServiceClient
 			final String addOption,
 			final String adapterId,
 			final String style ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
-		multiPart.field(
-				"GeoWave_store_name",
-				GeoWave_store_name);
-
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-		if (addOption != null) {
-			multiPart.field(
-					"addOption",
-					addOption);
-		}
-		if (adapterId != null) {
-			multiPart.field(
-					"adapterId",
-					adapterId);
-		}
-		if (style != null) {
-			multiPart.field(
-					"style",
-					style);
-		}
-
-		final Response resp = geoServerService.addLayer(multiPart);
+		final Response resp = geoServerService.addLayer(
+				GeoWave_store_name,
+				workspace,
+				addOption,
+				adapterId,
+				style);
 		return resp;
 	}
 
@@ -428,42 +297,27 @@ public class GeoServerServiceClient
 	public Response addStyle(
 			final String stylesid,
 			final String GeoWave_store_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"stylesid",
-				stylesid);
-		multiPart.field(
-				"GeoWave_store_name",
+
+		final Response resp = geoServerService.addStyle(
+				stylesid,
 				GeoWave_store_name);
-		final Response resp = geoServerService.addStyle(multiPart);
 		return resp;
 	}
 
 	public Response addWorkspace(
 			final String workspace_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"workspace_name",
-				workspace_name);
-		final Response resp = geoServerService.addWorkspace(multiPart);
+
+		final Response resp = geoServerService.addWorkspace(workspace_name);
 		return resp;
 	}
 
 	public Response removeCoverageStore(
 			final String coverage_store_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
 
-		multiPart.field(
-				"coverage_store_name",
-				coverage_store_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
-
-		final Response resp = geoServerService.removeCoverageStore(multiPart);
+		final Response resp = geoServerService.removeCoverageStore(
+				coverage_store_name,
+				workspace);
 		return resp;
 	}
 
@@ -478,20 +332,11 @@ public class GeoServerServiceClient
 			final String cvgstore,
 			final String coverage_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"cvgstore",
-				cvgstore);
-		multiPart.field(
-				"coverage_name",
-				coverage_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
 
-		final Response resp = geoServerService.removeCoverage(multiPart);
+		final Response resp = geoServerService.removeCoverage(
+				cvgstore,
+				coverage_name,
+				workspace);
 		return resp;
 	}
 
@@ -507,17 +352,10 @@ public class GeoServerServiceClient
 	public Response removeDataStore(
 			final String datastore_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"datastore_name",
-				datastore_name);
-		if (workspace != null) {
-			multiPart.field(
-					"workspace",
-					workspace);
-		}
 
-		final Response resp = geoServerService.removeDataStore(multiPart);
+		final Response resp = geoServerService.removeDataStore(
+				datastore_name,
+				workspace);
 		return resp;
 	}
 
@@ -530,45 +368,32 @@ public class GeoServerServiceClient
 
 	public Response removeFeatureLayer(
 			final String layer_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"layer_name",
-				layer_name);
-		final Response resp = geoServerService.removeFeatureLayer(multiPart);
+
+		final Response resp = geoServerService.removeFeatureLayer(layer_name);
 		return resp;
 	}
 
 	public Response removeStyle(
 			final String style_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"style_name",
-				style_name);
-		final Response resp = geoServerService.removeStyle(multiPart);
+
+		final Response resp = geoServerService.removeStyle(style_name);
 		return resp;
 	}
 
 	public Response removeWorkspace(
 			final String workspace_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"workspace_name",
-				workspace_name);
-		final Response resp = geoServerService.removeWorkspace(multiPart);
+
+		final Response resp = geoServerService.removeWorkspace(workspace_name);
 		return resp;
 	}
 
 	public Response setLayerStyle(
 			final String styleName,
 			final String layer_name ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"styleName",
-				styleName);
-		multiPart.field(
-				"layer_name",
+
+		final Response resp = geoServerService.setLayerStyle(
+				styleName,
 				layer_name);
-		final Response resp = geoServerService.setLayerStyle(multiPart);
 		return resp;
 	}
 }

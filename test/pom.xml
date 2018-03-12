@@ -16,6 +16,43 @@
 	<description>A module for integration and functional tests of GeoWave</description>
 	<dependencies>
 		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-spark</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>javax.ws.rs-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.containers</groupId>
+					<artifactId>
+						jersey-container-servlet-core
+					</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.containers</groupId>
+					<artifactId>jersey-container-servlet</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-client</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>org.eclipse.jetty</groupId>
 			<artifactId>jetty-server</artifactId>
 		</dependency>
@@ -91,43 +128,6 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-cli-osm</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
-			<exclusions>
-				<exclusion>
-					<groupId>javax.ws.rs</groupId>
-					<artifactId>javax.ws.rs-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>javax.servlet</groupId>
-					<artifactId>javax.servlet-api</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jersey.containers</groupId>
-					<artifactId>
-						jersey-container-servlet-core
-					</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jersey.containers</groupId>
-					<artifactId>jersey-container-servlet</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-server</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-common</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.glassfish.jersey.core</groupId>
-					<artifactId>jersey-client</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>

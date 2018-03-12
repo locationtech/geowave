@@ -5,6 +5,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -17,73 +18,70 @@ public interface GeoServerService
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getcs")
 	public Response getCoverageStore(
-			FormDataMultiPart multipart );
+			@QueryParam("coverage_store_name") String coverage_store_name,
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getcv")
 	public Response getCoverage(
-			FormDataMultiPart multipart );
+			@QueryParam("cvg_store") String cvgstore,
+			@QueryParam("coverage_name") String coverage_name,
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getds")
 	public Response getDataStore(
-			FormDataMultiPart multipart );
+			@QueryParam("datastore_name") String datastore_name,
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getfl")
 	public Response getFeatureLayer(
-			FormDataMultiPart multipart );
+			@QueryParam("layer_name") String layer_name );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getsa")
 	public Response getStoreAdapters(
-			FormDataMultiPart multipart );
+			@QueryParam("store_name") String store_name );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/getstyle")
 	public Response getStyle(
-			FormDataMultiPart multipart );
+			@QueryParam("style_name") String style_name );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/listcs")
 	public Response listCoverageStores(
-			FormDataMultiPart multipart );
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/listcv")
 	public Response listCoverages(
-			FormDataMultiPart multipart );
+			@QueryParam("coverage_store_name") String coverage_store_name,
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/listds")
 	public Response listDataStores(
-			FormDataMultiPart multipart );
+			@QueryParam("workspace") String workspace );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/listfl")
 	public Response listFeatureLayers(
-			FormDataMultiPart multipart );
+			@QueryParam("workspace") String workspace,
+			@QueryParam("datastore") String datastore,
+			@QueryParam("geowaveOnly") Boolean geowaveOnly );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
@@ -97,99 +95,105 @@ public interface GeoServerService
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addcs")
 	public Response addCoverageStore(
-			FormDataMultiPart multipart );
+			@QueryParam("GeoWave_store_name") String GeoWave_store_name,
+			@QueryParam("workspace") String workspace,
+			@QueryParam("equalizerHistogramOverride") Boolean equalizerHistogramOverride,
+			@QueryParam("interpolationOverride") String interpolationOverride,
+			@QueryParam("scaleTo8Bit") Boolean scaleTo8Bit );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addcv")
 	public Response addCoverage(
-			FormDataMultiPart multipart );
+			@QueryParam("cvgstore") String cvgstore,
+			@QueryParam("coverage_name") String coverage_name,
+			@QueryParam("workspace") String workspace );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addds")
 	public Response addDataStore(
-			FormDataMultiPart multipart );
+			@QueryParam("GeoWave_store_name") String GeoWave_store_name,
+			@QueryParam("workspace") String workspace,
+			@QueryParam("datastore") String datastore );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addfl")
 	public Response addFeatureLayer(
-			FormDataMultiPart multipart );
+			@QueryParam("datastore") String datastore,
+			@QueryParam("layer_name") String layer_name,
+			@QueryParam("workspace") String workspace );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addlayer")
 	public Response addLayer(
-			FormDataMultiPart multipart );
+			@QueryParam("GeoWave_store_name") String GeoWave_store_name,
+			@QueryParam("workspace") String workspace,
+			@QueryParam("addOption") String addOption,
+			@QueryParam("adapterId") String adapterId,
+			@QueryParam("style") String style );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addstyle")
 	public Response addStyle(
-			FormDataMultiPart multipart );
+			@QueryParam("stylesid") String stylesid,
+			@QueryParam("GeoWave_store_name") String GeoWave_store_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/addws")
 	public Response addWorkspace(
-			FormDataMultiPart multipart );
+			@QueryParam("workspace_name") String workspace_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmcs")
 	public Response removeCoverageStore(
-			FormDataMultiPart multipart );
+			@QueryParam("coverage_store_name") String coverage_store_name,
+			@QueryParam("workspace") String workspace );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmcv")
 	public Response removeCoverage(
-			FormDataMultiPart multipart );
+			@QueryParam("cvgstore") String cvgstore,
+			@QueryParam("coverage_name") String coverage_name,
+			@QueryParam("workspace") String workspace );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmds")
 	public Response removeDataStore(
-			FormDataMultiPart multipart );
+			@QueryParam("datastore_name") String datastore_name,
+			@QueryParam("workspace") String workspace );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmfl")
 	public Response removeFeatureLayer(
-			FormDataMultiPart multipart );
+			@QueryParam("layer_name") String layer_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmstyle")
 	public Response removeStyle(
-			FormDataMultiPart multipart );
+			@QueryParam("style_name") String style_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/rmws")
 	public Response removeWorkspace(
-			FormDataMultiPart multipart );
+			@QueryParam("workspace_name") String workspace_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/setls")
 	public Response setLayerStyle(
-			FormDataMultiPart multipart );
+			@QueryParam("styleName") String styleName,
+			@QueryParam("layer_name") String layer_name );
 }

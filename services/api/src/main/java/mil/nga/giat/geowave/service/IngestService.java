@@ -26,50 +26,102 @@ public interface IngestService
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/kafkaToGW")
 	public Response kafkaToGW(
-			FormDataMultiPart multipart );
+			@QueryParam("store_name") String store_name,
+			@QueryParam("index_group_list") String index_group_list,// Array of
+																	// Strings
+			@QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
+			@QueryParam("visibility") String visibility,
+			@QueryParam("groupId") String groupId,
+			@QueryParam("zookeeperConnect") String zookeeperConnect,
+			@QueryParam("autoOffsetReset") String autoOffsetReset,
+			@QueryParam("fetchMessageMaxBytes") String fetchMessageMaxBytes,
+			@QueryParam("consumerTimeoutMs") String consumerTimeoutMs,
+			@QueryParam("reconnectOnTimeout") Boolean reconnectOnTimeout,
+			@QueryParam("batchSize") Integer batchSize,
+			@QueryParam("extensions") String extensions,// Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/localToGW")
 	public Response localToGW(
-			FormDataMultiPart multipart );
+			@QueryParam("file_or_directory") String file_or_directory,
+			@QueryParam("storename") String storename,
+			@QueryParam("index_group_list") String index_group_list,// Array of
+																	// Strings
+			@QueryParam("threads") Integer threads,
+			@QueryParam("visibility") String visibility,
+			@QueryParam("extensions") String extensions, // Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/localToHdfs")
 	public Response localToHdfs(
-			FormDataMultiPart multipart );
+			@QueryParam("file_or_directory") String file_or_directory,
+			@QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
+			@QueryParam("extensions") String extensions, // Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/localToKafka")
 	public Response localToKafka(
-			FormDataMultiPart multipart );
+			@QueryParam("file_or_directory") String file_or_directory,
+			@QueryParam("kafkaPropertyFile") String kafkaPropertyFile,
+			@QueryParam("metadataBrokerList") String metadataBrokerList,
+			@QueryParam("requestRequiredAcks") String requestRequiredAcks,
+			@QueryParam("producerType") String producerType,
+			@QueryParam("serializerClass") String serializerClass,
+			@QueryParam("retryBackoffMs") String retryBackoffMs,
+			@QueryParam("extensions") String extensions, // Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/localToMrGW")
 	public Response localToMrGW(
-			FormDataMultiPart multipart );
+			@QueryParam("file_or_directory") String file_or_directory,
+			@QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
+			@QueryParam("store_name") String store_name,
+			@QueryParam("index_group_list") String index_group_list,// Array of
+																	// Strings
+			@QueryParam("visibility") String visibility,
+			@QueryParam("jobTrackerHostPort") String jobTrackerHostPort,
+			@QueryParam("resourceManger") String resourceManger,
+			@QueryParam("extensions") String extensions,// Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/mrToGW")
 	public Response mrToGW(
-			FormDataMultiPart multipart );
+			@QueryParam("path_to_base_directory_to_write_to") String path_to_base_directory_to_write_to,
+			@QueryParam("store_name") String store_name,
+			@QueryParam("index_group_list") String index_group_list,// Array of
+																	// Strings
+			@QueryParam("visibility") String visibility,
+			@QueryParam("jobTrackerHostPort") String jobTrackerHostPort,
+			@QueryParam("resourceManger") String resourceManger,
+			@QueryParam("extensions") String extensions,// Array of Strings
+			@QueryParam("formats") String formats );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
-	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/sparkToGW")
 	public Response sparkToGW(
-			FormDataMultiPart multipart );
+			@QueryParam("input_directory") String input_directory,
+			@QueryParam("store_name") String store_name,
+			@QueryParam("index_group_list") String index_group_list,// Array of
+																	// Strings
+			@QueryParam("visibility") String visibility,
+			@QueryParam("appName") String appName,
+			@QueryParam("host") String host,
+			@QueryParam("master") String master,
+			@QueryParam("numExecutors") Integer numExecutors,
+			@QueryParam("numCores") Integer numCores,
+			@QueryParam("extensions") String extensions,// Array of Strings
+			@QueryParam("formats") String formats );
 }

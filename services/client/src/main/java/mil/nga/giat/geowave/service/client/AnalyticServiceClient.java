@@ -75,162 +75,42 @@ public class AnalyticServiceClient
 			final String partitionPartitionDecreaseRate,
 			final String partitionPartitionPrecision,
 			final String partitionSecondaryPartitionerClass ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				storename);
-		multiPart.field(
-				"mapReduceHdfsBaseDir",
-				mapReduceHdfsBaseDir);
-		multiPart.field(
-				"extractMaxInputSplit",
-				extractMaxInputSplit);
-		multiPart.field(
-				"extractMinInputSplit",
-				extractMinInputSplit);
-		multiPart.field(
-				"adapterIds",
-				adapterIds);
-		multiPart.field(
-				"clusteringMaxIterations",
-				clusteringMaxIterations);
-		multiPart.field(
-				"clusteringMinimumSize",
-				clusteringMinimumSize);
-		multiPart.field(
-				"partitionMaxDistance",
-				partitionMaxDistance);
-		if (mapReduceConfigFile != null) {
-			multiPart.field(
-					"mapReduceConfigFile",
-					mapReduceConfigFile);
-		}
-		if (mapReduceHdfsHostPort != null) {
-			multiPart.field(
-					"mapReduceHdfsHostPort",
-					mapReduceHdfsHostPort);
-		}
-		if (mapReduceJobtrackerHostPort != null) {
-			multiPart.field(
-					"mapReduceJobtrackerHostPort",
-					mapReduceJobtrackerHostPort);
-		}
-		if (mapReduceYarnResourceManager != null) {
-			multiPart.field(
-					"mapReduceYarnResourceManager",
-					mapReduceYarnResourceManager);
-		}
-		if (commonDistanceFunctionClass != null) {
-			multiPart.field(
-					"commonDistanceFunctionClass",
-					commonDistanceFunctionClass);
-		}
-		if (extractQuery != null) {
-			multiPart.field(
-					"extractQuery",
-					extractQuery);
-		}
-		if (outputOutputFormat != null) {
-			multiPart.field(
-					"outputOutputFormat",
-					outputOutputFormat);
-		}
-		if (inputFormatClass != null) {
-			multiPart.field(
-					"inputFormatClass",
-					inputFormatClass);
-		}
-		if (inputHdfsPath != null) {
-			multiPart.field(
-					"inputHdfsPath",
-					inputHdfsPath);
-		}
-		if (outputReducerCount != null) {
-			multiPart.field(
-					"outputReducerCount",
-					outputReducerCount);
-		}
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (indexId != null) {
-			multiPart.field(
-					"indexId",
-					indexId);
-		}
-		if (outputHdfsOutputPath != null) {
-			multiPart.field(
-					"outputHdfsOutputPath",
-					outputHdfsOutputPath);
-		}
-		if (partitioningDistanceThresholds != null) {
-			multiPart.field(
-					"partitioningDistanceThresholds",
-					partitioningDistanceThresholds);
-		}
-		if (partitioningGeometricDistanceUnit != null) {
-			multiPart.field(
-					"partitioningGeometricDistanceUnit",
-					partitioningGeometricDistanceUnit);
-		}
-		if (globalBatchId != null) {
-			multiPart.field(
-					"globalBatchId",
-					globalBatchId);
-		}
-		if (hullDataTypeId != null) {
-			multiPart.field(
-					"hullDataTypeId",
-					hullDataTypeId);
-		}
-		if (hullProjectionClass != null) {
-			multiPart.field(
-					"hullProjectionClass",
-					hullProjectionClass);
-		}
-		if (outputDataNamespaceUri != null) {
-			multiPart.field(
-					"outputDataNamespaceUri",
-					outputDataNamespaceUri);
-		}
-		if (outputDataTypeId != null) {
-			multiPart.field(
-					"outputDataTypeId",
-					outputDataTypeId);
-		}
-		if (outputIndexId != null) {
-			multiPart.field(
-					"outputIndexId",
-					outputIndexId);
-		}
-		if (partitionMaxMemberSelection != null) {
-			multiPart.field(
-					"partitionMaxMemberSelection",
-					partitionMaxMemberSelection);
-		}
-		if (partitionPartitionerClass != null) {
-			multiPart.field(
-					"partitionPartitionerClass",
-					partitionPartitionerClass);
-		}
-		if (partitionPartitionDecreaseRate != null) {
-			multiPart.field(
-					"partitionPartitionDecreaseRate",
-					partitionPartitionDecreaseRate);
-		}
-		if (partitionPartitionPrecision != null) {
-			multiPart.field(
-					"partitionPartitionPrecision",
-					partitionPartitionPrecision);
-		}
-		if (partitionSecondaryPartitionerClass != null) {
-			multiPart.field(
-					"partitionSecondaryPartitionerClass",
-					partitionSecondaryPartitionerClass);
-		}
-		final Response resp = analyticService.dbScan(multiPart);
+
+		final Response resp = analyticService.dbScan(
+				storename,
+				mapReduceHdfsBaseDir,
+				extractMaxInputSplit,
+				extractMinInputSplit,
+				adapterIds, // Array of strings
+				clusteringMaxIterations,
+				clusteringMinimumSize,
+				partitionMaxDistance,
+				mapReduceConfigFile,
+				mapReduceHdfsHostPort,
+				mapReduceJobtrackerHostPort,
+				mapReduceYarnResourceManager,
+				commonDistanceFunctionClass,
+				extractQuery,
+				outputOutputFormat,
+				inputFormatClass,
+				inputHdfsPath,
+				outputReducerCount,
+				authorizations,// Array of strings
+				indexId,
+				outputHdfsOutputPath,
+				partitioningDistanceThresholds,
+				partitioningGeometricDistanceUnit,
+				globalBatchId,
+				hullDataTypeId,
+				hullProjectionClass,
+				outputDataNamespaceUri,
+				outputDataTypeId,
+				outputIndexId,
+				partitionMaxMemberSelection,
+				partitionPartitionerClass,
+				partitionPartitionDecreaseRate,
+				partitionPartitionPrecision,
+				partitionSecondaryPartitionerClass);
 		return resp;
 	}
 
@@ -295,59 +175,21 @@ public class AnalyticServiceClient
 			final String hdfsHostPort,
 			final Integer tileSize,
 			final String cqlFilter ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"input_storename",
-				input_storename);
-		multiPart.field(
-				"output_storename",
-				output_storename);
-		multiPart.field(
-				"featuretype",
-				featuretype);
-		multiPart.field(
-				"minLevel",
-				minLevel.toString());
-		multiPart.field(
-				"maxLevel",
-				maxLevel.toString());
-		multiPart.field(
-				"coverageName",
-				coverageName);
-		multiPart.field(
-				"jobTrackerOrResourceManHostPort",
-				jobTrackerOrResourceManHostPort);
-		if (indexId != null) {
-			multiPart.field(
-					"indexId",
-					indexId);
-		}
-		if (minSplits != null) {
-			multiPart.field(
-					"minSplits",
-					minSplits.toString());
-		}
-		if (maxSplits != null) {
-			multiPart.field(
-					"maxSplits",
-					maxSplits.toString());
-		}
-		if (hdfsHostPort != null) {
-			multiPart.field(
-					"hdfsHostPort",
-					hdfsHostPort);
-		}
-		if (tileSize != null) {
-			multiPart.field(
-					"tileSize",
-					tileSize.toString());
-		}
-		if (cqlFilter != null) {
-			multiPart.field(
-					"cqlFilter",
-					cqlFilter);
-		}
-		final Response resp = analyticService.kde(multiPart);
+
+		final Response resp = analyticService.kde(
+				input_storename,
+				output_storename,
+				featuretype,
+				minLevel,
+				maxLevel,
+				coverageName,
+				jobTrackerOrResourceManHostPort,
+				indexId,
+				minSplits,
+				maxSplits,
+				hdfsHostPort,
+				tileSize,
+				cqlFilter);
 		return resp;
 	}
 
@@ -394,90 +236,25 @@ public class AnalyticServiceClient
 			final Integer maxSplits,
 			final String centroidTypeName,
 			final String hullTypeName ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"input_storename",
-				input_storename);
-		multiPart.field(
-				"output_storename",
-				output_storename);
-		if (appName != null) {
-			multiPart.field(
-					"appName",
-					appName);
-		}
-		if (host != null) {
-			multiPart.field(
-					"host",
-					host);
-		}
-		if (master != null) {
-			multiPart.field(
-					"master",
-					master);
-		}
-		if (numClusters != null) {
-			multiPart.field(
-					"numClusters",
-					numClusters.toString());
-		}
-		if (numIterations != null) {
-			multiPart.field(
-					"numIterations",
-					numIterations.toString());
-		}
-		if (epsilon != null) {
-			multiPart.field(
-					"epsilon",
-					epsilon);
-		}
-		if (useTime != null) {
-			multiPart.field(
-					"useTime",
-					useTime.toString());
-		}
-		if (generateHulls != null) {
-			multiPart.field(
-					"generateHulls",
-					generateHulls.toString());
-		}
-		if (computeHullData != null) {
-			multiPart.field(
-					"computeHullData",
-					computeHullData.toString());
-		}
-		if (cqlFilter != null) {
-			multiPart.field(
-					"cqlFilter",
-					cqlFilter);
-		}
-		if (adapterId != null) {
-			multiPart.field(
-					"adapterId",
-					adapterId);
-		}
-		if (minSplits != null) {
-			multiPart.field(
-					"minSplits",
-					minSplits.toString());
-		}
-		if (maxSplits != null) {
-			multiPart.field(
-					"maxSplits",
-					maxSplits.toString());
-		}
-		if (centroidTypeName != null) {
-			multiPart.field(
-					"centroidTypeName",
-					centroidTypeName);
-		}
-		if (hullTypeName != null) {
-			multiPart.field(
-					"hullTypeName",
-					hullTypeName);
-		}
 
-		final Response resp = analyticService.kmeansSpark(multiPart);
+		final Response resp = analyticService.kmeansSpark(
+				input_storename,
+				output_storename,
+				appName,
+				host,
+				master,
+				numClusters,
+				numIterations,
+				epsilon,
+				useTime,
+				generateHulls,
+				computeHullData,
+				cqlFilter,
+				adapterId,
+				minSplits,
+				maxSplits,
+				centroidTypeName,
+				hullTypeName);
 		return resp;
 	}
 
@@ -532,119 +309,33 @@ public class AnalyticServiceClient
 			final String partitioningDistanceThresholds,
 			final String partitioningGeometricDistanceUnit,
 			final String partitionSecondaryPartitionerClass ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		multiPart.field(
-				"store_name",
-				storename);
-		multiPart.field(
-				"mapReduceHdfsBaseDir",
-				mapReduceHdfsBaseDir);
-		multiPart.field(
-				"extractMaxInputSplit",
-				extractMaxInputSplit);
-		multiPart.field(
-				"extractMinInputSplit",
-				extractMinInputSplit);
-		multiPart.field(
-				"adapterIds",
-				adapterIds);
-		multiPart.field(
-				"outputHdfsOutputPath",
-				outputHdfsOutputPath);
-		multiPart.field(
-				"partitionMaxDistance",
-				partitionMaxDistance);
-		if (mapReduceConfigFile != null) {
-			multiPart.field(
-					"mapReduceConfigFile",
-					mapReduceConfigFile);
-		}
-		if (mapReduceHdfsHostPort != null) {
-			multiPart.field(
-					"mapReduceHdfsHostPort",
-					mapReduceHdfsHostPort);
-		}
-		if (mapReduceJobtrackerHostPort != null) {
-			multiPart.field(
-					"mapReduceJobtrackerHostPort",
-					mapReduceJobtrackerHostPort);
-		}
-		if (mapReduceYarnResourceManager != null) {
-			multiPart.field(
-					"mapReduceYarnResourceManager",
-					mapReduceYarnResourceManager);
-		}
-		if (commonDistanceFunctionClass != null) {
-			multiPart.field(
-					"commonDistanceFunctionClass",
-					commonDistanceFunctionClass);
-		}
-		if (extractQuery != null) {
-			multiPart.field(
-					"extractQuery",
-					extractQuery);
-		}
-		if (outputOutputFormat != null) {
-			multiPart.field(
-					"outputOutputFormat",
-					outputOutputFormat);
-		}
-		if (inputFormatClass != null) {
-			multiPart.field(
-					"inputFormatClass",
-					inputFormatClass);
-		}
-		if (inputHdfsPath != null) {
-			multiPart.field(
-					"inputHdfsPath",
-					inputHdfsPath);
-		}
-		if (outputReducerCount != null) {
-			multiPart.field(
-					"outputReducerCount",
-					outputReducerCount);
-		}
-		if (authorizations != null) {
-			multiPart.field(
-					"authorizations",
-					authorizations);
-		}
-		if (indexId != null) {
-			multiPart.field(
-					"indexId",
-					indexId);
-		}
-		if (partitionMaxMemberSelection != null) {
-			multiPart.field(
-					"partitionMaxMemberSelection",
-					partitionMaxMemberSelection);
-		}
-		if (partitionPartitionerClass != null) {
-			multiPart.field(
-					"partitionPartitionerClass",
-					partitionPartitionerClass);
-		}
-		if (partitionPartitionPrecision != null) {
-			multiPart.field(
-					"partitionPartitionPrecision",
-					partitionPartitionPrecision);
-		}
-		if (partitioningDistanceThresholds != null) {
-			multiPart.field(
-					"partitioningDistanceThresholds",
-					partitioningDistanceThresholds);
-		}
-		if (partitioningGeometricDistanceUnit != null) {
-			multiPart.field(
-					"partitioningGeometricDistanceUnit",
-					partitioningGeometricDistanceUnit);
-		}
-		if (partitionSecondaryPartitionerClass != null) {
-			multiPart.field(
-					"partitionSecondaryPartitionerClass",
-					partitionSecondaryPartitionerClass);
-		}
-		final Response resp = analyticService.nearestNeighbor(multiPart);
+
+		final Response resp = analyticService.nearestNeighbor(
+				storename,
+				mapReduceHdfsBaseDir,
+				extractMaxInputSplit,
+				extractMinInputSplit,
+				adapterIds, // Array of strings
+				outputHdfsOutputPath,
+				partitionMaxDistance,
+				mapReduceConfigFile,
+				mapReduceHdfsHostPort,
+				mapReduceJobtrackerHostPort,
+				mapReduceYarnResourceManager,
+				commonDistanceFunctionClass,
+				extractQuery,
+				outputOutputFormat,
+				inputFormatClass,
+				inputHdfsPath,
+				outputReducerCount,
+				authorizations,// Array of strings
+				indexId,
+				partitionMaxMemberSelection,
+				partitionPartitionerClass,
+				partitionPartitionPrecision,
+				partitioningDistanceThresholds,
+				partitioningGeometricDistanceUnit,
+				partitionSecondaryPartitionerClass);
 		return resp;
 
 	}
@@ -692,34 +383,13 @@ public class AnalyticServiceClient
 			final String outputStoreName,
 			final String outputTypeName,
 			final Integer showResults ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		if (parameters != null) {
-			multiPart.field(
-					"parameters",
-					parameters);
-		}
-		if (csvOutputFile != null) {
-			multiPart.field(
-					"csvOutputFile",
-					csvOutputFile);
-		}
-		if (outputStoreName != null) {
-			multiPart.field(
-					"outputStoreName",
-					outputStoreName);
-		}
-		if (outputTypeName != null) {
-			multiPart.field(
-					"outputTypeName",
-					outputTypeName);
-		}
-		if (showResults != null) {
-			multiPart.field(
-					"showResults",
-					showResults.toString());
-		}
 
-		final Response resp = analyticService.sql(multiPart);
+		final Response resp = analyticService.sql(
+				parameters,// Array of strings
+				csvOutputFile,
+				outputStoreName,
+				outputTypeName,
+				showResults);
 		return resp;
 
 	}
