@@ -14,9 +14,9 @@ import com.beust.jcommander.Parameter;
 
 public class TheiaDownloadCommandLineOptions
 {
-	@Parameter(names = "--userident", description = "email address to authentificate when downloading Theia imagery.")
+	@Parameter(names = "--userident", description = "email address to authentificate when downloading Theia imagery.", required = true)
 	private String userIdent;
-	@Parameter(names = "--password", description = "Password to authentificate when downloading Theia imagery.")
+	@Parameter(names = "--password", description = "Password to authentificate when downloading Theia imagery.", required = true)
 	private String password;
 	@Parameter(names = "--overwrite", description = "An option to overwrite images that are ingested in the local workspace directory.  By default it will keep an existing image rather than downloading it again.")
 	private boolean overwriteIfExists;
