@@ -10,19 +10,12 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.services;
 
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
-import org.apache.commons.io.IOUtils;
-import org.geotools.feature.SchemaException;
+import javax.ws.rs.core.Response;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,20 +23,14 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.base.Function;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
+import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 
-import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
-import mil.nga.giat.geowave.core.store.config.ConfigOption;
-import mil.nga.giat.geowave.core.store.config.ConfigUtils;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.format.gpx.GpxUtils;
-import mil.nga.giat.geowave.service.ConfigService;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -53,7 +40,6 @@ public class RestServicesIT
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RestServicesIT.class);
-
 	private static ConfigServiceClient configServiceClient;
 
 	// @GeoWaveTestStore({
@@ -61,7 +47,6 @@ public class RestServicesIT
 	// GeoWaveStoreType.BIGTABLE,
 	// GeoWaveStoreType.HBASE
 	// })
-	// protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
 	private final static String testName = "RestServicesIT";
@@ -90,7 +75,14 @@ public class RestServicesIT
 	}
 
 	@Test
-	public void testServices() {
-		System.out.println(configServiceClient.list());
+	public void testAddHBaseStore() {
+		configServiceClient.removeStore("hstore");
+		Response r = configServiceClient.addHBaseStore(
+				"hstore",
+				"zooks2");
+
+		assertEquals(
+				r.getStatus(),
+				200);
 	}
 }

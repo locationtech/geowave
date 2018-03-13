@@ -69,6 +69,8 @@ public class ServicesTestEnvironment implements
 	protected static final String GEOWAVE_WAR_DIR = "target/restservices";
 	protected static final String GEOWAVE_CONTEXT_PATH = "/restservices";
 	protected static final String GEOWAVE_BASE_URL = JETTY_BASE_URL + GEOWAVE_CONTEXT_PATH;
+
+	protected static final String GEOWAVE_CONFIG_FILE = GEOWAVE_WAR_DIR + "/config.properties";
 	protected static final String GEOWAVE_WORKSPACE_PATH = GEOSERVER_WAR_DIR + "/data/workspaces/" + TEST_WORKSPACE;
 	protected static final String TEST_STYLE_NAME_NO_DIFFERENCE = "SubsamplePoints-2px";
 	protected static final String TEST_STYLE_NAME_MINOR_SUBSAMPLE = "SubsamplePoints-10px";
@@ -205,7 +207,9 @@ public class ServicesTestEnvironment implements
 				final WebAppContext restWebapp = new WebAppContext();
 				restWebapp.setContextPath(GEOWAVE_CONTEXT_PATH);
 				restWebapp.setWar(GEOWAVE_WAR_DIR);
-
+				restWebapp.setInitParameter(
+						"config_file",
+						GEOWAVE_CONFIG_FILE);
 				jettyServer.setHandler(new ContextHandlerCollection(
 						gsWebapp,
 						restWebapp));
