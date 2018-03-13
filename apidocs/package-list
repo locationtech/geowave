@@ -205,6 +205,7 @@ mil.nga.giat.geowave.format.stanag4676.parser
 mil.nga.giat.geowave.format.stanag4676.parser.model
 mil.nga.giat.geowave.format.stanag4676.parser.util
 mil.nga.giat.geowave.format.tdrive
+mil.nga.giat.geowave.format.theia
 mil.nga.giat.geowave.format.twitter
 mil.nga.giat.geowave.mapreduce
 mil.nga.giat.geowave.mapreduce.copy
