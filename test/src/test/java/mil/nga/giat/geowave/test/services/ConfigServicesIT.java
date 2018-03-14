@@ -33,10 +33,10 @@ import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 @Environments({
 	Environment.SERVICES
 })
-public class RestServicesIT
+public class ConfigServicesIT
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RestServicesIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServicesIT.class);
 	private static ConfigServiceClient configServiceClient;
 
 	// @GeoWaveTestStore({
@@ -335,9 +335,10 @@ public class RestServicesIT
 	}
 
 	// Geoserver command does not yet work on the server
+	@Test
 	public void testConfigGeoServer() {
 
-		Response configGeoserver = configServiceClient.configGeoServer("woop");
+		Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
 		TestUtils.assert200(
 				"Should write the new GeoServer URL to config and return 200",
 				configGeoserver.getStatus());
