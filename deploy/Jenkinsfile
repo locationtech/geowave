@@ -11,11 +11,7 @@ node ('master') {
             [$class: 'StringParameterDefinition', name: 'rpm_bucket', defaultValue: 'geowave-rpms', description: 'Bucket name to push rpms to'],
             [$class: 'StringParameterDefinition', name: 'cache_bucket', defaultValue: 'geowave', description: 'Bucket to push maven cache to'],
             [$class: 'StringParameterDefinition', name: 'third_party_deps_path', defaultValue: 'https://s3.amazonaws.com/geowave/third-party-downloads', description: 'URL to third party downloads directory (No trailing slash)'],
-<<<<<<< HEAD
             [$class: 'StringParameterDefinition', name: 'LOCAL_REPO_DIR', defaultValue: '/var/www/geowave-efs/html/repos/snapshots', description: 'Path on the local filesystem to the repo'],
-=======
-            [$class: 'StringParameterDefinition', name: 'local_repo_dir', defaultValue: '/var/www/geowave-efs/html/repos/snapshots', description: 'Path on the local filesystem to the repo'],
->>>>>>> master
             [$class: 'ChoiceParameterDefinition', name: 'overwrite_parameters', choices: 'No\nYes', description: 'Set to yes to reset parameters to defaults'],
             ]
           ],
