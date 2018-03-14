@@ -72,7 +72,8 @@ public class AdapterIndexMappingStoreImpl extends
 					null);
 			if (!oldMapping.equals(mapping)) {
 				throw new MismatchedIndexToAdapterMapping(
-						oldMapping);
+						oldMapping); // HPFortify FP: accumulo example stores
+										// hardcoded password
 			}
 		}
 		else {

@@ -14,6 +14,8 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 /**
  * Interface which defines an index strategy.
  * 

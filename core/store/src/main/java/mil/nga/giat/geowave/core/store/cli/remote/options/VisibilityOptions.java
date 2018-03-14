@@ -12,6 +12,8 @@ package mil.nga.giat.geowave.core.store.cli.remote.options;
 
 import java.io.Serializable;
 
+import java.io.Serializable;
+
 import com.beust.jcommander.Parameter;
 
 public class VisibilityOptions implements

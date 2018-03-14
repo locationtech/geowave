@@ -1468,7 +1468,8 @@ public class HBaseOperations implements
 		}
 	}
 
-	public String getServerSideVersion() {
+	@Override
+	public String getVersion() {
 		String version = null;
 
 		if ((options == null) || !options.isServerSideLibraryEnabled()) {
@@ -1535,11 +1536,5 @@ public class HBaseOperations implements
 					e);
 		}
 		return version;
-	}
-
-	@Override
-	public String getVersion() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }
