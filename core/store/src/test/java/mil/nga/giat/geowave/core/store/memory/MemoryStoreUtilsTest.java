@@ -211,5 +211,12 @@ public class MemoryStoreUtilsTest
 				final int position ) {
 			return null;
 		}
+
+		@Override
+		public void init(
+				PrimaryIndex... indices ) {
+			// TODO Auto-generated method stub
+
+		}
 	}
 }

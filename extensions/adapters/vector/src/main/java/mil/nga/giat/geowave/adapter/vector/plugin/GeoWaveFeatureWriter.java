@@ -46,6 +46,7 @@ public class GeoWaveFeatureWriter implements
 			final GeoWaveDataStoreComponents components,
 			final GeoWaveTransaction transaction,
 			final GeoWaveFeatureReader reader ) {
+		components.initForWrite();
 		this.transaction = transaction;
 		myReader = reader;
 		featureType = components.getAdapter().getFeatureType();

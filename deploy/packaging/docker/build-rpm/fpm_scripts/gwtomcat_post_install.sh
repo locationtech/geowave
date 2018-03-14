@@ -7,4 +7,4 @@ chmod 755 /etc/init.d/gwtomcat
 chown root:root /etc/init.d/gwtomcat
 
 #Removing class path spam when starting and shutting down
-sed -e /"Using CLASSPATH:"/d -i ${GEOWAVE_DIR}/catalina.sh
+sed -e /"Using CLASSPATH:"/d -i ${GEOWAVE_DIR}/tomcat8/bin/catalina.sh

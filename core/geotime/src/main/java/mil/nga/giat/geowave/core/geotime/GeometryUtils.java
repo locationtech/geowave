@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,10 +31,15 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
+import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
@@ -45,11 +53,28 @@ public class GeometryUtils
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final int DEFAULT_DIMENSIONALITY = 2;
+	public static final String DEFAULT_CRS_STR = "EPSG:4326";
+	public static final CoordinateReferenceSystem DEFAULT_CRS;
+	static {
+		try {
+			DEFAULT_CRS = CRS.decode(
+					DEFAULT_CRS_STR,
+					true);
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to decode " + DEFAULT_CRS_STR + " CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize " + DEFAULT_CRS_STR + " object",
+					e);
+		}
+	}
 
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
 
-		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> set = new LinkedList<>();
 		constructListOfConstraintSetsFromGeometry(
 				geometry,
 				set,
@@ -69,7 +94,7 @@ public class GeometryUtils
 	public static GeoConstraintsWrapper basicGeoConstraintsWrapperFromGeometry(
 			final Geometry geometry ) {
 
-		final List<ConstraintSet> set = new LinkedList<ConstraintSet>();
+		final List<ConstraintSet> set = new LinkedList<>();
 		final boolean geometryConstraintsExactMatch = constructListOfConstraintSetsFromGeometry(
 				geometry,
 				set,
@@ -138,7 +163,7 @@ public class GeometryUtils
 				env.getMinY(),
 				env.getMaxY());
 
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
@@ -187,7 +212,7 @@ public class GeometryUtils
 		final NumericData longitude = new NumericValue(
 				longitudeDegrees);
 
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
@@ -204,14 +229,27 @@ public class GeometryUtils
 				constraintsPerDimension);
 	}
 
+	public static MultiDimensionalNumericData getBoundsFromEnvelope(
+			Envelope envelope ) {
+		final NumericRange[] boundsPerDimension = new NumericRange[2];
+		boundsPerDimension[0] = new NumericRange(
+				envelope.getMinX(),
+				envelope.getMaxX());
+		boundsPerDimension[1] = new NumericRange(
+				envelope.getMinY(),
+				envelope.getMaxY());
+		return new BasicNumericDataset(
+				boundsPerDimension);
+	}
+
 	/**
 	 * Generate a longitude range from a JTS geometry
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The longitude range in EPSG:4326
+	 * @return The x range
 	 */
-	public static NumericData longitudeRangeFromGeometry(
+	public static NumericData xRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(
@@ -232,9 +270,9 @@ public class GeometryUtils
 	 *
 	 * @param geometry
 	 *            The JTS geometry
-	 * @return The latitude range in EPSG:4326
+	 * @return The y range
 	 */
-	public static NumericData latitudeRangeFromGeometry(
+	public static NumericData yRangeFromGeometry(
 			final Geometry geometry ) {
 		if ((geometry == null) || geometry.isEmpty()) {
 			return new NumericRange(
@@ -333,5 +371,59 @@ public class GeometryUtils
 		public Geometry getGeometry() {
 			return jtsBounds;
 		}
+	}
+
+	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex[] indices ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		for (PrimaryIndex primaryindx : indices) {
+
+			// for first iteration
+			if (indexCrs == null) {
+				indexCrs = getIndexCrs(primaryindx);
+			}
+			else {
+				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
+					// check if indexes have different CRS
+					if (!indexCrs.equals(((CustomCrsIndexModel) primaryindx.getIndexModel()).getCrs())) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
+					}
+					else {
+						if (!indexCrs.equals(GeometryUtils.DEFAULT_CRS)) {
+							LOGGER.error("Multiple indices with different CRS is not supported");
+							throw new RuntimeException(
+									"Multiple indices with different CRS is not supported");
+						}
+
+					}
+				}
+			}
+		}
+
+		return indexCrs;
+	}
+
+	public static CoordinateReferenceSystem getIndexCrs(
+			PrimaryIndex index ) {
+
+		CoordinateReferenceSystem indexCrs = null;
+
+		if (index.getIndexModel() instanceof CustomCrsIndexModel) {
+			indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
+		}
+		else {
+			indexCrs = GeometryUtils.DEFAULT_CRS;
+		}
+		return indexCrs;
+	}
+
+	public static String getCrsCode(
+			CoordinateReferenceSystem crs ) {
+
+		return (CRS.toSRS(crs));
 	}
 }

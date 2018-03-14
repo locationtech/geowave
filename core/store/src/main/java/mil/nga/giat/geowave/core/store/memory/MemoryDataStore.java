@@ -364,7 +364,7 @@ public class MemoryDataStore implements
 		final TreeSet<MemoryEntryRow> set = getRowsForIndex(index.getId());
 		final Iterator<MemoryEntryRow> rowIt = ((TreeSet<MemoryEntryRow>) set.clone()).iterator();
 		final List<QueryFilter> filters = (query == null) ? new ArrayList<QueryFilter>() : new ArrayList<QueryFilter>(
-				query.createFilters(index.getIndexModel()));
+				query.createFilters(index));
 		filters.add(new QueryFilter() {
 			@Override
 			public boolean accept(

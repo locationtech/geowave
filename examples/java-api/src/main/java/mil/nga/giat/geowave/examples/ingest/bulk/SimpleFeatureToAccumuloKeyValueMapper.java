@@ -16,6 +16,7 @@ import java.util.List;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
@@ -40,7 +41,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 
 	private final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 			GeonamesSimpleFeatureType.getInstance());
-	private final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex();
+	private final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 	private final VisibilityWriter<SimpleFeature> visibilityWriter = new UniformVisibilityWriter<SimpleFeature>(
 			new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
 	private final AccumuloKeyValuePairGenerator<SimpleFeature> generator = new AccumuloKeyValuePairGenerator<SimpleFeature>(
@@ -66,6 +67,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 			InterruptedException {
 
 		simpleFeature = parseGeonamesValue(value);
+		adapter.init(index);
 
 		// build Geowave-formatted Accumulo [Key,Value] pairs
 		keyValuePairs = generator.constructKeyValuePairs(

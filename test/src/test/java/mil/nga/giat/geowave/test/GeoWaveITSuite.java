@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
+import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
@@ -36,6 +37,7 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
 	GeoWaveBasicSpatialVectorIT.class,
+	GeowaveCustomCRSSpatialVectorIT.class,
 	GeoWaveBasicSpatialTemporalVectorIT.class,
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,

@@ -3,9 +3,7 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.filter.LiteralExpressionImpl;
 import org.geotools.filter.spatial.IntersectsImpl;
-import org.geotools.filter.text.commons.FilterToTextUtil;
 import org.geotools.filter.visitor.DuplicatingFilterVisitor;
-import org.geotools.filter.visitor.NullFilterVisitor;
 import org.opengis.filter.expression.Literal;
 import org.opengis.filter.expression.PropertyName;
 import org.opengis.filter.spatial.DWithin;
@@ -15,7 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 
 public class DWithinFilterVisitor extends
 		DuplicatingFilterVisitor
@@ -35,8 +33,8 @@ public class DWithinFilterVisitor extends
 			if ((filter.getExpression1() instanceof PropertyName) && (filter.getExpression2() instanceof Literal)) {
 				Pair<Geometry, Double> geometryAndDegrees;
 
-				geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils.buffer(
-						GeoWaveGTDataStore.DEFAULT_CRS,
+				geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
+						GeometryUtils.DEFAULT_CRS,
 						filter.getExpression2().evaluate(
 								extraData,
 								Geometry.class),
@@ -50,9 +48,9 @@ public class DWithinFilterVisitor extends
 
 			}
 			else if ((filter.getExpression2() instanceof PropertyName) && (filter.getExpression1() instanceof Literal)) {
-				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.GeometryUtils
+				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils
 						.buffer(
-								GeoWaveGTDataStore.DEFAULT_CRS,
+								GeometryUtils.DEFAULT_CRS,
 								filter.getExpression1().evaluate(
 										extraData,
 										Geometry.class),
@@ -64,7 +62,7 @@ public class DWithinFilterVisitor extends
 						filter.getExpression2());
 			}
 		}
-		catch (TransformException e) {
+		catch (final TransformException e) {
 			LOGGER.error(
 					"Cannot transform geoemetry to support provide distance",
 					e);

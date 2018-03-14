@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsR
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailMaxBreakStrategy;
 import mil.nga.giat.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailStableChangeBreakStrategy;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
@@ -283,7 +284,8 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+							new SpatialOptions()).getId();
 				}
 
 				@Override
@@ -421,7 +423,8 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex().getId();
+					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+							new SpatialOptions()).getId();
 				}
 
 				@Override

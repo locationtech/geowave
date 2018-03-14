@@ -52,7 +52,7 @@ GeoWave RPMs
 | geowave-$VERSION-core                | Core (home directory and geowave user)
 | geowave-$VERSION-docs                | Documentation (HTML, PDF and man pages)
 | geowave-$VERSION-$VENDOR-tools       | Command Line Tools (ingest, etc.)
-| geowave-$VERSION-$VENDOR-jetty       | GeoServer components installed into /usr/local/geowave/geoserver and available at, e.g., http://localhost:8000/geoserver/web
+| geowave-$VERSION-$VENDOR-gwtomcat    | GeoServer components installed into /usr/local/geowave/geoserver and available at, e.g., http://localhost:8080/geoserver/web
 | geowave-$VERSION-puppet              | Puppet Scripts
 | geowave-$VERSION-$VENDOR-single-host | All GeoWave components installed on a single host (sometimes useful for development)
 | geowave-repo                         | GeoWave RPM Repo config file

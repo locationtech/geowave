@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.adapter.vector.utils;
 
 import static org.junit.Assert.assertTrue;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 
 import org.junit.Test;
 
@@ -20,14 +19,16 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
 
-public class GeometryUtilsTest
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+
+public class FeatureGeometryUtilsTest
 {
 
 	GeometryFactory factory = new GeometryFactory();
 
 	@Test
 	public void testSplit() {
-		Geometry multiPolygon = factory.createMultiPolygon(new Polygon[] {
+		final Geometry multiPolygon = factory.createMultiPolygon(new Polygon[] {
 			factory.createPolygon(new Coordinate[] {
 				new Coordinate(
 						179.0,
@@ -46,8 +47,8 @@ public class GeometryUtilsTest
 						-89)
 			})
 		});
-		Geometry result = GeometryUtils.adjustGeo(
-				GeoWaveGTDataStore.DEFAULT_CRS,
+		final Geometry result = FeatureGeometryUtils.adjustGeo(
+				GeometryUtils.DEFAULT_CRS,
 				multiPolygon);
 
 		assertTrue(result.intersects(multiPolygon));
@@ -57,7 +58,7 @@ public class GeometryUtilsTest
 	@Test
 	public void testSimple() {
 
-		Geometry singlePoly = factory.createMultiPolygon(new Polygon[] {
+		final Geometry singlePoly = factory.createMultiPolygon(new Polygon[] {
 			factory.createPolygon(new Coordinate[] {
 				new Coordinate(
 						169.0,
@@ -76,8 +77,8 @@ public class GeometryUtilsTest
 						20)
 			})
 		});
-		Geometry result = GeometryUtils.adjustGeo(
-				GeoWaveGTDataStore.DEFAULT_CRS,
+		final Geometry result = FeatureGeometryUtils.adjustGeo(
+				GeometryUtils.DEFAULT_CRS,
 				singlePoly);
 
 		assertTrue(result.intersects(singlePoly));

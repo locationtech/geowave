@@ -45,7 +45,10 @@ import mil.nga.giat.geowave.analytic.param.MapReduceParameters.MRConfig;
 import mil.nga.giat.geowave.analytic.param.ParameterHelper;
 import mil.nga.giat.geowave.analytic.param.StoreParameters.StoreParam;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
@@ -204,9 +207,12 @@ public class GroupAssigmentJobRunnerTest
 				StoreParam.INPUT_STORE,
 				store);
 
+		FeatureDataAdapter adapter = new FeatureDataAdapter(
+				ftype);
+		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		adapter.init(index);
 		pluginOptions.createAdapterStore().addAdapter(
-				new FeatureDataAdapter(
-						ftype));
+				adapter);
 	}
 
 	@Test

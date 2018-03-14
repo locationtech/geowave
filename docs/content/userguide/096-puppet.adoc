@@ -29,7 +29,7 @@ install_app_server::
 Install Jetty with Geoserver and GeoWave plugin on this node.
 
 http_port::
-The port on which the Jetty application server will run - defaults to 8080.
+The port on which the Tomcat application server will run - defaults to 8080.
 
 repo_base_url::
 Used with the optional geowave::repo class to point the local package management system at a source for GeoWave RPMs. The default location is http://s3.amazonaws.com/geowave-rpms/release/noarch/.
