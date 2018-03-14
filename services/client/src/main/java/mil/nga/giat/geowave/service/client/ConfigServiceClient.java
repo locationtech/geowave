@@ -108,13 +108,15 @@ public class ConfigServiceClient
 	public Response addAccumuloStore(
 			final String name,
 			final String zookeeper,
-			final String username,
+			final String instance,
+			final String user,
 			final String password ) {
 
 		return addAccumuloStore(
 				name,
 				zookeeper,
-				username,
+				instance,
+				user,
 				password,
 				null,
 				null,
@@ -130,7 +132,8 @@ public class ConfigServiceClient
 	public Response addAccumuloStore(
 			final String name,
 			final String zookeeper,
-			final String username,
+			final String instance,
+			final String user,
 			final String password,
 			final Boolean makeDefault,
 			final String geowaveNamespace,
@@ -145,7 +148,8 @@ public class ConfigServiceClient
 		Response resp = configService.addAccumuloStore(
 				name,
 				zookeeper,
-				username,
+				instance,
+				user,
 				password,
 				makeDefault,
 				geowaveNamespace,
@@ -239,6 +243,17 @@ public class ConfigServiceClient
 				partitionStrategy,
 				storeTime,
 				crs);
+		return resp;
+	}
+
+	public Response addIndexGroup(
+			final String name,
+			final String[] indexes ) {
+		final Response resp = configService.addIndexGroup(
+				name,
+				String.join(
+						",",
+						indexes));
 		return resp;
 	}
 

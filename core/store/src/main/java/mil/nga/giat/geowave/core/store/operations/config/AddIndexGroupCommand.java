@@ -84,11 +84,13 @@ public class AddIndexGroupCommand extends
 
 	/**
 	 * Adds index group
+	 * 
+	 * @return
 	 *
 	 * @parameters params
 	 * @return none
 	 */
-	private void addIndexGroup(
+	private String addIndexGroup(
 			final OperationParams params ) {
 		final File propFile = getGeoWaveConfigFile(params);
 		final Properties existingProps = ConfigOptions.loadProperties(
@@ -111,8 +113,8 @@ public class AddIndexGroupCommand extends
 		if (groupOptions.load(
 				existingProps,
 				getNamespace())) {
-			throw new ParameterException(
-					"That index group already exists: " + newGroupName);
+			setStatus(ServiceStatus.DUPLICATE);
+			return "That index group already exists: " + getPluginName();
 		}
 
 		// Make sure all the indexes exist, and add them to the group options.
@@ -122,8 +124,9 @@ public class AddIndexGroupCommand extends
 			if (!options.load(
 					existingProps,
 					IndexPluginOptions.getIndexNamespace(indexes[i]))) {
-				throw new ParameterException(
-						"That index does not exist: " + indexes[i]);
+				setStatus(ServiceStatus.NOT_FOUND);
+
+				return "That index does not exist: " + indexes[i];
 			}
 			groupOptions.getDimensionalityPlugins().put(
 					indexes[i],
@@ -142,6 +145,18 @@ public class AddIndexGroupCommand extends
 			throw new WritePropertiesException(
 					"Write failure");
 		}
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			String[] split = key.toString().split(
+					"\\.");
+			if (split.length > 1) {
+				if (split[1].equals(parameters.get(0))) {
+					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+				}
+			}
+		}
+		setStatus(ServiceStatus.OK);
+		return builder.toString();
 	}
 
 	public String getPluginName() {

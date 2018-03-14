@@ -717,4 +717,31 @@ public class TestUtils
 			System.out.println(((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
 		}
 	}
+
+	public static void assert200(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				200,
+				responseCode);
+	}
+
+	public static void assert400(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				400,
+				responseCode);
+	}
+
+	public static void assert404(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				404,
+				responseCode);
+	}
 }

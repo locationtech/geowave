@@ -48,7 +48,8 @@ public interface ConfigService
 	public Response addAccumuloStore(
 			@QueryParam("name") String name,
 			@QueryParam("zookeeper") String zookeeper,
-			@QueryParam("username") String username,
+			@QueryParam("instance") String instance,
+			@QueryParam("user") String user,
 			@QueryParam("password") String password,
 			@QueryParam("makeDefault") Boolean makeDefault,
 			@QueryParam("geowaveNamespace") String geowaveNamespace,
@@ -103,6 +104,13 @@ public interface ConfigService
 			@QueryParam("bias") String bias,
 			@QueryParam("maxDuplicates") Long maxDuplicates,
 			@QueryParam("crs") String crs );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addindexgrp")
+	public Response addIndexGroup(
+			@QueryParam("name") String name,
+			@QueryParam("indexes") String indexes );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
