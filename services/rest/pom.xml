@@ -7,7 +7,7 @@
 		<version>0.9.7-SNAPSHOT</version>
 	</parent>
 	<properties>
-		<restlet.version>2.3.9</restlet.version>
+		<restlet.version>2.4.0</restlet.version>
 		<restservices.finalName>${project.artifactId}-${project.version}-restservices</restservices.finalName>
 	</properties>
 	<artifactId>geowave-service-rest</artifactId>
@@ -27,6 +27,21 @@
 			<groupId>org.restlet.jse</groupId>
 			<artifactId>org.restlet</artifactId>
 			<version>${restlet.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.restlet.jee</groupId>
+			<artifactId>org.restlet.ext.platform</artifactId>
+			<version>${restlet.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.raml</groupId>
+					<artifactId>raml-parser</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.restlet.jee</groupId>

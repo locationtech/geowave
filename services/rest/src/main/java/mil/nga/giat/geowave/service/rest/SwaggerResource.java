@@ -5,7 +5,7 @@ import java.io.IOException;
 import javax.servlet.ServletContext;
 
 import org.restlet.data.MediaType;
-import org.restlet.ext.apispark.internal.conversion.swagger.v1_2.model.ApiDeclaration;
+import org.restlet.ext.platform.internal.conversion.swagger.v1_2.model.ApiDeclaration;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.FileRepresentation;
 import org.restlet.resource.Get;
