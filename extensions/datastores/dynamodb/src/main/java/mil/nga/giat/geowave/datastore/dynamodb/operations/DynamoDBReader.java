@@ -269,7 +269,7 @@ public class DynamoDBReader implements
 	private List<QueryRequest> addQueryRanges(
 			final String tableName,
 			final SinglePartitionQueryRanges r,
-			final List<ByteArrayId> adapterIds,
+			List<ByteArrayId> adapterIds,
 			final AdapterStore adapterStore ) {
 		List<QueryRequest> retVal = new ArrayList<>();
 		final ByteArrayId partitionKey = r.getPartitionKey();
@@ -277,6 +277,7 @@ public class DynamoDBReader implements
 				? DynamoDBWriter.EMPTY_PARTITION_KEY : partitionKey.getBytes();
 		if ((adapterIds == null || adapterIds.isEmpty()) && (adapterStore != null)) {
 			final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
+			adapterIds = new ArrayList<>();
 			final List<ByteArrayId> adapterIDList = new ArrayList<ByteArrayId>();
 			adapters.forEachRemaining(
 					new Consumer<DataAdapter<?>>() {
