@@ -15,7 +15,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/ingest")
+@Path("/v0/ingest")
 public interface IngestService
 {
 

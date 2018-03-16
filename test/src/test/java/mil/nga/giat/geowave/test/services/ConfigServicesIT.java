@@ -23,11 +23,14 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -39,14 +42,15 @@ public class ConfigServicesIT
 	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServicesIT.class);
 	private static ConfigServiceClient configServiceClient;
 
-	// @GeoWaveTestStore({
-	// GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
-	// GeoWaveStoreType.HBASE
-	// })
+	@GeoWaveTestStore({
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+	    GeoWaveStoreType.HBASE
+	})
+	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private static long startMillis;
-	private final static String testName = "RestServicesIT";
+	private final static String testName = "ConfigServicesIT";
 
 	@BeforeClass
 	public static void setup() {

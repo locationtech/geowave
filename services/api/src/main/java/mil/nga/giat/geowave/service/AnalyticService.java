@@ -11,7 +11,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/analytic")
+@Path("/v0/analytic")
 public interface AnalyticService
 {
 	@POST

@@ -12,7 +12,7 @@ import javax.ws.rs.core.Response;
 import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 @Produces(MediaType.APPLICATION_JSON)
-@Path("/gs")
+@Path("/v0/gs")
 public interface GeoServerService
 {
 
