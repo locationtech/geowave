@@ -287,6 +287,7 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
+											<exclude>com.fasterxml.jackson*:*</exclude>
 
 											<!-- the required version of guava should exist in geoserver's 
 												classpath, although in order to get guava's StopWatch working with HBase 
