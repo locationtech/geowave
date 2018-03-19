@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.service.client.RemoteServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -19,16 +20,18 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 @Environments({
 	Environment.SERVICES
 })
-public class RemoteServicesIT {
-	
+public class RemoteServicesIT
+{
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerServicesIT.class);
 	private static RemoteServiceClient remoteServiceClient;
-	
+	private static ConfigServiceClient configServiceClient;
+
 	@GeoWaveTestStore(value = {
-			GeoWaveStoreType.ACCUMULO,
-			GeoWaveStoreType.BIGTABLE,
-		    GeoWaveStoreType.HBASE
-		})
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.HBASE
+	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private static long startMillis;

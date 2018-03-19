@@ -45,7 +45,7 @@ public class ConfigServicesIT
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-	    GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
