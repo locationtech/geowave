@@ -51,6 +51,8 @@ public class ServicesTestEnvironment implements
 		"hbase",
 		"hadoop",
 		"protobuf",
+		"guava",
+		"restlet"
 	};
 
 	protected static final int JETTY_PORT = 9011;

@@ -17,6 +17,7 @@ import java.io.File;
 import javax.ws.rs.core.Response;
 
 import org.junit.AfterClass;
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -52,6 +53,8 @@ public class ConfigServicesIT
 	private static long startMillis;
 	private final static String testName = "ConfigServicesIT";
 
+	private String storeName = "test-store-name";
+
 	@BeforeClass
 	public static void setup() {
 		// ZipUtils.unZipFile(
@@ -75,81 +78,63 @@ public class ConfigServicesIT
 				startMillis);
 	}
 
+	@Before
+	public void before() {
+		// remove any Geowave objects that may interfere with tests.
+		configServiceClient.removeStore(storeName);
+	}
+
 	@Test
 	public void testAddAccumuloStore() {
+		TestUtils.assertStatusCode(
+				"Create Store",
+				200,
+				configServiceClient.addAccumuloStore(
+						storeName,
+						"zookeeper",
+						"instance",
+						"user",
+						"password"));
 
-		configServiceClient.removeStore("astore"); // make sure that the store
-													// does not exist
-		Response firstAdd = configServiceClient.addAccumuloStore(
-				"astore",
-				"zookeeper",
-				"instance",
-				"user",
-				"password");
-
-		TestUtils.assert200(
-				"This store should be written to config and return 200",
-				firstAdd.getStatus());
-
-		Response secondAdd = configServiceClient.addAccumuloStore(
-				"astore",
-				"zookeeper",
-				"instance",
-				"user",
-				"password");
-
-		TestUtils.assert400(
-				"This should return 400, that store already exists",
-				secondAdd.getStatus());
-		configServiceClient.removeStore("astore"); // remove store at end of
-													// successful test
-
+		TestUtils.assertStatusCode(
+				"Create Duplicate Store",
+				400,
+				configServiceClient.addAccumuloStore(
+						storeName,
+						"zookeeper",
+						"instance",
+						"user",
+						"password"));
 	}
 
 	@Test
 	public void testAddHBaseStore() {
+		TestUtils.assertStatusCode(
+				"Create Store",
+				200,
+				configServiceClient.addHBaseStore(
+						storeName,
+						"zookeeper"));
 
-		configServiceClient.removeStore("hstore"); // make sure that the store
-													// does not exist
-		Response firstAdd = configServiceClient.addHBaseStore(
-				"hstore",
-				"zookeeper");
-
-		TestUtils.assert200(
-				"This store should be written to config and return 200",
-				firstAdd.getStatus());
-
-		Response secondAdd = configServiceClient.addHBaseStore(
-				"hstore",
-				"zookeeper");
-
-		TestUtils.assert400(
-				"This should return 400, that store already exists",
-				secondAdd.getStatus());
-		configServiceClient.removeStore("hstore"); // remove store at end of
-													// successful test
-
+		TestUtils.assertStatusCode(
+				"Create Duplicate Store",
+				400,
+				configServiceClient.addHBaseStore(
+						storeName,
+						"zookeeper"));
 	}
 
 	@Test
 	public void testAddBigTableStore() {
+		TestUtils.assertStatusCode(
+				"Create Store",
+				200,
+				configServiceClient.addBigTableStore(storeName));
 
-		configServiceClient.removeStore("bstore"); // make sure that the store
-													// does not exist
-		Response firstAdd = configServiceClient.addBigTableStore("bstore");
-
-		TestUtils.assert200(
-				"This store should be written to config and return 200",
-				firstAdd.getStatus());
-
-		Response secondAdd = configServiceClient.addBigTableStore("bstore");
-
-		TestUtils.assert400(
-				"This should return 400, that store already exists",
-				secondAdd.getStatus());
-		configServiceClient.removeStore("bstore"); // remove store at end of
-													// successful test
-
+		TestUtils.assertStatusCode(
+				"Create Duplicate Store",
+				400,
+				configServiceClient.addBigTableStore(storeName));
 	}
 
 	@Test

@@ -25,6 +25,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ws.rs.core.Response;
+
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
@@ -718,6 +720,7 @@ public class TestUtils
 		}
 	}
 
+	@Deprecated
 	public static void assert200(
 			String msg,
 			int responseCode ) {
@@ -727,6 +730,7 @@ public class TestUtils
 				responseCode);
 	}
 
+	@Deprecated
 	public static void assert400(
 			String msg,
 			int responseCode ) {
@@ -736,6 +740,7 @@ public class TestUtils
 				responseCode);
 	}
 
+	@Deprecated
 	public static void assert404(
 			String msg,
 			int responseCode ) {
@@ -743,5 +748,28 @@ public class TestUtils
 				msg,
 				404,
 				responseCode);
+	}
+
+	public static void assertStatusCode(
+			String msg,
+			int expectedCode,
+			Response response ) {
+		String assertionMsg = msg + String.format(
+				": A %s response code should be received",
+				expectedCode);
+		Assert.assertEquals(
+				assertionMsg,
+				expectedCode,
+				response.getStatus());
+	}
+
+	// Overload method with option to automatically generate assertion message.
+	public static void assertStatusCode(
+			int expectedCode,
+			Response response ) {
+		assertStatusCode(
+				"REST call",
+				expectedCode,
+				response);
 	}
 }

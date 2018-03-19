@@ -1,7 +1,10 @@
 package mil.nga.giat.geowave.test.services;
 
+import javax.ws.rs.core.Response;
+
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +40,8 @@ public class RemoteServicesIT
 	private static long startMillis;
 	private final static String testName = "RemoteServicesIT";
 
+	private String storeName = "store-under-remote-test";
+
 	@BeforeClass
 	public static void setup() {
 		// ZipUtils.unZipFile(
@@ -44,6 +49,8 @@ public class RemoteServicesIT
 		// GeoWaveServicesIT.class.getClassLoader().getResource(
 		// TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 		// TestUtils.TEST_CASE_BASE);
+		configServiceClient = new ConfigServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		remoteServiceClient = new RemoteServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		startMillis = System.currentTimeMillis();
@@ -59,6 +66,15 @@ public class RemoteServicesIT
 				LOGGER,
 				testName,
 				startMillis);
+	}
+
+	@Test
+	public void simpleTest() {
+		Response r = remoteServiceClient.listStats(storeName);
+		TestUtils.assert404(
+				"Should not be able to find a non-existent store",
+				r.getStatus());
+		System.out.println(r.readEntity(String.class));
 	}
 
 }
