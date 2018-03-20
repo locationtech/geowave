@@ -1,8 +1,7 @@
 package mil.nga.giat.geowave.service;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.DefaultValue;
+import java.util.Map;
+
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -11,8 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v0/config")
@@ -78,6 +75,14 @@ public interface ConfigService
 			@QueryParam("createTable") Boolean createTable,
 			@QueryParam("useAltIndex") Boolean useAltIndex,
 			@QueryParam("enableBlockCache") Boolean enableBlockCache );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addstore/{type}")
+	public Response addStore(
+			@QueryParam("name") String name,
+			@PathParam("type") String type,
+			@QueryParam("options") Map<String, String> options );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
