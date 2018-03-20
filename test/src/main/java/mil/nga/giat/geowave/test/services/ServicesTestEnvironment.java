@@ -215,7 +215,6 @@ public class ServicesTestEnvironment implements
 				jettyServer.setHandler(new ContextHandlerCollection(
 						gsWebapp,
 						restWebapp));
-				gsWebapp.setTempDirectory(TestUtils.TEMP_DIR);
 				// // this allows to send large SLD's from the styles form
 				gsWebapp.getServletContext().getContextHandler().setMaxFormContentSize(
 						MAX_FORM_CONTENT_SIZE);

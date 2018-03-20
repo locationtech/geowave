@@ -295,12 +295,13 @@ public class GeoServerServiceClient
 	}
 
 	public Response addStyle(
-			final String stylesid,
-			final String GeoWave_store_name ) {
+			final String stylesld,
+			final String GeoWave_style_name ) {
 
 		final Response resp = geoServerService.addStyle(
-				stylesid,
-				GeoWave_store_name);
+				stylesld,
+				GeoWave_style_name);
+		String s = resp.readEntity(String.class);
 		return resp;
 	}
 

@@ -89,6 +89,7 @@ public class GeoServerRemoveDatastoreCommand extends
 
 		if (deleteStoreResponse.getStatus() == Status.OK.getStatusCode()) {
 			setStatus(ServiceStatus.OK);
+			return "Delete store '" + datastoreName + "' from workspace '" + workspace + "' on GeoServer: OK";
 		}
 		switch (deleteStoreResponse.getStatus()) {
 			case 404:

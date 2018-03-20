@@ -26,7 +26,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class RemoteServicesIT
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerServicesIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GeoServerIngestIT.class);
 	private static RemoteServiceClient remoteServiceClient;
 	private static ConfigServiceClient configServiceClient;
 

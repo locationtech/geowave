@@ -10,10 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.services;
 
-import static org.junit.Assert.*;
-
-import java.io.File;
-
 import javax.ws.rs.core.Response;
 
 import org.junit.AfterClass;
@@ -144,15 +140,17 @@ public class ConfigServicesIT
 													// does not exist
 		Response firstAdd = configServiceClient.addSpatialIndex("spatial");
 
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This index should be written to config and return 200",
-				firstAdd.getStatus());
+				200,
+				firstAdd);
 
 		Response secondAdd = configServiceClient.addSpatialIndex("spatial");
 
-		TestUtils.assert400(
+		TestUtils.assertStatusCode(
 				"This should return 400, that index already exists",
-				secondAdd.getStatus());
+				400,
+				secondAdd);
 		configServiceClient.removeIndex("spatial"); // remove index at end of
 													// successful test
 
@@ -166,15 +164,17 @@ public class ConfigServicesIT
 		// does not exist
 		Response firstAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
 
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This index should be written to config and return 200",
-				firstAdd.getStatus());
+				200,
+				firstAdd);
 
 		Response secondAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
 
-		TestUtils.assert400(
+		TestUtils.assertStatusCode(
 				"This should return 400, that index already exists",
-				secondAdd.getStatus());
+				400,
+				secondAdd);
 		configServiceClient.removeIndex("spatial-temporal"); // remove index at
 																// end of
 		// successful test
@@ -197,17 +197,19 @@ public class ConfigServicesIT
 				"test-group",
 				indexes);
 
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This index group should be written to config and return 200",
-				firstAdd.getStatus());
+				200,
+				firstAdd);
 
 		Response secondAdd = configServiceClient.addIndexGroup(
 				"test-group",
 				indexes);
 
-		TestUtils.assert400(
+		TestUtils.assertStatusCode(
 				"This should return 400, that index group already exists",
-				secondAdd.getStatus());
+				400,
+				secondAdd);
 		configServiceClient.removeIndexGroup("test-group"); // remove index
 															// group at
 															// end of
@@ -220,9 +222,10 @@ public class ConfigServicesIT
 				"test-group",
 				badIndexes);
 
-		TestUtils.assert404(
+		TestUtils.assertStatusCode(
 				"This should return 404, one of the indexes listed does not exist",
-				thirdAdd.getStatus());
+				400,
+				thirdAdd);
 
 		configServiceClient.removeIndexGroup("test-group"); // remove index
 															// group at
@@ -240,15 +243,17 @@ public class ConfigServicesIT
 																	// command
 
 		Response firstRemove = configServiceClient.removeStore("test_remove_store");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This store should be removed from config and return 200",
-				firstRemove.getStatus());
+				200,
+				firstRemove);
 
 		Response secondRemove = configServiceClient.removeStore("test_remove_store");
 
-		TestUtils.assert404(
+		TestUtils.assertStatusCode(
 				"This should return 404, that store does not exist",
-				secondRemove.getStatus());
+				404,
+				secondRemove);
 
 	}
 
@@ -262,15 +267,17 @@ public class ConfigServicesIT
 																	// command
 
 		Response firstRemove = configServiceClient.removeIndex("test_remove_index");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This index should be removed from config and return 200",
-				firstRemove.getStatus());
+				200,
+				firstRemove);
 
 		Response secondRemove = configServiceClient.removeIndex("test_remove_index");
 
-		TestUtils.assert404(
+		TestUtils.assertStatusCode(
 				"This should return 404, that index does not exist",
-				secondRemove.getStatus());
+				404,
+				secondRemove);
 
 	}
 
@@ -291,15 +298,17 @@ public class ConfigServicesIT
 		// command
 
 		Response firstRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This index group should be removed from config and return 200",
-				firstRemove.getStatus());
+				200,
+				firstRemove);
 
 		Response secondRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
 
-		TestUtils.assert404(
+		TestUtils.assertStatusCode(
 				"This should return 404, that index group does not exist",
-				secondRemove.getStatus());
+				404,
+				secondRemove);
 
 	}
 
@@ -307,9 +316,10 @@ public class ConfigServicesIT
 	public void testHdfsConfig() {
 		// Should always return 200
 		Response config = configServiceClient.configHDFS("localhost:8020");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This should write to config and 200",
-				config.getStatus());
+				200,
+				config);
 	}
 
 	@Test
@@ -318,9 +328,10 @@ public class ConfigServicesIT
 		Response set = configServiceClient.set(
 				"Property",
 				"value");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"This should write to config and 200",
-				set.getStatus());
+				200,
+				set);
 	}
 
 	// Geoserver command does not yet work on the server
@@ -328,9 +339,10 @@ public class ConfigServicesIT
 	public void testConfigGeoServer() {
 
 		Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
-		TestUtils.assert200(
+		TestUtils.assertStatusCode(
 				"Should write the new GeoServer URL to config and return 200",
-				configGeoserver.getStatus());
+				200,
+				configGeoserver);
 
 	}
 }

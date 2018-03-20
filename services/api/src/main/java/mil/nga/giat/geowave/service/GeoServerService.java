@@ -141,8 +141,8 @@ public interface GeoServerService
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addstyle")
 	public Response addStyle(
-			@QueryParam("stylesid") String stylesid,
-			@QueryParam("GeoWave_store_name") String GeoWave_store_name );
+			@QueryParam("stylesld") String stylesld,
+			@QueryParam("GeoWave_style_name") String GeoWave_style_name );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
