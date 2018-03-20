@@ -36,7 +36,7 @@ import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOpti
 @GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
-		ServiceEnabledCommand<Void>
+		ServiceEnabledCommand<String>
 {
 	@Parameter(description = "<name> <comma separated list of indexes>")
 	private List<String> parameters = new ArrayList<String>();
@@ -52,10 +52,10 @@ public class AddIndexGroupCommand extends
 	}
 
 	@Override
-	public Pair<ServiceStatus, Void> executeService(
+	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
 			throws Exception {
-		Void ret = computeResults(params);
+		String ret = computeResults(params);
 		return ImmutablePair.of(
 				status,
 				ret);
@@ -68,18 +68,18 @@ public class AddIndexGroupCommand extends
 	 * @return none
 	 */
 	@Override
-	public Void computeResults(
+	public String computeResults(
 			final OperationParams params ) {
-
+		String ret = "";
 		try {
-			addIndexGroup(params);
+			ret = addIndexGroup(params);
 		}
 		catch (WritePropertiesException | ParameterException e) {
 			setStatus(ServiceStatus.INTERNAL_ERROR);
 			LOGGER.error(e.toString());
 		}
 
-		return null;
+		return ret;
 	}
 
 	/**
@@ -103,7 +103,6 @@ public class AddIndexGroupCommand extends
 		}
 
 		// New index group name
-		final String newGroupName = parameters.get(0);
 		final String[] indexes = parameters.get(
 				1).split(
 				",");

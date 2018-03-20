@@ -80,7 +80,6 @@ public class GeoServerServiceClient
 	public Response getDataStore(
 			final String datastore_name,
 			final String workspace ) {
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
 		final Response resp = geoServerService.getDataStore(
 				datastore_name,
 				workspace);
@@ -301,7 +300,6 @@ public class GeoServerServiceClient
 		final Response resp = geoServerService.addStyle(
 				stylesld,
 				GeoWave_style_name);
-		String s = resp.readEntity(String.class);
 		return resp;
 	}
 
