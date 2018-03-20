@@ -174,62 +174,12 @@ public class GeoServerIT
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
+		// create the datastore
 		final Map<String, String> configOptions = dataStoreOptions.getOptionsAsMap();
 		configOptions.put(
 				"gwNamespace",
 				TestUtils.TEST_NAMESPACE);
-		// create the datastore
-		if (dataStoreOptions.getType().equals(
-				"hbase")) {
-			configServiceClient.addHBaseStore(
-					TestUtils.TEST_NAMESPACE,
-					configOptions.get("zookeeper"),
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
-		if (dataStoreOptions.getType().equals(
-				"accumulo")) {
-			configServiceClient.addAccumuloStore(
-					TestUtils.TEST_NAMESPACE,
-					configOptions.get("zookeeper"),
-					configOptions.get("instance"),
-					configOptions.get("user"),
-					configOptions.get("password"),
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
-		if (dataStoreOptions.getType().equals(
-				"bigtable")) {
-			configServiceClient.addBigTableStore(
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
+		configServiceClient.addStore(TestUtils.TEST_NAMESPACE, dataStoreOptions.getType(), configOptions);
 		Response addDs = geoServerServiceClient.addDataStore(
 				TestUtils.TEST_NAMESPACE,
 				ServicesTestEnvironment.TEST_WORKSPACE,

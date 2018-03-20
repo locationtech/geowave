@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,15 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.service.client;
 
+import java.util.Map;
+
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 
 import mil.nga.giat.geowave.service.ConfigService;
 
-public class ConfigServiceClient
+public class ConfigServiceClient implements
+		ConfigService
 {
 	private final ConfigService configService;
 
@@ -32,8 +34,8 @@ public class ConfigServiceClient
 
 	public ConfigServiceClient(
 			final String baseUrl,
-			String user,
-			String password ) {
+			final String user,
+			final String password ) {
 		// ClientBuilder bldr = ClientBuilder.newBuilder();
 		// if (user != null && password != null) {
 		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
@@ -49,9 +51,11 @@ public class ConfigServiceClient
 
 	// }
 
+	@Override
 	public Response list(
-			String filter ) {
-		final Response resp = configService.list(filter);
+			final String filter ) {
+		final Response resp = configService.list(
+				filter);
 		resp.bufferEntity();
 		return resp;
 	}
@@ -75,6 +79,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response addHBaseStore(
 			final String name,
 			final String zookeeper,
@@ -89,7 +94,7 @@ public class ConfigServiceClient
 			final Boolean useAltIndex,
 			final Boolean enableBlockCache ) {
 
-		Response resp = configService.addHBaseStore(
+		final Response resp = configService.addHBaseStore(
 				name,
 				zookeeper,
 				makeDefault,
@@ -129,6 +134,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response addAccumuloStore(
 			final String name,
 			final String zookeeper,
@@ -145,7 +151,7 @@ public class ConfigServiceClient
 			final Boolean useAltIndex,
 			final Boolean enableBlockCache ) {
 
-		Response resp = configService.addAccumuloStore(
+		final Response resp = configService.addAccumuloStore(
 				name,
 				zookeeper,
 				instance,
@@ -182,6 +188,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response addBigTableStore(
 			final String name,
 			final Boolean makeDefault,
@@ -226,6 +233,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response addSpatialIndex(
 			final String name,
 			final Boolean makeDefault,
@@ -271,6 +279,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response addSpatialTemporalIndex(
 			final String name,
 			final Boolean makeDefault,
@@ -319,6 +328,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response configGeoServer(
 			final String GeoServer_URL,
 			final String username,
@@ -361,31 +371,39 @@ public class ConfigServiceClient
 		return resp;
 	}
 
+	@Override
 	public Response configHDFS(
 			final String HDFS_DefaultFS_URL ) {
 
-		final Response resp = configService.configHDFS(HDFS_DefaultFS_URL);
+		final Response resp = configService.configHDFS(
+				HDFS_DefaultFS_URL);
 		return resp;
 	}
 
+	@Override
 	public Response removeIndex(
 			final String name ) {
 
-		final Response resp = configService.removeIndex(name);
+		final Response resp = configService.removeIndex(
+				name);
 		return resp;
 	}
 
+	@Override
 	public Response removeIndexGroup(
 			final String name ) {
 
-		final Response resp = configService.removeIndexGroup(name);
+		final Response resp = configService.removeIndexGroup(
+				name);
 		return resp;
 	}
 
+	@Override
 	public Response removeStore(
 			final String name ) {
 
-		final Response resp = configService.removeStore(name);
+		final Response resp = configService.removeStore(
+				name);
 		return resp;
 	}
 
@@ -399,6 +417,7 @@ public class ConfigServiceClient
 				null);
 	}
 
+	@Override
 	public Response set(
 			final String name,
 			final String value,
@@ -408,6 +427,28 @@ public class ConfigServiceClient
 				name,
 				value,
 				password);
+		return resp;
+	}
+
+	@Override
+	public Response addStore(
+			final String name,
+			final String type,
+			final Map<String, String> options ) {
+		final Response resp = configService.addStore(
+				name,
+				type,
+				options);
+		return resp;
+	}
+
+	@Override
+	public Response addIndexGroup(
+			final String name,
+			final String indexes ) {
+		final Response resp = configService.addIndexGroup(
+				name,
+				indexes);
 		return resp;
 	}
 }
