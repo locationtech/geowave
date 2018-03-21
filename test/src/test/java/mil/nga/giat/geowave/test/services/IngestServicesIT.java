@@ -40,7 +40,7 @@ public class IngestServicesIT
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-	// GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -50,11 +50,6 @@ public class IngestServicesIT
 
 	@BeforeClass
 	public static void setup() {
-		// ZipUtils.unZipFile(
-		// new File(
-		// GeoWaveServicesIT.class.getClassLoader().getResource(
-		// TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-		// TestUtils.TEST_CASE_BASE);
 		ingestServiceClient = new IngestServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		configServiceClient = new ConfigServiceClient(
@@ -80,13 +75,11 @@ public class IngestServicesIT
 	public void testLocalToGW()
 			throws ParseException,
 			InterruptedException {
-		// if(dataStorePluginOptions.instanceOf(AccumuloRequiredOptions))
-		configServiceClient.addAccumuloStore(
+		configServiceClient.addStore(
 				"test-store",
-				"localhost:2181",
-				"miniInstance",
-				"root",
-				"Ge0wave");
+				dataStorePluginOptions.getType(),
+				null,
+				dataStorePluginOptions.getOptionsAsMap());
 		configServiceClient.addSpatialIndex(
 				"test-index",
 				false,

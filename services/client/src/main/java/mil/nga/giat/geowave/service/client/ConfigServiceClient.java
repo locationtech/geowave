@@ -10,19 +10,31 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.service.client;
 
+import java.lang.reflect.AnnotatedElement;
 import java.util.Map;
+import java.util.Map.Entry;
 
+import javax.ws.rs.Path;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.service.ConfigService;
 
 public class ConfigServiceClient implements
 		ConfigService
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(
+			ConfigServiceClient.class);
 	private final ConfigService configService;
+	// Jersey 2 web resource proxy client doesn't work well with dynamic
+	// key-value pair queryparams such as the generic addStore
+	private final WebTarget addStoreTarget;
 
 	public ConfigServiceClient(
 			final String baseUrl ) {
@@ -36,20 +48,40 @@ public class ConfigServiceClient implements
 			final String baseUrl,
 			final String user,
 			final String password ) {
-		// ClientBuilder bldr = ClientBuilder.newBuilder();
-		// if (user != null && password != null) {
-		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
-		// user,
-		// password);
-		// bldr.register(feature);
-		// }
+		WebTarget target = ClientBuilder.newClient().target(
+				baseUrl);
 		configService = WebResourceFactory.newResource(
 				ConfigService.class,
-				ClientBuilder.newClient().target(
-						baseUrl));
+				target);
+		addStoreTarget = createAddStoreTarget(target);				
+	}
+	private static WebTarget createAddStoreTarget(WebTarget baseTarget) {
+
+		WebTarget addStoreTarget = addPathFromAnnotation(
+				ConfigService.class,
+				baseTarget);
+		try {
+			addStoreTarget = addPathFromAnnotation(ConfigService.class.getMethod("addStore", String.class, String.class, String.class, Map.class),addStoreTarget);
+		}
+		catch (NoSuchMethodException | SecurityException e) {
+			LOGGER.warn("Unable to derive path from method annotations",e);
+			//default to hardcoded method path
+			addStoreTarget = addStoreTarget.path("/addstore/{type}");
+		}
+		return addStoreTarget;
 	}
 
-	// }
+	private static WebTarget addPathFromAnnotation(
+			final AnnotatedElement ae,
+			WebTarget target ) {
+		final Path p = ae.getAnnotation(
+				Path.class);
+		if (p != null) {
+			target = target.path(
+					p.value());
+		}
+		return target;
+	}
 
 	@Override
 	public Response list(
@@ -432,14 +464,32 @@ public class ConfigServiceClient implements
 
 	@Override
 	public Response addStore(
-			final String name,
-			final String type,
-			final Map<String, String> options ) {
-		final Response resp = configService.addStore(
-				name,
-				type,
-				options);
-		return resp;
+			String name,
+			String type,
+			String geowaveNamespace,
+			Map<String, String> additionalQueryParams ) {
+		WebTarget internalAddStoreTarget = addStoreTarget.resolveTemplate(
+				"type",
+				type);
+		internalAddStoreTarget = internalAddStoreTarget.queryParam(
+				"name",
+				name);
+		if (geowaveNamespace != null && !geowaveNamespace.isEmpty()) {
+			internalAddStoreTarget = internalAddStoreTarget.queryParam(
+					"gwNamespace",
+					name);
+		}
+		for (Entry<String, String> e : additionalQueryParams.entrySet()) {
+			internalAddStoreTarget = internalAddStoreTarget.queryParam(
+					e.getKey(),
+					e.getValue());
+		}
+		return internalAddStoreTarget
+				.request()
+				.accept(
+						MediaType.APPLICATION_JSON)
+				.method(
+						"POST");
 	}
 
 	@Override

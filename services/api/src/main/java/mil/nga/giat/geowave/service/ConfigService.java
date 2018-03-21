@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service;
 
 import java.util.Map;
 
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -82,7 +83,8 @@ public interface ConfigService
 	public Response addStore(
 			@QueryParam("name") String name,
 			@PathParam("type") String type,
-			@QueryParam("options") Map<String, String> options );
+			@QueryParam("gwNamespace") @DefaultValue("") String geowaveNamespace,			
+			Map<String, String> additionalQueryParams );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

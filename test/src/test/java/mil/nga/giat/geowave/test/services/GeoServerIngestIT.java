@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.Response;
@@ -73,11 +74,6 @@ public class GeoServerIngestIT
 
 	@BeforeClass
 	public static void setup() {
-		// ZipUtils.unZipFile(
-		// new File(
-		// GeoWaveServicesIT.class.getClassLoader().getResource(
-		// TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-		// TestUtils.TEST_CASE_BASE);
 		geoServerServiceClient = new GeoServerServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 
@@ -132,62 +128,11 @@ public class GeoServerIngestIT
 				"Unable to create 'testomatic' workspace",
 				200,
 				geoServerServiceClient.addWorkspace("testomatic"));
-		final Map<String, String> configOptions = dataStorePluginOptions.getOptionsAsMap();
-		// Assert.assertTrue(
-		// "Unable to publish '" + dataStorePluginOptions.getType() +
-		// "' data store",
-		// geoServerServiceClient.addDataStore(dataStorePluginOptions.getType());
-		if (dataStorePluginOptions.getType().equals(
-				"hbase")) {
-			configServiceClient.addHBaseStore(
-					TestUtils.TEST_NAMESPACE,
-					configOptions.get("zookeeper"),
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
-		if (dataStorePluginOptions.getType().equals(
-				"accumulo")) {
-			configServiceClient.addAccumuloStore(
-					TestUtils.TEST_NAMESPACE,
-					configOptions.get("zookeeper"),
-					configOptions.get("instance"),
-					configOptions.get("user"),
-					configOptions.get("password"),
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
-		if (dataStorePluginOptions.getType().equals(
-				"bigtable")) {
-			configServiceClient.addBigTableStore(
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					TestUtils.TEST_NAMESPACE,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null);
-		}
+		configServiceClient.addStore(
+				TestUtils.TEST_NAMESPACE,
+				dataStorePluginOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
+				dataStorePluginOptions.getOptionsAsMap());
 		TestUtils.assertStatusCode(
 				"Unable to add " + TestUtils.TEST_NAMESPACE + " datastore",
 				200,
