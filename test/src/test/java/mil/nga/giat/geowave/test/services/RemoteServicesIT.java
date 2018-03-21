@@ -44,11 +44,6 @@ public class RemoteServicesIT
 
 	@BeforeClass
 	public static void setup() {
-		// ZipUtils.unZipFile(
-		// new File(
-		// GeoWaveServicesIT.class.getClassLoader().getResource(
-		// TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-		// TestUtils.TEST_CASE_BASE);
 		configServiceClient = new ConfigServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		remoteServiceClient = new RemoteServiceClient(

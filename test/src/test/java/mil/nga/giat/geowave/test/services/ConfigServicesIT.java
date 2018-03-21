@@ -36,7 +36,8 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class ConfigServicesIT
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServicesIT.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(
+			ConfigServicesIT.class);
 	private static ConfigServiceClient configServiceClient;
 
 	@GeoWaveTestStore({
@@ -53,11 +54,6 @@ public class ConfigServicesIT
 
 	@BeforeClass
 	public static void setup() {
-		// ZipUtils.unZipFile(
-		// new File(
-		// GeoWaveServicesIT.class.getClassLoader().getResource(
-		// TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
-		// TestUtils.TEST_CASE_BASE);
 		configServiceClient = new ConfigServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		startMillis = System.currentTimeMillis();
@@ -77,106 +73,83 @@ public class ConfigServicesIT
 	@Before
 	public void before() {
 		// remove any Geowave objects that may interfere with tests.
-		configServiceClient.removeStore(storeName);
+		configServiceClient.removeStore(
+				storeName);
 	}
 
 	@Test
-	public void testAddAccumuloStore() {
+	public void testAddStore() {
 		TestUtils.assertStatusCode(
 				"Create Store",
 				200,
-				configServiceClient.addAccumuloStore(
+				configServiceClient.addStore(
 						storeName,
-						"zookeeper",
-						"instance",
-						"user",
-						"password"));
+						dataStorePluginOptions.getType(),
+						null,
+						dataStorePluginOptions.getOptionsAsMap()));
 
 		TestUtils.assertStatusCode(
 				"Create Duplicate Store",
 				400,
-				configServiceClient.addAccumuloStore(
+				configServiceClient.addStore(
 						storeName,
-						"zookeeper",
-						"instance",
-						"user",
-						"password"));
-	}
-
-	@Test
-	public void testAddHBaseStore() {
-		TestUtils.assertStatusCode(
-				"Create Store",
-				200,
-				configServiceClient.addHBaseStore(
-						storeName,
-						"zookeeper"));
-
-		TestUtils.assertStatusCode(
-				"Create Duplicate Store",
-				400,
-				configServiceClient.addHBaseStore(
-						storeName,
-						"zookeeper"));
-	}
-
-	@Test
-	public void testAddBigTableStore() {
-		TestUtils.assertStatusCode(
-				"Create Store",
-				200,
-				configServiceClient.addBigTableStore(storeName));
-
-		TestUtils.assertStatusCode(
-				"Create Duplicate Store",
-				400,
-				configServiceClient.addBigTableStore(storeName));
+						dataStorePluginOptions.getType(),
+						null,
+						dataStorePluginOptions.getOptionsAsMap()));
 	}
 
 	@Test
 	public void testAddSpatialIndex() {
 
-		configServiceClient.removeIndex("spatial"); // make sure that the index
-													// does not exist
-		Response firstAdd = configServiceClient.addSpatialIndex("spatial");
+		configServiceClient.removeIndex(
+				"spatial"); // make sure that the index
+							// does not exist
+		Response firstAdd = configServiceClient.addSpatialIndex(
+				"spatial");
 
 		TestUtils.assertStatusCode(
 				"This index should be written to config and return 200",
 				200,
 				firstAdd);
 
-		Response secondAdd = configServiceClient.addSpatialIndex("spatial");
+		Response secondAdd = configServiceClient.addSpatialIndex(
+				"spatial");
 
 		TestUtils.assertStatusCode(
 				"This should return 400, that index already exists",
 				400,
 				secondAdd);
-		configServiceClient.removeIndex("spatial"); // remove index at end of
-													// successful test
+		configServiceClient.removeIndex(
+				"spatial"); // remove index at end of
+							// successful test
 
 	}
 
 	@Test
 	public void testAddSpatialTemporalIndex() {
 
-		configServiceClient.removeIndex("spatial-temporal"); // make sure that
-																// the index
+		configServiceClient.removeIndex(
+				"spatial-temporal"); // make sure that
+										// the index
 		// does not exist
-		Response firstAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
+		Response firstAdd = configServiceClient.addSpatialTemporalIndex(
+				"spatial-temporal");
 
 		TestUtils.assertStatusCode(
 				"This index should be written to config and return 200",
 				200,
 				firstAdd);
 
-		Response secondAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
+		Response secondAdd = configServiceClient.addSpatialTemporalIndex(
+				"spatial-temporal");
 
 		TestUtils.assertStatusCode(
 				"This should return 400, that index already exists",
 				400,
 				secondAdd);
-		configServiceClient.removeIndex("spatial-temporal"); // remove index at
-																// end of
+		configServiceClient.removeIndex(
+				"spatial-temporal"); // remove index at
+										// end of
 		// successful test
 
 	}
@@ -184,11 +157,14 @@ public class ConfigServicesIT
 	@Test
 	public void testAddIndexGroup() {
 
-		configServiceClient.removeIndexGroup("test-group"); // make sure that
-															// the index group
-															// does not exist
-		configServiceClient.addSpatialIndex("index1");
-		configServiceClient.addSpatialIndex("index2");
+		configServiceClient.removeIndexGroup(
+				"test-group"); // make sure that
+								// the index group
+								// does not exist
+		configServiceClient.addSpatialIndex(
+				"index1");
+		configServiceClient.addSpatialIndex(
+				"index2");
 		String[] indexes = {
 			"index1",
 			"index2"
@@ -210,9 +186,10 @@ public class ConfigServicesIT
 				"This should return 400, that index group already exists",
 				400,
 				secondAdd);
-		configServiceClient.removeIndexGroup("test-group"); // remove index
-															// group at
-															// end of
+		configServiceClient.removeIndexGroup(
+				"test-group"); // remove index
+								// group at
+								// end of
 		// successful test
 		String[] badIndexes = {
 			"index1",
@@ -224,31 +201,34 @@ public class ConfigServicesIT
 
 		TestUtils.assertStatusCode(
 				"This should return 404, one of the indexes listed does not exist",
-				400,
+				404,
 				thirdAdd);
 
-		configServiceClient.removeIndexGroup("test-group"); // remove index
-															// group at
-															// end of
+		configServiceClient.removeIndexGroup(
+				"test-group"); // remove index
+								// group at
+								// end of
 		// successful test
 	}
 
 	@Test
 	public void testRemoveStore() {
+		// Create a store to test the remove command
+		configServiceClient.addStore(
+				"test_remove_store",
+				dataStorePluginOptions.getType(),
+				null,
+				dataStorePluginOptions.getOptionsAsMap()); 
 
-		configServiceClient.addBigTableStore("test_remove_store"); // Create a
-																	// store to
-																	// test the
-																	// remove
-																	// command
-
-		Response firstRemove = configServiceClient.removeStore("test_remove_store");
+		Response firstRemove = configServiceClient.removeStore(
+				"test_remove_store");
 		TestUtils.assertStatusCode(
 				"This store should be removed from config and return 200",
 				200,
 				firstRemove);
 
-		Response secondRemove = configServiceClient.removeStore("test_remove_store");
+		Response secondRemove = configServiceClient.removeStore(
+				"test_remove_store");
 
 		TestUtils.assertStatusCode(
 				"This should return 404, that store does not exist",
@@ -260,19 +240,22 @@ public class ConfigServicesIT
 	@Test
 	public void testRemoveIndex() {
 
-		configServiceClient.addSpatialIndex("test_remove_index"); // Create an
-																	// index to
-																	// test the
-																	// remove
-																	// command
+		configServiceClient.addSpatialIndex(
+				"test_remove_index"); // Create an
+										// index to
+										// test the
+										// remove
+										// command
 
-		Response firstRemove = configServiceClient.removeIndex("test_remove_index");
+		Response firstRemove = configServiceClient.removeIndex(
+				"test_remove_index");
 		TestUtils.assertStatusCode(
 				"This index should be removed from config and return 200",
 				200,
 				firstRemove);
 
-		Response secondRemove = configServiceClient.removeIndex("test_remove_index");
+		Response secondRemove = configServiceClient.removeIndex(
+				"test_remove_index");
 
 		TestUtils.assertStatusCode(
 				"This should return 404, that index does not exist",
@@ -283,8 +266,10 @@ public class ConfigServicesIT
 
 	@Test
 	public void testRemoveIndexGroup() {
-		configServiceClient.addSpatialIndex("index1");
-		configServiceClient.addSpatialIndex("index2");
+		configServiceClient.addSpatialIndex(
+				"index1");
+		configServiceClient.addSpatialIndex(
+				"index2");
 		String[] indexes = {
 			"index1",
 			"index2"
@@ -297,13 +282,15 @@ public class ConfigServicesIT
 		// remove
 		// command
 
-		Response firstRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
+		Response firstRemove = configServiceClient.removeIndexGroup(
+				"test_remove_index_group");
 		TestUtils.assertStatusCode(
 				"This index group should be removed from config and return 200",
 				200,
 				firstRemove);
 
-		Response secondRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
+		Response secondRemove = configServiceClient.removeIndexGroup(
+				"test_remove_index_group");
 
 		TestUtils.assertStatusCode(
 				"This should return 404, that index group does not exist",
@@ -315,7 +302,8 @@ public class ConfigServicesIT
 	@Test
 	public void testHdfsConfig() {
 		// Should always return 200
-		Response config = configServiceClient.configHDFS("localhost:8020");
+		Response config = configServiceClient.configHDFS(
+				"localhost:8020");
 		TestUtils.assertStatusCode(
 				"This should write to config and 200",
 				200,
@@ -338,7 +326,8 @@ public class ConfigServicesIT
 	@Test
 	public void testConfigGeoServer() {
 
-		Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
+		Response configGeoserver = configServiceClient.configGeoServer(
+				"test-geoserver");
 		TestUtils.assertStatusCode(
 				"Should write the new GeoServer URL to config and return 200",
 				200,

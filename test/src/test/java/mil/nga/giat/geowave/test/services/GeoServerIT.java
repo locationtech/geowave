@@ -175,11 +175,11 @@ public class GeoServerIT
 		success &= enableWfs();
 		success &= enableWms();
 		// create the datastore
-		final Map<String, String> configOptions = dataStoreOptions.getOptionsAsMap();
-		configOptions.put(
-				"gwNamespace",
-				TestUtils.TEST_NAMESPACE);
-		configServiceClient.addStore(TestUtils.TEST_NAMESPACE, dataStoreOptions.getType(), configOptions);
+		configServiceClient.addStore(
+				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getOptionsAsMap());
 		Response addDs = geoServerServiceClient.addDataStore(
 				TestUtils.TEST_NAMESPACE,
 				ServicesTestEnvironment.TEST_WORKSPACE,
