@@ -370,7 +370,6 @@ public class TestUtils
 				s3Url);
 		sparkIngester.runOperation(
 				null,
-				props,
 				localOptions,
 				"test",
 				indexes,

@@ -323,20 +323,6 @@ public class BasicMapReduceIT
 			}
 		}
 
-		// create temporary config file and use it for hdfs FS URL config
-
-		File configFile = File.createTempFile(
-				"test_mr",
-				null);
-		ManualOperationParams operationParams = new ManualOperationParams();
-		operationParams.getContext().put(
-				ConfigOptions.PROPERTIES_FILE_CONTEXT,
-				configFile);
-
-		final ConfigHDFSCommand configHdfs = new ConfigHDFSCommand();
-		configHdfs.setHdfsUrlParameter(env.getHdfs());
-		configHdfs.execute(operationParams);
-
 		exportCommand.setParameters(
 				exportPath,
 				null);
@@ -349,7 +335,7 @@ public class BasicMapReduceIT
 		MapReduceTestUtils.filterConfiguration(conf);
 		final int res = ToolRunner.run(
 				conf,
-				exportCommand.createRunner(operationParams),
+				exportCommand.createRunner(env.getOperationParams()),
 				new String[] {});
 		Assert.assertTrue(
 				"Export Vector Data map reduce job failed",

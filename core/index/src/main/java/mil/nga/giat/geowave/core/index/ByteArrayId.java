@@ -24,9 +24,11 @@ public class ByteArrayId implements
 		Comparable<ByteArrayId>
 {
 	private static final long serialVersionUID = 1L;
-	private final byte[] id;
+	private byte[] id;
 	@SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
 	private transient String stringId;
+
+	public ByteArrayId() {}
 
 	public ByteArrayId(
 			final byte[] id ) {

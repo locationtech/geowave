@@ -69,9 +69,7 @@ public class CopyCommand extends
 
 		if (options.getHdfsHostPort() == null) {
 
-			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			options.setHdfsHostPort(hdfsFSUrl);
 		}

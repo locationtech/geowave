@@ -224,9 +224,7 @@ public abstract class DefaultOperation implements
 	}
 
 	public Properties getGeoWaveConfigProperties() {
-		return ConfigOptions.loadProperties(
-				getGeoWaveConfigFile(),
-				null);
+		return ConfigOptions.loadProperties(getGeoWaveConfigFile());
 	}
 
 	/**

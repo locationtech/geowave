@@ -32,6 +32,10 @@ import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SecondaryIndexIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
+import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkIT;
+import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
+import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkSQLIT;
+import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
@@ -53,7 +57,11 @@ import mil.nga.giat.geowave.test.store.DataStatisticsStoreIT;
 	ConfigCacheIT.class,
 	DataStatisticsStoreIT.class,
 	SecondaryIndexIT.class,
-	DBScanIT.class
+	DBScanIT.class,
+	GeoWaveJavaSparkIT.class,
+	GeoWaveJavaSparkKMeansIT.class,
+	GeoWaveJavaSparkSQLIT.class,
+	GeoWaveSparkSpatialJoinIT.class
 })
 public class GeoWaveITSuite
 {

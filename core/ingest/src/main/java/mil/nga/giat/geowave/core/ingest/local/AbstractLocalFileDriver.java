@@ -82,9 +82,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		Properties configProperties = null;
 
 		if (configFile != null && configFile.exists()) {
-			configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+			configProperties = ConfigOptions.loadProperties(configFile);
 		}
 
 		// If input path is S3

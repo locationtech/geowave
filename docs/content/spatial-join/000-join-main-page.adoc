@@ -1,0 +1,94 @@
+[[quickstart-join-page]]
+<<<
+
+_v${project.version}_
+
+:linkattrs:
+
+= GeoWave Quickstart Guide: Spatial Join Jupyter Notebook image:geowave-icon-logo-cropped.png[width="28%"]
+
+== Assumptions
+
+This document assumes you understand how to create and configure an EMR cluster for GeoWave, and you understand the basic cluster setup for the jupyter notebook examples. If you need more information on the steps involved in setting up a cluster to support GeoWave visit: 
+
+- link:aws-env.html#[Amazon Web Services EMR, window="_blank"]
+- link:jupyter.html#[Jupyter Notebook Quickstart, window="_blank"]
+
+== Configuring Spark
+
+To better configure Spark for our demo we use an option provided by AWS to maximize the memory and CPU usage of our Spark cluster called `maximizeResourceAllocation`. This option has to be provided at cluster creation as a configuration option given to Spark. 
+For more information on how to set this option visit link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-spark-configure.html[Configuring Spark].
+
+[WARNING]
+====
+Setting this option on some smaller instances with HBase installed can cut the maximum available yarn resources in half (see link:http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-hadoop-task-config.html[here] for memory config per instance type). *AWS DOES NOT* account for HBase being installed when using `maximizeResourceAllocation`.
+When running through Jupyter notebook there is no issue because we account for this ourselves, but if you want to use spark through the CLI or shell this can break spark unless you modify the `spark-defaults.conf` manually.
+====
+
+== Recommended Hardware settings
+
+The current implementation of the join is rather unoptimized as it considers the worst case scenario in terms of setup logic for each dataset (dynamically generates indices for each set). This requires more hardware resources than the other demos, so you will need to modify the hardware specifications of your emr cluster to at least the minimum required settings specified below to run successfully.
+
+image::aws-gui-method-3.png[scaledwidth="100%",alt="select emr"]
+
+=== Spatial Join Demo Settings
+- Root device EBS volume size
+** Set this to at least 40gb
+- Master
+** Edit the Instance Type to be m4.2xlarge
+** Do not touch the EBS Storage
+- Core
+** Edit the Instance Type to be m4.2xlarge
+** Select at least 10 for the Instance count
+** Do not touch the EBS Storage or Auto Scaling
+
+== Connect to the notebook server
+
+After your cluster has been created and is in the Waiting state, you are ready to connect to the notebook server and run the demo:
+
+image::interacting-cluster-1.png[scaledwidth="100%",alt="select emr"]
+
+. Use the master public dns of the cluster like below in your browser to connect to the notebook server.  
++
+[source]
+----
+{master_public_dns}:9000
+----
+. Enter the default password `geowave` to gain access to the notebooks. 
+. Then simply select the demo notebook you wish to run and follow the instructions in the notebook to proceed through the demo. You can run each cell of the notebook by pressing [SHIFT + ENTER] while a cell is in focus.
+
+== Appendices
+
+=== Modifying Spark settings on Jupyter kernel
+
+Our bootstrap scripts setup the Jupyter kernel to use yarn by default, and other spark configuration settings through the `kernel.json` file for the kernel itself. If for any reason you would like to change these settings, you can do so by modifying the `kernel.json` once you are connected to the cluster.
+
+. SSH into the emr cluster
+. Open the `kernel.json` file in your favorite text editor (vim, vi, nano) found at the following location
+.. `/home/hadoop/.local/share/jupyter/kernels/pythonwithpixiedust22/kernel.json`
+. Modify `PYSPARK_SUBMIT_ARGS` to contain whatever settings you need for spark.
+. Restart the Jupyter Kernel (if running), or your settings will be applied the next time the kernel loads.
+
+=== Restarting the Jupyter Daemon
+
+The Jupyter notebook server is launched at cluster creation as a link:http://upstart.ubuntu.com/[Upstart] service. If Jupyter should stop working or need to be restarted after the cluster has been created, you can do so by following these steps.
+
+. SSH into the emr cluster
+. Run the following commands
+
++
+[source, bash]
+----
+sudo stop jupyter
+sudo start jupyter
+----
+
+
+
+
+
+
+
+
+
+

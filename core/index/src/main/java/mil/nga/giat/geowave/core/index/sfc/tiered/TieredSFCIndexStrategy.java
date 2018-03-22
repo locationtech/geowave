@@ -261,6 +261,40 @@ public class TieredSFCIndexStrategy implements
 		return null;
 	}
 
+	public List<ByteArrayId> reprojectToCoarserTier(
+			final ByteArrayId insertionId,
+			final byte reprojectTier ) {
+		// Get initial range covered by ID
+		MultiDimensionalNumericData initialRange = this.getRangeForId(insertionId);
+		final byte[] rowId = insertionId.getBytes();
+		// We must be reprojecting to coarser tier
+		if (rowId[0] > reprojectTier) {
+			final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+					initialRange,
+					baseDefinitions);
+			final Integer reprojectSfcIndex = orderedSfcIndexToTierId.inverse().get(
+					reprojectTier);
+			final SpaceFillingCurve reprojectSFC = orderedSfcs[reprojectSfcIndex];
+			final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
+					ranges.length);
+			for (BinnedNumericDataset range : ranges) {
+				List<ByteArrayId> ids = TieredSFCIndexStrategy.getRowIdsAtTier(
+						range,
+						reprojectTier,
+						reprojectSFC,
+						BigInteger.valueOf(maxEstimatedDuplicateIdsPerDimension),
+						reprojectSfcIndex);
+				rowIds.addAll(ids);
+			}
+			return rowIds;
+		}
+		else {
+			LOGGER.warn("Tier for row must be higher than reproject tier.");
+		}
+
+		return null;
+	}
+
 	@Override
 	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
 			final MultiDimensionalNumericData dataRange,
