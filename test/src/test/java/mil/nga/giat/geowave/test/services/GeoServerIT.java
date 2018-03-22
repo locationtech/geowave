@@ -99,8 +99,8 @@ public class GeoServerIT
 	private String update;
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
+		// GeoWaveStoreType.ACCUMULO,
+		// GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		"disableServer=true",
@@ -169,7 +169,6 @@ public class GeoServerIT
 		configServiceClient.configGeoServer("localhost:9011");
 		// create the workspace
 		Response addWs = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
-		String p = addWs.readEntity(String.class);
 		success &= (addWs.getStatus() == 200);
 		// enable wfs & wms
 		success &= enableWfs();

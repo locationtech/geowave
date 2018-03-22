@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import javax.imageio.ImageIO;
 import javax.ws.rs.core.Response;
@@ -63,8 +61,8 @@ public class GeoServerIngestIT
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
+		// GeoWaveStoreType.ACCUMULO,
+		// GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;

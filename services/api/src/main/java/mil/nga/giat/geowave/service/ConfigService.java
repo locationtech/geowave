@@ -83,7 +83,7 @@ public interface ConfigService
 	public Response addStore(
 			@QueryParam("name") String name,
 			@PathParam("type") String type,
-			@QueryParam("gwNamespace") @DefaultValue("") String geowaveNamespace,			
+			@QueryParam("geowaveNamespace") @DefaultValue("") String geowaveNamespace,
 			Map<String, String> additionalQueryParams );
 
 	@POST

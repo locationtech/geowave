@@ -29,8 +29,7 @@ import mil.nga.giat.geowave.service.ConfigService;
 public class ConfigServiceClient implements
 		ConfigService
 {
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			ConfigServiceClient.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ConfigServiceClient.class);
 	private final ConfigService configService;
 	// Jersey 2 web resource proxy client doesn't work well with dynamic
 	// key-value pair queryparams such as the generic addStore
@@ -53,19 +52,30 @@ public class ConfigServiceClient implements
 		configService = WebResourceFactory.newResource(
 				ConfigService.class,
 				target);
-		addStoreTarget = createAddStoreTarget(target);				
+		addStoreTarget = createAddStoreTarget(target);
 	}
-	private static WebTarget createAddStoreTarget(WebTarget baseTarget) {
+
+	private static WebTarget createAddStoreTarget(
+			WebTarget baseTarget ) {
 
 		WebTarget addStoreTarget = addPathFromAnnotation(
 				ConfigService.class,
 				baseTarget);
 		try {
-			addStoreTarget = addPathFromAnnotation(ConfigService.class.getMethod("addStore", String.class, String.class, String.class, Map.class),addStoreTarget);
+			addStoreTarget = addPathFromAnnotation(
+					ConfigService.class.getMethod(
+							"addStore",
+							String.class,
+							String.class,
+							String.class,
+							Map.class),
+					addStoreTarget);
 		}
 		catch (NoSuchMethodException | SecurityException e) {
-			LOGGER.warn("Unable to derive path from method annotations",e);
-			//default to hardcoded method path
+			LOGGER.warn(
+					"Unable to derive path from method annotations",
+					e);
+			// default to hardcoded method path
 			addStoreTarget = addStoreTarget.path("/addstore/{type}");
 		}
 		return addStoreTarget;
@@ -74,11 +84,9 @@ public class ConfigServiceClient implements
 	private static WebTarget addPathFromAnnotation(
 			final AnnotatedElement ae,
 			WebTarget target ) {
-		final Path p = ae.getAnnotation(
-				Path.class);
+		final Path p = ae.getAnnotation(Path.class);
 		if (p != null) {
-			target = target.path(
-					p.value());
+			target = target.path(p.value());
 		}
 		return target;
 	}
@@ -86,8 +94,7 @@ public class ConfigServiceClient implements
 	@Override
 	public Response list(
 			final String filter ) {
-		final Response resp = configService.list(
-				filter);
+		final Response resp = configService.list(filter);
 		resp.bufferEntity();
 		return resp;
 	}
@@ -407,8 +414,7 @@ public class ConfigServiceClient implements
 	public Response configHDFS(
 			final String HDFS_DefaultFS_URL ) {
 
-		final Response resp = configService.configHDFS(
-				HDFS_DefaultFS_URL);
+		final Response resp = configService.configHDFS(HDFS_DefaultFS_URL);
 		return resp;
 	}
 
@@ -416,8 +422,7 @@ public class ConfigServiceClient implements
 	public Response removeIndex(
 			final String name ) {
 
-		final Response resp = configService.removeIndex(
-				name);
+		final Response resp = configService.removeIndex(name);
 		return resp;
 	}
 
@@ -425,8 +430,7 @@ public class ConfigServiceClient implements
 	public Response removeIndexGroup(
 			final String name ) {
 
-		final Response resp = configService.removeIndexGroup(
-				name);
+		final Response resp = configService.removeIndexGroup(name);
 		return resp;
 	}
 
@@ -434,8 +438,7 @@ public class ConfigServiceClient implements
 	public Response removeStore(
 			final String name ) {
 
-		final Response resp = configService.removeStore(
-				name);
+		final Response resp = configService.removeStore(name);
 		return resp;
 	}
 
@@ -476,7 +479,7 @@ public class ConfigServiceClient implements
 				name);
 		if (geowaveNamespace != null && !geowaveNamespace.isEmpty()) {
 			internalAddStoreTarget = internalAddStoreTarget.queryParam(
-					"gwNamespace",
+					"geowaveNamespace",
 					name);
 		}
 		for (Entry<String, String> e : additionalQueryParams.entrySet()) {
@@ -484,12 +487,9 @@ public class ConfigServiceClient implements
 					e.getKey(),
 					e.getValue());
 		}
-		return internalAddStoreTarget
-				.request()
-				.accept(
-						MediaType.APPLICATION_JSON)
-				.method(
-						"POST");
+		return internalAddStoreTarget.request().accept(
+				MediaType.APPLICATION_JSON).method(
+				"POST");
 	}
 
 	@Override
