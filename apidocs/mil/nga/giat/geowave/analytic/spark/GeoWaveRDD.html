@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/AnalyticOperationCLIProvider.html" title="class in mil.nga.giat.geowave.analytic.spark"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRegistrator.html" title="class in mil.nga.giat.geowave.analytic.spark"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" target="_top">Frames</a></li>
@@ -191,6 +191,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                     int&nbsp;minSplits,
                     int&nbsp;maxSplits)</code>&nbsp;</td>
 </tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#writeFeaturesToGeoWave-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter-org.apache.spark.api.java.JavaPairRDD-">writeFeaturesToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                      <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
+                      org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;inputRDD)</code>
+<div class="block">Translate a set of objects in a JavaRDD to SimpleFeatures and push to
+ GeoWave</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#writeToGeoWave-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.apache.spark.api.java.JavaRDD-">writeToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+              <a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter,
+              org.apache.spark.api.java.JavaRDD&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;inputRDD)</code>
+<div class="block">Translate a set of objects in a JavaRDD to a provided type and push to
+ GeoWave</div>
+</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -297,6 +319,46 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="writeFeaturesToGeoWave-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter-org.apache.spark.api.java.JavaPairRDD-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeFeaturesToGeoWave</h4>
+<pre>public static&nbsp;void&nbsp;writeFeaturesToGeoWave(org.apache.spark.SparkContext&nbsp;sc,
+                                          <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                          <a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                                          <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
+                                          org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;inputRDD)
+                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Translate a set of objects in a JavaRDD to SimpleFeatures and push to
+ GeoWave</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="writeToGeoWave-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.apache.spark.api.java.JavaRDD-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>writeToGeoWave</h4>
+<pre>public static&nbsp;void&nbsp;writeToGeoWave(org.apache.spark.SparkContext&nbsp;sc,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter,
+                                  org.apache.spark.api.java.JavaRDD&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;inputRDD)
+                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<div class="block">Translate a set of objects in a JavaRDD to a provided type and push to
+ GeoWave</div>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="rddFeatures-org.apache.spark.api.java.JavaPairRDD-">
 <!--   -->
 </a>
@@ -364,7 +426,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/AnalyticOperationCLIProvider.html" title="class in mil.nga.giat.geowave.analytic.spark"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRegistrator.html" title="class in mil.nga.giat.geowave.analytic.spark"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" target="_top">Frames</a></li>

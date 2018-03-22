@@ -60,7 +60,9 @@ mil.nga.giat.geowave.analytic.spark.kmeans.operations
 mil.nga.giat.geowave.analytic.spark.sparksql
 mil.nga.giat.geowave.analytic.spark.sparksql.operations
 mil.nga.giat.geowave.analytic.spark.sparksql.udf
+mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt
 mil.nga.giat.geowave.analytic.spark.sparksql.util
+mil.nga.giat.geowave.analytic.spark.spatial
 mil.nga.giat.geowave.analytic.store
 mil.nga.giat.geowave.cli.debug
 mil.nga.giat.geowave.cli.geoserver

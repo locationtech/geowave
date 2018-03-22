@@ -95,6 +95,10 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.spark">mil.nga.giat.geowave.analytic.spark</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.cli.osm.osmfeature.types.features">mil.nga.giat.geowave.cli.osm.osmfeature.types.features</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -165,6 +169,31 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SimpleFeatureOutputReducer.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/clustering/SimpleFeatureOutputReducer.html#outputAdapter">outputAdapter</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static void</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html#writeFeaturesToGeoWave-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter-org.apache.spark.api.java.JavaPairRDD-">writeFeaturesToGeoWave</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions,
+                      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a>&nbsp;adapter,
+                      org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;inputRDD)</code>
+<div class="block">Translate a set of objects in a JavaRDD to SimpleFeatures and push to
+ GeoWave</div>
+</td>
 </tr>
 </tbody>
 </table>

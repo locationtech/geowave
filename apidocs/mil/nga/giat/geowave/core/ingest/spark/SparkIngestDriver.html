@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":9,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -185,26 +185,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkIngestDriver.html#runOperation-java.io.File-java.util.Properties-mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions-java.lang.String-java.lang.String-mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions-mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">runOperation</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;configProperties,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localInput,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.spark">SparkCommandLineOptions</a>&nbsp;sparkOptions,
-            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath)</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkIngestDriver.html#setHdfsURLStreamHandlerFactory--">setHdfsURLStreamHandlerFactory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkIngestDriver.html#setUpHDFSFilesystem-java.lang.String-java.lang.String-">setUpHDFSFilesystem</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;hdfsFSUrl)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/nio/file/Path.html?is-external=true" title="class or interface in java.nio.file">Path</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkIngestDriver.html#setUpS3Filesystem-java.util.Properties-java.lang.String-java.lang.String-">setUpS3Filesystem</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;configProperties,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath,
@@ -256,27 +245,6 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <li class="blockList">
 <h4>runOperation</h4>
 <pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localInput,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">VisibilityOptions</a>&nbsp;ingestOptions,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/spark/SparkCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.spark">SparkCommandLineOptions</a>&nbsp;sparkOptions,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;basePath)
-                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="runOperation-java.io.File-java.util.Properties-mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions-java.lang.String-java.lang.String-mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions-mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>runOperation</h4>
-<pre>public&nbsp;boolean&nbsp;runOperation(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;configFile,
-                            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;configProperties,
                             <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localInput,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStoreName,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexList,

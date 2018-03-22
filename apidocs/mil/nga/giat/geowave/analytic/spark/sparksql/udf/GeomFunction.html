@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
-var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":6,"i1":10,"i2":10,"i3":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunctionRegistry.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomIntersects.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" target="_top">Frames</a></li>
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -109,17 +109,17 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/BufferOperation.html" title="interface in mil.nga.giat.geowave.analytic.spark.sparksql.udf">BufferOperation</a>, org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomContains.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomContains</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomCovers.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomCovers</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomCrosses.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomCrosses</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomDisjoint.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomDisjoint</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomEquals</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomIntersects.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomIntersects</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomOverlaps.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomOverlaps</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomTouches.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomTouches</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithin.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomWithin</a></dd>
+<dd><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomContains.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomContains</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomCovers.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomCovers</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomCrosses.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomCrosses</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomDisjoint.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomDisjoint</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomEquals</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomIntersects.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomIntersects</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomOverlaps.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomOverlaps</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomTouches.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomTouches</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithin.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomWithin</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomWithinDistance</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public abstract class <span class="typeNameLabel">GeomFunction</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</pre>
+implements org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/BufferOperation.html" title="interface in mil.nga.giat.geowave.analytic.spark.sparksql.udf">BufferOperation</a></pre>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../../../serialized-form.html#mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction">Serialized Form</a></dd>
@@ -130,25 +130,6 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- =========== FIELD SUMMARY =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.summary">
-<!--   -->
-</a>
-<h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">GeomReader</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#geomReader">geomReader</a></span></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -173,14 +154,28 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected com.vividsolutions.jts.geom.Geometry</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#parseGeom-java.lang.String-">parseGeom</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geomStr)</code>&nbsp;</td>
+<td class="colFirst"><code>abstract boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">apply</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;geom1,
+     com.vividsolutions.jts.geom.Geometry&nbsp;geom2)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">call</a></span>(com.vividsolutions.jts.geom.Geometry&nbsp;t1,
+    com.vividsolutions.jts.geom.Geometry&nbsp;t2)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>double</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#getBufferAmount--">getBufferAmount</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>com.vividsolutions.jts.geom.Geometry</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#parseGeom-java.lang.String-">parseGeom</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;wktGeom)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -190,13 +185,6 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
 </ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.apache.spark.sql.api.java.UDF2">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;org.apache.spark.sql.api.java.UDF2</h3>
-<code>call</code></li>
-</ul>
 </li>
 </ul>
 </li>
@@ -205,23 +193,6 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="geomReader">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>geomReader</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">GeomReader</a> geomReader</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -245,13 +216,58 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getBufferAmount--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getBufferAmount</h4>
+<pre>public&nbsp;double&nbsp;getBufferAmount()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/BufferOperation.html#getBufferAmount--">getBufferAmount</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/BufferOperation.html" title="interface in mil.nga.giat.geowave.analytic.spark.sparksql.udf">BufferOperation</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="parseGeom-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>parseGeom</h4>
+<pre>public&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;parseGeom(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;wktGeom)
+                                               throws com.vividsolutions.jts.io.ParseException</pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code>com.vividsolutions.jts.io.ParseException</code></dd>
+</dl>
+</li>
+</ul>
+<a name="call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>call</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;call(com.vividsolutions.jts.geom.Geometry&nbsp;t1,
+                    com.vividsolutions.jts.geom.Geometry&nbsp;t2)
+             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>call</code>&nbsp;in interface&nbsp;<code>org.apache.spark.sql.api.java.UDF2&lt;com.vividsolutions.jts.geom.Geometry,com.vividsolutions.jts.geom.Geometry,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>parseGeom</h4>
-<pre>protected&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;parseGeom(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geomStr)</pre>
+<h4>apply</h4>
+<pre>public abstract&nbsp;boolean&nbsp;apply(com.vividsolutions.jts.geom.Geometry&nbsp;geom1,
+                              com.vividsolutions.jts.geom.Geometry&nbsp;geom2)</pre>
 </li>
 </ul>
 </li>
@@ -283,7 +299,7 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunctionRegistry.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomIntersects.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" target="_top">Frames</a></li>
@@ -308,13 +324,13 @@ implements org.apache.spark.sql.api.java.UDF2&lt;<a href="http://docs.oracle.com
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
