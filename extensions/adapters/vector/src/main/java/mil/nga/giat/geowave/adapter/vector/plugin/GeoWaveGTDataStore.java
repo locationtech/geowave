@@ -68,8 +68,7 @@ public class GeoWaveGTDataStore extends
 		ContentDataStore
 {
 	/** Package logger */
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveGTDataStore.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
 
 	private FeatureListenerManager listenerManager = null;
 	protected AdapterStore adapterStore;
@@ -95,8 +94,7 @@ public class GeoWaveGTDataStore extends
 				config);
 		authorizationSPI = config.getAuthorizationFactory().create(
 				config.getAuthorizationURL());
-		init(
-				config);
+		init(config);
 		featureNameSpaceURI = config.getFeatureNamespace();
 		indexQueryStrategy = config.getIndexQueryStrategy();
 		transactionBufferSize = config.getTransactionBufferSize();
@@ -142,20 +140,17 @@ public class GeoWaveGTDataStore extends
 
 	protected PrimaryIndex[] getIndicesForAdapter(
 			final GeotoolsFeatureDataAdapter adapter ) {
-		PrimaryIndex[] currentSelections = preferredIndexes.get(
-				adapter.getFeatureType().getName().toString());
+		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
 		if (currentSelections != null) {
 			return currentSelections;
 		}
-		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore.getIndicesForAdapter(
-				adapter.getAdapterId());
+		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore.getIndicesForAdapter(adapter
+				.getAdapterId());
 		if ((adapterIndexMapping != null) && adapterIndexMapping.isNotEmpty()) {
-			currentSelections = adapterIndexMapping.getIndices(
-					indexStore);
+			currentSelections = adapterIndexMapping.getIndices(indexStore);
 		}
 		else {
-			currentSelections = getPreferredIndices(
-					adapter);
+			currentSelections = getPreferredIndices(adapter);
 		}
 		preferredIndexes.put(
 				adapter.getFeatureType().getName().toString(),
@@ -174,38 +169,30 @@ public class GeoWaveGTDataStore extends
 				featureType,
 				visibilityManagement);
 
-		if (!adapterStore.adapterExists(
-				adapter.getAdapterId())) {
+		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
 			// it is questionable whether createSchema *should* write the
 			// adapter to the store, it is missing the proper index information
 			// at this stage
-			adapter.init(
-					new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-							new SpatialOptions()));
+			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 			if (featureNameSpaceURI != null) {
-				adapter.setNamespace(
-						featureNameSpaceURI.toString());
+				adapter.setNamespace(featureNameSpaceURI.toString());
 			}
-			adapterStore.addAdapter(
-					adapter);
+			adapterStore.addAdapter(adapter);
 		}
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(
 			final String typeName ) {
 		final GeotoolsFeatureDataAdapter featureAdapter;
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
-				new ByteArrayId(
-						StringUtils.stringToBinary(
-								typeName)));
+		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+				StringUtils.stringToBinary(typeName)));
 		if ((adapter == null) || !(adapter instanceof GeotoolsFeatureDataAdapter)) {
 			return null;
 		}
 		featureAdapter = (GeotoolsFeatureDataAdapter) adapter;
 		if (featureNameSpaceURI != null) {
 			if (adapter instanceof FeatureDataAdapter) {
-				((FeatureDataAdapter) featureAdapter).setNamespace(
-						featureNameSpaceURI.toString());
+				((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
 			}
 		}
 		return featureAdapter;
@@ -219,8 +206,7 @@ public class GeoWaveGTDataStore extends
 		while (adapters.hasNext()) {
 			final DataAdapter<?> adapter = adapters.next();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(
-						((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getName());
+				names.add(((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getName());
 			}
 		}
 		adapters.close();
@@ -275,8 +261,7 @@ public class GeoWaveGTDataStore extends
 		return new GeoWaveFeatureSource(
 				entry,
 				Query.ALL,
-				getAdapter(
-						entry.getTypeName()),
+				getAdapter(entry.getTypeName()),
 				transactionsAllocator);
 	}
 
@@ -284,18 +269,15 @@ public class GeoWaveGTDataStore extends
 	public void removeSchema(
 			final Name typeName )
 			throws IOException {
-		this.removeSchema(
-				typeName.getLocalPart());
+		this.removeSchema(typeName.getLocalPart());
 	}
 
 	@Override
 	public void removeSchema(
 			final String typeName )
 			throws IOException {
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
-				new ByteArrayId(
-						StringUtils.stringToBinary(
-								typeName)));
+		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+				StringUtils.stringToBinary(typeName)));
 		if (adapter != null) {
 			final String[] authorizations = getAuthorizationSPI().getAuthorizations();
 			dataStore.delete(
@@ -327,8 +309,7 @@ public class GeoWaveGTDataStore extends
 						source);
 			}
 			else {
-				state = (GeoWaveTransactionState) transaction.getState(
-						this);
+				state = (GeoWaveTransactionState) transaction.getState(this);
 				if (state == null) {
 					state = new GeoWaveTransactionManagementState(
 							transactionBufferSize,
@@ -349,8 +330,7 @@ public class GeoWaveGTDataStore extends
 
 		final List<PrimaryIndex> currentSelectionsList = new ArrayList<PrimaryIndex>(
 				2);
-		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(
-				adapter.getFeatureType());
+		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getFeatureType());
 		final boolean canUseTime = adapter.hasTemporalConstraints();
 
 		/**
@@ -367,10 +347,8 @@ public class GeoWaveGTDataStore extends
 
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
-					if (indexNames.contains(
-							index.getId().getString())) {
-						currentSelectionsList.add(
-								index);
+					if (indexNames.contains(index.getId().getString())) {
+						currentSelectionsList.add(index);
 					}
 				}
 				@SuppressWarnings("rawtypes")
@@ -388,8 +366,7 @@ public class GeoWaveGTDataStore extends
 					// If not requiring time OR (requires time AND has time
 					// constraints)
 					if (!hasTime || canUseTime) {
-						currentSelectionsList.add(
-								index);
+						currentSelectionsList.add(index);
 					}
 				}
 			}
@@ -401,12 +378,9 @@ public class GeoWaveGTDataStore extends
 		}
 
 		if (currentSelectionsList.isEmpty()) {
-			currentSelectionsList.add(
-					new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-							new SpatialOptions()));
+			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
 		}
 
-		return currentSelectionsList.toArray(
-				new PrimaryIndex[currentSelectionsList.size()]);
+		return currentSelectionsList.toArray(new PrimaryIndex[currentSelectionsList.size()]);
 	}
 }

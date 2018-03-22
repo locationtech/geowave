@@ -1,7 +1,7 @@
 ﻿<p align="center">
 	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"><br/><br/>
 </p>
-test
+
 ## About  
 
 | Continuous Integration | Code Coverage | Static Analysis | Chat |            
