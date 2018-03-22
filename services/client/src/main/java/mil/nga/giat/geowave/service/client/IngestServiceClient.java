@@ -4,7 +4,6 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import mil.nga.giat.geowave.service.IngestService;
@@ -25,13 +24,7 @@ public class IngestServiceClient
 			final String baseUrl,
 			String user,
 			String password ) {
-		// ClientBuilder bldr = ClientBuilder.newBuilder();
-		// if (user != null && password != null) {
-		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
-		// user,
-		// password);
-		// bldr.register(feature);
-		// }
+
 		ingestService = WebResourceFactory.newResource(
 				IngestService.class,
 				ClientBuilder.newClient().register(
@@ -47,7 +40,7 @@ public class IngestServiceClient
 
 	public Response kafkaToGW(
 			final String store_name,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final String kafkaPropertyFile ) {
 
 		return kafkaToGW(
@@ -68,7 +61,7 @@ public class IngestServiceClient
 
 	public Response kafkaToGW(
 			final String store_name,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final String kafkaPropertyFile,
 			final String visibility,
 			final String groupId,
@@ -78,12 +71,12 @@ public class IngestServiceClient
 			final String consumerTimeoutMs,
 			final Boolean reconnectOnTimeout,
 			final Integer batchSize,
-			final String extensions,// Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.kafkaToGW(
 				store_name,
-				index_group_list,// Array of Strings
+				index_group_list,
 				kafkaPropertyFile,
 				visibility,
 				groupId,
@@ -93,7 +86,7 @@ public class IngestServiceClient
 				consumerTimeoutMs,
 				reconnectOnTimeout,
 				batchSize,
-				extensions,// Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -116,19 +109,19 @@ public class IngestServiceClient
 	public Response localToGW(
 			final String file_or_directory,
 			final String storename,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final Integer threads,
 			final String visibility,
-			final String extensions, // Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.localToGW(
 				file_or_directory,
 				storename,
-				index_group_list,// Array of Strings
+				index_group_list,
 				threads,
 				visibility,
-				extensions, // Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -147,13 +140,13 @@ public class IngestServiceClient
 	public Response localToHdfs(
 			final String file_or_directory,
 			final String path_to_base_directory_to_write_to,
-			final String extensions, // Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.localToHdfs(
 				file_or_directory,
 				path_to_base_directory_to_write_to,
-				extensions, // Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -166,7 +159,7 @@ public class IngestServiceClient
 			final String producerType,
 			final String serializerClass,
 			final String retryBackoffMs,
-			final String extensions, // Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.localToKafka(
@@ -177,7 +170,7 @@ public class IngestServiceClient
 				producerType,
 				serializerClass,
 				retryBackoffMs,
-				extensions, // Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -202,22 +195,22 @@ public class IngestServiceClient
 			final String file_or_directory,
 			final String path_to_base_directory_to_write_to,
 			final String store_name,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final String visibility,
 			final String jobTrackerHostPort,
 			final String resourceManger,
-			final String extensions,// Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.localToMrGW(
 				file_or_directory,
 				path_to_base_directory_to_write_to,
 				store_name,
-				index_group_list,// Array of Strings
+				index_group_list,
 				visibility,
 				jobTrackerHostPort,
 				resourceManger,
-				extensions,// Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -226,7 +219,7 @@ public class IngestServiceClient
 			final String file_or_directory,
 			final String path_to_base_directory_to_write_to,
 			final String store_name,
-			final String index_group_list ) {// Array of Strings
+			final String index_group_list ) {
 
 		return localToMrGW(
 				file_or_directory,
@@ -243,21 +236,21 @@ public class IngestServiceClient
 	public Response mrToGW(
 			final String path_to_base_directory_to_write_to,
 			final String store_name,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final String visibility,
 			final String jobTrackerHostPort,
 			final String resourceManger,
-			final String extensions,// Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.mrToGW(
 				path_to_base_directory_to_write_to,
 				store_name,
-				index_group_list,// Array of Strings
+				index_group_list,
 				visibility,
 				jobTrackerHostPort,
 				resourceManger,
-				extensions,// Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}
@@ -265,7 +258,7 @@ public class IngestServiceClient
 	public Response mrToGW(
 			final String path_to_base_directory_to_write_to,
 			final String store_name,
-			final String index_group_list ) {// Array of Strings
+			final String index_group_list ) {
 
 		return mrToGW(
 				path_to_base_directory_to_write_to,
@@ -281,27 +274,27 @@ public class IngestServiceClient
 	public Response sparkToGW(
 			final String input_directory,
 			final String store_name,
-			final String index_group_list,// Array of Strings
+			final String index_group_list,
 			final String visibility,
 			final String appName,
 			final String host,
 			final String master,
 			final Integer numExecutors,
 			final Integer numCores,
-			final String extensions,// Array of Strings
+			final String extensions,
 			final String formats ) {
 
 		final Response resp = ingestService.sparkToGW(
 				input_directory,
 				store_name,
-				index_group_list,// Array of Strings
+				index_group_list,
 				visibility,
 				appName,
 				host,
 				master,
 				numExecutors,
 				numCores,
-				extensions,// Array of Strings
+				extensions,
 				formats);
 		return resp;
 	}

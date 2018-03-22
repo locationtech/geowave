@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -99,8 +98,8 @@ public class GeoServerIT
 	private String update;
 
 	@GeoWaveTestStore(value = {
-		// GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	}, options = {
 		"disableServer=true",
@@ -560,10 +559,6 @@ public class GeoServerIT
 			httpclient.close();
 		}
 	}
-
-	/*
-	 * @return lockID
-	 */
 
 	public boolean queryFindPointWithTime()
 			throws ClientProtocolException,

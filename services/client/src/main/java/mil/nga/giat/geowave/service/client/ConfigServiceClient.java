@@ -99,6 +99,10 @@ public class ConfigServiceClient implements
 		return resp;
 	}
 
+	public Response list() {
+		return configService.list(null);
+	}
+
 	public Response addHBaseStore(
 			final String name,
 			final String zookeeper ) {

@@ -40,8 +40,8 @@ import mil.nga.giat.geowave.service.client.GeoServerServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
@@ -61,8 +61,8 @@ public class GeoServerIngestIT
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
 
 	@GeoWaveTestStore(value = {
-		// GeoWaveStoreType.ACCUMULO,
-		// GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
@@ -345,8 +345,6 @@ public class GeoServerIngestIT
 
 	@Before
 	public void setUp() {
-		// ingest data here
-		// create store
 		configServiceClient.configGeoServer("localhost:9011");
 	}
 

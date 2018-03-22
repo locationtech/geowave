@@ -9,8 +9,6 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-
 @Produces(MediaType.APPLICATION_JSON)
 @Path("/v0/remote")
 public interface RemoteService

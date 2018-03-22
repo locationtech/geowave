@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.test.services;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
@@ -30,7 +29,6 @@ import org.slf4j.LoggerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestEnvironment;
-import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 
 public class ServicesTestEnvironment implements

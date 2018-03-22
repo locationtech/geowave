@@ -10,8 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.services;
 
+import static org.junit.Assert.assertEquals;
+
 import javax.ws.rs.core.Response;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -25,8 +30,8 @@ import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
-import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
@@ -50,6 +55,9 @@ public class ConfigServicesIT
 	private final static String testName = "ConfigServicesIT";
 
 	private String storeName = "test-store-name";
+	private String spatialIndexName = "test-spatial-index-name";
+	private String spatialTemporalIndexName = "test-spatial-temporal-index-name";
+	private String indexGroupName = "test-indexGroup-name";
 
 	@BeforeClass
 	public static void setup() {
@@ -73,12 +81,16 @@ public class ConfigServicesIT
 	public void before() {
 		// remove any Geowave objects that may interfere with tests.
 		configServiceClient.removeStore(storeName);
+		configServiceClient.removeIndex(spatialIndexName);
+		configServiceClient.removeIndex(spatialTemporalIndexName);
+		configServiceClient.removeIndexGroup(indexGroupName);
+		configServiceClient.removeIndexGroup(indexGroupName + "-bad");
 	}
 
 	@Test
 	public void testAddStore() {
 		TestUtils.assertStatusCode(
-				"Create Store",
+				"Unable to create store",
 				200,
 				configServiceClient.addStore(
 						storeName,
@@ -87,7 +99,7 @@ public class ConfigServicesIT
 						dataStorePluginOptions.getOptionsAsMap()));
 
 		TestUtils.assertStatusCode(
-				"Create Duplicate Store",
+				"Should fail to create duplicate store",
 				400,
 				configServiceClient.addStore(
 						storeName,
@@ -99,57 +111,43 @@ public class ConfigServicesIT
 	@Test
 	public void testAddSpatialIndex() {
 
-		configServiceClient.removeIndex("spatial"); // make sure that the index
-													// does not exist
-		Response firstAdd = configServiceClient.addSpatialIndex("spatial");
+		Response firstAdd = configServiceClient.addSpatialIndex(spatialIndexName);
 
 		TestUtils.assertStatusCode(
-				"This index should be written to config and return 200",
+				"Unable to create index",
 				200,
 				firstAdd);
 
-		Response secondAdd = configServiceClient.addSpatialIndex("spatial");
+		Response secondAdd = configServiceClient.addSpatialIndex(spatialIndexName);
 
 		TestUtils.assertStatusCode(
-				"This should return 400, that index already exists",
+				"Should fail to create duplicate index",
 				400,
 				secondAdd);
-		configServiceClient.removeIndex("spatial"); // remove index at end of
-													// successful test
 
 	}
 
 	@Test
 	public void testAddSpatialTemporalIndex() {
 
-		configServiceClient.removeIndex("spatial-temporal"); // make sure that
-																// the index
-		// does not exist
-		Response firstAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
+		Response firstAdd = configServiceClient.addSpatialTemporalIndex(spatialTemporalIndexName);
 
 		TestUtils.assertStatusCode(
-				"This index should be written to config and return 200",
+				"Unable to create index",
 				200,
 				firstAdd);
 
-		Response secondAdd = configServiceClient.addSpatialTemporalIndex("spatial-temporal");
+		Response secondAdd = configServiceClient.addSpatialTemporalIndex(spatialTemporalIndexName);
 
 		TestUtils.assertStatusCode(
-				"This should return 400, that index already exists",
+				"Should fail to create duplicate index",
 				400,
 				secondAdd);
-		configServiceClient.removeIndex("spatial-temporal"); // remove index at
-																// end of
-		// successful test
-
 	}
 
 	@Test
 	public void testAddIndexGroup() {
 
-		configServiceClient.removeIndexGroup("test-group"); // make sure that
-															// the index group
-															// does not exist
 		configServiceClient.addSpatialIndex("index1");
 		configServiceClient.addSpatialIndex("index2");
 		String[] indexes = {
@@ -157,48 +155,39 @@ public class ConfigServicesIT
 			"index2"
 		};
 		Response firstAdd = configServiceClient.addIndexGroup(
-				"test-group",
+				indexGroupName,
 				indexes);
 
 		TestUtils.assertStatusCode(
-				"This index group should be written to config and return 200",
+				"Unable to create index group",
 				200,
 				firstAdd);
 
 		Response secondAdd = configServiceClient.addIndexGroup(
-				"test-group",
+				indexGroupName,
 				indexes);
 
 		TestUtils.assertStatusCode(
-				"This should return 400, that index group already exists",
+				"Should fail to create duplicate index group",
 				400,
 				secondAdd);
-		configServiceClient.removeIndexGroup("test-group"); // remove index
-															// group at
-															// end of
-		// successful test
+
 		String[] badIndexes = {
 			"index1",
 			"badIndex"
 		};
 		Response thirdAdd = configServiceClient.addIndexGroup(
-				"test-group",
+				indexGroupName + "-bad",
 				badIndexes);
 
 		TestUtils.assertStatusCode(
 				"This should return 404, one of the indexes listed does not exist",
 				404,
 				thirdAdd);
-
-		configServiceClient.removeIndexGroup("test-group"); // remove index
-															// group at
-															// end of
-		// successful test
 	}
 
 	@Test
 	public void testRemoveStore() {
-		// Create a store to test the remove command
 		configServiceClient.addStore(
 				"test_remove_store",
 				dataStorePluginOptions.getType(),
@@ -207,7 +196,7 @@ public class ConfigServicesIT
 
 		Response firstRemove = configServiceClient.removeStore("test_remove_store");
 		TestUtils.assertStatusCode(
-				"This store should be removed from config and return 200",
+				"Unable to remove store",
 				200,
 				firstRemove);
 
@@ -223,15 +212,11 @@ public class ConfigServicesIT
 	@Test
 	public void testRemoveIndex() {
 
-		configServiceClient.addSpatialIndex("test_remove_index"); // Create an
-																	// index to
-																	// test the
-																	// remove
-																	// command
+		configServiceClient.addSpatialIndex("test_remove_index");
 
 		Response firstRemove = configServiceClient.removeIndex("test_remove_index");
 		TestUtils.assertStatusCode(
-				"This index should be removed from config and return 200",
+				"Unable to remove index",
 				200,
 				firstRemove);
 
@@ -254,15 +239,11 @@ public class ConfigServicesIT
 		};
 		configServiceClient.addIndexGroup(
 				"test_remove_index_group",
-				indexes); // Create an
-		// index group to
-		// test the
-		// remove
-		// command
+				indexes);
 
 		Response firstRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
 		TestUtils.assertStatusCode(
-				"This index group should be removed from config and return 200",
+				"Unable to remove index group",
 				200,
 				firstRemove);
 
@@ -280,32 +261,65 @@ public class ConfigServicesIT
 		// Should always return 200
 		Response config = configServiceClient.configHDFS("localhost:8020");
 		TestUtils.assertStatusCode(
-				"This should write to config and 200",
+				"Unable to configure HDFS",
 				200,
 				config);
 	}
 
 	@Test
-	public void testSet() {
+	public void testSet()
+			throws ParseException {
 		// Should always return 200
 		Response set = configServiceClient.set(
 				"Property",
-				"value");
+				"Value");
 		TestUtils.assertStatusCode(
-				"This should write to config and 200",
+				"Unable to set property",
 				200,
 				set);
+		String list = configServiceClient.list().readEntity(
+				String.class);
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(list);
+		JSONObject values = (JSONObject) json.get("data");
+
+		// check to make sure that property was actually set
+		assertEquals(
+				"The property was not set correctly",
+				"Value",
+				(String) values.get("Property"));
+
 	}
 
-	// Geoserver command does not yet work on the server
 	@Test
-	public void testConfigGeoServer() {
+	public void testList() {
+		// Should always return 200
+		Response list = configServiceClient.list();
+		TestUtils.assertStatusCode(
+				"Unable to return list",
+				200,
+				list);
+	}
 
+	@Test
+	public void testConfigGeoServer()
+			throws ParseException {
+		// Should always return 200
 		Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
 		TestUtils.assertStatusCode(
-				"Should write the new GeoServer URL to config and return 200",
+				"Unable to configure GeoServer",
 				200,
 				configGeoserver);
+		String list = configServiceClient.list().readEntity(
+				String.class);
+		JSONParser parser = new JSONParser();
+		JSONObject json = (JSONObject) parser.parse(list);
+		JSONObject values = (JSONObject) json.get("data");
 
+		// check to make sure that geoserver was actually set
+		assertEquals(
+				"GeoServer was not set correctly",
+				"test-geoserver",
+				(String) values.get("geoserver.url"));
 	}
 }

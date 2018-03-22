@@ -25,13 +25,7 @@ public class BaseServiceClient
 			final String baseUrl,
 			String user,
 			String password ) {
-		// ClientBuilder bldr = ClientBuilder.newBuilder();
-		// if (user != null && password != null) {
-		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
-		// user,
-		// password);
-		// bldr.register(feature);
-		// }
+
 		baseService = WebResourceFactory.newResource(
 				BaseService.class,
 				ClientBuilder.newClient().register(

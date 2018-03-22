@@ -10,25 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.service.client;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import mil.nga.giat.geowave.service.ConfigService;
-import mil.nga.giat.geowave.service.RemoteService;
-import net.sf.json.JSONObject;
-
-import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
-import org.glassfish.jersey.media.multipart.file.FileDataBodyPart;
+
+import mil.nga.giat.geowave.service.RemoteService;
 
 public class RemoteServiceClient
 {
@@ -46,13 +34,7 @@ public class RemoteServiceClient
 			final String baseUrl,
 			String user,
 			String password ) {
-		// ClientBuilder bldr = ClientBuilder.newBuilder();
-		// if (user != null && password != null) {
-		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
-		// user,
-		// password);
-		// bldr.register(feature);
-		// }
+
 		remoteService = WebResourceFactory.newResource(
 				RemoteService.class,
 				ClientBuilder.newClient().register(

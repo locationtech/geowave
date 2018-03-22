@@ -4,11 +4,9 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
 
 import org.glassfish.jersey.client.proxy.WebResourceFactory;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 
 import mil.nga.giat.geowave.service.AnalyticService;
-import mil.nga.giat.geowave.service.RemoteService;
 
 public class AnalyticServiceClient
 {
@@ -26,13 +24,7 @@ public class AnalyticServiceClient
 			final String baseUrl,
 			String user,
 			String password ) {
-		// ClientBuilder bldr = ClientBuilder.newBuilder();
-		// if (user != null && password != null) {
-		// HttpAuthenticationFeature feature = HttpAuthenticationFeature.basic(
-		// user,
-		// password);
-		// bldr.register(feature);
-		// }
+
 		analyticService = WebResourceFactory.newResource(
 				AnalyticService.class,
 				ClientBuilder.newClient().register(
