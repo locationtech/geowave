@@ -170,7 +170,7 @@ public abstract class AbstractHBasePersistence<T extends Persistable> extends
 					getNativeIteratorWrapper(it));
 		}
 		catch (final IOException e) {
-			LOGGER.warn(
+			LOGGER.info(
 					"Unable to find objects in HBase table.",
 					e);
 		}
