@@ -499,8 +499,7 @@
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
 				<scope>compile</scope>
-			</dependency>
-			<dependency>
+			</dependency>			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-multipart</artifactId>
 				<version>${jersey.version}</version>
@@ -508,6 +507,16 @@
 			<dependency>
 				<groupId>org.glassfish.jersey.core</groupId>
 				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-common</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
 			<dependency>
@@ -525,7 +534,6 @@
 				<artifactId>jersey-proxy-client</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-vfs2</artifactId>
