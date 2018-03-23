@@ -216,6 +216,8 @@ mil.nga.giat.geowave.mapreduce.input
 mil.nga.giat.geowave.mapreduce.operations
 mil.nga.giat.geowave.mapreduce.output
 mil.nga.giat.geowave.mapreduce.splits
+mil.nga.giat.geowave.service
+mil.nga.giat.geowave.service.client
 mil.nga.giat.geowave.service.grpc
 mil.nga.giat.geowave.service.grpc.protobuf
 mil.nga.giat.geowave.service.rest
@@ -227,6 +229,7 @@ mil.nga.giat.geowave.test
 mil.nga.giat.geowave.test.annotation
 mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
+mil.nga.giat.geowave.test.services
 mil.nga.giat.geowave.types.stanag4676.service
 mil.nga.giat.geowave.types.stanag4676.service.rest
 org.geotools.process.function
