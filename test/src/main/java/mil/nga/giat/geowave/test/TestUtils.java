@@ -25,6 +25,8 @@ import java.util.Map.Entry;
 import java.util.Properties;
 import java.util.Set;
 
+import javax.ws.rs.core.Response;
+
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
@@ -50,6 +52,7 @@ import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.hadoop.util.VersionInfo;
 import org.apache.hadoop.util.VersionUtil;
 import org.slf4j.Logger;
@@ -619,6 +622,55 @@ public class TestUtils
 	}
 
 	/**
+	 * 
+	 * @param testName
+	 *            Name of the test that we are starting.
+	 */
+	public static void printStartOfTest(
+			Logger LOGGER,
+			String testName ) {
+		// Format
+		String paddedName = StringUtils.center(
+				"STARTING " + testName,
+				37);
+		// Print
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* " + paddedName + " *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	/**
+	 * 
+	 * @param testName
+	 *            Name of the test that we are starting.
+	 * @param startMillis
+	 *            The time (millis) that the test started.
+	 */
+	public static void printEndOfTest(
+			Logger LOGGER,
+			String testName,
+			long startMillis ) {
+		// Get Elapsed Time
+		double elapsedS = (System.currentTimeMillis() - startMillis) / 1000.;
+		// Format
+		String paddedName = StringUtils.center(
+				"FINISHED " + testName,
+				37);
+		String paddedElapsed = StringUtils.center(
+				elapsedS + "s elapsed.",
+				37);
+		// Print
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* " + paddedName + " *");
+		LOGGER.warn("* " + paddedElapsed + " *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+	}
+
+	/**
 	 *
 	 * @param bi
 	 *            sample
@@ -683,5 +735,58 @@ public class TestUtils
 		if (errorPixels > 0) {
 			System.out.println(((float) errorPixels / (float) totalPixels) + "% pixels differed from expected");
 		}
+	}
+
+	@Deprecated
+	public static void assert200(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				200,
+				responseCode);
+	}
+
+	@Deprecated
+	public static void assert400(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				400,
+				responseCode);
+	}
+
+	@Deprecated
+	public static void assert404(
+			String msg,
+			int responseCode ) {
+		Assert.assertEquals(
+				msg,
+				404,
+				responseCode);
+	}
+
+	public static void assertStatusCode(
+			String msg,
+			int expectedCode,
+			Response response ) {
+		String assertionMsg = msg + String.format(
+				": A %s response code should be received",
+				expectedCode);
+		Assert.assertEquals(
+				assertionMsg,
+				expectedCode,
+				response.getStatus());
+	}
+
+	// Overload method with option to automatically generate assertion message.
+	public static void assertStatusCode(
+			int expectedCode,
+			Response response ) {
+		assertStatusCode(
+				"REST call",
+				expectedCode,
+				response);
 	}
 }

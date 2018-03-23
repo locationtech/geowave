@@ -11,10 +11,14 @@ public class GeoWaveOperationFinder extends
 		Finder
 {
 	private final ServiceEnabledCommand<?> operation;
+	private final String defaultConfigFile;
 
 	public GeoWaveOperationFinder(
-			final ServiceEnabledCommand<?> operation ) {
+			final ServiceEnabledCommand<?> operation,
+			String defaultConfigFile ) {
 		this.operation = operation;
+		this.defaultConfigFile = defaultConfigFile;
+
 	}
 
 	@Override
@@ -23,7 +27,8 @@ public class GeoWaveOperationFinder extends
 			final Request request,
 			final Response response ) {
 		return new GeoWaveOperationServiceWrapper<>(
-				operation);
+				operation,
+				defaultConfigFile);
 	}
 
 	@Override

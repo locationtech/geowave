@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -16,8 +17,80 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-spark</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>javax.ws.rs-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-geoserver</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+				<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-service-rest</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>javax.ws.rs-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.restlet.osgi</groupId>
+					<artifactId>org.restlet.ext.jaxrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>
+						org.springframework.security.oauth
+					</groupId>
+					<artifactId>spring-security-oauth2</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-service-client</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -41,12 +114,6 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -54,6 +121,16 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-servlet</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -64,6 +141,20 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -91,6 +182,42 @@
 				<exclusion>
 					<groupId>hsqldb</groupId>
 					<artifactId>hsqldb</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-json</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey.contribs</groupId>
+					<artifactId>jersey-guice</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -127,6 +254,27 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
 				<executions>
+					<execution>
+						<id>unpack-wars</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.geoserver.web</groupId>
+									<artifactId>gs-web-app</artifactId>
+									<version>${geoserver.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
+									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+
 					<execution>
 						<id>setup-wps</id>
 						<goals>
@@ -183,6 +331,28 @@
 				</executions>
 			</plugin>
 			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/restservices</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/../services/rest/src/main/webapp</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.2.1</version>
@@ -223,7 +393,7 @@
 								<log4j.configuration>file:${project.build.testOutputDirectory}/log4j-test.properties</log4j.configuration>
 								<java.util.logging.config.file>${project.build.testOutputDirectory}/jul-test.properties</java.util.logging.config.file>
 							</systemPropertyVariables>
-							<!-- Sonar currently just supports surefire so "trick" Sonar into
+							<!-- Sonar currently just supports surefire so "trick" Sonar into 
 								thinking they are surefire reports -->
 							<reportsDirectory>${sonar.surefire.reportsPath}</reportsDirectory>
 							<argLine>${test.args} ${jacoco.failsafe.argline}</argLine>
@@ -257,7 +427,8 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
 										<fileset dir="../" includes="**/coverage-reports/*.exec" />
@@ -265,10 +436,14 @@
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+											<fileset dir="../"
+												includes="**/target/classes/**,**/target/munged/classes/**"
+												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+											<fileset dir="../"
+												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
+												excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -301,7 +476,7 @@
 						<sourceDirectory>../extensions/datastores/hbase/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/bigtable/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/auth/src/main/java</sourceDirectory>
-						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>						
+						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/theia/src/main/java</sourceDirectory>

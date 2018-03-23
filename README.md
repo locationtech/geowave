@@ -1,4 +1,4 @@
-<p align="center">
+﻿<p align="center">
 	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"><br/><br/>
 </p>
 
