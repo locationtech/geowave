@@ -19,6 +19,8 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.Arrays;
+import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.ws.rs.core.HttpHeaders;
@@ -120,11 +122,19 @@ public class DownloadRunner extends
 					HttpHeaders.CONTENT_LENGTH,
 					String.valueOf(authentication.length()));
 			OutputStream os = connection.getOutputStream();
+			// HP Fortify "Resource Shutdown" false positive
+			// The OutputStream is being closed
 			os.write(authentication.getBytes("UTF-8"));
+			// HP Fortify "Privacy Violation" false positive
+			// In this case the password is being sent to an output
+			// stream in order to authenticate the system and allow
+			// us to perform the requested download.
 			os.flush();
 			os.close();
 
 			inputStream = connection.getInputStream();
+			// HP Fortify "Resource Shutdown" false positive
+			// The InputStream is being closed in the finally block
 			final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			IOUtils.copyLarge(
 					inputStream,
@@ -204,6 +214,8 @@ public class DownloadRunner extends
 				inputStream = response.getEntityInputStream();
 				final FileOutputStream outputStream = new FileOutputStream(
 						compressedFile);
+				// HP Fortify "Resource Shutdown" false positive
+				// The OutputStream is being closed
 				copyLarge(
 						inputStream,
 						outputStream,
@@ -297,8 +309,9 @@ public class DownloadRunner extends
 				File temp = new File(
 						file.getAbsolutePath() + File.separatorChar + name);
 
-				if (temp.isDirectory() && name.toUpperCase().startsWith(
-						productId.toUpperCase())) {
+				if (temp.isDirectory() && name.toUpperCase(
+						Locale.ENGLISH).startsWith(
+						productId.toUpperCase(Locale.ENGLISH))) {
 					// We provide the coverage in ground reflectance with the
 					// correction of slope effects.
 					// The full description of the product format is here:

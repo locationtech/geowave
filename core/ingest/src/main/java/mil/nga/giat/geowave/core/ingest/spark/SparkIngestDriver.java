@@ -1,3 +1,13 @@
+/*******************************************************************************
+ * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * 
+ * See the NOTICE file distributed with this work for additional
+ * information regarding copyright ownership.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Apache License,
+ * Version 2.0 which accompanies this distribution and is available at
+ * http://www.apache.org/licenses/LICENSE-2.0.txt
+ ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.spark;
 
 import java.io.File;
@@ -371,6 +381,9 @@ public class SparkIngestDriver implements
 							s3EndpointUrl + "/"),
 					new HashMap<String, Object>(),
 					Thread.currentThread().getContextClassLoader());
+			// HP Fortify "Path Traversal" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 
 		}
 		catch (URISyntaxException e) {
@@ -418,6 +431,9 @@ public class SparkIngestDriver implements
 			URI uri = new URI(
 					hdfsFSUrl + hdfsInputPath);
 			path = Paths.get(uri);
+			// HP Fortify "Path Traversal" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
 
 		}
 		catch (URISyntaxException e) {
@@ -474,6 +490,9 @@ public class SparkIngestDriver implements
 
 		Field factoryField = URL.class.getDeclaredField("factory");
 		factoryField.setAccessible(true);
+		// HP Fortify "Access Control" false positive
+		// The need to change the accessibility here is
+		// necessary, has been review and judged to be safe
 
 		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
 
@@ -483,6 +502,9 @@ public class SparkIngestDriver implements
 		else {
 			try {
 				factoryField.setAccessible(true);
+				// HP Fortify "Access Control" false positive
+				// The need to change the accessibility here is
+				// necessary, has been review and judged to be safe
 				factoryField.set(
 						null,
 						new FsUrlStreamHandlerFactory());
