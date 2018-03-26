@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,12 +10,18 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.format.theia;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +31,8 @@ import java.util.Locale;
 import java.util.NoSuchElementException;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import javax.ws.rs.core.HttpHeaders;
 
 import org.apache.commons.io.IOUtils;
@@ -52,8 +60,6 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Polygon;
 
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.format.theia.PropertyIgnoringFilterVisitor;
-import mil.nga.giat.geowave.format.theia.SceneFeatureIterator;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -92,7 +98,7 @@ public class SceneFeatureIterator implements
 	/**
 	 * Returns the SimpleFeatureTypeBuilder which provides the schema of the
 	 * Theia repository.
-	 * 
+	 *
 	 * @return
 	 * @throws NoSuchAuthorityCodeException
 	 * @throws FactoryException
@@ -100,7 +106,7 @@ public class SceneFeatureIterator implements
 	public static SimpleFeatureTypeBuilder defaultSceneFeatureTypeBuilder()
 			throws NoSuchAuthorityCodeException,
 			FactoryException {
-		SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
+		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName(SCENES_TYPE_NAME);
 		typeBuilder.setCRS(CRS.decode(
 				"EPSG:4326",
@@ -199,12 +205,12 @@ public class SceneFeatureIterator implements
 	private static class JSONFeatureIterator implements
 			Iterator<SimpleFeature>
 	{
-		private SimpleFeatureType featureType;
-		private Iterator<?> iterator;
+		private final SimpleFeatureType featureType;
+		private final Iterator<?> iterator;
 
 		public JSONFeatureIterator(
-				SimpleFeatureType featureType,
-				Iterator<?> iterator ) {
+				final SimpleFeatureType featureType,
+				final Iterator<?> iterator ) {
 			this.featureType = featureType;
 			this.iterator = iterator;
 		}
@@ -216,7 +222,7 @@ public class SceneFeatureIterator implements
 
 		@Override
 		public SimpleFeature next() {
-			final JSONObject jsonObject = (JSONObject) this.iterator.next();
+			final JSONObject jsonObject = (JSONObject) iterator.next();
 
 			final String id = jsonObject.getString("id");
 			final JSONObject properties = (JSONObject) jsonObject.get("properties");
@@ -232,12 +238,12 @@ public class SceneFeatureIterator implements
 
 			// Fill Geometry
 			try {
-				Geometry geometry = new GeometryJSON().read(jsonObject.get(
+				final Geometry geometry = new GeometryJSON().read(jsonObject.get(
 						"geometry").toString());
 				geometry.setSRID(4326);
 				feature.setDefaultGeometry(geometry);
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				LOGGER.warn("Unable to read geometry '" + e.getMessage() + "'");
 			}
 
@@ -256,7 +262,7 @@ public class SceneFeatureIterator implements
 							value,
 							binding);
 				}
-				catch (ParseException e) {
+				catch (final ParseException e) {
 					LOGGER.warn("Unable to convert attribute '" + e.getMessage() + "'");
 					value = null;
 				}
@@ -281,7 +287,8 @@ public class SceneFeatureIterator implements
 			throws NoSuchAuthorityCodeException,
 			FactoryException,
 			MalformedURLException,
-			IOException {
+			IOException,
+			GeneralSecurityException {
 		init(
 				new File(
 						workspaceDir,
@@ -308,7 +315,8 @@ public class SceneFeatureIterator implements
 			final Filter cqlFilter )
 			throws NoSuchAuthorityCodeException,
 			FactoryException,
-			IOException {
+			IOException,
+			GeneralSecurityException {
 
 		final SimpleDateFormat dateFormat = new SimpleDateFormat(
 				"yyyy-MM-dd");
@@ -319,13 +327,13 @@ public class SceneFeatureIterator implements
 
 		// Split out the spatial part of the filter.
 		Envelope envelope = null;
-		if (cqlFilter != null && !cqlFilter.equals(Filter.INCLUDE)) {
+		if ((cqlFilter != null) && !cqlFilter.equals(Filter.INCLUDE)) {
 			Envelope bounds = new Envelope();
 			bounds = (Envelope) cqlFilter.accept(
 					ExtractBoundsFilterVisitor.BOUNDS_VISITOR,
 					bounds);
 
-			if (bounds != null && !bounds.isNull() && !bounds.equals(infinity())) {
+			if ((bounds != null) && !bounds.isNull() && !bounds.equals(infinity())) {
 				envelope = bounds;
 			}
 		}
@@ -334,13 +342,13 @@ public class SceneFeatureIterator implements
 		String searchUrl = String.format(
 				SCENES_SEARCH_URL,
 				collection);
-		if (platform != null && platform.length() > 0) {
+		if ((platform != null) && (platform.length() > 0)) {
 			searchUrl += "platform=" + platform + "&";
 		}
-		if (location != null && location.length() > 0) {
+		if ((location != null) && (location.length() > 0)) {
 			searchUrl += "location=" + location + "&";
 		}
-		if (envelope != null && envelope.isNull() == false) {
+		if ((envelope != null) && (envelope.isNull() == false)) {
 			searchUrl += String.format(
 					Locale.ENGLISH,
 					"box=%.6f,%.6f,%.6f,%.6f&",
@@ -369,15 +377,53 @@ public class SceneFeatureIterator implements
 		InputStream inputStream = null;
 		ByteArrayOutputStream outputStream = null;
 		try {
-			URL url = new URL(
+			final URL url = new URL(
 					searchUrl);
 
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			connection.setUseCaches(false);
 			connection.setRequestProperty(
 					HttpHeaders.USER_AGENT,
 					"Mozilla/5.0");
 			connection.setRequestMethod("GET");
+
+			// allow for custom trust store to anchor acceptable certs, use an
+			// expected file in the workspace directory
+			final File customCertsFile = new File(
+					scenesDir.getParentFile(),
+					"theia-keystore.crt");
+			if (customCertsFile.exists()) {
+				// Load CAs from an InputStream
+				final CertificateFactory cf = CertificateFactory.getInstance("X.509");
+
+				final InputStream caInput = new BufferedInputStream(
+						new FileInputStream(
+								customCertsFile));
+				final Certificate ca = cf.generateCertificate(caInput);
+
+				// Create a KeyStore containing our trusted CAs
+				final String keyStoreType = KeyStore.getDefaultType();
+				final KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+				keyStore.load(
+						null,
+						null);
+				keyStore.setCertificateEntry(
+						"ca",
+						ca);
+
+				// Create a TrustManager that trusts the CAs in our KeyStore
+				final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+				final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+				tmf.init(keyStore);
+
+				// Create an SSLContext that uses our TrustManager
+				final SSLContext context = SSLContext.getInstance("TLS");
+				context.init(
+						null,
+						tmf.getTrustManagers(),
+						null);
+				connection.setSSLSocketFactory(context.getSocketFactory());
+			}
 
 			inputStream = connection.getInputStream();
 			// HP Fortify "Resource Shutdown" false positive
@@ -385,26 +431,26 @@ public class SceneFeatureIterator implements
 			IOUtils.copyLarge(
 					inputStream,
 					outputStream = new ByteArrayOutputStream());
-			String geoJson = new String(
+			final String geoJson = new String(
 					outputStream.toByteArray(),
 					java.nio.charset.StandardCharsets.UTF_8);
 
-			SimpleFeatureTypeBuilder typeBuilder = SceneFeatureIterator.defaultSceneFeatureTypeBuilder();
+			final SimpleFeatureTypeBuilder typeBuilder = SceneFeatureIterator.defaultSceneFeatureTypeBuilder();
 			type = typeBuilder.buildFeatureType();
 
-			JSONObject response = JSONObject.fromObject(geoJson);
-			JSONArray features = response.getJSONArray("features");
+			final JSONObject response = JSONObject.fromObject(geoJson);
+			final JSONArray features = response.getJSONArray("features");
 			Iterator<SimpleFeature> featureItereator = new JSONFeatureIterator(
 					type,
-					(Iterator<?>) features.iterator());
+					features.iterator());
 
-			if (cqlFilter != null && !cqlFilter.equals(Filter.INCLUDE)) {
+			if ((cqlFilter != null) && !cqlFilter.equals(Filter.INCLUDE)) {
 				Filter actualFilter;
 
 				if (hasOtherProperties(cqlFilter)) {
 					final List<AttributeDescriptor> descriptorList = type.getAttributeDescriptors();
 
-					String[] propertyNames = new String[descriptorList.size()];
+					final String[] propertyNames = new String[descriptorList.size()];
 					for (int i = 0, icount = descriptorList.size(); i < icount; i++) {
 						propertyNames[i] = descriptorList.get(
 								i).getLocalName();

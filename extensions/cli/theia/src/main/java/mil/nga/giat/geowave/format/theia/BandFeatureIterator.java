@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.format.theia;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -89,7 +90,8 @@ public class BandFeatureIterator implements
 			throws MalformedURLException,
 			IOException,
 			NoSuchAuthorityCodeException,
-			FactoryException {
+			FactoryException,
+			GeneralSecurityException {
 		this(
 				new SceneFeatureIterator(
 						collection,

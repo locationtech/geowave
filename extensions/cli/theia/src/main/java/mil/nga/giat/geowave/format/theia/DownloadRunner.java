@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,8 +10,10 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.format.theia;
 
+import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,10 +21,15 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Arrays;
+import java.security.GeneralSecurityException;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
 import java.util.Locale;
 
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
 import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 
@@ -39,16 +46,12 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 
 import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
-import mil.nga.giat.geowave.format.theia.AnalyzeRunner;
-import mil.nga.giat.geowave.format.theia.DownloadRunner;
-import mil.nga.giat.geowave.format.theia.TheiaBasicCommandLineOptions;
-import mil.nga.giat.geowave.format.theia.TheiaDownloadCommandLineOptions;
-import mil.nga.giat.geowave.format.theia.SceneFeatureIterator;
 
 public class DownloadRunner extends
 		AnalyzeRunner
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(DownloadRunner.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			DownloadRunner.class);
 
 	private static final String AUNTHENTICATION_URL = "https://theia.cnes.fr/atdistrib/services/authenticate/";
 	private static final String DOWNLOAD_URL = "https://theia.cnes.fr/atdistrib/resto2/collections/%s/%s/download/?issuerId=theia";
@@ -73,10 +76,12 @@ public class DownloadRunner extends
 				firstBandOfScene,
 				analysisInfo);
 
-		final String collection = (String) firstBandOfScene
-				.getAttribute(SceneFeatureIterator.COLLECTION_ATTRIBUTE_NAME);
-		final String productId = (String) firstBandOfScene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
-		final String entityId = (String) firstBandOfScene.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
+		final String collection = (String) firstBandOfScene.getAttribute(
+				SceneFeatureIterator.COLLECTION_ATTRIBUTE_NAME);
+		final String productId = (String) firstBandOfScene.getAttribute(
+				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String entityId = (String) firstBandOfScene.getAttribute(
+				SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
 
 		final String userIdent = downloadOptions.getUserIdent();
 		final String password = downloadOptions.getPassword();
@@ -85,46 +90,107 @@ public class DownloadRunner extends
 		String tokenId;
 
 		// Check authentication parameters
-		if (userIdent == null || userIdent.length() == 0 || password == null || password.length() == 0) {
-			LOGGER.error("Invalid or empty authentication parameters (email and password)");
+		if ((userIdent == null) || (userIdent.length() == 0) || (password == null) || (password.length() == 0)) {
+			LOGGER.error(
+					"Invalid or empty authentication parameters (email and password)");
 			return;
 		}
 		try {
 			authentication = "ident=" + URLEncoder.encode(
 					userIdent,
-					"UTF-8") + "&pass=" + URLEncoder.encode(
-					password,
-					"UTF-8");
+					"UTF-8") + "&pass="
+					+ URLEncoder.encode(
+							password,
+							"UTF-8");
 		}
-		catch (UnsupportedEncodingException e) {
-			LOGGER.error("Invalid or empty authentication parameters (email and password)" + e.getMessage());
+		catch (final UnsupportedEncodingException e) {
+			LOGGER.error(
+					"Invalid or empty authentication parameters (email and password)" + e.getMessage());
 			return;
 		}
 
 		// Get a valid tokenId to download data
 		InputStream inputStream = null;
 		try {
-			URL url = new URL(
+			final URL url = new URL(
 					tokenUrl);
 
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			connection.setUseCaches(false);
+			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			connection.setUseCaches(
+					false);
 			connection.setRequestProperty(
 					HttpHeaders.USER_AGENT,
 					"Mozilla/5.0");
-			connection.setRequestMethod("POST");
+			connection.setRequestMethod(
+					"POST");
 
-			connection.setDoOutput(true);
+			connection.setDoOutput(
+					true);
 			connection.setRequestProperty(
 					HttpHeaders.CONTENT_TYPE,
 					MediaType.APPLICATION_FORM_URLENCODED);
 			connection.setRequestProperty(
 					HttpHeaders.CONTENT_LENGTH,
-					String.valueOf(authentication.length()));
-			OutputStream os = connection.getOutputStream();
+					String.valueOf(
+							authentication.length()));
+			// allow for custom trust store to anchor acceptable certs, use an
+			// expected file in the workspace directory
+			final File customCertsFile = new File(
+					theiaOptions.getWorkspaceDir(),
+					"theia-keystore.crt");
+			if (customCertsFile.exists()) {
+				try {
+					// Load CAs from an InputStream
+					final CertificateFactory cf = CertificateFactory.getInstance(
+							"X.509");
+
+					final InputStream caInput = new BufferedInputStream(
+							new FileInputStream(
+									customCertsFile));
+					final Certificate ca = cf.generateCertificate(
+							caInput);
+
+					// Create a KeyStore containing our trusted CAs
+					final String keyStoreType = KeyStore.getDefaultType();
+					final KeyStore keyStore = KeyStore.getInstance(
+							keyStoreType);
+					keyStore.load(
+							null,
+							null);
+					keyStore.setCertificateEntry(
+							"ca",
+							ca);
+
+					// Create a TrustManager that trusts the CAs in our KeyStore
+					final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+					final TrustManagerFactory tmf = TrustManagerFactory.getInstance(
+							tmfAlgorithm);
+					tmf.init(
+							keyStore);
+
+					// Create an SSLContext that uses our TrustManager
+					final SSLContext context = SSLContext.getInstance(
+							"TLS");
+					context.init(
+							null,
+							tmf.getTrustManagers(),
+							null);
+					connection.setSSLSocketFactory(
+							context.getSocketFactory());
+				}
+				catch (final GeneralSecurityException securityException) {
+					LOGGER.error(
+							"Unable to use keystore `" + customCertsFile.getAbsolutePath() + "'",
+							securityException);
+					return;
+				}
+			}
+			final OutputStream os = connection.getOutputStream();
 			// HP Fortify "Resource Shutdown" false positive
 			// The OutputStream is being closed
-			os.write(authentication.getBytes("UTF-8"));
+			os.write(
+					authentication.getBytes(
+							"UTF-8"));
 			// HP Fortify "Privacy Violation" false positive
 			// In this case the password is being sent to an output
 			// stream in order to authenticate the system and allow
@@ -142,22 +208,26 @@ public class DownloadRunner extends
 			tokenId = new String(
 					outputStream.toByteArray(),
 					java.nio.charset.StandardCharsets.UTF_8);
-			IOUtils.closeQuietly(outputStream);
+			IOUtils.closeQuietly(
+					outputStream);
 		}
 		catch (final IOException e) {
-			LOGGER.error("Unable to query a token to download '" + e.getMessage() + "'");
+			LOGGER.error(
+					"Unable to query a token to download '" + e.getMessage() + "'");
 			return;
 		}
 		finally {
 			if (inputStream != null) {
-				IOUtils.closeQuietly(inputStream);
+				IOUtils.closeQuietly(
+						inputStream);
 				inputStream = null;
 			}
 		}
 
 		// Token is right?
 		if (tokenId.length() == 0) {
-			LOGGER.error("Unable to get a token to download. Check your ident and password");
+			LOGGER.error(
+					"Unable to get a token to download. Check your ident and password");
 			return;
 		}
 
@@ -171,10 +241,13 @@ public class DownloadRunner extends
 		if (compressedFile.exists()) {
 			if (downloadOptions.isOverwriteIfExists()) {
 				if (!compressedFile.delete()) {
-					LOGGER.warn("Unable to delete file '" + compressedFile.getAbsolutePath() + "'");
+					LOGGER.warn(
+							"Unable to delete file '" + compressedFile.getAbsolutePath() + "'");
 				}
-				if (productDir.exists() && !FileUtil.fullyDelete(productDir)) {
-					LOGGER.warn("Unable to delete dir '" + productDir.getAbsolutePath() + "'");
+				if (productDir.exists() && !FileUtil.fullyDelete(
+						productDir)) {
+					LOGGER.warn(
+							"Unable to delete dir '" + productDir.getAbsolutePath() + "'");
 				}
 			}
 			else if (productDir.exists()) {
@@ -182,7 +255,8 @@ public class DownloadRunner extends
 			}
 		}
 		if (!compressedFile.getParentFile().exists() && !compressedFile.getParentFile().mkdirs()) {
-			LOGGER.warn("Unable to create directory '" + compressedFile.getParentFile().getAbsolutePath() + "'");
+			LOGGER.warn(
+					"Unable to create directory '" + compressedFile.getParentFile().getAbsolutePath() + "'");
 		}
 
 		// Download the gzipped file
@@ -194,22 +268,31 @@ public class DownloadRunner extends
 		boolean success = false;
 		while (!success && (retry < DOWNLOAD_RETRY)) {
 			try {
-				ClientConfig clientConfig = new DefaultClientConfig();
+				final ClientConfig clientConfig = new DefaultClientConfig();
 
-				Client client = Client.create(clientConfig);
+				final Client client = Client.create(
+						clientConfig);
 
-				ClientResponse response = client.resource(
-						downloadUrl).accept(
-						"application/zip").header(
-						javax.ws.rs.core.HttpHeaders.USER_AGENT,
-						"Mozilla/5.0").header(
-						javax.ws.rs.core.HttpHeaders.AUTHORIZATION,
-						"Bearer " + tokenId).get(
-						ClientResponse.class);
+				final ClientResponse response = client
+						.resource(
+								downloadUrl)
+						.accept(
+								"application/zip")
+						.header(
+								javax.ws.rs.core.HttpHeaders.USER_AGENT,
+								"Mozilla/5.0")
+						.header(
+								javax.ws.rs.core.HttpHeaders.AUTHORIZATION,
+								"Bearer " + tokenId)
+						.get(
+								ClientResponse.class);
 
-				String displaySize = FileUtils.byteCountToDisplaySize(response.getLength());
-				System.out.println("\nDownloading file '" + productId + "' (" + displaySize + ")");
-				System.out.print("Wait please... ");
+				String displaySize = FileUtils.byteCountToDisplaySize(
+						response.getLength());
+				System.out.println(
+						"\nDownloading file '" + productId + "' (" + displaySize + ")");
+				System.out.print(
+						"Wait please... ");
 
 				inputStream = response.getEntityInputStream();
 				final FileOutputStream outputStream = new FileOutputStream(
@@ -220,16 +303,20 @@ public class DownloadRunner extends
 						inputStream,
 						outputStream,
 						response.getLength());
-				IOUtils.closeQuietly(outputStream);
+				IOUtils.closeQuietly(
+						outputStream);
 
-				displaySize = FileUtils.byteCountToDisplaySize(compressedFile.length());
-				System.out.println("File successfully downloaded! (" + displaySize + ")");
+				displaySize = FileUtils.byteCountToDisplaySize(
+						compressedFile.length());
+				System.out.println(
+						"File successfully downloaded! (" + displaySize + ")");
 
 				ZipUtils.unZipFile(
 						compressedFile,
 						productDir.getAbsolutePath(),
 						true);
-				System.out.println("File successfully unzipped!");
+				System.out.println(
+						"File successfully unzipped!");
 				success = true;
 			}
 			catch (final IOException e) {
@@ -239,7 +326,8 @@ public class DownloadRunner extends
 			}
 			finally {
 				if (inputStream != null) {
-					IOUtils.closeQuietly(inputStream);
+					IOUtils.closeQuietly(
+							inputStream);
 					inputStream = null;
 				}
 			}
@@ -249,7 +337,7 @@ public class DownloadRunner extends
 	/**
 	 * Returns the path of the downloaded scene directory in the specified
 	 * workspace directory
-	 * 
+	 *
 	 * @param scene
 	 * @param workspaceDirectory
 	 * @return
@@ -258,7 +346,8 @@ public class DownloadRunner extends
 			final SimpleFeature scene,
 			final String workspaceDirectory ) {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) scene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String productId = (String) scene.getAttribute(
+				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
 
 		return new File(
 				scenesDir + File.separator + productId);
@@ -267,7 +356,7 @@ public class DownloadRunner extends
 	/**
 	 * Returns the path of the downloaded scene file in the specified workspace
 	 * directory
-	 * 
+	 *
 	 * @param scene
 	 * @param workspaceDirectory
 	 * @return
@@ -276,7 +365,8 @@ public class DownloadRunner extends
 			final SimpleFeature scene,
 			final String workspaceDirectory ) {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) scene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String productId = (String) scene.getAttribute(
+				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
 
 		return new File(
 				scenesDir + File.separator + productId + ".zip");
@@ -285,7 +375,7 @@ public class DownloadRunner extends
 	/**
 	 * Returns the path of the downloaded coverage in the specified workspace
 	 * directory
-	 * 
+	 *
 	 * @param band
 	 * @param workspaceDirectory
 	 * @return
@@ -296,16 +386,18 @@ public class DownloadRunner extends
 			final String workspaceDirectory )
 			throws IOException {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) band.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
-		final String bandName = (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME);
+		final String productId = (String) band.getAttribute(
+				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String bandName = (String) band.getAttribute(
+				BandFeatureIterator.BAND_ATTRIBUTE_NAME);
 
-		File file = new File(
+		final File file = new File(
 				scenesDir + File.separator + productId);
 
-		String[] fileList = file.list();
+		final String[] fileList = file.list();
 
 		if (fileList != null) {
-			for (String name : fileList) {
+			for (final String name : fileList) {
 				File temp = new File(
 						file.getAbsolutePath() + File.separatorChar + name);
 
@@ -322,7 +414,9 @@ public class DownloadRunner extends
 					temp = new File(
 							file.getAbsolutePath() + File.separatorChar + name + File.separatorChar + name + "_FRE_"
 									+ bandName + ".tif");
-					if (temp.exists()) return temp;
+					if (temp.exists()) {
+						return temp;
+					}
 				}
 			}
 		}
@@ -333,38 +427,39 @@ public class DownloadRunner extends
 	/**
 	 * Remove all downloaded files of the scene in the specified workspace
 	 * directory
-	 * 
+	 *
 	 * @param scene
 	 * @param workspaceDirectory
 	 */
 	protected static void cleanDownloadedFiles(
 			final SimpleFeature scene,
 			final String workspaceDirectory ) {
-		File sceneFile = getSceneFile(
+		final File sceneFile = getSceneFile(
 				scene,
 				workspaceDirectory);
 		if (sceneFile.exists()) {
 			try {
 				sceneFile.delete();
 			}
-			catch (SecurityException e) {
+			catch (final SecurityException e) {
 				LOGGER.warn(
 						"Unable to delete file from public '" + sceneFile.getAbsolutePath() + ".",
 						e);
 			}
 		}
-		File sceneDir = getSceneDirectory(
+		final File sceneDir = getSceneDirectory(
 				scene,
 				workspaceDirectory);
 		if (sceneDir.isDirectory()) {
-			FileUtil.fullyDelete(sceneDir);
+			FileUtil.fullyDelete(
+					sceneDir);
 		}
 	}
 
 	/**
 	 * Copy bytes from a large (over 2GB) <code>InputStream</code> to an
 	 * <code>OutputStream</code> showing the progress of the copy.
-	 * 
+	 *
 	 * @param input
 	 * @param output
 	 * @param contentLength
@@ -372,9 +467,9 @@ public class DownloadRunner extends
 	 * @throws IOException
 	 */
 	static long copyLarge(
-			InputStream input,
-			OutputStream output,
-			int contentLength )
+			final InputStream input,
+			final OutputStream output,
+			final int contentLength )
 			throws IOException {
 		long count = 0;
 		int n = 0;
@@ -383,7 +478,8 @@ public class DownloadRunner extends
 		final int EOF = -1;
 		int percentDone = 0, lastPercentDone = -1;
 
-		while (EOF != (n = input.read(buffer))) {
+		while (EOF != (n = input.read(
+				buffer))) {
 			output.write(
 					buffer,
 					0,
@@ -397,10 +493,12 @@ public class DownloadRunner extends
 					lastPercentDone = percentDone;
 
 					if ((percentDone % 10) == 0) {
-						System.out.print(percentDone + "%");
+						System.out.print(
+								percentDone + "%");
 					}
 					else if ((percentDone % 3) == 0) {
-						System.out.print(".");
+						System.out.print(
+								".");
 					}
 				}
 			}
