@@ -426,6 +426,8 @@ public class SceneFeatureIterator implements
 			}
 
 			inputStream = connection.getInputStream();
+			// HP Fortify "Resource Shutdown" false positive
+			// The InputStream is being closed in the finally block
 			IOUtils.copyLarge(
 					inputStream,
 					outputStream = new ByteArrayOutputStream());
