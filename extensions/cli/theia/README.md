@@ -305,3 +305,5 @@ Usage: geowave theia ingest [options] <rasterstorename> <vectorstorename> <comma
        Default is <TEMP_DIR>/theia
        Default: theia
 ```
+
+Lastly, in  <Theia workspace directory>/theia-keystore.crt, it is optional to place a custom keystore for accessing Theia to reduce the set of valid server certificates for SSL connections to Theia's REST API from that of the default system keystore.

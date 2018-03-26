@@ -56,7 +56,7 @@ public class VectorIngestRunnerTest
 		analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
 		analyzeOptions.setLocation("T30TXN");
 		analyzeOptions.setStartDate(DateUtilities.parseISO("2018-01-01T00:00:00Z"));
-		analyzeOptions.setEndDate(DateUtilities.parseISO("2018-01-02T00:00:00Z"));
+		analyzeOptions.setEndDate(DateUtilities.parseISO("2018-01-03T00:00:00Z"));
 		analyzeOptions.setCqlFilter("BBOX(shape,-1.8274,42.3253,-1.6256,42.4735) AND (band='B4' OR band='B8')");
 
 		VectorIngestRunner runner = new VectorIngestRunner(
@@ -79,7 +79,7 @@ public class VectorIngestRunnerTest
 				new QueryOptions(),
 				new EverythingQuery())) {
 			assertTrue(
-					"Store is not empty",
+					"Store is empty when it should have at least one result",
 					results.hasNext());
 		}
 

@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.security.GeneralSecurityException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -95,7 +96,8 @@ public class SceneFeatureIteratorTest
 			ParseException,
 			NoSuchAuthorityCodeException,
 			FactoryException,
-			MalformedURLException {
+			MalformedURLException,
+			GeneralSecurityException {
 
 		String collection = "SENTINEL2";
 		String platform = "";
