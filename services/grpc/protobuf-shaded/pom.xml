@@ -5,7 +5,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.7</version>
+		<version>0.9.8-SNAPSHOT</version>
   </parent>
   <artifactId>geowave-grpc-protobuf-shaded</artifactId>
 	<name>GeoWave gRPC Protobuf Library with Proto3</name>
