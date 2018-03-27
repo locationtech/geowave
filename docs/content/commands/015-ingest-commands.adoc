@@ -14,6 +14,7 @@ Commands that ingest data directly into GeoWave or stage data to be ingested int
 * <<015-ingest-commands.adoc#ingest-localToKafka, LocalToKafka>>
 * <<015-ingest-commands.adoc#ingest-localToMrGW, LocalToMRGW>>
 * <<015-ingest-commands.adoc#ingest-mrToGW, MRToGW>>
+* <<015-ingest-commands.adoc#ingest-sparkToGW, SparkToGW>>
 
 
 [[ingest-kafkaToGW]]
@@ -50,5 +51,10 @@ include::manpages/ingest/geowave-localToMrGW.txt[]
 ==== *geowave ingest mrToGW*
 
 include::manpages/ingest/geowave-mrToGW.txt[]
+
+[[ingest-sparkToGW]]
+==== *geowave ingest sparkToGW*
+
+include::manpages/ingest/geowave-sparkToGW.txt[]
 
 '''

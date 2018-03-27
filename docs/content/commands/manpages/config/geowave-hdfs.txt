@@ -1,0 +1,21 @@
+//:geowave-hdfs
+//:===============
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave config hdfs - Create a local configuration for HDFS
+
+SYNOPSIS
+//:--------
+
+geowave config hdfs [options] <HDFS DefaultFS URL>
+
+DESCRIPTION
+//:-----------
+
+This command will create a local configuration for HDFS.
+
+OPTIONS
+//:-------

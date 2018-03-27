@@ -52,7 +52,7 @@ cd /mnt/gdal
 
 sudo wget http://demo.geo-solutions.it/share/github/imageio-ext/releases/1.1.X/1.1.7/native/gdal/linux/gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
 
-tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
+sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz
 ----
 
 Set the path to the GDAL libraries.
