@@ -77,9 +77,9 @@ public class GeoServerGetStyleCommand extends
 		final Response getStyleResponse = geoserverClient.getStyle(style);
 
 		if (getStyleResponse.getStatus() == Status.OK.getStatusCode()) {
-			final String style = IOUtils.toString((InputStream) getStyleResponse.getEntity());
+			final String styleInfo = IOUtils.toString((InputStream) getStyleResponse.getEntity());
 			setStatus(ServiceStatus.OK);
-			return "\nGeoServer style info for '" + style + "': " + style;
+			return "\nGeoServer style info for '" + style + "':\n" + styleInfo;
 
 		}
 		switch (getStyleResponse.getStatus()) {
