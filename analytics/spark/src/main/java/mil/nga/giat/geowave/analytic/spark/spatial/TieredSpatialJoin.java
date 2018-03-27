@@ -393,6 +393,8 @@ public class TieredSpatialJoin extends
 						BasicNumericDataset convertedBounds = new BasicNumericDataset(
 								boundsRange);
 						List<ByteArrayId> insertIds = targetStrategy.getInsertionIds(convertedBounds);
+						// HP Fortify "Pointer Dereference" False Positive
+						// Proper null checking is being performed
 
 						// When we span more than one row each individual get
 						// added as a separate output pair

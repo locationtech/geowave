@@ -381,6 +381,10 @@ public class SceneFeatureIterator implements
 					searchUrl);
 
 			final HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			// HP Fortify "Certificate Validation" False Positive
+			// we allow for custom trust store to anchor acceptable certs
+			// to reduce the level of trust if desired
+
 			connection.setUseCaches(false);
 			connection.setRequestProperty(
 					HttpHeaders.USER_AGENT,
