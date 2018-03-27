@@ -638,6 +638,19 @@ their values, if there are any. An example would be additional Accumulo options:
 <div class="ulist">
 <ul>
 <li>
+<p>-c --crs (will only be shown if you have already defined spatial or satial_temporal as your type)</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The native Coordinate Reference System used within the index.  All spatial data will be projected into this CRS for appropriate indexing as needed.</p>
+</li>
+<li>
+<p>Default: EPSG:4326</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
 <p>--d, --default</p>
 <div class="ulist">
 <ul>
@@ -897,6 +910,30 @@ their values, if there are any. An example would be additional Accumulo options:
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="config-aws"><a class="anchor" href="#config-aws"></a><strong>geowave config aws</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config aws - Create a local configuration for aws s3</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave config aws &lt;AWS S3 endpoint URL&gt; (for example s3.amazonaws.com)</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will create a local configuration for aws s3</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
 </div>
 </div>
 <div class="sect3">
@@ -1224,6 +1261,30 @@ It is possible to override values as you copy, such as cpstore old new --gwNames
 </div>
 </div>
 <div class="sect3">
+<h4 id="config-hdfs"><a class="anchor" href="#config-hdfs"></a><strong>geowave config hdfs</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave config hdfs - Create a local configuration for HDFS</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave config hdfs [options] &lt;HDFS DefaultFS URL&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will create a local configuration for HDFS.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+</div>
+<div class="sect3">
 <h4 id="config-list"><a class="anchor" href="#config-list"></a><strong>geowave config list</strong></h4>
 <div class="paragraph">
 <p>NAME</p>
@@ -1431,6 +1492,9 @@ This can be useful if you want to update a particular property of a index or sto
 </li>
 <li>
 <p><a href="#ingest-mrToGW">MRToGW</a></p>
+</li>
+<li>
+<p><a href="#ingest-sparkToGW">SparkToGW</a></p>
 </li>
 </ul>
 </div>
@@ -1990,7 +2054,7 @@ This can be useful if you want to update a particular property of a index or sto
 <p>NAME</p>
 </div>
 <div class="paragraph">
-<p>geowave ingest localToGW - Ingest supported files in local file system directly, without using HDFS</p>
+<p>geowave ingest localToGW - Ingest supported files in local file system directly, from S3 or from HDFS</p>
 </div>
 <div class="paragraph">
 <p>SYNOPSIS</p>
@@ -4180,6 +4244,119 @@ This can be useful if you want to update a particular property of a index or sto
 <ul>
 <li>
 <p>A comma-delimitted set of typenames to ingest, feature types matching the specified typenames will be ingested (optional, by default all types will be ingested)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-v, --visibility</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The visibility of the data ingested (optional; default is 'public')</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="ingest-sparkToGW"><a class="anchor" href="#ingest-sparkToGW"></a><strong>geowave ingest sparkToGW</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest sparkToGW - Ingest supported files that already exist in HDFS or S3</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave ingest sparkToGW [options] &lt;input directory&gt; &lt;store name&gt; &lt;comma delimited index/group list&gt;</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>Ingest supported files that already exist in HDFS or S3</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>-x, --extension</p>
+<div class="ulist">
+<ul>
+<li>
+<p>individual or comma-delimited set of file extensions to accept (optional)</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-f, --formats</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-ho, --hosts</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark driver host
+Default: localhost</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-m, --master</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark master designation
+Default: local</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-n, --name</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The spark application name
+Default: Spark Ingest</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-c, --numcores</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of cores
+Default: -1</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>-e, --numexecutors</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Number of executors
+Default: -1</p>
 </li>
 </ul>
 </div>
@@ -9403,7 +9580,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-03-27 19:00:20 +00:00
+Last updated 2018-03-27 20:29:22 +00:00
 </div>
 </div>
 </body>

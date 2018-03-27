@@ -1320,6 +1320,9 @@ href="images/geowave-icon-logo-small.png">
 <p>In addition to the raw data to ingest, the ingest process requires an adapter to translate the native data into a format that can be persisted into the data store. Also, the ingest process requires an Index that is a definition of all the configured parameters that define how data is translated to Row IDs (how it is indexed). It also includes what common fields need to be maintained within the table to be used by fine-grained and secondary filters.</p>
 </div>
 <div class="paragraph">
+<p>There are various ways to ingest data into a GeoWave store. The standard localToGW command is used to ingest files from a local file system or from an AWS S3 bucket into GeoWave in a single process. For a distributed ingest (recommended for larger datasets) the sparkToGW and mrToGW commands can be used. Ingests can also be performed directly from HDFS or utilizing Kafka.</p>
+</div>
+<div class="paragraph">
 <p>The full list of GeoWave ingest commands can be found in the <a href="commands.html#ingest-commands" target="_blank">GeoWave CLI Appendix</a>.</p>
 </div>
 <div class="paragraph">
@@ -3098,7 +3101,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-03-27 19:00:19 +00:00
+Last updated 2018-03-27 20:29:21 +00:00
 </div>
 </div>
 </body>
