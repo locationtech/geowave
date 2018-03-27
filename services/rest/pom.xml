@@ -4,7 +4,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.7-SNAPSHOT</version>
+		<version>0.9.7</version>
 	</parent>
 	<properties>
 		<restlet.version>2.4.0</restlet.version>
