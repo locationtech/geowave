@@ -14,9 +14,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
-import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -40,16 +39,20 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
 import mil.nga.giat.geowave.test.TestUtils.ExpectedResults;
+import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 
 @RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SPARK
+})
 public class GeoWaveJavaSparkIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			GeoWaveJavaSparkIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkIT.class);
 
 	private static final String TEST_BOX_FILTER_FILE = TEST_FILTER_PACKAGE + "Box-Filter.shp";
 	private static final String TEST_POLYGON_FILTER_FILE = TEST_FILTER_PACKAGE + "Polygon-Filter.shp";
@@ -60,7 +63,10 @@ public class GeoWaveJavaSparkIT extends
 	private static final int TORNADO_COUNT = 1196;
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -70,52 +76,28 @@ public class GeoWaveJavaSparkIT extends
 	public static void reportTestStart() {
 		stopwatch.reset();
 		stopwatch.start();
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"*  RUNNING GeoWaveJavaSparkIT           *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("*  RUNNING GeoWaveJavaSparkIT           *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@AfterClass
 	public static void reportTestFinish() {
 		stopwatch.stop();
-		LOGGER.warn(
-				"-----------------------------------------");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"* FINISHED GeoWaveJavaSparkIT           *");
-		LOGGER.warn(
-				"*         " + stopwatch.getTimeString() + " elapsed.             *");
-		LOGGER.warn(
-				"*                                       *");
-		LOGGER.warn(
-				"-----------------------------------------");
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED GeoWaveJavaSparkIT           *");
+		LOGGER.warn("*         " + stopwatch.getTimeString() + " elapsed.             *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 	}
 
 	@Test
 	public void testLoadRDD() {
 		// Set up Spark
-		SparkConf sparkConf = new SparkConf();
-
-		sparkConf.setAppName(
-				"GeoWaveRDD");
-		sparkConf.setMaster(
-				"local");
-		sparkConf.set(
-				"spark.kryo.registrator",
-				"mil.nga.giat.geowave.analytic.spark.GeoWaveRegistrator");
-		sparkConf.set(
-				"spark.serializer",
-				"org.apache.spark.serializer.KryoSerializer");
-		JavaSparkContext context = new JavaSparkContext(
-				sparkConf);
+		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 
 		// ingest test points
 		TestUtils.testLocalIngest(
@@ -126,25 +108,22 @@ public class GeoWaveJavaSparkIT extends
 
 		try {
 			// get expected results (box filter)
-			final ExpectedResults expectedResults = TestUtils.getExpectedResults(
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
-					});
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(new URL[] {
+				new File(
+						HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+			});
 
-			final DistributableQuery query = TestUtils.resourceToQuery(
-					new File(
-							TEST_BOX_FILTER_FILE).toURI().toURL());
+			final DistributableQuery query = TestUtils.resourceToQuery(new File(
+					TEST_BOX_FILTER_FILE).toURI().toURL());
 
 			// Load RDD using spatial query (bbox)
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					query);
 
 			long count = javaRdd.count();
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features.");
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
 
 			// Verify RDD count matches expected count
 			Assert.assertEquals(
@@ -153,34 +132,28 @@ public class GeoWaveJavaSparkIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			context.close();
-			Assert.fail(
-					"Error occurred while testing a bounding box query of spatial index: '" + e.getLocalizedMessage()
-							+ "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
+					+ e.getLocalizedMessage() + "'");
 		}
 		try {
 			// get expected results (polygon filter)
-			final ExpectedResults expectedResults = TestUtils.getExpectedResults(
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
-					});
+			final ExpectedResults expectedResults = TestUtils.getExpectedResults(new URL[] {
+				new File(
+						HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+			});
 
-			final DistributableQuery query = TestUtils.resourceToQuery(
-					new File(
-							TEST_POLYGON_FILTER_FILE).toURI().toURL());
+			final DistributableQuery query = TestUtils.resourceToQuery(new File(
+					TEST_POLYGON_FILTER_FILE).toURI().toURL());
 
 			// Load RDD using spatial query (poly)
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					query);
 
 			long count = javaRdd.count();
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features.");
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
 
 			Assert.assertEquals(
 					expectedResults.count,
@@ -188,11 +161,9 @@ public class GeoWaveJavaSparkIT extends
 		}
 		catch (final Exception e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			context.close();
-			Assert.fail(
-					"Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage()
+					+ "'");
 		}
 
 		// ingest test lines
@@ -209,25 +180,22 @@ public class GeoWaveJavaSparkIT extends
 
 		while (adapterIt.hasNext()) {
 			DataAdapter adapter = adapterIt.next();
-			String adapterName = StringUtils.stringFromBinary(
-					adapter.getAdapterId().getBytes());
+			String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
-			if (adapterName.equals(
-					"hail")) {
+			if (adapterName.equals("hail")) {
 				hailAdapter = adapter;
 			}
 			else {
 				tornadoAdapter = adapter;
 			}
 
-			LOGGER.warn(
-					"DataStore has feature adapter: " + adapterName);
+			LOGGER.warn("DataStore has feature adapter: " + adapterName);
 		}
 
 		// Load RDD using hail adapter
 		try {
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					null,
 					new QueryOptions(
@@ -239,33 +207,27 @@ public class GeoWaveJavaSparkIT extends
 					HAIL_COUNT,
 					count);
 
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features for adapter " + StringUtils.stringFromBinary(
-							hailAdapter.getAdapterId().getBytes()));
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features for adapter "
+					+ StringUtils.stringFromBinary(hailAdapter.getAdapterId().getBytes()));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			context.close();
-			Assert.fail(
-					"Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
 		}
 
 		// Load RDD using tornado adapter
 		try {
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					null,
 					new QueryOptions(
 							tornadoAdapter));
 
-			javaRdd = javaRdd.distinct();
 			long count = javaRdd.count();
-			LOGGER.warn(
-					"DataStore loaded into RDD with " + count + " features for adapter " + StringUtils.stringFromBinary(
-							tornadoAdapter.getAdapterId().getBytes()));
+			LOGGER.warn("DataStore loaded into RDD with " + count + " features for adapter "
+					+ StringUtils.stringFromBinary(tornadoAdapter.getAdapterId().getBytes()));
 
 			Assert.assertEquals(
 					TORNADO_COUNT,
@@ -273,18 +235,12 @@ public class GeoWaveJavaSparkIT extends
 		}
 		catch (IOException e) {
 			e.printStackTrace();
-			TestUtils.deleteAll(
-					dataStore);
-			context.close();
-			Assert.fail(
-					"Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
+			TestUtils.deleteAll(dataStore);
+			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
 		}
 
 		// Clean up
-		TestUtils.deleteAll(
-				dataStore);
-
-		context.close();
+		TestUtils.deleteAll(dataStore);
 	}
 
 	@Override

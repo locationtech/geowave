@@ -36,6 +36,7 @@ script:
   # This script uses the IT_ONLY flag to determine whether to run unit tests using verify, or ITs only using failsafe
   - .utility/run-tests.sh
 before_install:
+  - sudo apt-get install lzop
   # This must match the dev-resources version from the parent pom:
   - export DEV_RESOURCES_VERSION=1.2
   - export MAVEN_OPTS="-XX:CompressedClassSpaceSize=256m -XX:+UseSerialGC -Xmx2g -XX:MaxMetaspaceSize=512m -Dorg.slf4j.simpleLogger.defaultLogLevel=warn"

@@ -231,7 +231,8 @@ public class TieredSpatialJoin extends
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reproject = this.reprojectToTier(
 						rightTiers,
 						leftTierId,
-						broadcastStrategy);
+						broadcastStrategy,
+                        bufferDistance);
 				finalMatches = this.joinAndCompareTiers(
 						leftTier,
 						reproject,
@@ -284,7 +285,8 @@ public class TieredSpatialJoin extends
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reproject = this.reprojectToTier(
 						leftTiers,
 						rightTierId,
-						broadcastStrategy);
+						broadcastStrategy,
+                        bufferDistance);
 				JavaPairRDD<GeoWaveInputKey, Geometry> finalMatches = this.joinAndCompareTiers(
 						reproject,
 						rightTier,
@@ -470,7 +472,8 @@ public class TieredSpatialJoin extends
 	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reprojectToTier(
 			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> higherRightTiers,
 			byte targetTierId,
-			Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy ) {
+			Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy,
+			double bufferDistance ) {
 		return higherRightTiers
 				.flatMapToPair(new PairFlatMapFunction<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 
@@ -492,46 +495,45 @@ public class TieredSpatialJoin extends
 								break;
 							}
 						}
-						if (targetStrategy != null) {
-							Geometry geom = t._2._2;
-
-							NumericRange xRange = new NumericRange(
-									geom.getEnvelopeInternal().getMinX(),
-									geom.getEnvelopeInternal().getMaxX());
-							NumericRange yRange = new NumericRange(
-									geom.getEnvelopeInternal().getMinY(),
-									geom.getEnvelopeInternal().getMaxY());
-							NumericData[] boundsRange = {
-								xRange,
-								yRange
-							};
-
-							// Convert the data to how the api expects and index
-							// using strategy above
-							BasicNumericDataset convertedBounds = new BasicNumericDataset(
-									boundsRange);
-							InsertionIds insertIds = targetStrategy.getInsertionIds(convertedBounds);
-
-							// When we span more than one row each individual
-							// get added as a separate output pair
-							// TODO should this use composite IDs or just the
-							// sort keys
-							for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
-									.hasNext();) {
-								ByteArrayId id = iter.next();
-								// Id decomposes to byte array of Tier, Bin, SFC
-								// (Hilbert in this case) id)
-								// There may be value in decomposing the id and
-								// storing tier + sfcIndex as a tuple key of new
-								// RDD
-								Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
-										id,
-										t._2);
-								reprojected.add(indexPair);
-							}
+						if (targetStrategy == null) {
+							LOGGER.warn("Tier " + targetTierId + " not found in index strategy.");
+							return reprojected.iterator();
 						}
-						else {
-							LOGGER.warn("Tier '" + targetTierId + "' not found in index strategy");
+
+						Geometry geom = t._2._2;
+
+						NumericRange xRange = new NumericRange(
+								geom.getEnvelopeInternal().getMinX() - bufferDistance,
+								geom.getEnvelopeInternal().getMaxX() + bufferDistance);
+						NumericRange yRange = new NumericRange(
+								geom.getEnvelopeInternal().getMinY() - bufferDistance,
+								geom.getEnvelopeInternal().getMaxY() + bufferDistance);
+						NumericData[] boundsRange = {
+							xRange,
+							yRange
+						};
+						// Convert the data to how the api expects and index
+						// using strategy above
+						BasicNumericDataset convertedBounds = new BasicNumericDataset(
+								boundsRange);
+						InsertionIds insertIds = targetStrategy.getInsertionIds(convertedBounds);
+
+						// When we span more than one row each individual
+						// get added as a separate output pair
+						// TODO should this use composite IDs or just the
+						// sort keys
+						for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+								.hasNext();) {
+							ByteArrayId id = iter.next();
+							// Id decomposes to byte array of Tier, Bin, SFC
+							// (Hilbert in this case) id)
+							// There may be value in decomposing the id and
+							// storing tier + sfcIndex as a tuple key of new
+							// RDD
+							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
+									id,
+									t._2);
+							reprojected.add(indexPair);
 						}
 						return reprojected.iterator();
 					}

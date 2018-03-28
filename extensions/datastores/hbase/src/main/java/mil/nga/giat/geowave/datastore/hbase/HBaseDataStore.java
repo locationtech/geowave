@@ -106,9 +106,4 @@ public class HBaseDataStore extends
 		}
 
 	}
-
-	@Override
-	protected SplitsProvider createSplitsProvider() {
-		return new HBaseSplitsProvider();
-	}
 }
