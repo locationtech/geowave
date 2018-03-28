@@ -267,16 +267,20 @@ public class TieredSFCIndexStrategy implements
 		// Get initial range covered by ID
 		MultiDimensionalNumericData initialRange = this.getRangeForId(insertionId);
 		final byte[] rowId = insertionId.getBytes();
+		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+				initialRange,
+				baseDefinitions);
+		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
+				ranges.length);
+		final Integer reprojectSfcIndex = orderedSfcIndexToTierId.inverse().get(
+				reprojectTier);
+		if (reprojectSfcIndex == null) {
+			return rowIds;
+		}
+		final SpaceFillingCurve reprojectSFC = orderedSfcs[reprojectSfcIndex];
+
 		// We must be reprojecting to coarser tier
 		if (rowId[0] > reprojectTier) {
-			final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
-					initialRange,
-					baseDefinitions);
-			final Integer reprojectSfcIndex = orderedSfcIndexToTierId.inverse().get(
-					reprojectTier);
-			final SpaceFillingCurve reprojectSFC = orderedSfcs[reprojectSfcIndex];
-			final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>(
-					ranges.length);
 			for (BinnedNumericDataset range : ranges) {
 				List<ByteArrayId> ids = TieredSFCIndexStrategy.getRowIdsAtTier(
 						range,
@@ -291,8 +295,7 @@ public class TieredSFCIndexStrategy implements
 		else {
 			LOGGER.warn("Tier for row must be higher than reproject tier.");
 		}
-
-		return null;
+		return rowIds;
 	}
 
 	@Override

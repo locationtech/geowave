@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.net.URL;
 
 import org.apache.spark.SparkConf;
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
+import org.apache.spark.sql.SparkSession;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -29,6 +30,7 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.util.Stopwatch;
 
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -65,9 +67,14 @@ public class GeoWaveJavaSparkIT extends
 	protected DataStorePluginOptions dataStore;
 
 	private static Stopwatch stopwatch = new Stopwatch();
+	private static SparkSession session = null;
 
 	@BeforeClass
 	public static void reportTestStart() {
+		SparkConf addonOptions = new SparkConf();
+		addonOptions.setMaster("local[*]");
+		addonOptions.setAppName("GeoWaveRDD");
+		session = GeoWaveSparkConf.createDefaultSession(addonOptions);
 		stopwatch.reset();
 		stopwatch.start();
 		LOGGER.warn("-----------------------------------------");
@@ -80,6 +87,7 @@ public class GeoWaveJavaSparkIT extends
 	@AfterClass
 	public static void reportTestFinish() {
 		stopwatch.stop();
+		session.close();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED GeoWaveJavaSparkIT           *");
@@ -91,14 +99,7 @@ public class GeoWaveJavaSparkIT extends
 	@Test
 	public void testLoadRDD() {
 		// Set up Spark
-		SparkConf sparkConf = new SparkConf();
-
-		sparkConf.setAppName("GeoWaveRDD");
-		sparkConf.setMaster("local");
-		sparkConf.set("spark.kryo.registrator", "mil.nga.giat.geowave.analytic.spark.GeoWaveRegistrator");
-		sparkConf.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer");
-		JavaSparkContext context = new JavaSparkContext(
-				sparkConf);
+		SparkContext context = session.sparkContext();
 
 		// ingest test points
 		TestUtils.testLocalIngest(
@@ -119,7 +120,7 @@ public class GeoWaveJavaSparkIT extends
 
 			// Load RDD using spatial query (bbox)
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					query);
 
@@ -134,7 +135,6 @@ public class GeoWaveJavaSparkIT extends
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			context.close();
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
 					+ e.getLocalizedMessage() + "'");
 		}
@@ -150,7 +150,7 @@ public class GeoWaveJavaSparkIT extends
 
 			// Load RDD using spatial query (poly)
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					query);
 
@@ -164,7 +164,6 @@ public class GeoWaveJavaSparkIT extends
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			context.close();
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage()
 					+ "'");
 		}
@@ -198,7 +197,7 @@ public class GeoWaveJavaSparkIT extends
 		// Load RDD using hail adapter
 		try {
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					null,
 					new QueryOptions(
@@ -216,14 +215,13 @@ public class GeoWaveJavaSparkIT extends
 		catch (IOException e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			context.close();
 			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
 		}
 
 		// Load RDD using tornado adapter
 		try {
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					null,
 					new QueryOptions(
@@ -241,14 +239,11 @@ public class GeoWaveJavaSparkIT extends
 		catch (IOException e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			context.close();
 			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
 		}
 
 		// Clean up
 		TestUtils.deleteAll(dataStore);
-
-		context.close();
 	}
 
 	@Override

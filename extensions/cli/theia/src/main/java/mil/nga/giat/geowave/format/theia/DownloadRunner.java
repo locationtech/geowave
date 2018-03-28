@@ -50,8 +50,7 @@ import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 public class DownloadRunner extends
 		AnalyzeRunner
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			DownloadRunner.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(DownloadRunner.class);
 
 	private static final String AUNTHENTICATION_URL = "https://theia.cnes.fr/atdistrib/services/authenticate/";
 	private static final String DOWNLOAD_URL = "https://theia.cnes.fr/atdistrib/resto2/collections/%s/%s/download/?issuerId=theia";
@@ -76,12 +75,10 @@ public class DownloadRunner extends
 				firstBandOfScene,
 				analysisInfo);
 
-		final String collection = (String) firstBandOfScene.getAttribute(
-				SceneFeatureIterator.COLLECTION_ATTRIBUTE_NAME);
-		final String productId = (String) firstBandOfScene.getAttribute(
-				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
-		final String entityId = (String) firstBandOfScene.getAttribute(
-				SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
+		final String collection = (String) firstBandOfScene
+				.getAttribute(SceneFeatureIterator.COLLECTION_ATTRIBUTE_NAME);
+		final String productId = (String) firstBandOfScene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String entityId = (String) firstBandOfScene.getAttribute(SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME);
 
 		final String userIdent = downloadOptions.getUserIdent();
 		final String password = downloadOptions.getPassword();
@@ -91,21 +88,18 @@ public class DownloadRunner extends
 
 		// Check authentication parameters
 		if ((userIdent == null) || (userIdent.length() == 0) || (password == null) || (password.length() == 0)) {
-			LOGGER.error(
-					"Invalid or empty authentication parameters (email and password)");
+			LOGGER.error("Invalid or empty authentication parameters (email and password)");
 			return;
 		}
 		try {
 			authentication = "ident=" + URLEncoder.encode(
 					userIdent,
-					"UTF-8") + "&pass="
-					+ URLEncoder.encode(
-							password,
-							"UTF-8");
+					"UTF-8") + "&pass=" + URLEncoder.encode(
+					password,
+					"UTF-8");
 		}
 		catch (final UnsupportedEncodingException e) {
-			LOGGER.error(
-					"Invalid or empty authentication parameters (email and password)" + e.getMessage());
+			LOGGER.error("Invalid or empty authentication parameters (email and password)" + e.getMessage());
 			return;
 		}
 
@@ -119,23 +113,19 @@ public class DownloadRunner extends
 			// HP Fortify "Certificate Validation" False Positive
 			// we allow for custom trust store to anchor acceptable certs
 			// to reduce the level of trust if desired
-			connection.setUseCaches(
-					false);
+			connection.setUseCaches(false);
 			connection.setRequestProperty(
 					HttpHeaders.USER_AGENT,
 					"Mozilla/5.0");
-			connection.setRequestMethod(
-					"POST");
+			connection.setRequestMethod("POST");
 
-			connection.setDoOutput(
-					true);
+			connection.setDoOutput(true);
 			connection.setRequestProperty(
 					HttpHeaders.CONTENT_TYPE,
 					MediaType.APPLICATION_FORM_URLENCODED);
 			connection.setRequestProperty(
 					HttpHeaders.CONTENT_LENGTH,
-					String.valueOf(
-							authentication.length()));
+					String.valueOf(authentication.length()));
 			// allow for custom trust store to anchor acceptable certs, use an
 			// expected file in the workspace directory
 			final File customCertsFile = new File(
@@ -144,19 +134,16 @@ public class DownloadRunner extends
 			if (customCertsFile.exists()) {
 				try {
 					// Load CAs from an InputStream
-					final CertificateFactory cf = CertificateFactory.getInstance(
-							"X.509");
+					final CertificateFactory cf = CertificateFactory.getInstance("X.509");
 
 					final InputStream caInput = new BufferedInputStream(
 							new FileInputStream(
 									customCertsFile));
-					final Certificate ca = cf.generateCertificate(
-							caInput);
+					final Certificate ca = cf.generateCertificate(caInput);
 
 					// Create a KeyStore containing our trusted CAs
 					final String keyStoreType = KeyStore.getDefaultType();
-					final KeyStore keyStore = KeyStore.getInstance(
-							keyStoreType);
+					final KeyStore keyStore = KeyStore.getInstance(keyStoreType);
 					keyStore.load(
 							null,
 							null);
@@ -166,20 +153,16 @@ public class DownloadRunner extends
 
 					// Create a TrustManager that trusts the CAs in our KeyStore
 					final String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-					final TrustManagerFactory tmf = TrustManagerFactory.getInstance(
-							tmfAlgorithm);
-					tmf.init(
-							keyStore);
+					final TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+					tmf.init(keyStore);
 
 					// Create an SSLContext that uses our TrustManager
-					final SSLContext context = SSLContext.getInstance(
-							"TLS");
+					final SSLContext context = SSLContext.getInstance("TLS");
 					context.init(
 							null,
 							tmf.getTrustManagers(),
 							null);
-					connection.setSSLSocketFactory(
-							context.getSocketFactory());
+					connection.setSSLSocketFactory(context.getSocketFactory());
 				}
 				catch (final GeneralSecurityException securityException) {
 					LOGGER.error(
@@ -191,9 +174,7 @@ public class DownloadRunner extends
 			final OutputStream os = connection.getOutputStream();
 			// HP Fortify "Resource Shutdown" false positive
 			// The OutputStream is being closed
-			os.write(
-					authentication.getBytes(
-							"UTF-8"));
+			os.write(authentication.getBytes("UTF-8"));
 			// HP Fortify "Privacy Violation" false positive
 			// In this case the password is being sent to an output
 			// stream in order to authenticate the system and allow
@@ -211,26 +192,22 @@ public class DownloadRunner extends
 			tokenId = new String(
 					outputStream.toByteArray(),
 					java.nio.charset.StandardCharsets.UTF_8);
-			IOUtils.closeQuietly(
-					outputStream);
+			IOUtils.closeQuietly(outputStream);
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to query a token to download '" + e.getMessage() + "'");
+			LOGGER.error("Unable to query a token to download '" + e.getMessage() + "'");
 			return;
 		}
 		finally {
 			if (inputStream != null) {
-				IOUtils.closeQuietly(
-						inputStream);
+				IOUtils.closeQuietly(inputStream);
 				inputStream = null;
 			}
 		}
 
 		// Token is right?
 		if (tokenId.length() == 0) {
-			LOGGER.error(
-					"Unable to get a token to download. Check your ident and password");
+			LOGGER.error("Unable to get a token to download. Check your ident and password");
 			return;
 		}
 
@@ -244,13 +221,10 @@ public class DownloadRunner extends
 		if (compressedFile.exists()) {
 			if (downloadOptions.isOverwriteIfExists()) {
 				if (!compressedFile.delete()) {
-					LOGGER.warn(
-							"Unable to delete file '" + compressedFile.getAbsolutePath() + "'");
+					LOGGER.warn("Unable to delete file '" + compressedFile.getAbsolutePath() + "'");
 				}
-				if (productDir.exists() && !FileUtil.fullyDelete(
-						productDir)) {
-					LOGGER.warn(
-							"Unable to delete dir '" + productDir.getAbsolutePath() + "'");
+				if (productDir.exists() && !FileUtil.fullyDelete(productDir)) {
+					LOGGER.warn("Unable to delete dir '" + productDir.getAbsolutePath() + "'");
 				}
 			}
 			else if (productDir.exists()) {
@@ -258,8 +232,7 @@ public class DownloadRunner extends
 			}
 		}
 		if (!compressedFile.getParentFile().exists() && !compressedFile.getParentFile().mkdirs()) {
-			LOGGER.warn(
-					"Unable to create directory '" + compressedFile.getParentFile().getAbsolutePath() + "'");
+			LOGGER.warn("Unable to create directory '" + compressedFile.getParentFile().getAbsolutePath() + "'");
 		}
 
 		// Download the gzipped file
@@ -273,29 +246,20 @@ public class DownloadRunner extends
 			try {
 				final ClientConfig clientConfig = new DefaultClientConfig();
 
-				final Client client = Client.create(
-						clientConfig);
+				final Client client = Client.create(clientConfig);
 
-				final ClientResponse response = client
-						.resource(
-								downloadUrl)
-						.accept(
-								"application/zip")
-						.header(
-								javax.ws.rs.core.HttpHeaders.USER_AGENT,
-								"Mozilla/5.0")
-						.header(
-								javax.ws.rs.core.HttpHeaders.AUTHORIZATION,
-								"Bearer " + tokenId)
-						.get(
-								ClientResponse.class);
+				final ClientResponse response = client.resource(
+						downloadUrl).accept(
+						"application/zip").header(
+						javax.ws.rs.core.HttpHeaders.USER_AGENT,
+						"Mozilla/5.0").header(
+						javax.ws.rs.core.HttpHeaders.AUTHORIZATION,
+						"Bearer " + tokenId).get(
+						ClientResponse.class);
 
-				String displaySize = FileUtils.byteCountToDisplaySize(
-						response.getLength());
-				System.out.println(
-						"\nDownloading file '" + productId + "' (" + displaySize + ")");
-				System.out.print(
-						"Wait please... ");
+				String displaySize = FileUtils.byteCountToDisplaySize(response.getLength());
+				System.out.println("\nDownloading file '" + productId + "' (" + displaySize + ")");
+				System.out.print("Wait please... ");
 
 				inputStream = response.getEntityInputStream();
 				final FileOutputStream outputStream = new FileOutputStream(
@@ -306,20 +270,16 @@ public class DownloadRunner extends
 						inputStream,
 						outputStream,
 						response.getLength());
-				IOUtils.closeQuietly(
-						outputStream);
+				IOUtils.closeQuietly(outputStream);
 
-				displaySize = FileUtils.byteCountToDisplaySize(
-						compressedFile.length());
-				System.out.println(
-						"File successfully downloaded! (" + displaySize + ")");
+				displaySize = FileUtils.byteCountToDisplaySize(compressedFile.length());
+				System.out.println("File successfully downloaded! (" + displaySize + ")");
 
 				ZipUtils.unZipFile(
 						compressedFile,
 						productDir.getAbsolutePath(),
 						true);
-				System.out.println(
-						"File successfully unzipped!");
+				System.out.println("File successfully unzipped!");
 				success = true;
 			}
 			catch (final IOException e) {
@@ -329,8 +289,7 @@ public class DownloadRunner extends
 			}
 			finally {
 				if (inputStream != null) {
-					IOUtils.closeQuietly(
-							inputStream);
+					IOUtils.closeQuietly(inputStream);
 					inputStream = null;
 				}
 			}
@@ -349,8 +308,7 @@ public class DownloadRunner extends
 			final SimpleFeature scene,
 			final String workspaceDirectory ) {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) scene.getAttribute(
-				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String productId = (String) scene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
 
 		return new File(
 				scenesDir + File.separator + productId);
@@ -368,8 +326,7 @@ public class DownloadRunner extends
 			final SimpleFeature scene,
 			final String workspaceDirectory ) {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) scene.getAttribute(
-				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String productId = (String) scene.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
 
 		return new File(
 				scenesDir + File.separator + productId + ".zip");
@@ -389,10 +346,8 @@ public class DownloadRunner extends
 			final String workspaceDirectory )
 			throws IOException {
 		final String scenesDir = workspaceDirectory + File.separator + DOWNLOAD_DIRECTORY;
-		final String productId = (String) band.getAttribute(
-				SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
-		final String bandName = (String) band.getAttribute(
-				BandFeatureIterator.BAND_ATTRIBUTE_NAME);
+		final String productId = (String) band.getAttribute(SceneFeatureIterator.PRODUCT_ID_ATTRIBUTE_NAME);
+		final String bandName = (String) band.getAttribute(BandFeatureIterator.BAND_ATTRIBUTE_NAME);
 
 		final File file = new File(
 				scenesDir + File.separator + productId);
@@ -454,8 +409,7 @@ public class DownloadRunner extends
 				scene,
 				workspaceDirectory);
 		if (sceneDir.isDirectory()) {
-			FileUtil.fullyDelete(
-					sceneDir);
+			FileUtil.fullyDelete(sceneDir);
 		}
 	}
 
@@ -481,8 +435,7 @@ public class DownloadRunner extends
 		final int EOF = -1;
 		int percentDone = 0, lastPercentDone = -1;
 
-		while (EOF != (n = input.read(
-				buffer))) {
+		while (EOF != (n = input.read(buffer))) {
 			output.write(
 					buffer,
 					0,
@@ -496,12 +449,10 @@ public class DownloadRunner extends
 					lastPercentDone = percentDone;
 
 					if ((percentDone % 10) == 0) {
-						System.out.print(
-								percentDone + "%");
+						System.out.print(percentDone + "%");
 					}
 					else if ((percentDone % 3) == 0) {
-						System.out.print(
-								".");
+						System.out.print(".");
 					}
 				}
 			}
