@@ -3,22 +3,20 @@ package mil.nga.giat.geowave.datastore.cassandra.operations;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.stream.StreamSupport;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.aol.cyclops.control.LazyReact;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.KeyspaceMetadata;
 import com.datastax.driver.core.PreparedStatement;
@@ -40,12 +38,11 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
-import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
-import com.spotify.futures.CompletableFuturesExtra;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
@@ -283,61 +280,60 @@ public class CassandraOperations implements
 
 	}
 
-	public CloseableIterator<GeoWaveRow> executeQueryAsync(
+	final Semaphore semaphore = new Semaphore(
+			1000);
+
+	public CloseableIterator<CassandraRow> executeQueryAsync(
 			final Statement... statements ) {
 		// first create a list of asynchronous query executions
 		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(
 				statements.length);
 		for (final Statement s : statements) {
-			final ResultSetFuture f = session.executeAsync(
-					s);
-			futures.add(
-					f);
-			Futures.addCallback(
-					f,
-					new QueryCallback(),
-					CassandraOperations.READ_RESPONSE_THREADS);
+			try {
+				semaphore.acquire();
+				try {
+					final ResultSetFuture f = session.executeAsync(
+							s);
+					futures.add(
+							f);
+					Futures.addCallback(
+							f,
+							new QueryCallback(semaphore),
+							CassandraOperations.READ_RESPONSE_THREADS);
+				} catch (Exception e) {
+					semaphore.release();
+				}
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 		}
-		// convert the list of futures to an asynchronously as completed
-		// iterator on cassandra rows
-		final com.aol.cyclops.internal.react.stream.CloseableIterator results = new LazyReact()
-				.fromStreamFutures(
-						Lists.transform(
-								futures,
-								new ListenableFutureToCompletableFuture()).stream())
-				.flatMap(
-						r -> StreamSupport.stream(
-								r.spliterator(),
-								false))
-				.map(
-						r -> new CassandraRow(
-								r))
-				.iterator();
-		// now convert cyclops-react closeable iterator to a geowave closeable
-		// iterator
-		return new CloseableIteratorWrapper<GeoWaveRow>(
+
+		Iterator<CassandraRow> resultsIter = 
+				Iterators.concat(
+						Iterators.transform(futures.iterator(),
+								resultsFuture -> Iterators.transform(resultsFuture.getUninterruptibly().iterator(),
+										row -> new CassandraRow(row))));
+		
+		return new CloseableIteratorWrapper<CassandraRow>(
 				new Closeable() {
 					@Override
 					public void close()
 							throws IOException {
-						results.close();
+						for (ResultSetFuture f : futures) {
+							f.cancel(true);
+						}
 					}
 				},
-				results);
+				resultsIter);
 	}
 
-	public CloseableIterator<GeoWaveRow> executeQuery(
+	public CloseableIterator<CassandraRow> executeQuery(
 			final Statement... statements ) {
-		final List<GeoWaveRow> rows = new ArrayList<>();
-		for (final Statement s : statements) {
-			final ResultSet r = session.execute(s);
-			for (final Row row : r) {
-				rows.add(new CassandraRow(
-						row));
-			}
-		}
-		return new CloseableIterator.Wrapper<GeoWaveRow>(
-				rows.iterator());
+		Iterator<Iterator<Row>> results = Iterators.transform(
+				Arrays.asList(statements).iterator(), s -> session.execute(s).iterator());
+		Iterator<Row> rows = Iterators.concat(results);
+		return new CloseableIterator.Wrapper<CassandraRow>(
+				Iterators.transform(rows, r -> new CassandraRow(r)));
 	}
 
 	@Override
@@ -382,7 +378,7 @@ public class CassandraOperations implements
 		return true;
 	}
 
-	public CloseableIterator<GeoWaveRow> getRows(
+	public CloseableIterator<CassandraRow> getRows(
 			final String tableName,
 			final byte[][] dataIds,
 			final byte[] adapterId,
@@ -395,10 +391,10 @@ public class CassandraOperations implements
 			dataIdsSet.add(new ByteArrayId(
 					dataIds[i]));
 		}
-		final CloseableIterator<GeoWaveRow> everything = executeQuery(QueryBuilder.select().from(
+		final CloseableIterator<CassandraRow> everything = executeQuery(QueryBuilder.select().from(
 				gwNamespace,
 				tableName).allowFiltering());
-		return new CloseableIteratorWrapper<GeoWaveRow>(
+		return new CloseableIteratorWrapper<CassandraRow>(
 				everything,
 				Iterators.filter(
 						everything,
@@ -418,30 +414,30 @@ public class CassandraOperations implements
 			final String tableName,
 			final GeoWaveRow row,
 			final String... additionalAuthorizations ) {
-		final ResultSet rs = session.execute(QueryBuilder.delete().from(
-				gwNamespace,
-				tableName).where(
-				QueryBuilder.eq(
-						CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
-						ByteBuffer.wrap(row.getPartitionKey()))).and(
-				QueryBuilder.eq(
-						CassandraField.GW_SORT_KEY.getFieldName(),
-						ByteBuffer.wrap(row.getSortKey()))).and(
-				QueryBuilder.eq(
-						CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-						ByteBuffer.wrap(row.getAdapterId()))));
-
-		return !rs.isExhausted();
-	}
-
-	private static class ListenableFutureToCompletableFuture implements
-			Function<ListenableFuture<ResultSet>, CompletableFuture<ResultSet>>
-	{
-		@Override
-		public CompletableFuture<ResultSet> apply(
-				final ListenableFuture<ResultSet> input ) {
-			return CompletableFuturesExtra.toCompletableFuture(input);
+		boolean exhausted = true;
+		for (int i = 0; i < row.getFieldValues().length; i++) {
+			final ResultSet rs = session.execute(QueryBuilder.delete().from(
+					gwNamespace,
+					tableName).where(
+					QueryBuilder.eq(
+							CassandraField.GW_PARTITION_ID_KEY.getFieldName(),
+							ByteBuffer.wrap(row.getPartitionKey()))).and(
+					QueryBuilder.eq(
+							CassandraField.GW_SORT_KEY.getFieldName(),
+							ByteBuffer.wrap(row.getSortKey()))).and(
+					QueryBuilder.eq(
+							CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
+							ByteBuffer.wrap(row.getAdapterId()))).and(
+					QueryBuilder.eq(
+							CassandraField.GW_DATA_ID_KEY.getFieldName(),
+							ByteBuffer.wrap(row.getDataId()))).and(
+					QueryBuilder.eq(
+							CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName(),
+							ByteBuffer.wrap(row.getFieldValues()[i].getVisibility()))));
+			exhausted &= rs.isExhausted();
 		}
+
+		return !exhausted;
 	}
 
 	private static class ByteArrayToByteBuffer implements
@@ -464,15 +460,32 @@ public class CassandraOperations implements
 		}
 	}
 
+	public static class StringToByteBuffer implements
+			Function<String, ByteBuffer>
+	{
+		@Override
+		public ByteBuffer apply(
+				final String input ) {
+			return ByteBuffer.wrap(StringUtils.stringToBinary(input));
+		}
+	}
+
 	// callback class
 	protected static class QueryCallback implements
 			FutureCallback<ResultSet>
 	{
+		private final Semaphore semaphore;
+
+		public QueryCallback(
+				Semaphore semaphore ) {
+			this.semaphore = semaphore;
+		}
 
 		@Override
 		public void onSuccess(
 				final ResultSet result ) {
 			// placeholder: put any logging or on success logic here.
+			semaphore.release();
 		}
 
 		@Override
@@ -481,6 +494,7 @@ public class CassandraOperations implements
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
 			t.printStackTrace();
+			semaphore.release();
 			throw new RuntimeException(
 					t);
 		}
@@ -520,7 +534,7 @@ public class CassandraOperations implements
 	public boolean insureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
-		return false;
+		return true;
 	}
 
 	@Override

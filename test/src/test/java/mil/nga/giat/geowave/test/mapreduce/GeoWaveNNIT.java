@@ -69,6 +69,7 @@ public class GeoWaveNNIT extends
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB
 	})

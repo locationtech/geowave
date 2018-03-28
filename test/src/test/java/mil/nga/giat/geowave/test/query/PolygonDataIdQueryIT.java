@@ -62,6 +62,7 @@ public class PolygonDataIdQueryIT extends
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB
 	})

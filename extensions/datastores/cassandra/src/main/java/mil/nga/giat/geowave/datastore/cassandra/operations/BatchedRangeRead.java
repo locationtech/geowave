@@ -12,10 +12,9 @@ import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
-import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations.ByteArrayIdToByteBuffer;
 
@@ -37,20 +36,30 @@ public class BatchedRangeRead
 		this.ranges = ranges;
 	}
 
-	public CloseableIterator<GeoWaveRow> results() {
+	public CloseableIterator<CassandraRow> results() {
 		final List<BoundStatement> statements = new ArrayList<>();
 		for (final SinglePartitionQueryRanges r : ranges) {
 			for (final ByteArrayRange range : r.getSortKeyRanges()) {
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);
+				byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
+				byte[] end = range.getEnd() != null ? range.getEndAsNextPrefix().getBytes() : new byte[] {
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF,
+					(byte) 0xFF
+				};
 				boundRead.set(
 						CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName(),
-						ByteBuffer.wrap(range.getStart().getBytes()),
+						ByteBuffer.wrap(start),
 						ByteBuffer.class);
 
 				boundRead.set(
 						CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName(),
-						ByteBuffer.wrap(range.getEndAsNextPrefix().getBytes()),
+						ByteBuffer.wrap(end),
 						ByteBuffer.class);
 				boundRead.set(
 						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
@@ -63,6 +72,7 @@ public class BatchedRangeRead
 								adapterIds,
 								new ByteArrayIdToByteBuffer()),
 						TypeCodec.list(TypeCodec.blob()));
+
 				statements.add(boundRead);
 			}
 

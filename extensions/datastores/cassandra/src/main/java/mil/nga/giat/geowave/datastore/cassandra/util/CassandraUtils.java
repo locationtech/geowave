@@ -16,8 +16,12 @@ public class CassandraUtils
 			final PreparedStatement insertionStatement,
 			final GeoWaveRow row ) {
 		final BoundStatement[] retVal = new BoundStatement[row.getFieldValues().length];
-		final int i = 0;
+		int i = 0;
 		for (final GeoWaveValue value : row.getFieldValues()) {
+			ByteBuffer nanoBuffer = ByteBuffer.allocate(8);
+			nanoBuffer.putLong(
+					0,
+					Long.MAX_VALUE - System.nanoTime());
 			retVal[i] = new BoundStatement(
 					insertionStatement);
 			retVal[i].set(
@@ -37,6 +41,10 @@ public class CassandraUtils
 					ByteBuffer.wrap(value.getVisibility()),
 					ByteBuffer.class);
 			retVal[i].set(
+					CassandraField.GW_NANO_TIME_KEY.getBindMarkerName(),
+					nanoBuffer,
+					ByteBuffer.class);
+			retVal[i].set(
 					CassandraField.GW_FIELD_MASK_KEY.getBindMarkerName(),
 					ByteBuffer.wrap(value.getFieldMask()),
 					ByteBuffer.class);
@@ -54,6 +62,7 @@ public class CassandraUtils
 						(byte) row.getNumberOfDuplicates()
 					}),
 					ByteBuffer.class);
+			i++;
 		}
 		return retVal;
 	}

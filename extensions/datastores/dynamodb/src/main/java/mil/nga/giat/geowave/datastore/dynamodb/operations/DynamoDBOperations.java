@@ -31,6 +31,7 @@ import com.google.common.collect.Iterators;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.Deleter;
@@ -44,7 +45,6 @@ import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBClientPool;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOptions;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.DynamoDBRowMergingIterator;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
@@ -115,11 +115,13 @@ public class DynamoDBOperations implements
 		final ScanRequest request = new ScanRequest(
 				qName);
 		final ScanResult scanResult = client.scan(request);
-		final Iterator<DynamoDBRow> everything = new DynamoDBRowMergingIterator(
-				new LazyPaginatedScan(
-						scanResult,
-						request,
-						client));
+		final Iterator<DynamoDBRow> everything = new GeoWaveRowMergingIterator<DynamoDBRow>(
+				Iterators.transform(
+						new LazyPaginatedScan(
+								scanResult,
+								request,
+								client),
+						new DynamoDBRow.GuavaRowTranslationHelper()));
 		return Iterators.filter(
 				everything,
 				new Predicate<DynamoDBRow>() {

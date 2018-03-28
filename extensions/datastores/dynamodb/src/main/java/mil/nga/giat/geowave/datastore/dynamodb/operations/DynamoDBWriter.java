@@ -255,16 +255,14 @@ public class DynamoDBWriter implements
 			final GeoWaveRow row ) {
 		final ArrayList<WriteRequest> mutations = new ArrayList<>();
 
-		final byte[] rowId = DynamoDBRow.getRangeKey(row);
-
-		final Map<String, AttributeValue> map = new HashMap<>();
-
 		byte[] partitionKey = row.getPartitionKey();
 		if ((partitionKey == null) || (partitionKey.length == 0)) {
 			partitionKey = EMPTY_PARTITION_KEY;
 		}
 
 		for (final GeoWaveValue value : row.getFieldValues()) {
+			byte[] rowId = DynamoDBRow.getRangeKey(row);
+			Map<String, AttributeValue> map = new HashMap<>();
 
 			map.put(
 					DynamoDBRow.GW_PARTITION_ID_KEY,

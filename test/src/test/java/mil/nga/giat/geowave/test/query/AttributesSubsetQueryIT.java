@@ -64,6 +64,7 @@ public class AttributesSubsetQueryIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.DYNAMODB
 	})

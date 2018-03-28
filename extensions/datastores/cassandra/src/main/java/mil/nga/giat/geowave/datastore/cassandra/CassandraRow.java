@@ -8,12 +8,11 @@ import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.Row;
 import com.datastax.driver.core.schemabuilder.Create;
 
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValueImpl;
+import mil.nga.giat.geowave.core.store.entities.MergeableGeoWaveRow;
 
-public class CassandraRow implements
-		GeoWaveRow
+public class CassandraRow extends MergeableGeoWaveRow
 {
 	private final static Logger LOGGER = Logger.getLogger(
 			CassandraRow.class);
@@ -59,11 +58,14 @@ public class CassandraRow implements
 		GW_DATA_ID_KEY(
 				"data_id",
 				ColumnType.CLUSTER_COLUMN),
-		GW_FIELD_MASK_KEY(
-				"field_mask",
-				ColumnType.OTHER_COLUMN),
 		GW_FIELD_VISIBILITY_KEY(
 				"vis",
+				ColumnType.CLUSTER_COLUMN),
+		GW_NANO_TIME_KEY(
+				"nano_time",
+				ColumnType.CLUSTER_COLUMN),
+		GW_FIELD_MASK_KEY(
+				"field_mask",
 				ColumnType.OTHER_COLUMN),
 		GW_VALUE_KEY(
 				"value",
@@ -107,10 +109,10 @@ public class CassandraRow implements
 	}
 
 	private final Row row;
-	private GeoWaveValue[] cachedFieldValues = null;
 
 	public CassandraRow(
 			final Row row ) {
+		super(getFieldValues(row));
 		this.row = row;
 	}
 
@@ -144,20 +146,19 @@ public class CassandraRow implements
 				CassandraField.GW_NUM_DUPLICATES_KEY.getFieldName()).array()[0];
 	}
 
-	@Override
-	public GeoWaveValue[] getFieldValues() {
-		if (cachedFieldValues == null) {
-			final byte[] fieldMask = row.getBytes(
-					CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
-			final byte[] value = row.getBytes(
-					CassandraField.GW_VALUE_KEY.getFieldName()).array();
+	private static GeoWaveValue[] getFieldValues(Row row) {
+		final byte[] fieldMask = row.getBytes(
+				CassandraField.GW_FIELD_MASK_KEY.getFieldName()).array();
+		final byte[] value = row.getBytes(
+				CassandraField.GW_VALUE_KEY.getFieldName()).array();
+		final byte[] visibility = row.getBytes(
+				CassandraField.GW_FIELD_VISIBILITY_KEY.getFieldName()).array();
 
-			cachedFieldValues = new GeoWaveValueImpl[1];
-			cachedFieldValues[0] = new GeoWaveValueImpl(
-					fieldMask,
-					null,
-					value);
-		}
-		return cachedFieldValues;
+		GeoWaveValue[] fieldValues = new GeoWaveValueImpl[1];
+		fieldValues[0] = new GeoWaveValueImpl(
+				fieldMask,
+				visibility,
+				value);
+		return fieldValues;
 	}
 }

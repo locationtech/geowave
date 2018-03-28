@@ -19,21 +19,21 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.DynamoDBRowMergingIterator;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedScan;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBUtils;
@@ -56,8 +56,7 @@ public class DynamoDBReader implements
 	private final int partitionKeyLength;
 	private Iterator<DynamoDBRow> iterator;
 
-	private Map<String, AttributeValue> expressionAttributeValues = null;
-	private String filterExpression = null;
+	private ClientVisibilityFilter visibilityFilter;
 
 	public DynamoDBReader(
 			final ReaderParams readerParams,
@@ -91,32 +90,8 @@ public class DynamoDBReader implements
 
 	private void processAuthorizations(
 			final String[] authorizations ) {
-		final StringBuilder filterExpressionBuilder = new StringBuilder(
-				"attribute_not_exists(").append(
-				DynamoDBRow.GW_VISIBILITY_KEY).append(
-				")");
-		if ((authorizations != null) && (authorizations.length > 0)) {
-			expressionAttributeValues = Maps.newHashMap();
-			int authCount = 1;
-			filterExpressionBuilder.append(
-					" or ").append(
-					DynamoDBRow.GW_VISIBILITY_KEY).append(
-					" in (");
-			for (final String auth : authorizations) {
-				if (authCount > 1) {
-					filterExpressionBuilder.append(",");
-				}
-				final String authKey = ":auth" + authCount;
-				expressionAttributeValues.put(
-						authKey,
-						new AttributeValue().withB(ByteBuffer.wrap(StringUtils.stringToBinary(auth))));
-				filterExpressionBuilder.append(authKey);
-				authCount++;
-			}
-			filterExpressionBuilder.append(")");
-		}
-
-		filterExpression = filterExpressionBuilder.toString();
+		visibilityFilter = new ClientVisibilityFilter(
+				Sets.newHashSet(authorizations));
 	}
 
 	protected void initScanner() {
@@ -203,16 +178,16 @@ public class DynamoDBReader implements
 		}
 		else {
 			if (ASYNC) {
-				final ScanRequest request = authorizationFilter(new ScanRequest(
-						tableName));
+				final ScanRequest request = new ScanRequest(
+						tableName);
 				rawIterator = new AsyncPaginatedScan(
 						request,
 						operations.getClient());
 			}
 			else {
 				// query everything
-				final ScanRequest request = authorizationFilter(new ScanRequest(
-						tableName));
+				final ScanRequest request = new ScanRequest(
+						tableName);
 				final ScanResult scanResult = operations.getClient().scan(
 						request);
 				rawIterator = new LazyPaginatedScan(
@@ -222,7 +197,10 @@ public class DynamoDBReader implements
 			}
 		}
 		
-		iterator = new DynamoDBRowMergingIterator(rawIterator);
+		iterator = new GeoWaveRowMergingIterator<DynamoDBRow>(
+				Iterators.filter(
+						Iterators.transform(rawIterator, new DynamoDBRow.GuavaRowTranslationHelper()),
+						visibilityFilter));
 	}
 
 	@Override
@@ -263,28 +241,6 @@ public class DynamoDBReader implements
 		}
 
 		return allQueries;
-	}
-
-	private QueryRequest authorizationFilter(
-			final QueryRequest request ) {
-		if (expressionAttributeValues != null) {
-			request.withExpressionAttributeValues(expressionAttributeValues);
-		}
-		if (filterExpression != null) {
-			request.setFilterExpression(filterExpression);
-		}
-		return request;
-	}
-
-	private ScanRequest authorizationFilter(
-			final ScanRequest request ) {
-		if (expressionAttributeValues != null) {
-			request.withExpressionAttributeValues(expressionAttributeValues);
-		}
-		if (filterExpression != null) {
-			request.setFilterExpression(filterExpression);
-		}
-		return request;
 	}
 
 	private QueryRequest getQuery(
@@ -336,7 +292,7 @@ public class DynamoDBReader implements
 						ComparisonOperator.BETWEEN).withAttributeValueList(
 						new AttributeValue().withB(ByteBuffer.wrap(start)),
 						new AttributeValue().withB(ByteBuffer.wrap(end))));
-		return authorizationFilter(query);
+		return query;
 	}
 
 	private List<QueryRequest> addQueryRanges(

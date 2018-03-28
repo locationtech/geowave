@@ -1,26 +1,23 @@
 package mil.nga.giat.geowave.datastore.dynamodb;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.math3.util.Pair;
-
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
-import com.google.common.collect.Iterators;
-import com.google.common.collect.Lists;
-import com.google.common.collect.PeekingIterator;
+import com.beust.jcommander.internal.Lists;
+import com.google.common.base.Function;
 
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValueImpl;
+import mil.nga.giat.geowave.core.store.entities.MergeableGeoWaveRow;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBUtils;
 
-public class DynamoDBRow implements
+public class DynamoDBRow extends
+		MergeableGeoWaveRow implements
 		GeoWaveRow
 {
 	public static final String GW_PARTITION_ID_KEY = "P";
@@ -30,40 +27,39 @@ public class DynamoDBRow implements
 	public static final String GW_VALUE_KEY = "V";
 
 	private final GeoWaveKey key;
-	private final GeoWaveValue[] fieldValues;
 
-	private final List<Map<String, AttributeValue>> objMaps;
+	private final List<Map<String, AttributeValue>> objMaps = Lists.newArrayList();
 
 	public DynamoDBRow(
-			final GeoWaveKey key,
-			final List<Map<String, AttributeValue>> objMaps ) {
-		this.objMaps = objMaps;
+			final Map<String, AttributeValue> objMap ) {
+		super(
+				getFieldValues(objMap));
 
-		this.key = key;
-
-		fieldValues = new GeoWaveValueImpl[objMaps.size()];
-		int fieldValuesIndex = 0;
-		for (final Map<String, AttributeValue> objMap : objMaps) {
-			final byte[] fieldMask = objMap.get(
-					GW_FIELD_MASK_KEY).getB().array();
-			final byte[] value = objMap.get(
-					GW_VALUE_KEY).getB().array();
-			byte[] visibility = null;
-			if (objMap.containsKey(GW_VISIBILITY_KEY)) {
-				visibility = objMap.get(
-						GW_VISIBILITY_KEY).getB().array();
-			}
-
-			fieldValues[fieldValuesIndex] = new GeoWaveValueImpl(
-					fieldMask,
-					visibility,
-					value);
-			fieldValuesIndex++;
-		}
-
+		this.objMaps.add(objMap);
+		this.key = getGeoWaveKey(objMap);
 	}
 
-	public static GeoWaveKey getGeoWaveKey(
+	private static GeoWaveValue[] getFieldValues(
+			Map<String, AttributeValue> objMap ) {
+		final GeoWaveValue[] fieldValues = new GeoWaveValueImpl[1];
+		final byte[] fieldMask = objMap.get(
+				GW_FIELD_MASK_KEY).getB().array();
+		final byte[] value = objMap.get(
+				GW_VALUE_KEY).getB().array();
+		byte[] visibility = null;
+		if (objMap.containsKey(GW_VISIBILITY_KEY)) {
+			visibility = objMap.get(
+					GW_VISIBILITY_KEY).getB().array();
+		}
+
+		fieldValues[0] = new GeoWaveValueImpl(
+				fieldMask,
+				visibility,
+				value);
+		return fieldValues;
+	}
+
+	private static GeoWaveKey getGeoWaveKey(
 			final Map<String, AttributeValue> objMap ) {
 		final byte[] partitionKey = objMap.get(
 				GW_PARTITION_ID_KEY).getB().array();
@@ -105,52 +101,15 @@ public class DynamoDBRow implements
 		return objMaps;
 	}
 
-	public static class DynamoDBRowMergingIterator implements
-			Iterator<DynamoDBRow>
+	public static class GuavaRowTranslationHelper implements
+			Function<Map<String, AttributeValue>, DynamoDBRow>
 	{
-
-		PeekingIterator<Pair<GeoWaveKey, Map<String, AttributeValue>>> source;
-
-		public DynamoDBRowMergingIterator(final Iterator<Map<String, AttributeValue>> source) {
-			final Iterator<Pair<GeoWaveKey, Map<String, AttributeValue>>> iteratorWithKeys =
-					Iterators.transform(source, (entry) -> new Pair<>(DynamoDBRow.getGeoWaveKey(entry), entry));
-			this.source = Iterators.peekingIterator(iteratorWithKeys);
-		}
-
 		@Override
-		public boolean hasNext() {
-			return source.hasNext();
-		}
-
-		@Override
-		public DynamoDBRow next() {
-			final Pair<GeoWaveKey, Map<String, AttributeValue>> nextValue = source.next();
-			final List<Map<String, AttributeValue>> rowValues = Lists.newArrayList();
-			rowValues.add(nextValue.getValue());
-			while (source.hasNext() && keysEqual(
-					nextValue.getKey(),
-					source.peek().getKey())) {
-				rowValues.add(source.next().getValue());
-			}
+		public DynamoDBRow apply(
+				final Map<String, AttributeValue> input ) {
 			return new DynamoDBRow(
-					nextValue.getKey(),
-					rowValues);
+					input);
 		}
-
-		private boolean keysEqual(
-				final GeoWaveKey left,
-				final GeoWaveKey right ) {
-			return Arrays.equals(
-					left.getAdapterId(),
-					right.getAdapterId()) && Arrays.equals(
-					left.getDataId(),
-					right.getDataId()) && Arrays.equals(
-					left.getPartitionKey(),
-					right.getPartitionKey()) && Arrays.equals(
-					left.getSortKey(),
-					right.getSortKey()) && (left.getNumberOfDuplicates() == right.getNumberOfDuplicates());
-		}
-
 	}
 
 	@Override
@@ -179,8 +138,11 @@ public class DynamoDBRow implements
 	}
 
 	@Override
-	public GeoWaveValue[] getFieldValues() {
-		return fieldValues;
+	public void mergeRowInternal(
+			MergeableGeoWaveRow row ) {
+		if (row instanceof DynamoDBRow) {
+			objMaps.addAll(((DynamoDBRow) row).getAttributeMapping());
+		}
 	}
 
 	public static byte[] getRangeKey(
