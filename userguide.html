@@ -534,7 +534,7 @@ href="images/geowave-icon-logo-small.png">
 <div class="sectionbody">
 <div style="page-break-after: always;"></div>
 <div class="paragraph">
-<p><em>v0.9.7-SNAPSHOT</em></p>
+<p><em>v0.9.8-SNAPSHOT</em></p>
 </div>
 </div>
 </div>
@@ -2309,7 +2309,7 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 <div class="title">In the above table, replace the following:</div>
 <ul>
 <li>
-<p>$VERSION: Version of GeoWave source, e.g., 0.9.7-SNAPSHOT</p>
+<p>$VERSION: Version of GeoWave source, e.g., 0.9.8-SNAPSHOT</p>
 </li>
 <li>
 <p>$VENDOR:  Distribution vendor abbreviation - from vendors table above, e.g., apache, cdh5, hdp2</p>
@@ -2320,7 +2320,7 @@ yum --enablerepo=geowave install geowave-$VERSION-$VENDOR-*</code></pre>
 </ul>
 </div>
 <div class="paragraph">
-<p>For all vendors or packages for a particular version, replace with * (e.g., 'geowave-0.9.7-SNAPSHOT-apache-*') for all apache apache packages in 0.9.7-SNAPSHOT version of GeoWave.</p>
+<p>For all vendors or packages for a particular version, replace with * (e.g., 'geowave-0.9.8-SNAPSHOT-apache-*') for all apache apache packages in 0.9.8-SNAPSHOT version of GeoWave.</p>
 </div>
 <div class="paragraph">
 <p>Note that only accumulo, hbase, jetty, tools, and single-host are vendor package rpm&#8217;s. All others are version RPMs.</p>
@@ -2539,10 +2539,10 @@ accumulo shell -u root -p ROOT_PWD -e "config -np" | grep -A 1 general.vfs.conte
 <div class="title">Compare version and timestamps of installed RPMs</div>
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">[geowaveuser@c1-master ~]$ rpm -qa | grep geowave
-geowave-0.9.7-SNAPSHOT-apache-core-0.9.7-SNAPSHOT-201602012009.noarch
-geowave-0.9.7-SNAPSHOT-apache-jetty-0.9.7-SNAPSHOT-201602012009.noarch
-geowave-0.9.7-SNAPSHOT-apache-accumulo-0.9.7-SNAPSHOT-201602012009.noarch
-geowave-0.9.7-SNAPSHOT-apache-tools-0.9.7-SNAPSHOT-201602012009.noarch</code></pre>
+geowave-0.9.8-SNAPSHOT-apache-core-0.9.8-SNAPSHOT-201602012009.noarch
+geowave-0.9.8-SNAPSHOT-apache-jetty-0.9.8-SNAPSHOT-201602012009.noarch
+geowave-0.9.8-SNAPSHOT-apache-accumulo-0.9.8-SNAPSHOT-201602012009.noarch
+geowave-0.9.8-SNAPSHOT-apache-tools-0.9.8-SNAPSHOT-201602012009.noarch</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -2769,7 +2769,7 @@ this artifact.</p>
 <dl>
 <dt class="hdlist1">geowave_version</dt>
 <dd>
-<p>The desired version of GeoWave to install, ex: '0.9.7-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
+<p>The desired version of GeoWave to install, ex: '0.9.8-SNAPSHOT'. We support concurrent installs but only one will be active at a time.</p>
 </dd>
 <dt class="hdlist1">hadoop_vendor_version</dt>
 <dd>
@@ -2821,7 +2821,7 @@ class { 'geowave::repo':
   repo_refresh_md =&gt; 0,
 } -&gt;
 class { 'geowave':
-  geowave_version       =&gt; '0.9.7-SNAPSHOT',
+  geowave_version       =&gt; '0.9.8-SNAPSHOT',
   hadoop_vendor_version =&gt; 'apache',
   install_accumulo      =&gt; true,
   install_app           =&gt; true,
@@ -2845,7 +2845,7 @@ node 'c1-master' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.9.7-SNAPSHOT',
+    geowave_version       =&gt; '0.9.8-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_accumulo      =&gt; true,
     install_app           =&gt; true,
@@ -2859,7 +2859,7 @@ node 'c1-app-01' {
     repo_enabled    =&gt; 1,
   } -&gt;
   class { 'geowave':
-    geowave_version       =&gt; '0.9.7-SNAPSHOT',
+    geowave_version       =&gt; '0.9.8-SNAPSHOT',
     hadoop_vendor_version =&gt; 'apache',
     install_app_server    =&gt; true,
     http_port             =&gt; '8888',
@@ -2902,7 +2902,7 @@ yum --enablerepo=geowave install geowave-puppet</code></pre>
 <div class="sect2">
 <h3 id="version"><a class="anchor" href="#version"></a>Version</h3>
 <div class="paragraph">
-<p>This documentation was generated for GeoWave version 0.9.7-SNAPSHOT.</p>
+<p>This documentation was generated for GeoWave version 0.9.8-SNAPSHOT.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -3101,7 +3101,7 @@ For configuring the password encryption enabled setting:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-03-27 20:29:21 +00:00
+Last updated 2018-03-28 00:23:17 +00:00
 </div>
 </div>
 </body>
