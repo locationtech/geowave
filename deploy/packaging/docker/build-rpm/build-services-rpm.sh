@@ -127,7 +127,9 @@ echo "Copy REST Services file"
 cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
 
 # Copy accumulo 1.7 restservices war file 
-cp $WORKSPACE/services/rest/target/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war
+if [[ -f $WORKSPACE/services/rest/target/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war ]]; then
+  cp $WORKSPACE/services/rest/target/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war
+fi
 
 #get geoserver the war files ready
 #unpack it in tmp dir
