@@ -101,26 +101,20 @@ public class GeoWaveJavaSparkKMeansIT
 		String adapterId = "hail";
 
 		// Create the runner
+		long mark = System.currentTimeMillis();
 		final KMeansRunner runner = new KMeansRunner();
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
 		runner.setCqlFilter(CQL_FILTER);
 		runner.setMaster("local[*]");
+		runner.setUseTime(true);
+		// Set output params to write centroids + hulls to store.
+		runner.setOutputDataStore(inputDataStore);
+		runner.setCentroidTypeName("kmeans-centroids-test");
 
-		// Attempt to set the time params
-		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
-				runner,
-				inputDataStore,
-				new ByteArrayId(
-						adapterId));
-
-		if (scaledRange == null) {
-			Assert.fail("Failed to set time params");
-
-			TestUtils.deleteAll(inputDataStore);
-
-			runner.close();
-		}
+		runner.setGenerateHulls(true);
+		runner.setComputeHullData(true);
+		runner.setHullTypeName("kmeans-hulls-test");
 
 		// Run kmeans
 		try {
@@ -134,17 +128,20 @@ public class GeoWaveJavaSparkKMeansIT
 		// Create the output
 		final KMeansModel clusterModel = runner.getOutputModel();
 
+		long dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("KMeans duration: " + dur + " ms.");
 		// Write out the centroid features
-		DataAdapter centroidAdapter = KMeansUtils.writeClusterCentroids(
-				clusterModel,
-				inputDataStore,
-				"kmeans-centroids-test",
-				scaledRange);
+		DataAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
+				new ByteArrayId(
+						"kmeans-centroids-test"));
 
 		// Query back from the new adapter
+		mark = System.currentTimeMillis();
 		queryFeatures(
 				centroidAdapter,
 				clusterModel.clusterCenters().length);
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("Centroid verify: " + dur + " ms.");
 
 		// Generate the hulls
 		final JavaPairRDD<Integer, Iterable<Vector>> groupByRDD = KMeansHullGenerator.groupByIndex(
@@ -165,17 +162,17 @@ public class GeoWaveJavaSparkKMeansIT
 		}
 
 		// Write out the hull features w/ metadata
-		DataAdapter hullAdapter = KMeansUtils.writeClusterHulls(
-				runner.getInputCentroids(),
-				clusterModel,
-				inputDataStore,
-				"kmeans-hulls-test",
-				true);
+		DataAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
+				new ByteArrayId(
+						"kmeans-hulls-test"));
 
+		mark = System.currentTimeMillis();
 		// Query back from the new adapter
 		queryFeatures(
 				hullAdapter,
 				clusterModel.clusterCenters().length);
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("Hull verify: " + dur + " ms.");
 
 		TestUtils.deleteAll(inputDataStore);
 

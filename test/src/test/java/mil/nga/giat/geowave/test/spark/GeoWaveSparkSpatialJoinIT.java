@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test.spark;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -26,6 +27,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
@@ -59,16 +61,12 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@BeforeClass
 	public static void reportTestStart() {
-		startMillis = System.currentTimeMillis();
-		session = SparkSession.builder().appName(
-				"SpatialJoinTest").master(
-				"local[*]").config(
-				"spark.serializer",
-				"org.apache.spark.serializer.KryoSerializer").config(
-				"spark.kryo.registrator",
-				"mil.nga.giat.geowave.analytic.spark.GeoWaveRegistrator").getOrCreate();
-
+		SparkConf addonOptions = new SparkConf();
+		addonOptions.setMaster("local[*]");
+		addonOptions.setAppName("JavaSparkSqlIT");
+		session = GeoWaveSparkConf.createDefaultSession(addonOptions);
 		GeomFunctionRegistry.registerGeometryFunctions(session);
+		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("*  RUNNING GeoWaveSparkSpatialJoinIT  *");
@@ -79,9 +77,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@AfterClass
 	public static void reportTestFinish() {
-		
 		session.close();
-		
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED GeoWaveSparkSpatialJoinIT  *");
@@ -90,7 +86,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 	}
 
 	@Test
@@ -115,7 +111,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		loadRDDs(
 				hail_adapter,
 				tornado_adapter);
-		
 
 		this.hailRDD.cache();
 		this.tornadoRDD.cache();

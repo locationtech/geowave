@@ -5,6 +5,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
@@ -27,6 +28,7 @@ import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -84,16 +86,17 @@ public class KMeansRunner
 						"Unable to set jar location in spark configuration",
 						e);
 			}
-			session = SparkSession.builder().appName(
-					appName).master(
-					master).config(
+			SparkConf addonOptions = new SparkConf();
+			addonOptions = addonOptions.setAppName(
+					appName).setMaster(
+					master).set(
 					"spark.driver.host",
-					host).config(
+					host).set(
 					"spark.jars",
-					jar).getOrCreate();
+					jar);
+			session = GeoWaveSparkConf.createDefaultSession(addonOptions);
 
-			jsc = new JavaSparkContext(
-					session.sparkContext());
+			jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
 		}
 	}
 

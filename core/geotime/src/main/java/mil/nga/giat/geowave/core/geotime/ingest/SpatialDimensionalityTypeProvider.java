@@ -226,7 +226,7 @@ public class SpatialDimensionalityTypeProvider implements
 			options.storeTime = storeTime;
 			return this;
 		}
-		
+
 		public SpatialIndexBuilder setCrs(
 				final String crs ) {
 			options.crs = crs;

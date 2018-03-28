@@ -319,7 +319,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			options.maxDuplicates = maxDuplicates;
 			return this;
 		}
-		
+
 		public SpatialTemporalIndexBuilder setCrs(
 				final String crs ) {
 			options.crs = crs;
