@@ -31,7 +31,6 @@ import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
 import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
-import mil.nga.giat.geowave.test.query.SecondaryIndexIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
@@ -56,7 +55,6 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	SpatialTemporalQueryIT.class,
 	PolygonDataIdQueryIT.class,
 	ConfigCacheIT.class,
-	SecondaryIndexIT.class,
 	DBScanIT.class,
 	GeoWaveJavaSparkIT.class,
 	GeoWaveJavaSparkKMeansIT.class,

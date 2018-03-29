@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.datastore.accumulo.operations;
+package mil.nga.giat.geowave.datastore.accumulo.cli;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +9,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.datastore.accumulo.cli.AccumuloSection;
 import mil.nga.giat.geowave.datastore.accumulo.minicluster.AccumuloMiniCluster;
 
 @GeowaveOperation(name = "runserver", parentOperation = AccumuloSection.class)

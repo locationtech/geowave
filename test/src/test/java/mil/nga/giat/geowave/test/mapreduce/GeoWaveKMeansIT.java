@@ -71,8 +71,7 @@ public class GeoWaveKMeansIT
 {
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.BIGTABLE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

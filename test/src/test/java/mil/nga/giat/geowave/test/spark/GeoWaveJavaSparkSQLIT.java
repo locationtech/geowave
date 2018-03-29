@@ -39,8 +39,7 @@ public class GeoWaveJavaSparkSQLIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkSQLIT.class);
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO		
 	})
 	protected DataStorePluginOptions dataStore;
 

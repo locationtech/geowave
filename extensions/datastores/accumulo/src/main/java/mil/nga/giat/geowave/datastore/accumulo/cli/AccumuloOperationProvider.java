@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -8,28 +8,20 @@
  * Version 2.0 which accompanies this distribution and is available at
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package mil.nga.giat.geowave.core.store.cli.remote;
+package mil.nga.giat.geowave.datastore.accumulo.cli;
 
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
-import mil.nga.giat.geowave.core.store.operations.remote.MergeDataCommand;
-import mil.nga.giat.geowave.core.store.operations.remote.VersionCommand;
 
-public class RemoteOperationsProvider implements
+public class AccumuloOperationProvider implements
 		CLIOperationProviderSpi
 {
-
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
-		RemoteSection.class,
-		CalculateStatCommand.class,
-		ClearCommand.class,
-		ListAdapterCommand.class,
-		ListIndexCommand.class,
-		ListStatsCommand.class,
-		VersionCommand.class,
-		MergeDataCommand.class,
-		RecalculateStatsCommand.class,
-		RemoveAdapterCommand.class,
-		RemoveStatCommand.class
+		AccumuloSection.class,
+		AccumuloRunServerCommand.class,
+		PreSplitPartitionIdCommand.class,
+		SplitEqualIntervalCommand.class,
+		SplitNumRecordsCommand.class,
+		SplitQuantileCommand.class
 	};
 
 	@Override

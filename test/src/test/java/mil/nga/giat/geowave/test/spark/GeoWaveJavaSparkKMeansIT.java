@@ -58,8 +58,7 @@ public class GeoWaveJavaSparkKMeansIT
 	protected static final String CQL_FILTER = "BBOX(the_geom, -100, 30, -90, 40)";
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions inputDataStore;
 

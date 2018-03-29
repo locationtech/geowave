@@ -43,7 +43,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions dataStore;
