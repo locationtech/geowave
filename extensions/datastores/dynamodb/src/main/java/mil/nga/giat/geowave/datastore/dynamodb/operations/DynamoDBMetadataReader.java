@@ -55,19 +55,15 @@ public class DynamoDBMetadataReader implements
 					tableName);
 
 			if (query.hasSecondaryId()) {
-				queryRequest.addQueryFilterEntry(
-						DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
-						new Condition()
-								.withAttributeValueList(
-										new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())))
-								.withComparisonOperator(
-										ComparisonOperator.EQ));
+				queryRequest.withFilterExpression(
+						DynamoDBOperations.METADATA_SECONDARY_ID_KEY + " = :secVal").addExpressionAttributeValuesEntry(
+						":secVal",
+						new AttributeValue().withB(ByteBuffer.wrap(query.getSecondaryId())));
 			}
-			queryRequest.addKeyConditionsEntry(
-					DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
-					new Condition().withAttributeValueList(
-							new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId()))).withComparisonOperator(
-							ComparisonOperator.EQ));
+			queryRequest.withKeyConditionExpression(
+					DynamoDBOperations.METADATA_PRIMARY_ID_KEY + " = :priVal").addExpressionAttributeValuesEntry(
+					":priVal",
+					new AttributeValue().withB(ByteBuffer.wrap(query.getPrimaryId())));
 
 			final QueryResult queryResult = operations.getClient().query(
 					queryRequest);

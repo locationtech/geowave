@@ -224,7 +224,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	@SuppressWarnings("unchecked")
-	private T internalGetObject(
+	protected T internalGetObject(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final boolean warnIfNotExists,

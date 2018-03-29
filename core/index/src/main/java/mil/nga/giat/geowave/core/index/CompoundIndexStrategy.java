@@ -41,13 +41,13 @@ public class CompoundIndexStrategy implements
 		NumericIndexStrategy
 {
 
-	private PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> subStrategy1;
+	private PartitionIndexStrategy subStrategy1;
 	private NumericIndexStrategy subStrategy2;
 	private int defaultMaxDuplication;
 	private int metaDataSplit = -1;
 
 	public CompoundIndexStrategy(
-			final PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData> subStrategy1,
+			final PartitionIndexStrategy<? extends MultiDimensionalNumericData, ? extends MultiDimensionalNumericData> subStrategy1,
 			final NumericIndexStrategy subStrategy2 ) {
 		this.subStrategy1 = subStrategy1;
 		this.subStrategy2 = subStrategy2;

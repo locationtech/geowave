@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import org.apache.log4j.Logger;
-
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
 import com.amazonaws.services.dynamodbv2.model.Condition;
@@ -17,6 +15,7 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -45,15 +44,10 @@ import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 public class DynamoDBReader implements
 		Reader
 {
-	private final static Logger LOGGER = Logger.getLogger(DynamoDBReader.class);
 	private static final boolean ASYNC = false;
 	private final ReaderParams readerParams;
 	private final RecordReaderParams recordReaderParams;
 	private final DynamoDBOperations operations;
-	private final boolean clientSideRowMerging;
-
-	private final boolean wholeRowEncoding;
-	private final int partitionKeyLength;
 	private Iterator<DynamoDBRow> iterator;
 
 	private ClientVisibilityFilter visibilityFilter;
@@ -65,11 +59,6 @@ public class DynamoDBReader implements
 		recordReaderParams = null;
 		processAuthorizations(readerParams.getAdditionalAuthorizations());
 		this.operations = operations;
-
-		partitionKeyLength = readerParams.getIndex().getIndexStrategy().getPartitionKeyLength();
-		wholeRowEncoding = readerParams.isMixedVisibility() && !readerParams.isServersideAggregation();
-		clientSideRowMerging = readerParams.isClientsideRowMerging();
-
 		initScanner();
 	}
 
@@ -80,10 +69,6 @@ public class DynamoDBReader implements
 		this.recordReaderParams = recordReaderParams;
 		processAuthorizations(recordReaderParams.getAdditionalAuthorizations());
 		this.operations = operations;
-
-		partitionKeyLength = recordReaderParams.getIndex().getIndexStrategy().getPartitionKeyLength();
-		wholeRowEncoding = recordReaderParams.isMixedVisibility() && !recordReaderParams.isServersideAggregation();
-		clientSideRowMerging = false;
 
 		initRecordScanner();
 	}
@@ -98,9 +83,10 @@ public class DynamoDBReader implements
 		final String tableName = operations.getQualifiedTableName(
 				readerParams.getIndex().getId().getString());
 
-//		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)) {
-			//TODO: we should do something here
-//		}
+		// if ((readerParams.getLimit() != null) && (readerParams.getLimit() >
+		// 0)) {
+		// TODO: we should do something here
+		// }
 
 		final List<QueryRequest> requests = new ArrayList<>();
 
@@ -116,13 +102,15 @@ public class DynamoDBReader implements
 									readerParams.getAdapterStore()))));
 
 		}
-//		else if ((adapterIds != null) && !adapterIds.isEmpty()) {
-//			//TODO this isn't going to work because there aren't partition keys being passed along
-//			requests.addAll(
-//					getAdapterOnlyQueryRequests(
-//							tableName,
-//							adapterIds));
-//		}
+		// else if ((readerParams.getAdapterIds() != null) &&
+		// !readerParams.getAdapterIds().isEmpty()) {
+		// //TODO this isn't going to work because there aren't partition keys
+		// being passed along
+		// requests.addAll(
+		// getAdapterOnlyQueryRequests(
+		// tableName,
+		// readerParams.getAdapterIds()));
+		// }
 
 		startRead(
 				requests,
@@ -164,6 +152,7 @@ public class DynamoDBReader implements
 			final List<QueryRequest> requests,
 			final String tableName ) {
 		Iterator<Map<String, AttributeValue>> rawIterator;
+		Predicate<DynamoDBRow> adapterIdFilter = null;
 		if (!requests.isEmpty()) {
 			if (ASYNC) {
 				rawIterator = Iterators.concat(
@@ -194,13 +183,37 @@ public class DynamoDBReader implements
 						scanResult,
 						request,
 						operations.getClient());
+				// TODO it'd be best to keep the set of partitions as a stat and
+				// use it to query by adapter IDs server-side
+				// but stats could be disabled so we may need to do client-side
+				// filtering by adapter ID
+				if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
+					adapterIdFilter = new Predicate<DynamoDBRow>() {
+
+						@Override
+						public boolean apply(
+								final DynamoDBRow input ) {
+							return readerParams.getAdapterIds().contains(
+									new ByteArrayId(
+											input.getAdapterId()));
+						}
+
+					};
+				}
 			}
 		}
-		
+
 		iterator = new GeoWaveRowMergingIterator<DynamoDBRow>(
 				Iterators.filter(
-						Iterators.transform(rawIterator, new DynamoDBRow.GuavaRowTranslationHelper()),
+						Iterators.transform(
+								rawIterator,
+								new DynamoDBRow.GuavaRowTranslationHelper()),
 						visibilityFilter));
+		if (adapterIdFilter != null) {
+			iterator = Iterators.filter(
+					iterator,
+					adapterIdFilter);
+		}
 	}
 
 	@Override
@@ -221,7 +234,7 @@ public class DynamoDBReader implements
 
 	private List<QueryRequest> getAdapterOnlyQueryRequests(
 			final String tableName,
-			final ArrayList<ByteArrayId> adapterIds ) {
+			final List<ByteArrayId> adapterIds ) {
 		final List<QueryRequest> allQueries = new ArrayList<>();
 
 		for (final ByteArrayId adapterId : adapterIds) {
@@ -307,7 +320,7 @@ public class DynamoDBReader implements
 		if (adapterIds == null) {
 			adapterIds = Lists.newArrayList();
 		}
-		if (adapterIds.isEmpty() && adapterStore != null) {
+		if (adapterIds.isEmpty() && (adapterStore != null)) {
 			final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
 
 			final List<ByteArrayId> adapterIDList = Lists.newArrayList();

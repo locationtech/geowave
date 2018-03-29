@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -103,9 +103,11 @@ public class DataStatisticsStoreImpl extends
 			final ByteArrayId adapterId,
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
-		return getObject(
+		return internalGetObject(
 				statisticsId,
 				adapterId,
+				// for data statistics we don't want to log if its not found
+				false,
 				authorizations);
 	}
 

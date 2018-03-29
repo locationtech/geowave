@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -10,6 +8,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 
 import com.datastax.driver.core.querybuilder.Select;
+import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -74,13 +73,7 @@ public class CassandraReader implements
 			final CloseableIterator<CassandraRow> results,
 			final Set<String> authorizations ) {
 		return new CloseableIteratorWrapper<CassandraRow>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {
-						results.close();
-					}
-				},
+				results,
 				new GeoWaveRowMergingIterator<CassandraRow>(
 						Iterators.filter(
 								results,
@@ -91,7 +84,7 @@ public class CassandraReader implements
 	protected void initScanner() {
 		final Collection<SinglePartitionQueryRanges> ranges = readerParams.getQueryRanges().getPartitionQueryRanges();
 
-		Set<String> authorizations = Sets.newHashSet(readerParams.getAdditionalAuthorizations());
+		final Set<String> authorizations = Sets.newHashSet(readerParams.getAdditionalAuthorizations());
 		if ((ranges != null) && !ranges.isEmpty()) {
 			final CloseableIterator<CassandraRow> results = operations.getBatchedRangeRead(
 					readerParams.getIndex().getId().getString(),
@@ -104,8 +97,25 @@ public class CassandraReader implements
 		}
 		else {
 			// TODO figure out the query select by adapter IDs here
-			Select select = operations.getSelect(readerParams.getIndex().getId().getString());
-			final CloseableIterator<CassandraRow> results = operations.executeQuery(select);
+			final Select select = operations.getSelect(readerParams.getIndex().getId().getString());
+			CloseableIterator<CassandraRow> results = operations.executeQuery(select);
+			if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
+				// TODO because we aren't filtering server-side by adapter ID,
+				// we will need to filter here on the client
+				results = new CloseableIteratorWrapper<CassandraRow>(
+						results,
+						Iterators.filter(
+								results,
+								new Predicate<CassandraRow>() {
+									@Override
+									public boolean apply(
+											final CassandraRow input ) {
+										return readerParams.getAdapterIds().contains(
+												new ByteArrayId(
+														input.getAdapterId()));
+									}
+								}));
+			}
 			iterator = wrapResults(
 					results,
 					authorizations);
@@ -122,7 +132,7 @@ public class CassandraReader implements
 				range.getStartSortKey());
 		final ByteArrayId stopKey = range.isInfiniteStopSortKey() ? null : new ByteArrayId(
 				range.getEndSortKey());
-		SinglePartitionQueryRanges partitionRange = new SinglePartitionQueryRanges(
+		final SinglePartitionQueryRanges partitionRange = new SinglePartitionQueryRanges(
 				new ByteArrayId(
 						range.getPartitionKey()),
 				Collections.singleton(new ByteArrayRange(
@@ -133,7 +143,7 @@ public class CassandraReader implements
 				adapterIds,
 				Collections.singleton(partitionRange)).results();
 
-		Set<String> authorizations = Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
+		final Set<String> authorizations = Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
 
 		iterator = wrapResults(
 				results,
