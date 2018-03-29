@@ -21,6 +21,7 @@ import com.vividsolutions.jts.util.Stopwatch;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SqlResultsWriter;
+import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;

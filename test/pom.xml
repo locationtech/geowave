@@ -5,7 +5,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.7-SNAPSHOT</version>
+		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<properties>
 		<gdal.dir>${project.build.directory}/temp/gdal</gdal.dir>
@@ -17,8 +17,80 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-analytic-spark</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>javax.ws.rs-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-cli-geoserver</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+				<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-webapp</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-service-rest</artifactId>
+			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>javax.ws.rs</groupId>
+					<artifactId>javax.ws.rs-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.restlet.osgi</groupId>
+					<artifactId>org.restlet.ext.jaxrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>
+						org.springframework.security.oauth
+					</groupId>
+					<artifactId>spring-security-oauth2</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-service-client</artifactId>
+			<version>${project.version}</version>
+		</dependency> 
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -42,12 +114,6 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-analytic-spark</artifactId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -55,6 +121,16 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.eclipse.jetty</groupId>
+					<artifactId>jetty-servlet</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>javax.servlet-api</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -67,8 +143,16 @@
 			<version>${project.version}</version>
 			<exclusions>
 				<exclusion>
-					<groupId>com.lmax</groupId>
-					<artifactId>disruptor</artifactId>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -109,6 +193,42 @@
 					<groupId>hsqldb</groupId>
 					<artifactId>hsqldb</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.mortbay.jetty</groupId>
+					<artifactId>jetty-util</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-core</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-json</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-server</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey</groupId>
+					<artifactId>jersey-client</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.sun.jersey.contribs</groupId>
+					<artifactId>jersey-guice</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.codehaus.jackson</groupId>
+					<artifactId>jackson-jaxrs</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>javax.servlet</groupId>
+					<artifactId>servlet-api</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -135,6 +255,10 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>com.lmax</groupId>
+					<artifactId>disruptor</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -155,6 +279,27 @@
 				<artifactId>maven-dependency-plugin</artifactId>
 				<version>2.9</version>
 				<executions>
+					<execution>
+						<id>unpack-wars</id>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.geoserver.web</groupId>
+									<artifactId>gs-web-app</artifactId>
+									<version>${geoserver.version}</version>
+									<type>war</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
+									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
+								</artifactItem>
+							</artifactItems>
+						</configuration>
+					</execution>
+
 					<execution>
 						<id>setup-wps</id>
 						<goals>
@@ -206,6 +351,28 @@
 									<outputDirectory>${project.build.directory}/geoserver/WEB-INF/lib</outputDirectory>
 								</artifactItem>
 							</artifactItems>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<version>3.0.2</version>
+				<executions>
+					<execution>
+						<id>copy-resources</id>
+						<!-- here the phase you need -->
+						<phase>pre-integration-test</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${project.build.directory}/restservices</outputDirectory>
+							<resources>
+								<resource>
+									<directory>${project.basedir}/../services/rest/src/main/webapp</directory>
+								</resource>
+							</resources>
 						</configuration>
 					</execution>
 				</executions>
@@ -451,13 +618,4 @@
 			</properties>
 		</profile>
 	</profiles>
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>com.lmax</groupId>
-				<artifactId>disruptor</artifactId>
-				<version>3.3.0</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
 </project>

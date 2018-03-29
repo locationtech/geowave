@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.7-SNAPSHOT</version>
+	<version>0.9.8-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -52,6 +52,7 @@
 		<accumulo.scope>compile</accumulo.scope>
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
+		<jetty.version>9.4.8.v20171121</jetty.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.23.1</jersey.version>
 		<scala.version>2.11.8</scala.version>
@@ -60,7 +61,7 @@
 		<snappy.version>1.1.2.6</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
-		<fasterxml.jackson.version>2.5.0</fasterxml.jackson.version>
+		<fasterxml.jackson.version>2.6.6</fasterxml.jackson.version>
 		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
@@ -94,6 +95,21 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-util</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>		
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.scala-lang</groupId>
 				<artifactId>scala-library</artifactId>
 				<version>${scala.version}</version>
@@ -112,9 +128,7 @@
 				<groupId>org.scala-lang</groupId>
 				<artifactId>scala-reflect</artifactId>
 				<version>${scala.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.apache.zookeeper</groupId>
+			</dependency>			<dependency>				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
 				<version>${zookeeper.version}</version>
 			</dependency>
@@ -268,7 +282,7 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
-           		<type>test-jar</type>
+				<type>test-jar</type>
 				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
@@ -281,7 +295,7 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-common</artifactId>
 				<version>${hbase.version}</version>
-           		<type>test-jar</type>
+				<type>test-jar</type>
 				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
@@ -515,8 +529,7 @@
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
 				<scope>compile</scope>
-			</dependency>
-			<dependency>
+			</dependency>			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-multipart</artifactId>
 				<version>${jersey.version}</version>
@@ -524,6 +537,16 @@
 			<dependency>
 				<groupId>org.glassfish.jersey.core</groupId>
 				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-common</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
 			<dependency>
@@ -541,7 +564,6 @@
 				<artifactId>jersey-proxy-client</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-vfs2</artifactId>

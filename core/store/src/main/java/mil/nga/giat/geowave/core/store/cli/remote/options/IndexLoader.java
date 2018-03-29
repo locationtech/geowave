@@ -55,9 +55,7 @@ public class IndexLoader
 		loadedIndices = new HashMap<String, IndexPluginOptions>();
 
 		// Properties (load them all)
-		return loadFromConfig(ConfigOptions.loadProperties(
-				configFile,
-				null));
+		return loadFromConfig(ConfigOptions.loadProperties(configFile));
 	}
 
 	/**

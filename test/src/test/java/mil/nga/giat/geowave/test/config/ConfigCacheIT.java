@@ -116,9 +116,7 @@ public class ConfigCacheIT
 
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				"namespace",
@@ -147,9 +145,7 @@ public class ConfigCacheIT
 
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				"namespace2",
@@ -170,9 +166,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				"namespace",
@@ -189,9 +183,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				1,
@@ -211,9 +203,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				spatialType,
@@ -237,9 +227,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				spatialType,
@@ -261,9 +249,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				spatialType,
@@ -280,9 +266,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				1,
@@ -301,9 +285,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				"abc=spatial",
@@ -327,9 +309,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 		Assert.assertEquals(
 				1,
 				props.size());
@@ -344,9 +324,7 @@ public class ConfigCacheIT
 		command.prepare(operationParams);
 		command.execute(operationParams);
 
-		final Properties props = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		final Properties props = ConfigOptions.loadProperties(configFile);
 
 		Assert.assertEquals(
 				1,

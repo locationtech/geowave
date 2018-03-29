@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
+
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
@@ -316,6 +317,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		public SpatialTemporalIndexBuilder setMaxDuplicates(
 				final long maxDuplicates ) {
 			options.maxDuplicates = maxDuplicates;
+			return this;
+		}
+
+		public SpatialTemporalIndexBuilder setCrs(
+				final String crs ) {
+			options.crs = crs;
 			return this;
 		}
 

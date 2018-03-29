@@ -16,6 +16,9 @@ import java.util.List;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -23,6 +26,7 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 
 @GeowaveOperation(name = "addcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage")
@@ -34,6 +38,8 @@ public class GeoServerAddCoverageCommand extends
 		"--workspace"
 	}, required = false, description = "workspace name")
 	private String workspace = null;
+
+	private ServiceStatus status = ServiceStatus.OK;
 
 	@Parameter(names = {
 		"-cs",
@@ -51,6 +57,21 @@ public class GeoServerAddCoverageCommand extends
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
+	}
+
+	public void setStatus(
+			ServiceStatus status ) {
+		this.status = status;
+	}
+
+	@Override
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
 	}
 
 	@Override
@@ -73,7 +94,19 @@ public class GeoServerAddCoverageCommand extends
 				cvgName);
 
 		if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
+			setStatus(ServiceStatus.OK);
 			return "Add coverage '" + cvgName + "' to '" + workspace + "/" + cvgstore + "' on GeoServer: OK";
+		}
+		switch (addLayerResponse.getStatus()) {
+			case 404:
+				setStatus(ServiceStatus.NOT_FOUND);
+				break;
+			case 400:
+				setStatus(ServiceStatus.DUPLICATE);
+				break;
+			default:
+				setStatus(ServiceStatus.INTERNAL_ERROR);
+				break;
 		}
 		return "Error adding GeoServer coverage " + cvgName + "; code = " + addLayerResponse.getStatus();
 	}

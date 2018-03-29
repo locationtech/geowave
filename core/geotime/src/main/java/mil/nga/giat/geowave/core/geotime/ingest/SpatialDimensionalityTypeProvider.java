@@ -227,6 +227,12 @@ public class SpatialDimensionalityTypeProvider implements
 			return this;
 		}
 
+		public SpatialIndexBuilder setCrs(
+				final String crs ) {
+			options.crs = crs;
+			return this;
+		}
+
 		@Override
 		public PrimaryIndex createIndex() {
 			return createIndex(internalCreatePrimaryIndex(options));

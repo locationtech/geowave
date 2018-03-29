@@ -5,18 +5,12 @@ import com.vividsolutions.jts.geom.Geometry;
 public class GeomCovers extends
 		GeomFunction
 {
+
 	@Override
-	public Boolean call(
-			String geomStr1,
-			String geomStr2 )
-			throws Exception {
-		Geometry geom1 = parseGeom(geomStr1);
-		Geometry geom2 = parseGeom(geomStr2);
-
-		if (geom1 != null && geom2 != null) {
-			return geom1.covers(geom2);
-		}
-
-		return false;
+	public boolean apply(
+			Geometry geom1,
+			Geometry geom2 ) {
+		return geom1.covers(geom2);
 	}
+
 }

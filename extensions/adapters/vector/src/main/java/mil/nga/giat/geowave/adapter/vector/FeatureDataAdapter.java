@@ -273,6 +273,13 @@ public class FeatureDataAdapter extends
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
+	// Simplify for call from pyspark/jupyter
+	public void init(
+			PrimaryIndex index ) {
+		this.init(new PrimaryIndex[] {
+			index
+		});
+	}
 
 	@Override
 	public void init(
@@ -699,7 +706,7 @@ public class FeatureDataAdapter extends
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
 		CoordinateReferenceSystem crs = reprojectedFeatureType.getCoordinateReferenceSystem();
-		byte[] indexCrsBytes;
+		final byte[] indexCrsBytes;
 		if (crs != null) {
 			indexCrsBytes = StringUtils.stringToBinary(CRS.toSRS(crs));
 		}
@@ -752,11 +759,18 @@ public class FeatureDataAdapter extends
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		// for now...do a gentle migration
 		final byte versionId = buf.get();
-		if (versionId != VERSION) {
-			LOGGER.warn("Mismatched Feature Data Adapter version");
-		}
 		final byte[] typeNameBytes = new byte[buf.getInt()];
-		final byte[] indexCrsBytes = new byte[buf.getInt()];
+
+		// TODO: DONTMAINTAIN! Don't maintain after 1.0. This was specifically
+		// made to support GeoWave 0.9.6 - 0.9.7 data
+		final byte[] indexCrsBytes;
+		if (versionId < VERSION) {
+			LOGGER.warn("Mismatched Feature Data Adapter version");
+			indexCrsBytes = new byte[0];
+		}
+		else {
+			indexCrsBytes = new byte[buf.getInt()];
+		}
 		final byte[] namespaceBytes = new byte[buf.getInt()];
 
 		final byte[] attrBytes = new byte[buf.getInt()];
@@ -777,8 +791,17 @@ public class FeatureDataAdapter extends
 
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-				- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
+		// TODO: DONTMAINTAIN! Don't maintain after 1.0. This was specifically
+		// made to support GeoWave 0.9.6 - 0.9.7 data
+		final byte[] secondaryIndexBytes;
+		if (versionId < VERSION) {
+			secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
+					- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 21];
+		}
+		else {
+			secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
+					- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
+		}
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);

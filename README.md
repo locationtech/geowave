@@ -1,12 +1,12 @@
-<p align="center">
+﻿<p align="center">
 	<img float="center" src="https://raw.githubusercontent.com/locationtech/geowave/master/docs/content/userguide/images/geowave-full-logo-300px.png" alt="GeoWave"><br/><br/>
 </p>
 
 ## About  
 
-| Continuous Integration | Code Coverage | License | Chat |            
-|:------------------:|:-------------:|:---------------:|:----:|
-| <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | <a href='https://coveralls.io/r/locationtech/?branch=master'><img src='https://coveralls.io/repos/locationtech/geowave/badge.svg?branch=master' alt='Coverage Status' /></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
+| Continuous Integration | Code Coverage | Static Analysis | License | Chat |            
+|:------------------:|:-------------:|:---------------:|:-------:|:----:|
+| <a href="https://travis-ci.org/locationtech/geowave/branches"><img alt="Travis-CI test status" src="https://travis-ci.org/locationtech/geowave.svg?branch=master"/></a> | <a href='https://coveralls.io/r/locationtech/?branch=master'><img src='https://coveralls.io/repos/locationtech/geowave/badge.svg?branch=master' alt='Coverage Status' /></a> | <a href="https://scan.coverity.com/projects/3371"><img alt="Coverity Scan Build Status" src="https://scan.coverity.com/projects/3371/badge.svg"/></a> | [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) | [![Join the chat at https://gitter.im/locationtech/geowave](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/locationtech/geowave?utm_source=badge&utm_medium=badge&utm_content=badge) |  
 
 GeoWave is an open source set of software that:
 

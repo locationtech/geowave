@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 
 @GeowaveOperation(name = "localToGW", parentOperation = IngestSection.class)
-@Parameters(commandDescription = "Ingest supported files in local file system directly, without using HDFS")
+@Parameters(commandDescription = "Ingest supported files in local file system directly, from S3 or from HDFS ")
 public class LocalToGeowaveCommand extends
 		ServiceEnabledCommand<Void>
 {

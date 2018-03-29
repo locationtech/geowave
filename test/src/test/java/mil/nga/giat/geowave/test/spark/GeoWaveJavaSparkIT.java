@@ -95,6 +95,12 @@ public class GeoWaveJavaSparkIT extends
 
 		sparkConf.setAppName("GeoWaveRDD");
 		sparkConf.setMaster("local");
+		sparkConf.set(
+				"spark.kryo.registrator",
+				"mil.nga.giat.geowave.analytic.spark.GeoWaveRegistrator");
+		sparkConf.set(
+				"spark.serializer",
+				"org.apache.spark.serializer.KryoSerializer");
 		JavaSparkContext context = new JavaSparkContext(
 				sparkConf);
 
@@ -227,6 +233,7 @@ public class GeoWaveJavaSparkIT extends
 					new QueryOptions(
 							tornadoAdapter));
 
+			javaRdd = javaRdd.distinct();
 			long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features for adapter "
 					+ StringUtils.stringFromBinary(tornadoAdapter.getAdapterId().getBytes()));

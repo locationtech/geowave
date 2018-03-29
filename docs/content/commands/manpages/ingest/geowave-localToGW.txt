@@ -5,7 +5,7 @@
 NAME
 //:----
 
-geowave ingest localToGW - Ingest supported files in local file system directly, without using HDFS
+geowave ingest localToGW - Ingest supported files in local file system directly, from S3 or from HDFS
 
 SYNOPSIS
 //:--------

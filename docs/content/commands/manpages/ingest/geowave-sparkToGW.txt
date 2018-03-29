@@ -1,0 +1,43 @@
+//:geowave-sparkToGW
+//:=================
+//::doctype: manpage
+
+NAME
+//:----
+
+geowave ingest sparkToGW - Ingest supported files that already exist in HDFS or S3
+
+SYNOPSIS
+//:--------
+
+geowave ingest sparkToGW [options] <input directory> <store name> <comma delimited index/group list>
+
+DESCRIPTION
+//:-----------
+
+Ingest supported files that already exist in HDFS or S3
+
+OPTIONS
+//:-------
+
+- -x, --extension
+ * individual or comma-delimited set of file extensions to accept (optional)
+- -f, --formats
+ * Explicitly set the ingest formats by name (or multiple comma-delimited formats), if not set all available ingest formats will be used
+- -ho, --hosts
+ * The spark driver host
+   Default: localhost
+- -m, --master
+ * The spark master designation
+   Default: local
+- -n, --name
+ * The spark application name
+   Default: Spark Ingest
+- -c, --numcores
+ * Number of cores
+   Default: -1
+- -e, --numexecutors
+ * Number of executors
+   Default: -1
+- -v, --visibility
+ * The visibility of the data ingested (optional; default is 'public')

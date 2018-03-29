@@ -36,7 +36,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 @GeowaveOperation(name = "addindexgrp", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create an index group for usage in GeoWave")
 public class AddIndexGroupCommand extends
-		ServiceEnabledCommand<Void>
+		ServiceEnabledCommand<String>
 {
 	@Parameter(description = "<name> <comma separated list of indexes>")
 	private List<String> parameters = new ArrayList<String>();
@@ -52,10 +52,10 @@ public class AddIndexGroupCommand extends
 	}
 
 	@Override
-	public Pair<ServiceStatus, Void> executeService(
+	public Pair<ServiceStatus, String> executeService(
 			OperationParams params )
 			throws Exception {
-		Void ret = computeResults(params);
+		String ret = computeResults(params);
 		return ImmutablePair.of(
 				status,
 				ret);
@@ -68,32 +68,32 @@ public class AddIndexGroupCommand extends
 	 * @return none
 	 */
 	@Override
-	public Void computeResults(
+	public String computeResults(
 			final OperationParams params ) {
-
+		String ret = "";
 		try {
-			addIndexGroup(params);
+			ret = addIndexGroup(params);
 		}
 		catch (WritePropertiesException | ParameterException e) {
 			setStatus(ServiceStatus.INTERNAL_ERROR);
 			LOGGER.error(e.toString());
 		}
 
-		return null;
+		return ret;
 	}
 
 	/**
 	 * Adds index group
+	 * 
+	 * @return
 	 *
 	 * @parameters params
 	 * @return none
 	 */
-	private void addIndexGroup(
+	private String addIndexGroup(
 			final OperationParams params ) {
 		final File propFile = getGeoWaveConfigFile(params);
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		final Properties existingProps = ConfigOptions.loadProperties(propFile);
 
 		if (parameters.size() < 2) {
 			throw new ParameterException(
@@ -101,7 +101,6 @@ public class AddIndexGroupCommand extends
 		}
 
 		// New index group name
-		final String newGroupName = parameters.get(0);
 		final String[] indexes = parameters.get(
 				1).split(
 				",");
@@ -111,8 +110,8 @@ public class AddIndexGroupCommand extends
 		if (groupOptions.load(
 				existingProps,
 				getNamespace())) {
-			throw new ParameterException(
-					"That index group already exists: " + newGroupName);
+			setStatus(ServiceStatus.DUPLICATE);
+			return "That index group already exists: " + getPluginName();
 		}
 
 		// Make sure all the indexes exist, and add them to the group options.
@@ -122,8 +121,9 @@ public class AddIndexGroupCommand extends
 			if (!options.load(
 					existingProps,
 					IndexPluginOptions.getIndexNamespace(indexes[i]))) {
-				throw new ParameterException(
-						"That index does not exist: " + indexes[i]);
+				setStatus(ServiceStatus.NOT_FOUND);
+
+				return "That index does not exist: " + indexes[i];
 			}
 			groupOptions.getDimensionalityPlugins().put(
 					indexes[i],
@@ -142,6 +142,18 @@ public class AddIndexGroupCommand extends
 			throw new WritePropertiesException(
 					"Write failure");
 		}
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			String[] split = key.toString().split(
+					"\\.");
+			if (split.length > 1) {
+				if (split[1].equals(parameters.get(0))) {
+					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+				}
+			}
+		}
+		setStatus(ServiceStatus.OK);
+		return builder.toString();
 	}
 
 	public String getPluginName() {

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index.sfc.hilbert;
 
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
