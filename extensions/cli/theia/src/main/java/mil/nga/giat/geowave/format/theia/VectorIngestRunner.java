@@ -28,11 +28,11 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.format.theia.AnalyzeRunner;
 import mil.nga.giat.geowave.format.theia.BandFeatureIterator;
 import mil.nga.giat.geowave.format.theia.TheiaBasicCommandLineOptions;
@@ -152,14 +152,7 @@ public class VectorIngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		try {
-			bandWriter.write(band);
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"Unable to write next band",
-					e);
-		}
+		bandWriter.write(band);
 		super.nextBand(
 				band,
 				analysisInfo);
@@ -203,14 +196,7 @@ public class VectorIngestRunner extends
 			}
 		}
 		if (fid != null) {
-			try {
-				sceneWriter.write(featureBuilder.buildFeature(fid));
-			}
-			catch (IOException e) {
-				LOGGER.error(
-						"Unable to write scene",
-						e);
-			}
+			sceneWriter.write(featureBuilder.buildFeature(fid));
 		}
 	}
 }

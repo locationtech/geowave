@@ -38,17 +38,19 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
-public class PolygonDataIdQueryIT
+public class PolygonDataIdQueryIT extends
+		AbstractGeoWaveIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(PolygonDataIdQueryIT.class);
 	private static SimpleFeatureType simpleFeatureType;
@@ -60,10 +62,15 @@ public class PolygonDataIdQueryIT
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStore;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStore;
+	}
 
 	private static long startMillis;
 
@@ -74,7 +81,6 @@ public class PolygonDataIdQueryIT
 						dataAdapter,
 						TestUtils.DEFAULT_SPATIAL_INDEX),
 				new DataIdQuery(
-						dataAdapter.getAdapterId(),
 						new ByteArrayId(
 								StringUtils.stringToBinary(DATA_ID))));
 		int numResults = 0;

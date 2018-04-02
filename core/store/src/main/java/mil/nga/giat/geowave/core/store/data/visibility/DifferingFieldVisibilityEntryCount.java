@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 
 import net.sf.json.JSONException;
@@ -22,14 +21,13 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class DifferingFieldVisibilityEntryCount<T> extends
 		AbstractDataStatistics<T> implements
-		DeleteCallback<T>
+		DeleteCallback<T, GeoWaveRow>
 {
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"DIFFERING_VISIBILITY_COUNT");
@@ -97,19 +95,23 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		if (entryHasDifferentVisibilities(entryInfo)) {
-			entriesWithDifferingFieldVisibilities++;
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		for (final GeoWaveRow kv : kvs) {
+			if (entryHasDifferentVisibilities(kv)) {
+				entriesWithDifferingFieldVisibilities++;
+			}
 		}
 	}
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		if (entryHasDifferentVisibilities(entryInfo)) {
-			entriesWithDifferingFieldVisibilities--;
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		for (final GeoWaveRow kv : kvs) {
+			if (entryHasDifferentVisibilities(kv)) {
+				entriesWithDifferingFieldVisibilities--;
+			}
 		}
 	}
 
@@ -122,24 +124,13 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	}
 
 	private static boolean entryHasDifferentVisibilities(
-			final DataStoreEntryInfo entryInfo ) {
-		if ((entryInfo != null) && (entryInfo.getFieldInfo() != null)) {
-			final List<FieldInfo<?>> fields = entryInfo.getFieldInfo();
+			final GeoWaveRow geowaveRow ) {
+		if ((geowaveRow.getFieldValues() != null) && (geowaveRow.getFieldValues().length > 1)) {
 			// if there is 0 or 1 field, there won't be differing visibilities
-			if (fields.size() > 1) {
-				final byte[] visibility = fields.get(
-						0).getVisibility();
-				for (int i = 1; i < fields.size(); i++) {
-					if (!Arrays.equals(
-							visibility,
-							fields.get(
-									i).getVisibility())) {
-						return true;
-					}
-				}
-			}
+			return true;
 		}
 		return false;
+
 	}
 
 	public static DifferingFieldVisibilityEntryCount getVisibilityCounts(

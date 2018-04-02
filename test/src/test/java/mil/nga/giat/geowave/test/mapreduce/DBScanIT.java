@@ -58,7 +58,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -67,14 +67,16 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.MAP_REDUCE
 })
-public class DBScanIT
+public class DBScanIT extends
+		AbstractGeoWaveIT
 {
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
@@ -83,6 +85,10 @@ public class DBScanIT
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(DBScanIT.class);
 	private static long startMillis;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
 
 	@BeforeClass
 	public static void startTimer() {

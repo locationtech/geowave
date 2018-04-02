@@ -17,8 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
@@ -43,7 +43,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.ACCUMULO
 	})
 	protected DataStorePluginOptions dataStore;
@@ -79,9 +78,9 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@AfterClass
 	public static void reportTestFinish() {
-		
+
 		session.close();
-		
+
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED GeoWaveSparkSpatialJoinIT  *");
@@ -90,7 +89,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 	}
 
 	@Test
@@ -115,7 +114,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		loadRDDs(
 				hail_adapter,
 				tornado_adapter);
-		
 
 		this.hailRDD.cache();
 		this.tornadoRDD.cache();

@@ -13,6 +13,12 @@ package mil.nga.giat.geowave.adapter.vector.index;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.feature.type.AttributeDescriptor;
+
+import com.google.common.base.Splitter;
+
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
@@ -21,17 +27,11 @@ import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
-import mil.nga.giat.geowave.core.store.index.numeric.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.temporal.TemporalIndexStrategy;
 import mil.nga.giat.geowave.core.store.index.text.TextIndexStrategy;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.feature.type.AttributeDescriptor;
-
-import com.google.common.base.Splitter;
 
 /**
  * Class to manage secondary indexes for a Simple Feature Type. It keeps a list
@@ -153,7 +153,7 @@ public class SecondaryIndexManager implements
 						fieldId.getString());
 				statistics.add(stat);
 				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
-						new NumericIndexStrategy(),
+						new NumericFieldIndexStrategy(),
 						fieldId,
 						statistics,
 						secondaryIndexType,
@@ -194,8 +194,7 @@ public class SecondaryIndexManager implements
 		for (final DataStatistics<SimpleFeature> statistic : statistics) {
 			statsManager.addStats(
 					statistic,
-					new FieldIdStatisticVisibility<SimpleFeature>(
-							statistic.getStatisticsId()));
+					fieldId);
 		}
 	}
 
@@ -222,7 +221,7 @@ public class SecondaryIndexManager implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(bytes);
 		for (final Persistable persistable : persistables) {
 			supportedSecondaryIndices.add((SecondaryIndex<SimpleFeature>) persistable);

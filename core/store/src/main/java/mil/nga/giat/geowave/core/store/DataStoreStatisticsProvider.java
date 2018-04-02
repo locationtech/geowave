@@ -17,11 +17,10 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.EmptyStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
@@ -55,27 +54,21 @@ public class DataStoreStatisticsProvider<T> implements
 
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
-				idsFromAdapter.length + 5);
-		newSet[idsFromAdapter.length] = RowRangeDataStatistics.STATS_TYPE;
-		newSet[idsFromAdapter.length + 1] = RowRangeHistogramStatistics.STATS_TYPE;
-		newSet[idsFromAdapter.length + 2] = IndexMetaDataSet.STATS_TYPE;
-		newSet[idsFromAdapter.length + 3] = DifferingFieldVisibilityEntryCount.STATS_TYPE;
-		newSet[idsFromAdapter.length + 4] = DuplicateEntryCount.STATS_TYPE;
+				idsFromAdapter.length + 4);
+		newSet[idsFromAdapter.length] = RowRangeHistogramStatistics.STATS_TYPE;
+		newSet[idsFromAdapter.length + 1] = IndexMetaDataSet.STATS_TYPE;
+		newSet[idsFromAdapter.length + 2] = DifferingFieldVisibilityEntryCount.STATS_TYPE;
+		newSet[idsFromAdapter.length + 3] = DuplicateEntryCount.STATS_TYPE;
 		return newSet;
 	}
 
 	@Override
 	public DataStatistics<T> createDataStatistics(
 			final ByteArrayId statisticsType ) {
-		if (statisticsType.equals(RowRangeDataStatistics.STATS_TYPE)) {
-			return new RowRangeDataStatistics(
-					index.getId());
-		}
 		if (statisticsType.equals(RowRangeHistogramStatistics.STATS_TYPE)) {
 			return new RowRangeHistogramStatistics(
 					adapter.getAdapterId(),
-					index.getId(),
-					1024);
+					index.getId());
 		}
 		if (statisticsType.equals(IndexMetaDataSet.STATS_TYPE)) {
 			return new IndexMetaDataSet(
@@ -99,8 +92,12 @@ public class DataStoreStatisticsProvider<T> implements
 
 	@Override
 	public EntryVisibilityHandler<T> getVisibilityHandler(
+			final CommonIndexModel indexModel,
+			final DataAdapter<T> adapter,
 			final ByteArrayId statisticsId ) {
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
-				.getVisibilityHandler(statisticsId) : new EmptyStatisticVisibility<T>();
+		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).getVisibilityHandler(
+				index.getIndexModel(),
+				adapter,
+				statisticsId) : new EmptyStatisticVisibility<T>();
 	}
 }

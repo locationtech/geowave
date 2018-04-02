@@ -13,6 +13,11 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 
+import org.geotools.filter.text.cql2.CQLException;
+import org.geotools.filter.text.ecql.ECQL;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.filter.Filter;
+
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -28,10 +33,6 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.geotools.filter.text.cql2.CQLException;
-import org.geotools.filter.text.ecql.ECQL;
-import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.filter.Filter;
 
 public class CQLQueryFilter implements
 		DistributableQueryFilter
@@ -74,7 +75,8 @@ public class CQLQueryFilter implements
 				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
 						persistenceEncoding.getAdapterId(),
 						persistenceEncoding.getDataId(),
-						persistenceEncoding.getIndexInsertionId(),
+						persistenceEncoding.getInsertionPartitionKey(),
+						persistenceEncoding.getInsertionSortKey(),
 						persistenceEncoding.getDuplicateCount(),
 						persistenceEncoding.getCommonData(),
 						new PersistentDataset<byte[]>(),

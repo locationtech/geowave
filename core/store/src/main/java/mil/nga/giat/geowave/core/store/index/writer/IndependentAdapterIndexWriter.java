@@ -16,6 +16,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -40,20 +42,21 @@ public class IndependentAdapterIndexWriter<T> implements
 	}
 
 	@Override
-	public List<ByteArrayId> write(
+	public InsertionIds write(
 			final T entry,
-			final VisibilityWriter<T> feldVisibilityWriter )
-			throws IOException {
+			final VisibilityWriter<T> feldVisibilityWriter ) {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
+		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<SinglePartitionInsertionIds>();
 		while (indexedEntries.hasNext()) {
-			rowIds.addAll(writer.write(
+			InsertionIds ids = writer.write(
 					indexedEntries.next(),
-					feldVisibilityWriter));
+					feldVisibilityWriter);
+			partitionInsertionIds.addAll(ids.getPartitionKeys());
 		}
-		return rowIds;
+		return new InsertionIds(
+				partitionInsertionIds);
 
 	}
 
@@ -64,17 +67,18 @@ public class IndependentAdapterIndexWriter<T> implements
 	}
 
 	@Override
-	public List<ByteArrayId> write(
-			T entry )
-			throws IOException {
+	public InsertionIds write(
+			T entry ) {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
-		final List<ByteArrayId> rowIds = new ArrayList<ByteArrayId>();
+		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<SinglePartitionInsertionIds>();
 		while (indexedEntries.hasNext()) {
-			rowIds.addAll(writer.write(indexedEntries.next()));
+			InsertionIds ids = writer.write(indexedEntries.next());
+			partitionInsertionIds.addAll(ids.getPartitionKeys());
 		}
-		return rowIds;
+		return new InsertionIds(
+				partitionInsertionIds);
 	}
 
 	@Override

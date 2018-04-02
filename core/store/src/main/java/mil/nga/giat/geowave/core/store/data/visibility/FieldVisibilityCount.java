@@ -21,13 +21,13 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 public class FieldVisibilityCount<T> extends
 		AbstractDataStatistics<T> implements
-		DeleteCallback<T>
+		DeleteCallback<T, GeoWaveRow>
 {
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FIELD_VISIBILITY_COUNT");
@@ -114,24 +114,24 @@ public class FieldVisibilityCount<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			GeoWaveRow... kvs ) {
 		updateEntry(
-				entryInfo,
-				1);
+				1,
+				kvs);
 	}
 
 	private void updateEntry(
-			final DataStoreEntryInfo entryInfo,
-			final int incrementValue ) {
-		if ((entryInfo != null) && (entryInfo.getFieldInfo() != null)) {
-			final List<FieldInfo<?>> fields = entryInfo.getFieldInfo();
-			for (final FieldInfo<?> field : fields) {
+			final int incrementValue,
+			GeoWaveRow... kvs ) {
+		for (GeoWaveRow row : kvs) {
+			GeoWaveValue[] values = row.getFieldValues();
+			for (final GeoWaveValue v : values) {
 				ByteArrayId visibility = new ByteArrayId(
 						new byte[] {});
-				if (field.getVisibility() != null) {
+				if (v.getVisibility() != null) {
 					visibility = new ByteArrayId(
-							field.getVisibility());
+							v.getVisibility());
 				}
 				Long count = countsPerVisibility.get(visibility);
 				if (count == null) {
@@ -146,11 +146,11 @@ public class FieldVisibilityCount<T> extends
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			GeoWaveRow... kvs ) {
 		updateEntry(
-				entryInfo,
-				-1);
+				-1,
+				kvs);
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -19,11 +19,12 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
+import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.RangeDecomposition;
@@ -37,12 +38,12 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 public class BinnedSFCUtils
 {
 
-	public static List<ByteArrayRange> getQueryRanges(
+	public static List<SinglePartitionQueryRanges> getQueryRanges(
 			final BinnedNumericDataset[] binnedQueries,
 			final SpaceFillingCurve sfc,
 			final int maxRanges,
 			final byte tier ) {
-		final List<ByteArrayRange> queryRanges = new ArrayList<ByteArrayRange>();
+		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
 
 		int maxRangeDecompositionPerBin = maxRanges;
 		if ((maxRanges > 1) && (binnedQueries.length > 1)) {
@@ -60,17 +61,11 @@ public class BinnedSFCUtils
 					// value)
 					},
 					binnedQuery.getBinId());
-			for (final ByteArrayRange range : rangeDecomp.getRanges()) {
-				queryRanges.add(new ByteArrayRange(
-						new ByteArrayId(
-								ByteArrayUtils.combineArrays(
-										tierAndBinId,
-										range.getStart().getBytes())),
-						new ByteArrayId(
-								ByteArrayUtils.combineArrays(
-										tierAndBinId,
-										range.getEnd().getBytes()))));
-			}
+
+			queryRanges.add(new SinglePartitionQueryRanges(
+					new ByteArrayId(
+							tierAndBinId),
+					Arrays.asList(rangeDecomp.getRanges())));
 		}
 		return queryRanges;
 	}
@@ -101,7 +96,7 @@ public class BinnedSFCUtils
 				coordinateRangesPerDimension);
 	}
 
-	public static ByteArrayId getSingleBinnedRowId(
+	public static SinglePartitionInsertionIds getSingleBinnedInsertionId(
 			final BigInteger rowCount,
 			final byte multiDimensionalId,
 			final BinnedNumericDataset index,
@@ -121,8 +116,8 @@ public class BinnedSFCUtils
 				singleId = sfc.getId(minValues);
 			}
 			else {
-				byte[] minId = sfc.getId(minValues);
-				byte[] maxId = sfc.getId(maxValues);
+				final byte[] minId = sfc.getId(minValues);
+				final byte[] maxId = sfc.getId(maxValues);
 
 				if (Arrays.equals(
 						minId,
@@ -131,9 +126,10 @@ public class BinnedSFCUtils
 				}
 			}
 			if (singleId != null) {
-				return new ByteArrayId(
-						ByteArrayUtils.combineArrays(
-								tierAndBinId,
+				return new SinglePartitionInsertionIds(
+						new ByteArrayId(
+								tierAndBinId),
+						new ByteArrayId(
 								singleId));
 			}
 		}

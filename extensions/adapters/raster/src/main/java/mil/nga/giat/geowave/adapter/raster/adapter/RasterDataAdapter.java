@@ -49,6 +49,7 @@ import javax.media.jai.PlanarImage;
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.math.util.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -123,13 +124,14 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -489,8 +491,7 @@ public class RasterDataAdapter implements
 		if (histogramConfig != null) {
 			supportedStatsTypes[2] = HistogramStatistics.STATS_TYPE;
 		}
-		visibilityHandler = new FieldIdStatisticVisibility<GridCoverage>(
-				DATA_FIELD_ID);
+		visibilityHandler = new DefaultFieldStatisticVisibility<GridCoverage>();
 	}
 
 	@Override
@@ -657,8 +658,20 @@ public class RasterDataAdapter implements
 		@Override
 		public Iterator<GridCoverage> convert(
 				final SubStrategy pyramidLevel ) {
-			final Iterator<ByteArrayId> insertionIds = pyramidLevel.getIndexStrategy().getInsertionIds(
-					originalBounds).iterator();
+			// get all pairs of partition/sort keys for insertionIds that
+			// represent the original bounds at this pyramid level
+			final Iterator<Pair<ByteArrayId, ByteArrayId>> insertionIds = pyramidLevel
+					.getIndexStrategy()
+					.getInsertionIds(
+							originalBounds)
+					.getPartitionKeys()
+					.stream()
+					.flatMap(
+							partition -> partition.getSortKeys().stream().map(
+									sortKey -> Pair.of(
+											partition.getPartitionKey(),
+											sortKey)))
+					.iterator();
 			return new Iterator<GridCoverage>() {
 
 				@Override
@@ -668,14 +681,13 @@ public class RasterDataAdapter implements
 
 				@Override
 				public GridCoverage next() {
-					ByteArrayId insertionId = insertionIds.next();
+					Pair<ByteArrayId, ByteArrayId> insertionId = insertionIds.next();
 					if (insertionId == null) {
 						return null;
 					}
-					final MultiDimensionalNumericData rangePerDimension = pyramidLevel
-							.getIndexStrategy()
-							.getRangeForId(
-									insertionId);
+					final MultiDimensionalNumericData rangePerDimension = pyramidLevel.getIndexStrategy().getRangeForId(
+							insertionId.getLeft(),
+							insertionId.getRight());
 					final NumericDimensionDefinition[] dimensions = pyramidLevel
 							.getIndexStrategy()
 							.getOrderedDimensionDefinitions();
@@ -745,10 +757,11 @@ public class RasterDataAdapter implements
 							// behavior
 							final Geometry wholeFootprintScreenGeom = new GeometryFactory(
 									new PrecisionModel(
-											PrecisionModel.FIXED)).createGeometry(JTS.transform(
-									footprint,
-									new AffineTransform2D(
-											worldToScreenTransform)));
+											PrecisionModel.FIXED)).createGeometry(
+													JTS.transform(
+															footprint,
+															new AffineTransform2D(
+																	worldToScreenTransform)));
 							final com.vividsolutions.jts.geom.Envelope fullTileEnvelope = new com.vividsolutions.jts.geom.Envelope(
 									0,
 									tileSize,
@@ -763,18 +776,21 @@ public class RasterDataAdapter implements
 								// for some reason the original image
 								// footprint
 								// falls outside this insertion ID
-								LOGGER.warn("Original footprint geometry (" + originalData.getGridGeometry()
-										+ ") falls outside the insertion bounds (" + insertionIdGeometry + ")");
+								LOGGER.warn(
+										"Original footprint geometry (" + originalData.getGridGeometry()
+												+ ") falls outside the insertion bounds (" + insertionIdGeometry + ")");
 								return null;
 							}
 							footprintWithinTileWorldGeom = JTS.transform(
 									// change the precision model back to JTS
 									// default from fixed precision
-									new GeometryFactory().createGeometry(footprintWithinTileScreenGeom),
+									new GeometryFactory().createGeometry(
+											footprintWithinTileScreenGeom),
 									gridToCRS);
 
-							if (footprintWithinTileScreenGeom
-									.covers(new GeometryFactory().toGeometry(fullTileEnvelope))) {
+							if (footprintWithinTileScreenGeom.covers(
+									new GeometryFactory().toGeometry(
+											fullTileEnvelope))) {
 								// if the screen geometry fully covers the
 								// tile,
 								// don't bother carrying it forward
@@ -801,14 +817,21 @@ public class RasterDataAdapter implements
 							final Envelope tileEnvelope = insertionIdGeometry.getEnvelope();
 							final ReferencedEnvelope tileReferencedEnvelope = new ReferencedEnvelope(
 									new com.vividsolutions.jts.geom.Envelope(
-											tileEnvelope.getMinimum(0),
-											tileEnvelope.getMaximum(0),
-											tileEnvelope.getMinimum(1),
-											tileEnvelope.getMaximum(1)),
+											tileEnvelope.getMinimum(
+													0),
+											tileEnvelope.getMaximum(
+													0),
+											tileEnvelope.getMinimum(
+													1),
+											tileEnvelope.getMaximum(
+													1)),
 									crs);
-							final Geometry tileJTSGeometry = new GeometryFactory().toGeometry(tileReferencedEnvelope);
-							if (!footprint.contains(tileJTSGeometry)) {
-								tileInterpolation = Interpolation.getInstance(Interpolation.INTERP_NEAREST);
+							final Geometry tileJTSGeometry = new GeometryFactory().toGeometry(
+									tileReferencedEnvelope);
+							if (!footprint.contains(
+									tileJTSGeometry)) {
+								tileInterpolation = Interpolation.getInstance(
+										Interpolation.INTERP_NEAREST);
 							}
 						}
 						GridCoverage resampledCoverage = (GridCoverage) RasterUtils.getCoverageOperations().resample(
@@ -838,7 +861,8 @@ public class RasterDataAdapter implements
 						boolean resize = false;
 
 						for (int d = 0; d < e.getDimension(); d++) {
-							if (e.getSpan(d) != tileSize) {
+							if (e.getSpan(
+									d) != tileSize) {
 								resize = true;
 								break;
 							}
@@ -846,8 +870,10 @@ public class RasterDataAdapter implements
 						if (resize) {
 							resampledCoverage = Operations.DEFAULT.scale(
 									resampledCoverage,
-									(double) tileSize / (double) e.getSpan(0),
-									(double) tileSize / (double) e.getSpan(1),
+									(double) tileSize / (double) e.getSpan(
+											0),
+									(double) tileSize / (double) e.getSpan(
+											1),
 									-resampledCoverage.getRenderedImage().getMinX(),
 									-resampledCoverage.getRenderedImage().getMinY());
 						}
@@ -875,10 +901,12 @@ public class RasterDataAdapter implements
 										centroids[d]);
 							}
 
-							insertionId = pyramidLevel.getIndexStrategy().getInsertionIds(
-									new BasicNumericDataset(
-											ranges)).get(
-									0);
+							insertionId = pyramidLevel
+									.getIndexStrategy()
+									.getInsertionIds(
+											new BasicNumericDataset(
+													ranges))
+									.getFirstPartitionAndSortKeyPair();
 							// this is intended to allow the partitioning
 							// algorithm to use a consistent multi-dimensional
 							// dataset (so if hashing is done on the
@@ -888,13 +916,15 @@ public class RasterDataAdapter implements
 						}
 						return new FitToIndexGridCoverage(
 								resampledCoverage,
-								insertionId,
+								insertionId.getLeft(),
+								insertionId.getRight(),
 								new Resolution(
 										pixelRes),
 								originalEnvelope,
 								footprintWithinTileWorldGeom,
 								footprintWithinTileScreenGeom,
-								getProperties(originalData));
+								getProperties(
+										originalData));
 					}
 					catch (IllegalArgumentException | NoninvertibleTransformException e) {
 						LOGGER.warn(
@@ -950,16 +980,19 @@ public class RasterDataAdapter implements
 		}
 		return getCoverageFromRasterTile(
 				(RasterTile) rasterTile,
-				data.getIndexInsertionId(),
+				data.getInsertionPartitionKey(),
+				data.getInsertionSortKey(),
 				index);
 	}
 
 	public GridCoverage getCoverageFromRasterTile(
 			final RasterTile rasterTile,
-			final ByteArrayId insertionId,
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey,
 			final PrimaryIndex index ) {
 		final MultiDimensionalNumericData indexRange = index.getIndexStrategy().getRangeForId(
-				insertionId);
+				partitionKey,
+				sortKey);
 		final NumericDimensionDefinition[] orderedDimensions = index
 				.getIndexStrategy()
 				.getOrderedDimensionDefinitions();
@@ -1260,7 +1293,8 @@ public class RasterDataAdapter implements
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
 					adapterExtendedData,
-					((FitToIndexGridCoverage) entry).getInsertionId());
+					((FitToIndexGridCoverage) entry).getPartitionKey(),
+					((FitToIndexGridCoverage) entry).getSortKey());
 		}
 		else {
 			// this shouldn't happen
@@ -1706,12 +1740,6 @@ public class RasterDataAdapter implements
 		return noDataValuesPerBand;
 	}
 
-	@Override
-	public EntryVisibilityHandler<GridCoverage> getVisibilityHandler(
-			final ByteArrayId statisticsId ) {
-		return visibilityHandler;
-	}
-
 	public Map<String, String> getMetadata() {
 		return metadata;
 	}
@@ -2107,4 +2135,11 @@ public class RasterDataAdapter implements
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public EntryVisibilityHandler<GridCoverage> getVisibilityHandler(
+			final CommonIndexModel indexModel,
+			final DataAdapter<GridCoverage> adapter,
+			final ByteArrayId statisticsId ) {
+		return visibilityHandler;
+	}
 }

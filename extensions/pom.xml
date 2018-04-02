@@ -17,6 +17,8 @@
 		<module>datastores/accumulo</module>
 		<module>datastores/hbase</module>
 		<module>datastores/bigtable</module>
+		<module>datastores/cassandra</module>
+		<module>datastores/dynamodb</module>
 		<module>formats/geolife</module>
 		<module>formats/geotools-raster</module>
 		<module>formats/geotools-vector</module>

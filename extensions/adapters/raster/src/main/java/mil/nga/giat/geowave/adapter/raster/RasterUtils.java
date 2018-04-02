@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -47,8 +47,6 @@ import javax.media.jai.RenderedImageAdapter;
 import javax.media.jai.RenderedOp;
 import javax.media.jai.TiledImage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.coverage.Category;
 import org.geotools.coverage.CoverageFactoryFinder;
 import org.geotools.coverage.GridSampleDimension;
@@ -84,6 +82,8 @@ import org.opengis.referencing.operation.CoordinateOperationFactory;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.Matrix;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableMap;
 import com.sun.media.imageioimpl.common.BogusColorSpace;
@@ -673,6 +673,8 @@ public class RasterUtils
 				resultEnvelope);
 	}
 
+	private static long i = 0;
+
 	@SuppressFBWarnings(value = {
 		"RV_RETURN_VALUE_IGNORED_NO_SIDE_EFFECT"
 	}, justification = "incorrect; drawImage has side effects")
@@ -1129,7 +1131,7 @@ public class RasterUtils
 
 		// Default to TYPE_BYTE for floating point images only; otherwise
 		// keep unchanged.
-		SampleDimensionType targetType = sourceIsFloat ? SampleDimensionType.UNSIGNED_8BITS : sourceType;
+		final SampleDimensionType targetType = sourceIsFloat ? SampleDimensionType.UNSIGNED_8BITS : sourceType;
 
 		// Default setting: no scaling
 		final boolean targetIsFloat = TypeMap.isFloatingPoint(targetType);

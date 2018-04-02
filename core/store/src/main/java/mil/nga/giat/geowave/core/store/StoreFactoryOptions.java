@@ -10,10 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store;
 
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
-
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -22,10 +18,14 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+
 import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.utils.JCommanderParameterUtils;
 import mil.nga.giat.geowave.core.cli.utils.PropertiesUtils;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 /**
  * This interface doesn't actually do anything, is just used for tracking during
@@ -58,6 +58,8 @@ abstract public class StoreFactoryOptions
 		return new DataStorePluginOptions(
 				this);
 	}
+
+	public abstract DataStoreOptions getStoreOptions();
 
 	public void validatePluginOptions()
 			throws ParameterException {

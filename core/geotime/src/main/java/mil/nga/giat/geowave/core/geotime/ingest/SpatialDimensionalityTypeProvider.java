@@ -33,12 +33,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
@@ -226,7 +226,7 @@ public class SpatialDimensionalityTypeProvider implements
 			options.storeTime = storeTime;
 			return this;
 		}
-		
+
 		public SpatialIndexBuilder setCrs(
 				final String crs ) {
 			options.crs = crs;

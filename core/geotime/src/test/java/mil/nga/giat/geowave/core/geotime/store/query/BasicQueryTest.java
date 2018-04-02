@@ -64,6 +64,8 @@ public class BasicQueryTest
 						"1"),
 				new ByteArrayId(
 						"1"),
+				new ByteArrayId(
+						"1"),
 				1,
 				commonData,
 				new PersistentDataset<byte[]>());

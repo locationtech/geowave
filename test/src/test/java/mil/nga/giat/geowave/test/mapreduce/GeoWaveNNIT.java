@@ -49,7 +49,7 @@ import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -57,23 +57,30 @@ import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
 	Environment.MAP_REDUCE
 })
-public class GeoWaveNNIT
+public class GeoWaveNNIT extends
+		AbstractGeoWaveIT
 {
-
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveNNIT.class);
 	private static long startMillis;
+
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
+	}
 
 	@BeforeClass
 	public static void startTimer() {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,25 +15,25 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.referencing.operation.MathTransform;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
-import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import mil.nga.giat.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import mil.nga.giat.geowave.core.store.adapter.statistics.FieldTypeStatisticVisibility;
+import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
  * Object that manages statistics for an adapter
@@ -47,8 +47,7 @@ public class StatsManager
 	/**
 	 * Visibility that can be used within GeoWave as a CommonIndexValue
 	 */
-	private final static EntryVisibilityHandler<SimpleFeature> GEOMETRY_VISIBILITY_HANDLER = new FieldTypeStatisticVisibility<SimpleFeature>(
-			GeometryWrapper.class);
+	private final static EntryVisibilityHandler<SimpleFeature> DEFAULT_VISIBILITY_HANDLER = new DefaultFieldStatisticVisibility<SimpleFeature>();
 
 	/**
 	 * List of stats objects supported by this manager for the adapter
@@ -60,7 +59,7 @@ public class StatsManager
 	 * objects
 	 */
 
-	private final Map<ByteArrayId, EntryVisibilityHandler<SimpleFeature>> visibilityHandlers = new HashMap<ByteArrayId, EntryVisibilityHandler<SimpleFeature>>();
+	private final Map<ByteArrayId, ByteArrayId> statisticsIdToFieldIdMap = new HashMap<ByteArrayId, ByteArrayId>();
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
@@ -68,7 +67,7 @@ public class StatsManager
 	/**
 	 * Constructor - Creates a StatsManager that supports the specified adapter
 	 * with a persisted SimpleFeatureType
-	 * 
+	 *
 	 * @param dataAdapter
 	 *            - adapter to be associated with this manager
 	 * @param persistedType
@@ -92,7 +91,7 @@ public class StatsManager
 	 * Constructor - Creates a StatsManager that supports the specified adapter
 	 * with a persisted and re-projected SimpleFeatureType that is translated by
 	 * the transform
-	 * 
+	 *
 	 * @param dataAdapter
 	 *            - adapter to be associated with this manager
 	 * @param persistedType
@@ -117,35 +116,29 @@ public class StatsManager
 
 		for (final AttributeDescriptor descriptor : persistedType.getAttributeDescriptors()) {
 
-			String fieldName = descriptor.getLocalName();
-			FieldIdStatisticVisibility vis = new FieldIdStatisticVisibility(
-					new ByteArrayId(
-							fieldName));
-			ByteArrayId adapterID = dataAdapter.getAdapterId();
-
 			// ---------------------------------------------------------------------
 			// For temporal and geometry because there is a dependency on these
 			// stats for optimizations within the GeoServer adapter.
 
 			if (TimeUtils.isTemporal(descriptor.getType().getBinding())) {
-				FeatureTimeRangeStatistics statObj = new FeatureTimeRangeStatistics(
-						adapterID,
-						fieldName);
 
 				addStats(
-						statObj,
-						vis);
+						new FeatureTimeRangeStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new ByteArrayId(
+								descriptor.getLocalName()));
 			}
 
 			else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
-				FeatureBoundingBoxStatistics statObj = new FeatureBoundingBoxStatistics(
-						adapterID,
-						fieldName,
-						reprojectedType,
-						transform);
 				addStats(
-						statObj,
-						vis);
+						new FeatureBoundingBoxStatistics(
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName(),
+								reprojectedType,
+								transform),
+						new ByteArrayId(
+								descriptor.getLocalName()));
 			}
 
 			// ---------------------------------------------------------------------
@@ -160,14 +153,16 @@ public class StatsManager
 						.get(
 								"stats");
 
-				List<StatsConfig<SimpleFeature>> featureConfigs = statsConfigurations.getConfigurationsForAttribute();
+				final List<StatsConfig<SimpleFeature>> featureConfigs = statsConfigurations
+						.getConfigurationsForAttribute();
 
-				for (StatsConfig<SimpleFeature> statConfig : featureConfigs) {
+				for (final StatsConfig<SimpleFeature> statConfig : featureConfigs) {
 					addStats(
 							statConfig.create(
-									adapterID,
-									fieldName),
-							vis);
+									dataAdapter.getAdapterId(),
+									descriptor.getLocalName()),
+							new ByteArrayId(
+									descriptor.getLocalName()));
 				}
 
 			}
@@ -178,14 +173,17 @@ public class StatsManager
 			else if (Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
 				addStats(
 						new FeatureNumericRangeStatistics(
-								adapterID,
-								fieldName),
-						vis);
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new ByteArrayId(
+								descriptor.getLocalName()));
+
 				addStats(
 						new FeatureFixedBinNumericStatistics(
-								adapterID,
-								fieldName),
-						vis);
+								dataAdapter.getAdapterId(),
+								descriptor.getLocalName()),
+						new ByteArrayId(
+								descriptor.getLocalName()));
 			}
 		}
 	}
@@ -195,12 +193,12 @@ public class StatsManager
 
 	/**
 	 * Creates a stats object to be tracked for this adapter based on type
-	 * 
+	 *
 	 * @param dataAdapter
 	 *            - adapter to be associated with this manager
 	 * @param statisticsId
 	 *            - name of statistics type to be created
-	 * 
+	 *
 	 * @return new statistics object of specified type
 	 */
 
@@ -241,21 +239,27 @@ public class StatsManager
 
 	/**
 	 * Get a visibility handler for the specified statistics object
-	 * 
+	 *
 	 * @param statisticsId
 	 * @return - visibility handler for given stats object
 	 */
 
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
+			final CommonIndexModel indexModel,
+			final DataAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
 		// If the statistics object is of type CountDataStats or there is no
 		// visibility handler, then return the default visibility handler
-
-		if (statisticsId.equals(CountDataStatistics.STATS_TYPE) || (!visibilityHandlers.containsKey(statisticsId))) {
-			return GEOMETRY_VISIBILITY_HANDLER;
+		if (statisticsId.equals(CountDataStatistics.STATS_TYPE)
+				|| (!statisticsIdToFieldIdMap.containsKey(statisticsId))) {
+			return DEFAULT_VISIBILITY_HANDLER;
 		}
 
-		return visibilityHandlers.get(statisticsId);
+		final ByteArrayId fieldId = statisticsIdToFieldIdMap.get(statisticsId);
+		return new FieldIdStatisticVisibility<>(
+				fieldId,
+				indexModel,
+				adapter);
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -264,35 +268,35 @@ public class StatsManager
 	/**
 	 * Adds/Replaces a stats object for the given adapter <br>
 	 * Supports object replacement.
-	 * 
+	 *
 	 * @param statsObj
 	 *            - data stats object to be tracked by adding or replacement
 	 * @param visibilityHandler
 	 *            - type of visibility required to access the stats object
-	 * 
+	 *
 	 */
 
 	public void addStats(
-			DataStatistics<SimpleFeature> statsObj,
-			EntryVisibilityHandler<SimpleFeature> visibilityHandler ) {
+			final DataStatistics<SimpleFeature> statsObj,
+			final ByteArrayId fieldId ) {
 		int replaceStat = 0;
 
 		// Go through stats list managed by this manager and look for a match
-		for (DataStatistics<SimpleFeature> currentStat : statsObjList) {
+		for (final DataStatistics<SimpleFeature> currentStat : statsObjList) {
 			if (currentStat.getStatisticsId().equals(
 					statsObj.getStatisticsId())) {
 				// If a match was found for an existing stat object in list,
 				// remove it now and replace it later.
-				this.statsObjList.remove(replaceStat);
+				statsObjList.remove(replaceStat);
 				break;
 			}
 			replaceStat++; // Not found, check next stat object
 		}
 
-		this.statsObjList.add(statsObj);
-		this.visibilityHandlers.put(
+		statsObjList.add(statsObj);
+		statisticsIdToFieldIdMap.put(
 				statsObj.getStatisticsId(),
-				visibilityHandler);
+				fieldId);
 	}
 
 	// -----------------------------------------------------------------------------------
@@ -300,7 +304,7 @@ public class StatsManager
 
 	/**
 	 * Get an array of stats object IDs for the Stats Manager
-	 * 
+	 *
 	 * @return Array of stats object IDs as 'ByteArrayId'
 	 */
 

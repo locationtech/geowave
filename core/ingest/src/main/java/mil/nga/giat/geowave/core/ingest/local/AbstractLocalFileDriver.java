@@ -42,7 +42,7 @@ import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
 import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 /**

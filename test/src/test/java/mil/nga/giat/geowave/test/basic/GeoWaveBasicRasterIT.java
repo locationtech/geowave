@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,7 +15,6 @@ import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Random;
 
 import org.apache.commons.math.util.MathUtils;
 import org.junit.AfterClass;
@@ -43,7 +42,7 @@ import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -52,12 +51,15 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveBasicRasterIT
+public class GeoWaveBasicRasterIT extends
+		AbstractGeoWaveIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
@@ -66,12 +68,17 @@ public class GeoWaveBasicRasterIT
 	private static final double DELTA = MathUtils.EPSILON;
 	private static long startMillis;
 
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
+
 	@BeforeClass
 	public static void startTimer() {
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING GeoWaveBasicRasterIT       *");
+		LOGGER.warn("*    RUNNING GeoWaveBasicRasterIT       *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -92,7 +99,9 @@ public class GeoWaveBasicRasterIT
 	public void testNoDataMergeStrategy()
 			throws IOException {
 		final String coverageName = "testNoDataMergeStrategy";
-		final int tileSize = 128; // 256; fails on bigtable
+		final int tileSize = 64; // 256 fails on bigtable exceeding maximum
+									// size, 128 fails on DynamoDB exceeding
+									// maximum size
 		final double westLon = 0;
 		final double eastLon = 45;
 		final double southLat = 0;
@@ -104,6 +113,7 @@ public class GeoWaveBasicRasterIT
 				eastLon,
 				southLat,
 				northLat);
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test
@@ -124,6 +134,7 @@ public class GeoWaveBasicRasterIT
 		final double eastLon = 47.8125;
 		final double southLat = -47.8125;
 		final double northLat = -45;
+
 		ingestGeneralPurpose(
 				summingCoverageName,
 				summingTileSize,
@@ -134,13 +145,7 @@ public class GeoWaveBasicRasterIT
 				summingNumBands,
 				summingNumRasters,
 				new SummingMergeStrategy());
-		ingestNoDataMergeStrategy(
-				noDataCoverageName,
-				noDataTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat);
+
 		ingestGeneralPurpose(
 				sumAndAveragingCoverageName,
 				sumAndAveragingTileSize,
@@ -152,9 +157,14 @@ public class GeoWaveBasicRasterIT
 				sumAndAveragingNumRasters,
 				new SumAndAveragingMergeStrategy());
 
-		queryNoDataMergeStrategy(
+		ingestNoDataMergeStrategy(
 				noDataCoverageName,
-				noDataTileSize);
+				noDataTileSize,
+				westLon,
+				eastLon,
+				southLat,
+				northLat);
+
 		queryGeneralPurpose(
 				summingCoverageName,
 				summingTileSize,
@@ -165,6 +175,11 @@ public class GeoWaveBasicRasterIT
 				summingNumBands,
 				summingNumRasters,
 				new SummingExpectedValue());
+
+		queryNoDataMergeStrategy(
+				noDataCoverageName,
+				noDataTileSize);
+
 		queryGeneralPurpose(
 				sumAndAveragingCoverageName,
 				sumAndAveragingTileSize,
@@ -175,6 +190,8 @@ public class GeoWaveBasicRasterIT
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
 				new SumAndAveragingExpectedValue());
+
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	private void ingestAndQueryNoDataMergeStrategy(
@@ -231,7 +248,7 @@ public class GeoWaveBasicRasterIT
 					for (int b = 1; b < 7; b++) {
 						Assert.assertEquals(
 								"x=" + x + ",y=" + y + ",b=" + b,
-								getValue(
+								TestUtils.getTileValue(
 										x,
 										y,
 										b,
@@ -246,7 +263,7 @@ public class GeoWaveBasicRasterIT
 					if ((y % 2) == 0) {
 						Assert.assertEquals(
 								"x=" + x + ",y=" + y + ",b=0",
-								getValue(
+								TestUtils.getTileValue(
 										x,
 										y,
 										0,
@@ -280,7 +297,7 @@ public class GeoWaveBasicRasterIT
 					else {
 						Assert.assertEquals(
 								"x=" + x + ",y=" + y + ",b=7",
-								getValue(
+								TestUtils.getTileValue(
 										x,
 										y,
 										7,
@@ -321,167 +338,11 @@ public class GeoWaveBasicRasterIT
 		final WritableRaster raster2 = RasterUtils.createRasterTypeDouble(
 				numBands,
 				tileSize);
-		// for raster1 do the following:
-		// set every even row in bands 0 and 1
-		// set every value incorrectly in band 2
-		// set no values in band 3 and set every value in 4
 
-		// for raster2 do the following:
-		// set no value in band 0 and 4
-		// set every odd row in band 1
-		// set every value in bands 2 and 3
-
-		// for band 5, set the lower 2x2 samples for raster 1 and the rest for
-		// raster 2
-		// for band 6, set the upper quadrant samples for raster 1 and the rest
-		// for raster 2
-		// for band 7, set the lower 2x2 samples to the wrong value for raster 1
-		// and the expected value for raster 2 and set everything but the upper
-		// quadrant for raster 2
-		for (int x = 0; x < tileSize; x++) {
-			for (int y = 0; y < tileSize; y++) {
-
-				// just use x and y to arbitrarily end up with some wrong value
-				// that can be ingested
-				final double wrongValue = (getValue(
-						y,
-						x,
-						y,
-						tileSize) * 3) + 1;
-				if ((x < 2) && (y < 2)) {
-					raster1.setSample(
-							x,
-							y,
-							5,
-							getValue(
-									x,
-									y,
-									5,
-									tileSize));
-					raster1.setSample(
-							x,
-							y,
-							7,
-							wrongValue);
-					raster2.setSample(
-							x,
-							y,
-							7,
-							getValue(
-									x,
-									y,
-									7,
-									tileSize));
-				}
-				else {
-					raster2.setSample(
-							x,
-							y,
-							5,
-							getValue(
-									x,
-									y,
-									5,
-									tileSize));
-				}
-				if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
-					raster1.setSample(
-							x,
-							y,
-							6,
-							getValue(
-									x,
-									y,
-									6,
-									tileSize));
-				}
-				else {
-					raster2.setSample(
-							x,
-							y,
-							6,
-							getValue(
-									x,
-									y,
-									6,
-									tileSize));
-					raster2.setSample(
-							x,
-							y,
-							7,
-							getValue(
-									x,
-									y,
-									7,
-									tileSize));
-				}
-				if ((y % 2) == 0) {
-					raster1.setSample(
-							x,
-							y,
-							0,
-							getValue(
-									x,
-									y,
-									0,
-									tileSize));
-					raster1.setSample(
-							x,
-							y,
-							1,
-							getValue(
-									x,
-									y,
-									1,
-									tileSize));
-				}
-				raster1.setSample(
-						x,
-						y,
-						2,
-						wrongValue);
-
-				raster1.setSample(
-						x,
-						y,
-						4,
-						getValue(
-								x,
-								y,
-								4,
-								tileSize));
-				if ((y % 2) == 1) {
-					raster2.setSample(
-							x,
-							y,
-							1,
-							getValue(
-									x,
-									y,
-									1,
-									tileSize));
-				}
-				raster2.setSample(
-						x,
-						y,
-						2,
-						getValue(
-								x,
-								y,
-								2,
-								tileSize));
-
-				raster2.setSample(
-						x,
-						y,
-						3,
-						getValue(
-								x,
-								y,
-								3,
-								tileSize));
-			}
-		}
+		TestUtils.fillTestRasters(
+				raster1,
+				raster2,
+				tileSize);
 
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
@@ -543,7 +404,7 @@ public class GeoWaveBasicRasterIT
 									x,
 									y,
 									b,
-									getValue(
+									TestUtils.getTileValue(
 											x,
 											y,
 											b,
@@ -561,53 +422,6 @@ public class GeoWaveBasicRasterIT
 						raster));
 			}
 		}
-	}
-
-	private static double getValue(
-			final int x,
-			final int y,
-			final int b,
-			final int tileSize ) {
-		// just use an arbitrary 'r'
-		return getValue(
-				x,
-				y,
-				b,
-				3,
-				tileSize);
-	}
-
-	private static double getValue(
-			final int x,
-			final int y,
-			final int b,
-			final int r,
-			final int tileSize ) {
-		// make this some random but repeatable and vary the scale
-		final double resultOfFunction = randomFunction(
-				x,
-				y,
-				b,
-				r,
-				tileSize);
-		// this is meant to just vary the scale
-		if ((r % 2) == 0) {
-			return resultOfFunction;
-		}
-		else {
-
-			return new Random(
-					(long) resultOfFunction).nextDouble() * resultOfFunction;
-		}
-	}
-
-	private static double randomFunction(
-			final int x,
-			final int y,
-			final int b,
-			final int r,
-			final int tileSize ) {
-		return (((x + (y * tileSize)) * .1) / (b + 1)) + r;
 	}
 
 	private void queryGeneralPurpose(
@@ -695,7 +509,7 @@ public class GeoWaveBasicRasterIT
 				final int tileSize ) {
 			double sum = 0;
 			for (int r = 0; r < numRasters; r++) {
-				sum += getValue(
+				sum += TestUtils.getTileValue(
 						x,
 						y,
 						b,
@@ -720,7 +534,7 @@ public class GeoWaveBasicRasterIT
 			final boolean isSum = ((b % 2) == 0);
 
 			for (int r = 0; r < numRasters; r++) {
-				sum += getValue(
+				sum += TestUtils.getTileValue(
 						x,
 						y,
 						isSum ? b : b - 1,
@@ -786,7 +600,7 @@ public class GeoWaveBasicRasterIT
 						null);
 				final MergeCounter mergeCounter = thisTile.getMetadata();
 				// we're merging, this is the incremented new number of merges
-				final int newNumMerges = mergeCounter.getNumMerges() + 1;
+				final int newNumMerges = mergeCounter.getNumMerges() + nextTile.getMetadata().getNumMerges() + 1;
 
 				// we've merged 1 more tile than the total number of merges (ie.
 				// if we've performed 1 merge, we've seen 2 tiles)

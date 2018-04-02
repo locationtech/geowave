@@ -31,7 +31,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 public class SpatialTemporalQuery extends
 		SpatialQuery
 {
-	protected SpatialTemporalQuery() {}
+	public SpatialTemporalQuery() {}
 
 	public SpatialTemporalQuery(
 			final Date startTime,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -28,11 +28,11 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 
 public class VectorIngestRunner extends
 		AnalyzeRunner
@@ -142,14 +142,7 @@ public class VectorIngestRunner extends
 	protected void nextBand(
 			final SimpleFeature band,
 			final AnalysisInfo analysisInfo ) {
-		try {
-			bandWriter.write(band);
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"Unable to write next band",
-					e);
-		}
+		bandWriter.write(band);
 		super.nextBand(
 				band,
 				analysisInfo);
@@ -189,14 +182,7 @@ public class VectorIngestRunner extends
 			}
 		}
 		if (fid != null) {
-			try {
-				sceneWriter.write(bldr.buildFeature(fid));
-			}
-			catch (IOException e) {
-				LOGGER.error(
-						"Unable to write scene",
-						e);
-			}
+			sceneWriter.write(bldr.buildFeature(fid));
 		}
 	}
 }

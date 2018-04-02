@@ -10,16 +10,14 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index.numeric;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.index.FieldIndexStrategy;
 
 public class NumericFieldIndexStrategy implements
@@ -41,14 +39,14 @@ public class NumericFieldIndexStrategy implements
 			final byte[] bytes ) {}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final NumericQueryConstraint indexedRange,
 			final IndexMetaData... hints ) {
-		return indexedRange.getRange();
+		return indexedRange.getQueryRanges();
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final NumericQueryConstraint indexedRange,
 			final int maxEstimatedRangeDecomposition,
 			final IndexMetaData... hints ) {
@@ -63,27 +61,19 @@ public class NumericFieldIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final List<FieldInfo<Number>> indexedData ) {
-		final List<ByteArrayId> insertionIds = new ArrayList<>();
-		for (final FieldInfo<Number> fieldInfo : indexedData) {
-			insertionIds.add(new ByteArrayId(
-					toIndexByte(fieldInfo.getDataValue().getValue())));
-		}
-		return insertionIds;
+	public InsertionIds getInsertionIds(
+			final Number indexedData ) {
+		return new InsertionIds(
+				null,
+				Collections.singletonList(new ByteArrayId(
+						toIndexByte(indexedData))));
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final List<FieldInfo<Number>> indexedData,
+	public InsertionIds getInsertionIds(
+			final Number indexedData,
 			final int maxEstimatedDuplicateIds ) {
 		return getInsertionIds(indexedData);
-	}
-
-	@Override
-	public List<FieldInfo<Number>> getRangeForId(
-			final ByteArrayId insertionId ) {
-		return Collections.emptyList();
 	}
 
 	public static final byte[] toIndexByte(
@@ -92,12 +82,14 @@ public class NumericFieldIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		return null;
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
 	}
 
 	@Override
-	public List<IndexMetaData> createMetaData() {
-		return Collections.emptyList();
+	public Number getRangeForId(
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		return Lexicoders.DOUBLE.fromByteArray(sortKey.getBytes());
 	}
 }

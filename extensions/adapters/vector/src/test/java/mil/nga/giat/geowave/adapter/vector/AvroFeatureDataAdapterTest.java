@@ -205,7 +205,6 @@ public class AvroFeatureDataAdapterTest
 		coordArray[4] = new Coordinate(
 				-180,
 				-90);
-
 		// read data using the whole feature data adapter
 		try (final CloseableIterator<SimpleFeature> itr = dataStore.query(
 				new QueryOptions(
@@ -219,11 +218,10 @@ public class AvroFeatureDataAdapterTest
 
 				final SimpleFeature feature = dataMap.remove(Integer.parseInt(feat.getID()));
 				assertEquals(
-						feature,
-						feat);
+						DataUtilities.encodeFeature(feature),
+						DataUtilities.encodeFeature(feat));
 
 			}
-
 			assertTrue(dataMap.isEmpty());
 		}
 
@@ -266,6 +264,7 @@ public class AvroFeatureDataAdapterTest
 		final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
 				dataAdapter.getAdapterId(),
 				persistenceEncoding.getDataId(),
+				null,
 				null,
 				1,
 				persistenceEncoding.getCommonData(),

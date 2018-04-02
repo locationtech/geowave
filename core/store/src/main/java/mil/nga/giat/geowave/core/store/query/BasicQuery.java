@@ -752,8 +752,12 @@ public class BasicQuery implements
 		final List<ByteArrayRange> allRanges = new ArrayList<>();
 		final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
 		for (final QueryConstraints queryConstraint : queryConstraints) {
+			// TODO figure out what to do about partitions with secondard index
+			// constraints (probably not the correct approach to just always
+			// carry along the composite ranges and lose track of partitions if
+			// it makes sense to partition secondary indicies too)
 			allRanges.addAll(index.getIndexStrategy().getQueryRanges(
-					queryConstraint));
+					queryConstraint).getCompositeQueryRanges());
 		}
 		return allRanges;
 	}

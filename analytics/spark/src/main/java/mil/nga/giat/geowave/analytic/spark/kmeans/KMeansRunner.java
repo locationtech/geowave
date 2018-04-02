@@ -33,7 +33,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -153,7 +153,7 @@ public class KMeansRunner
 		}
 
 		final QueryOptions queryOptions = new QueryOptions();
-		queryOptions.setAdapter(featureAdapterIds);
+		queryOptions.setAdapterIds(featureAdapterIds);
 
 		// This is required due to some funkiness in GeoWaveInputFormat
 		final AdapterStore adapterStore = inputDataStore.createAdapterStore();

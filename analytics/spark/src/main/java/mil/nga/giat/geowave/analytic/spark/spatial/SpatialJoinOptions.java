@@ -2,11 +2,10 @@ package mil.nga.giat.geowave.analytic.spark.spatial;
 
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 public class SpatialJoinOptions
 {
-
 	private DataStorePluginOptions leftStore = null;
 	private DataStorePluginOptions rightStore = null;
 

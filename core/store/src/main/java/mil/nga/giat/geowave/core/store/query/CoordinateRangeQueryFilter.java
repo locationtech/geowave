@@ -49,15 +49,22 @@ public class CoordinateRangeQueryFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		if ((persistenceEncoding == null) || (persistenceEncoding.getIndexInsertionId() == null)) {
+		if ((persistenceEncoding == null)
+				|| ((persistenceEncoding.getInsertionPartitionKey() == null) && (persistenceEncoding
+						.getInsertionSortKey() == null))) {
 			return false;
 		}
-		return inBounds(persistenceEncoding.getIndexInsertionId());
+		return inBounds(
+				persistenceEncoding.getInsertionPartitionKey(),
+				persistenceEncoding.getInsertionSortKey());
 	}
 
 	private boolean inBounds(
-			final ByteArrayId insertionId ) {
-		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(insertionId);
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(
+				partitionKey,
+				sortKey);
 		return rangeCache.inBounds(coordinates);
 	}
 

@@ -64,7 +64,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.service.client.GeoServerServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -101,8 +101,6 @@ public class GeoServerIT
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
-	}, options = {
-		"disableServer=true",
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

@@ -24,26 +24,17 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class DataIdQuery implements
 		Query
 {
-	private final ByteArrayId adapterId;
 	private final List<ByteArrayId> dataIds;
 
 	public DataIdQuery(
-			final ByteArrayId adapterId,
 			final ByteArrayId dataId ) {
-		this.adapterId = adapterId;
 		dataIds = Collections.singletonList(dataId);
 	}
 
 	public DataIdQuery(
-			final ByteArrayId adapterId,
 			final List<ByteArrayId> dataIds ) {
-		this.adapterId = adapterId;
 		this.dataIds = new ArrayList<>(
 				dataIds);
-	}
-
-	public ByteArrayId getAdapterId() {
-		return adapterId;
 	}
 
 	public List<ByteArrayId> getDataIds() {
@@ -55,7 +46,6 @@ public class DataIdQuery implements
 			final PrimaryIndex index ) {
 		final List<QueryFilter> filters = new ArrayList<>();
 		filters.add(new DataIdQueryFilter(
-				adapterId,
 				dataIds));
 		return filters;
 	}

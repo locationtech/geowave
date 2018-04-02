@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,8 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -34,6 +32,8 @@ import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.geotools.geometry.jts.JTS;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -41,6 +41,7 @@ import org.opengis.referencing.FactoryException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
@@ -60,6 +61,7 @@ import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -71,12 +73,12 @@ import mil.nga.giat.geowave.core.store.data.field.FieldUtils;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.field.FieldWriter;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
-import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -159,7 +161,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type for this object
 	 */
@@ -179,7 +181,7 @@ public class FeatureDataAdapter extends
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
 	 * provided customIndexHandlers
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type for this object
 	 * @param customIndexHandlers
@@ -202,7 +204,7 @@ public class FeatureDataAdapter extends
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
 	 * provided visibilityManagement
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type for this object
 	 * @param visibilityManagement
@@ -224,7 +226,7 @@ public class FeatureDataAdapter extends
 	 * Constructor<br>
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
 	 * provided fieldVisiblityHandler
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type for this object
 	 * @param fieldVisiblityHandler
@@ -246,7 +248,7 @@ public class FeatureDataAdapter extends
 	 * Creates a FeatureDataAdapter for the specified SimpleFeatureType with the
 	 * provided customIndexHandlers, fieldVisibilityHandler and
 	 * defaultVisibilityManagement
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type for this object
 	 * @param customIndexHandlers
@@ -388,7 +390,7 @@ public class FeatureDataAdapter extends
 
 	/**
 	 * Set the FeatureType for this Data Adapter.
-	 * 
+	 *
 	 * @param featureType
 	 *            - new feature type
 	 */
@@ -404,10 +406,10 @@ public class FeatureDataAdapter extends
 	/**
 	 * Create List of NativeFieldHandlers based on the SimpleFeature type passed
 	 * as parameter.
-	 * 
+	 *
 	 * @param featureType
 	 *            - SFT to be used to determine handlers
-	 * 
+	 *
 	 * @return List of NativeFieldHandlers that correspond to attributes in
 	 *         featureType
 	 */
@@ -430,10 +432,10 @@ public class FeatureDataAdapter extends
 	/**
 	 * Attempts to find a time descriptor (range or timestamp) within provided
 	 * featureType and return index field handler for it.
-	 * 
+	 *
 	 * @param featureType
 	 *            - feature type to be scanned.
-	 * 
+	 *
 	 * @return Index Field Handler for the time descriptor found in featureType
 	 */
 	protected IndexFieldHandler<SimpleFeature, Time, Object> getTimeRangeHandler(
@@ -444,18 +446,18 @@ public class FeatureDataAdapter extends
 
 		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
 
-			FeatureAttributeHandler fah_startRange = new FeatureAttributeHandler(
+			final FeatureAttributeHandler fah_startRange = new FeatureAttributeHandler(
 					timeDescriptors.getStartRange());
-			FeatureAttributeHandler fah_endRange = new FeatureAttributeHandler(
+			final FeatureAttributeHandler fah_endRange = new FeatureAttributeHandler(
 					timeDescriptors.getEndRange());
-			FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler = config
+			final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler = config
 					.getManager()
 					.createVisibilityHandler(
 							timeDescriptors.getStartRange().getLocalName(),
 							fieldVisiblityHandler,
 							config.getAttributeName());
 
-			FeatureTimeRangeHandler ftrh = new FeatureTimeRangeHandler(
+			final FeatureTimeRangeHandler ftrh = new FeatureTimeRangeHandler(
 					fah_startRange,
 					fah_endRange,
 					visibilityHandler);
@@ -467,14 +469,14 @@ public class FeatureDataAdapter extends
 			// if we didn't succeed in identifying a start and end time,
 			// just grab the first attribute and use it as a timestamp
 
-			FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler = config
+			final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler = config
 					.getManager()
 					.createVisibilityHandler(
 							timeDescriptors.getTime().getLocalName(),
 							fieldVisiblityHandler,
 							config.getAttributeName());
 
-			FeatureTimestampHandler fth = new FeatureTimestampHandler(
+			final FeatureTimestampHandler fth = new FeatureTimestampHandler(
 					timeDescriptors.getTime(),
 					visibilityHandler);
 
@@ -490,7 +492,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Get a List<> of the default index field handlers from the Simple Feature
 	 * Type provided
-	 * 
+	 *
 	 * @param typeObj
 	 *            - Simple Feature Type object
 	 * @return - List of the default Index Field Handlers
@@ -535,7 +537,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Sets the namespace of the reprojected feature type associated with this
 	 * data adapter
-	 * 
+	 *
 	 * @param namespaceURI
 	 *            - new namespace URI
 	 */
@@ -555,7 +557,7 @@ public class FeatureDataAdapter extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @return Field Reader for the given Field ID
 	 */
 	@Override
@@ -590,7 +592,7 @@ public class FeatureDataAdapter extends
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * @return Field Writer for the given Field ID
 	 */
 	@Override
@@ -653,7 +655,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Get feature type default data contained in the reprojected SFT and
 	 * serialize to a binary stream
-	 * 
+	 *
 	 * @return byte array with binary data
 	 */
 	@Override
@@ -738,7 +740,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Extract the feature type default data from the binary stream passed in
 	 * and place in the reprojected SFT for this feature data adapter
-	 * 
+	 *
 	 * @return if successful, the reprojected feature type created from the
 	 *         serialized stream
 	 */
@@ -923,8 +925,13 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
+			final CommonIndexModel indexModel,
+			final DataAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
-		return statsManager.getVisibilityHandler(statisticsId);
+		return statsManager.getVisibilityHandler(
+				indexModel,
+				adapter,
+				statisticsId);
 	}
 
 	@Override
@@ -947,7 +954,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Determine if a time or range descriptor is set. If so, then use it,
 	 * otherwise infer.
-	 * 
+	 *
 	 * @param persistType
 	 *            - FeatureType that will be scanned for TimeAttributes
 	 * @return
@@ -1006,7 +1013,7 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = Maps.synchronizedBiMap(HashBiMap.create());
 	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
 	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
 
@@ -1024,26 +1031,26 @@ public class FeatureDataAdapter extends
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		Integer position = fieldToPositionMap.get(fieldId);
+		final Integer position = fieldToPositionMap.get(fieldId);
 		if (position == null) {
 			return -1;
 		}
-		return position.intValue() + model.getDimensions().length;
+		return position.intValue() + dimensionFieldIds.size();
 	}
 
 	@Override
 	public ByteArrayId getFieldIdForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		if (position >= model.getDimensions().length) {
+		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+		if (position >= dimensionFieldIds.size()) {
 			if (fieldToPositionMap.isEmpty()) {
 				initializePositionMaps();
 			}
-			final int adjustedPosition = position - model.getDimensions().length;
+			final int adjustedPosition = position - dimensionFieldIds.size();
 			// check other fields
 			return positionToFieldMap.get(adjustedPosition);
 		}
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		// otherwise check CommonIndexModel dimensions
 		return dimensionFieldIds.get(position);
 	}
@@ -1058,7 +1065,7 @@ public class FeatureDataAdapter extends
 						currFieldId,
 						i);
 			}
-			positionToFieldMap = fieldToPositionMap.inverse();
+			positionToFieldMap = Maps.synchronizedBiMap(fieldToPositionMap.inverse());
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -1067,16 +1074,13 @@ public class FeatureDataAdapter extends
 		}
 	}
 
-	private List<ByteArrayId> getDimensionFieldIds(
+	protected List<ByteArrayId> getDimensionFieldIds(
 			final CommonIndexModel model ) {
 		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
 		if (retVal != null) {
 			return retVal;
 		}
-		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
-		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
-			dimensionFieldIds.add(dimension.getFieldId());
-		}
+		final List<ByteArrayId> dimensionFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
 		modelToDimensionsMap.put(
 				model.getId(),
 				dimensionFieldIds);

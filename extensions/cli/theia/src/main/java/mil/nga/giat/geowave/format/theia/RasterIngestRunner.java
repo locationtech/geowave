@@ -65,11 +65,11 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexLoader;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.format.theia.BandFeatureIterator;
 import mil.nga.giat.geowave.format.theia.DownloadRunner;
 import mil.nga.giat.geowave.format.theia.TheiaBandConverterSpi;
@@ -604,14 +604,7 @@ public class RasterIngestRunner extends
 					}
 				}
 
-				try {
-					writer.write(mergedCoverage);
-				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Unable to write merged coverage",
-							e);
-				}
+				writer.write(mergedCoverage);
 				lastSceneBands.clear();
 			}
 		}

@@ -23,4 +23,6 @@ public interface DataStoreOptions
 	public boolean isCreateTable();
 
 	public boolean isEnableBlockCache();
+
+	public boolean isServerSideLibraryEnabled();
 }

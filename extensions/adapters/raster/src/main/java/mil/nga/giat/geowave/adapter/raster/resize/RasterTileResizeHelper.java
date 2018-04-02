@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.opengis.coverage.grid.GridCoverage;
@@ -109,9 +110,13 @@ public class RasterTileResizeHelper
 			}
 		}
 		if (needsMerge) {
+			final Pair<byte[], byte[]> pair = key.getPartitionAndSortKey(index);
 			mergedCoverage = newAdapter.getCoverageFromRasterTile(
 					mergedTile,
-					key.getDataId(),
+					pair == null ? null : new ByteArrayId(
+							pair.getLeft()),
+					pair == null ? null : new ByteArrayId(
+							pair.getRight()),
 					index);
 		}
 		return mergedCoverage;
@@ -119,6 +124,15 @@ public class RasterTileResizeHelper
 
 	public ByteArrayId getNewCoverageId() {
 		return newAdapter.getAdapterId();
+	}
+
+	public ByteArrayId getNewDataId(
+			final GridCoverage coverage ) {
+		return newAdapter.getDataId(coverage);
+	}
+
+	public ByteArrayId getIndexId() {
+		return index.getId();
 	}
 
 	public boolean isOriginalCoverage(

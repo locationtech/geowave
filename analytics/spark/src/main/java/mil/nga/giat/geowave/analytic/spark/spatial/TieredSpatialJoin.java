@@ -40,6 +40,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
@@ -58,8 +59,7 @@ public class TieredSpatialJoin extends
 		JoinStrategy
 {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			TieredSpatialJoin.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(TieredSpatialJoin.class);
 
 	// Combined matching pairs
 	private JavaPairRDD<GeoWaveInputKey, Geometry> combinedResults = null;
@@ -337,8 +337,8 @@ public class TieredSpatialJoin extends
 			new LongitudeDefinition(),
 			new LatitudeDefinition(
 					true)
-			// just use the same range for latitude to make square sfc values in
-			// decimal degrees (EPSG:4326)
+		// just use the same range for latitude to make square sfc values in
+		// decimal degrees (EPSG:4326)
 		};
 		final int LONGITUDE_BITS = 31;
 		final int LATITUDE_BITS = 31;
@@ -360,8 +360,7 @@ public class TieredSpatialJoin extends
 			this.combinedResults = finalMatches;
 		}
 		else {
-			this.combinedResults = this.combinedResults.union(
-					finalMatches);
+			this.combinedResults = this.combinedResults.union(finalMatches);
 		}
 	}
 
@@ -374,8 +373,8 @@ public class TieredSpatialJoin extends
 		// rows within rdd.
 		// Instead of storing whole feature on index maybe just output Key +
 		// Bounds
-		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexedData = data.flatMapToPair(
-				new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
+		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexedData = data
+				.flatMapToPair(new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 					@Override
 					public Iterator<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> call(
 							Tuple2<GeoWaveInputKey, SimpleFeature> t )
@@ -420,14 +419,17 @@ public class TieredSpatialJoin extends
 						// using strategy above
 						BasicNumericDataset convertedBounds = new BasicNumericDataset(
 								boundsRange);
-						List<ByteArrayId> insertIds = broadcastStrategy.value().getInsertionIds(
+						InsertionIds insertIds = broadcastStrategy.value().getInsertionIds(
 								convertedBounds);
 
 						// Sometimes the result can span more than one row/cell
 						// of a tier
 						// When we span more than one row each individual get
 						// added as a separate output pair
-						for (Iterator<ByteArrayId> iter = insertIds.iterator(); iter.hasNext();) {
+						// TODO should this use composite IDs or just the sort
+						// keys
+						for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+								.hasNext();) {
 							ByteArrayId id = iter.next();
 							// Id decomposes to byte array of Tier, Bin, SFC
 							// (Hilbert in this case) id)
@@ -440,8 +442,7 @@ public class TieredSpatialJoin extends
 							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
 									id,
 									valuePair);
-							result.add(
-									indexPair);
+							result.add(indexPair);
 						}
 
 						return result.iterator();
@@ -470,8 +471,8 @@ public class TieredSpatialJoin extends
 			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> higherRightTiers,
 			byte targetTierId,
 			Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy ) {
-		return higherRightTiers.flatMapToPair(
-				new PairFlatMapFunction<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
+		return higherRightTiers
+				.flatMapToPair(new PairFlatMapFunction<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 
 					@Override
 					public Iterator<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> call(
@@ -509,14 +510,14 @@ public class TieredSpatialJoin extends
 							// using strategy above
 							BasicNumericDataset convertedBounds = new BasicNumericDataset(
 									boundsRange);
-							List<ByteArrayId> insertIds = targetStrategy.getInsertionIds(
-									convertedBounds);
+							InsertionIds insertIds = targetStrategy.getInsertionIds(convertedBounds);
 
 							// When we span more than one row each individual
-							// get
-							// added as a separate output pair
-
-							for (Iterator<ByteArrayId> iter = insertIds.iterator(); iter.hasNext();) {
+							// get added as a separate output pair
+							// TODO should this use composite IDs or just the
+							// sort keys
+							for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+									.hasNext();) {
 								ByteArrayId id = iter.next();
 								// Id decomposes to byte array of Tier, Bin, SFC
 								// (Hilbert in this case) id)
@@ -526,13 +527,11 @@ public class TieredSpatialJoin extends
 								Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
 										id,
 										t._2);
-								reprojected.add(
-										indexPair);
+								reprojected.add(indexPair);
 							}
 						}
 						else {
-							LOGGER.warn(
-									"Tier '" + targetTierId + "' not found in index strategy");
+							LOGGER.warn("Tier '" + targetTierId + "' not found in index strategy");
 						}
 						return reprojected.iterator();
 					}

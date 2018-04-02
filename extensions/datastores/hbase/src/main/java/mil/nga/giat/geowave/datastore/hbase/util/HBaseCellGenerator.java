@@ -17,13 +17,13 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 /**
  * Functionality similar to <code> AccumuloKeyValuePairGenerator </code> Since
@@ -32,7 +32,6 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
  */
 public class HBaseCellGenerator<T>
 {
-
 	private final WritableDataAdapter<T> adapter;
 	private final PrimaryIndex index;
 	private final VisibilityWriter<T> visibilityWriter;
@@ -52,27 +51,25 @@ public class HBaseCellGenerator<T>
 			final T entry ) {
 
 		final List<Cell> keyValuePairs = new ArrayList<>();
-		Cell cell;
-		final DataStoreEntryInfo ingestInfo = DataStoreUtils.getIngestInfo(
+		final GeoWaveRow[] rows = BaseDataStoreUtils.getGeoWaveRows(
+				entry,
 				adapter,
 				index,
-				entry,
 				visibilityWriter);
-		final List<ByteArrayId> rowIds = ingestInfo.getRowIds();
-		@SuppressWarnings("rawtypes")
-		final List<FieldInfo<?>> fieldInfoList = ingestInfo.getFieldInfo();
 
-		for (final ByteArrayId rowId : rowIds) {
-			for (@SuppressWarnings("rawtypes")
-			final FieldInfo fieldInfo : fieldInfoList) {
-				cell = CellUtil.createCell(
-						rowId.getBytes(),
-						adapterId,
-						fieldInfo.getDataValue().getId().getBytes(),
-						System.currentTimeMillis(),
-						KeyValue.Type.Put.getCode(),
-						fieldInfo.getWrittenValue());
-				keyValuePairs.add(cell);
+		if ((rows != null) && (rows.length > 0)) {
+			for (final GeoWaveRow row : rows) {
+				for (final GeoWaveValue value : row.getFieldValues()) {
+					Cell cell = CellUtil.createCell(
+							GeoWaveKey.getCompositeId(row),
+							adapterId,
+							row.getDataId(),
+							System.currentTimeMillis(),
+							KeyValue.Type.Put.getCode(),
+							value.getValue());
+
+					keyValuePairs.add(cell);
+				}
 			}
 		}
 

@@ -267,6 +267,11 @@
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-cassandra</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
 					<!-- This is required in case ImageDataAdapter is needed in the classpath -->
 					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-format-4676</artifactId>

@@ -14,54 +14,50 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Sets;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
-import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.PartitionIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /**
  * Used to create determined, uniform row id prefix as one possible approach to
  * prevent hot spotting.
- * 
+ *
  * Before using this class, one should consider balancing options for the
  * specific data store. Can one pre-split using a component of another index
  * strategy (e.g. bin identifier)? How about ingest first and then do major
  * compaction?
- * 
+ *
  * Consider that Accumulo 1.7 supports two balancers
  * org.apache.accumulo.server.master.balancer.RegexGroupBalancer and
  * org.apache.accumulo.server.master.balancer.GroupBalancer.
- * 
+ *
  * This class should be used with a CompoundIndexStrategy. In addition, tablets
  * should be pre-split on the number of prefix IDs. Without splits, the splits
  * are at the mercy of the Big Table servers default. For example, Accumulo
  * fills up one tablet before splitting, regardless of the partitioning.
- * 
+ *
  * The key set size does not need to be large. For example, using two times the
  * number of tablet servers (for growth) and presplitting, two keys per server.
  * The default is 3.
- * 
+ *
  * There is a cost to using this approach: queries must span all prefixes. The
  * number of prefixes should initially be at least the number of tablet servers.
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class RoundRobinKeyIndexStrategy implements
-		NumericIndexStrategy
+		PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>
 {
 
-	private final List<ByteArrayRange> keySet = new ArrayList<ByteArrayRange>();
+	private final List<ByteArrayId> keys = new ArrayList<ByteArrayId>();
 	public int position = 0;
 
 	/**
@@ -78,7 +74,7 @@ public class RoundRobinKeyIndexStrategy implements
 
 	private void init(
 			final int size ) {
-		keySet.clear();
+		keys.clear();
 		if (size > 256) {
 			final ByteBuffer buf = ByteBuffer.allocate(4);
 			for (int i = 0; i < size; i++) {
@@ -87,9 +83,7 @@ public class RoundRobinKeyIndexStrategy implements
 						Arrays.copyOf(
 								buf.array(),
 								4));
-				keySet.add(new ByteArrayRange(
-						id,
-						id));
+				keys.add(id);
 				buf.rewind();
 			}
 		}
@@ -99,76 +93,9 @@ public class RoundRobinKeyIndexStrategy implements
 						new byte[] {
 							(byte) i
 						});
-				keySet.add(new ByteArrayRange(
-						id,
-						id));
+				keys.add(id);
 			}
 		}
-	}
-
-	/**
-	 * Always returns all possible ranges
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange,
-			final IndexMetaData... hints ) {
-		return keySet;
-	}
-
-	/**
-	 * Always returns all possible ranges
-	 * 
-	 * {@inheritDoc}
-	 */
-	@Override
-	public List<ByteArrayRange> getQueryRanges(
-			final MultiDimensionalNumericData indexedRange,
-			final int maxEstimatedRangeDecomposition,
-			final IndexMetaData... hints ) {
-		return keySet;
-	}
-
-	/**
-	 * Returns an insertion id selected round-robin from a predefined pool
-	 */
-	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final MultiDimensionalNumericData indexedData ) {
-		position = (position + 1) % keySet.size();
-		return Collections.singletonList(keySet.get(
-				position).getStart());
-	}
-
-	/**
-	 * Returns an insertion id selected round-robin from a predefined pool
-	 * 
-	 */
-	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final MultiDimensionalNumericData indexedData,
-			final int maxEstimatedDuplicateIds ) {
-		position = (position + 1) % keySet.size();
-		return Collections.singletonList(keySet.get(
-				position).getStart());
-	}
-
-	@Override
-	public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
-		return new NumericDimensionDefinition[0];
-	}
-
-	@Override
-	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
-		return new BasicNumericDataset();
-	}
-
-	@Override
-	public double[] getHighestPrecisionIdRangePerDimension() {
-		return new double[0];
 	}
 
 	@Override
@@ -179,7 +106,7 @@ public class RoundRobinKeyIndexStrategy implements
 	@Override
 	public byte[] toBinary() {
 		final ByteBuffer buf = ByteBuffer.allocate(4);
-		buf.putInt(keySet.size());
+		buf.putInt(keys.size());
 		return buf.array();
 
 	}
@@ -191,20 +118,15 @@ public class RoundRobinKeyIndexStrategy implements
 		init(buf.getInt());
 	}
 
-	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		final Set<ByteArrayId> naturalSplits = new HashSet<ByteArrayId>();
-		for (final ByteArrayRange range : keySet) {
-			naturalSplits.add(range.getStart());
-		}
-		return naturalSplits;
+	public Set<ByteArrayId> getPartitionKeys() {
+		return Sets.newHashSet(keys);
 	}
 
 	@Override
-	public int getByteOffsetFromDimensionalIndex() {
-		if ((keySet != null) && !keySet.isEmpty()) {
-			return keySet.get(
-					0).getStart().getBytes().length;
+	public int getPartitionKeyLength() {
+		if ((keys != null) && !keys.isEmpty()) {
+			return keys.get(
+					0).getBytes().length;
 		}
 		return 0;
 	}
@@ -215,17 +137,16 @@ public class RoundRobinKeyIndexStrategy implements
 	}
 
 	@Override
-	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
-		return new MultiDimensionalCoordinates();
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
+		position = (position + 1) % keys.size();
+		return Collections.singleton(keys.get(position));
 	}
 
 	@Override
-	public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-			final MultiDimensionalNumericData dataRange,
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
-		return new MultiDimensionalCoordinateRanges[] {
-			new MultiDimensionalCoordinateRanges()
-		};
+		return getPartitionKeys();
 	}
 }

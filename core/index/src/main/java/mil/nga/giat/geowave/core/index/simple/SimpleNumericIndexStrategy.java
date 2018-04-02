@@ -20,9 +20,12 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.Coordinate;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -78,7 +81,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final IndexMetaData... hints ) {
 		return getQueryRanges(
@@ -94,7 +97,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public QueryRanges getQueryRanges(
 			final MultiDimensionalNumericData indexedRange,
 			final int maxEstimatedRangeDecomposition,
 			final IndexMetaData... hints ) {
@@ -107,7 +110,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 		final ByteArrayRange range = new ByteArrayRange(
 				start,
 				end);
-		return Collections.singletonList(range);
+		final SinglePartitionQueryRanges partitionRange = new SinglePartitionQueryRanges(
+				Collections.singletonList(range));
+		return new QueryRanges(
+				Collections.singletonList(partitionRange));
 	}
 
 	/**
@@ -119,7 +125,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 		return getInsertionIds(
 				indexedData,
@@ -135,7 +141,7 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	 * {@inheritDoc}
 	 */
 	@Override
-	public List<ByteArrayId> getInsertionIds(
+	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final int maxEstimatedDuplicateIds ) {
 		final long min = (long) indexedData.getMinValuesPerDimension()[0];
@@ -146,7 +152,8 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 			insertionIds.add(new ByteArrayId(
 					lexicoder.toByteArray(cast(i))));
 		}
-		return insertionIds;
+		return new InsertionIds(
+				insertionIds);
 	}
 
 	@Override
@@ -156,8 +163,9 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId insertionId ) {
-		final long value = Long.class.cast(lexicoder.fromByteArray(insertionId.getBytes()));
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		final long value = Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes()));
 		final NumericData[] dataPerDimension = new NumericData[] {
 			new NumericValue(
 					value)
@@ -168,12 +176,13 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId insertionId ) {
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
 		return new MultiDimensionalCoordinates(
 				null,
 				new Coordinate[] {
 					new Coordinate(
-							Long.class.cast(lexicoder.fromByteArray(insertionId.getBytes())),
+							Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes())),
 							null)
 				});
 	}
@@ -239,12 +248,34 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public int getPartitionKeyLength() {
+		return 0;
+	}
+
+	@Override
+	public Set<ByteArrayId> getInsertionPartitionKeys(
+			final MultiDimensionalNumericData insertionData ) {
 		return null;
 	}
 
 	@Override
-	public List<IndexMetaData> createMetaData() {
-		return Collections.emptyList();
+	public Set<ByteArrayId> getQueryPartitionKeys(
+			final MultiDimensionalNumericData queryData,
+			final IndexMetaData... hints ) {
+		return null;
 	}
+
+	@Override
+	public byte[] toBinary() {
+		return new byte[] {};
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -11,25 +11,73 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.PartialKey;
 import org.apache.accumulo.core.data.Value;
+import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
+import org.apache.accumulo.core.iterators.conf.ColumnSet;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 
+import com.google.common.base.Splitter;
+import com.google.common.collect.Lists;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class MergingVisibilityCombiner extends
 		TransformingIterator
 {
 	private static final byte[] AMPRISAND = StringUtils.stringToBinary("&");
+
+	private ColumnSet combiners;
+	private final Key workKey = new Key();
+
+	@Override
+	public void init(
+			final SortedKeyValueIterator<Key, Value> source,
+			final Map<String, String> options,
+			final IteratorEnvironment env )
+			throws IOException {
+		super.init(
+				source,
+				options,
+				env);
+		final String encodedColumns = getColumnOptionValue(options);
+		if (encodedColumns.length() == 0) {
+			throw new IllegalArgumentException(
+					"The column must not be empty");
+		}
+		combiners = new ColumnSet(
+				Lists.newArrayList(Splitter.on(
+						",").split(
+						encodedColumns)));
+	}
+
+	protected String getColumnOptionValue(
+			final Map<String, String> options ) {
+		// if this is not "row" merging than it is merging stats on the metadata
+		// table
+		return MetadataType.STATS.name();
+	}
+
+	@Override
+	public SortedKeyValueIterator<Key, Value> deepCopy(
+			final IteratorEnvironment env ) {
+		final SortedKeyValueIterator<Key, Value> retVal = super.deepCopy(env);
+		if (retVal instanceof MergingVisibilityCombiner) {
+			((MergingVisibilityCombiner) retVal).combiners = combiners;
+		}
+		return retVal;
+	}
 
 	@Override
 	protected PartialKey getKeyPrefix() {
@@ -43,6 +91,19 @@ public class MergingVisibilityCombiner extends
 			throws IOException {
 		Mergeable currentMergeable = null;
 		Key outputKey = null;
+		workKey.set(input.getTopKey());
+		// default to not combining, only combine when combiners does not
+		// contain this column
+		if ((combiners == null) || !combiners.contains(workKey) || workKey.isDeleted()) {
+			// don't transform at all
+			while (input.hasTop()) {
+				output.append(
+						input.getTopKey(),
+						input.getTopValue());
+				input.next();
+			}
+			return;
+		}
 		while (input.hasTop()) {
 			final Value val = input.getTopValue();
 			// the SortedKeyValueIterator uses the same instance of topKey to

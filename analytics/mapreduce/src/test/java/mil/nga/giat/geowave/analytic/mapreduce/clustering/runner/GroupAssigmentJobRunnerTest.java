@@ -21,7 +21,9 @@ import org.apache.hadoop.util.Tool;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
@@ -51,14 +53,15 @@ import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 public class GroupAssigmentJobRunnerTest
 {
 
 	final GroupAssigmentJobRunner runner = new GroupAssigmentJobRunner();
 	final PropertyManagement runTimeProperties = new PropertyManagement();
-	private static final String TEST_NAMESPACE = "test";
+	@Rule
+	public TestName name = new TestName();
 
 	@Before
 	public void init() {
@@ -199,7 +202,8 @@ public class GroupAssigmentJobRunnerTest
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
-		opts.setGeowaveNamespace(TEST_NAMESPACE);
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
+		opts.setGeowaveNamespace(namespace);
 		PersistableStore store = new PersistableStore(
 				pluginOptions);
 

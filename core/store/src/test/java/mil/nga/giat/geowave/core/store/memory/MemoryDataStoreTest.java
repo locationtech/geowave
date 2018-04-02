@@ -213,7 +213,6 @@ public class MemoryDataStoreTest
 							"bbb"
 						}),
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						adapter.getDataId(new Integer(
 								35))))) {
 			assertTrue(itemIt.hasNext());
@@ -419,7 +418,6 @@ public class MemoryDataStoreTest
 							"bbb"
 						}),
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						adapter.getDataId(new Integer(
 								35))))) {
 			assertTrue(itemIt.hasNext());
@@ -437,7 +435,6 @@ public class MemoryDataStoreTest
 							"bbb"
 						}),
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						adapter.getDataId(new Integer(
 								35))))) {
 			assertTrue(itemIt.hasNext());

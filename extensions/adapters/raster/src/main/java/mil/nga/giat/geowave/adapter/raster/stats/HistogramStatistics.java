@@ -46,7 +46,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 public class HistogramStatistics extends
 		AbstractDataStatistics<GridCoverage>
@@ -167,8 +167,8 @@ public class HistogramStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final GridCoverage entry ) {
+			final GridCoverage entry,
+			final GeoWaveRow... geoWaveRows ) {
 		/*
 		 * Create the operation for the Histogram with a ROI. No subsampling
 		 * should be applied.
