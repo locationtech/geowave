@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li>Prev&nbsp;Class</li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloSecondaryIndexUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -117,7 +117,7 @@ var activeTableTab = "activeTableTab";
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
 <div class="block">Given a <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter"><code>WritableDataAdapter</code></a> and an <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index"><code>PrimaryIndex</code></a>, this class
  handles the creation of Geowave-formatted [Key,Value] pairs.
- 
+
  The intent is that this class will be used within the Mapper of a MapReduce
  job to generate Keys and Values to be sorted during the shuffle-and-sort
  phase in preparation for bulk ingest into Accumulo via
@@ -140,12 +140,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#AccumuloKeyValuePairGenerator-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">AccumuloKeyValuePairGenerator</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;callback,
-                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#AccumuloKeyValuePairGenerator-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">AccumuloKeyValuePairGenerator</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                              <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
@@ -166,7 +160,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloKeyValuePair</a>&gt;</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.KeyValue&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#constructKeyValuePairs-byte:A-T-">constructKeyValuePairs</a></span>(byte[]&nbsp;adapterId,
                       <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
@@ -195,23 +189,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="AccumuloKeyValuePairGenerator-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">
 <!--   -->
 </a>
-<ul class="blockList">
-<li class="blockList">
-<h4>AccumuloKeyValuePairGenerator</h4>
-<pre>public&nbsp;AccumuloKeyValuePairGenerator(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
-                                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</pre>
-</li>
-</ul>
-<a name="AccumuloKeyValuePairGenerator-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">
-<!--   -->
-</a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloKeyValuePairGenerator</h4>
 <pre>public&nbsp;AccumuloKeyValuePairGenerator(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;callback,
                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</pre>
 </li>
 </ul>
@@ -231,8 +213,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>constructKeyValuePairs</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util">AccumuloKeyValuePair</a>&gt;&nbsp;constructKeyValuePairs(byte[]&nbsp;adapterId,
-                                                         <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&nbsp;entry)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.accumulo.core.data.KeyValue&gt;&nbsp;constructKeyValuePairs(byte[]&nbsp;adapterId,
+                                                                           <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&nbsp;entry)</pre>
 </li>
 </ul>
 </li>
@@ -263,7 +245,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePair.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li>Prev&nbsp;Class</li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloSecondaryIndexUtils.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

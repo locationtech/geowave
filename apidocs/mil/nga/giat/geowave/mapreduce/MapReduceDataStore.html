@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextIndexStore.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../mil/nga/giat/geowave/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" target="_top">Frames</a></li>
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>, <a href="../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseDataStore</a></dd>
+<dd><a href="../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>, <a href="../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a>, <a href="../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStore.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraDataStore</a>, <a href="../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBDataStore.html" title="class in mil.nga.giat.geowave.datastore.dynamodb">DynamoDBDataStore</a>, <a href="../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseDataStore</a></dd>
 </dl>
 <hr>
 <br>
@@ -131,9 +131,10 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">createRecordReader</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">createRecordReader</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
                   <a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
                   <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                  <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
                   <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
                   <a href="../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                   boolean&nbsp;isOutputWritable,
@@ -141,9 +142,10 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-java.lang.Integer-java.lang.Integer-">getSplits</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-java.lang.Integer-java.lang.Integer-">getSplits</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
          <a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
          <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+         <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
          <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
          <a href="../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
@@ -155,7 +157,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 <!--   -->
 </a>
 <h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></h3>
-<code><a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">createWriter</a>, <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#delete-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.query.Query-">delete</a>, <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.query.Query-">query</a></code></li>
+<code><a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">createWriter</a>, <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#delete-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.query.Query-">delete</a>, <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html#query-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.query.Query-">query</a></code></li>
 </ul>
 </li>
 </ul>
@@ -171,7 +173,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">
+<a name="createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -180,6 +182,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 <pre>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,?&gt;&nbsp;createRecordReader(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
                                                                                <a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
                                                                                <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                                               <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
                                                                                <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
                                                                                <a href="../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                                                                                boolean&nbsp;isOutputWritable,
@@ -193,7 +196,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 </dl>
 </li>
 </ul>
-<a name="getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-java.lang.Integer-java.lang.Integer-">
+<a name="getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-java.lang.Integer-java.lang.Integer-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -202,6 +205,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;&nbsp;getSplits(<a href="../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
                                                        <a href="../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
                                                        <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                                       <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
                                                        <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
                                                        <a href="../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
                                                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
@@ -244,7 +248,7 @@ extends <a href="../../../../../mil/nga/giat/geowave/core/store/DataStore.html" 
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextIndexStore.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../mil/nga/giat/geowave/mapreduce/NativeMapContext.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" target="_top">Frames</a></li>

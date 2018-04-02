@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.bigtable.operations.BigTableOperations</li>
@@ -114,12 +114,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/server/ServerSideOperations.html" title="interface in mil.nga.giat.geowave.core.store.server">ServerSideOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">BigTableOperations</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a></pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a></pre>
 </li>
 </ul>
 </div>
@@ -133,11 +133,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 </a>
 <h3>Field Summary</h3>
 <ul class="blockList">
-<li class="blockList"><a name="fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations">
+<li class="blockList"><a name="fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations">
 <!--   -->
 </a>
-<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.operations.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#ADMIN_MUTEX">ADMIN_MUTEX</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#DEFAULT_TABLE_NAMESPACE">DEFAULT_TABLE_NAMESPACE</a></code></li>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.operations.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#ADMIN_MUTEX">ADMIN_MUTEX</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#conn">conn</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#DEFAULT_MAX_VERSIONS">DEFAULT_MAX_VERSIONS</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#DEFAULT_TABLE_NAMESPACE">DEFAULT_TABLE_NAMESPACE</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#MERGING_MAX_VERSIONS">MERGING_MAX_VERSIONS</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#METADATA_CFS_VERSIONING">METADATA_CFS_VERSIONING</a></code></li>
 </ul>
 </li>
 </ul>
@@ -153,15 +153,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#BigTableOperations--">BigTableOperations</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#BigTableOperations-java.lang.String-">BigTableOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#BigTableOperations-java.lang.String-java.lang.String-java.lang.String-">BigTableOperations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;projectId,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId,
-                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#BigTableOperations-mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions-">BigTableOperations</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations.config">BigTableOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -183,6 +175,14 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#createOperations-mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions-">createOperations</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations.config">BigTableOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#forceRegionUpdate-com.google.cloud.bigtable.hbase.BigtableRegionLocator-">forceRegionUpdate</a></span>(com.google.cloud.bigtable.hbase.BigtableRegionLocator&nbsp;regionLocator)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>org.apache.hadoop.hbase.client.RegionLocator</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#getRegionLocator-java.lang.String-">getRegionLocator</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.hbase.client.ResultScanner</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#getScannedResults-org.apache.hadoop.hbase.client.Scan-java.lang.String-java.lang.String...-">getScannedResults</a></span>(org.apache.hadoop.hbase.client.Scan&nbsp;scanner,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
@@ -190,11 +190,11 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.operations.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#addColumnFamiles-java.lang.String:A-java.lang.String-">addColumnFamiles</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#columnFamilyExists-java.lang.String-java.lang.String-">columnFamilyExists</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createOperations-mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseRequiredOptions-">createOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createTable-java.lang.String:A-org.apache.hadoop.hbase.TableName-java.util.Set-">createTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter-java.lang.String-java.lang.String:A-boolean-">createWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#createWriter-java.lang.String-java.lang.String:A-boolean-java.util.Set-">createWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#deleteAll--">deleteAll</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#deleteTable-java.lang.String-">deleteTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getConfig--">getConfig</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getQualifiedTableName-java.lang.String-">getQualifiedTableName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getRegionLocator-java.lang.String-">getRegionLocator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getTable-java.lang.String-">getTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getTableName-java.lang.String-">getTableName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getTableNameSpace--">getTableNameSpace</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#isSchemaUpdateEnabled--">isSchemaUpdateEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#mergeData-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#tableExists-java.lang.String-">tableExists</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#verifyCoprocessor-java.lang.String-java.lang.String-java.lang.String-">verifyCoprocessor</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.hbase.operations.<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a></h3>
+<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#addServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-">addServerOp</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#aggregateServerSide-mil.nga.giat.geowave.core.store.operations.ReaderParams-">aggregateServerSide</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createDeleter-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String...-">createDeleter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createMetadataDeleter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataDeleter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createMetadataReader-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataReader</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createMetadataWriter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createOperations-mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions-">createOperations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-">createReader</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createTable-mil.nga.giat.geowave.core.index.ByteArrayId-boolean-mil.nga.giat.geowave.core.index.ByteArrayId-">createTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createTable-org.apache.commons.lang3.tuple.Pair:A-org.apache.hadoop.hbase.TableName-">createTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createTable-java.lang.String:A-boolean-org.apache.hadoop.hbase.TableName-">createTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">createWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createWriter-java.lang.String-java.lang.String:A-boolean-">createWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createWriter-java.lang.String-java.lang.String:A-boolean-java.util.Set-">createWriter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#deleteAll--">deleteAll</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#deleteAll-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String...-">deleteAll</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#ensureServerSideOperationsObserverAttached-mil.nga.giat.geowave.core.index.ByteArrayId-">ensureServerSideOperationsObserverAttached</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getBufferedMutator-org.apache.hadoop.hbase.TableName-">getBufferedMutator</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getIndexId-org.apache.hadoop.hbase.TableName-">getIndexId</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getMultiRowRangeFilter-java.util.List-">getMultiRowRangeFilter</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getQualifiedTableName-java.lang.String-">getQualifiedTableName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getScanCacheSize--">getScanCacheSize</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getServerOpOptions-java.lang.String-java.lang.String-mil.nga.giat.geowave.core.store.server.ServerOpConfig.ServerOpScope-">getServerOpOptions</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getTable-java.lang.String-">getTable</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getTableName-java.lang.String-">getTableName</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getTableRegions-java.lang.String-">getTableRegions</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getVersion--">getVersion</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#indexExists-mil.nga.giat.geowave.core.index.ByteArrayId-">indexExists</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#insureAuthorizations-java.lang.String-java.lang.String...-">insureAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#insurePartition-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">insurePartition</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#isEnableBlockCache--">isEnableBlockCache</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#isRowMergingEnabled-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">isRowMergingEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#isSchemaUpdateEnabled--">isSchemaUpdateEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#listServerOps-java.lang.String-">listServerOps</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#mergeData-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#metadataExists-mil.nga.giat.geowave.core.store.operations.MetadataType-">metadataExists</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">removeServerOp</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#updateServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-com.google.common.collect.ImmutableSet-">updateServerOp</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyColumnFamilies-java.lang.String:A-boolean-org.apache.hadoop.hbase.TableName-boolean-">verifyColumnFamilies</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyColumnFamily-java.lang.String-boolean-java.lang.String-boolean-">verifyColumnFamily</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyCoprocessor-java.lang.String-java.lang.String-java.lang.String-">verifyCoprocessor</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -217,43 +217,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BigTableOperations--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>BigTableOperations</h4>
-<pre>public&nbsp;BigTableOperations()
-                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="BigTableOperations-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>BigTableOperations</h4>
-<pre>public&nbsp;BigTableOperations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)
-                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="BigTableOperations-java.lang.String-java.lang.String-java.lang.String-">
+<a name="BigTableOperations-mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BigTableOperations</h4>
-<pre>public&nbsp;BigTableOperations(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;projectId,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)
+<pre>public&nbsp;BigTableOperations(<a href="../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations.config">BigTableOptions</a>&nbsp;options)
                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
@@ -269,6 +239,31 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getRegionLocator-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRegionLocator</h4>
+<pre>public&nbsp;org.apache.hadoop.hbase.client.RegionLocator&nbsp;getRegionLocator(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)
+                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getRegionLocator-java.lang.String-">getRegionLocator</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a></code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="forceRegionUpdate-com.google.cloud.bigtable.hbase.BigtableRegionLocator-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>forceRegionUpdate</h4>
+<pre>protected&nbsp;void&nbsp;forceRegionUpdate(com.google.cloud.bigtable.hbase.BigtableRegionLocator&nbsp;regionLocator)</pre>
+</li>
+</ul>
 <a name="getScannedResults-org.apache.hadoop.hbase.client.Scan-java.lang.String-java.lang.String...-">
 <!--   -->
 </a>
@@ -281,7 +276,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
                                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html#getScannedResults-org.apache.hadoop.hbase.client.Scan-java.lang.String-java.lang.String...-">getScannedResults</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getScannedResults-org.apache.hadoop.hbase.client.Scan-java.lang.String-java.lang.String...-">getScannedResults</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
@@ -355,7 +350,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/opera
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

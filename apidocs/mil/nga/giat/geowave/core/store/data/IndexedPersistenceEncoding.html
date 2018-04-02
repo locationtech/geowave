@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DeferredReadCommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -160,9 +160,10 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#IndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentDataset-">IndexedPersistenceEncoding</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#IndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentDataset-">IndexedPersistenceEncoding</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexInsertionId,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionPartitionKey,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionSortKey,
                           int&nbsp;duplicateCount,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="type parameter in IndexedPersistenceEncoding">T</a>&gt;&nbsp;commonData,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</code>&nbsp;</td>
@@ -190,16 +191,21 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#getIndexInsertionId--">getIndexInsertionId</a></span>()</code>
-<div class="block">Return the index ID, this is the ID that the entry inserted at given by
- the index</div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionPartitionKey--">getInsertionPartitionKey</a></span>()</code>
+<div class="block">Return the partition key portion of the insertion ID</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#getInsertionSortKey--">getInsertionSortKey</a></span>()</code>
+<div class="block">Return the sort key portion of the insertion ID</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#isDeduplicationEnabled--">isDeduplicationEnabled</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html#isDuplicated--">isDuplicated</a></span>()</code>
 <div class="block">Return a flag indicating if the entry has any duplicates</div>
@@ -234,7 +240,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="IndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentDataset-">
+<a name="IndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentDataset-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -242,7 +248,8 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 <h4>IndexedPersistenceEncoding</h4>
 <pre>public&nbsp;IndexedPersistenceEncoding(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                                   <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexInsertionId,
+                                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionPartitionKey,
+                                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionSortKey,
                                   int&nbsp;duplicateCount,
                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/IndexedPersistenceEncoding.html" title="type parameter in IndexedPersistenceEncoding">T</a>&gt;&nbsp;commonData,
                                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</pre>
@@ -256,18 +263,31 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getIndexInsertionId--">
+<a name="getInsertionPartitionKey--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getIndexInsertionId</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getIndexInsertionId()</pre>
-<div class="block">Return the index ID, this is the ID that the entry inserted at given by
- the index</div>
+<h4>getInsertionPartitionKey</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getInsertionPartitionKey()</pre>
+<div class="block">Return the partition key portion of the insertion ID</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>
-<dd>the index ID</dd>
+<dd>the insertion partition key</dd>
+</dl>
+</li>
+</ul>
+<a name="getInsertionSortKey--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInsertionSortKey</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getInsertionSortKey()</pre>
+<div class="block">Return the sort key portion of the insertion ID</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the insertion sort key</dd>
 </dl>
 </li>
 </ul>
@@ -341,7 +361,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/Persi
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="interface in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DeferredReadCommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

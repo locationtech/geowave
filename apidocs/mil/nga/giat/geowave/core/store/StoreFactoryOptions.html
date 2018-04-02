@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":6,"i3":6,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/StorePersistableRegistry.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloRequiredOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations.config">BigTableOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseRequiredOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryRequiredOptions.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryRequiredOptions</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloRequiredOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html" title="class in mil.nga.giat.geowave.datastore.bigtable.operations.config">BigTableOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/config/CassandraRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.cassandra.operations.config">CassandraRequiredOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBOptions.html" title="class in mil.nga.giat.geowave.datastore.dynamodb">DynamoDBOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseRequiredOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.cli.config">HBaseRequiredOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryRequiredOptions.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryRequiredOptions</a></dd>
 </dl>
 <hr>
 <br>
@@ -176,7 +176,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#createPluginOptions--">createPluginOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -188,14 +188,18 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#getStoreFactory--">getStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#setGeowaveNamespace-java.lang.String-">setGeowaveNamespace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
+<td class="colFirst"><code>abstract <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#getStoreOptions--">getStoreOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions--">validatePluginOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#setGeowaveNamespace-java.lang.String-">setGeowaveNamespace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions--">validatePluginOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#validatePluginOptions-java.util.Properties-">validatePluginOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html?is-external=true" title="class or interface in java.util">Properties</a>&nbsp;properties)</code>
 <div class="block">Method to perform global validation for all plugin options</div>
@@ -307,7 +311,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>createPluginOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;createPluginOptions()</pre>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;createPluginOptions()</pre>
+</li>
+</ul>
+<a name="getStoreOptions--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getStoreOptions</h4>
+<pre>public abstract&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;getStoreOptions()</pre>
 </li>
 </ul>
 <a name="validatePluginOptions--">
@@ -368,7 +381,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/StorePersistableRegistry.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -194,7 +194,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFa
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.cli.config">HBaseOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getHBaseOptions--">getHBaseOptions</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
@@ -210,10 +210,14 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFa
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getStoreFactory--">getStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html#getStoreOptions--">getStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html#setInstanceId-java.lang.String-">setInstanceId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;instanceId)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/config/BigTableOptions.html#setProjectId-java.lang.String-">setProjectId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;projectId)</code>&nbsp;</td>
 </tr>
@@ -376,10 +380,23 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFa
 <a name="getHBaseOptions--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getHBaseOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a>&nbsp;getHBaseOptions()</pre>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.cli.config">HBaseOptions</a>&nbsp;getHBaseOptions()</pre>
+</li>
+</ul>
+<a name="getStoreOptions--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getStoreOptions</h4>
+<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;getStoreOptions()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html#getStoreOptions--">getStoreOptions</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -207,11 +207,15 @@ extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Mergi
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html#getBinary-mil.nga.giat.geowave.core.index.Mergeable-">getBinary</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html#getColumnOptionValue-java.util.Map-">getColumnOptionValue</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html#getMergeable-org.apache.accumulo.core.data.Key-byte:A-">getMergeable</a></span>(org.apache.accumulo.core.data.Key&nbsp;key,
             byte[]&nbsp;binary)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/RowMergingVisibilityCombiner.html#init-org.apache.accumulo.core.iterators.SortedKeyValueIterator-java.util.Map-org.apache.accumulo.core.iterators.IteratorEnvironment-">init</a></span>(org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;&nbsp;source,
     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options,
@@ -223,14 +227,14 @@ extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Mergi
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">MergingVisibilityCombiner</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#getKeyPrefix--">getKeyPrefix</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#transformRange-org.apache.accumulo.core.iterators.SortedKeyValueIterator-org.apache.accumulo.core.iterators.user.TransformingIterator.KVBuffer-">transformRange</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#deepCopy-org.apache.accumulo.core.iterators.IteratorEnvironment-">deepCopy</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#getKeyPrefix--">getKeyPrefix</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#transformRange-org.apache.accumulo.core.iterators.SortedKeyValueIterator-org.apache.accumulo.core.iterators.user.TransformingIterator.KVBuffer-">transformRange</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.accumulo.core.iterators.user.TransformingIterator">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;org.apache.accumulo.core.iterators.user.TransformingIterator</h3>
-<code>canSee, canSeeColumnFamily, computeReseekRange, copyPartialKey, deepCopy, describeOptions, getTopKey, getTopValue, hasTop, includeTransformedKey, isSetAfterPart, next, replaceColumnFamily, replaceColumnQualifier, replaceColumnVisibility, replaceKeyParts, replaceKeyParts, seek, setAuthorizations, setMaxBufferSize, transformKeys, untransformColumnFamilies, validateOptions</code></li>
+<code>canSee, canSeeColumnFamily, computeReseekRange, copyPartialKey, describeOptions, getTopKey, getTopValue, hasTop, includeTransformedKey, isSetAfterPart, next, replaceColumnFamily, replaceColumnQualifier, replaceColumnVisibility, replaceKeyParts, replaceKeyParts, seek, setAuthorizations, setMaxBufferSize, transformKeys, untransformColumnFamilies, validateOptions</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.org.apache.accumulo.core.iterators.WrappingIterator">
@@ -304,6 +308,19 @@ extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Mergi
 </dl>
 </li>
 </ul>
+<a name="getColumnOptionValue-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getColumnOptionValue</h4>
+<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getColumnOptionValue(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;options)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#getColumnOptionValue-java.util.Map-">getColumnOptionValue</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">MergingVisibilityCombiner</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="init-org.apache.accumulo.core.iterators.SortedKeyValueIterator-java.util.Map-org.apache.accumulo.core.iterators.IteratorEnvironment-">
 <!--   -->
 </a>
@@ -318,7 +335,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/Mergi
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code>init</code>&nbsp;in interface&nbsp;<code>org.apache.accumulo.core.iterators.SortedKeyValueIterator&lt;org.apache.accumulo.core.data.Key,org.apache.accumulo.core.data.Value&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>init</code>&nbsp;in class&nbsp;<code>org.apache.accumulo.core.iterators.user.TransformingIterator</code></dd>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html#init-org.apache.accumulo.core.iterators.SortedKeyValueIterator-java.util.Map-org.apache.accumulo.core.iterators.IteratorEnvironment-">init</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingVisibilityCombiner.html" title="class in mil.nga.giat.geowave.datastore.accumulo">MergingVisibilityCombiner</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>

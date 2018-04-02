@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskedFieldInfoComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskedPairComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedDataSet.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -180,7 +180,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#generateFieldSubsetBitmask-mil.nga.giat.geowave.core.store.index.CommonIndexModel-java.util.List-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">generateFieldSubsetBitmask</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;fieldIds,
                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</code>
 <div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
 </td>
@@ -193,6 +193,13 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>static int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#getLowestFieldPosition-byte:A-">getLowestFieldPosition</a></span>(byte[]&nbsp;bitmask)</code>
+<div class="block">Iterates the set (true) bits within the given composite bitmask and
+ generates a list of field positions.</div>
+</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskUtils.html#isAnyBitSet-byte:A-">isAnyBitSet</a></span>(byte[]&nbsp;array)</code>&nbsp;</td>
 </tr>
@@ -310,6 +317,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
+<a name="getLowestFieldPosition-byte:A-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLowestFieldPosition</h4>
+<pre>public static&nbsp;int&nbsp;getLowestFieldPosition(byte[]&nbsp;bitmask)</pre>
+<div class="block">Iterates the set (true) bits within the given composite bitmask and
+ generates a list of field positions.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>compositeBitmask</code> - the composite bitmask</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>a list of field positions</dd>
+</dl>
+</li>
+</ul>
 <a name="generateFieldSubsetBitmask-mil.nga.giat.geowave.core.store.index.CommonIndexModel-java.util.List-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">
 <!--   -->
 </a>
@@ -317,7 +341,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>generateFieldSubsetBitmask</h4>
 <pre>public static&nbsp;byte[]&nbsp;generateFieldSubsetBitmask(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
-                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;fieldIds,
+                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;fieldIds,
                                                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapterAssociatedWithFieldIds)</pre>
 <div class="block">Generates a field subset bitmask for the given index, adapter, and fields</div>
 <dl>
@@ -379,7 +403,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskedFieldInfoComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/BitmaskedPairComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedDataSet.html" title="class in mil.nga.giat.geowave.core.store.flatten"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

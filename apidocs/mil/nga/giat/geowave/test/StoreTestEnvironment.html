@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/test/HBaseTestVisibilityLabelServiceImpl.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../mil/nga/giat/geowave/test/TestDataStoreOptions.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../mil/nga/giat/geowave/test/AccumuloStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">AccumuloStoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/BigtableStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">BigtableStoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">HBaseStoreTestEnvironment</a></dd>
+<dd><a href="../../../../../mil/nga/giat/geowave/test/AccumuloStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">AccumuloStoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/BigtableStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">BigtableStoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/CassandraStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">CassandraStoreTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/DynamoDBTestEnvironment.html" title="class in mil.nga.giat.geowave.test">DynamoDBTestEnvironment</a>, <a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test">HBaseStoreTestEnvironment</a></dd>
 </dl>
 <hr>
 <br>
@@ -160,8 +160,9 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.htm
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreOptions-mil.nga.giat.geowave.test.annotation.GeoWaveTestStore-">getDataStoreOptions</a></span>(<a href="../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html" title="annotation in mil.nga.giat.geowave.test.annotation">GeoWaveTestStore</a>&nbsp;store)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreOptions-mil.nga.giat.geowave.test.annotation.GeoWaveTestStore-java.lang.String:A-">getDataStoreOptions</a></span>(<a href="../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html" title="annotation in mil.nga.giat.geowave.test.annotation">GeoWaveTestStore</a>&nbsp;store,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;profileOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.GeoWaveStoreType.html" title="enum in mil.nga.giat.geowave.test.annotation">GeoWaveTestStore.GeoWaveStoreType</a></code></td>
@@ -244,13 +245,14 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.htm
 <pre>protected abstract&nbsp;void&nbsp;initOptions(<a href="../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</pre>
 </li>
 </ul>
-<a name="getDataStoreOptions-mil.nga.giat.geowave.test.annotation.GeoWaveTestStore-">
+<a name="getDataStoreOptions-mil.nga.giat.geowave.test.annotation.GeoWaveTestStore-java.lang.String:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getDataStoreOptions</h4>
-<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">DataStorePluginOptions</a>&nbsp;getDataStoreOptions(<a href="../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html" title="annotation in mil.nga.giat.geowave.test.annotation">GeoWaveTestStore</a>&nbsp;store)</pre>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getDataStoreOptions(<a href="../../../../../mil/nga/giat/geowave/test/annotation/GeoWaveTestStore.html" title="annotation in mil.nga.giat.geowave.test.annotation">GeoWaveTestStore</a>&nbsp;store,
+                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;profileOptions)</pre>
 </li>
 </ul>
 </li>
@@ -281,7 +283,7 @@ implements <a href="../../../../../mil/nga/giat/geowave/test/TestEnvironment.htm
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../mil/nga/giat/geowave/test/HBaseStoreTestEnvironment.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../mil/nga/giat/geowave/test/HBaseTestVisibilityLabelServiceImpl.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../mil/nga/giat/geowave/test/TestDataStoreOptions.html" title="class in mil.nga.giat.geowave.test"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase.index.secondary">HBaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemorySecondaryIndexDataStore</a></dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo.index.secondary">AccumuloSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreImpl.html" title="class in mil.nga.giat.geowave.core.store.metadata">SecondaryIndexStoreImpl</a></dd>
 </dl>
 <hr>
 <br>
@@ -127,21 +127,22 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">deleteEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;attributes)</code>&nbsp;</td>
+           <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveValue.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">deleteJoinEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">deleteJoinEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId)</code>&nbsp;</td>
+               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
+               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
@@ -170,25 +171,25 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">storeEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-          <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility,
-          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;attributes)</code>
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveValue.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</code>
 <div class="block">Stores a secondary index entry that will not require a join against the
  primary index upon lookup.</div>
 </td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">storeJoinEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html#storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">storeJoinEntry</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId,
               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
               <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</code>
 <div class="block">Stores a secondary index entry that will require a join against the
  primary index upon lookup.</div>
@@ -223,7 +224,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -234,7 +235,8 @@ var activeTableTab = "activeTableTab";
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</pre>
 <div class="block">Stores a secondary index entry that will require a join against the
  primary index upon lookup.</div>
@@ -244,13 +246,13 @@ var activeTableTab = "activeTableTab";
 <dd><code>indexedAttributeValue</code> - </dd>
 <dd><code>adapterId</code> - </dd>
 <dd><code>indexedAttributeFieldId</code> - </dd>
-<dd><code>primaryIndexId</code> - </dd>
-<dd><code>primaryIndexRowId</code> - </dd>
+<dd><code>primaryIndexPartitionKey</code> - </dd>
+<dd><code>primaryIndexSortKey</code> - </dd>
 <dd><code>attributeVisibility</code> - </dd>
 </dl>
 </li>
 </ul>
-<a name="storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">
+<a name="storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -261,8 +263,7 @@ var activeTableTab = "activeTableTab";
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;attributes)</pre>
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveValue.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</pre>
 <div class="block">Stores a secondary index entry that will not require a join against the
  primary index upon lookup.</div>
 <dl>
@@ -272,8 +273,7 @@ var activeTableTab = "activeTableTab";
 <dd><code>adapterId</code> - </dd>
 <dd><code>indexedAttributeFieldId</code> - </dd>
 <dd><code>dataId</code> - </dd>
-<dd><code>attributeVisibility</code> - </dd>
-<dd><code>attributes</code> - </dd>
+<dd><code>originalFields</code> - </dd>
 </dl>
 </li>
 </ul>
@@ -302,7 +302,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -312,11 +312,12 @@ var activeTableTab = "activeTableTab";
                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeValue,
                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexRowId)</pre>
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexPartitionKey,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexSortKey,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;attributeVisibility)</pre>
 </li>
 </ul>
-<a name="deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">
+<a name="deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -327,7 +328,7 @@ var activeTableTab = "activeTableTab";
                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexedAttributeFieldId,
                  <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.FieldInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo.FieldInfo</a>&lt;?&gt;&gt;&nbsp;attributes)</pre>
+                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveValue.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveValue</a>...&nbsp;originalFields)</pre>
 </li>
 </ul>
 <a name="flush--">

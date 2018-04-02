@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -134,8 +134,9 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">FitToIndexGridCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
-                      <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">FitToIndexGridCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
                       <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                       org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                       com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
@@ -212,36 +213,36 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getGridGeometry--">getGridGeometry</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i12" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getInsertionId--">getInsertionId</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getNumOverviews--">getNumOverviews</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getNumSampleDimensions--">getNumSampleDimensions</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>int[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOptimalDataBlockSizes--">getOptimalDataBlockSizes</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOriginalCoverage--">getOriginalCoverage</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>org.opengis.geometry.Envelope</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOriginalEnvelope--">getOriginalEnvelope</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOverview-int-">getOverview</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
-<tr id="i19" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridGeometry</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getOverviewGridGeometry-int-">getOverviewGridGeometry</a></span>(int&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getPartitionKey--">getPartitionKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a></code></td>
@@ -269,10 +270,14 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getSampleDimension-int-">getSampleDimension</a></span>(int&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i26" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getSortKey--">getSortKey</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#getSources--">getSources</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i27" class="rowColor">
+<tr id="i28" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/raster/FitToIndexGridCoverage.html#isDataEditable--">isDataEditable</a></span>()</code>&nbsp;</td>
 </tr>
@@ -298,14 +303,15 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">
+<a name="FitToIndexGridCoverage-org.opengis.coverage.grid.GridCoverage-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.adapter.raster.Resolution-org.opengis.geometry.Envelope-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FitToIndexGridCoverage</h4>
 <pre>public&nbsp;FitToIndexGridCoverage(org.opengis.coverage.grid.GridCoverage&nbsp;gridCoverage,
-                              <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId,
+                              <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                              <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
                               <a href="../../../../../../mil/nga/giat/geowave/adapter/raster/Resolution.html" title="class in mil.nga.giat.geowave.adapter.raster">Resolution</a>&nbsp;resolution,
                               org.opengis.geometry.Envelope&nbsp;originalEnvelope,
                               com.vividsolutions.jts.geom.Geometry&nbsp;footprintWorldGeometry,
@@ -348,13 +354,22 @@ implements org.opengis.coverage.grid.GridCoverage</pre>
 <pre>public&nbsp;com.vividsolutions.jts.geom.Geometry&nbsp;getFootprintScreenGeometry()</pre>
 </li>
 </ul>
-<a name="getInsertionId--">
+<a name="getPartitionKey--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getInsertionId</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getInsertionId()</pre>
+<h4>getPartitionKey</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPartitionKey()</pre>
+</li>
+</ul>
+<a name="getSortKey--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSortKey</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getSortKey()</pre>
 </li>
 </ul>
 <a name="getResolution--">

@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.core.store.BaseStoreFactory">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -100,10 +100,10 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloFactory</a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store.BaseStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.metadata">mil.nga.giat.geowave.core.store.metadata.SecondaryIndexStoreFactory</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStoreFactory</li>
@@ -124,13 +124,28 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AccumuloSecondaryIndexDataStoreFactory</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.metadata">SecondaryIndexStoreFactory</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.mil.nga.giat.geowave.core.store.BaseStoreFactory">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">BaseStoreFactory</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html#helper">helper</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -143,7 +158,9 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html#AccumuloSecondaryIndexDataStoreFactory--">AccumuloSecondaryIndexDataStoreFactory</a></span>()</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStoreFactory.html#AccumuloSecondaryIndexDataStoreFactory-java.lang.String-java.lang.String-mil.nga.giat.geowave.core.store.StoreFactoryHelper-">AccumuloSecondaryIndexDataStoreFactory</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;description,
+                                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryHelper</a>&nbsp;helper)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -169,18 +186,11 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloStoreFactory">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.BaseStoreFactory">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloStoreFactory</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloStoreFactory.html#createOperations-mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions-">createOperations</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloFactory</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#createOptionsInstance--">createOptionsInstance</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getDescription--">getDescription</a>, <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getType--">getType</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">BaseStoreFactory</a></h3>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html#createOptionsInstance--">createOptionsInstance</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html#getDescription--">getDescription</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html#getType--">getType</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -188,20 +198,6 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.GenericStoreFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createOptionsInstance--">createOptionsInstance</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.GenericFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html#getDescription--">getDescription</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html#getType--">getType</a></code></li>
 </ul>
 </li>
 </ul>
@@ -217,13 +213,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloSecondaryIndexDataStoreFactory--">
+<a name="AccumuloSecondaryIndexDataStoreFactory-java.lang.String-java.lang.String-mil.nga.giat.geowave.core.store.StoreFactoryHelper-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloSecondaryIndexDataStoreFactory</h4>
-<pre>public&nbsp;AccumuloSecondaryIndexDataStoreFactory()</pre>
+<pre>public&nbsp;AccumuloSecondaryIndexDataStoreFactory(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
+                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;description,
+                                              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryHelper</a>&nbsp;helper)</pre>
 </li>
 </ul>
 </li>
@@ -244,6 +242,12 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">GenericStoreFactory</a></code></span></div>
 <div class="block">Create the store, w/the options instance that was returned and populated
  w/createOptionsInstance().</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreFactory.html" title="class in mil.nga.giat.geowave.core.store.metadata">SecondaryIndexStoreFactory</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -300,7 +304,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.core.store.BaseStoreFactory">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>

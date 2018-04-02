@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputFormat.html" title="class in mil.nga.giat.geowave.mapreduce.input"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="class in mil.nga.giat.geowave.mapreduce.input"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" target="_top">Frames</a></li>
@@ -166,6 +166,15 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
                <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-mil.nga.giat.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+               <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+               <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#GeoWaveInputKey-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-mil.nga.giat.geowave.core.index.ByteArrayId-">GeoWaveInputKey</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+               <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
+</tr>
 </table>
 </li>
 </ul>
@@ -194,26 +203,30 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#getInsertionId--">getInsertionId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#getGeoWaveKey--">getGeoWaveKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#getPartitionAndSortKey-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getPartitionAndSortKey</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#hashCode--">hashCode</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#readFields-java.io.DataInput-">readFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataInput.html?is-external=true" title="class or interface in java.io">DataInput</a>&nbsp;input)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#setDataId-mil.nga.giat.geowave.core.index.ByteArrayId-">setDataId</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#setInsertionId-mil.nga.giat.geowave.core.index.ByteArrayId-">setInsertionId</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</code>&nbsp;</td>
-</tr>
 <tr id="i8" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#setGeoWaveKey-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-">setGeoWaveKey</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key)</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html#write-java.io.DataOutput-">write</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/DataOutput.html?is-external=true" title="class or interface in java.io">DataOutput</a>&nbsp;output)</code>&nbsp;</td>
 </tr>
@@ -255,14 +268,35 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <pre>public&nbsp;GeoWaveInputKey()</pre>
 </li>
 </ul>
+<a name="GeoWaveInputKey-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GeoWaveInputKey</h4>
+<pre>public&nbsp;GeoWaveInputKey(<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+                       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
+</li>
+</ul>
 <a name="GeoWaveInputKey-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GeoWaveInputKey</h4>
+<pre>public&nbsp;GeoWaveInputKey(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
+</li>
+</ul>
+<a name="GeoWaveInputKey-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveInputKey</h4>
 <pre>public&nbsp;GeoWaveInputKey(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId)</pre>
+                       <a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+                       <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</pre>
 </li>
 </ul>
 </li>
@@ -273,22 +307,31 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getInsertionId--">
+<a name="getPartitionAndSortKey-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getInsertionId</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getInsertionId()</pre>
+<h4>getPartitionAndSortKey</h4>
+<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;&nbsp;getPartitionAndSortKey(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
-<a name="setInsertionId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="getGeoWaveKey--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setInsertionId</h4>
-<pre>public&nbsp;void&nbsp;setInsertionId(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId)</pre>
+<h4>getGeoWaveKey</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;getGeoWaveKey()</pre>
+</li>
+</ul>
+<a name="setGeoWaveKey-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGeoWaveKey</h4>
+<pre>public&nbsp;void&nbsp;setGeoWaveKey(<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key)</pre>
 </li>
 </ul>
 <a name="setDataId-mil.nga.giat.geowave.core.index.ByteArrayId-">
@@ -415,7 +458,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/GeoWaveKey.htm
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputFormat.html" title="class in mil.nga.giat.geowave.mapreduce.input"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/InputFormatIteratorWrapper.html" title="class in mil.nga.giat.geowave.mapreduce.input"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" target="_top">Frames</a></li>

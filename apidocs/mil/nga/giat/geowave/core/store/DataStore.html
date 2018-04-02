@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactory.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/DataStore.html" target="_top">Frames</a></li>
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStore</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html" title="class in mil.nga.giat.geowave.core.store.base">BaseDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStore.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBDataStore.html" title="class in mil.nga.giat.geowave.datastore.dynamodb">DynamoDBDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseDataStore</a></dd>
 </dl>
 <hr>
 <br>
@@ -132,8 +132,8 @@ var activeTableTab = "activeTableTab";
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">createWriter</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html#createWriter-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">createWriter</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;adapter,
             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;index)</code>
 <div class="block">Returns an index writer to perform batched write operations</div>
 </td>
@@ -170,15 +170,15 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="createWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">
+<a name="createWriter-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>createWriter</h4>
-<pre>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;createWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                             <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;index)
-                      throws <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
+<pre>&lt;T&gt;&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;&nbsp;createWriter(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;adapter,
+                                <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;index)
+                         throws <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/exceptions/MismatchedIndexToAdapterMapping.html" title="class in mil.nga.giat.geowave.core.store.adapter.exceptions">MismatchedIndexToAdapterMapping</a></pre>
 <div class="block">Returns an index writer to perform batched write operations</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -275,7 +275,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIteratorWrapper.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactory.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/DataStore.html" target="_top">Frames</a></li>

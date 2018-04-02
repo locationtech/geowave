@@ -93,14 +93,14 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.core.store.callback</div>
-<h2 title="Class DeleteCallbackList" class="title">Class DeleteCallbackList&lt;T&gt;</h2>
+<h2 title="Class DeleteCallbackList" class="title">Class DeleteCallbackList&lt;T,R extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.core.store.callback.DeleteCallbackList&lt;T&gt;</li>
+<li>mil.nga.giat.geowave.core.store.callback.DeleteCallbackList&lt;T,R&gt;</li>
 </ul>
 </li>
 </ul>
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T,R&gt;</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">DeleteCallbackList&lt;T&gt;</span>
+<pre>public class <span class="typeNameLabel">DeleteCallbackList&lt;T,R extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T,R&gt;, <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a></pre>
 </li>
 </ul>
 </div>
@@ -134,7 +134,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callbac
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html#DeleteCallbackList-java.util.List-">DeleteCallbackList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&gt;&gt;&nbsp;callbacks)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html#DeleteCallbackList-java.util.List-">DeleteCallbackList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a>&gt;&gt;&nbsp;callbacks)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -157,9 +157,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callbac
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryDeleted</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&nbsp;entry)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html#entryDeleted-T-R...-">entryDeleted</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&nbsp;entry,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a>...&nbsp;rows)</code>
+<div class="block">This will be called after an entry is successfully deleted with the row
  IDs that were used</div>
 </td>
 </tr>
@@ -191,7 +191,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callbac
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DeleteCallbackList</h4>
-<pre>public&nbsp;DeleteCallbackList(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&gt;&gt;&nbsp;callbacks)</pre>
+<pre>public&nbsp;DeleteCallbackList(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a>&gt;&gt;&nbsp;callbacks)</pre>
 </li>
 </ul>
 </li>
@@ -202,26 +202,24 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/callbac
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-java.lang.Object-">
+<a name="entryDeleted-java.lang.Object-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">
 <!--   -->
-</a><a name="entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">
+</a><a name="entryDeleted-T-R...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryDeleted</h4>
-<pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">DeleteCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
+<pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&nbsp;entry,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a>...&nbsp;rows)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">DeleteCallback</a></code></span></div>
+<div class="block">This will be called after an entry is successfully deleted with the row
  IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">T</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallbackList.html" title="type parameter in DeleteCallbackList">R</a> extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entryInfo</code> - information regarding what was written to include the
-            insertion row IDs, fields, and visibilities</dd>
-<dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>entry</code> - the entry that was deleted</dd>
 </dl>
 </li>
 </ul>

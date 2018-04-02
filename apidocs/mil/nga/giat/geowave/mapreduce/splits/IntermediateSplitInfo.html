@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -153,7 +153,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html#IntermediateSplitInfo-java.util.Map-mil.nga.giat.geowave.mapreduce.splits.SplitsProvider-">IntermediateSplitInfo</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>&gt;&gt;&nbsp;splitInfo,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html#IntermediateSplitInfo-java.util.Map-mil.nga.giat.geowave.mapreduce.splits.SplitsProvider-">IntermediateSplitInfo</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitInfo.html" title="class in mil.nga.giat.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
                      <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html" title="class in mil.nga.giat.geowave.mapreduce.splits">SplitsProvider</a>&nbsp;splitsProvider)</code>&nbsp;</td>
 </tr>
 </table>
@@ -185,7 +185,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveInputSplit.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveInputSplit</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html#toFinalSplit--">toFinalSplit</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.html#toFinalSplit-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-java.util.Map-java.lang.String...-">toFinalSplit</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&gt;&nbsp;indexIdToAdaptersMap,
+            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -215,7 +217,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <ul class="blockListLast">
 <li class="blockList">
 <h4>IntermediateSplitInfo</h4>
-<pre>public&nbsp;IntermediateSplitInfo(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>&gt;&gt;&nbsp;splitInfo,
+<pre>public&nbsp;IntermediateSplitInfo(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitInfo.html" title="class in mil.nga.giat.geowave.mapreduce.splits">SplitInfo</a>&gt;&nbsp;splitInfo,
                              <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html" title="class in mil.nga.giat.geowave.mapreduce.splits">SplitsProvider</a>&nbsp;splitsProvider)</pre>
 </li>
 </ul>
@@ -227,13 +229,15 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="toFinalSplit--">
+<a name="toFinalSplit-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-java.util.Map-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toFinalSplit</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveInputSplit.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveInputSplit</a>&nbsp;toFinalSplit()</pre>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveInputSplit.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveInputSplit</a>&nbsp;toFinalSplit(<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&gt;&nbsp;indexIdToAdaptersMap,
+                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
 <a name="compareTo-mil.nga.giat.geowave.mapreduce.splits.IntermediateSplitInfo-">
@@ -303,7 +307,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Comparabl
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/IntermediateSplitInfo.IndexRangeLocation.html" title="class in mil.nga.giat.geowave.mapreduce.splits"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

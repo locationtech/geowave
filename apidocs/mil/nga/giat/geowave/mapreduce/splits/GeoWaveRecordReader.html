@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":6};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":9,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -120,13 +120,9 @@ var activeTableTab = "activeTableTab";
 <dt>All Implemented Interfaces:</dt>
 <dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></dd>
 </dl>
-<dl>
-<dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/mapreduce/GeoWaveAccumuloRecordReader.html" title="class in mil.nga.giat.geowave.datastore.accumulo.mapreduce">GeoWaveAccumuloRecordReader</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/mapreduce/GeoWaveHBaseRecordReader.html" title="class in mil.nga.giat.geowave.datastore.hbase.mapreduce">GeoWaveHBaseRecordReader</a></dd>
-</dl>
 <hr>
 <br>
-<pre>public abstract class <span class="typeNameLabel">GeoWaveRecordReader&lt;T&gt;</span>
+<pre>public class <span class="typeNameLabel">GeoWaveRecordReader&lt;T&gt;</span>
 extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;</pre>
 <div class="block">This class is used by the GeoWaveInputFormat to read data from a GeoWave data
  store.</div>
@@ -176,32 +172,48 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#adapterStore">adapterStore</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#aimStore">aimStore</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#currentGeoWaveKey">currentGeoWaveKey</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#currentGeoWaveRangeIndexPair">currentGeoWaveRangeIndexPair</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#currentValue">currentValue</a></span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html" title="class in mil.nga.giat.geowave.core.store.base">BaseDataStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#dataStore">dataStore</a></span></code>&nbsp;</td>
+</tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#indexStore">indexStore</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#isOutputWritable">isOutputWritable</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#iterator">iterator</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected static org.slf4j.Logger</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#LOGGER">LOGGER</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>protected long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#numKeysRead">numKeysRead</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#operations">operations</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.ProgressPerRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRecordReader.ProgressPerRange</a>&gt;</code></td>
@@ -234,10 +246,13 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#GeoWaveRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">GeoWaveRecordReader</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#GeoWaveRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations-">GeoWaveRecordReader</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
                    <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
                    boolean&nbsp;isOutputWritable,
-                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                   <a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -249,7 +264,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t3" class="tableTab"><span><a href="javascript:show(4);">Abstract Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -259,8 +274,8 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.Iterator-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&gt;&gt;&nbsp;inputs,
+<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#concatenateWithCallback-java.util.Iterator-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">concatenateWithCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
                        <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</code>
 <div class="block">Mostly guava's concatenate method, but there is a need for a callback
  between iterators</div>
@@ -275,6 +290,10 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#getCurrentValue--">getCurrentValue</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code>float</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#getProgress--">getProgress</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#initialize-org.apache.hadoop.mapreduce.InputSplit-org.apache.hadoop.mapreduce.TaskAttemptContext-">initialize</a></span>(org.apache.hadoop.mapreduce.InputSplit&nbsp;inSplit,
           org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;attempt)</code>
@@ -282,21 +301,19 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
  configuration.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-mil.nga.giat.geowave.core.store.query.QueryOptions-">queryRange</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;i,
-          <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#nextKeyValue--">nextKeyValue</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-">queryRange</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+          <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-          <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;rangeQueryOptions)</code>&nbsp;</td>
+          <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;rangeQueryOptions,
+          boolean&nbsp;mixedVisibility)</code>&nbsp;</td>
 </tr>
 </table>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.org.apache.hadoop.mapreduce.RecordReader">
-<!--   -->
-</a>
-<h3>Methods inherited from class&nbsp;org.apache.hadoop.mapreduce.RecordReader</h3>
-<code>getProgress, nextKeyValue</code></li>
-</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
@@ -420,10 +437,46 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <a name="adapterStore">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>adapterStore</h4>
 <pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a> adapterStore</pre>
+</li>
+</ul>
+<a name="aimStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>aimStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a> aimStore</pre>
+</li>
+</ul>
+<a name="indexStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>indexStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a> indexStore</pre>
+</li>
+</ul>
+<a name="dataStore">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dataStore</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html" title="class in mil.nga.giat.geowave.core.store.base">BaseDataStore</a> dataStore</pre>
+</li>
+</ul>
+<a name="operations">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>operations</h4>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a> operations</pre>
 </li>
 </ul>
 </li>
@@ -434,7 +487,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GeoWaveRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">
+<a name="GeoWaveRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -443,7 +496,10 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <pre>public&nbsp;GeoWaveRecordReader(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
                            <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
                            boolean&nbsp;isOutputWritable,
-                           <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
+                           <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                           <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
+                           <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                           <a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a>&nbsp;operations)</pre>
 </li>
 </ul>
 </li>
@@ -473,16 +529,17 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 </dl>
 </li>
 </ul>
-<a name="queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-mil.nga.giat.geowave.core.store.query.QueryOptions-">
+<a name="queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-mil.nga.giat.geowave.core.store.query.QueryOptions-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>queryRange</h4>
-<pre>protected abstract&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&nbsp;queryRange(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;i,
-                                                   <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
-                                                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-                                                   <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;rangeQueryOptions)</pre>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;&nbsp;queryRange(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                                                     <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
+                                                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
+                                                                     <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;rangeQueryOptions,
+                                                                     boolean&nbsp;mixedVisibility)</pre>
 </li>
 </ul>
 <a name="close--">
@@ -520,6 +577,24 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 </dl>
 </li>
 </ul>
+<a name="nextKeyValue--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>nextKeyValue</h4>
+<pre>public&nbsp;boolean&nbsp;nextKeyValue()
+                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>nextKeyValue</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
+</dl>
+</li>
+</ul>
 <a name="getCurrentValue--">
 <!--   -->
 </a>
@@ -541,13 +616,29 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <a name="concatenateWithCallback-java.util.Iterator-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader.NextRangeCallback-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>concatenateWithCallback</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;concatenateWithCallback(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;?&gt;&gt;&gt;&nbsp;inputs,
-                                                          <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</pre>
+<pre>protected static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&nbsp;concatenateWithCallback(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/RangeLocationPair.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RangeLocationPair</a>,<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,T&gt;&gt;&gt;&gt;&nbsp;inputs,
+                                                                                    <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.NextRangeCallback.html" title="interface in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRecordReader.NextRangeCallback</a>&nbsp;nextRangeCallback)</pre>
 <div class="block">Mostly guava's concatenate method, but there is a need for a callback
  between iterators</div>
+</li>
+</ul>
+<a name="getProgress--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getProgress</h4>
+<pre>public&nbsp;float&nbsp;getProgress()
+                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code>getProgress</code>&nbsp;in class&nbsp;<code>org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

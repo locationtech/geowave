@@ -142,6 +142,14 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.server">mil.nga.giat.geowave.datastore.hbase.server</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -631,10 +639,6 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeDataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;</span></code>
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
@@ -651,29 +655,25 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">RowRangeDataStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeDataStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">FixedBinNumericStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">RowRangeHistogramStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">MaxDuplicatesStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/MaxDuplicatesStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">CountDataStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/CountDataStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">NumericRangeDataStatistics.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;statistics)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">DuplicateEntryCount.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
 </tr>
@@ -853,6 +853,65 @@
 <tr class="rowColor">
 <td class="colFirst"><code>protected byte[]</code></td>
 <td class="colLast"><span class="typeNameLabel">MergingCombiner.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/MergingCombiner.html#getBinary-mil.nga.giat.geowave.core.index.Mergeable-">getBinary</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#aggregateServerSide-mil.nga.giat.geowave.core.store.operations.ReaderParams-">aggregateServerSide</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.server">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/package-summary.html">mil.nga.giat.geowave.datastore.hbase.server</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/package-summary.html">mil.nga.giat.geowave.datastore.hbase.server</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></td>
+<td class="colLast"><span class="typeNameLabel">MergingServerOp.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/MergingServerOp.html#getMergeable-org.apache.hadoop.hbase.Cell-byte:A-">getMergeable</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
+            byte[]&nbsp;bytes)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></td>
+<td class="colLast"><span class="typeNameLabel">RowMergingServerOp.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/RowMergingServerOp.html#getMergeable-org.apache.hadoop.hbase.Cell-byte:A-">getMergeable</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
+            byte[]&nbsp;bytes)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/package-summary.html">mil.nga.giat.geowave.datastore.hbase.server</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colLast"><span class="typeNameLabel">MergingServerOp.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/MergingServerOp.html#getBinary-mil.nga.giat.geowave.core.index.Mergeable-">getBinary</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected byte[]</code></td>
+<td class="colLast"><span class="typeNameLabel">RowMergingServerOp.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/server/RowMergingServerOp.html#getBinary-mil.nga.giat.geowave.core.index.Mergeable-">getBinary</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;mergeable)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

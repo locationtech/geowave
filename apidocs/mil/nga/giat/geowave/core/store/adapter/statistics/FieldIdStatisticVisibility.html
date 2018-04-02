@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/EmptyStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldTypeStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" target="_top">Frames</a></li>
@@ -134,7 +134,9 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Entr
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html#FieldIdStatisticVisibility-mil.nga.giat.geowave.core.index.ByteArrayId-">FieldIdStatisticVisibility</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html#FieldIdStatisticVisibility-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">FieldIdStatisticVisibility</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -153,8 +155,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Entr
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html#getVisibility-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">getVisibility</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&nbsp;entry)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html#getVisibility-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">getVisibility</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&nbsp;entry,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -178,13 +180,15 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Entr
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="FieldIdStatisticVisibility-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="FieldIdStatisticVisibility-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>FieldIdStatisticVisibility</h4>
-<pre>public&nbsp;FieldIdStatisticVisibility(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<pre>public&nbsp;FieldIdStatisticVisibility(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId,
+                                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter)</pre>
 </li>
 </ul>
 </li>
@@ -195,19 +199,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Entr
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getVisibility-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-java.lang.Object-">
+<a name="getVisibility-java.lang.Object-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">
 <!--   -->
-</a><a name="getVisibility-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">
+</a><a name="getVisibility-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getVisibility</h4>
-<pre>public&nbsp;byte[]&nbsp;getVisibility(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&nbsp;entry)</pre>
+<pre>public&nbsp;byte[]&nbsp;getVisibility(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&nbsp;entry,
+                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html#getVisibility-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">getVisibility</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html#getVisibility-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">getVisibility</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" title="type parameter in FieldIdStatisticVisibility">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -240,7 +244,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/Entr
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/EmptyStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FieldTypeStatisticVisibility.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/FixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/core/store/adapter/statistics/FieldIdStatisticVisibility.html" target="_top">Frames</a></li>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,8 +49,8 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" target="_top">Frames</a></li>
@@ -113,7 +113,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/config/CassandraOptions.html" title="class in mil.nga.giat.geowave.datastore.cassandra.operations.config">CassandraOptions</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.cli.config">HBaseOptions</a></dd>
 </dl>
 <hr>
 <br>
@@ -148,17 +148,21 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreO
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistAdapter">persistAdapter</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistAdapter">persistAdapter</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistIndex">persistIndex</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistIndex">persistIndex</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#useAltIndex">useAltIndex</a></span></code>&nbsp;</td>
 </tr>
@@ -216,29 +220,37 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreO
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isUseAltIndex--">isUseAltIndex</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setCreateTable-boolean-">setCreateTable</a></span>(boolean&nbsp;createTable)</code>&nbsp;</td>
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isUseAltIndex--">isUseAltIndex</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a></span>(boolean&nbsp;enableBlockCache)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setCreateTable-boolean-">setCreateTable</a></span>(boolean&nbsp;createTable)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistAdapter-boolean-">setPersistAdapter</a></span>(boolean&nbsp;persistAdapter)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a></span>(boolean&nbsp;enableBlockCache)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a></span>(boolean&nbsp;persistDataStatistics)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistAdapter-boolean-">setPersistAdapter</a></span>(boolean&nbsp;persistAdapter)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistIndex-boolean-">setPersistIndex</a></span>(boolean&nbsp;persistIndex)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a></span>(boolean&nbsp;persistDataStatistics)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistIndex-boolean-">setPersistIndex</a></span>(boolean&nbsp;persistIndex)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a></span>(boolean&nbsp;enableServerSideLibrary)</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setUseAltIndex-boolean-">setUseAltIndex</a></span>(boolean&nbsp;useAltIndex)</code>&nbsp;</td>
 </tr>
@@ -312,10 +324,19 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreO
 <a name="enableBlockCache">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>enableBlockCache</h4>
 <pre>protected&nbsp;boolean enableBlockCache</pre>
+</li>
+</ul>
+<a name="enableServerSideLibrary">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>enableServerSideLibrary</h4>
+<pre>protected&nbsp;boolean enableServerSideLibrary</pre>
 </li>
 </ul>
 </li>
@@ -469,10 +490,32 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreO
 <a name="setEnableBlockCache-boolean-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setEnableBlockCache</h4>
 <pre>public&nbsp;void&nbsp;setEnableBlockCache(boolean&nbsp;enableBlockCache)</pre>
+</li>
+</ul>
+<a name="isServerSideLibraryEnabled--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isServerSideLibraryEnabled</h4>
+<pre>public&nbsp;boolean&nbsp;isServerSideLibraryEnabled()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="setServerSideLibraryEnabled-boolean-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setServerSideLibraryEnabled</h4>
+<pre>public&nbsp;void&nbsp;setServerSideLibraryEnabled(boolean&nbsp;enableServerSideLibrary)</pre>
 </li>
 </ul>
 </li>
@@ -503,8 +546,8 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreO
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" target="_top">Frames</a></li>

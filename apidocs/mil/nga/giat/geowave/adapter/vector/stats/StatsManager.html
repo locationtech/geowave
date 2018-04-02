@@ -163,8 +163,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
-        <a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">addStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Adds/Replaces a stats object for the given adapter <br>
  Supports object replacement.</div>
 </td>
@@ -184,7 +184,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html#getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>
 <div class="block">Get a visibility handler for the specified statistics object</div>
 </td>
 </tr>
@@ -277,13 +279,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getVisibilityHandler</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                                                                                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;adapter,
+                                                                                             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
 <div class="block">Get a visibility handler for the specified statistics object</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
@@ -293,14 +297,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.store.EntryVisibilityHandler-">
+<a name="addStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addStats</h4>
 <pre>public&nbsp;void&nbsp;addStats(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;statsObj,
-                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;visibilityHandler)</pre>
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
 <div class="block">Adds/Replaces a stats object for the given adapter <br>
  Supports object replacement.</div>
 <dl>

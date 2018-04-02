@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -204,18 +204,28 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDa
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                     int&nbsp;position)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                         <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a writer for an individual field given the ID.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="interface in mil.nga.giat.geowave.core.store.adapter">NativeFieldHandler.RowBuilder</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#newBuilder--">newBuilder</a></span>()</code>&nbsp;</td>
 </tr>
@@ -225,7 +235,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDa
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.adapter.vector.<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#createDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#createWritableSerializer--">createWritableSerializer</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#decodeCRS-java.lang.String-">decodeCRS</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataFromBinary-byte:A-">defaultTypeDataFromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataToBinary--">defaultTypeDataToBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#encode-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">encode</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getAdapterId--">getAdapterId</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDataId-org.opengis.feature.simple.SimpleFeature-">getDataId</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getFeatureType--">getFeatureType</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getSupportedSecondaryIndices--">getSupportedSecondaryIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getTimeDescriptors--">getTimeDescriptors</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getTimeRangeHandler-org.opengis.feature.simple.SimpleFeatureType-">getTimeRangeHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#hasTemporalConstraints--">hasTemporalConstraints</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#inferTimeAttributeDescriptor-org.opengis.feature.simple.SimpleFeatureType-">inferTimeAttributeDescriptor</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#init-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#init-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#isSupported-org.opengis.feature.simple.SimpleFeature-">isSupported</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#resetTimeDescriptors--">resetTimeDescriptors</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#setNamespace-java.lang.String-">setNamespace</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#createDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-">createDataStatistics</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#createWritableSerializer--">createWritableSerializer</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#decodeCRS-java.lang.String-">decodeCRS</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataFromBinary-byte:A-">defaultTypeDataFromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#defaultTypeDataToBinary--">defaultTypeDataToBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#encode-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">encode</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getAdapterId--">getAdapterId</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDataId-org.opengis.feature.simple.SimpleFeature-">getDataId</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDefaultTypeMatchingHandlers-java.lang.Object-">getDefaultTypeMatchingHandlers</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getDimensionFieldIds-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">getDimensionFieldIds</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getFeatureType--">getFeatureType</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getSupportedSecondaryIndices--">getSupportedSecondaryIndices</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getSupportedStatisticsTypes--">getSupportedStatisticsTypes</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getTimeDescriptors--">getTimeDescriptors</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getTimeRangeHandler-org.opengis.feature.simple.SimpleFeatureType-">getTimeRangeHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#hasTemporalConstraints--">hasTemporalConstraints</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#inferTimeAttributeDescriptor-org.opengis.feature.simple.SimpleFeatureType-">inferTimeAttributeDescriptor</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#init-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#init-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">init</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#isSupported-org.opengis.feature.simple.SimpleFeature-">isSupported</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#resetTimeDescriptors--">resetTimeDescriptors</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#setNamespace-java.lang.String-">setNamespace</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter">
@@ -385,6 +395,38 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDa
 <dd><code>fieldId</code> - the unique field ID</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>Field Writer for the given Field ID</dd>
+</dl>
+</li>
+</ul>
+<a name="getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPositionOfOrderedField</h4>
+<pre>public&nbsp;int&nbsp;getPositionOfOrderedField(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                     <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getFieldIdForPosition</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getFieldIdForPosition(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                                         int&nbsp;position)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;</code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureDataAdapter.html" title="class in mil.nga.giat.geowave.adapter.vector">FeatureDataAdapter</a></code></dd>
 </dl>
 </li>
 </ul>

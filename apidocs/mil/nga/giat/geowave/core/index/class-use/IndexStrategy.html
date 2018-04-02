@@ -169,6 +169,16 @@
 <div class="block">Interface which defines a numeric index strategy.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/PartitionIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">PartitionIndexStrategy</a>&lt;QueryRangeType extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a>,EntryRangeType&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/SortedIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">SortedIndexStrategy</a>&lt;QueryRangeType extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/QueryConstraints.html" title="interface in mil.nga.giat.geowave.core.index">QueryConstraints</a>,EntryRangeType&gt;</span></code>
+<div class="block">Interface which defines an index strategy.</div>
+</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
@@ -194,6 +204,10 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.core.index">NumericIndexStrategyWrapper</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/PartitionIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.core.index">PartitionIndexStrategyWrapper</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -320,32 +334,6 @@
 </tr>
 </tbody>
 </table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="type parameter in Index">QueryRangeType</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="type parameter in Index">EntryRangeType</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">Index.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexMetaDataSet.html#IndexMetaDataSet-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.IndexStrategy-">IndexMetaDataSet</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId,
-                <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">IndexStrategy</a>&lt;?,?&gt;&nbsp;indexStrategy)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.index.numeric">
 <!--   -->
@@ -361,10 +349,6 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/numeric/NumericFieldIndexStrategy.html" title="class in mil.nga.giat.geowave.core.store.index.numeric">NumericFieldIndexStrategy</a></span></code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/numeric/NumericIndexStrategy.html" title="class in mil.nga.giat.geowave.core.store.index.numeric">NumericIndexStrategy</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

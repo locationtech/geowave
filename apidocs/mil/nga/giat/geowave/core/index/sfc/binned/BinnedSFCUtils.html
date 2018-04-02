@@ -160,7 +160,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/SinglePartitionQueryRanges.html" title="class in mil.nga.giat.geowave.core.index">SinglePartitionQueryRanges</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getQueryRanges-mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-int-byte-">getQueryRanges</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>[]&nbsp;binnedQueries,
               <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
               int&nbsp;maxRanges,
@@ -173,11 +173,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getSingleBinnedRowId-java.math.BigInteger-byte-mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getSingleBinnedRowId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
-                    byte&nbsp;multiDimensionalId,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/SinglePartitionInsertionIds.html" title="class in mil.nga.giat.geowave.core.index">SinglePartitionInsertionIds</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/binned/BinnedSFCUtils.html#getSingleBinnedInsertionId-java.math.BigInteger-byte-mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">getSingleBinnedInsertionId</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
+                          byte&nbsp;multiDimensionalId,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -224,10 +224,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getQueryRanges</h4>
-<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayRange.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayRange</a>&gt;&nbsp;getQueryRanges(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>[]&nbsp;binnedQueries,
-                                                  <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
-                                                  int&nbsp;maxRanges,
-                                                  byte&nbsp;tier)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/SinglePartitionQueryRanges.html" title="class in mil.nga.giat.geowave.core.index">SinglePartitionQueryRanges</a>&gt;&nbsp;getQueryRanges(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>[]&nbsp;binnedQueries,
+                                                              <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc,
+                                                              int&nbsp;maxRanges,
+                                                              byte&nbsp;tier)</pre>
 </li>
 </ul>
 <a name="getCoordinateRanges-mil.nga.giat.geowave.core.index.dimension.bin.BinRange:A:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-int-byte-">
@@ -242,16 +242,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                    byte&nbsp;tier)</pre>
 </li>
 </ul>
-<a name="getSingleBinnedRowId-java.math.BigInteger-byte-mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">
+<a name="getSingleBinnedInsertionId-java.math.BigInteger-byte-mil.nga.giat.geowave.core.index.sfc.data.BinnedNumericDataset-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getSingleBinnedRowId</h4>
-<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getSingleBinnedRowId(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
-                                               byte&nbsp;multiDimensionalId,
-                                               <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
-                                               <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</pre>
+<h4>getSingleBinnedInsertionId</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/SinglePartitionInsertionIds.html" title="class in mil.nga.giat.geowave.core.index">SinglePartitionInsertionIds</a>&nbsp;getSingleBinnedInsertionId(<a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;rowCount,
+                                                                     byte&nbsp;multiDimensionalId,
+                                                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&nbsp;index,
+                                                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/SpaceFillingCurve.html" title="interface in mil.nga.giat.geowave.core.index.sfc">SpaceFillingCurve</a>&nbsp;sfc)</pre>
 </li>
 </ul>
 <a name="getCoordinatesForId-byte:A-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-mil.nga.giat.geowave.core.index.sfc.SpaceFillingCurve-">

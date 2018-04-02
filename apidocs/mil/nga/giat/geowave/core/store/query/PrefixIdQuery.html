@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/InsertionIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -134,7 +134,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#PrefixIdQuery-mil.nga.giat.geowave.core.index.ByteArrayId-">PrefixIdQuery</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowPrefix)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#PrefixIdQuery-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">PrefixIdQuery</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKeyPrefix)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -167,9 +168,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#getRowPrefix--">getRowPrefix</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#getPartitionKey--">getPartitionKey</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#getSortKeyPrefix--">getSortKeyPrefix</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/PrefixIdQuery.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
 <div class="block">This is useful to determine what indices this query supports.</div>
@@ -197,13 +202,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="PrefixIdQuery-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="PrefixIdQuery-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>PrefixIdQuery</h4>
-<pre>public&nbsp;PrefixIdQuery(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rowPrefix)</pre>
+<pre>public&nbsp;PrefixIdQuery(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKeyPrefix)</pre>
 </li>
 </ul>
 </li>
@@ -214,13 +220,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getRowPrefix--">
+<a name="getPartitionKey--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getRowPrefix</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getRowPrefix()</pre>
+<h4>getPartitionKey</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getPartitionKey()</pre>
+</li>
+</ul>
+<a name="getSortKeyPrefix--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getSortKeyPrefix</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getSortKeyPrefix()</pre>
 </li>
 </ul>
 <a name="createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
@@ -318,7 +333,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/FilteredIndexQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/InsertionIdQuery.html" title="class in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

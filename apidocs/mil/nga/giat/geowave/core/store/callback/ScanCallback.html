@@ -93,7 +93,7 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.core.store.callback</div>
-<h2 title="Interface ScanCallback" class="title">Interface ScanCallback&lt;T&gt;</h2>
+<h2 title="Interface ScanCallback" class="title">Interface ScanCallback&lt;T,R extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</h2>
 </div>
 <div class="contentContainer">
 <div class="description">
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <hr>
 <br>
-<pre>public interface <span class="typeNameLabel">ScanCallback&lt;T&gt;</span></pre>
+<pre>public interface <span class="typeNameLabel">ScanCallback&lt;T,R extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</span></pre>
 <div class="block">This interface provides a callback mechanism when scanning entries</div>
 </li>
 </ul>
@@ -131,8 +131,8 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html#entryScanned-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryScanned</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">entryScanned</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">R</a>&nbsp;row)</code>
 <div class="block">This will be called after an entry is successfully scanned with the row
  IDs that were used.</div>
 </td>
@@ -152,29 +152,28 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="entryScanned-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-java.lang.Object-">
+<a name="entryScanned-java.lang.Object-mil.nga.giat.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
-</a><a name="entryScanned-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">
+</a><a name="entryScanned-T-R-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>entryScanned</h4>
-<pre>void&nbsp;entryScanned(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry)</pre>
+<pre>void&nbsp;entryScanned(<a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">T</a>&nbsp;entry,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="type parameter in ScanCallback">R</a>&nbsp;row)</pre>
 <div class="block">This will be called after an entry is successfully scanned with the row
  IDs that were used. Deduplication, if performed, occurs prior to calling
  this method.
- 
+
  Without or without de-duplication, row ids are not consolidate, thus each
  entry only contains one row id. If the entry is not de-dupped, then the
  entry this method is called for each duplicate, each with a different row
  id.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entryInfo</code> - information regarding what was scanned to include the
-            insertion row IDs, fields, and visibilities</dd>
 <dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>row</code> - the raw row scanned from the table for this entry</dd>
 </dl>
 </li>
 </ul>

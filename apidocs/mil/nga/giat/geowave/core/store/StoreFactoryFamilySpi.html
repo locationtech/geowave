@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" target="_top">Frames</a></li>
@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/BigTableStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.bigtable">BigTableStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryStoreFactoryFamily</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/BigTableStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.bigtable">BigTableStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.dynamodb">DynamoDBStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseStoreFactoryFamily</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryStoreFactoryFamily</a></dd>
 </dl>
 <hr>
 <br>
@@ -146,7 +146,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactor
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -239,7 +239,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactor
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getDataStoreOperationsFactory</h4>
-<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&gt;&nbsp;getDataStoreOperationsFactory()</pre>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&gt;&nbsp;getDataStoreOperationsFactory()</pre>
 </li>
 </ul>
 </li>
@@ -271,7 +271,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactor
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryHelper.html" title="interface in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" target="_top">Frames</a></li>

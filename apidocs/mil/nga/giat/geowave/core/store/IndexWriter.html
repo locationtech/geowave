@@ -105,7 +105,7 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AccumuloIndexWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index">DataStoreIndexWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="class in mil.nga.giat.geowave.datastore.hbase">HBaseIndexWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer">IndependentAdapterIndexWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer">IndexCompositeWriter</a></dd>
+<dd><a href="../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndependentAdapterIndexWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer">IndependentAdapterIndexWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/index/writer/IndexCompositeWriter.html" title="class in mil.nga.giat.geowave.core.store.index.writer">IndexCompositeWriter</a></dd>
 </dl>
 <hr>
 <br>
@@ -138,14 +138,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#getIndices--">getIndices</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write-T-">write</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry)</code>
 <div class="block">Write the entry using the index writer's configure field visibility
  writer.</div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html#write-T-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">write</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry,
      <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</code>&nbsp;</td>
 </tr>
@@ -179,8 +179,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry)
-                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry)</pre>
 <div class="block">Write the entry using the index writer's configure field visibility
  writer.</div>
 <dl>
@@ -189,7 +188,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <dd><code>entry</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code>IOException</code></dd>
 </dl>
 </li>
 </ul>
@@ -201,13 +200,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html
 <ul class="blockList">
 <li class="blockList">
 <h4>write</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry,
-                        <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)
-                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-</dl>
+<pre><a href="../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;write(<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&nbsp;entry,
+                   <a href="../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="type parameter in IndexWriter">T</a>&gt;&nbsp;fieldVisibilityWriter)</pre>
 </li>
 </ul>
 <a name="getIndices--">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -113,13 +113,13 @@ var activeTableTab = "activeTableTab";
 </dl>
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;</dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T,<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">SecondaryIndexDataManager&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T&gt;</pre>
+implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;T,<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</pre>
 <div class="block">One manager associated with each primary index.</div>
 </li>
 </ul>
@@ -139,9 +139,9 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#SecondaryIndexDataManager-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">SecondaryIndexDataManager</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#SecondaryIndexDataManager-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">SecondaryIndexDataManager</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;&nbsp;adapter,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId)</code>&nbsp;</td>
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;primaryIndex)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -164,16 +164,22 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryDeleted</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-            <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry)</code>
-<div class="block">This will be called after an entry is successfully ingested with the row
- IDs that were used</div>
-</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#entryCallback-T-boolean-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">entryCallback</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+             boolean&nbsp;delete,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryIngested</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-             <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#entryDeleted-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">entryDeleted</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
+<div class="block">This will be called after an entry is successfully deleted with the row
+ IDs that were used</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html#entryIngested-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</code>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
 </td>
@@ -200,7 +206,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="SecondaryIndexDataManager-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="SecondaryIndexDataManager-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore-mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -208,7 +214,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <h4>SecondaryIndexDataManager</h4>
 <pre>public&nbsp;SecondaryIndexDataManager(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&nbsp;secondaryIndexStore,
                                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataAdapter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;&nbsp;adapter,
-                                 <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId)</pre>
+                                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;primaryIndex)</pre>
 </li>
 </ul>
 </li>
@@ -219,49 +225,59 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.h
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-java.lang.Object-">
+<a name="entryCallback-java.lang.Object-boolean-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">
 <!--   -->
-</a><a name="entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">
+</a><a name="entryCallback-T-boolean-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>entryCallback</h4>
+<pre>public&nbsp;void&nbsp;entryCallback(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+                          boolean&nbsp;delete,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
+</li>
+</ul>
+<a name="entryIngested-java.lang.Object-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">
+<!--   -->
+</a><a name="entryIngested-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryIngested</h4>
-<pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">IngestCallback</a></code></span></div>
+<pre>public&nbsp;void&nbsp;entryIngested(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">IngestCallback</a></code></span></div>
 <div class="block">This will be called after an entry is successfully ingested with the row
  IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html#entryIngested-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">entryIngested</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entryInfo</code> - information regarding what was written to include the
-            insertion row IDs, fields, and visibilities</dd>
 <dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>kvs</code> - the rows inserted into the table for this entry</dd>
 </dl>
 </li>
 </ul>
-<a name="entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-java.lang.Object-">
+<a name="entryDeleted-java.lang.Object-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">
 <!--   -->
-</a><a name="entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">
+</a><a name="entryDeleted-T-mil.nga.giat.geowave.core.store.entities.GeoWaveRow...-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>entryDeleted</h4>
-<pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../../mil/nga/giat/geowave/core/store/base/DataStoreEntryInfo.html" title="class in mil.nga.giat.geowave.core.store.base">DataStoreEntryInfo</a>&nbsp;entryInfo,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">DeleteCallback</a></code></span></div>
-<div class="block">This will be called after an entry is successfully ingested with the row
+<pre>public&nbsp;void&nbsp;entryDeleted(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&nbsp;entry,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>...&nbsp;kvs)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">DeleteCallback</a></code></span></div>
+<div class="block">This will be called after an entry is successfully deleted with the row
  IDs that were used</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo-T-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html#entryDeleted-T-R...-">entryDeleted</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/DeleteCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">DeleteCallback</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="type parameter in SecondaryIndexDataManager">T</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>entryInfo</code> - information regarding what was written to include the
-            insertion row IDs, fields, and visibilities</dd>
-<dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>entry</code> - the entry that was deleted</dd>
 </dl>
 </li>
 </ul>

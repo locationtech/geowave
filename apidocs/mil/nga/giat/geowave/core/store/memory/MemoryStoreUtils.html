@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9};
+var methods = {"i0":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreOperations.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.AndExpression.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -182,20 +182,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.html#entryToRows-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-T-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">entryToRows</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-           T&nbsp;entry,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.html#getEncoding-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.memory.MemoryEntryRow-">getEncoding</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-           <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&nbsp;row)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.html#isAuthorized-byte:A-java.lang.String:A-">isAuthorized</a></span>(byte[]&nbsp;visibility,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
@@ -242,37 +228,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="isAuthorized-byte:A-java.lang.String:A-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>isAuthorized</h4>
 <pre>protected static&nbsp;boolean&nbsp;isAuthorized(byte[]&nbsp;visibility,
                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
-</li>
-</ul>
-<a name="getEncoding-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.memory.MemoryEntryRow-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getEncoding</h4>
-<pre>protected static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/IndexedAdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">IndexedAdapterPersistenceEncoding</a>&nbsp;getEncoding(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
-                                                               <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter,
-                                                               <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&nbsp;row)</pre>
-</li>
-</ul>
-<a name="entryToRows-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.lang.Object-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">
-<!--   -->
-</a><a name="entryToRows-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-T-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>entryToRows</h4>
-<pre>protected static&nbsp;&lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&gt;&nbsp;entryToRows(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                                                      T&nbsp;entry,
-                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-                                                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</pre>
 </li>
 </ul>
 </li>
@@ -303,7 +263,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreOperations.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.AndExpression.html" title="class in mil.nga.giat.geowave.core.store.memory"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

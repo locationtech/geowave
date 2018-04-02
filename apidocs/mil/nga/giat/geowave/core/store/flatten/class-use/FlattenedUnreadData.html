@@ -83,23 +83,23 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.data">mil.nga.giat.geowave.core.store.data</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.flatten">mil.nga.giat.geowave.core.store.flatten</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.encoding">mil.nga.giat.geowave.datastore.accumulo.encoding</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.query">mil.nga.giat.geowave.datastore.accumulo.query</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.util">mil.nga.giat.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.encoding">mil.nga.giat.geowave.datastore.hbase.encoding</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.iterators">mil.nga.giat.geowave.datastore.accumulo.iterators</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.query">mil.nga.giat.geowave.datastore.hbase.query</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.filters">mil.nga.giat.geowave.datastore.hbase.filters</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 </tbody>
@@ -107,6 +107,52 @@
 </li>
 <li class="blockList">
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.data">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/UnreadFieldDataList.html" title="class in mil.nga.giat.geowave.core.store.data">UnreadFieldDataList</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/DeferredReadCommonIndexedPersistenceEncoding.html#DeferredReadCommonIndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">DeferredReadCommonIndexedPersistenceEncoding</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
+                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
+                                            int&nbsp;duplicateCount,
+                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
+                                            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/UnreadFieldDataList.html#UnreadFieldDataList-java.util.List-">UnreadFieldDataList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&gt;&nbsp;unreadData)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.flatten">
 <!--   -->
 </a>
@@ -150,57 +196,34 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.encoding">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.util">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/package-summary.html">mil.nga.giat.geowave.core.store.util</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/package-summary.html">mil.nga.giat.geowave.core.store.util</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
+<th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/AccumuloUnreadDataList.html" title="class in mil.nga.giat.geowave.datastore.accumulo.encoding">AccumuloUnreadDataList</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/AccumuloCommonIndexedPersistenceEncoding.html#AccumuloCommonIndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">AccumuloCommonIndexedPersistenceEncoding</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                                        <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                                        <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexInsertionId,
-                                        int&nbsp;duplicateCount,
-                                        <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
-                                        <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/AccumuloUnreadDataList.html#AccumuloUnreadDataList-java.util.List-">AccumuloUnreadDataList</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&gt;&nbsp;unreadData)</code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/DataStoreUtils.html#aggregateFieldData-mil.nga.giat.geowave.core.store.entities.GeoWaveKey-mil.nga.giat.geowave.core.store.entities.GeoWaveValue-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.index.CommonIndexModel-java.util.List-">aggregateFieldData</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>&nbsp;key,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveValue.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveValue</a>&nbsp;value,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
+                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;commonIndexFieldIds)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.query">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.iterators">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.query</a></h3>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.iterators</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.query</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.iterators</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -208,14 +231,14 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#aggregateFieldData-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-mil.nga.giat.geowave.core.store.data.PersistentDataset-">aggregateFieldData</a></span>(org.apache.accumulo.core.data.Key&nbsp;key,
+<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/QueryFilterIterator.html#aggregateFieldData-org.apache.accumulo.core.data.Key-org.apache.accumulo.core.data.Value-mil.nga.giat.geowave.core.store.data.PersistentDataset-">aggregateFieldData</a></span>(org.apache.accumulo.core.data.Key&nbsp;key,
                   org.apache.accumulo.core.data.Value&nbsp;value,
                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.query</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.iterators</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -223,46 +246,26 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#applyRowFilter-org.apache.hadoop.io.Text-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">applyRowFilter</a></span>(org.apache.hadoop.io.Text&nbsp;currentRow,
+<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/QueryFilterIterator.html#applyRowFilter-org.apache.hadoop.io.Text-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">applyRowFilter</a></span>(org.apache.hadoop.io.Text&nbsp;currentRow,
               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
               <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></code></td>
-<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/QueryFilterIterator.html#getEncoding-org.apache.hadoop.io.Text-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">getEncoding</a></span>(org.apache.hadoop.io.Text&nbsp;currentRow,
+<td class="colLast"><span class="typeNameLabel">QueryFilterIterator.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/QueryFilterIterator.html#getEncoding-org.apache.hadoop.io.Text-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">getEncoding</a></span>(org.apache.hadoop.io.Text&nbsp;currentRow,
+           int&nbsp;partitionKeyLength,
            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
            <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.encoding">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.filters">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/encoding/package-summary.html">mil.nga.giat.geowave.datastore.hbase.encoding</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/encoding/package-summary.html">mil.nga.giat.geowave.datastore.hbase.encoding</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/encoding/HBaseCommonIndexedPersistenceEncoding.html#HBaseCommonIndexedPersistenceEncoding-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-int-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">HBaseCommonIndexedPersistenceEncoding</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
-                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataId,
-                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexInsertionId,
-                                     int&nbsp;duplicateCount,
-                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
-                                     <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a></h3>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/package-summary.html">mil.nga.giat.geowave.datastore.hbase.filters</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/package-summary.html">mil.nga.giat.geowave.datastore.hbase.filters</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -270,27 +273,21 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#aggregateFieldData-org.apache.hadoop.hbase.Cell-mil.nga.giat.geowave.core.store.data.PersistentDataset-">aggregateFieldData</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
+<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#aggregateFieldData-org.apache.hadoop.hbase.Cell-mil.nga.giat.geowave.core.store.data.PersistentDataset-">aggregateFieldData</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/package-summary.html">mil.nga.giat.geowave.datastore.hbase.filters</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected org.apache.hadoop.hbase.filter.Filter.ReturnCode</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#applyRowFilter-org.apache.hadoop.hbase.Cell-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">applyRowFilter</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
-              <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><code>protected static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/CommonIndexedPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/HBaseDistributableFilter.html#getPersistenceEncoding-org.apache.hadoop.hbase.Cell-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">getPersistenceEncoding</a></span>(org.apache.hadoop.hbase.Cell&nbsp;cell,
+<td class="colLast"><span class="typeNameLabel">HBaseDistributableFilter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/HBaseDistributableFilter.html#getPersistenceEncoding-mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl-mil.nga.giat.geowave.core.store.data.PersistentDataset-mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData-">getPersistenceEncoding</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html" title="class in mil.nga.giat.geowave.core.store.entities">GeoWaveKeyImpl</a>&nbsp;rowKey,
                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;&nbsp;commonData,
                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>&nbsp;unreadData)</code>&nbsp;</td>
 </tr>

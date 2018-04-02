@@ -1094,8 +1094,12 @@
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockList">
-<h4>id</h4>
-<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> id</pre>
+<h4>partitionKey</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> partitionKey</pre>
+</li>
+<li class="blockList">
+<h4>sortKey</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> sortKey</pre>
 </li>
 <li class="blockList">
 <h4>groupId</h4>
@@ -1618,12 +1622,33 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.flatten</h2>
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.cli.remote.options</h2>
 <ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.flatten.BitmaskedFieldInfoComparator">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/core/store/flatten/BitmaskedFieldInfoComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten">mil.nga.giat.geowave.core.store.flatten.BitmaskedFieldInfoComparator</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/core/store/cli/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>visibility</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> visibility</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.flatten</h2>
+<ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.flatten.BitmaskedPairComparator">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/core/store/flatten/BitmaskedPairComparator.html" title="class in mil.nga.giat.geowave.core.store.flatten">mil.nga.giat.geowave.core.store.flatten.BitmaskedPairComparator</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -1634,51 +1659,6 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.memory</h2>
 <ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory.MemoryAdapterIndexMappingStore">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/core/store/memory/MemoryAdapterIndexMappingStore.html" title="class in mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory.MemoryAdapterIndexMappingStore</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>1L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>readObject</h4>
-<pre>private&nbsp;void&nbsp;readObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;in)
-                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
-</dl>
-</li>
-<li class="blockListLast">
-<h4>writeObject</h4>
-<pre>private&nbsp;void&nbsp;writeObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;out)
-                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>toIndexMapping</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; toIndexMapping</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore">
 <!--   -->
 </a>
@@ -1724,22 +1704,46 @@
 </li>
 </ul>
 </li>
-</ul>
-</li>
-<li class="blockList">
-<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.core.store.operations.remote.options</h2>
-<ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory.OldMemoryAdapterIndexMappingStore">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/core/store/operations/remote/options/VisibilityOptions.html" title="class in mil.nga.giat.geowave.core.store.operations.remote.options">mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/core/store/memory/OldMemoryAdapterIndexMappingStore.html" title="class in mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory.OldMemoryAdapterIndexMappingStore</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 <ul class="blockList">
+<li class="blockList">
+<h3>Serialization Methods</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>readObject</h4>
+<pre>private&nbsp;void&nbsp;readObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectInputStream.html?is-external=true" title="class or interface in java.io">ObjectInputStream</a>&nbsp;in)
+                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
+</dl>
+</li>
+<li class="blockListLast">
+<h4>writeObject</h4>
+<pre>private&nbsp;void&nbsp;writeObject(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectOutputStream.html?is-external=true" title="class or interface in java.io">ObjectOutputStream</a>&nbsp;out)
+                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockListLast">
-<h4>visibility</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> visibility</pre>
+<h4>toIndexMapping</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; toIndexMapping</pre>
 </li>
 </ul>
 </li>
@@ -2070,517 +2074,8 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.datastore.hbase.query.generated</h2>
-<ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationRequest">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/generated/AggregationProtos.AggregationRequest.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.generated">mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationRequest</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>aggregation_</h4>
-<pre><a href="mil/nga/giat/geowave/datastore/hbase/query/generated/AggregationProtos.AggregationType.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.generated">AggregationProtos.AggregationType</a> aggregation_</pre>
-</li>
-<li class="blockList">
-<h4>rangeFilter_</h4>
-<pre>com.google.protobuf.ByteString rangeFilter_</pre>
-</li>
-<li class="blockList">
-<h4>filter_</h4>
-<pre>com.google.protobuf.ByteString filter_</pre>
-</li>
-<li class="blockList">
-<h4>model_</h4>
-<pre>com.google.protobuf.ByteString model_</pre>
-</li>
-<li class="blockList">
-<h4>adapter_</h4>
-<pre>com.google.protobuf.ByteString adapter_</pre>
-</li>
-<li class="blockList">
-<h4>blockCaching_</h4>
-<pre>boolean blockCaching_</pre>
-</li>
-<li class="blockList">
-<h4>cacheSize_</h4>
-<pre>int cacheSize_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationResponse">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/generated/AggregationProtos.AggregationResponse.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.generated">mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationResponse</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>value_</h4>
-<pre>com.google.protobuf.ByteString value_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationType">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/generated/AggregationProtos.AggregationType.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.generated">mil.nga.giat.geowave.datastore.hbase.query.generated.AggregationProtos.AggregationType</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>name_</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> name_</pre>
-</li>
-<li class="blockList">
-<h4>params_</h4>
-<pre>com.google.protobuf.ByteString params_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/generated/FilterProtos.SingleEntryFilter.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.generated">mil.nga.giat.geowave.datastore.hbase.query.generated.FilterProtos.SingleEntryFilter</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>adapterId_</h4>
-<pre>com.google.protobuf.ByteString adapterId_</pre>
-</li>
-<li class="blockList">
-<h4>dataId_</h4>
-<pre>com.google.protobuf.ByteString dataId_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.datastore.hbase.query.protobuf</h2>
 <ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationRequest.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationRequest</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>aggregation_</h4>
-<pre><a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationType.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">AggregationProtos.AggregationType</a> aggregation_</pre>
-</li>
-<li class="blockList">
-<h4>rangeFilter_</h4>
-<pre>com.google.protobuf.ByteString rangeFilter_</pre>
-</li>
-<li class="blockList">
-<h4>filter_</h4>
-<pre>com.google.protobuf.ByteString filter_</pre>
-</li>
-<li class="blockList">
-<h4>model_</h4>
-<pre>com.google.protobuf.ByteString model_</pre>
-</li>
-<li class="blockList">
-<h4>adapter_</h4>
-<pre>com.google.protobuf.ByteString adapter_</pre>
-</li>
-<li class="blockList">
-<h4>adapterId_</h4>
-<pre>com.google.protobuf.ByteString adapterId_</pre>
-</li>
-<li class="blockList">
-<h4>numericIndexStrategyFilter_</h4>
-<pre>com.google.protobuf.ByteString numericIndexStrategyFilter_</pre>
-</li>
-<li class="blockList">
-<h4>blockCaching_</h4>
-<pre>boolean blockCaching_</pre>
-</li>
-<li class="blockList">
-<h4>cacheSize_</h4>
-<pre>int cacheSize_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationResponse">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationResponse.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationResponse</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>value_</h4>
-<pre>com.google.protobuf.ByteString value_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationType">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/AggregationProtos.AggregationType.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">mil.nga.giat.geowave.datastore.hbase.query.protobuf.AggregationProtos.AggregationType</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>classId_</h4>
-<pre>com.google.protobuf.ByteString classId_</pre>
-</li>
-<li class="blockList">
-<h4>params_</h4>
-<pre>com.google.protobuf.ByteString params_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.FilterProtos.SingleEntryFilter">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/datastore/hbase/query/protobuf/FilterProtos.SingleEntryFilter.html" title="class in mil.nga.giat.geowave.datastore.hbase.query.protobuf">mil.nga.giat.geowave.datastore.hbase.query.protobuf.FilterProtos.SingleEntryFilter</a> extends com.google.protobuf.GeneratedMessage implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>0L</dd>
-</dl>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialization Methods</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>writeReplace</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;writeReplace()
-                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/ObjectStreamException.html?is-external=true" title="class or interface in java.io">ObjectStreamException</a></code></dd>
-</dl>
-</li>
-</ul>
-</li>
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>unknownFields</h4>
-<pre>com.google.protobuf.UnknownFieldSet unknownFields</pre>
-</li>
-<li class="blockList">
-<h4>bitField0_</h4>
-<pre>int bitField0_</pre>
-</li>
-<li class="blockList">
-<h4>adapterId_</h4>
-<pre>com.google.protobuf.ByteString adapterId_</pre>
-</li>
-<li class="blockList">
-<h4>dataId_</h4>
-<pre>com.google.protobuf.ByteString dataId_</pre>
-</li>
-<li class="blockList">
-<h4>memoizedIsInitialized</h4>
-<pre>byte memoizedIsInitialized</pre>
-</li>
-<li class="blockList">
-<h4>memoizedSerializedSize</h4>
-<pre>int memoizedSerializedSize</pre>
-</li>
-<li class="blockListLast">
-<h4>memoizedHashCode</h4>
-<pre>int memoizedHashCode</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionRequest">
 <!--   -->
 </a>
@@ -3066,6 +2561,110 @@
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+<li class="blockList">
+<h2 title="Package">Package&nbsp;org.apache.hadoop.hbase.regionserver</h2>
+<ul class="blockList">
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.LeaseException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.LeaseException extends org.apache.hadoop.hbase.DoNotRetryIOException implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>8179703995292418650L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.Leases.LeaseStillHeldException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.Leases.LeaseStillHeldException extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>leaseName</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> leaseName</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.NoSuchColumnFamilyException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.NoSuchColumnFamilyException extends org.apache.hadoop.hbase.DoNotRetryIOException implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-6569952730832331274L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RegionAlreadyInTransitionException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RegionAlreadyInTransitionException extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a> implements Serializable</h3>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RegionServerAbortedException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RegionServerAbortedException extends org.apache.hadoop.hbase.regionserver.RegionServerStoppedException implements Serializable</h3>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RegionServerRunningException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RegionServerRunningException extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1073741824L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RegionServerStoppedException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RegionServerStoppedException extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a> implements Serializable</h3>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RowTooBigException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RowTooBigException extends org.apache.hadoop.hbase.RegionException implements Serializable</h3>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RSDumpServlet">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RSDumpServlet extends org.apache.hadoop.hbase.monitoring.StateDumpServlet implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.RSStatusServlet">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.RSStatusServlet extends javax.servlet.http.HttpServlet implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.UnexpectedStateException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.UnexpectedStateException extends org.apache.hadoop.hbase.HBaseIOException implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-6727953144066746071L</dd>
+</dl>
+</li>
+<li class="blockList"><a name="org.apache.hadoop.hbase.regionserver.WrongRegionException">
+<!--   -->
+</a>
+<h3>Class org.apache.hadoop.hbase.regionserver.WrongRegionException extends <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>993179627856392526L</dd>
+</dl>
 </li>
 </ul>
 </li>

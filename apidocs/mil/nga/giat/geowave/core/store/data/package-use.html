@@ -151,58 +151,38 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query">mil.nga.giat.geowave.core.store.query</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.query.aggregate">mil.nga.giat.geowave.core.store.query.aggregate</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.util">mil.nga.giat.geowave.core.store.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.encoding">mil.nga.giat.geowave.datastore.accumulo.encoding</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.iterators">mil.nga.giat.geowave.datastore.accumulo.iterators</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.query">mil.nga.giat.geowave.datastore.accumulo.query</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.util">mil.nga.giat.geowave.datastore.accumulo.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.encoding">mil.nga.giat.geowave.datastore.hbase.encoding</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.filters">mil.nga.giat.geowave.datastore.hbase.filters</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.query">mil.nga.giat.geowave.datastore.hbase.query</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.util">mil.nga.giat.geowave.datastore.hbase.util</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.stanag4676.image">mil.nga.giat.geowave.format.stanag4676.image</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce">mil.nga.giat.geowave.mapreduce</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -435,9 +415,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentValue.html#mil.nga.giat.geowave.core.store.base">PersistentValue</a>
-<div class="block">This represents a single value in the GeoWave data store as the value plus
- the field ID pair</div>
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.core.store.base">VisibilityWriter</a>
+<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
 </td>
 </tr>
 </tbody>
@@ -453,6 +432,14 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.core.store.data">CommonIndexedPersistenceEncoding</a>
+<div class="block">This class models all of the necessary information for persisting data in
+ Accumulo (following the common index model) and is used internally within
+ GeoWave as an intermediary object between the direct storage format and the
+ native data format.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/IndexedPersistenceEncoding.html#mil.nga.giat.geowave.core.store.data">IndexedPersistenceEncoding</a>
 <div class="block">This class models all of the necessary information for persisting data in the
  data store (following the common index model) and is used internally within
@@ -460,7 +447,7 @@
  native data format.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistenceEncoding.html#mil.nga.giat.geowave.core.store.data">PersistenceEncoding</a>
 <div class="block">This class models all of the necessary information for persisting data in the
  data store (following the common index model) and is used internally within
@@ -468,12 +455,12 @@
  native data format.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.core.store.data">PersistentDataset</a>
 <div class="block">This is a basic mapping of field ID to native field type.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentValue.html#mil.nga.giat.geowave.core.store.data">PersistentValue</a>
 <div class="block">This represents a single value in the GeoWave data store as the value plus
  the field ID pair</div>
@@ -535,11 +522,6 @@
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/DataWriter.html#mil.nga.giat.geowave.core.store.index">DataWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.core.store.index">VisibilityWriter</a>
 <div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
 </td>
 </tr>
@@ -623,23 +605,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.core.store.memory">VisibilityWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.query">
 <!--   -->
 </a>
@@ -690,57 +655,24 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/DataWriter.html#mil.nga.giat.geowave.core.store.util">DataWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
-<tr class="rowColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.core.store.util">PersistentDataset</a>
 <div class="block">This is a basic mapping of field ID to native field type.</div>
 </td>
 </tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentValue.html#mil.nga.giat.geowave.core.store.util">PersistentValue</a>
-<div class="block">This represents a single value in the GeoWave data store as the value plus
- the field ID pair</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.core.store.util">VisibilityWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.iterators">
 <!--   -->
 </a>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/iterators/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.iterators</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colOne" scope="col">Class and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.datastore.accumulo">VisibilityWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.encoding">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/encoding/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.encoding</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.accumulo.encoding">CommonIndexedPersistenceEncoding</a>
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.accumulo.iterators">CommonIndexedPersistenceEncoding</a>
 <div class="block">This class models all of the necessary information for persisting data in
  Accumulo (following the common index model) and is used internally within
  GeoWave as an intermediary object between the direct storage format and the
@@ -748,48 +680,7 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/IndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.accumulo.encoding">IndexedPersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistenceEncoding.html#mil.nga.giat.geowave.datastore.accumulo.encoding">PersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.accumulo.encoding">PersistentDataset</a>
-<div class="block">This is a basic mapping of field ID to native field type.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.query">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/query/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.query</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.accumulo.query">CommonIndexedPersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in
- Accumulo (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.accumulo.query">PersistentDataset</a>
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.accumulo.iterators">PersistentDataset</a>
 <div class="block">This is a basic mapping of field ID to native field type.</div>
 </td>
 </tr>
@@ -813,34 +704,17 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.filters">
 <!--   -->
 </a>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/filters/package-summary.html">mil.nga.giat.geowave.datastore.hbase.filters</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colOne" scope="col">Class and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/VisibilityWriter.html#mil.nga.giat.geowave.datastore.hbase">VisibilityWriter</a>
-<div class="block">This interface is used to write data for a row in a GeoWave data store.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.encoding">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/encoding/package-summary.html">mil.nga.giat.geowave.datastore.hbase.encoding</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.hbase.encoding">CommonIndexedPersistenceEncoding</a>
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.hbase.filters">CommonIndexedPersistenceEncoding</a>
 <div class="block">This class models all of the necessary information for persisting data in
  Accumulo (following the common index model) and is used internally within
  GeoWave as an intermediary object between the direct storage format and the
@@ -848,48 +722,7 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/IndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.hbase.encoding">IndexedPersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistenceEncoding.html#mil.nga.giat.geowave.datastore.hbase.encoding">PersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in the
- data store (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.hbase.encoding">PersistentDataset</a>
-<div class="block">This is a basic mapping of field ID to native field type.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.query">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/query/package-summary.html">mil.nga.giat.geowave.datastore.hbase.query</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/CommonIndexedPersistenceEncoding.html#mil.nga.giat.geowave.datastore.hbase.query">CommonIndexedPersistenceEncoding</a>
-<div class="block">This class models all of the necessary information for persisting data in
- Accumulo (following the common index model) and is used internally within
- GeoWave as an intermediary object between the direct storage format and the
- native data format.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.hbase.query">PersistentDataset</a>
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/class-use/PersistentDataset.html#mil.nga.giat.geowave.datastore.hbase.filters">PersistentDataset</a>
 <div class="block">This is a basic mapping of field ID to native field type.</div>
 </td>
 </tr>

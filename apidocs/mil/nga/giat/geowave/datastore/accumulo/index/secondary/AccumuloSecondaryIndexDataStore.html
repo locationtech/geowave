@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore</li>
@@ -119,7 +119,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AccumuloSecondaryIndexDataStore</span>
-extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</pre>
+extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></pre>
 </li>
 </ul>
 </div>
@@ -153,11 +153,11 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">AccumuloSecondaryIndexDataStore</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations,
+                               <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;accumuloOptions)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -175,7 +175,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>protected org.apache.accumulo.core.data.Mutation</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#buildFullDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildFullDeleteMutation</a></span>(byte[]&nbsp;secondaryIndexRowId,
                        byte[]&nbsp;adapterId,
                        byte[]&nbsp;indexedAttributeFieldId,
@@ -183,7 +183,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
                        byte[]&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>protected org.apache.accumulo.core.data.Mutation</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#buildJoinDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinDeleteMutation</a></span>(byte[]&nbsp;secondaryIndexRowId,
                        byte[]&nbsp;adapterId,
                        byte[]&nbsp;indexedAttributeFieldId,
@@ -191,16 +191,17 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
                        byte[]&nbsp;primaryIndexRowId)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected org.apache.accumulo.core.data.Mutation</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinMutation</a></span>(byte[]&nbsp;secondaryIndexRowId,
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinMutation</a></span>(byte[]&nbsp;secondaryIndexRowId,
                  byte[]&nbsp;adapterId,
                  byte[]&nbsp;indexedAttributeFieldId,
                  byte[]&nbsp;primaryIndexId,
-                 byte[]&nbsp;primaryIndexRowId,
+                 byte[]&nbsp;primaryIndexPartitionKey,
+                 byte[]&nbsp;primaryIndexSortKey,
                  byte[]&nbsp;attributeVisibility)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected org.apache.accumulo.core.data.Mutation</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#buildMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildMutation</a></span>(byte[]&nbsp;secondaryIndexRowId,
              byte[]&nbsp;adapterId,
              byte[]&nbsp;indexedAttributeFieldId,
@@ -210,7 +211,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
              byte[]&nbsp;fieldVisibility)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></td>
+<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/index/secondary/AccumuloSecondaryIndexDataStore.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
@@ -236,7 +237,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.index.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#close--">close</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">deleteEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">deleteJoinEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#flush--">flush</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getFilter-java.util.List-">getFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#removeAll--">removeAll</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-java.util.List-">storeEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">storeJoinEntry</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#close--">close</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#deleteEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">deleteEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#deleteJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">deleteJoinEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#flush--">flush</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getFilter-java.util.List-">getFilter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#removeAll--">removeAll</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#storeEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.entities.GeoWaveValue...-">storeEntry</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#storeJoinEntry-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">storeJoinEntry</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -259,23 +260,23 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-">
+<a name="AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AccumuloSecondaryIndexDataStore</h4>
-<pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations)</pre>
+<pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations)</pre>
 </li>
 </ul>
-<a name="AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions-">
+<a name="AccumuloSecondaryIndexDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloSecondaryIndexDataStore</h4>
-<pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                                       <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
+<pre>public&nbsp;AccumuloSecondaryIndexDataStore(<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;accumuloOperations,
+                                       <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;accumuloOptions)</pre>
 </li>
 </ul>
 </li>
@@ -303,28 +304,29 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <ul class="blockList">
 <li class="blockList">
 <h4>getWriter</h4>
-<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/Writer.html" title="interface in mil.nga.giat.geowave.core.store.base">Writer</a>&lt;org.apache.accumulo.core.data.Mutation&gt;&nbsp;getWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a>&nbsp;getWriter(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryIndexId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">
+<a name="buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>buildJoinMutation</h4>
-<pre>protected&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;buildJoinMutation(byte[]&nbsp;secondaryIndexRowId,
-                                                                   byte[]&nbsp;adapterId,
-                                                                   byte[]&nbsp;indexedAttributeFieldId,
-                                                                   byte[]&nbsp;primaryIndexId,
-                                                                   byte[]&nbsp;primaryIndexRowId,
-                                                                   byte[]&nbsp;attributeVisibility)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;buildJoinMutation(byte[]&nbsp;secondaryIndexRowId,
+                                       byte[]&nbsp;adapterId,
+                                       byte[]&nbsp;indexedAttributeFieldId,
+                                       byte[]&nbsp;primaryIndexId,
+                                       byte[]&nbsp;primaryIndexPartitionKey,
+                                       byte[]&nbsp;primaryIndexSortKey,
+                                       byte[]&nbsp;attributeVisibility)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildJoinMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -334,16 +336,16 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <ul class="blockList">
 <li class="blockList">
 <h4>buildMutation</h4>
-<pre>protected&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;buildMutation(byte[]&nbsp;secondaryIndexRowId,
-                                                               byte[]&nbsp;adapterId,
-                                                               byte[]&nbsp;indexedAttributeFieldId,
-                                                               byte[]&nbsp;dataId,
-                                                               byte[]&nbsp;fieldId,
-                                                               byte[]&nbsp;fieldValue,
-                                                               byte[]&nbsp;fieldVisibility)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;buildMutation(byte[]&nbsp;secondaryIndexRowId,
+                                   byte[]&nbsp;adapterId,
+                                   byte[]&nbsp;indexedAttributeFieldId,
+                                   byte[]&nbsp;dataId,
+                                   byte[]&nbsp;fieldId,
+                                   byte[]&nbsp;fieldValue,
+                                   byte[]&nbsp;fieldVisibility)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildMutation-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-byte:A-">buildMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -353,14 +355,14 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <ul class="blockList">
 <li class="blockList">
 <h4>buildJoinDeleteMutation</h4>
-<pre>protected&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;buildJoinDeleteMutation(byte[]&nbsp;secondaryIndexRowId,
-                                                                         byte[]&nbsp;adapterId,
-                                                                         byte[]&nbsp;indexedAttributeFieldId,
-                                                                         byte[]&nbsp;primaryIndexId,
-                                                                         byte[]&nbsp;primaryIndexRowId)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;buildJoinDeleteMutation(byte[]&nbsp;secondaryIndexRowId,
+                                             byte[]&nbsp;adapterId,
+                                             byte[]&nbsp;indexedAttributeFieldId,
+                                             byte[]&nbsp;primaryIndexId,
+                                             byte[]&nbsp;primaryIndexRowId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildJoinDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinDeleteMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildJoinDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildJoinDeleteMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -370,14 +372,14 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/B
 <ul class="blockList">
 <li class="blockList">
 <h4>buildFullDeleteMutation</h4>
-<pre>protected&nbsp;org.apache.accumulo.core.data.Mutation&nbsp;buildFullDeleteMutation(byte[]&nbsp;secondaryIndexRowId,
-                                                                         byte[]&nbsp;adapterId,
-                                                                         byte[]&nbsp;indexedAttributeFieldId,
-                                                                         byte[]&nbsp;dataId,
-                                                                         byte[]&nbsp;fieldId)</pre>
+<pre>protected&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;buildFullDeleteMutation(byte[]&nbsp;secondaryIndexRowId,
+                                             byte[]&nbsp;adapterId,
+                                             byte[]&nbsp;indexedAttributeFieldId,
+                                             byte[]&nbsp;dataId,
+                                             byte[]&nbsp;fieldId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildFullDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildFullDeleteMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a>&lt;org.apache.accumulo.core.data.Mutation&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html#buildFullDeleteMutation-byte:A-byte:A-byte:A-byte:A-byte:A-">buildFullDeleteMutation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/BaseSecondaryIndexDataStore.html" title="class in mil.nga.giat.geowave.core.store.index">BaseSecondaryIndexDataStore</a></code></dd>
 </dl>
 </li>
 </ul>

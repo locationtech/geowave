@@ -196,19 +196,21 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations-">getAccumuloGeowaveDataStore</a></span>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">getAccumuloGeowaveDataStore</a></span>(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
+                           <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">DataStore is essentially the controller that take the accumulo
  information, geowave configuration, and data type, and inserts/queries
  from accumulo</div>
 </td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloOperationsInstance-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">getAccumuloOperationsInstance</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeepers,
+<td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloOperationsInstance-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">getAccumuloOperationsInstance</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeepers,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloInstance,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloUser,
                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloPass,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)</code>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                             <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">The class tells geowave about the accumulo instance it should connect to,
  as well as what tables it should create/store it's data in</div>
 </td>
@@ -288,13 +290,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                                                                                 int&nbsp;firstFeatureId)</pre>
 </li>
 </ul>
-<a name="getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations-">
+<a name="getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAccumuloGeowaveDataStore</h4>
-<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;getAccumuloGeowaveDataStore(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</pre>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;getAccumuloGeowaveDataStore(<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
+                                                <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</pre>
 <div class="block">DataStore is essentially the controller that take the accumulo
  information, geowave configuration, and data type, and inserts/queries
  from accumulo</div>
@@ -306,19 +309,20 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </dl>
 </li>
 </ul>
-<a name="getAccumuloOperationsInstance-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">
+<a name="getAccumuloOperationsInstance-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAccumuloOperationsInstance</h4>
-<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;getAccumuloOperationsInstance(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeepers,
-                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloInstance,
-                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloUser,
-                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloPass,
-                                                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace)
-                                                         throws org.apache.accumulo.core.client.AccumuloException,
-                                                                org.apache.accumulo.core.client.AccumuloSecurityException</pre>
+<pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;getAccumuloOperationsInstance(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeepers,
+                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloInstance,
+                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloUser,
+                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;accumuloPass,
+                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                                                           <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)
+                                                    throws org.apache.accumulo.core.client.AccumuloException,
+                                                           org.apache.accumulo.core.client.AccumuloSecurityException</pre>
 <div class="block">The class tells geowave about the accumulo instance it should connect to,
  as well as what tables it should create/store it's data in</div>
 <dl>

@@ -166,13 +166,13 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Inde
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.TierIndexMetaData.html#insertionIdsAdded-java.util.List-">insertionIdsAdded</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.TierIndexMetaData.html#insertionIdsAdded-mil.nga.giat.geowave.core.index.InsertionIds-">insertionIdsAdded</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;ids)</code>
 <div class="block">Update the aggregation result using the new entry provided</div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.TierIndexMetaData.html#insertionIdsRemoved-java.util.List-">insertionIdsRemoved</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.TierIndexMetaData.html#insertionIdsRemoved-mil.nga.giat.geowave.core.index.InsertionIds-">insertionIdsRemoved</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;ids)</code>
 <div class="block">Update the aggregation result by removing the entries provided</div>
 </td>
 </tr>
@@ -288,35 +288,35 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Inde
 </dl>
 </li>
 </ul>
-<a name="insertionIdsAdded-java.util.List-">
+<a name="insertionIdsAdded-mil.nga.giat.geowave.core.index.InsertionIds-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>insertionIdsAdded</h4>
-<pre>public&nbsp;void&nbsp;insertionIdsAdded(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsAdded-java.util.List-">IndexMetaData</a></code></span></div>
+<pre>public&nbsp;void&nbsp;insertionIdsAdded(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;ids)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsAdded-mil.nga.giat.geowave.core.index.InsertionIds-">IndexMetaData</a></code></span></div>
 <div class="block">Update the aggregation result using the new entry provided</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsAdded-java.util.List-">insertionIdsAdded</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsAdded-mil.nga.giat.geowave.core.index.InsertionIds-">insertionIdsAdded</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ids</code> - the new indices to compute an updated aggregation result on</dd>
 </dl>
 </li>
 </ul>
-<a name="insertionIdsRemoved-java.util.List-">
+<a name="insertionIdsRemoved-mil.nga.giat.geowave.core.index.InsertionIds-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>insertionIdsRemoved</h4>
-<pre>public&nbsp;void&nbsp;insertionIdsRemoved(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;ids)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsRemoved-java.util.List-">IndexMetaData</a></code></span></div>
+<pre>public&nbsp;void&nbsp;insertionIdsRemoved(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;ids)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsRemoved-mil.nga.giat.geowave.core.index.InsertionIds-">IndexMetaData</a></code></span></div>
 <div class="block">Update the aggregation result by removing the entries provided</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsRemoved-java.util.List-">insertionIdsRemoved</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a></code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html#insertionIdsRemoved-mil.nga.giat.geowave.core.index.InsertionIds-">insertionIdsRemoved</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a></code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>ids</code> - the new indices to compute an updated aggregation result on</dd>
 </dl>

@@ -119,35 +119,43 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.base">mil.nga.giat.geowave.core.store.base</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.cli.remote.options">mil.nga.giat.geowave.core.store.cli.remote.options</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.metadata">mil.nga.giat.geowave.core.store.metadata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.operations.remote.options">mil.nga.giat.geowave.core.store.operations.remote.options</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.index.secondary">mil.nga.giat.geowave.datastore.accumulo.index.secondary</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.bigtable">mil.nga.giat.geowave.datastore.bigtable</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.cassandra">mil.nga.giat.geowave.datastore.cassandra</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.dynamodb">mil.nga.giat.geowave.datastore.dynamodb</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.index.secondary">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -424,6 +432,10 @@
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
 <td class="colLast"><span class="typeNameLabel">GeoWaveStoreFinder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/GeoWaveStoreFinder.html#createDataStore-java.util.Map-">createDataStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;configOptions)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStoreFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;factoryOptions)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
@@ -436,6 +448,50 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">StoreFactoryFamilySpi.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStoreFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.base">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/base/package-summary.html">mil.nga.giat.geowave.core.store.base</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/base/package-summary.html">mil.nga.giat.geowave.core.store.base</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html" title="class in mil.nga.giat.geowave.core.store.base">BaseDataStore</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.cli.remote.options">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.cli.remote.options</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.cli.remote.options</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><span class="typeNameLabel">StoreLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/StoreLoader.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DataStorePluginOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -460,55 +516,12 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.metadata">
 <!--   -->
 </a>
-<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStore.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStore</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/package-summary.html">mil.nga.giat.geowave.core.store.metadata</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryDataStoreFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;configOptions)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected static <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryDataStoreFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreFactory.html#createStore-java.lang.String-">createStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;namespace)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryStoreFactoryFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreFactoryFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/package-summary.html">mil.nga.giat.geowave.core.store.metadata</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -516,29 +529,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">MemorySecondaryIndexDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemorySecondaryIndexDataStore.html#setDataStore-mil.nga.giat.geowave.core.store.DataStore-">setDataStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.operations.remote.options">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.operations.remote.options</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/package-summary.html">mil.nga.giat.geowave.core.store.operations.remote.options</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">StoreLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/StoreLoader.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DataStorePluginOptions.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/remote/options/DataStorePluginOptions.html#createDataStore--">createDataStore</a></span>()</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">SecondaryIndexStoreImpl.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/SecondaryIndexStoreImpl.html#setDataStore-mil.nga.giat.geowave.core.store.DataStore-">setDataStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -638,6 +629,94 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.cassandra">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/package-summary.html">mil.nga.giat.geowave.datastore.cassandra</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/package-summary.html">mil.nga.giat.geowave.datastore.cassandra</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStore.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraDataStore</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/package-summary.html">mil.nga.giat.geowave.datastore.cassandra</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraDataStoreFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/package-summary.html">mil.nga.giat.geowave.datastore.cassandra</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraStoreFactoryFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraStoreFactoryFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.dynamodb">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBDataStore.html" title="class in mil.nga.giat.geowave.datastore.dynamodb">DynamoDBDataStore</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
+<td class="colLast"><span class="typeNameLabel">DynamoDBDataStoreFactory.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBDataStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DynamoDBStoreFactoryFamily.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/DynamoDBStoreFactoryFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
 <!--   -->
 </a>
@@ -682,24 +761,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.index.secondary">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/package-summary.html">mil.nga.giat.geowave.datastore.hbase.index.secondary</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseSecondaryIndexDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/index/secondary/HBaseSecondaryIndexDataStore.html#setDataStore-mil.nga.giat.geowave.core.store.DataStore-">setDataStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.examples.ingest">
 <!--   -->
 </a>
@@ -713,7 +774,8 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></code></td>
-<td class="colLast"><span class="typeNameLabel">SimpleIngest.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations-">getAccumuloGeowaveDataStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo">BasicAccumuloOperations</a>&nbsp;instance)</code>
+<td class="colLast"><span class="typeNameLabel">SimpleIngest.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/examples/ingest/SimpleIngest.html#getAccumuloGeowaveDataStore-mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions-">getAccumuloGeowaveDataStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations">AccumuloOperations</a>&nbsp;operations,
+                           <a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/cli/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.cli.config">AccumuloOptions</a>&nbsp;options)</code>
 <div class="block">DataStore is essentially the controller that take the accumulo
  information, geowave configuration, and data type, and inserts/queries
  from accumulo</div>
@@ -798,6 +860,19 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/package-summary.html">mil.nga.giat.geowave.mapreduce</a> that implement <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/package-summary.html">mil.nga.giat.geowave.mapreduce</a> that return <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -858,6 +933,14 @@
 <tr class="rowColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">StoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/test/StoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraStoreTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/test/CassandraStoreTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DynamoDBTestEnvironment.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/test/DynamoDBTestEnvironment.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

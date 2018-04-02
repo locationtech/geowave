@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,8 +49,8 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRow.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html" target="_top">Frames</a></li>
@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloFactory</a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store.BaseDataStoreFamily</a></li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily</li>
@@ -119,14 +119,32 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AccumuloStoreFactoryFamily</span>
-extends <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloFactory</a>
-implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></pre>
+extends <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
+<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#TYPE">TYPE</a></span></code>&nbsp;</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -157,40 +175,20 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getAdapterIndexMappingStoreFactory--">getAdapterIndexMappingStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getAdapterStoreFactory--">getAdapterStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getIndexStoreFactory--">getIndexStoreFactory</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i6" class="altColor">
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html#getSecondaryIndexDataStore--">getSecondaryIndexDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.datastore.accumulo.AbstractAccumuloFactory">
+<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.BaseDataStoreFamily">
 <!--   -->
 </a>
-<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.datastore.accumulo.<a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html" title="class in mil.nga.giat.geowave.datastore.accumulo">AbstractAccumuloFactory</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#createOptionsInstance--">createOptionsInstance</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getDescription--">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AbstractAccumuloFactory.html#getType--">getType</a></code></li>
+<h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></h3>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterIndexMappingStoreFactory--">getAdapterIndexMappingStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterStoreFactory--">getAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDescription--">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getIndexStoreFactory--">getIndexStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getType--">getType</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -198,13 +196,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
-</ul>
-<ul class="blockList">
-<li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.GenericFactory">
-<!--   -->
-</a>
-<h3>Methods inherited from interface&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html#getDescription--">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html#getType--">getType</a></code></li>
 </ul>
 </li>
 </ul>
@@ -214,6 +205,27 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
+<!-- ============ FIELD DETAIL =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.detail">
+<!--   -->
+</a>
+<h3>Field Detail</h3>
+<a name="TYPE">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>TYPE</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> TYPE</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily.TYPE">Constant Field Values</a></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
@@ -247,84 +259,23 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getDataStatisticsStoreFactory--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDataStatisticsStoreFactory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&gt;&nbsp;getDataStatisticsStoreFactory()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getIndexStoreFactory--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getIndexStoreFactory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&gt;&nbsp;getIndexStoreFactory()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getIndexStoreFactory--">getIndexStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getAdapterStoreFactory--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAdapterStoreFactory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&gt;&nbsp;getAdapterStoreFactory()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getAdapterStoreFactory--">getAdapterStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreFactory--">getDataStoreFactory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></code></dd>
 </dl>
 </li>
 </ul>
 <a name="getSecondaryIndexDataStore--">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>getSecondaryIndexDataStore</h4>
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataStore.html" title="interface in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataStore</a>&gt;&nbsp;getSecondaryIndexDataStore()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getSecondaryIndexDataStore--">getSecondaryIndexDataStore</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getAdapterIndexMappingStoreFactory--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getAdapterIndexMappingStoreFactory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&gt;&nbsp;getAdapterIndexMappingStoreFactory()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getAdapterIndexMappingStoreFactory--">getAdapterIndexMappingStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
-</dl>
-</li>
-</ul>
-<a name="getDataStoreOperationsFactory--">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>getDataStoreOperationsFactory</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&gt;&nbsp;getDataStoreOperationsFactory()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getSecondaryIndexDataStore--">getSecondaryIndexDataStore</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -356,8 +307,8 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRowId.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/BasicAccumuloOperations.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloRow.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/datastore/accumulo/IteratorConfig.html" title="class in mil.nga.giat.geowave.datastore.accumulo"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/datastore/accumulo/AccumuloStoreFactoryFamily.html" target="_top">Frames</a></li>
@@ -382,13 +333,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFacto
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>

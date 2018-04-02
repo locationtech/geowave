@@ -114,22 +114,6 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.index">mil.nga.giat.geowave.core.store.index</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo">mil.nga.giat.geowave.datastore.accumulo</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.accumulo.util">mil.nga.giat.geowave.datastore.accumulo.util</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase">mil.nga.giat.geowave.datastore.hbase</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
 </tbody>
 </table>
 </li>
@@ -296,16 +280,12 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeDataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;</span></code>
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatsCompositionTool.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">StatsCompositionTool</a>&lt;T&gt;</span></code>
 <div class="block">This tool does not react to callbacks if the provided statistics store is
@@ -342,12 +322,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html#createIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter,
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html#createIndexWriter-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.operations.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;adapter,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;baseOperations,
+                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&nbsp;baseOperations,
                  <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;baseOptions,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&nbsp;callback,
+                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;callback,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -360,7 +340,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected abstract &lt;T&gt;&nbsp;void</code></td>
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><span class="typeNameLabel">BaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/base/BaseDataStore.html#addAltIndexCallback-java.util.List-java.lang.String-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">addAltIndexCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&gt;&nbsp;callbacks,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
@@ -440,186 +420,6 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/SecondaryIndexDataManager.html" title="class in mil.nga.giat.geowave.core.store.index">SecondaryIndexDataManager</a>&lt;T&gt;</span></code>
 <div class="block">One manager associated with each primary index.</div>
 </td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
-<caption><span>Fields in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> declared as <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">DataStoreIndexWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#callback">callback</a></span></code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/package-summary.html">mil.nga.giat.geowave.core.store.index</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html#DataStoreIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">DataStoreIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;adapter,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;operations,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;options,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/DataStoreIndexWriter.html" title="type parameter in DataStoreIndexWriter">T</a>&gt;&nbsp;callback,
-                    <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a> in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/package-summary.html">mil.nga.giat.geowave.core.store.memory</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected static &lt;T&gt;&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryEntryRow.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryEntryRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryStoreUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryStoreUtils.html#entryToRows-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-T-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">entryToRows</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;&nbsp;dataWriter,
-           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-           T&nbsp;entry,
-           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&nbsp;ingestCallback,
-           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;T&gt;&nbsp;customFieldVisibilityWriter)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#createIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;baseOperations,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;baseOptions,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&nbsp;callback,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloDataStore.html#addAltIndexCallback-java.util.List-java.lang.String-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">addAltIndexCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&gt;&nbsp;callbacks,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/package-summary.html">mil.nga.giat.geowave.datastore.accumulo</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html#AccumuloIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.datastore.accumulo.AccumuloOperations-mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">AccumuloIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloOperations.html" title="interface in mil.nga.giat.geowave.datastore.accumulo">AccumuloOperations</a>&nbsp;accumuloOperations,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/config/AccumuloOptions.html" title="class in mil.nga.giat.geowave.datastore.accumulo.operations.config">AccumuloOptions</a>&nbsp;accumuloOptions,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/AccumuloIndexWriter.html" title="type parameter in AccumuloIndexWriter">T</a>&gt;&nbsp;callback,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.accumulo.util">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.util</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.util</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html#AccumuloKeyValuePairGenerator-mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.callback.IngestCallback-mil.nga.giat.geowave.core.store.data.VisibilityWriter-">AccumuloKeyValuePairGenerator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;adapter,
-                             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;callback,
-                             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/util/AccumuloKeyValuePairGenerator.html" title="type parameter in AccumuloKeyValuePairGenerator">T</a>&gt;&nbsp;visibilityWriter)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#createIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">createIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&nbsp;adapter,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOperations</a>&nbsp;baseOperations,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;baseOptions,
-                 <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&nbsp;callback,
-                 <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Method parameters in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseDataStore.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseDataStore.html#addAltIndexCallback-java.util.List-java.lang.String-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">addAltIndexCallback</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;&gt;&nbsp;callbacks,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexName,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;T&gt;&nbsp;adapter,
-                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryIndexId)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
-<caption><span>Constructors in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/package-summary.html">mil.nga.giat.geowave.datastore.hbase</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Constructor and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html#HBaseIndexWriter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations-mil.nga.giat.geowave.datastore.hbase.operations.config.HBaseOptions-mil.nga.giat.geowave.core.store.callback.IngestCallback-java.io.Closeable-">HBaseIndexWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;adapter,
-                <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/BasicHBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">BasicHBaseOperations</a>&nbsp;operations,
-                <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/config/HBaseOptions.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations.config">HBaseOptions</a>&nbsp;options,
-                <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/HBaseIndexWriter.html" title="type parameter in HBaseIndexWriter">T</a>&gt;&nbsp;callback,
-                <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>&nbsp;closable)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

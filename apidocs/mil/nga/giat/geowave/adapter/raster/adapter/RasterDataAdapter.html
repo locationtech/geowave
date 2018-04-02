@@ -332,8 +332,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getCoverageFromRasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getCoverageFromRasterTile</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getCoverageFromRasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">getCoverageFromRasterTile</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
@@ -410,7 +411,9 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</code>&nbsp;</td>
 </tr>
 <tr id="i29" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
@@ -757,14 +760,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </dl>
 </li>
 </ul>
-<a name="getCoverageFromRasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
+<a name="getCoverageFromRasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getCoverageFromRasterTile</h4>
 <pre>public&nbsp;org.opengis.coverage.grid.GridCoverage&nbsp;getCoverageFromRasterTile(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;rasterTile,
-                                                                        <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertionId,
+                                                                        <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
+                                                                        <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey,
                                                                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</pre>
 </li>
 </ul>
@@ -943,19 +947,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>public&nbsp;double[][]&nbsp;getNoDataValuesPerBand()</pre>
 </li>
 </ul>
-<a name="getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getVisibilityHandler</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
-</dl>
-</li>
-</ul>
 <a name="getMetadata--">
 <!--   -->
 </a>
@@ -1098,13 +1089,28 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <a name="init-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>init</h4>
 <pre>public&nbsp;void&nbsp;init(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>...&nbsp;indices)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#init-mil.nga.giat.geowave.core.store.index.PrimaryIndex...-">init</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
+</dl>
+</li>
+</ul>
+<a name="getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getVisibilityHandler</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/EntryVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store">EntryVisibilityHandler</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;getVisibilityHandler(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+                                                                                           <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;&nbsp;adapter,
+                                                                                           <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;statisticsId)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html#getVisibilityHandler-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.store.adapter.DataAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getVisibilityHandler</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;org.opengis.coverage.grid.GridCoverage&gt;</code></dd>
 </dl>
 </li>
 </ul>
