@@ -71,9 +71,6 @@ tar cvzf geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}${TIME_TAG_STR}.tar.gz geow
 
 rm -rf geowave
 
-# Copy the Jace C++ artifacts
-cp ${WORKSPACE}/${ARGS[buildroot]}/SOURCES/geowave-c++-${GEOWAVE_VERSION}-${VENDOR_VERSION}.tar.gz ${WORKSPACE}/${ARGS[buildroot]}/TARBALL/geowave-c++-${VENDOR_VERSION}-${GEOWAVE_VERSION}${TIME_TAG_STR}.tar.gz
-
 echo '###### Copy rpm to repo and reindex'
 
 mkdir -p ${LOCAL_REPO_DIR}/${ARGS[repo]}/${BUILD_TYPE}/{SRPMS,TARBALL,${ARGS[arch]}}/
