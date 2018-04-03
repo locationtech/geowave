@@ -47,6 +47,8 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 
 public class GeoWaveFeatureReaderTest extends
 		BaseDataStoreTest
@@ -71,7 +73,8 @@ public class GeoWaveFeatureReaderTest extends
 		type = DataUtilities.createType(
 				"GeoWaveFeatureReaderTest",
 				"geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
-
+		((GeoWaveGTDataStore)dataStore).getIndexStore().addIndex(new SpatialIndexBuilder().createIndex());
+		((GeoWaveGTDataStore)dataStore).getIndexStore().addIndex(new SpatialTemporalIndexBuilder().createIndex());
 		dataStore.createSchema(type);
 
 		stime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
@@ -156,6 +159,38 @@ public class GeoWaveFeatureReaderTest extends
 	}
 
 	@Test
+	public void testSmallBBOX()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException {
+		final FilterFactoryImpl factory = new FilterFactoryImpl();
+		final Query query = new Query(
+				"GeoWaveFeatureReaderTest",
+				factory.bbox(
+						"geometry",
+						28,
+						41,
+						28.5,
+						41.5,
+						"EPSG:4326"),
+				new String[] {
+					"geometry",
+					"pid"
+				});
+
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
+		int count = 0;
+		while (reader.hasNext()) {
+			final SimpleFeature feature = reader.next();
+			assertTrue(fids.contains(feature.getID()));
+			count++;
+		}
+		assertEquals(1, count);
+
+	}
+	@Test
 	public void testBBOX()
 			throws IllegalArgumentException,
 			NoSuchElementException,
@@ -164,7 +199,7 @@ public class GeoWaveFeatureReaderTest extends
 		final Query query = new Query(
 				"GeoWaveFeatureReaderTest",
 				factory.bbox(
-						"",
+						"geometry",
 						-180,
 						-90,
 						180,
