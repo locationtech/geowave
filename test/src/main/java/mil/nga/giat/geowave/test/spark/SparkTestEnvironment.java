@@ -29,7 +29,7 @@ public class SparkTestEnvironment implements
 	@Override
 	public void setup()
 			throws Exception {
-		if(defaultSession == null) {
+		if (defaultSession == null) {
 			SparkConf addonOptions = new SparkConf();
 			addonOptions.setMaster("local[*]");
 			addonOptions.setAppName("CoreGeoWaveSparkITs");

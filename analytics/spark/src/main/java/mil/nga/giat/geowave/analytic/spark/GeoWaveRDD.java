@@ -8,7 +8,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
@@ -167,6 +166,24 @@ public class GeoWaveRDD
 				outputStoreOptions,
 				adapter,
 				inputRDD.values());
+	}
+
+	public static void writeFeaturesToGeoWave(
+			SparkContext sc,
+			PrimaryIndex[] indices,
+			DataStorePluginOptions outputStoreOptions,
+			FeatureDataAdapter adapter,
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> inputRDD )
+			throws IOException {
+
+		for (int iStrategy = 0; iStrategy < indices.length; iStrategy += 1) {
+			writeToGeoWave(
+					sc,
+					indices[iStrategy],
+					outputStoreOptions,
+					adapter,
+					inputRDD.values());
+		}
 	}
 
 	/**

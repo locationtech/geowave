@@ -52,4 +52,8 @@ public abstract class WKTGeomFunction implements
 			throws ParseException {
 		return geomReader.read(wktString);
 	}
+	
+	public String getRegisterName() {
+		return function.getRegisterName();
+	}
 }
