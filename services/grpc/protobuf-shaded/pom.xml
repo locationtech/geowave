@@ -24,6 +24,35 @@
   <build>
     <plugins>
       <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>java</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <includeProjectDependencies>false</includeProjectDependencies>
+          <includePluginDependencies>true</includePluginDependencies>
+          <mainClass>mil.nga.giat.geowave.service.grpc.GeowaveOperationGrpcGenerator</mainClass>
+          <arguments>
+            <argument>${project.basedir}</argument>
+          </arguments>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>mil.nga.giat</groupId>
+            <artifactId>geowave-grpc-protobuf-generator</artifactId>
+            <version>${project.version}</version>
+            <type>jar</type>
+          </dependency>
+        </dependencies>
+      </plugin>	
+      <plugin>
         <artifactId>maven-shade-plugin</artifactId>
         <version>2.4</version>
         <executions>
