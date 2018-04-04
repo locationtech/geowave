@@ -170,7 +170,6 @@ mil.nga.giat.geowave.datastore.accumulo.mapreduce
 mil.nga.giat.geowave.datastore.accumulo.minicluster
 mil.nga.giat.geowave.datastore.accumulo.operations
 mil.nga.giat.geowave.datastore.accumulo.operations.config
-mil.nga.giat.geowave.datastore.accumulo.query
 mil.nga.giat.geowave.datastore.accumulo.split
 mil.nga.giat.geowave.datastore.accumulo.util
 mil.nga.giat.geowave.datastore.bigtable
