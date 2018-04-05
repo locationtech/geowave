@@ -96,6 +96,7 @@ import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.AggregationEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObserver;
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos;
@@ -1487,7 +1488,7 @@ public class HBaseOperations implements
 			if (options.isVerifyCoprocessors()) {
 				verifyCoprocessor(
 						AbstractGeoWavePersistence.METADATA_TABLE,
-						VersionService.class.getName(),
+						VersionEndpoint.class.getName(),
 						options.getCoprocessorJar());
 			}
 			final Table table = getTable(AbstractGeoWavePersistence.METADATA_TABLE);
