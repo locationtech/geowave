@@ -10,7 +10,10 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,8 +28,12 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.FileStatus;
+import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.hbase.Coprocessor;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionLocation;
@@ -101,7 +108,6 @@ import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationPro
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionRequest;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionService;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingServerOp;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingVisibilityServerOp;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
@@ -638,12 +644,26 @@ public class HBaseOperations implements
 						LOGGER.debug("- add coprocessor...");
 
 						// Retrieve coprocessor jar path from config
+						Path hdfsJarPath = null;
 						if (coprocessorJar == null) {
+							try {
+								hdfsJarPath = getGeoWaveJarOnPath();
+							}
+							catch (final Exception e) {
+								LOGGER.warn(
+										"Unable to infer coprocessor library",
+										e);
+							}
+						}
+						else {
+							hdfsJarPath = new Path(
+									coprocessorJar);
+						}
+
+						if (hdfsJarPath == null) {
 							td.addCoprocessor(coprocessorName);
 						}
 						else {
-							final Path hdfsJarPath = new Path(
-									coprocessorJar);
 							LOGGER.debug("Coprocessor jar path: " + hdfsJarPath.toString());
 							td.addCoprocessor(
 									coprocessorName,
@@ -651,7 +671,6 @@ public class HBaseOperations implements
 									Coprocessor.PRIORITY_USER,
 									null);
 						}
-
 						LOGGER.debug("- modify table...");
 						admin.modifyTable(
 								tableName,
@@ -678,7 +697,9 @@ public class HBaseOperations implements
 				}
 			}
 		}
-		catch (final IOException e) {
+		catch (
+
+		final IOException e) {
 			LOGGER.error(
 					"Error verifying/adding coprocessor.",
 					e);
@@ -687,6 +708,54 @@ public class HBaseOperations implements
 		}
 
 		return true;
+	}
+
+	private static Path getGeoWaveJarOnPath()
+			throws IOException {
+		final Configuration conf = HBaseConfiguration.create();
+		final File f = new File(
+				"/etc/hbase/conf/hbase-site.xml");
+		if (f.exists()) {
+			try (InputStream fis = new FileInputStream(
+					f)) {
+				conf.addResource(fis);
+			}
+		}
+		final String remotePath = conf.get("hbase.dynamic.jars.dir");
+		if (remotePath == null) {
+			return null;
+		}
+		final Path remoteDir = new Path(
+				remotePath);
+
+		final FileSystem remoteDirFs = remoteDir.getFileSystem(conf);
+
+		final FileStatus[] statuses = remoteDirFs.listStatus(remoteDir);
+		if ((statuses == null) || (statuses.length == 0)) {
+			return null; // no remote files at all
+		}
+		Path retVal = null;
+		for (final FileStatus status : statuses) {
+			if (status.isDirectory()) {
+				continue; // No recursive lookup
+			}
+			final Path path = status.getPath();
+			final String fileName = path.getName();
+
+			if (fileName.endsWith(".jar")) {
+				if (fileName.contains("geowave") && fileName.contains("hbase")) {
+					LOGGER.info("inferring " + status.getPath().toString() + " as the library for this coprocesor");
+					// this is the best guess at the right jar if there are
+					// multiple
+					return status.getPath();
+				}
+				retVal = status.getPath();
+			}
+		}
+		if (retVal != null) {
+			LOGGER.info("inferring " + retVal.toString() + " as the library for this coprocesor");
+		}
+		return retVal;
 	}
 
 	@Override
