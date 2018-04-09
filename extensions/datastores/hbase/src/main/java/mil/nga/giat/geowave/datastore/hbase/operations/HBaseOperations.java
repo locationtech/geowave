@@ -11,9 +11,7 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -716,10 +714,7 @@ public class HBaseOperations implements
 		final File f = new File(
 				"/etc/hbase/conf/hbase-site.xml");
 		if (f.exists()) {
-			try (InputStream fis = new FileInputStream(
-					f)) {
-				conf.addResource(fis);
-			}
+			conf.addResource(f.toURI().toURL());
 		}
 		final String remotePath = conf.get("hbase.dynamic.jars.dir");
 		if (remotePath == null) {
