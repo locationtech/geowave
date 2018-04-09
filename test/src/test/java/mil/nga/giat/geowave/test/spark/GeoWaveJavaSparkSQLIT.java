@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.test.spark;
 
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -21,25 +21,32 @@ import com.vividsolutions.jts.util.Stopwatch;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SqlResultsWriter;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 
 @RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SPARK
+})
 public class GeoWaveJavaSparkSQLIT extends
 		AbstractGeoWaveBasicVectorIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkSQLIT.class);
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO		
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -70,12 +77,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	@Test
 	public void testCreateDataFrame() {
 		// Set up Spark
-		SparkSession spark = SparkSession.builder().master(
-				"local[*]").appName(
-				"JavaSparkSqlIT").getOrCreate();
-
-		JavaSparkContext context = new JavaSparkContext(
-				spark.sparkContext());
+		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
+		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
 
 		// ingest test points
 		TestUtils.testLocalIngest(
@@ -87,7 +90,7 @@ public class GeoWaveJavaSparkSQLIT extends
 		try {
 			// Load RDD from datastore, no filters
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore);
 
 			long count = javaRdd.count();
@@ -95,7 +98,7 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			// Create a DataFrame from the RDD
 			SimpleFeatureDataFrame sfDataFrame = new SimpleFeatureDataFrame(
-					spark);
+					session);
 
 			if (!sfDataFrame.init(
 					dataStore,
@@ -112,11 +115,11 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			String bbox = "POLYGON ((-94 34, -93 34, -93 35, -94 35, -94 34))";
 
-			Dataset<Row> results = spark.sql("SELECT * FROM features WHERE geomContains('" + bbox + "', geom)");
+			Dataset<Row> results = session.sql("SELECT * FROM features WHERE geomContains('" + bbox + "', geom)");
 			long containsCount = results.count();
 			LOGGER.warn("Got " + containsCount + " for geomContains test");
 
-			results = spark.sql("SELECT * FROM features WHERE geomWithin(geom, '" + bbox + "')");
+			results = session.sql("SELECT * FROM features WHERE geomWithin(geom, '" + bbox + "')");
 			long withinCount = results.count();
 			LOGGER.warn("Got " + withinCount + " for geomWithin test");
 
@@ -134,7 +137,7 @@ public class GeoWaveJavaSparkSQLIT extends
 			// Test other spatial UDFs
 			String line1 = "LINESTRING(0 0, 10 10)";
 			String line2 = "LINESTRING(0 10, 10 0)";
-			Row result = spark.sql(
+			Row result = session.sql(
 					"SELECT geomIntersects('" + line1 + "', '" + line2 + "')").head();
 
 			boolean intersect = result.getBoolean(0);
@@ -144,7 +147,7 @@ public class GeoWaveJavaSparkSQLIT extends
 					"Lines should intersect",
 					intersect);
 
-			result = spark.sql(
+			result = session.sql(
 					"SELECT geomDisjoint('" + line1 + "', '" + line2 + "')").head();
 
 			boolean disjoint = result.getBoolean(0);
@@ -158,28 +161,19 @@ public class GeoWaveJavaSparkSQLIT extends
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			spark.close();
-			context.close();
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
 					+ e.getLocalizedMessage() + "'");
 		}
 
 		// Clean up
 		TestUtils.deleteAll(dataStore);
-
-		spark.close();
-		context.close();
 	}
 
 	// @Test
 	public void testSpatialJoin() {
 		// Set up Spark
-		SparkSession spark = SparkSession.builder().master(
-				"local[*]").appName(
-				"JavaSparkSqlIT").getOrCreate();
-
-		JavaSparkContext context = new JavaSparkContext(
-				spark.sparkContext());
+		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
+		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
 
 		// ingest test points
 		TestUtils.testLocalIngest(
@@ -198,13 +192,13 @@ public class GeoWaveJavaSparkSQLIT extends
 					leftBox);
 
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					leftBoxQuery);
 
 			// Create a DataFrame from the Left RDD
 			SimpleFeatureDataFrame leftDataFrame = new SimpleFeatureDataFrame(
-					spark);
+					session);
 
 			if (!leftDataFrame.init(
 					dataStore,
@@ -216,7 +210,7 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			dfLeft.createOrReplaceTempView("left");
 
-			Dataset<Row> leftDistinct = spark.sql("SELECT distinct geom FROM left");
+			Dataset<Row> leftDistinct = session.sql("SELECT distinct geom FROM left");
 
 			long leftCount = leftDistinct.count();
 			LOGGER.warn("Left dataframe loaded with " + leftCount + " unique points.");
@@ -228,13 +222,13 @@ public class GeoWaveJavaSparkSQLIT extends
 					rightBox);
 
 			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRdd = GeoWaveRDD.rddForSimpleFeatures(
-					context.sc(),
+					context,
 					dataStore,
 					rightBoxQuery);
 
 			// Create a DataFrame from the Left RDD
 			SimpleFeatureDataFrame rightDataFrame = new SimpleFeatureDataFrame(
-					spark);
+					session);
 
 			if (!rightDataFrame.init(
 					dataStore,
@@ -246,13 +240,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			dfRight.createOrReplaceTempView("right");
 
-			Dataset<Row> rightDistinct = spark.sql("SELECT distinct geom FROM right");
+			Dataset<Row> rightDistinct = session.sql("SELECT distinct geom FROM right");
 
 			long rightCount = rightDistinct.count();
 			LOGGER.warn("Right dataframe loaded with " + rightCount + " unique points.");
 
 			// Do a spatial join to find the overlap
-			Dataset<Row> results = spark
+			Dataset<Row> results = session
 					.sql("SELECT distinct left.geom FROM left INNER JOIN right ON geomIntersects(left.geom, right.geom)");
 
 			long overlapCount = results.count();
@@ -261,17 +255,12 @@ public class GeoWaveJavaSparkSQLIT extends
 		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
-			spark.close();
-			context.close();
 			Assert.fail("Error occurred while testing a bounding box query of spatial index: '"
 					+ e.getLocalizedMessage() + "'");
 		}
 
 		// Clean up
 		TestUtils.deleteAll(dataStore);
-
-		spark.close();
-		context.close();
 	}
 
 	@Override

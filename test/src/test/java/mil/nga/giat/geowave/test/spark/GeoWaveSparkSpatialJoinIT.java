@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test.spark;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
@@ -22,7 +23,9 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
@@ -37,18 +40,25 @@ import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytic.spark.spatial.TieredSpatialJoin;
 
 @RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SPARK
+})
 public class GeoWaveSparkSpatialJoinIT extends
 		AbstractGeoWaveBasicVectorIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveSparkSpatialJoinIT.class);
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStore;
 
 	private static long startMillis;
-	private static SparkSession session;
+	private static SparkSession session = null;
+	private static SparkContext context = null;
 	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> hailRDD = null;
 	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> tornadoRDD = null;
 	private Dataset<Row> hailBruteResults = null;
@@ -58,16 +68,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@BeforeClass
 	public static void reportTestStart() {
-		startMillis = System.currentTimeMillis();
-		session = SparkSession.builder().appName(
-				"SpatialJoinTest").master(
-				"local[*]").config(
-				"spark.serializer",
-				"org.apache.spark.serializer.KryoSerializer").config(
-				"spark.kryo.registrator",
-				"mil.nga.giat.geowave.analytic.spark.GeoWaveRegistrator").getOrCreate();
 
-		GeomFunctionRegistry.registerGeometryFunctions(session);
+		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("*  RUNNING GeoWaveSparkSpatialJoinIT  *");
@@ -78,9 +80,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@AfterClass
 	public static void reportTestFinish() {
-
-		session.close();
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED GeoWaveSparkSpatialJoinIT  *");
@@ -94,6 +93,10 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	@Test
 	public void testHailTornadoDistanceJoin() {
+
+		session = SparkTestEnvironment.getInstance().getDefaultSession();
+		context = SparkTestEnvironment.getInstance().getDefaultContext();
+		GeomFunctionRegistry.registerGeometryFunctions(session);
 		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
 		long mark = System.currentTimeMillis();
 		ingestHailandTornado();
@@ -170,17 +173,18 @@ public class GeoWaveSparkSpatialJoinIT extends
 		// Verify each row matches
 		Assert.assertTrue((hailIndexedCount == hailBruteCount));
 		Assert.assertTrue((tornadoIndexedCount == tornadoBruteCount));
+		Dataset<Row> subtractedFrame = indexedHail.except(hailBruteResults);
+		subtractedFrame = subtractedFrame.cache();
 		Assert.assertTrue(
 				"Subtraction between brute force join and indexed Hail should result in count of 0",
-				(indexedHail.except(
-						hailBruteResults).count() == 0));
+				(subtractedFrame.count() == 0));
+		subtractedFrame.unpersist();
+		subtractedFrame = indexedTornado.except(tornadoBruteResults);
+		subtractedFrame = subtractedFrame.cache();
 		Assert.assertTrue(
 				"Subtraction between brute force join and indexed Tornado should result in count of 0",
-				(indexedTornado.except(
-						tornadoBruteResults).count() == 0));
+				(subtractedFrame.count() == 0));
 
-		hailRDD.unpersist();
-		tornadoRDD.unpersist();
 		TestUtils.deleteAll(dataStore);
 	}
 
@@ -221,18 +225,18 @@ public class GeoWaveSparkSpatialJoinIT extends
 		DataAdapter<?> tornadoAdapter = dataStore.createAdapterStore().getAdapter(tornado_adapter);
 		try {
 			hailRDD = GeoWaveRDD.rddForSimpleFeatures(
-					session.sparkContext(), 
+					context, 
 					dataStore, 
 					null, 
 					new QueryOptions(hailAdapter)).reduceByKey((f1,f2) -> f1);
-			hailRDD.cache();
+			hailRDD = hailRDD.cache();
 
 			tornadoRDD = GeoWaveRDD.rddForSimpleFeatures(
-					session.sparkContext(), 
+					context, 
 					dataStore, 
 					null, 
 					new QueryOptions(tornadoAdapter)).reduceByKey((f1,f2) -> f1);
-			tornadoRDD.cache();
+			tornadoRDD = tornadoRDD.cache();
 		}
 		catch (IOException e) {
 			LOGGER.error("Could not load rdds for test");
