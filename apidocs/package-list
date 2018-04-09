@@ -237,6 +237,7 @@ mil.nga.giat.geowave.test.annotation
 mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.services
+mil.nga.giat.geowave.test.spark
 mil.nga.giat.geowave.types.stanag4676.service
 mil.nga.giat.geowave.types.stanag4676.service.rest
 org.apache.hadoop.hbase.regionserver
