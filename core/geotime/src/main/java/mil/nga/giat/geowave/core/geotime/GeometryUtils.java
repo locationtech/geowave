@@ -31,7 +31,9 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -166,13 +168,20 @@ public class GeometryUtils
 		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
+		/*
+		 * constraintsPerDimension.put( LongitudeDefinition.class, new
+		 * ConstraintData( rangeLongitude, false)); constraintsPerDimension.put(
+		 * LatitudeDefinition.class, new ConstraintData( rangeLatitude, false));
+		 * return new ConstraintSet( constraintsPerDimension);
+		 */
+
 		constraintsPerDimension.put(
-				LongitudeDefinition.class,
+				CustomCRSUnboundedSpatialDimensionX.class,
 				new ConstraintData(
 						rangeLongitude,
 						false));
 		constraintsPerDimension.put(
-				LatitudeDefinition.class,
+				CustomCRSUnboundedSpatialDimensionY.class,
 				new ConstraintData(
 						rangeLatitude,
 						false));

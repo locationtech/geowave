@@ -346,7 +346,8 @@ public class GeoWaveBasicRasterIT extends
 
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.createCustomCRSPrimaryIndex())) {
+			// TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(RasterUtils.createCoverageTypeDouble(
 					coverageName,
 					westLon,
@@ -392,7 +393,8 @@ public class GeoWaveBasicRasterIT extends
 				"test-value");
 		try (IndexWriter writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				// TestUtils.DEFAULT_SPATIAL_INDEX
+				TestUtils.createCustomCRSPrimaryIndex())) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,
