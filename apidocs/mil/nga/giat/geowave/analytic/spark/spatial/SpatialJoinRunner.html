@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html" title="interface in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -141,8 +141,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#SpatialJoinRunner--">SpatialJoinRunner</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#SpatialJoinRunner-mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinOptions-org.apache.spark.sql.SparkSession-">SpatialJoinRunner</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a>&nbsp;opts,
-                 org.apache.spark.sql.SparkSession&nbsp;session)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#SpatialJoinRunner-org.apache.spark.sql.SparkSession-">SpatialJoinRunner</a></span>(org.apache.spark.sql.SparkSession&nbsp;session)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -160,24 +159,124 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getAppName--">getAppName</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getHost--">getHost</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getLeftAdapterId--">getLeftAdapterId</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getLeftResults--">getLeftResults</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getOptions--">getOptions</a></span>()</code>&nbsp;</td>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getLeftStore--">getLeftStore</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getMaster--">getMaster</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getOutputLeftAdapterId--">getOutputLeftAdapterId</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getOutputRightAdapterId--">getOutputRightAdapterId</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getOutputStore--">getOutputStore</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getPartCount--">getPartCount</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getPredicate--">getPredicate</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getRightAdapterId--">getRightAdapterId</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getRightResults--">getRightResults</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i14" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getRightStore--">getRightStore</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#run--">run</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setOptions-mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinOptions-">setOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setAppName-java.lang.String-">setAppName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;appName)</code>&nbsp;</td>
+</tr>
+<tr id="i17" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setHost-java.lang.String-">setHost</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;host)</code>&nbsp;</td>
+</tr>
+<tr id="i18" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setIndexStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">setIndexStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr id="i19" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setLeftAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setLeftAdapterId</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;leftAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i20" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setLeftStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setLeftStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;leftStore)</code>&nbsp;</td>
+</tr>
+<tr id="i21" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setMaster-java.lang.String-">setMaster</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;master)</code>&nbsp;</td>
+</tr>
+<tr id="i22" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setOutputLeftAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setOutputLeftAdapterId</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;outLeftAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i23" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setOutputRightAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setOutputRightAdapterId</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;outRightAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i24" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setOutputStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setOutputStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStore)</code>&nbsp;</td>
+</tr>
+<tr id="i25" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setPartCount-java.lang.Integer-">setPartCount</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;partCount)</code>&nbsp;</td>
+</tr>
+<tr id="i26" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setPredicate-mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction-">setPredicate</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a>&nbsp;predicate)</code>&nbsp;</td>
+</tr>
+<tr id="i27" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setRightAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setRightAdapterId</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rightAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i28" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setRightStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setRightStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;rightStore)</code>&nbsp;</td>
+</tr>
+<tr id="i29" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setSession-org.apache.spark.sql.SparkSession-">setSession</a></span>(org.apache.spark.sql.SparkSession&nbsp;session)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -210,14 +309,13 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <pre>public&nbsp;SpatialJoinRunner()</pre>
 </li>
 </ul>
-<a name="SpatialJoinRunner-mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinOptions-org.apache.spark.sql.SparkSession-">
+<a name="SpatialJoinRunner-org.apache.spark.sql.SparkSession-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SpatialJoinRunner</h4>
-<pre>public&nbsp;SpatialJoinRunner(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a>&nbsp;opts,
-                         org.apache.spark.sql.SparkSession&nbsp;session)</pre>
+<pre>public&nbsp;SpatialJoinRunner(org.apache.spark.sql.SparkSession&nbsp;session)</pre>
 </li>
 </ul>
 </li>
@@ -246,24 +344,6 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </dl>
 </li>
 </ul>
-<a name="getOptions--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getOptions</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a>&nbsp;getOptions()</pre>
-</li>
-</ul>
-<a name="setOptions-mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setOptions</h4>
-<pre>public&nbsp;void&nbsp;setOptions(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">SpatialJoinOptions</a>&nbsp;options)</pre>
-</li>
-</ul>
 <a name="getLeftResults--">
 <!--   -->
 </a>
@@ -276,10 +356,253 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <a name="getRightResults--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getRightResults</h4>
 <pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;getRightResults()</pre>
+</li>
+</ul>
+<a name="getLeftStore--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLeftStore</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getLeftStore()</pre>
+</li>
+</ul>
+<a name="setLeftStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLeftStore</h4>
+<pre>public&nbsp;void&nbsp;setLeftStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;leftStore)</pre>
+</li>
+</ul>
+<a name="getLeftAdapterId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getLeftAdapterId</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getLeftAdapterId()</pre>
+</li>
+</ul>
+<a name="setLeftAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setLeftAdapterId</h4>
+<pre>public&nbsp;void&nbsp;setLeftAdapterId(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;leftAdapterId)</pre>
+</li>
+</ul>
+<a name="getRightStore--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRightStore</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getRightStore()</pre>
+</li>
+</ul>
+<a name="setRightStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRightStore</h4>
+<pre>public&nbsp;void&nbsp;setRightStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;rightStore)</pre>
+</li>
+</ul>
+<a name="getRightAdapterId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getRightAdapterId</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getRightAdapterId()</pre>
+</li>
+</ul>
+<a name="setRightAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRightAdapterId</h4>
+<pre>public&nbsp;void&nbsp;setRightAdapterId(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;rightAdapterId)</pre>
+</li>
+</ul>
+<a name="getOutputStore--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOutputStore</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getOutputStore()</pre>
+</li>
+</ul>
+<a name="setOutputStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOutputStore</h4>
+<pre>public&nbsp;void&nbsp;setOutputStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStore)</pre>
+</li>
+</ul>
+<a name="getPredicate--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPredicate</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a>&nbsp;getPredicate()</pre>
+</li>
+</ul>
+<a name="setPredicate-mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPredicate</h4>
+<pre>public&nbsp;void&nbsp;setPredicate(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a>&nbsp;predicate)</pre>
+</li>
+</ul>
+<a name="getIndexStrategy--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getIndexStrategy</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;getIndexStrategy()</pre>
+</li>
+</ul>
+<a name="setIndexStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setIndexStrategy</h4>
+<pre>public&nbsp;void&nbsp;setIndexStrategy(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</pre>
+</li>
+</ul>
+<a name="getAppName--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getAppName</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getAppName()</pre>
+</li>
+</ul>
+<a name="setAppName-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setAppName</h4>
+<pre>public&nbsp;void&nbsp;setAppName(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;appName)</pre>
+</li>
+</ul>
+<a name="getMaster--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getMaster</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getMaster()</pre>
+</li>
+</ul>
+<a name="setMaster-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setMaster</h4>
+<pre>public&nbsp;void&nbsp;setMaster(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;master)</pre>
+</li>
+</ul>
+<a name="getHost--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHost</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getHost()</pre>
+</li>
+</ul>
+<a name="setHost-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setHost</h4>
+<pre>public&nbsp;void&nbsp;setHost(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;host)</pre>
+</li>
+</ul>
+<a name="getPartCount--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getPartCount</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;getPartCount()</pre>
+</li>
+</ul>
+<a name="setPartCount-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setPartCount</h4>
+<pre>public&nbsp;void&nbsp;setPartCount(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;partCount)</pre>
+</li>
+</ul>
+<a name="setSession-org.apache.spark.sql.SparkSession-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSession</h4>
+<pre>public&nbsp;void&nbsp;setSession(org.apache.spark.sql.SparkSession&nbsp;session)</pre>
+</li>
+</ul>
+<a name="getOutputLeftAdapterId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOutputLeftAdapterId</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getOutputLeftAdapterId()</pre>
+</li>
+</ul>
+<a name="setOutputLeftAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setOutputLeftAdapterId</h4>
+<pre>public&nbsp;void&nbsp;setOutputLeftAdapterId(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;outLeftAdapterId)</pre>
+</li>
+</ul>
+<a name="getOutputRightAdapterId--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getOutputRightAdapterId</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getOutputRightAdapterId()</pre>
+</li>
+</ul>
+<a name="setOutputRightAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>setOutputRightAdapterId</h4>
+<pre>public&nbsp;void&nbsp;setOutputRightAdapterId(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;outRightAdapterId)</pre>
 </li>
 </ul>
 </li>
@@ -310,7 +633,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </div>
 <div class="subNav">
 <ul class="navList">
-<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html" title="interface in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithin.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/UDFRegistrySPI.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html" target="_top">Frames</a></li>
@@ -142,6 +142,9 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/spa
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#GeomWithinDistance--">GeomWithinDistance</a></span>()</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#GeomWithinDistance-double-">GeomWithinDistance</a></span>(double&nbsp;radius)</code>&nbsp;</td>
 </tr>
 </table>
@@ -172,13 +175,17 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/spa
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#getRadius--">getRadius</a></span>()</code>&nbsp;</td>
 </tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html#setRadius-double-">setRadius</a></span>(double&nbsp;radius)</code>&nbsp;</td>
+</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.analytic.spark.sparksql.udf.<a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">call</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#parseGeom-java.lang.String-">parseGeom</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#call-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">call</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#getRegisterName--">getRegisterName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html#parseGeom-java.lang.String-">parseGeom</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -201,6 +208,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/spa
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
+<a name="GeomWithinDistance--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>GeomWithinDistance</h4>
+<pre>public&nbsp;GeomWithinDistance()</pre>
+</li>
+</ul>
 <a name="GeomWithinDistance-double-">
 <!--   -->
 </a>
@@ -240,6 +256,15 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/spa
 <li class="blockList">
 <h4>getRadius</h4>
 <pre>public&nbsp;double&nbsp;getRadius()</pre>
+</li>
+</ul>
+<a name="setRadius-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setRadius</h4>
+<pre>public&nbsp;void&nbsp;setRadius(double&nbsp;radius)</pre>
 </li>
 </ul>
 <a name="apply-com.vividsolutions.jts.geom.Geometry-com.vividsolutions.jts.geom.Geometry-">
@@ -285,7 +310,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/spa
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithin.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li>Next&nbsp;Class</li>
+<li><a href="../../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/UDFRegistrySPI.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../../index.html?mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomWithinDistance.html" target="_top">Frames</a></li>
