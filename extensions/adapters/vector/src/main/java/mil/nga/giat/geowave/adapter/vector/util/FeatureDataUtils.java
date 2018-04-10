@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
@@ -278,6 +279,29 @@ public class FeatureDataUtils
 		}
 
 		return null;
+	}
+
+	public static FeatureDataAdapter cloneFeatureDataAdapter(
+			final DataStorePluginOptions storeOptions,
+			final ByteArrayId originalAdapterId,
+			final ByteArrayId newAdapterId ) {
+
+		// Get original feature type info
+		SimpleFeatureType oldType = FeatureDataUtils.getFeatureType(
+				storeOptions,
+				originalAdapterId);
+
+		// Build type using new name
+		SimpleFeatureTypeBuilder sftBuilder = new SimpleFeatureTypeBuilder();
+		sftBuilder.init(oldType);
+		sftBuilder.setName(newAdapterId.toString());
+		SimpleFeatureType newType = sftBuilder.buildFeatureType();
+
+		// Create new adapter that will use new typename
+		FeatureDataAdapter newAdapter = new FeatureDataAdapter(
+				newType);
+
+		return newAdapter;
 	}
 
 	public static String getGeomField(

@@ -37,6 +37,7 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
 import mil.nga.giat.geowave.analytic.spark.spatial.TieredSpatialJoin;
 
 @RunWith(GeoWaveITRunner.class)
@@ -104,7 +105,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 		NumericIndexStrategy strategy = createIndexStrategy();
 
-		TieredSpatialJoin tieredJoin = new TieredSpatialJoin();
 		ByteArrayId hail_adapter = new ByteArrayId(
 				"hail");
 		ByteArrayId tornado_adapter = new ByteArrayId(
@@ -114,6 +114,16 @@ public class GeoWaveSparkSpatialJoinIT extends
 		String sqlHail = "select hail.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
 		String sqlTornado = "select tornado.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
 
+		SpatialJoinRunner runner = new SpatialJoinRunner(
+				session);
+		runner.setLeftStore(dataStore);
+		runner.setLeftAdapterId(hail_adapter);
+
+		runner.setRightStore(dataStore);
+		runner.setRightAdapterId(tornado_adapter);
+
+		runner.setIndexStrategy(strategy);
+		runner.setPredicate(distancePredicate);
 		loadRDDs(
 				hail_adapter,
 				tornado_adapter);
@@ -126,12 +136,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 		LOGGER.warn("------------ Running indexed spatial join. ----------");
 		mark = System.currentTimeMillis();
 		try {
-			tieredJoin.join(
-					session,
-					hailRDD,
-					tornadoRDD,
-					distancePredicate,
-					strategy);
+			runner.run();
 		}
 		catch (InterruptedException e) {
 			LOGGER.error("Async error in join");
@@ -141,8 +146,12 @@ public class GeoWaveSparkSpatialJoinIT extends
 			LOGGER.error("Async error in join");
 			e.printStackTrace();
 		}
-		hailIndexedCount = tieredJoin.getLeftResults().count();
-		tornadoIndexedCount = tieredJoin.getRightResults().count();
+		catch (IOException e) {
+			LOGGER.error("IO error in join");
+			e.printStackTrace();
+		}
+		hailIndexedCount = runner.getLeftResults().count();
+		tornadoIndexedCount = runner.getRightResults().count();
 		long indexJoinDur = (System.currentTimeMillis() - mark);
 		LOGGER.warn("Indexed Result Count: " + (hailIndexedCount + tornadoIndexedCount));
 		SimpleFeatureDataFrame indexHailFrame = new SimpleFeatureDataFrame(
@@ -153,12 +162,12 @@ public class GeoWaveSparkSpatialJoinIT extends
 		indexTornadoFrame.init(
 				dataStore,
 				tornado_adapter);
-		Dataset<Row> indexedTornado = indexTornadoFrame.getDataFrame(tieredJoin.getRightResults());
+		Dataset<Row> indexedTornado = indexTornadoFrame.getDataFrame(runner.getRightResults());
 
 		indexHailFrame.init(
 				dataStore,
 				hail_adapter);
-		Dataset<Row> indexedHail = indexHailFrame.getDataFrame(tieredJoin.getLeftResults());
+		Dataset<Row> indexedHail = indexHailFrame.getDataFrame(runner.getLeftResults());
 
 		LOGGER.warn("------------ Running Brute force spatial join. ----------");
 		dur = runBruteForceJoin(

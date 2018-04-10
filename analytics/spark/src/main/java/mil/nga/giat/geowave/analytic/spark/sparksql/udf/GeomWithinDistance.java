@@ -8,6 +8,10 @@ public class GeomWithinDistance extends
 
 	private double radius;
 
+	public GeomWithinDistance() {
+		radius = 0.01;
+	}
+
 	public GeomWithinDistance(
 			double radius ) {
 		this.radius = radius;
@@ -19,6 +23,11 @@ public class GeomWithinDistance extends
 
 	public double getRadius() {
 		return radius;
+	}
+
+	public void setRadius(
+			double radius ) {
+		this.radius = radius;
 	}
 
 	@Override

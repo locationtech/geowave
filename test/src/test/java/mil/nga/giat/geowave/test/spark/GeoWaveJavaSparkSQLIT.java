@@ -115,13 +115,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			String bbox = "POLYGON ((-94 34, -93 34, -93 35, -94 35, -94 34))";
 
-			Dataset<Row> results = session.sql("SELECT * FROM features WHERE geomContains('" + bbox + "', geom)");
+			Dataset<Row> results = session.sql("SELECT * FROM features WHERE GeomContains('" + bbox + "', geom)");
 			long containsCount = results.count();
-			LOGGER.warn("Got " + containsCount + " for geomContains test");
+			LOGGER.warn("Got " + containsCount + " for GeomContains test");
 
-			results = session.sql("SELECT * FROM features WHERE geomWithin(geom, '" + bbox + "')");
+			results = session.sql("SELECT * FROM features WHERE GeomWithin(geom, '" + bbox + "')");
 			long withinCount = results.count();
-			LOGGER.warn("Got " + withinCount + " for geomWithin test");
+			LOGGER.warn("Got " + withinCount + " for GeomWithin test");
 
 			Assert.assertTrue(
 					"Within and Contains counts should be equal",
@@ -138,20 +138,20 @@ public class GeoWaveJavaSparkSQLIT extends
 			String line1 = "LINESTRING(0 0, 10 10)";
 			String line2 = "LINESTRING(0 10, 10 0)";
 			Row result = session.sql(
-					"SELECT geomIntersects('" + line1 + "', '" + line2 + "')").head();
+					"SELECT GeomIntersects('" + line1 + "', '" + line2 + "')").head();
 
 			boolean intersect = result.getBoolean(0);
-			LOGGER.warn("geomIntersects returned " + intersect);
+			LOGGER.warn("GeomIntersects returned " + intersect);
 
 			Assert.assertTrue(
 					"Lines should intersect",
 					intersect);
 
 			result = session.sql(
-					"SELECT geomDisjoint('" + line1 + "', '" + line2 + "')").head();
+					"SELECT GeomDisjoint('" + line1 + "', '" + line2 + "')").head();
 
 			boolean disjoint = result.getBoolean(0);
-			LOGGER.warn("geomDisjoint returned " + disjoint);
+			LOGGER.warn("GeomDisjoint returned " + disjoint);
 
 			Assert.assertFalse(
 					"Lines should not be disjoint",
