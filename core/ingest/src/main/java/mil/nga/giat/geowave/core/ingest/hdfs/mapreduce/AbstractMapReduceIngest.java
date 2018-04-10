@@ -156,15 +156,21 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
 				dataStoreOptions);
-		PrimaryIndex[] indexesArray = new PrimaryIndex[indexes.size()];
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
-		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
-			dataAdapter.init(indexes.toArray(indexesArray));
-			GeoWaveOutputFormat.addDataAdapter(
-					job.getConfiguration(),
-					dataAdapter);
-		}
+		if (dataAdapters != null && dataAdapters.length > 0) {
+			PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
+			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
+				// from a controlled client, intialize the writer within the
+				// context of the datastore before distributing ingest
+				dataStoreOptions.createDataStore().createWriter(
+						dataAdapter,
+						indexesArray).close();
 
+				GeoWaveOutputFormat.addDataAdapter(
+						job.getConfiguration(),
+						dataAdapter);
+			}
+		}
 		job.setSpeculativeExecution(false);
 
 		// add required indices
