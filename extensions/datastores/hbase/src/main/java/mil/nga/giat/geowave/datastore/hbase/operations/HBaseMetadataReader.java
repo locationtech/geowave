@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.util.Iterator;
+import java.util.NavigableMap;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -49,15 +50,13 @@ public class HBaseMetadataReader implements
 			final byte[] columnFamily = StringUtils.stringToBinary(metadataType.name());
 			final byte[] columnQualifier = query.getSecondaryId();
 
-			if (columnFamily != null) {
-				if (columnQualifier != null) {
-					scanner.addColumn(
-							columnFamily,
-							columnQualifier);
-				}
-				else {
-					scanner.addFamily(columnFamily);
-				}
+			if (columnQualifier != null) {
+				scanner.addColumn(
+						columnFamily,
+						columnQualifier);
+			}
+			else {
+				scanner.addFamily(columnFamily);
 			}
 
 			if (query.hasPrimaryId()) {
@@ -85,9 +84,22 @@ public class HBaseMetadataReader implements
 								@Override
 								public GeoWaveMetadata apply(
 										final Result result ) {
+									byte[] resultantCQ;
+									if (columnQualifier == null) {
+										NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(columnFamily);
+										if (familyMap != null && !familyMap.isEmpty()) {
+											resultantCQ = familyMap.firstKey();
+										}
+										else {
+											resultantCQ = new byte[0];
+										}
+									}
+									else {
+										resultantCQ = columnQualifier;
+									}
 									return new GeoWaveMetadata(
 											result.getRow(),
-											columnQualifier,
+											resultantCQ,
 											null,
 											getMergedStats(
 													result,
