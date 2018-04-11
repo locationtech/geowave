@@ -51,7 +51,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
-public class GeoWaveBasicRasterIT extends
+public class GeoWaveBasicCustomCRSRasterIT extends
 		AbstractGeoWaveIT
 {
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
@@ -64,7 +64,7 @@ public class GeoWaveBasicRasterIT extends
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicRasterIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicCustomCRSRasterIT.class);
 	private static final double DELTA = MathUtils.EPSILON;
 	private static long startMillis;
 
@@ -78,7 +78,7 @@ public class GeoWaveBasicRasterIT extends
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*    RUNNING GeoWaveBasicRasterIT       *");
+		LOGGER.warn("*    RUNNING GeoWaveBasicCustomCRSRasterIT       *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -87,7 +87,7 @@ public class GeoWaveBasicRasterIT extends
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED GeoWaveBasicRasterIT         *");
+		LOGGER.warn("*      FINISHED GeoWaveBasicCustomCRSRasterIT         *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
@@ -346,7 +346,8 @@ public class GeoWaveBasicRasterIT extends
 
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.createCustomCRSPrimaryIndex())) {
+			// TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(RasterUtils.createCoverageTypeDouble(
 					coverageName,
 					westLon,
@@ -392,7 +393,8 @@ public class GeoWaveBasicRasterIT extends
 				"test-value");
 		try (IndexWriter writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				// TestUtils.DEFAULT_SPATIAL_INDEX
+				TestUtils.createCustomCRSPrimaryIndex())) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,

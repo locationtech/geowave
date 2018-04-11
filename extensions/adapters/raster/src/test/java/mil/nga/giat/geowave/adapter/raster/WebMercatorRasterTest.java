@@ -23,10 +23,12 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.CRS;
+import org.junit.Assert;
 import org.junit.Test;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.MismatchedDimensionException;
@@ -185,58 +187,80 @@ public class WebMercatorRasterTest
 					}
 					System.err.println(count);
 				}
-				// for (int x = 0; x < 32; x++) {
-				// for (int y = 0; y < 32; y++) {
-				//
-				// for (int b = 0; b < 3; b++) {
-				// double expectedValue;
-				// if (x > 15) {
-				// if (y > 15) {
-				// expectedValue = expectedMaxXMaxYValue;
-				// } else {
-				// expectedValue = expectedMaxXMinYValue;
-				// }
-				// } else if (y > 15) {
-				// expectedValue = expectedMinXMaxYValue;
-				// } else {
-				// expectedValue = expectedMinXMinYValue;
-				// }
-				// expectedValue += b;
-				// System.err.println(String.format(
-				// "Value=%d at x=%d;y=%d;b=%d",
-				// img.getSample(x, y, b), x, y, b));
-				// //
-				// Assert.assertEquals(String.format("Value didn't match expected at x=%d;y=%d;b=%d",
-				// // x,y,b),expectedValue,img.getSample(x, y, b),
-				// // FloatCompareUtils.COMP_EPSILON);
-				// }
-				// }
-				// }
-			}
-			// try (CloseableIterator it = dataStore.query(
-			// new QueryOptions(),
-			// new EverythingQuery())) {
-			// int count = 0;
-			// while (it.hasNext()) {
-			// count++;
-			// it.next();
-			// }
-			// System.err.println(count);
-			// }
-			// try (CloseableIterator it = dataStore.query(
-			// new QueryOptions(),new IndexOnlySpatialQuery(new
-			// GeometryFactory()
-			// .toGeometry(new Envelope(-500000,
-			// 500000,
-			// -500000,500000)), "EPSG:3857"))){
-			// int count = 0;
-			// while (it.hasNext()) {
-			// count++;
-			// it.next();
-			// }
-			// System.err.println(count);
-			// }
 
+//				for (int x = 0; x < 32; x++) {
+//					for (int y = 0; y < 32; y++) {
+//
+//						for (int b = 0; b < 3; b++) {
+//							double expectedValue;
+//							if (x > 15) {
+//								if (y > 15) {
+//									expectedValue = expectedMaxXMaxYValue;
+//								}
+//								else {
+//									expectedValue = expectedMaxXMinYValue;
+//								}
+//							}
+//							else if (y > 15) {
+//								expectedValue = expectedMinXMaxYValue;
+//							}
+//							else {
+//								expectedValue = expectedMinXMinYValue;
+//							}
+//							expectedValue += b;
+//							System.err.println(String.format(
+//									"Value=%d at x=%d;y=%d;b=%d",
+//									img.getSample(
+//											x,
+//											y,
+//											b),
+//									x,
+//									y,
+//									b));
+//
+//							Assert.assertEquals(
+//									String.format(
+//											"Value didn't match expected at x=%d;y=%d;b=%d",
+//											x,
+//											y,
+//											b),
+//									expectedValue,
+//									img.getSample(
+//											x,
+//											y,
+//											b),
+//									FloatCompareUtils.COMP_EPSILON);
+//						}
+//					}
+//				}
+
+			}
+		}
+		try (CloseableIterator it = dataStore.query(
+				new QueryOptions(),
+				new EverythingQuery())) {
+			int count = 0;
+			while (it.hasNext()) {
+				count++;
+				it.next();
+			}
+			System.err.println(count);
+		}
+		try (CloseableIterator it = dataStore.query(
+				new QueryOptions(),
+				new IndexOnlySpatialQuery(
+						new GeometryFactory().toGeometry(new Envelope(
+								-5000,
+								5000,
+								-5000,
+								5000)),
+						"EPSG:3857"))) {
+			int count = 0;
+			while (it.hasNext()) {
+				count++;
+				it.next();
+			}
+			System.err.println(count);
 		}
 
 	}
