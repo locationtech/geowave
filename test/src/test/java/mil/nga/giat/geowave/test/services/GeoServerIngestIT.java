@@ -61,8 +61,8 @@ public class GeoServerIngestIT
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
 
 	@GeoWaveTestStore(value = {
-		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.BIGTABLE,
+		// GeoWaveStoreType.ACCUMULO,
+		// GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
@@ -146,6 +146,12 @@ public class GeoServerIngestIT
 						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
 		TestUtils.assertStatusCode(
+				"Should return 400, that layer was already added",
+				400,
+				geoServerServiceClient.addStyle(
+						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
+						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
+		TestUtils.assertStatusCode(
 				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' style",
 				200,
 				geoServerServiceClient.addStyle(
@@ -163,17 +169,25 @@ public class GeoServerIngestIT
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
-		Response r = geoServerServiceClient.addLayer(
-				TestUtils.TEST_NAMESPACE,
-				WORKSPACE,
-				null,
-				null,
-				"point");
+
 		TestUtils.assertStatusCode(
 				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
 				200,
-				r);
-
+				geoServerServiceClient.addLayer(
+						TestUtils.TEST_NAMESPACE,
+						WORKSPACE,
+						null,
+						null,
+						"point"));
+		TestUtils.assertStatusCode(
+				"Should return 400, that layer was already added",
+				400,
+				geoServerServiceClient.addLayer(
+						TestUtils.TEST_NAMESPACE,
+						WORKSPACE,
+						null,
+						null,
+						"point"));
 		final BufferedImage biDirectRender = getWMSSingleTile(
 				-180,
 				180,
@@ -184,7 +198,6 @@ public class GeoServerIngestIT
 				920,
 				360,
 				null);
-
 		BufferedImage ref = null;
 
 		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System

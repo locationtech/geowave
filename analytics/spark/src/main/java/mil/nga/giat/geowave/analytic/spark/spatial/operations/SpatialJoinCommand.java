@@ -116,34 +116,34 @@ public class SpatialJoinCommand extends
 		runner.setMaster(spatialJoinOptions.getMaster());
 		runner.setHost(spatialJoinOptions.getHost());
 		runner.setPartCount(spatialJoinOptions.getPartCount());
-		
+
 		runner.setPredicate(predicate);
-		
-		//set DataStore options for runner
+
+		// set DataStore options for runner
 		runner.setLeftStore(leftDataStore);
 		if (spatialJoinOptions.getLeftAdapterId() != null) {
 			runner.setLeftAdapterId(new ByteArrayId(
 					spatialJoinOptions.getLeftAdapterId()));
 		}
-		
+
 		runner.setRightStore(rightDataStore);
 		if (spatialJoinOptions.getRightAdapterId() != null) {
 			runner.setRightAdapterId(new ByteArrayId(
 					spatialJoinOptions.getRightAdapterId()));
 		}
-		
+
 		runner.setOutputStore(outputDataStore);
 		if (spatialJoinOptions.getOutputLeftAdapterId() != null) {
 			runner.setOutputLeftAdapterId(new ByteArrayId(
 					spatialJoinOptions.getOutputLeftAdapterId()));
 		}
-		
+
 		if (spatialJoinOptions.getOutputRightAdapterId() != null) {
 			runner.setOutputRightAdapterId(new ByteArrayId(
 					spatialJoinOptions.getOutputRightAdapterId()));
 		}
 
-		//Finally call run to execute the join
+		// Finally call run to execute the join
 		runner.run();
 
 		return null;

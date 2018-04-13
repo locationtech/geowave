@@ -94,8 +94,10 @@ public class SpatialJoinRunner implements
 			throws IOException {
 		if (outputStore != null) {
 			ByteArrayId leftJoinId = outLeftAdapterId;
-			if(leftJoinId == null) { 
-				leftJoinId = createDefaultAdapterName(leftAdapterId, leftStore);
+			if (leftJoinId == null) {
+				leftJoinId = createDefaultAdapterName(
+						leftAdapterId,
+						leftStore);
 			}
 			FeatureDataAdapter newLeftAdapter = FeatureDataUtils.cloneFeatureDataAdapter(
 					leftStore,
@@ -107,8 +109,10 @@ public class SpatialJoinRunner implements
 			newLeftAdapter.init(leftIndices);
 
 			ByteArrayId rightJoinId = outRightAdapterId;
-			if(rightJoinId == null) { 
-				rightJoinId = createDefaultAdapterName(rightAdapterId, rightStore);
+			if (rightJoinId == null) {
+				rightJoinId = createDefaultAdapterName(
+						rightAdapterId,
+						rightStore);
 			}
 			FeatureDataAdapter newRightAdapter = FeatureDataUtils.cloneFeatureDataAdapter(
 					rightStore,
@@ -137,21 +141,28 @@ public class SpatialJoinRunner implements
 
 	private ByteArrayId createDefaultAdapterName(
 			ByteArrayId adapterId,
-			DataStorePluginOptions storeOptions) {
+			DataStorePluginOptions storeOptions ) {
 		String defaultAdapterName = adapterId + "_joined";
-		ByteArrayId defaultAdapterId = new ByteArrayId(defaultAdapterName);
+		ByteArrayId defaultAdapterId = new ByteArrayId(
+				defaultAdapterName);
 		AdapterStore adapterStore = storeOptions.createAdapterStore();
-		if(!adapterStore.adapterExists(defaultAdapterId)) {
+		if (!adapterStore.adapterExists(defaultAdapterId)) {
 			return defaultAdapterId;
 		}
 		Integer iSuffix = 0;
-		String uniNum = "_" + String.format("%02d", iSuffix);
-		defaultAdapterId = new ByteArrayId(defaultAdapterName + uniNum);
-		while(adapterStore.adapterExists(defaultAdapterId)) {
-			//Should be _00 _01 etc
+		String uniNum = "_" + String.format(
+				"%02d",
+				iSuffix);
+		defaultAdapterId = new ByteArrayId(
+				defaultAdapterName + uniNum);
+		while (adapterStore.adapterExists(defaultAdapterId)) {
+			// Should be _00 _01 etc
 			iSuffix += 1;
-			uniNum = "_" + String.format("%02d", iSuffix);
-			defaultAdapterId = new ByteArrayId(defaultAdapterName + uniNum);
+			uniNum = "_" + String.format(
+					"%02d",
+					iSuffix);
+			defaultAdapterId = new ByteArrayId(
+					defaultAdapterName + uniNum);
 		}
 		return defaultAdapterId;
 	}

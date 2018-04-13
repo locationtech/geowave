@@ -75,7 +75,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	}
 
 	@Test
-	public void testCreateDataFrame() {
+	public void testCreateDataFrame()
+			throws Exception {
 		// Set up Spark
 		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
@@ -170,7 +171,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	}
 
 	// @Test
-	public void testSpatialJoin() {
+	public void testSpatialJoin()
+			throws Exception {
 		// Set up Spark
 		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();

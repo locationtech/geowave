@@ -26,6 +26,7 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -45,14 +46,16 @@ public class ListIndexCommand extends
 
 	@Override
 	public void execute(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws TargetNotFoundException {
 		JCommander.getConsole().println(
 				computeResults(params));
 	}
 
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws TargetNotFoundException {
 		if (parameters.size() < 1) {
 			throw new ParameterException(
 					"Must specify store name");
@@ -71,7 +74,8 @@ public class ListIndexCommand extends
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
-			result = "Cannot find store name: " + inputStoreLoader.getStoreName();
+			throw new TargetNotFoundException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
 		else {
 

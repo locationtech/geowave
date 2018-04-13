@@ -24,6 +24,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -32,7 +34,6 @@ import net.sf.json.JSONObject;
 public class GeoServerListStylesCommand extends
 		GeoServerCommand<String>
 {
-	private ServiceStatus status = ServiceStatus.OK;
 
 	@Override
 	public void execute(
@@ -40,21 +41,6 @@ public class GeoServerListStylesCommand extends
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -66,17 +52,12 @@ public class GeoServerListStylesCommand extends
 		if (listStylesResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(listStylesResponse.getEntity());
 			final JSONArray styles = jsonResponse.getJSONArray("styles");
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer styles list: " + styles.toString(2);
 		}
-		switch (listStylesResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer styles list; code = " + listStylesResponse.getStatus();
+		String errorMessage = "Error getting GeoServer styles list: " + listStylesResponse.readEntity(String.class)
+				+ "\nGeoServer Response Code = " + listStylesResponse.getStatus();
+		return handleError(
+				listStylesResponse,
+				errorMessage);
 	}
 }

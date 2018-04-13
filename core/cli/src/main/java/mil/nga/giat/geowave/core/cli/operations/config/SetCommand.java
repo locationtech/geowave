@@ -51,8 +51,6 @@ public class SetCommand extends
 
 	private boolean isRestCall = true;
 
-	ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params ) {
@@ -67,27 +65,11 @@ public class SetCommand extends
 	 * @return string containing json with details of success or failure of the
 	 *         set
 	 */
-	@Override
-	public Pair<ServiceStatus, Object> executeService(
-			OperationParams params )
-			throws Exception {
-		Object ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
 
 	@Override
 	public Object computeResults(
 			final OperationParams params ) {
-		try {
-			return setKeyValue(params);
-		}
-		catch (WritePropertiesException | ParameterException e) {
-			setStatus(ServiceStatus.INTERNAL_ERROR);
-			LOGGER.error(e.toString());
-			return null;
-		}
+		return setKeyValue(params);
 	}
 
 	/**
@@ -170,7 +152,6 @@ public class SetCommand extends
 					"Write failure");
 		}
 		else {
-			status = ServiceStatus.OK;
 			return previousValue;
 		}
 	}
@@ -185,15 +166,6 @@ public class SetCommand extends
 		parameters = new ArrayList<String>();
 		parameters.add(key);
 		parameters.add(value);
-	}
-
-	public ServiceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
 	}
 
 	private static class WritePropertiesException extends

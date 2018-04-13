@@ -93,7 +93,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 	}
 
 	@Test
-	public void testHailTornadoDistanceJoin() {
+	public void testHailTornadoDistanceJoin() throws Exception {
 
 		session = SparkTestEnvironment.getInstance().getDefaultSession();
 		context = SparkTestEnvironment.getInstance().getDefaultContext();
@@ -203,7 +203,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 		return index.getIndexStrategy();
 	}
 
-	private void ingestHailandTornado() {
+	private void ingestHailandTornado() throws Exception {
 		long mark = System.currentTimeMillis();
 
 		// ingest both lines and points

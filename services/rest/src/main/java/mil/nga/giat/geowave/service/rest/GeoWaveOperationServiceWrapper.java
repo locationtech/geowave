@@ -11,6 +11,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.NotAuthorizedException;
+import javax.ws.rs.NotFoundException;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
 import org.restlet.Application;
@@ -33,6 +37,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
@@ -297,8 +303,8 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final ConcurrentHashMap<String, Future> opStatuses = (ConcurrentHashMap<String, Future>)appContext.getAttributes().get("asyncOperationStatuses");
 				
 				Callable <T> task = () -> {
-					Pair<ServiceStatus, T> res = operation.executeService(params);
-					return res.getRight();
+					T res = operation.computeResults(params);
+					return res;
 				};
 				final Future<T> futureResult = opPool.submit(task);
 				final UUID opId = UUID.randomUUID();
@@ -312,30 +318,57 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 				return rep;
 			} else {
-				final Pair<ServiceStatus, T> result = operation.executeService(params);
-				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
-				
-				switch (result.getLeft()) {
-					case OK:
-						rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
-						setStatus(Status.SUCCESS_OK);
-						break;
-					case NOT_FOUND:
-						rm.status = RestOperationStatusMessage.StatusType.ERROR;
-						setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-						break;
-					case DUPLICATE:
-						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-						break;
-					case INTERNAL_ERROR:
-						rm.status = RestOperationStatusMessage.StatusType.ERROR;
-						setStatus(Status.SERVER_ERROR_INTERNAL);
-				}
-				
-				rm.data = result.getRight();
+				final T result = operation.computeResults(params);
+				final RestOperationStatusMessage rm = new RestOperationStatusMessage();			
+				rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
+				rm.data = result;
 				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 				return rep;
 			}
+		}
+		catch (final NotAuthorizedException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final ForbiddenException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final TargetNotFoundException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final DuplicateEntryException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
 		}
 		catch (final Exception e) {
 			LOGGER.error(
@@ -345,6 +378,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";
 			rm.data = e;
+			setStatus(Status.SERVER_ERROR_INTERNAL);
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}

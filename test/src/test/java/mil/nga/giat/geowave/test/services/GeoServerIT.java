@@ -167,6 +167,8 @@ public class GeoServerIT
 		// create the workspace
 		Response addWs = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
 		success &= (addWs.getStatus() == 200);
+		Response addWsBad = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
+		success &= (addWsBad.getStatus() == 400);
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
@@ -181,12 +183,22 @@ public class GeoServerIT
 				ServicesTestEnvironment.TEST_WORKSPACE,
 				TestUtils.TEST_NAMESPACE);
 		success &= (addDs.getStatus() == 200);
+		Response addDsBad = geoServerServiceClient.addDataStore(
+				TestUtils.TEST_NAMESPACE,
+				ServicesTestEnvironment.TEST_WORKSPACE,
+				TestUtils.TEST_NAMESPACE);
+		// Make sure that we handle duplicates correctly
+		success &= (addDsBad.getStatus() == 400);
 		// make sure the datastore exists
 		Response getDs = geoServerServiceClient.getDataStore(
 				TestUtils.TEST_NAMESPACE,
 				ServicesTestEnvironment.TEST_WORKSPACE);
 		success &= (getDs.getStatus() == 200);
-
+		Response getDsBad = geoServerServiceClient.getDataStore(
+				TestUtils.TEST_NAMESPACE_BAD,
+				ServicesTestEnvironment.TEST_WORKSPACE);
+		// Make sure that we handle duplicates correctly
+		success &= (getDsBad.getStatus() == 404);
 		success &= createLayers();
 
 		if (!success) {
