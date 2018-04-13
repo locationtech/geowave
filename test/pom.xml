@@ -259,6 +259,10 @@
 					<groupId>com.lmax</groupId>
 					<artifactId>disruptor</artifactId>
 				</exclusion>
+				<exclusion>
+					<artifactId>hibernate-validator</artifactId>
+					<groupId>org.hibernate</groupId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
