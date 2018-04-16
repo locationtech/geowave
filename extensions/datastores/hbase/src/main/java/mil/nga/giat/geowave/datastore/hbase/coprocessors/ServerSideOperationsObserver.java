@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 public class ServerSideOperationsObserver extends
 		BaseRegionObserver
 {
+
 	private final static Logger LOGGER = Logger.getLogger(ServerSideOperationsObserver.class);
 	public static final String SERVER_OP_PREFIX = "serverop";
 	public static final String SERVER_OP_SCOPES_KEY = "scopes";

@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.core.ingest.s3;
+package mil.nga.giat.geowave.mapreduce.s3;
 
 public class S3Params
 {

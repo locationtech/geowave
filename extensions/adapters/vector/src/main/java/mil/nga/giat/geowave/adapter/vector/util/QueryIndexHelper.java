@@ -169,6 +169,10 @@ public class QueryIndexHelper
 					.getGeometryDescriptor()
 					.getType()
 					.getCoordinateReferenceSystem());
+			// TODO if the query doesn't intersect the stats this will return an
+			// empty geometry, it seems that'd be an opportunity to quickly
+			// return no results rather than continuing on and hoping that an
+			// empty geometry gives no results and not a full table scan
 			return geo.intersection(bbox);
 		}
 		return bbox;

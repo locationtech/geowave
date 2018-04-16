@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class SecondaryIndexQueryFilterIterator extends
 		RowFilter
@@ -57,7 +58,7 @@ public class SecondaryIndexQueryFilterIterator extends
 		if (options.containsKey(FILTERS)) {
 			final String filterStr = options.get(FILTERS);
 			final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-			filter = (DistributableQueryFilter) AccumuloUtils.fromBinary(filterBytes);
+			filter = (DistributableQueryFilter) URLClassloaderUtils.fromBinary(filterBytes);
 		}
 		primaryIndexId = options.get(PRIMARY_INDEX_ID);
 	}

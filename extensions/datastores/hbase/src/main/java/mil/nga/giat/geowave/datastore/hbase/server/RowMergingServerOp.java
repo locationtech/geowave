@@ -14,9 +14,9 @@ import com.google.common.collect.Sets;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.server.RowMergingAdapterOptionProvider;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class RowMergingServerOp extends
 		MergingServerOp
@@ -73,7 +73,7 @@ public class RowMergingServerOp extends
 				}));
 		final String rowTransformStr = options.get(RowMergingAdapterOptionProvider.ROW_TRANSFORM_KEY);
 		final byte[] rowTransformBytes = ByteArrayUtils.byteArrayFromString(rowTransformStr);
-		rowTransform = (RowTransform<Mergeable>) PersistenceUtils.fromBinary(rowTransformBytes);
+		rowTransform = (RowTransform<Mergeable>) URLClassloaderUtils.fromBinary(rowTransformBytes);
 		rowTransform.initOptions(options);
 	}
 

@@ -40,13 +40,13 @@ import com.google.protobuf.Service;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class AggregationEndpoint extends
 		AggregationProtos.AggregationService implements
@@ -94,7 +94,7 @@ public class AggregationEndpoint extends
 		ByteString value = ByteString.EMPTY;
 
 		// Get the aggregation type
-		final Aggregation aggregation = (Aggregation) PersistenceUtils.fromClassId(request
+		final Aggregation aggregation = (Aggregation) URLClassloaderUtils.fromClassId(request
 				.getAggregation()
 				.getClassId()
 				.toByteArray());
@@ -102,7 +102,7 @@ public class AggregationEndpoint extends
 		// Handle aggregation params
 		if (request.getAggregation().hasParams()) {
 			final byte[] parameterBytes = request.getAggregation().getParams().toByteArray();
-			final Persistable aggregationParams = PersistenceUtils.fromBinary(parameterBytes);
+			final Persistable aggregationParams = URLClassloaderUtils.fromBinary(parameterBytes);
 			aggregation.setParameters(aggregationParams);
 		}
 		HBaseDistributableFilter hdFilter = null;
@@ -234,7 +234,7 @@ public class AggregationEndpoint extends
 						request.getCacheSize(),
 						authorizations);
 
-				final byte[] bvalue = PersistenceUtils.toBinary(mvalue);
+				final byte[] bvalue = URLClassloaderUtils.toBinary(mvalue);
 				value = ByteString.copyFrom(bvalue);
 			}
 			catch (final IOException ioe) {

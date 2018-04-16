@@ -33,10 +33,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.QueryRanges;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.server.ServerOpConfig.ServerOpScope;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
@@ -147,7 +147,7 @@ public class HBaseUtils
 		DataStatistics mergedStats = null;
 		for (final Cell cell : rowCells) {
 			final byte[] byteValue = CellUtil.cloneValue(cell);
-			final DataStatistics stats = (DataStatistics) PersistenceUtils.fromBinary(byteValue);
+			final DataStatistics stats = (DataStatistics) URLClassloaderUtils.fromBinary(byteValue);
 
 			if (mergedStats != null) {
 				mergedStats.merge(stats);

@@ -32,7 +32,9 @@ import javax.ws.rs.core.Response;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
@@ -114,10 +116,8 @@ public class TestUtils
 	public static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	public static final String TEST_CASE_BASE = "data/";
 
-	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
-	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialTemporalOptions());
+	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialIndexBuilder().createIndex();
+	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalIndexBuilder().createIndex();
 	// CRS for Web Mercator
 	public static String CUSTOM_CRSCODE = "EPSG:3857";
 

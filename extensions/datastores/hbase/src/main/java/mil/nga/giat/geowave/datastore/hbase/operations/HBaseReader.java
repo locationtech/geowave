@@ -20,7 +20,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
@@ -35,6 +34,7 @@ import mil.nga.giat.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 
 public class HBaseReader implements
@@ -135,7 +135,7 @@ public class HBaseReader implements
 					new GeoWaveValueImpl(
 							null,
 							null,
-							PersistenceUtils.toBinary(aggTotal))
+							URLClassloaderUtils.toBinary(aggTotal))
 				});
 	}
 
@@ -187,22 +187,25 @@ public class HBaseReader implements
 		if (!filterList.getFilters().isEmpty()) {
 			rscanner.setFilter(filterList);
 		}
-
 		try {
-			this.scanner = operations.getScannedResults(
+			Iterable<Result> iterable = operations.getScannedResults(
 					rscanner,
 					recordReaderParams.getIndex().getId().getString(),
 					recordReaderParams.getAdditionalAuthorizations());
+			if (iterable instanceof ResultScanner) {
+				this.scanner = (ResultScanner) iterable;
+			}
+			this.scanIt = iterable.iterator();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
 					"Could not get the results from scanner",
 					e);
 			this.scanner = null;
+			this.scanIt = null;
 			return;
 		}
 
-		this.scanIt = scanner.iterator();
 	}
 
 	protected void initScanner() {
@@ -235,10 +238,14 @@ public class HBaseReader implements
 		}
 
 		try {
-			this.scanner = operations.getScannedResults(
+			Iterable<Result> iterable = operations.getScannedResults(
 					multiScanner,
 					readerParams.getIndex().getId().getString(),
 					readerParams.getAdditionalAuthorizations());
+			if (iterable instanceof ResultScanner) {
+				this.scanner = (ResultScanner) iterable;
+			}
+			this.scanIt = iterable.iterator();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -246,10 +253,9 @@ public class HBaseReader implements
 					e);
 
 			this.scanner = null;
+			this.scanIt = null;
 			return;
 		}
-
-		this.scanIt = scanner.iterator();
 	}
 
 	private void addSkipFilter(

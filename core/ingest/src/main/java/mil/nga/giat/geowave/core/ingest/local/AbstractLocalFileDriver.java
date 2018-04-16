@@ -25,24 +25,18 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
-import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
-import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
-import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils.URLTYPE;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 /**
@@ -88,7 +82,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
-				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+				URLClassloaderUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 				LOGGER.error(
@@ -158,7 +152,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is HDFS
 		else if (inputPath.startsWith("hdfs://")) {
 			try {
-				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
+				URLClassloaderUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
 			}
 			catch (final Error | NoSuchFieldException | SecurityException | IllegalArgumentException
 					| IllegalAccessException e) {

@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class PersistentDataFormatter implements
 		Formatter
@@ -276,7 +277,7 @@ public class PersistentDataFormatter implements
 			final StringBuilder sb,
 			final Value value ) {
 		try {
-			Persistable persistable = AccumuloUtils.fromBinary(value.get());
+			Persistable persistable = URLClassloaderUtils.fromBinary(value.get());
 			sb.append(persistable.toString());
 		}
 		catch (final Exception ex) {

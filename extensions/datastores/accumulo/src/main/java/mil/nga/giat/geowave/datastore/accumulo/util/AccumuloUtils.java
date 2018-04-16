@@ -49,8 +49,6 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
-import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -79,8 +77,6 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 public class AccumuloUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloUtils.class);
-	private static final String ROW_MERGING_SUFFIX = "_COMBINER";
-	private static final String ROW_MERGING_VISIBILITY_SUFFIX = "_VISIBILITY_COMBINER";
 
 	public static Range byteArrayRangeToAccumuloRange(
 			final ByteArrayRange byteArrayRange ) {
@@ -696,141 +692,5 @@ public class AccumuloUtils
 
 		@Override
 		public void remove() {}
-	}
-
-	private static final Object MUTEX = new Object();
-	private static boolean classLoaderInitialized = false;
-
-	private static void initClassLoader()
-			throws MalformedURLException {
-		synchronized (MUTEX) {
-			if (classLoaderInitialized) {
-				return;
-			}
-			final ClassLoader classLoader = AccumuloUtils.class.getClassLoader();
-			LOGGER.info("Generating patched classloader");
-			if (classLoader instanceof VFSClassLoader) {
-				final VFSClassLoader cl = (VFSClassLoader) classLoader;
-				final FileObject[] fileObjs = cl.getFileObjects();
-				final ArrayList<URL> fileList = new ArrayList();
-
-				for (int i = 0; i < fileObjs.length; i++) {
-					String fileStr = fileObjs[i].toString();
-					if (verifyProtocol(fileStr)) {
-						fileList.add(new URL(
-								fileStr));
-					}
-					else {
-						LOGGER.error("Failed to register class loader from: " + fileStr);
-					}
-				}
-
-				final URL[] fileUrls = new URL[fileList.size()];
-				for (int i = 0; i < fileList.size(); i++) {
-					fileUrls[i] = fileList.get(i);
-				}
-
-				final ClassLoader urlCL = java.security.AccessController
-						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-							@Override
-							public URLClassLoader run() {
-								final URLClassLoader ucl = new URLClassLoader(
-										fileUrls,
-										cl);
-								return ucl;
-							}
-						});
-
-				SPIServiceRegistry.registerClassLoader(urlCL);
-			}
-			classLoaderInitialized = true;
-		}
-	}
-
-	private static boolean verifyProtocol(
-			String fileStr ) {
-		if (fileStr.contains("s3://")) {
-			try {
-				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
-
-				return true;
-			}
-			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-				LOGGER.error(
-						"Error in setting up S3URLStreamHandler Factory",
-						e1);
-
-				return false;
-			}
-		}
-		else if (fileStr.contains("hdfs://")) {
-			try {
-				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
-
-				return true;
-			}
-			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
-				LOGGER.error(
-						"Error in setting up HdfsUrlStreamHandler Factory",
-						e1);
-
-				return false;
-			}
-		}
-
-		LOGGER.debug("Assuming good URLStreamHandler for " + fileStr);
-		return true;
-	}
-
-	public static byte[] toBinary(
-			final Persistable persistable ) {
-		try {
-			initClassLoader();
-		}
-		catch (final MalformedURLException e) {
-			LOGGER.warn(
-					"Unable to initialize classloader in toBinary",
-					e);
-		}
-		return PersistenceUtils.toBinary(persistable);
-	}
-
-	public static Persistable fromBinary(
-			final byte[] bytes ) {
-		try {
-			initClassLoader();
-		}
-		catch (final MalformedURLException e) {
-			LOGGER.warn(
-					"Unable to initialize classloader in fromBinary",
-					e);
-		}
-		return PersistenceUtils.fromBinary(bytes);
-	}
-
-	public static byte[] toBinary(
-			final Collection<? extends Persistable> persistables ) {
-		try {
-			initClassLoader();
-		}
-		catch (final MalformedURLException e) {
-			LOGGER.warn(
-					"Unable to initialize classloader in toBinary (list)",
-					e);
-		}
-		return PersistenceUtils.toBinary(persistables);
-	}
-
-	public static byte[] toClassId(
-			final Persistable persistable ) {
-		try {
-			initClassLoader();
-		}
-		catch (final MalformedURLException e) {
-			LOGGER.warn(
-					"Unable to initialize classloader in toClassId",
-					e);
-		}
-		return PersistenceUtils.toClassId(persistable);
 	}
 }
