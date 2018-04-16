@@ -170,7 +170,7 @@ public class ListStatsCommand extends
 			return retValue;
 		}
 		else {
-			throw new TargetNotFoundException();
+			return "No Data Found";
 		}
 	}
 }
