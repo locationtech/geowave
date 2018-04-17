@@ -68,7 +68,10 @@ public class GeowaveSparkIngestIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStore;
 

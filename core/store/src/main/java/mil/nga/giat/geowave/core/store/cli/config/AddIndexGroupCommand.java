@@ -63,15 +63,8 @@ public class AddIndexGroupCommand extends
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
-		String ret = "";
-		try {
-			ret = addIndexGroup(params);
-		}
-		catch (WritePropertiesException | ParameterException e) {
-			LOGGER.error(e.toString());
-		}
-
-		return ret;
+		
+		return addIndexGroup(params);
 	}
 
 	/**
