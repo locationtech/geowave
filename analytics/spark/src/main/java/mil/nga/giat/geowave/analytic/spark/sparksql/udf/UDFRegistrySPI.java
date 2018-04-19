@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.analytic.spark.sparksql.udf;
 
+import java.util.Objects;
 import java.util.function.Supplier;
 
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomContains;
@@ -94,7 +95,9 @@ public class UDFRegistrySPI
 		public boolean nameMatch(
 				String udfName ) {
 			for (int iName = 0; iName < udfNames.length; iName += 1) {
-				if (udfNames[iName] == udfName) {
+				if (Objects.equals(
+						udfNames[iName],
+						udfName)) {
 					return true;
 				}
 			}
