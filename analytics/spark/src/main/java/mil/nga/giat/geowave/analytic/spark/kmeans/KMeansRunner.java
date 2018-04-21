@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.spark.SparkConf;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.clustering.KMeans;
@@ -15,7 +14,6 @@ import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.sql.SparkSession;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
-import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +26,10 @@ import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import mil.nga.giat.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
+import mil.nga.giat.geowave.analytic.spark.RDDUtils;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -38,7 +39,6 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class KMeansRunner
 {
@@ -206,17 +206,19 @@ public class KMeansRunner
 		}
 
 		// Load RDD from datastore
-		final JavaPairRDD<GeoWaveInputKey, SimpleFeature> featureRdd = GeoWaveRDD.rddForSimpleFeatures(
+		RDDOptions kmeansOpts = new RDDOptions();
+		kmeansOpts.setMinSplits(minSplits);
+		kmeansOpts.setMaxSplits(maxSplits);
+		kmeansOpts.setQuery(query);
+		kmeansOpts.setQueryOptions(queryOptions);
+		GeoWaveRDD kmeansRDD = GeoWaveRDDLoader.loadRDD(
 				jsc.sc(),
 				inputDataStore,
-				query,
-				queryOptions,
-				minSplits,
-				maxSplits);
+				kmeansOpts);
 
 		// Retrieve the input centroids
-		centroidVectors = GeoWaveRDD.rddFeatureVectors(
-				featureRdd,
+		centroidVectors = RDDUtils.rddFeatureVectors(
+				kmeansRDD,
 				timeField,
 				scaledTimeRange);
 		centroidVectors.cache();

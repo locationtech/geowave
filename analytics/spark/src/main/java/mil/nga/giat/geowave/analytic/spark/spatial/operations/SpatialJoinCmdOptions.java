@@ -2,7 +2,7 @@ package mil.nga.giat.geowave.analytic.spark.spatial.operations;
 
 import com.beust.jcommander.Parameter;
 
-public class SpatialJoinOptions
+public class SpatialJoinCmdOptions
 {
 	@Parameter(names = {
 		"-n",
@@ -64,12 +64,18 @@ public class SpatialJoinOptions
 	}, description = "Used for distance join predicate and other spatial operations that require a scalar radius.")
 	private Double radius = 0.01;
 
+	@Parameter(names = {
+		"-n",
+		"--negative",
+	}, description = "Used for testing a negative result from geometry predicate. i.e GeomIntersects() == false")
+	private boolean negativeTest = false;
+
 	// TODO: Experiment with collecting + broadcasting rdds when one side can
 	// fit into memory
 	private boolean leftBroadcast = false;
 	private boolean rightBroadcast = false;
 
-	public SpatialJoinOptions() {}
+	public SpatialJoinCmdOptions() {}
 
 	public String getAppName() {
 		return appName;

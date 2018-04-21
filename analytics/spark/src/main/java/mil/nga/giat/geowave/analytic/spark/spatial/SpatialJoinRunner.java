@@ -7,16 +7,18 @@ import java.util.concurrent.ExecutionException;
 
 import org.apache.spark.SparkConf;
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.sql.SparkSession;
-import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveIndexedRDD;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
+import mil.nga.giat.geowave.analytic.spark.RDDUtils;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
@@ -24,7 +26,6 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class SpatialJoinRunner implements
 		Serializable
@@ -44,6 +45,7 @@ public class SpatialJoinRunner implements
 	private DataStorePluginOptions rightStore = null;
 	private ByteArrayId rightAdapterId = null;
 	private ByteArrayId outRightAdapterId = null;
+	private boolean negativeTest = false;
 
 	private DataStorePluginOptions outputStore = null;
 	private GeomFunction predicate = null;
@@ -52,8 +54,8 @@ public class SpatialJoinRunner implements
 	// like GeoWaveRDD in future
 	// to support different situations (indexed vs non indexed etc..) but keep
 	// it hidden in implementation details
-	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRDD = null;
-	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD = null;
+	private GeoWaveIndexedRDD leftRDD = null;
+	private GeoWaveIndexedRDD rightRDD = null;
 
 	// TODO: Join strategy could be supplied as variable or determined
 	// automatically from index store (would require associating index and join
@@ -80,12 +82,14 @@ public class SpatialJoinRunner implements
 		// Verify CRS match/transform possible
 		verifyCRS();
 		// Run join
+
+		joinStrategy.getJoinOptions().setNegativePredicate(
+				negativeTest);
 		joinStrategy.join(
 				session,
 				leftRDD,
 				rightRDD,
-				predicate,
-				indexStrategy);
+				predicate);
 
 		writeResultsToNewAdapter();
 	}
@@ -124,13 +128,13 @@ public class SpatialJoinRunner implements
 			newRightAdapter.init(rightIndices);
 			// Write each feature set to new adapter and store using original
 			// indexing methods.
-			GeoWaveRDD.writeFeaturesToGeoWave(
+			RDDUtils.writeRDDToGeoWave(
 					sc,
 					leftIndices,
 					outputStore,
 					newLeftAdapter,
 					this.getLeftResults());
-			GeoWaveRDD.writeFeaturesToGeoWave(
+			RDDUtils.writeRDDToGeoWave(
 					sc,
 					rightIndices,
 					outputStore,
@@ -218,36 +222,74 @@ public class SpatialJoinRunner implements
 						leftStore.createAdapterStore().getAdapter(
 								leftAdapterId));
 
-				leftRDD = GeoWaveRDD.rddForSimpleFeatures(
+				RDDOptions leftOpts = new RDDOptions();
+				leftOpts.setQueryOptions(leftOptions);
+				leftOpts.setMinSplits(partCount);
+				leftOpts.setMaxSplits(partCount);
+
+				NumericIndexStrategy leftStrategy = null;
+				// Did the user provide a strategy for join?
+				if (this.indexStrategy == null) {
+					PrimaryIndex[] leftIndices = leftStore.createAdapterIndexMappingStore().getIndicesForAdapter(
+							leftAdapterId).getIndices(
+							leftStore.createIndexStore());
+					if (leftIndices.length > 0) {
+						leftStrategy = leftIndices[0].getIndexStrategy();
+					}
+
+				}
+				else {
+					leftStrategy = indexStrategy;
+				}
+
+				leftRDD = GeoWaveRDDLoader.loadIndexedRDD(
 						sc,
 						leftStore,
-						null,
-						leftOptions);
+						leftOpts,
+						leftStrategy);
 			}
 
 		}
 
 		if (rightStore != null) {
-			QueryOptions rightOptions = null;
-
-			if (rightAdapterId == null) {
-				// If no adapterId provided by user grab first adapterId
-				// available.
-				rightAdapterId = FeatureDataUtils.getFeatureAdapterIds(
-						rightStore).get(
-						0);
-			}
-
-			rightOptions = new QueryOptions(
-					rightStore.createAdapterStore().getAdapter(
-							rightAdapterId));
-
 			if (rightRDD == null) {
-				rightRDD = GeoWaveRDD.rddForSimpleFeatures(
+				QueryOptions rightOptions = null;
+
+				if (rightAdapterId == null) {
+					// If no adapterId provided by user grab first adapterId
+					// available.
+					rightAdapterId = FeatureDataUtils.getFeatureAdapterIds(
+							rightStore).get(
+							0);
+				}
+
+				rightOptions = new QueryOptions(
+						rightStore.createAdapterStore().getAdapter(
+								rightAdapterId));
+
+				RDDOptions rightOpts = new RDDOptions();
+				rightOpts.setQueryOptions(rightOptions);
+				rightOpts.setMinSplits(partCount);
+				rightOpts.setMaxSplits(partCount);
+
+				NumericIndexStrategy rightStrategy = null;
+				if (this.indexStrategy == null) {
+					PrimaryIndex[] rightIndices = rightStore.createAdapterIndexMappingStore().getIndicesForAdapter(
+							rightAdapterId).getIndices(
+							rightStore.createIndexStore());
+					if (rightIndices.length > 0) {
+						rightStrategy = rightIndices[0].getIndexStrategy();
+					}
+				}
+				else {
+					rightStrategy = indexStrategy;
+				}
+
+				rightRDD = GeoWaveRDDLoader.loadIndexedRDD(
 						sc,
 						rightStore,
-						null,
-						rightOptions);
+						rightOpts,
+						rightStrategy);
 
 			}
 
@@ -261,11 +303,11 @@ public class SpatialJoinRunner implements
 	}
 
 	// Accessors and Mutators
-	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> getLeftResults() {
+	public GeoWaveRDD getLeftResults() {
 		return this.joinStrategy.getLeftResults();
 	}
 
-	public JavaPairRDD<GeoWaveInputKey, SimpleFeature> getRightResults() {
+	public GeoWaveRDD getRightResults() {
 		return this.joinStrategy.getRightResults();
 	}
 
@@ -392,13 +434,22 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setLeftRDD(
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRDD ) {
+			GeoWaveIndexedRDD leftRDD ) {
 		this.leftRDD = leftRDD;
 	}
 
 	public void setRightRDD(
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD ) {
+			GeoWaveIndexedRDD rightRDD ) {
 		this.rightRDD = rightRDD;
+	}
+
+	public boolean isNegativeTest() {
+		return negativeTest;
+	}
+
+	public void setNegativeTest(
+			boolean negativeTest ) {
+		this.negativeTest = negativeTest;
 	}
 
 }

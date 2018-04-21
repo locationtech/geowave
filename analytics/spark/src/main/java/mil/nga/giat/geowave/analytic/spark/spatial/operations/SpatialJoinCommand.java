@@ -37,7 +37,7 @@ public class SpatialJoinCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	@ParametersDelegate
-	private SpatialJoinOptions spatialJoinOptions = new SpatialJoinOptions();
+	private SpatialJoinCmdOptions spatialJoinOptions = new SpatialJoinCmdOptions();
 
 	DataStorePluginOptions leftDataStore = null;
 	DataStorePluginOptions rightDataStore = null;

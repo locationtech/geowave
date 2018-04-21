@@ -5,49 +5,30 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.annotation.RegEx;
-
 import org.apache.spark.SparkConf;
-import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaPairRDD;
-import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
-import org.apache.spark.sql.catalog.Catalog;
-import org.apache.spark.sql.catalyst.TableIdentifier;
-import org.apache.spark.sql.catalyst.expressions.Expression;
 import org.apache.spark.sql.catalyst.parser.ParseException;
-import org.apache.spark.sql.catalyst.parser.ParserInterface;
 import org.apache.spark.sql.catalyst.plans.logical.LogicalPlan;
-import org.apache.spark.sql.execution.QueryExecution;
-import org.apache.spark.sql.execution.SparkSqlAstBuilder;
-import org.json4s.JsonAST.JValue;
-import org.mortbay.util.ajax.JSON;
-import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.amazonaws.util.StringUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.vividsolutions.jts.util.StringUtil;
-
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.analytic.spark.kmeans.KMeansRunner;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
@@ -55,13 +36,11 @@ import mil.nga.giat.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI.UDFNameAndConstructor;
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-import scala.Tuple2;
-import scala.collection.JavaConversions;
 
 public class SqlQueryRunner
 {
@@ -114,12 +93,14 @@ public class SqlQueryRunner
 	public Dataset<Row> run()
 			throws IOException,
 			InterruptedException,
-			ExecutionException {
+			ExecutionException,
+			ParseException {
 		initContext();
 		// Load stores and create views.
 		loadStoresAndViews();
 
-		// Create a version of the sql without string literals to
+		// Create a version of the sql without string literals to check for
+		// subquery syntax in sql statement.
 		Pattern stringLit = Pattern.compile("(?:\\'|\\\").*?(?:\\'|\\\")");
 		Matcher m = stringLit.matcher(sql);
 		String cleanedSql = m.replaceAll("");
@@ -135,51 +116,47 @@ public class SqlQueryRunner
 
 			// Parse sparks logical plan for query and determine if spatial join
 			// is present
-			try {
-				LogicalPlan plan = session.sessionState().sqlParser().parsePlan(
-						sql);
-				JsonParser gsonParser = new JsonParser();
-				JsonElement jElement = gsonParser.parse(plan.prettyJson());
-				if (jElement.isJsonArray()) {
-					JsonArray jArray = jElement.getAsJsonArray();
-					int size = jArray.size();
-					for (int iObj = 0; iObj < size; iObj++) {
-						JsonElement childElement = jArray.get(iObj);
-						if (childElement.isJsonObject()) {
-							JsonObject jObj = childElement.getAsJsonObject();
-							String objClass = jObj.get(
-									"class").getAsString();
-							if (Objects.equals(
-									objClass,
-									"org.apache.spark.sql.catalyst.plans.logical.Filter")) {
-								// Search through filter Object to determine if
-								// GeomPredicate function present in condition.
-								JsonElement conditionElements = jObj.get("condition");
-								if (conditionElements.isJsonArray()) {
-									JsonArray conditionArray = conditionElements.getAsJsonArray();
-									int condSize = conditionArray.size();
-									for (int iCond = 0; iCond < condSize; iCond++) {
-										JsonElement childCond = conditionArray.get(iCond);
-										if (childCond.isJsonObject()) {
-											JsonObject condObj = childCond.getAsJsonObject();
-											String condClass = condObj.get(
-													"class").getAsString();
-											if (Objects.equals(
-													condClass,
-													"org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
-												String udfName = condObj.get(
-														"name").getAsJsonObject().get(
-														"funcName").getAsString();
-												UDFNameAndConstructor geomUDF = UDFRegistrySPI
-														.findFunctionByName(udfName);
-												if (geomUDF != null) {
-													ExtractedGeomPredicate relevantPredicate = new ExtractedGeomPredicate();
-													relevantPredicate.predicate = geomUDF
-															.getPredicateConstructor()
-															.get();
-													relevantPredicate.predicateName = udfName;
-													extractedPredicates.add(relevantPredicate);
-												}
+			LogicalPlan plan = null;
+			plan = session.sessionState().sqlParser().parsePlan(
+					sql);
+			JsonParser gsonParser = new JsonParser();
+			JsonElement jElement = gsonParser.parse(plan.prettyJson());
+			if (jElement.isJsonArray()) {
+				JsonArray jArray = jElement.getAsJsonArray();
+				int size = jArray.size();
+				for (int iObj = 0; iObj < size; iObj++) {
+					JsonElement childElement = jArray.get(iObj);
+					if (childElement.isJsonObject()) {
+						JsonObject jObj = childElement.getAsJsonObject();
+						String objClass = jObj.get(
+								"class").getAsString();
+						if (Objects.equals(
+								objClass,
+								"org.apache.spark.sql.catalyst.plans.logical.Filter")) {
+							// Search through filter Object to determine if
+							// GeomPredicate function present in condition.
+							JsonElement conditionElements = jObj.get("condition");
+							if (conditionElements.isJsonArray()) {
+								JsonArray conditionArray = conditionElements.getAsJsonArray();
+								int condSize = conditionArray.size();
+								for (int iCond = 0; iCond < condSize; iCond++) {
+									JsonElement childCond = conditionArray.get(iCond);
+									if (childCond.isJsonObject()) {
+										JsonObject condObj = childCond.getAsJsonObject();
+										String condClass = condObj.get(
+												"class").getAsString();
+										if (Objects.equals(
+												condClass,
+												"org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
+											String udfName = condObj.get(
+													"name").getAsJsonObject().get(
+													"funcName").getAsString();
+											UDFNameAndConstructor geomUDF = UDFRegistrySPI.findFunctionByName(udfName);
+											if (geomUDF != null) {
+												ExtractedGeomPredicate relevantPredicate = new ExtractedGeomPredicate();
+												relevantPredicate.predicate = geomUDF.getPredicateConstructor().get();
+												relevantPredicate.predicateName = udfName;
+												extractedPredicates.add(relevantPredicate);
 											}
 										}
 									}
@@ -188,11 +165,6 @@ public class SqlQueryRunner
 						}
 					}
 				}
-
-			}
-			catch (ParseException e) {
-				LOGGER.warn("Cannot generate plan for sql query");
-				e.printStackTrace();
 			}
 		}
 
@@ -263,6 +235,7 @@ public class SqlQueryRunner
 			}
 
 			// Extract radius for distance join from condition
+			boolean negativePredicate = false;
 			if (Objects.equals(
 					pred.predicateName,
 					"GeomDistance")) {
@@ -277,8 +250,11 @@ public class SqlQueryRunner
 				}
 				else {
 
-					String logicalOperand = tokens[0];
-					String radiusStr = tokens[1];
+					String logicalOperand = tokens[0].trim();
+					if (logicalOperand == ">" || logicalOperand == ">=") {
+						negativePredicate = true;
+					}
+					String radiusStr = tokens[1].trim();
 					if (!org.apache.commons.lang3.math.NumberUtils.isNumber(radiusStr)) {
 						LOGGER.warn("Could not extract radius for distance join. Running default SQL");
 						return runDefaultSQL();
@@ -301,9 +277,35 @@ public class SqlQueryRunner
 			InputStoreInfo leftStore = inputStores.get(pred.leftTableRelation);
 			InputStoreInfo rightStore = inputStores.get(pred.rightTableRelation);
 
+			joinRunner.setNegativeTest(negativePredicate);
+
 			// Setup store info for runner
-			joinRunner.setLeftRDD(leftStore.rdd);
-			joinRunner.setRightRDD(rightStore.rdd);
+			PrimaryIndex[] leftIndices = leftStore.storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
+					leftStore.adapterId).getIndices(
+					leftStore.storeOptions.createIndexStore());
+			PrimaryIndex[] rightIndices = rightStore.storeOptions
+					.createAdapterIndexMappingStore()
+					.getIndicesForAdapter(
+							rightStore.adapterId)
+					.getIndices(
+							rightStore.storeOptions.createIndexStore());
+			;
+			NumericIndexStrategy leftStrat = null;
+			if (leftIndices.length > 0) {
+				leftStrat = leftIndices[0].getIndexStrategy();
+			}
+			NumericIndexStrategy rightStrat = null;
+			if (rightIndices.length > 0) {
+				rightStrat = rightIndices[0].getIndexStrategy();
+			}
+			joinRunner.setLeftRDD(GeoWaveRDDLoader.loadIndexedRDD(
+					session.sparkContext(),
+					leftStore.rdd,
+					leftStrat));
+			joinRunner.setRightRDD(GeoWaveRDDLoader.loadIndexedRDD(
+					session.sparkContext(),
+					rightStore.rdd,
+					rightStrat));
 
 			joinRunner.setPredicate(pred.predicate);
 
@@ -384,17 +386,20 @@ public class SqlQueryRunner
 	private void loadStoresAndViews()
 			throws IOException {
 		Collection<InputStoreInfo> addStores = inputStores.values();
+
 		for (InputStoreInfo storeInfo : addStores) {
 
 			DataAdapter<?> adapter = storeInfo.storeOptions.createAdapterStore().getAdapter(
 					storeInfo.adapterId);
 			QueryOptions queryOptions = new QueryOptions(
 					adapter);
-			storeInfo.rdd = GeoWaveRDD.rddForSimpleFeatures(
+
+			RDDOptions rddOpts = new RDDOptions();
+			rddOpts.setQueryOptions(queryOptions);
+			storeInfo.rdd = GeoWaveRDDLoader.loadRDD(
 					session.sparkContext(),
 					storeInfo.storeOptions,
-					null,
-					queryOptions);
+					rddOpts);
 
 			// Create a DataFrame from the Left RDD
 			final SimpleFeatureDataFrame dataFrame = new SimpleFeatureDataFrame(
@@ -503,7 +508,7 @@ public class SqlQueryRunner
 		private DataStorePluginOptions storeOptions;
 		private ByteArrayId adapterId;
 		private String viewName;
-		private JavaPairRDD<GeoWaveInputKey, SimpleFeature> rdd = null;
+		private GeoWaveRDD rdd = null;
 	}
 
 	private class ExtractedGeomPredicate

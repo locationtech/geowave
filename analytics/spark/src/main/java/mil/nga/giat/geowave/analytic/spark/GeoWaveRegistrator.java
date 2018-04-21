@@ -23,6 +23,8 @@ public class GeoWaveRegistrator implements
 		
 		PersistableFactory.getInstance().getClassIdMapping().entrySet().forEach(e -> kryo.register(e.getKey(), persistSerializer, e.getValue()));
 
+		kryo.register(GeoWaveRDD.class);
+		kryo.register(GeoWaveIndexedRDD.class);
 		kryo.register(
 				SimpleFeatureImpl.class,
 				simpleSerializer);

@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.util.Stopwatch;
 
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SqlQueryRunner;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SqlResultsWriter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -90,9 +92,11 @@ public class GeoWaveJavaSparkSQLIT extends
 
 		try {
 			// Load RDD from datastore, no filters
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
-					dataStore);
+					dataStore,
+					new RDDOptions());
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
 			long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");

@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.test.spark;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 
 import org.apache.spark.SparkContext;
@@ -28,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.util.Stopwatch;
 
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -117,10 +118,13 @@ public class GeoWaveJavaSparkIT extends
 					TEST_BOX_FILTER_FILE).toURI().toURL());
 
 			// Load RDD using spatial query (bbox)
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			RDDOptions queryOpts = new RDDOptions();
+			queryOpts.setQuery(query);
+			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
-					query);
+					queryOpts);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
 			long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
@@ -147,10 +151,13 @@ public class GeoWaveJavaSparkIT extends
 					TEST_POLYGON_FILTER_FILE).toURI().toURL());
 
 			// Load RDD using spatial query (poly)
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			RDDOptions queryOpts = new RDDOptions();
+			queryOpts.setQuery(query);
+			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
-					query);
+					queryOpts);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
 			long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
@@ -194,12 +201,15 @@ public class GeoWaveJavaSparkIT extends
 
 		// Load RDD using hail adapter
 		try {
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+
+			RDDOptions queryOpts = new RDDOptions();
+			queryOpts.setQueryOptions(new QueryOptions(
+					hailAdapter));
+			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
-					null,
-					new QueryOptions(
-							hailAdapter));
+					queryOpts);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
 			long count = javaRdd.count();
 
@@ -210,7 +220,7 @@ public class GeoWaveJavaSparkIT extends
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features for adapter "
 					+ StringUtils.stringFromBinary(hailAdapter.getAdapterId().getBytes()));
 		}
-		catch (IOException e) {
+		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");
@@ -218,12 +228,14 @@ public class GeoWaveJavaSparkIT extends
 
 		// Load RDD using tornado adapter
 		try {
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			RDDOptions queryOpts = new RDDOptions();
+			queryOpts.setQueryOptions(new QueryOptions(
+					tornadoAdapter));
+			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
-					null,
-					new QueryOptions(
-							tornadoAdapter));
+					queryOpts);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
 			long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features for adapter "
@@ -233,7 +245,7 @@ public class GeoWaveJavaSparkIT extends
 					TORNADO_COUNT,
 					count);
 		}
-		catch (IOException e) {
+		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
 			Assert.fail("Error occurred while loading RDD with adapter: '" + e.getLocalizedMessage() + "'");

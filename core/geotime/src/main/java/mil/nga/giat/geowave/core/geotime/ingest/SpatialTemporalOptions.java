@@ -23,6 +23,7 @@ public class SpatialTemporalOptions implements
 		"--bias"
 	}, required = false, description = "The bias of the spatial-temporal index. There can be more precision given to time or space if necessary.", converter = BiasConverter.class)
 	protected Bias bias = Bias.BALANCED;
+
 	@Parameter(names = {
 		"--maxDuplicates"
 	}, required = false, description = "The max number of duplicates per dimension range.  The default is 2 per range (for example lines and polygon timestamp data would be up to 4 because its 2 dimensions, and line/poly time range data would be 8).")
@@ -37,5 +38,13 @@ public class SpatialTemporalOptions implements
 	public void setCrs(
 			String crs ) {
 		this.crs = crs;
+	}
+
+	public Bias getBias() {
+		return this.bias;
+	}
+
+	public long getMaxDuplicates() {
+		return this.maxDuplicates;
 	}
 }
