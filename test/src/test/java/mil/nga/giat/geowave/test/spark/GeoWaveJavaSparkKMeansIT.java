@@ -95,7 +95,6 @@ public class GeoWaveJavaSparkKMeansIT
 	}
 
 	@Test
-
 	public void testKMeansRunner()
 			throws Exception {
 		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();

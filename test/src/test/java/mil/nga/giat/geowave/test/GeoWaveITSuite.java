@@ -69,7 +69,6 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	GeoServerIT.class,
 	GeowaveSparkIngestIT.class
 })
-
 public class GeoWaveITSuite
 {
 	@BeforeClass
