@@ -124,7 +124,7 @@
 				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
-					<artifactId>geowave-cli-theia</artifactId>
+					<artifactId>geowave-cli-sentinel2</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>

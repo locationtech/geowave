@@ -178,7 +178,7 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-cli-theia</artifactId>
+			<artifactId>geowave-cli-sentinel2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -517,7 +517,7 @@
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
-						<sourceDirectory>../extensions/cli/theia/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/sentinel2/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/geoserver/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/osm/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/debug/src/main/java</sourceDirectory>
