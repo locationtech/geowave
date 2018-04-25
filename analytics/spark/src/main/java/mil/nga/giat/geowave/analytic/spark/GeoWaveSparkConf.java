@@ -25,9 +25,9 @@ public class GeoWaveSparkConf implements
 	}
 
 	// Returns a *NEW* SparkConf with GeoWave default settings applied using
-	// userConf as base. *DOES NOT MODIFY PARAMETER*
+	// userConf as base.
 	public static SparkConf applyDefaultsToConfig(
-			SparkConf userConf ) {
+			final SparkConf userConf ) {
 		SparkConf newConf = userConf.clone();
 		newConf = newConf.set(
 				"spark.serializer",
@@ -47,7 +47,7 @@ public class GeoWaveSparkConf implements
 	// Create a SparkSession with GeoWave settings and then user configuration
 	// options added on top of defaults.
 	public static SparkSession createDefaultSession(
-			SparkConf addonOptions ) {
+			final SparkConf addonOptions ) {
 		SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
 		return SparkSession.builder().config(
 				defaultConfig).config(

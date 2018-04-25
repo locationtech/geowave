@@ -21,19 +21,20 @@ public class GeomFunctionRegistry implements
 	public static void registerGeometryFunctions(
 			SparkSession spark ) {
 
-		//Distance UDF is only exception to GeomFunction interface since it returns Double
+		// Distance UDF is only exception to GeomFunction interface since it
+		// returns Double
 		spark.udf().register(
 				"geomDistance",
 				geomDistanceInstance,
 				DataTypes.DoubleType);
-		
-		//Register all UDF functions from RegistrySPI
+
+		// Register all UDF functions from RegistrySPI
 		UDFNameAndConstructor[] supportedUDFs = UDFRegistrySPI.getSupportedUDFs();
-		for( int iUDF = 0; iUDF < supportedUDFs.length; iUDF += 1) {
+		for (int iUDF = 0; iUDF < supportedUDFs.length; iUDF += 1) {
 			UDFNameAndConstructor udf = supportedUDFs[iUDF];
-			if(udf.getWKTConstructor() != null) {
+			if (udf.getWKTConstructor() != null) {
 				WKTGeomFunction funcInstance = udf.getWKTConstructor().get();
-				
+
 				spark.udf().register(
 						funcInstance.getRegisterName(),
 						funcInstance,

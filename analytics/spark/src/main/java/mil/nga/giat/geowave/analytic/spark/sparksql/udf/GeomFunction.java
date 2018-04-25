@@ -42,7 +42,7 @@ public abstract class GeomFunction implements
 	public abstract boolean apply(
 			Geometry geom1,
 			Geometry geom2 );
-	
+
 	public String getRegisterName() {
 		return this.getClass().getSimpleName();
 	}
