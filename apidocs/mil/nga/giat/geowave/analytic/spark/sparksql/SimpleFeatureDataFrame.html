@@ -148,7 +148,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#getDataFrame-org.apache.spark.api.java.JavaPairRDD-">getDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#getDataFrame-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-">getDataFrame</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;pairRDD)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>org.opengis.feature.simple.SimpleFeatureType</code></td>
@@ -169,7 +169,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#resetDataFrame-org.apache.spark.api.java.JavaPairRDD-">resetDataFrame</a></span>(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SimpleFeatureDataFrame.html#resetDataFrame-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-">resetDataFrame</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;pairRDD)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -247,22 +247,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;org.apache.spark.api.java.JavaRDD&lt;org.apache.spark.sql.Row&gt;&nbsp;getRowRDD()</pre>
 </li>
 </ul>
-<a name="getDataFrame-org.apache.spark.api.java.JavaPairRDD-">
+<a name="getDataFrame-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getDataFrame</h4>
-<pre>public&nbsp;org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;&nbsp;getDataFrame(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</pre>
+<pre>public&nbsp;org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;&nbsp;getDataFrame(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;pairRDD)</pre>
 </li>
 </ul>
-<a name="resetDataFrame-org.apache.spark.api.java.JavaPairRDD-">
+<a name="resetDataFrame-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>resetDataFrame</h4>
-<pre>public&nbsp;org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;&nbsp;resetDataFrame(org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;pairRDD)</pre>
+<pre>public&nbsp;org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;&nbsp;resetDataFrame(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;pairRDD)</pre>
 </li>
 </ul>
 </li>

@@ -87,7 +87,15 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.spark">mil.nga.giat.geowave.analytic.spark</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.analytic.spark.spatial">mil.nga.giat.geowave.analytic.spark.spatial</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.core.geotime.ingest">mil.nga.giat.geowave.core.geotime.ingest</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -171,6 +179,81 @@
 </tbody>
 </table>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a> in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.broadcast.Broadcast&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/RDDUtils.html#broadcastIndexStrategy-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">broadcastIndexStrategy</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>org.apache.spark.broadcast.Broadcast&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveIndexedRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static org.apache.spark.broadcast.Broadcast&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">RDDUtils.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/RDDUtils.html#broadcastIndexStrategy-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">broadcastIndexStrategy</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveIndexedRDD</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDDLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDDLoader.html#loadIndexedRDD-org.apache.spark.SparkContext-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.analytic.spark.RDDOptions-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">loadIndexedRDD</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+              <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/RDDOptions.html" title="class in mil.nga.giat.geowave.analytic.spark">RDDOptions</a>&nbsp;rddOpts,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveIndexedRDD</a></code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRDDLoader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDDLoader.html#loadIndexedRDD-org.apache.spark.SparkContext-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">loadIndexedRDD</a></span>(org.apache.spark.SparkContext&nbsp;sc,
+              <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;inputRDD,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveIndexedRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#reindex-org.apache.spark.broadcast.Broadcast-">reindex</a></span>(org.apache.spark.broadcast.Broadcast&lt;? extends <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;&nbsp;newIndexStrategy)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/package-summary.html">mil.nga.giat.geowave.analytic.spark</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#GeoWaveIndexedRDD-mil.nga.giat.geowave.analytic.spark.GeoWaveRDD-org.apache.spark.broadcast.Broadcast-">GeoWaveIndexedRDD</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a>&nbsp;geowaveRDD,
+                 org.apache.spark.broadcast.Broadcast&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.spatial">
 <!--   -->
 </a>
@@ -182,6 +265,14 @@
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TieredSpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html#createDefaultStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">createDefaultStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html#createDefaultStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">createDefaultStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialJoinRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#getIndexStrategy--">getIndexStrategy</a></span>()</code>&nbsp;</td>
@@ -196,24 +287,46 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">TieredSpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html#join-org.apache.spark.sql.SparkSession-org.apache.spark.api.java.JavaPairRDD-org.apache.spark.api.java.JavaPairRDD-mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">join</a></span>(org.apache.spark.sql.SparkSession&nbsp;spark,
-    org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;leftRDD,
-    org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;rightRDD,
-    <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a>&nbsp;predicate,
-    <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TieredSpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html#createDefaultStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">createDefaultStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">SpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html#join-org.apache.spark.sql.SparkSession-org.apache.spark.api.java.JavaPairRDD-org.apache.spark.api.java.JavaPairRDD-mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">join</a></span>(org.apache.spark.sql.SparkSession&nbsp;spark,
-    org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;leftRDD,
-    org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,org.opengis.feature.simple.SimpleFeature&gt;&nbsp;rightRDD,
-    <a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a>&nbsp;predicate,
-    <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html#createDefaultStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">createDefaultStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">SpatialJoinRunner.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html#setIndexStrategy-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">setIndexStrategy</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">TieredSpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/TieredSpatialJoin.html#supportsJoin-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">supportsJoin</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialJoin.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoin.html#supportsJoin-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">supportsJoin</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.core.geotime.ingest">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a> in <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/package-summary.html">mil.nga.giat.geowave.core.geotime.ingest</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/package-summary.html">mil.nga.giat.geowave.core.geotime.ingest</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialDimensionalityTypeProvider.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialDimensionalityTypeProvider.html#isSpatial-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">isSpatial</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">SpatialTemporalDimensionalityTypeProvider.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.html#isSpatialTemporal-mil.nga.giat.geowave.core.index.NumericIndexStrategy-">isSpatialTemporal</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&nbsp;indexStrategy)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

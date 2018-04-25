@@ -1118,6 +1118,50 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.spark</h2>
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.GeoWaveIndexedRDD">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">mil.nga.giat.geowave.analytic.spark.GeoWaveIndexedRDD</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>geowaveRDD</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a> geowaveRDD</pre>
+</li>
+<li class="blockList">
+<h4>rawFeatureRDD</h4>
+<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rawFeatureRDD</pre>
+</li>
+<li class="blockList">
+<h4>rawGeometryRDD</h4>
+<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rawGeometryRDD</pre>
+</li>
+<li class="blockListLast">
+<h4>indexStrategy</h4>
+<pre>org.apache.spark.broadcast.Broadcast&lt;T&gt; indexStrategy</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.GeoWaveRDD">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">mil.nga.giat.geowave.analytic.spark.GeoWaveRDD</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockListLast">
+<h4>rawRDD</h4>
+<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rawRDD</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf">
 <!--   -->
 </a>
@@ -1345,6 +1389,26 @@
 <li class="blockList">
 <h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.spark.spatial</h2>
 <ul class="blockList">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.spatial.JoinOptions">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/spatial/JoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">mil.nga.giat.geowave.analytic.spark.spatial.JoinOptions</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<ul class="blockList">
+<li class="blockList">
+<h3>Serialized Fields</h3>
+<ul class="blockList">
+<li class="blockList">
+<h4>joinBuildSide</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/spatial/JoinOptions.BuildSide.html" title="enum in mil.nga.giat.geowave.analytic.spark.spatial">JoinOptions.BuildSide</a> joinBuildSide</pre>
+</li>
+<li class="blockListLast">
+<h4>negativePredicate</h4>
+<pre>boolean negativePredicate</pre>
+</li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.spatial.JoinStrategy">
 <!--   -->
 </a>
@@ -1355,11 +1419,15 @@
 <ul class="blockList">
 <li class="blockList">
 <h4>leftJoined</h4>
-<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; leftJoined</pre>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a> leftJoined</pre>
+</li>
+<li class="blockList">
+<h4>rightJoined</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveRDD</a> rightJoined</pre>
 </li>
 <li class="blockListLast">
-<h4>rightJoined</h4>
-<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rightJoined</pre>
+<h4>joinOpts</h4>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/spatial/JoinOptions.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">JoinOptions</a> joinOpts</pre>
 </li>
 </ul>
 </li>
@@ -1422,6 +1490,10 @@
 <pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> outRightAdapterId</pre>
 </li>
 <li class="blockList">
+<h4>negativeTest</h4>
+<pre>boolean negativeTest</pre>
+</li>
+<li class="blockList">
 <h4>outputStore</h4>
 <pre><a href="mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a> outputStore</pre>
 </li>
@@ -1435,11 +1507,11 @@
 </li>
 <li class="blockList">
 <h4>leftRDD</h4>
-<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; leftRDD</pre>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveIndexedRDD</a> leftRDD</pre>
 </li>
 <li class="blockList">
 <h4>rightRDD</h4>
-<pre>org.apache.spark.api.java.JavaPairRDD&lt;K,V&gt; rightRDD</pre>
+<pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveIndexedRDD</a> rightRDD</pre>
 </li>
 <li class="blockListLast">
 <h4>joinStrategy</h4>

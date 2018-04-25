@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -147,24 +147,26 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#addInputStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">addInputStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+             <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewName)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#close--">close</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#getAdapterName--">getAdapterName</a></span>()</code>&nbsp;</td>
-</tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#run--">run</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#removeAllStores--">removeAllStores</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setAdapterId1-mil.nga.giat.geowave.core.index.ByteArrayId-">setAdapterId1</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#removeInputStore-java.lang.String-">removeInputStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewName)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setAdapterId2-mil.nga.giat.geowave.core.index.ByteArrayId-">setAdapterId2</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colFirst"><code>org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#run--">run</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
@@ -176,31 +178,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setInputDataStore1-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setInputDataStore1</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setMaster-java.lang.String-">setMaster</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;master)</code>&nbsp;</td>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setInputDataStore2-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setInputDataStore2</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setSparkSession-org.apache.spark.sql.SparkSession-">setSparkSession</a></span>(org.apache.spark.sql.SparkSession&nbsp;session)</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setJavaSparkContext-org.apache.spark.api.java.JavaSparkContext-">setJavaSparkContext</a></span>(org.apache.spark.api.java.JavaSparkContext&nbsp;jsc)</code>&nbsp;</td>
-</tr>
-<tr id="i10" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setMaster-java.lang.String-">setMaster</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;master)</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setSql-java.lang.String-">setSql</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sql)</code>&nbsp;</td>
-</tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setTempView1-java.lang.String-">setTempView1</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tempView1)</code>&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/sparksql/SqlQueryRunner.html#setTempView2-java.lang.String-">setTempView2</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tempView2)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -257,29 +243,55 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>run</h4>
 <pre>public&nbsp;org.apache.spark.sql.Dataset&lt;org.apache.spark.sql.Row&gt;&nbsp;run()
-                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+                                                           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a>,
+                                                                  <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutionException.html?is-external=true" title="class or interface in java.util.concurrent">ExecutionException</a>,
+                                                                  org.apache.spark.sql.catalyst.parser.ParseException</pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/ExecutionException.html?is-external=true" title="class or interface in java.util.concurrent">ExecutionException</a></code></dd>
+<dd><code>org.apache.spark.sql.catalyst.parser.ParseException</code></dd>
 </dl>
 </li>
 </ul>
-<a name="getAdapterName--">
+<a name="addInputStore-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterName</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getAdapterName()</pre>
+<h4>addInputStore</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;addInputStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+                            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewName)</pre>
 </li>
 </ul>
-<a name="setJavaSparkContext-org.apache.spark.api.java.JavaSparkContext-">
+<a name="removeInputStore-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>setJavaSparkContext</h4>
-<pre>public&nbsp;void&nbsp;setJavaSparkContext(org.apache.spark.api.java.JavaSparkContext&nbsp;jsc)</pre>
+<h4>removeInputStore</h4>
+<pre>public&nbsp;void&nbsp;removeInputStore(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;viewName)</pre>
+</li>
+</ul>
+<a name="removeAllStores--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>removeAllStores</h4>
+<pre>public&nbsp;void&nbsp;removeAllStores()</pre>
+</li>
+</ul>
+<a name="setSparkSession-org.apache.spark.sql.SparkSession-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setSparkSession</h4>
+<pre>public&nbsp;void&nbsp;setSparkSession(org.apache.spark.sql.SparkSession&nbsp;session)</pre>
 </li>
 </ul>
 <a name="setAppName-java.lang.String-">
@@ -307,60 +319,6 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>setHost</h4>
 <pre>public&nbsp;void&nbsp;setHost(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;host)</pre>
-</li>
-</ul>
-<a name="setInputDataStore1-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setInputDataStore1</h4>
-<pre>public&nbsp;void&nbsp;setInputDataStore1(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore)</pre>
-</li>
-</ul>
-<a name="setAdapterId1-mil.nga.giat.geowave.core.index.ByteArrayId-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setAdapterId1</h4>
-<pre>public&nbsp;void&nbsp;setAdapterId1(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-</li>
-</ul>
-<a name="setTempView1-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setTempView1</h4>
-<pre>public&nbsp;void&nbsp;setTempView1(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tempView1)</pre>
-</li>
-</ul>
-<a name="setInputDataStore2-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setInputDataStore2</h4>
-<pre>public&nbsp;void&nbsp;setInputDataStore2(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputDataStore)</pre>
-</li>
-</ul>
-<a name="setAdapterId2-mil.nga.giat.geowave.core.index.ByteArrayId-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setAdapterId2</h4>
-<pre>public&nbsp;void&nbsp;setAdapterId2(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-</li>
-</ul>
-<a name="setTempView2-java.lang.String-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setTempView2</h4>
-<pre>public&nbsp;void&nbsp;setTempView2(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tempView2)</pre>
 </li>
 </ul>
 <a name="setSql-java.lang.String-">
