@@ -10,22 +10,36 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLStreamHandlerFactory;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
+import java.nio.file.FileSystems;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.upplication.s3fs.S3FileSystemProvider;
+
 import mil.nga.giat.geowave.core.ingest.hdfs.HdfsUrlStreamHandlerFactory;
+import mil.nga.giat.geowave.core.ingest.s3.GeoWaveAmazonS3Factory;
 import mil.nga.giat.geowave.core.ingest.s3.S3URLStreamHandlerFactory;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 
 public class IngestUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(IngestUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(
+			IngestUtils.class);
 
 	public static boolean checkIndexesAgainstProvider(
 			final String providerName,
@@ -39,8 +53,9 @@ public class IngestUtils
 				// HP Fortify "Log Forging" false positive
 				// What Fortify considers "user input" comes only
 				// from users with OS-level access anyway
-				LOGGER.warn("Local file ingest plugin for ingest type '" + providerName
-						+ "' does not support dimensionality '" + option.getType() + "'");
+				LOGGER.warn(
+						"Local file ingest plugin for ingest type '" + providerName
+								+ "' does not support dimensionality '" + option.getType() + "'");
 				valid = false;
 			}
 		}
@@ -69,45 +84,55 @@ public class IngestUtils
 			return;
 		}
 
-		Field factoryField = URL.class.getDeclaredField("factory");
+		Field factoryField = URL.class.getDeclaredField(
+				"factory");
 		// HP Fortify "Access Control" false positive
 		// The need to change the accessibility here is
 		// necessary, has been review and judged to be safe
-		factoryField.setAccessible(true);
+		factoryField.setAccessible(
+				true);
 
-		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
+		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(
+				null);
 
 		if (urlStreamHandlerFactory == null) {
 			if (urlType == URLTYPE.S3) {
-				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
+				URL.setURLStreamHandlerFactory(
+						new S3URLStreamHandlerFactory());
 				hasS3Handler = true;
 			}
 			else { // HDFS
-				URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory());
+				URL.setURLStreamHandlerFactory(
+						new HdfsUrlStreamHandlerFactory());
 				hasHdfsHandler = true;
 			}
 
 		}
 		else {
-			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
+			Field lockField = URL.class.getDeclaredField(
+					"streamHandlerLock");
 			// HP Fortify "Access Control" false positive
 			// The need to change the accessibility here is
 			// necessary, has been review and judged to be safe
-			lockField.setAccessible(true);
-			synchronized (lockField.get(null)) {
+			lockField.setAccessible(
+					true);
+			synchronized (lockField.get(
+					null)) {
 
 				factoryField.set(
 						null,
 						null);
 
 				if (urlType == URLTYPE.S3) {
-					URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory(
-							urlStreamHandlerFactory));
+					URL.setURLStreamHandlerFactory(
+							new S3URLStreamHandlerFactory(
+									urlStreamHandlerFactory));
 					hasS3Handler = true;
 				}
 				else { // HDFS
-					URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory(
-							urlStreamHandlerFactory));
+					URL.setURLStreamHandlerFactory(
+							new HdfsUrlStreamHandlerFactory(
+									urlStreamHandlerFactory));
 					hasHdfsHandler = true;
 				}
 			}
@@ -134,7 +159,8 @@ public class IngestUtils
 		for (final Class<? extends CommonIndexValue> requiredType : requiredTypes) {
 			boolean fieldFound = false;
 			for (final Class<? extends CommonIndexValue> supportedType : supportedTypes) {
-				if (requiredType.isAssignableFrom(supportedType)) {
+				if (requiredType.isAssignableFrom(
+						supportedType)) {
 					fieldFound = true;
 					break;
 				}
@@ -161,4 +187,57 @@ public class IngestUtils
 
 	}
 
+	public static Path setupS3FileSystem(
+			String basePath,
+			String s3EndpointUrl )
+			throws IOException {
+		Path path = null;
+		FileSystem fs = null;
+		try {
+			fs = FileSystems.newFileSystem(
+					new URI(
+							s3EndpointUrl + "/"),
+					Collections.singletonMap(S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS, GeoWaveAmazonS3Factory.class.getName()),
+					Thread.currentThread().getContextClassLoader());
+			// HP Fortify "Path Traversal" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
+
+		}
+		catch (URISyntaxException e) {
+			LOGGER.error(
+					"Unable to ingest data, Inavlid S3 path");
+			return null;
+		}
+		catch (FileSystemAlreadyExistsException e) {
+			LOGGER.info(
+					"File system " + s3EndpointUrl + "already exists");
+			try {
+				fs = FileSystems.getFileSystem(
+						new URI(
+								s3EndpointUrl + "/"));
+			}
+			catch (URISyntaxException e1) {
+				LOGGER.error(
+						"Unable to ingest data, Inavlid S3 path");
+				return null;
+			}
+		}
+
+		String s3InputPath = basePath.replaceFirst(
+				"s3://",
+				"/");
+		try {
+			path = fs.getPath(
+					s3InputPath);
+		}
+		catch (InvalidPathException e) {
+			LOGGER.error(
+					"Input valid input path " + s3InputPath);
+			return null;
+		}
+
+		return path;
+
+	}
 }

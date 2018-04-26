@@ -7,6 +7,10 @@ import java.net.URLConnection;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AnonymousAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
@@ -35,11 +39,13 @@ public class S3URLConnection extends
 	@Override
 	public InputStream getInputStream()
 			throws IOException {
-		final S3Params s3Params = S3ParamsExtractor.extract(url);
+		final S3Params s3Params = S3ParamsExtractor.extract(
+				url);
 
 		final ClientConfiguration clientConfig = buildClientConfig();
 
 		final AmazonS3 s3Client = new AmazonS3Client(
+				new DefaultGeoWaveAWSCredentialsProvider(),
 				clientConfig);
 
 		final S3Object object = s3Client.getObject(
@@ -67,17 +73,19 @@ public class S3URLConnection extends
 				PROP_S3_HANDLER_SIGNER_OVERRIDE,
 				null);
 
-		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol("https"
-				.equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
+		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol(
+				"https".equalsIgnoreCase(
+						protocol) ? Protocol.HTTPS : Protocol.HTTP);
 
 		if (userAgent != null) {
-			clientConfig.setUserAgent(userAgent);
+			clientConfig.setUserAgent(
+					userAgent);
 		}
 		if (signerOverride != null) {
-			clientConfig.setSignerOverride(signerOverride);
+			clientConfig.setSignerOverride(
+					signerOverride);
 		}
 
 		return clientConfig;
 	}
-
 }
