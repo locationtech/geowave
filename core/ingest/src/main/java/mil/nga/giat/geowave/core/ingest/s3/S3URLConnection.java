@@ -7,6 +7,10 @@ import java.net.URLConnection;
 
 import com.amazonaws.ClientConfiguration;
 import com.amazonaws.Protocol;
+import com.amazonaws.SdkClientException;
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.AnonymousAWSCredentials;
+import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.S3Object;
@@ -40,6 +44,7 @@ public class S3URLConnection extends
 		final ClientConfiguration clientConfig = buildClientConfig();
 
 		final AmazonS3 s3Client = new AmazonS3Client(
+				new DefaultGeoWaveAWSCredentialsProvider(),
 				clientConfig);
 
 		final S3Object object = s3Client.getObject(
@@ -79,5 +84,4 @@ public class S3URLConnection extends
 
 		return clientConfig;
 	}
-
 }
