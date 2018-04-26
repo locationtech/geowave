@@ -112,7 +112,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				s3EndpointUrl = "s3://" + s3EndpointUrl;
 			}
 
-			path = IngestUtils.setupS3FileSystem(inputPath, s3EndpointUrl);
+			path = IngestUtils.setupS3FileSystem(
+					inputPath,
+					s3EndpointUrl);
 
 		}
 		// If input path is HDFS

@@ -363,7 +363,7 @@ public class TestUtils
 		dataStore.save(
 				props,
 				DataStorePluginOptions.getStoreNamespace("test"));
-		
+
 		AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test");
 		addStore.setPluginOptions(dataStore);

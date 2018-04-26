@@ -39,8 +39,7 @@ public class S3URLConnection extends
 	@Override
 	public InputStream getInputStream()
 			throws IOException {
-		final S3Params s3Params = S3ParamsExtractor.extract(
-				url);
+		final S3Params s3Params = S3ParamsExtractor.extract(url);
 
 		final ClientConfiguration clientConfig = buildClientConfig();
 
@@ -73,17 +72,14 @@ public class S3URLConnection extends
 				PROP_S3_HANDLER_SIGNER_OVERRIDE,
 				null);
 
-		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol(
-				"https".equalsIgnoreCase(
-						protocol) ? Protocol.HTTPS : Protocol.HTTP);
+		final ClientConfiguration clientConfig = new ClientConfiguration().withProtocol("https"
+				.equalsIgnoreCase(protocol) ? Protocol.HTTPS : Protocol.HTTP);
 
 		if (userAgent != null) {
-			clientConfig.setUserAgent(
-					userAgent);
+			clientConfig.setUserAgent(userAgent);
 		}
 		if (signerOverride != null) {
-			clientConfig.setSignerOverride(
-					signerOverride);
+			clientConfig.setSignerOverride(signerOverride);
 		}
 
 		return clientConfig;

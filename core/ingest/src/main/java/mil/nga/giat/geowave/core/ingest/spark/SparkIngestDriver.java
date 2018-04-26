@@ -80,8 +80,7 @@ public class SparkIngestDriver implements
 		Serializable
 {
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			SparkIngestDriver.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(SparkIngestDriver.class);
 
 	public SparkIngestDriver() {
 
@@ -298,8 +297,7 @@ public class SparkIngestDriver implements
 		// Based on the selected formats, select the format plugins
 		IngestFormatPluginOptions pluginFormats = new IngestFormatPluginOptions();
 		// Based on the selected formats, select the format plugins
-		pluginFormats.selectPlugin(
-				localInput.getFormats());
+		pluginFormats.selectPlugin(localInput.getFormats());
 		DataStorePluginOptions inputStoreOptions = null;
 		List<IndexPluginOptions> indexOptions = null;
 
@@ -311,8 +309,7 @@ public class SparkIngestDriver implements
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(
 					configProperties,
-					DataStorePluginOptions.getStoreNamespace(
-							inputStoreName),
+					DataStorePluginOptions.getStoreNamespace(inputStoreName),
 					configFile)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
@@ -326,8 +323,7 @@ public class SparkIngestDriver implements
 					inputStoreName);
 			if (!inputStoreLoader.loadFromConfig(
 					configProperties,
-					DataStorePluginOptions.getStoreNamespace(
-							inputStoreName),
+					DataStorePluginOptions.getStoreNamespace(inputStoreName),
 					null)) {
 				throw new ParameterException(
 						"Cannot find store name: " + inputStoreLoader.getStoreName());
@@ -338,8 +334,7 @@ public class SparkIngestDriver implements
 		if (indexOptions == null) {
 			final IndexLoader indexLoader = new IndexLoader(
 					indexList);
-			if (!indexLoader.loadFromConfig(
-					configProperties)) {
+			if (!indexLoader.loadFromConfig(configProperties)) {
 				throw new ParameterException(
 						"Cannot find index(s) by name: " + indexList);
 			}
@@ -362,10 +357,8 @@ public class SparkIngestDriver implements
 					pluginEntry.getKey(),
 					pluginEntry.getValue());
 
-			adapters.addAll(
-					Arrays.asList(
-							pluginEntry.getValue().getDataAdapters(
-									ingestOptions.getVisibility())));
+			adapters.addAll(Arrays.asList(pluginEntry.getValue().getDataAdapters(
+					ingestOptions.getVisibility())));
 		}
 
 		LocalFileIngestDriver localIngestDriver = new LocalFileIngestDriver(
@@ -386,18 +379,16 @@ public class SparkIngestDriver implements
 			List<PluginVisitor<LocalFileIngestPlugin<?>>> pluginVisitors = new ArrayList<>(
 					localFileIngestPlugins.size());
 			for (final Entry<String, LocalFileIngestPlugin<?>> localPlugin : localFileIngestPlugins.entrySet()) {
-				pluginVisitors.add(
-						new PluginVisitor<LocalFileIngestPlugin<?>>(
-								localPlugin.getValue(),
-								localPlugin.getKey(),
-								localInput.getExtensions()));
+				pluginVisitors.add(new PluginVisitor<LocalFileIngestPlugin<?>>(
+						localPlugin.getValue(),
+						localPlugin.getKey(),
+						localInput.getExtensions()));
 			}
 
 			while (inputFiles.hasNext()) {
 				final URL file = inputFiles.next().toURL();
 				for (final PluginVisitor<LocalFileIngestPlugin<?>> visitor : pluginVisitors) {
-					if (visitor.supportsFile(
-							file)) {
+					if (visitor.supportsFile(file)) {
 						localIngestDriver.processFile(
 								file,
 								visitor.getTypeName(),
@@ -455,8 +446,7 @@ public class SparkIngestDriver implements
 
 			URI uri = new URI(
 					hdfsFSUrl + hdfsInputPath);
-			path = Paths.get(
-					uri);
+			path = Paths.get(uri);
 			// HP Fortify "Path Traversal" false positive
 			// What Fortify considers "user input" comes only
 			// from users with OS-level access anyway
@@ -478,8 +468,7 @@ public class SparkIngestDriver implements
 			throws URISyntaxException {
 
 		try {
-			IngestUtils.setURLStreamHandlerFactory(
-					URLTYPE.S3);
+			IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 		}
 		catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 			LOGGER.error(
@@ -506,25 +495,20 @@ public class SparkIngestDriver implements
 			IllegalArgumentException,
 			IllegalAccessException {
 
-		Field factoryField = URL.class.getDeclaredField(
-				"factory");
-		factoryField.setAccessible(
-				true);
+		Field factoryField = URL.class.getDeclaredField("factory");
+		factoryField.setAccessible(true);
 		// HP Fortify "Access Control" false positive
 		// The need to change the accessibility here is
 		// necessary, has been review and judged to be safe
 
-		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(
-				null);
+		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
 
 		if (urlStreamHandlerFactory == null) {
-			URL.setURLStreamHandlerFactory(
-					new FsUrlStreamHandlerFactory());
+			URL.setURLStreamHandlerFactory(new FsUrlStreamHandlerFactory());
 		}
 		else {
 			try {
-				factoryField.setAccessible(
-						true);
+				factoryField.setAccessible(true);
 				// HP Fortify "Access Control" false positive
 				// The need to change the accessibility here is
 				// necessary, has been review and judged to be safe
@@ -533,8 +517,7 @@ public class SparkIngestDriver implements
 						new FsUrlStreamHandlerFactory());
 			}
 			catch (IllegalAccessException e1) {
-				LOGGER.error(
-						"Could not access URLStreamHandler factory field on URL class: {}");
+				LOGGER.error("Could not access URLStreamHandler factory field on URL class: {}");
 				throw new RuntimeException(
 						"Could not access URLStreamHandler factory field on URL class: {}",
 						e1);
