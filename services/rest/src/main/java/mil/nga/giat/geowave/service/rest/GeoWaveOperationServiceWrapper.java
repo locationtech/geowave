@@ -179,7 +179,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 						form,
 						f.getName());
 				if (strValue != null) {
-					if (Long.class.isAssignableFrom(f.getType())) {
+					if (Long.class.isAssignableFrom(f.getType()) || long.class.isAssignableFrom(f.getType())) {
 						objValue = Long.valueOf(strValue);
 					}
 					else if (Integer.class.isAssignableFrom(f.getType()) || int.class.isAssignableFrom(f.getType())) {
