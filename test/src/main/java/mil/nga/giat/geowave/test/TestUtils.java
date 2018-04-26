@@ -42,6 +42,8 @@ import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOpt
 import mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.spark.SparkIngestDriver;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.ListStatsCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -361,6 +363,11 @@ public class TestUtils
 		dataStore.save(
 				props,
 				DataStorePluginOptions.getStoreNamespace("test"));
+		
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
 		for (String indexType : indexTypes) {
@@ -369,12 +376,16 @@ public class TestUtils
 			pluginOptions.save(
 					props,
 					IndexPluginOptions.getIndexNamespace(indexType));
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters(indexType);
+			addIndex.setPluginOptions(pluginOptions);
+			addIndex.execute(operationParams);
 		}
 		props.setProperty(
 				ConfigAWSCommand.AWS_S3_ENDPOINT_URL,
 				s3Url);
 		sparkIngester.runOperation(
-				null,
+				configFile,
 				localOptions,
 				"test",
 				indexes,
