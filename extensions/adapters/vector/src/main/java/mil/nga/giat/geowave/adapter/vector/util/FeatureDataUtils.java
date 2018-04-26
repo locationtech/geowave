@@ -254,7 +254,7 @@ public class FeatureDataUtils
 		// if no id provided, locate a single featureadapter
 		if (adapterId == null) {
 			final List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
-			if (adapterIdList.size() == 1) {
+			if (adapterIdList.size() >= 1) {
 				adapterId = adapterIdList.get(0);
 			}
 			else if (adapterIdList.isEmpty()) {

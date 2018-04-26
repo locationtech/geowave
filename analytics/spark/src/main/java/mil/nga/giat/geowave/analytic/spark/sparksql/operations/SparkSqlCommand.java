@@ -3,7 +3,10 @@ package mil.nga.giat.geowave.analytic.spark.sparksql.operations;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SaveMode;
@@ -37,8 +40,8 @@ public class SparkSqlCommand extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SparkSqlCommand.class);
 	private final static String STORE_ADAPTER_DELIM = "|";
-	private final static String CMD_DESCR = "<sql query> - e.g. 'select * from storename[" + STORE_ADAPTER_DELIM
-			+ "adaptername] where condition...'";
+	private final static String CMD_DESCR = "<sql query> - e.g. 'select * from %storename[" + STORE_ADAPTER_DELIM
+			+ "adaptername" + STORE_ADAPTER_DELIM + "viewName] where condition...'";
 
 	@Parameter(description = CMD_DESCR)
 	private List<String> parameters = new ArrayList<String>();
@@ -46,15 +49,8 @@ public class SparkSqlCommand extends
 	@ParametersDelegate
 	private SparkSqlOptions sparkSqlOptions = new SparkSqlOptions();
 
-	private DataStorePluginOptions inputDataStore1 = null;
-	private ByteArrayId adapterId1 = null;
-	private String tempView1 = null;
-
-	private DataStorePluginOptions inputDataStore2 = null;
-	private ByteArrayId adapterId2 = null;
-	private String tempView2 = null;
-
-	DataStorePluginOptions outputDataStore = null;
+	private DataStorePluginOptions outputDataStore = null;
+	private SqlQueryRunner sqlRunner = new SqlQueryRunner();
 
 	// Log some timing
 	Stopwatch stopwatch = new Stopwatch();
@@ -86,17 +82,6 @@ public class SparkSqlCommand extends
 				sql,
 				sparkSqlOptions.getOutputStoreName());
 
-		SqlQueryRunner sqlRunner = new SqlQueryRunner();
-		sqlRunner.setInputDataStore1(inputDataStore1);
-		sqlRunner.setAdapterId1(adapterId1);
-		sqlRunner.setTempView1(tempView1);
-
-		if (inputDataStore2 != null) {
-			sqlRunner.setInputDataStore2(inputDataStore2);
-			sqlRunner.setAdapterId2(adapterId2);
-			sqlRunner.setTempView2(tempView2);
-		}
-
 		LOGGER.debug("Running with SQL: " + cleanSql);
 		sqlRunner.setSql(cleanSql);
 
@@ -108,10 +93,9 @@ public class SparkSqlCommand extends
 
 		stopwatch.stop();
 
-		LOGGER.debug("Spark SQL query took " + stopwatch.getTimeString());
-		LOGGER.debug("   and got " + results.count() + " results");
-
 		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Spark SQL query took " + stopwatch.getTimeString());
+			LOGGER.debug("   and got " + results.count() + " results");
 			results.printSchema();
 		}
 
@@ -130,10 +114,6 @@ public class SparkSqlCommand extends
 					outputDataStore);
 
 			String typeName = sparkSqlOptions.getOutputTypeName();
-			if (typeName == null) {
-				typeName = sqlRunner.getAdapterName();
-			}
-
 			if (typeName == null) {
 				typeName = "sqlresults";
 			}
@@ -162,160 +142,81 @@ public class SparkSqlCommand extends
 			File configFile,
 			String sql,
 			String outputStoreName ) {
-		// Extract input store(s) from sql
-		String inputStoreInfo1 = null;
-		String inputStoreInfo2 = null;
-		String escapedSpaceRegex = java.util.regex.Pattern.quote(" ");
-		String crapRegex = "[^a-zA-Z\\d\\s]";
-
+		Pattern storeDetect = Pattern.compile("(\"[^\"]*\"|'[^']*')|([%][^.,\\s]+)");
+		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 		LOGGER.debug("Input SQL: " + sql);
 
-		String[] sqlSplits = sql.split(escapedSpaceRegex);
-		int splitIndex = 0;
+		Matcher matchedStore = getFirstPositiveMatcher(
+				storeDetect,
+				sql);
+		String replacedSQL = sql;
 
-		StringBuffer cleanSqlBuf = new StringBuffer();
-
-		while (splitIndex < sqlSplits.length) {
-			String split = sqlSplits[splitIndex];
-
-			if (split.equalsIgnoreCase("from")) {
-				cleanSqlBuf.append(split);
-				cleanSqlBuf.append(" ");
-
-				if (splitIndex < sqlSplits.length - 1) {
-					splitIndex++;
-					inputStoreInfo1 = sqlSplits[splitIndex];
-					LOGGER.debug("Input store info (1): " + inputStoreInfo1);
-
-					cleanSqlBuf.append(inputStoreInfo1.replaceAll(
-							crapRegex,
-							"_"));
+		while (matchedStore != null) {
+			String parseStore = matchedStore.group(2);
+			if (parseStore.contains(escapedDelimRegex)) {
+				String[] storeNameParts = parseStore.split(escapedDelimRegex);
+				String storeName = null;
+				String adapterName = null;
+				String viewName = null;
+				switch (storeNameParts.length) {
+					case 2:
+						viewName = storeNameParts[2];
+					case 1:
+						adapterName = storeNameParts[1];
+					case 0:
+						storeName = storeNameParts[0];
+						break;
+					default:
+						throw new ParameterException(
+								"Ambiguous datastore" + STORE_ADAPTER_DELIM + "adapter designation: " + storeNameParts);
 				}
-			}
-			else if (split.equalsIgnoreCase("join")) {
-				cleanSqlBuf.append(split);
-				cleanSqlBuf.append(" ");
 
-				if (splitIndex < sqlSplits.length - 1) {
-					splitIndex++;
-					inputStoreInfo2 = sqlSplits[splitIndex];
-					LOGGER.debug("Input store info (2): " + inputStoreInfo2);
-
-					cleanSqlBuf.append(inputStoreInfo2.replaceAll(
-							crapRegex,
-							"_"));
-				}
-			}
-			else {
-				cleanSqlBuf.append(split);
-			}
-
-			if (splitIndex < sqlSplits.length - 1) {
-				cleanSqlBuf.append(" ");
-			}
-
-			splitIndex++;
-		}
-
-		// For eliminating invalid chars in view names
-		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
-
-		// Parse SQL for store.adapter
-		if (inputStoreInfo1 != null) {
-			String inputStoreName = inputStoreInfo1;
-
-			String adapterName = null;
-
-			if (inputStoreInfo1.contains(STORE_ADAPTER_DELIM)) {
-				String[] infoParts = inputStoreInfo1.split(escapedDelimRegex);
-
-				if (infoParts.length > 2) {
+				final StoreLoader inputStoreLoader = new StoreLoader(
+						storeName);
+				if (!inputStoreLoader.loadFromConfig(configFile)) {
 					throw new ParameterException(
-							"Ambiguous datastore" + STORE_ADAPTER_DELIM + "adapter designation: " + inputStoreInfo1);
+							"Cannot find input store: " + inputStoreLoader.getStoreName());
+				}
+				DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+
+				ByteArrayId adapterId = null;
+				if (adapterName != null) {
+					adapterId = new ByteArrayId(
+							adapterName);
+				}
+				viewName = sqlRunner.addInputStore(
+						storeOptions,
+						adapterId,
+						viewName);
+				if (viewName != null) {
+					replacedSQL = StringUtils.replace(
+							replacedSQL,
+							parseStore,
+							viewName,
+							-1);
 				}
 
-				inputStoreName = infoParts[0];
-				adapterName = infoParts[1];
-
-				inputStoreInfo1 = inputStoreInfo1.replaceAll(
-						crapRegex,
-						"_");
+				matchedStore = getNextPositiveMatcher(matchedStore);
 			}
-
-			LOGGER.debug("Input store (1): " + inputStoreName);
-			LOGGER.debug("Input adapter (1): " + adapterName);
-
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find input store: " + inputStoreLoader.getStoreName());
-			}
-			inputDataStore1 = inputStoreLoader.getDataStorePlugin();
-
-			if (adapterName != null) {
-				adapterId1 = new ByteArrayId(
-						adapterName);
-			}
-
-			// We use datastore_adapter as the temp view name
-			tempView1 = inputStoreInfo1;
-			LOGGER.debug("Temp view (1): " + tempView1);
 		}
+		return replacedSQL;
+	}
 
-		// If there's a join, set up the 2nd store info
-		if (inputStoreInfo2 != null) {
-			String inputStoreName = inputStoreInfo2;
-			String adapterName = null;
+	private Matcher getFirstPositiveMatcher(
+			Pattern compiledPattern,
+			String sql ) {
+		Matcher returnMatch = compiledPattern.matcher(sql);
+		return getNextPositiveMatcher(returnMatch);
+	}
 
-			if (inputStoreInfo2.contains(STORE_ADAPTER_DELIM)) {
-				String[] infoParts = inputStoreInfo2.split(escapedDelimRegex);
-
-				if (infoParts.length > 2) {
-					throw new ParameterException(
-							"Ambiguous datastore" + STORE_ADAPTER_DELIM + "adapter designation: " + inputStoreInfo2);
-				}
-
-				inputStoreName = infoParts[0];
-				adapterName = infoParts[1];
-
-				inputStoreInfo2 = inputStoreInfo2.replaceAll(
-						crapRegex,
-						"_");
+	private Matcher getNextPositiveMatcher(
+			Matcher lastMatch ) {
+		while (lastMatch.find()) {
+			if (lastMatch.group(2) != null) {
+				return lastMatch;
 			}
-
-			LOGGER.debug("Input store (2): " + inputStoreName);
-			LOGGER.debug("Input adapter (2): " + adapterName);
-
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find input store: " + inputStoreLoader.getStoreName());
-			}
-			inputDataStore2 = inputStoreLoader.getDataStorePlugin();
-
-			if (adapterName != null) {
-				adapterId2 = new ByteArrayId(
-						adapterName);
-			}
-
-			tempView2 = inputStoreInfo2;
-			LOGGER.debug("Temp view (2): " + tempView2);
 		}
-
-		if (outputStoreName != null) {
-			final StoreLoader outputStoreLoader = new StoreLoader(
-					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find output store: " + outputStoreLoader.getStoreName());
-			}
-			outputDataStore = outputStoreLoader.getDataStorePlugin();
-		}
-
-		// Clean up any other disallowed chars:
-		return cleanSqlBuf.toString();
+		return null;
 	}
 
 	public List<String> getParameters() {
@@ -326,15 +227,6 @@ public class SparkSqlCommand extends
 			final String sql ) {
 		parameters = new ArrayList<String>();
 		parameters.add(sql);
-	}
-
-	public DataStorePluginOptions getInputStoreOptions() {
-		return inputDataStore1;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		inputDataStore1 = inputStoreOptions;
 	}
 
 	public DataStorePluginOptions getOutputStoreOptions() {

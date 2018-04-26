@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.spark.SparkContext;
-import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -13,7 +12,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +27,8 @@ import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
@@ -36,9 +36,7 @@ import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
-import mil.nga.giat.geowave.analytic.spark.spatial.TieredSpatialJoin;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -60,8 +58,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 	private static long startMillis;
 	private static SparkSession session = null;
 	private static SparkContext context = null;
-	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> hailRDD = null;
-	private JavaPairRDD<GeoWaveInputKey, SimpleFeature> tornadoRDD = null;
+	private GeoWaveRDD hailRDD = null;
+	private GeoWaveRDD tornadoRDD = null;
 	private Dataset<Row> hailBruteResults = null;
 	private long hailBruteCount = 0;
 	private Dataset<Row> tornadoBruteResults = null;
@@ -104,8 +102,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		ingestHailandTornado();
 		long dur = (System.currentTimeMillis() - mark);
 
-		NumericIndexStrategy strategy = createIndexStrategy();
-
 		ByteArrayId hail_adapter = new ByteArrayId(
 				"hail");
 		ByteArrayId tornado_adapter = new ByteArrayId(
@@ -123,14 +119,10 @@ public class GeoWaveSparkSpatialJoinIT extends
 		runner.setRightStore(dataStore);
 		runner.setRightAdapterId(tornado_adapter);
 
-		runner.setIndexStrategy(strategy);
 		runner.setPredicate(distancePredicate);
 		loadRDDs(
 				hail_adapter,
 				tornado_adapter);
-
-		this.hailRDD.cache();
-		this.tornadoRDD.cache();
 
 		long tornadoIndexedCount = 0;
 		long hailIndexedCount = 0;
@@ -151,8 +143,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 			LOGGER.error("IO error in join");
 			e.printStackTrace();
 		}
-		hailIndexedCount = runner.getLeftResults().count();
-		tornadoIndexedCount = runner.getRightResults().count();
+		hailIndexedCount = runner.getLeftResults().getRawRDD().count();
+		tornadoIndexedCount = runner.getRightResults().getRawRDD().count();
 		long indexJoinDur = (System.currentTimeMillis() - mark);
 		LOGGER.warn("Indexed Result Count: " + (hailIndexedCount + tornadoIndexedCount));
 		SimpleFeatureDataFrame indexHailFrame = new SimpleFeatureDataFrame(
@@ -198,12 +190,6 @@ public class GeoWaveSparkSpatialJoinIT extends
 		TestUtils.deleteAll(dataStore);
 	}
 
-	private NumericIndexStrategy createIndexStrategy() {
-		SpatialIndexBuilder indexProvider = new SpatialIndexBuilder();
-		PrimaryIndex index = indexProvider.createIndex();
-		return index.getIndexStrategy();
-	}
-
 	private void ingestHailandTornado()
 			throws Exception {
 		long mark = System.currentTimeMillis();
@@ -231,25 +217,31 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 	}
 
-	private void loadRDDs(ByteArrayId hail_adapter, ByteArrayId tornado_adapter) {
-		DataAdapter<?> hailAdapter = dataStore.createAdapterStore().getAdapter(hail_adapter);
-		DataAdapter<?> tornadoAdapter = dataStore.createAdapterStore().getAdapter(tornado_adapter);
+	private void loadRDDs(
+			ByteArrayId hail_adapter,
+			ByteArrayId tornado_adapter ) {
+		DataAdapter<?> hailAdapter = dataStore.createAdapterStore().getAdapter(
+				hail_adapter);
+		DataAdapter<?> tornadoAdapter = dataStore.createAdapterStore().getAdapter(
+				tornado_adapter);
 		try {
-			hailRDD = GeoWaveRDD.rddForSimpleFeatures(
-					context, 
-					dataStore, 
-					null, 
-					new QueryOptions(hailAdapter)).reduceByKey((f1,f2) -> f1);
-			hailRDD = hailRDD.cache();
+			RDDOptions hailOpts = new RDDOptions();
+			hailOpts.setQueryOptions(new QueryOptions(
+					hailAdapter));
+			hailRDD = GeoWaveRDDLoader.loadRDD(
+					context,
+					dataStore,
+					hailOpts);
 
-			tornadoRDD = GeoWaveRDD.rddForSimpleFeatures(
-					context, 
-					dataStore, 
-					null, 
-					new QueryOptions(tornadoAdapter)).reduceByKey((f1,f2) -> f1);
-			tornadoRDD = tornadoRDD.cache();
+			RDDOptions tornadoOpts = new RDDOptions();
+			tornadoOpts.setQueryOptions(new QueryOptions(
+					tornadoAdapter));
+			tornadoRDD = GeoWaveRDDLoader.loadRDD(
+					context,
+					dataStore,
+					tornadoOpts);
 		}
-		catch (IOException e) {
+		catch (final Exception e) {
 			LOGGER.error("Could not load rdds for test");
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStore);
