@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
+import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -144,7 +145,6 @@ public class HBaseReader implements
 		final ByteArrayRange range = HBaseSplitsProvider.toHBaseRange(recordReaderParams.getRowRange());
 
 		final Scan rscanner = createStandardScanner(recordReaderParams);
-
 		// Use this instead of setStartRow/setStopRow for single rowkeys
 		if (Bytes.equals(
 				range.getStart().getBytes(),
@@ -184,6 +184,9 @@ public class HBaseReader implements
 			}
 		}
 
+		setLimit(
+				recordReaderParams,
+				filterList);
 		if (!filterList.getFilters().isEmpty()) {
 			rscanner.setFilter(filterList);
 		}
@@ -210,7 +213,6 @@ public class HBaseReader implements
 
 	protected void initScanner() {
 		final FilterList filterList = new FilterList();
-
 		final Scan multiScanner = getMultiScanner(filterList);
 
 		if (operations.isServerSideLibraryEnabled()) {
@@ -233,6 +235,9 @@ public class HBaseReader implements
 			}
 		}
 
+		setLimit(
+				readerParams,
+				filterList);
 		if (!filterList.getFilters().isEmpty()) {
 			multiScanner.setFilter(filterList);
 		}
@@ -255,6 +260,28 @@ public class HBaseReader implements
 			this.scanner = null;
 			this.scanIt = null;
 			return;
+		}
+	}
+
+	private static void setLimit(
+			BaseReaderParams readerParams,
+			FilterList filterList ) {
+		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)) {
+			// @formatter:off
+			// TODO in hbase 1.4.x there is a scan.getLimit() and
+			// scan.setLimit() which is perfectly suited for this
+//			if (readerParams.getLimit() < scanner.getLimit() || scanner.getLimit() <= 0) {
+				// also in hbase 1.4.x readType.PREAD would make sense for
+				// limits
+// 				scanner.setReadType(ReadType.PREAD);
+//				scanner.setLimit(
+//						readerParams.getLimit());
+//			}
+			// @formatter:on
+			// however, to be compatible with earlier versions of hbase, for now
+			// we are using a page filter
+			filterList.addFilter(new PageFilter(
+					readerParams.getLimit()));
 		}
 	}
 
@@ -320,7 +347,6 @@ public class HBaseReader implements
 			final FilterList filterList ) {
 		// Single scan w/ multiple ranges
 		final Scan multiScanner = createStandardScanner(readerParams);
-
 		final List<ByteArrayRange> ranges = readerParams.getQueryRanges().getCompositeQueryRanges();
 
 		final MultiRowRangeFilter filter = operations.getMultiRowRangeFilter(ranges);
@@ -374,15 +400,10 @@ public class HBaseReader implements
 					scanner.addFamily(adapterId.getBytes());
 				}
 				else {
-					LOGGER.warn("Adapter ID: " + adapterId.getString() + " not found in table: "
+					LOGGER.info("Adapter ID: " + adapterId.getString() + " not found in table: "
 							+ readerParams.getIndex().getId().getString());
 				}
 			}
-		}
-
-		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)
-				&& (readerParams.getLimit() < scanner.getBatch())) {
-			scanner.setBatch(readerParams.getLimit());
 		}
 
 		return scanner;

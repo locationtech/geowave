@@ -68,8 +68,17 @@ public class MemoryDataStoreOperations implements
 			.synchronizedMap(new HashMap<ByteArrayId, SortedSet<MemoryStoreEntry>>());
 	private final Map<MetadataType, SortedSet<MemoryMetadataEntry>> metadataStore = Collections
 			.synchronizedMap(new HashMap<MetadataType, SortedSet<MemoryMetadataEntry>>());
+	private boolean serversideEnabled;
 
-	public MemoryDataStoreOperations() {}
+	public MemoryDataStoreOperations() {
+		this(
+				true);
+	}
+
+	public MemoryDataStoreOperations(
+			boolean serversideEnabled ) {
+		this.serversideEnabled = serversideEnabled;
+	}
 
 	@Override
 	public boolean indexExists(
@@ -217,7 +226,7 @@ public class MemoryDataStoreOperations implements
 							@Override
 							public boolean apply(
 									final MemoryStoreEntry input ) {
-								if (readerParams.getFilter() != null) {
+								if (readerParams.getFilter() != null && serversideEnabled) {
 									final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
 									final List<FlattenedUnreadData> unreadData = new ArrayList<>();
 									final List<ByteArrayId> commonIndexFieldIds = DataStoreUtils

@@ -83,7 +83,6 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
-	private static final String TEST_DAY_RANGE_NAMESPACE = "TEST_DAY_RANGE";
 	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
 			10).setPeriodicity(

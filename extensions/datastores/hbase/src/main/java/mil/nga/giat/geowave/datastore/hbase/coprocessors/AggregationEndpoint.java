@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.datastore.hbase.coprocessors;
 
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,8 +38,8 @@ import com.google.protobuf.Service;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
@@ -88,7 +87,7 @@ public class AggregationEndpoint extends
 			final AggregationProtos.AggregationRequest request,
 			final RpcCallback<AggregationProtos.AggregationResponse> done ) {
 		FilterList filterList = null;
-		final DataAdapter dataAdapter = null;
+		DataAdapter dataAdapter = null;
 		ByteArrayId adapterId = null;
 		AggregationProtos.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
@@ -196,13 +195,8 @@ public class AggregationEndpoint extends
 
 			if (request.hasAdapter()) {
 				final byte[] adapterBytes = request.getAdapter().toByteArray();
-				final ByteBuffer buf = ByteBuffer.wrap(adapterBytes);
-				buf.get();
-				final int length = buf.getInt();
-				final byte[] adapterIdBytes = new byte[length];
-				buf.get(adapterIdBytes);
-				adapterId = new ByteArrayId(
-						adapterIdBytes);
+				dataAdapter = (DataAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
+				adapterId = dataAdapter.getAdapterId();
 			}
 			else if (request.hasAdapterId()) {
 				final byte[] adapterIdBytes = request.getAdapterId().toByteArray();
@@ -211,7 +205,7 @@ public class AggregationEndpoint extends
 			}
 			final String[] authorizations;
 			if (request.hasVisLabels()) {
-				byte[] visBytes = request.getVisLabels().toByteArray();
+				final byte[] visBytes = request.getVisLabels().toByteArray();
 				if (visBytes.length > 0) {
 					authorizations = StringUtils.stringsFromBinary(visBytes);
 				}
@@ -267,7 +261,7 @@ public class AggregationEndpoint extends
 			final HBaseDistributableFilter hdFilter,
 			final boolean blockCaching,
 			final int scanCacheSize,
-			String[] authorizations )
+			final String[] authorizations )
 			throws IOException {
 		final Scan scan = new Scan();
 		scan.setMaxVersions(1);

@@ -57,6 +57,12 @@ public class JobContextAdapterStore implements
 	}
 
 	@Override
+	public void removeAdapter(
+			ByteArrayId adapterId ) {
+		adapterCache.remove(adapterId);
+	}
+
+	@Override
 	public DataAdapter<?> getAdapter(
 			final ByteArrayId adapterId ) {
 		DataAdapter<?> adapter = adapterCache.get(adapterId);
@@ -177,4 +183,12 @@ public class JobContextAdapterStore implements
 				adapter);
 	}
 
+	public static void removeAdapter(
+			final Configuration configuration,
+			ByteArrayId adapterId ) {
+		GeoWaveConfiguratorBase.removeDataAdapter(
+				CLASS,
+				configuration,
+				adapterId);
+	}
 }

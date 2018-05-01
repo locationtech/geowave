@@ -124,24 +124,6 @@ public class HBaseUtils
 		}
 	}
 
-	public static boolean rangesIntersect(
-			final RowRange range1,
-			final RowRange range2 ) {
-		final ByteArrayRange thisRange = new ByteArrayRange(
-				new ByteArrayId(
-						range1.getStartRow()),
-				new ByteArrayId(
-						range1.getStopRow()));
-
-		final ByteArrayRange otherRange = new ByteArrayRange(
-				new ByteArrayId(
-						range2.getStartRow()),
-				new ByteArrayId(
-						range2.getStopRow()));
-
-		return thisRange.intersects(otherRange);
-	}
-
 	public static DataStatistics getMergedStats(
 			final List<Cell> rowCells ) {
 		DataStatistics mergedStats = null;

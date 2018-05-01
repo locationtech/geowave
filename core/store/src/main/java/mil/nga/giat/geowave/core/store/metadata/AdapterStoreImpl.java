@@ -62,4 +62,10 @@ public class AdapterStoreImpl extends
 	public CloseableIterator<DataAdapter<?>> getAdapters() {
 		return getObjects();
 	}
+
+	@Override
+	public void removeAdapter(
+			ByteArrayId adapterId ) {
+		remove(adapterId);
+	}
 }

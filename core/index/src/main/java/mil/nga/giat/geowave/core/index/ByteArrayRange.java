@@ -122,21 +122,31 @@ public class ByteArrayRange implements
 
 	public boolean intersects(
 			final ByteArrayRange other ) {
-		return (((getStart().compareTo(other.getEnd())) <= 0) && ((getEnd().compareTo(other.getStart())) >= 0));
+		if (isSingleValue()) {
+			if (other.isSingleValue()) {
+				return getStart().equals(
+						other.getStart());
+			}
+			return false;
+		}
+		return (((getStart().compareTo(other.getEndAsNextPrefix())) < 0) && ((getEndAsNextPrefix().compareTo(other
+				.getStart())) > 0));
 	}
 
 	public ByteArrayRange intersection(
 			final ByteArrayRange other ) {
 		return new ByteArrayRange(
 				start.compareTo(other.start) <= 0 ? other.start : start,
-				end.compareTo(other.end) >= 0 ? other.end : end);
+				getEndAsNextPrefix().compareTo(
+						other.getEndAsNextPrefix()) >= 0 ? other.end : end);
 	}
 
 	public ByteArrayRange union(
 			final ByteArrayRange other ) {
 		return new ByteArrayRange(
 				start.compareTo(other.start) <= 0 ? start : other.start,
-				end.compareTo(other.end) >= 0 ? end : other.end);
+				getEndAsNextPrefix().compareTo(
+						other.getEndAsNextPrefix()) >= 0 ? end : other.end);
 	}
 
 	@Override
@@ -144,8 +154,8 @@ public class ByteArrayRange implements
 			final ByteArrayRange other ) {
 		final int diff = getStart().compareTo(
 				other.getStart());
-		return diff != 0 ? diff : getEnd().compareTo(
-				other.getEnd());
+		return diff != 0 ? diff : getEndAsNextPrefix().compareTo(
+				other.getEndAsNextPrefix());
 	}
 
 	public static enum MergeOperation {

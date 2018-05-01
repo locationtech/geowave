@@ -110,4 +110,9 @@ public class MemoryAdapterStore implements
 					(DataAdapter<?>) PersistenceUtils.fromBinary(data));
 		}
 	}
+
+	public void removeAdapter(
+			ByteArrayId adapterId ) {
+		adapterMap.remove(adapterId);
+	}
 }

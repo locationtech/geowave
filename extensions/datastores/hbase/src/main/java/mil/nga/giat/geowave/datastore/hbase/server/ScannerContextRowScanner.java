@@ -17,8 +17,15 @@ import org.apache.hadoop.hbase.regionserver.ScannerContext.NextState;
 import org.apache.log4j.Logger;
 
 /**
- * this is required to be in org.apache.hadoop.hbase.regionserver because it
- * accesses package private methods within ScannerContext
+ * This uses reflection to access package private methods and variables expected
+ * to be within ScannerContext. This access mimics how whole row filtering is
+ * accomplished within HBase internal scanner code, and similarly, rows are
+ * necessary to be aggregated together for GeoWave ServerSide Operations. Using
+ * similar packaging to gain access to package private members was insufficient
+ * due to how HBase Coprocessor classloading special cases the loading of HBase
+ * packages. Alternatively, it may be sufficient to use
+ * NoLimitScannerContext.getInstance() at a higher level than the row scanner,
+ * but no implementation of this potential alternative has been as well tested.
  *
  *
  */

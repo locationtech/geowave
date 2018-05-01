@@ -15,8 +15,6 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;

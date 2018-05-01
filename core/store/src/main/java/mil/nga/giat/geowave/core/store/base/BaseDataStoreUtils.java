@@ -97,7 +97,7 @@ public class BaseDataStoreUtils
 				adapter,
 				adapterId,
 				adapterStore)) {
-			LOGGER.error("Could not retrieve adapter from adapter store.");
+			LOGGER.error("Could not retrieve adapter " + adapterId.getString() + " from adapter store.");
 			return null;
 		}
 
@@ -227,7 +227,7 @@ public class BaseDataStoreUtils
 				value.getVisibility(),
 				-1).getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
-			final ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
+			ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
 					decodePackage.getIndex().getIndexModel(),
 					fieldInfo.getFieldPosition());
 			final FieldReader<? extends CommonIndexValue> indexFieldReader = decodePackage
