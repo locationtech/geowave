@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.analytic.spark;
 
 import mil.nga.giat.geowave.analytic.spark.kmeans.operations.KmeansSparkCommand;
 import mil.nga.giat.geowave.analytic.spark.sparksql.operations.SparkSqlCommand;
+import mil.nga.giat.geowave.analytic.spark.spatial.operations.SpatialJoinCommand;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.AnalyticSection;
 import mil.nga.giat.geowave.core.cli.spi.CLIOperationProviderSpi;
 
@@ -21,7 +22,8 @@ public class AnalyticOperationCLIProvider implements
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
 		AnalyticSection.class,
 		KmeansSparkCommand.class,
-		SparkSqlCommand.class
+		SparkSqlCommand.class,
+		SpatialJoinCommand.class
 	};
 
 	@Override
