@@ -247,7 +247,7 @@ public class AccumuloUtils
 				true,
 				true);
 		for (final ByteArrayId p : partitions.getPartitionKeys()) {
-			operations.insurePartition(
+			operations.ensurePartition(
 					p,
 					index.getId().getString());
 		}

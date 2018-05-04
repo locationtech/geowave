@@ -807,7 +807,7 @@ public class HBaseOperations implements
 		return true;
 	}
 
-	public void insurePartition(
+	public void ensurePartition(
 			final ByteArrayId partition,
 			final String tableNameStr ) {
 		final TableName tableName = getTableName(tableNameStr);
@@ -858,7 +858,7 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		return true;
@@ -1288,8 +1288,8 @@ public class HBaseOperations implements
 		final Map<String, ImmutableSet<ServerOpScope>> map = new HashMap<>();
 		try {
 			final TableName tableName = getTableName(index);
-			final String namespace = tableName.getNamespaceAsString();
-			final String qualifier = tableName.getQualifierAsString();
+			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(tableName.getNamespaceAsString());
+			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(tableName.getQualifierAsString());
 			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
 					tableName);
 			final Map<String, String> config = desc.getConfiguration();
@@ -1324,8 +1324,8 @@ public class HBaseOperations implements
 		final Map<String, String> map = new HashMap<>();
 		try {
 			final TableName tableName = getTableName(index);
-			final String namespace = tableName.getNamespaceAsString();
-			final String qualifier = tableName.getQualifierAsString();
+			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(tableName.getNamespaceAsString());
+			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(tableName.getQualifierAsString());
 			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
 					tableName);
 			final Map<String, String> config = desc.getConfiguration();
@@ -1365,8 +1365,8 @@ public class HBaseOperations implements
 
 			if (removeConfig(
 					desc,
-					table.getNamespaceAsString(),
-					table.getQualifierAsString(),
+					HBaseUtils.writeTableNameAsConfigSafe(table.getNamespaceAsString()),
+					HBaseUtils.writeTableNameAsConfigSafe(table.getQualifierAsString()),
 					serverOpName)) {
 				conn.getAdmin().modifyTable(
 						table,
@@ -1421,11 +1421,11 @@ public class HBaseOperations implements
 						.append(
 								".")
 						.append(
-								namespace)
+								HBaseUtils.writeTableNameAsConfigSafe(namespace))
 						.append(
 								".")
 						.append(
-								qualifier)
+								HBaseUtils.writeTableNameAsConfigSafe(qualifier))
 						.append(
 								".")
 						.append(
@@ -1510,8 +1510,8 @@ public class HBaseOperations implements
 			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
 					table);
 
-			final String namespace = table.getNamespaceAsString();
-			final String qualifier = table.getQualifierAsString();
+			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(table.getNamespaceAsString());
+			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(table.getQualifierAsString());
 			removeConfig(
 					desc,
 					namespace,

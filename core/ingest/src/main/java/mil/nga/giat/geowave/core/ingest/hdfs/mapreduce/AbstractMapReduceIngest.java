@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -95,13 +96,16 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
 	protected static List<ByteArrayId> getPrimaryIndexIds(
 			final Configuration conf ) {
-		final String primaryIndexIdStr = conf.get(AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY);
+		final String primaryIndexIdStr = conf.get(
+				AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY);
 		final List<ByteArrayId> primaryIndexIds = new ArrayList<ByteArrayId>();
 		if ((primaryIndexIdStr != null) && !primaryIndexIdStr.isEmpty()) {
-			final String[] indexIds = primaryIndexIdStr.split(",");
+			final String[] indexIds = primaryIndexIdStr.split(
+					",");
 			for (final String indexId : indexIds) {
-				primaryIndexIds.add(new ByteArrayId(
-						indexId));
+				primaryIndexIds.add(
+						new ByteArrayId(
+								indexId));
 			}
 		}
 		return primaryIndexIds;
@@ -114,7 +118,9 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		final Configuration conf = getConf();
 		conf.set(
 				INGEST_PLUGIN_KEY,
-				ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(ingestPlugin)));
+				ByteArrayUtils.byteArrayToString(
+						PersistenceUtils.toBinary(
+								ingestPlugin)));
 		if (ingestOptions.getVisibility() != null) {
 			conf.set(
 					GLOBAL_VISIBILITY_KEY,
@@ -127,16 +133,19 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		final List<PrimaryIndex> indexes = new ArrayList<PrimaryIndex>();
 		for (final IndexPluginOptions indexOption : indexOptions) {
 			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
-			indexes.add(primaryIndex);
+			indexes.add(
+					primaryIndex);
 			if (primaryIndex != null) {
 				// add index
 				GeoWaveOutputFormat.addIndex(
 						job.getConfiguration(),
 						primaryIndex);
 				if (indexIds.length() != 0) {
-					indexIds.append(",");
+					indexIds.append(
+							",");
 				}
-				indexIds.append(primaryIndex.getId().getString());
+				indexIds.append(
+						primaryIndex.getId().getString());
 			}
 		}
 
@@ -144,9 +153,11 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				PRIMARY_INDEX_IDS_KEY,
 				indexIds.toString());
 
-		job.setJarByClass(AbstractMapReduceIngest.class);
+		job.setJarByClass(
+				AbstractMapReduceIngest.class);
 
-		job.setInputFormatClass(AvroKeyInputFormat.class);
+		job.setInputFormatClass(
+				AvroKeyInputFormat.class);
 		AvroJob.setInputKeySchema(
 				job,
 				parentPlugin.getAvroSchema());
@@ -154,18 +165,23 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				job,
 				inputFile);
 
-		setupMapper(job);
-		setupReducer(job);
+		setupMapper(
+				job);
+		setupReducer(
+				job);
 		// set geowave output format
-		job.setOutputFormatClass(GeoWaveOutputFormat.class);
+		job.setOutputFormatClass(
+				GeoWaveOutputFormat.class);
 
 		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
 				dataStoreOptions);
 		final DataStore store = dataStoreOptions.createDataStore();
-		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
+		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(
+				ingestOptions.getVisibility());
+		final PrimaryIndex[] indexesArray = indexes.toArray(
+				new PrimaryIndex[indexes.size()]);
 		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-			final PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
 			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 				// from a controlled client, intialize the writer within the
 				// context of the datastore before distributing ingest
@@ -179,8 +195,29 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 						job.getConfiguration(),
 						dataAdapter);
 			}
+			//this is done primarily to ensure stats merging is enabled before the distributed ingest
+			if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
+				dataStoreOptions.createDataStoreOperations().createMetadataWriter(
+						MetadataType.STATS).close();
+			}
 		}
-		job.setSpeculativeExecution(false);
+		else {
+			// if the adapter is unknown by the ingest format, at least add the
+			// indices from the client
+			for (final PrimaryIndex index : indexesArray) {
+				if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistIndex()) {
+					dataStoreOptions.createIndexStore().addIndex(
+							index);
+				}
+			}
+			//this is done primarily to ensure stats merging is enabled before the distributed ingest
+			if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
+				dataStoreOptions.createDataStoreOperations().createMetadataWriter(
+						MetadataType.STATS).close();
+			}
+		}
+		job.setSpeculativeExecution(
+				false);
 
 		// add required indices
 		final PrimaryIndex[] requiredIndices = parentPlugin.getRequiredIndices();
@@ -191,7 +228,8 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 						requiredIndex);
 			}
 		}
-		final int retVal = job.waitForCompletion(true) ? 0 : -1;
+		final int retVal = job.waitForCompletion(
+				true) ? 0 : -1;
 		// when it is complete, delete any empty adapters and index mappings
 		// that were created from this driver but didn't actually have data
 		// ingests
@@ -201,7 +239,8 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 				final QueryOptions queryOptions = new QueryOptions(
 						dataAdapter);
-				queryOptions.setLimit(1);
+				queryOptions.setLimit(
+						1);
 				try (CloseableIterator<?> it = store.query(
 						queryOptions,
 						new EverythingQuery())) {
@@ -210,8 +249,10 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 							adapterStore = dataStoreOptions.createAdapterStore();
 							adapterIndexMappingStore = dataStoreOptions.createAdapterIndexMappingStore();
 						}
-						adapterStore.removeAdapter(dataAdapter.getAdapterId());
-						adapterIndexMappingStore.remove(dataAdapter.getAdapterId());
+						adapterStore.removeAdapter(
+								dataAdapter.getAdapterId());
+						adapterIndexMappingStore.remove(
+								dataAdapter.getAdapterId());
 					}
 				}
 			}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,6 +21,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
@@ -36,6 +37,7 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.PartitionStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
@@ -59,7 +61,7 @@ public class HBaseSplitsProvider extends
 			final DataStoreOperations operations,
 			final PrimaryIndex index,
 			final List<DataAdapter<Object>> adapters,
-			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
 			final AdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -111,23 +113,22 @@ public class HBaseSplitsProvider extends
 			return splits;
 		}
 
-		RowRangeHistogramStatistics<?> stats = getHistStats(
+		final PartitionStatistics<?> statistics = getPartitionStats(
 				index,
 				adapters,
 				adapterStore,
 				statsStore,
-				statsCache,
 				authorizations);
 
 		if (ranges == null) { // get partition ranges from stats
-			if (stats != null) {
+			if (statistics != null) {
 				ranges = new ArrayList();
 
 				ByteArrayId prevKey = new ByteArrayId(
 						HConstants.EMPTY_BYTE_ARRAY);
 
-				for (ByteArrayId partitionKey : stats.getPartitionKeys()) {
-					ByteArrayRange range = new ByteArrayRange(
+				for (final ByteArrayId partitionKey : statistics.getPartitionKeys()) {
+					final ByteArrayRange range = new ByteArrayRange(
 							prevKey,
 							partitionKey);
 
@@ -171,7 +172,7 @@ public class HBaseSplitsProvider extends
 				final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
 
 				for (final ByteArrayRange range : regionEntry.getValue()) {
-					GeoWaveRowRange gwRange = fromHBaseRange(
+					final GeoWaveRowRange gwRange = fromHBaseRange(
 							range,
 							partitionKeyLength);
 
@@ -182,9 +183,10 @@ public class HBaseSplitsProvider extends
 									adapterStore,
 									statsStore,
 									statsCache,
+									new ByteArrayId(
+											gwRange.getPartitionKey()),
 									authorizations),
-							gwRange,
-							index.getIndexStrategy().getPartitionKeyLength());
+							gwRange);
 
 					rangeList.add(new RangeLocationPair(
 							gwRange,
@@ -213,9 +215,9 @@ public class HBaseSplitsProvider extends
 			final RegionLocator regionLocator )
 			throws IOException {
 
-		List<HRegionLocation> locations = regionLocator.getAllRegionLocations();
+		final List<HRegionLocation> locations = regionLocator.getAllRegionLocations();
 
-		for (HRegionLocation location : locations) {
+		for (final HRegionLocation location : locations) {
 			Map<HRegionInfo, List<ByteArrayRange>> regionInfoMap = binnedRanges.get(location);
 			if (regionInfoMap == null) {
 				regionInfoMap = new HashMap<HRegionInfo, List<ByteArrayRange>>();
@@ -254,8 +256,8 @@ public class HBaseSplitsProvider extends
 		final ListIterator<ByteArrayRange> i = inputRanges.listIterator();
 		while (i.hasNext()) {
 			final ByteArrayRange range = i.next();
-			byte[] startKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getStart().getBytes();
-			byte[] endKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getEnd().getBytes();
+			final byte[] startKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getStart().getBytes();
+			final byte[] endKey = range == null ? HConstants.EMPTY_BYTE_ARRAY : range.getEnd().getBytes();
 
 			final HRegionLocation location = regionLocator.getRegionLocation(startKey);
 
@@ -284,12 +286,12 @@ public class HBaseSplitsProvider extends
 				i.remove();
 			}
 			else {
-				ByteArrayRange thisRange = new ByteArrayRange(
+				final ByteArrayRange thisRange = new ByteArrayRange(
 						new ByteArrayId(
 								startKey),
 						new ByteArrayId(
 								endKey));
-				ByteArrayRange regionRange = new ByteArrayRange(
+				final ByteArrayRange regionRange = new ByteArrayRange(
 						new ByteArrayId(
 								regionInfo.getStartKey()),
 						new ByteArrayId(
@@ -319,12 +321,12 @@ public class HBaseSplitsProvider extends
 	protected static GeoWaveRowRange rangeIntersection(
 			final GeoWaveRowRange thisRange,
 			final GeoWaveRowRange otherRange ) {
-		ByteArrayRange thisByteArrayRange = new ByteArrayRange(
+		final ByteArrayRange thisByteArrayRange = new ByteArrayRange(
 				new ByteArrayId(
 						thisRange.getStartSortKey()),
 				new ByteArrayId(
 						thisRange.getEndSortKey()));
-		ByteArrayRange otherByteArrayRange = new ByteArrayRange(
+		final ByteArrayRange otherByteArrayRange = new ByteArrayRange(
 				new ByteArrayId(
 						otherRange.getStartSortKey()),
 				new ByteArrayId(
@@ -344,8 +346,9 @@ public class HBaseSplitsProvider extends
 			final GeoWaveRowRange range ) {
 
 		if ((range.getPartitionKey() == null) || (range.getPartitionKey().length == 0)) {
-			byte[] startKey = (range.getStartSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range.getStartSortKey();
-			byte[] endKey = (range.getEndSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range.getEndSortKey();
+			final byte[] startKey = (range.getStartSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range
+					.getStartSortKey();
+			final byte[] endKey = (range.getEndSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range.getEndSortKey();
 
 			return new ByteArrayRange(
 					new ByteArrayId(
@@ -354,11 +357,11 @@ public class HBaseSplitsProvider extends
 							endKey));
 		}
 		else {
-			byte[] startKey = (range.getStartSortKey() == null) ? range.getPartitionKey() : ArrayUtils.addAll(
+			final byte[] startKey = (range.getStartSortKey() == null) ? range.getPartitionKey() : ArrayUtils.addAll(
 					range.getPartitionKey(),
 					range.getStartSortKey());
 
-			byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
+			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
 					: ArrayUtils.addAll(
 							range.getPartitionKey(),
 							range.getEndSortKey());
@@ -374,11 +377,11 @@ public class HBaseSplitsProvider extends
 	public static GeoWaveRowRange fromHBaseRange(
 			final ByteArrayRange range,
 			final int partitionKeyLength ) {
-		byte[] startRow = Bytes.equals(
+		final byte[] startRow = Bytes.equals(
 				range.getStart().getBytes(),
 				HConstants.EMPTY_BYTE_ARRAY) ? null : range.getStart().getBytes();
 
-		byte[] stopRow = Bytes.equals(
+		final byte[] stopRow = Bytes.equals(
 				range.getEnd().getBytes(),
 				HConstants.EMPTY_BYTE_ARRAY) ? null : range.getEnd().getBytes();
 

@@ -531,7 +531,7 @@ public class CassandraOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		return true;

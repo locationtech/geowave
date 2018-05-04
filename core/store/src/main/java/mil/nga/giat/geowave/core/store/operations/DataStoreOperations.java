@@ -26,7 +26,7 @@ public interface DataStoreOperations
 			ByteArrayId adapterId,
 			String... additionalAuthorizations );
 
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			String clientUser,
 			String... authorizations );
 

@@ -64,7 +64,19 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						continue;
 					}
 					final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx);
-					if (!stats.containsKey(RowRangeHistogramStatistics.composeId(nextIdx.getId()))) {
+					boolean containsRowRangeHistograms = false;
+					for (final ByteArrayId statsId : stats.keySet()) {
+						// find out if any partition histograms exist for this
+						// index ID by checking the prefix
+						if (statsId.getString().startsWith(
+								RowRangeHistogramStatistics.composeId(
+										nextIdx.getId(),
+										null).getString())) {
+							containsRowRangeHistograms = true;
+							break;
+						}
+					}
+					if (!containsRowRangeHistograms) {
 						LOGGER
 								.warn("Best Match Heuristic requires statistic RowRangeHistogramStatistics for each index to properly choose an index.");
 					}

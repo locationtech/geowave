@@ -11,9 +11,9 @@
 package mil.nga.giat.geowave.datastore.accumulo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertFalse;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +25,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -42,7 +43,6 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -234,31 +234,40 @@ public class AccumuloDataStoreStatsTest
 					24,
 					33)
 		});
-
+		ByteArrayId partitionKey = null;
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
-			indexWriter.write(
+			partitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
 									32)),
 							"test_pt"),
-					visWriterAAA);
-			indexWriter.write(
+					visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+			ByteArrayId testPartitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									26,
 									32)),
 							"test_pt_1"),
-					visWriterAAA);
-			indexWriter.write(
+					visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+			// they should all be the same partition key, let's just make sure
+			Assert.assertEquals(
+					"test_pt_1 should have the same partition key as test_pt",
+					partitionKey,
+					testPartitionKey);
+			testPartitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									27,
 									32)),
 							"test_pt_2"),
-					visWriterBBB);
+					visWriterBBB).getPartitionKeys().iterator().next().getPartitionKey();
+			Assert.assertEquals(
+					"test_pt_2 should have the same partition key as test_pt",
+					partitionKey,
+					testPartitionKey);
 		}
 
 		final SpatialQuery query = new SpatialQuery(
@@ -548,7 +557,9 @@ public class AccumuloDataStoreStatsTest
 
 		RowRangeHistogramStatistics<?> histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				RowRangeHistogramStatistics.composeId(index.getId()),
+				RowRangeHistogramStatistics.composeId(
+						index.getId(),
+						partitionKey),
 				"bbb");
 
 		assertTrue(histogramStats != null);
@@ -564,7 +575,9 @@ public class AccumuloDataStoreStatsTest
 
 		histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
 				adapter.getAdapterId(),
-				RowRangeHistogramStatistics.composeId(index.getId()),
+				RowRangeHistogramStatistics.composeId(
+						index.getId(),
+						partitionKey),
 				"bbb");
 
 		assertNull(histogramStats);
@@ -804,7 +817,7 @@ public class AccumuloDataStoreStatsTest
 
 		@Override
 		public void init(
-				PrimaryIndex... indices ) {
+				final PrimaryIndex... indices ) {
 			// TODO Auto-generated method stub
 
 		}

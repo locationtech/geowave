@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -47,7 +47,8 @@ public class RowHistogramDataStaticticsTest
 				new ByteArrayId(
 						"20030"),
 				new ByteArrayId(
-						"20030"));
+						"20030"),
+				null);
 
 		for (long i = 0; i < 10000; i++) {
 			final GeoWaveRow row = new GeoWaveRowImpl(
@@ -62,33 +63,28 @@ public class RowHistogramDataStaticticsTest
 
 		assertEquals(
 				1.0,
-				stats.cdf(
-						null,
-						genKey(
-								10000).getSortKey()),
+				stats.cdf(genKey(
+						10000).getSortKey()),
 				0.00001);
 
 		assertEquals(
 				0.0,
-				stats.cdf(
-						null,
-						genKey(
-								0).getSortKey()),
+				stats.cdf(genKey(
+						0).getSortKey()),
 				0.00001);
 
 		assertEquals(
 				0.5,
-				stats.cdf(
-						null,
-						genKey(
-								5000).getSortKey()),
+				stats.cdf(genKey(
+						5000).getSortKey()),
 				0.04);
 
 		final RowRangeHistogramStatistics<Integer> stats2 = new RowRangeHistogramStatistics<Integer>(
 				new ByteArrayId(
 						"20030"),
 				new ByteArrayId(
-						"20030"));
+						"20030"),
+				null);
 
 		for (long j = 10000; j < 20000; j++) {
 
@@ -102,30 +98,24 @@ public class RowHistogramDataStaticticsTest
 
 		assertEquals(
 				0.0,
-				stats2.cdf(
-						null,
-						genKey(
-								10000).getSortKey()),
+				stats2.cdf(genKey(
+						10000).getSortKey()),
 				0.00001);
 
 		stats.merge(stats2);
 
 		assertEquals(
 				0.5,
-				stats.cdf(
-						null,
-						genKey(
-								10000).getSortKey()),
+				stats.cdf(genKey(
+						10000).getSortKey()),
 				0.15);
 
 		stats2.fromBinary(stats.toBinary());
 
 		assertEquals(
 				0.5,
-				stats.cdf(
-						null,
-						genKey(
-								10000).getSortKey()),
+				stats.cdf(genKey(
+						10000).getSortKey()),
 				0.15);
 
 		System.out.println(stats.toString());

@@ -133,8 +133,8 @@ public class AccumuloOperations implements
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 	private String password;
-	private final Map<String, Set<String>> insuredAuthorizationCache = new HashMap<>();
-	private final Map<String, Set<ByteArrayId>> insuredPartitionCache = new HashMap<>();
+	private final Map<String, Set<String>> ensuredAuthorizationCache = new HashMap<>();
+	private final Map<String, Set<ByteArrayId>> ensuredPartitionCache = new HashMap<>();
 	private final AccumuloOptions options;
 
 	/**
@@ -416,8 +416,8 @@ public class AccumuloOperations implements
 				tableNamespace,
 				AccumuloStoreFactoryFamily.TYPE).deleteAll();
 		locGrpCache.clear();
-		insuredAuthorizationCache.clear();
-		insuredPartitionCache.clear();
+		ensuredAuthorizationCache.clear();
+		ensuredPartitionCache.clear();
 	}
 
 	public boolean delete(
@@ -635,7 +635,7 @@ public class AccumuloOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		String user;
@@ -645,28 +645,28 @@ public class AccumuloOperations implements
 		else {
 			user = clientUser;
 		}
-		final Set<String> uninsuredAuths = new HashSet<String>();
-		Set<String> insuredAuths = insuredAuthorizationCache.get(user);
-		if (insuredAuths == null) {
-			uninsuredAuths.addAll(Arrays.asList(authorizations));
-			insuredAuths = new HashSet<String>();
-			insuredAuthorizationCache.put(
+		final Set<String> unensuredAuths = new HashSet<String>();
+		Set<String> ensuredAuths = ensuredAuthorizationCache.get(user);
+		if (ensuredAuths == null) {
+			unensuredAuths.addAll(Arrays.asList(authorizations));
+			ensuredAuths = new HashSet<String>();
+			ensuredAuthorizationCache.put(
 					user,
-					insuredAuths);
+					ensuredAuths);
 		}
 		else {
 			for (final String auth : authorizations) {
-				if (!insuredAuths.contains(auth)) {
-					uninsuredAuths.add(auth);
+				if (!ensuredAuths.contains(auth)) {
+					unensuredAuths.add(auth);
 				}
 			}
 		}
-		if (!uninsuredAuths.isEmpty()) {
+		if (!unensuredAuths.isEmpty()) {
 			try {
 				Authorizations auths = connector.securityOperations().getUserAuthorizations(
 						user);
 				final List<byte[]> newSet = new ArrayList<byte[]>();
-				for (final String auth : uninsuredAuths) {
+				for (final String auth : unensuredAuths) {
 					if (!auths.contains(auth)) {
 						newSet.add(auth.getBytes(StringUtils.UTF8_CHAR_SET));
 					}
@@ -682,13 +682,13 @@ public class AccumuloOperations implements
 
 					LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
 				}
-				for (final String auth : uninsuredAuths) {
-					insuredAuths.add(auth);
+				for (final String auth : unensuredAuths) {
+					ensuredAuths.add(auth);
 				}
 			}
 			catch (AccumuloException | AccumuloSecurityException e) {
 				LOGGER.error(
-						"Unable to add authorizations '" + Arrays.toString(uninsuredAuths.toArray(new String[] {}))
+						"Unable to add authorizations '" + Arrays.toString(unensuredAuths.toArray(new String[] {}))
 								+ "'",
 						e);
 				return false;
@@ -722,13 +722,13 @@ public class AccumuloOperations implements
 		this.cacheTimeoutMillis = cacheTimeoutMillis;
 	}
 
-	public void insurePartition(
+	public void ensurePartition(
 			final ByteArrayId partition,
 			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
-		Set<ByteArrayId> existingPartitions = insuredPartitionCache.get(qName);
+		Set<ByteArrayId> existingPartitions = ensuredPartitionCache.get(qName);
 		try {
-			synchronized (insuredPartitionCache) {
+			synchronized (ensuredPartitionCache) {
 				if (existingPartitions == null) {
 					Collection<Text> splits;
 					splits = connector.tableOperations().listSplits(
@@ -738,7 +738,7 @@ public class AccumuloOperations implements
 						existingPartitions.add(new ByteArrayId(
 								s.getBytes()));
 					}
-					insuredPartitionCache.put(
+					ensuredPartitionCache.put(
 							qName,
 							existingPartitions);
 				}

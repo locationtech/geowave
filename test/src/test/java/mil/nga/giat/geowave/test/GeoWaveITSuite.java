@@ -62,7 +62,6 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	DBScanIT.class,
 	GeoWaveJavaSparkIT.class,
 	GeoWaveJavaSparkKMeansIT.class,
-	GeoWaveSparkSpatialJoinIT.class,
 	GeoWaveJavaSparkSQLIT.class,
 	GeoWaveSparkSpatialJoinIT.class,
 	ConfigServicesIT.class,
