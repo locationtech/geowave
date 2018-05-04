@@ -112,47 +112,9 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				s3EndpointUrl = "s3://" + s3EndpointUrl;
 			}
 
-			FileSystem fs;
-			try {
-				// HP Fortify "Path Traversal" false positive
-				// What Fortify considers "user input" comes only
-				// from users with OS-level access anyway
-				fs = FileSystems.newFileSystem(
-						new URI(
-								s3EndpointUrl + "/"),
-						new HashMap<String, Object>(),
-						Thread.currentThread().getContextClassLoader());
-			}
-			catch (URISyntaxException e) {
-				LOGGER.error("Unable to ingest data, Inavlid S3 path");
-				return;
-			}
-			catch (FileSystemAlreadyExistsException e) {
-				LOGGER.info("File system " + s3EndpointUrl + "already exists");
-				try {
-					fs = FileSystems.getFileSystem(new URI(
-							s3EndpointUrl + "/"));
-				}
-				catch (URISyntaxException e1) {
-					LOGGER.error("Unable to ingest data, Inavlid S3 path");
-					return;
-				}
-			}
-
-			String s3InputPath = inputPath.replaceFirst(
-					"s3://",
-					"/");
-			try {
-				path = (S3Path) fs.getPath(s3InputPath);
-			}
-			catch (InvalidPathException e) {
-				LOGGER.error("Input valid input path " + inputPath);
-				return;
-			}
-			if (!path.isAbsolute()) {
-				LOGGER.error("Input path " + inputPath + " does not exist");
-				return;
-			}
+			path = IngestUtils.setupS3FileSystem(
+					inputPath,
+					s3EndpointUrl);
 
 		}
 		// If input path is HDFS
