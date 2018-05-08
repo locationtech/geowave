@@ -10,7 +10,7 @@ import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
 
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class HBaseMergingFilter extends
 		FilterBase
@@ -50,7 +50,7 @@ public class HBaseMergingFilter extends
 				Mergeable mergedValue = null;
 				for (Cell cell : rowCells) {
 					byte[] byteValue = CellUtil.cloneValue(cell);
-					Mergeable value = (Mergeable) PersistenceUtils.fromBinary(byteValue);
+					Mergeable value = (Mergeable) URLClassloaderUtils.fromBinary(byteValue);
 
 					if (mergedValue != null) {
 						mergedValue.merge(value);
@@ -66,7 +66,7 @@ public class HBaseMergingFilter extends
 						singleQual,
 						System.currentTimeMillis(),
 						KeyValue.Type.Put.getCode(),
-						PersistenceUtils.toBinary(mergedValue));
+						URLClassloaderUtils.toBinary(mergedValue));
 
 				rowCells.clear();
 				rowCells.add(singleCell);

@@ -19,6 +19,11 @@
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>com.upplication</groupId>
+			<artifactId>s3fs</artifactId>
+			<version>1.5.3</version>
+		</dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>

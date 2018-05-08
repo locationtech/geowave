@@ -143,16 +143,16 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		// TODO if the cache isn't taking authorizations into account, this
-		// seems insufficient for mixed visibility use cases, but on the
-		// otherhand this is an optimization for the majority use case that
-		// doesn't include mixed visibility that we want to take advantage of
-		return deleteObjectFromCache(
-				primaryId,
-				secondaryId) && deleteObjects(
+		if (deleteObjects(
 				primaryId,
 				secondaryId,
-				authorizations);
+				authorizations)) {
+			deleteObjectFromCache(
+					primaryId,
+					secondaryId);
+			return true;
+		}
+		return false;
 	}
 
 	protected void addObject(

@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class HBaseNumericIndexStrategyFilter extends
 		FilterBase
@@ -55,7 +56,7 @@ public class HBaseNumericIndexStrategyFilter extends
 			final int indexStrategyLength = buf.getInt();
 			final byte[] indexStrategyBytes = new byte[indexStrategyLength];
 			buf.get(indexStrategyBytes);
-			indexStrategy = (NumericIndexStrategy) PersistenceUtils.fromBinary(indexStrategyBytes);
+			indexStrategy = (NumericIndexStrategy) URLClassloaderUtils.fromBinary(indexStrategyBytes);
 			final byte[] coordRangeBytes = new byte[pbBytes.length - indexStrategyLength - 4];
 			buf.get(coordRangeBytes);
 			final ArrayOfArrays arrays = new ArrayOfArrays();
@@ -76,7 +77,7 @@ public class HBaseNumericIndexStrategyFilter extends
 	@Override
 	public byte[] toByteArray()
 			throws IOException {
-		final byte[] indexStrategyBytes = PersistenceUtils.toBinary(indexStrategy);
+		final byte[] indexStrategyBytes = URLClassloaderUtils.toBinary(indexStrategy);
 		final byte[] coordinateRangesBinary = new ArrayOfArrays(
 				coordinateRanges).toBinary();
 

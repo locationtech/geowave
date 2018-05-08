@@ -227,8 +227,8 @@ public class GpxUtils
 			}
 		}
 		catch (IOException e) {
-			LOGGER.error(
-					"Could not create the FileInputStream.",
+			LOGGER.info(
+					"Could not create the FileInputStream for OSM metadata.",
 					e);
 		}
 

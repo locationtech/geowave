@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
 import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class NumericIndexStrategyFilterIterator implements
 		SortedKeyValueIterator<Key, Value>
@@ -66,7 +67,7 @@ public class NumericIndexStrategyFilterIterator implements
 			if (options.containsKey(INDEX_STRATEGY_KEY)) {
 				final String idxStrategyStr = options.get(INDEX_STRATEGY_KEY);
 				final byte[] idxStrategyBytes = ByteArrayUtils.byteArrayFromString(idxStrategyStr);
-				indexStrategy = (NumericIndexStrategy) AccumuloUtils.fromBinary(idxStrategyBytes);
+				indexStrategy = (NumericIndexStrategy) URLClassloaderUtils.fromBinary(idxStrategyBytes);
 				partitionKeyLength = indexStrategy.getPartitionKeyLength();
 			}
 			else {

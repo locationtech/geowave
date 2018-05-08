@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.filter.FilterList;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
+import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,6 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 
 public class HBaseReader implements
@@ -135,7 +136,7 @@ public class HBaseReader implements
 					new GeoWaveValueImpl(
 							null,
 							null,
-							PersistenceUtils.toBinary(aggTotal))
+							URLClassloaderUtils.toBinary(aggTotal))
 				});
 	}
 
@@ -144,7 +145,6 @@ public class HBaseReader implements
 		final ByteArrayRange range = HBaseSplitsProvider.toHBaseRange(recordReaderParams.getRowRange());
 
 		final Scan rscanner = createStandardScanner(recordReaderParams);
-
 		// Use this instead of setStartRow/setStopRow for single rowkeys
 		if (Bytes.equals(
 				range.getStart().getBytes(),
@@ -184,30 +184,40 @@ public class HBaseReader implements
 			}
 		}
 
+		setLimit(
+				recordReaderParams,
+				filterList);
 		if (!filterList.getFilters().isEmpty()) {
-			rscanner.setFilter(filterList);
+			if (filterList.getFilters().size() > 1){
+				rscanner.setFilter(filterList);
+			}
+			else{
+				rscanner.setFilter(filterList.getFilters().get(0));
+			}
 		}
-
 		try {
-			this.scanner = operations.getScannedResults(
+			Iterable<Result> iterable = operations.getScannedResults(
 					rscanner,
 					recordReaderParams.getIndex().getId().getString(),
 					recordReaderParams.getAdditionalAuthorizations());
+			if (iterable instanceof ResultScanner) {
+				this.scanner = (ResultScanner) iterable;
+			}
+			this.scanIt = iterable.iterator();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
 					"Could not get the results from scanner",
 					e);
 			this.scanner = null;
+			this.scanIt = null;
 			return;
 		}
 
-		this.scanIt = scanner.iterator();
 	}
 
 	protected void initScanner() {
 		final FilterList filterList = new FilterList();
-
 		final Scan multiScanner = getMultiScanner(filterList);
 
 		if (operations.isServerSideLibraryEnabled()) {
@@ -230,15 +240,27 @@ public class HBaseReader implements
 			}
 		}
 
+		setLimit(
+				readerParams,
+				filterList);
 		if (!filterList.getFilters().isEmpty()) {
-			multiScanner.setFilter(filterList);
+			if (filterList.getFilters().size() > 1){
+				multiScanner.setFilter(filterList);
+			}
+			else{
+				multiScanner.setFilter(filterList.getFilters().get(0));
+			}
 		}
 
 		try {
-			this.scanner = operations.getScannedResults(
+			Iterable<Result> iterable = operations.getScannedResults(
 					multiScanner,
 					readerParams.getIndex().getId().getString(),
 					readerParams.getAdditionalAuthorizations());
+			if (iterable instanceof ResultScanner) {
+				this.scanner = (ResultScanner) iterable;
+			}
+			this.scanIt = iterable.iterator();
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -246,10 +268,31 @@ public class HBaseReader implements
 					e);
 
 			this.scanner = null;
+			this.scanIt = null;
 			return;
 		}
+	}
 
-		this.scanIt = scanner.iterator();
+	private static void setLimit(
+			BaseReaderParams readerParams,
+			FilterList filterList ) {
+		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)) {
+			// @formatter:off
+			// TODO in hbase 1.4.x there is a scan.getLimit() and
+			// scan.setLimit() which is perfectly suited for this
+//			if (readerParams.getLimit() < scanner.getLimit() || scanner.getLimit() <= 0) {
+				// also in hbase 1.4.x readType.PREAD would make sense for
+				// limits
+// 				scanner.setReadType(ReadType.PREAD);
+//				scanner.setLimit(
+//						readerParams.getLimit());
+//			}
+			// @formatter:on
+			// however, to be compatible with earlier versions of hbase, for now
+			// we are using a page filter
+			filterList.addFilter(new PageFilter(
+					readerParams.getLimit()));
+		}
 	}
 
 	private void addSkipFilter(
@@ -314,7 +357,6 @@ public class HBaseReader implements
 			final FilterList filterList ) {
 		// Single scan w/ multiple ranges
 		final Scan multiScanner = createStandardScanner(readerParams);
-
 		final List<ByteArrayRange> ranges = readerParams.getQueryRanges().getCompositeQueryRanges();
 
 		final MultiRowRangeFilter filter = operations.getMultiRowRangeFilter(ranges);
@@ -368,15 +410,10 @@ public class HBaseReader implements
 					scanner.addFamily(adapterId.getBytes());
 				}
 				else {
-					LOGGER.warn("Adapter ID: " + adapterId.getString() + " not found in table: "
+					LOGGER.info("Adapter ID: " + adapterId.getString() + " not found in table: "
 							+ readerParams.getIndex().getId().getString());
 				}
 			}
-		}
-
-		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)
-				&& (readerParams.getLimit() < scanner.getBatch())) {
-			scanner.setBatch(readerParams.getLimit());
 		}
 
 		return scanner;

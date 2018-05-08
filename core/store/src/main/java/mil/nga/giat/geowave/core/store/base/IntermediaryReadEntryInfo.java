@@ -12,7 +12,6 @@ class IntermediaryReadEntryInfo<T>
 	private final PersistentDataset<CommonIndexValue> indexData = new PersistentDataset<CommonIndexValue>();
 	private final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 	private final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
-
 	private final boolean decodeRow;
 	private final PrimaryIndex index;
 

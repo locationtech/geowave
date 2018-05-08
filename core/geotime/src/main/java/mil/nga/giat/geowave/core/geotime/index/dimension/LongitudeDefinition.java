@@ -63,7 +63,14 @@ public class LongitudeDefinition extends
 
 		// If the normalized max is less than normalized min, the range
 		// crosses the date line
-		if (normalizedMax < normalizedMin) {
+		// also, special case min=0, max=-1 as this is used within JTS as the
+		// envelope for empty geometry and we don't want empty geometry
+		// interpreted as a dateline crossing
+		if (normalizedMax < normalizedMin && !((FloatCompareUtils.checkDoublesEqual(
+				normalizedMax,
+				-1) && (FloatCompareUtils.checkDoublesEqual(
+				normalizedMin,
+				0))))) {
 
 			return new BinRange[] {
 				new BinRange(

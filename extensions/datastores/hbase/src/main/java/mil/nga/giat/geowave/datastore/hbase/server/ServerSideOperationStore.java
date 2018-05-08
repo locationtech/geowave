@@ -16,8 +16,8 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.ImmutableSet;
 
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.server.ServerOpConfig.ServerOpScope;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class ServerSideOperationStore
 {
@@ -133,7 +133,7 @@ public class ServerSideOperationStore
 		}
 
 		private HBaseServerOp createOperation() {
-			final HBaseServerOp op = (HBaseServerOp) PersistenceUtils.fromClassId(classId);
+			final HBaseServerOp op = (HBaseServerOp) URLClassloaderUtils.fromClassId(classId);
 			if (op != null) {
 				try {
 					op.init(options);
