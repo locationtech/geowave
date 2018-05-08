@@ -92,6 +92,11 @@ public class TheiaImageryProvider extends
 	}
 
 	@Override
+	public boolean isAvailable() {
+		return true;
+	}
+
+	@Override
 	public SimpleFeatureTypeBuilder sceneFeatureTypeBuilder()
 			throws NoSuchAuthorityCodeException,
 			FactoryException {

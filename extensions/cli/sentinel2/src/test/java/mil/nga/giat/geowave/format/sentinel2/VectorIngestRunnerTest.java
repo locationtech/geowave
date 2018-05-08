@@ -49,15 +49,11 @@ public class VectorIngestRunnerTest
 	}
 
 	@Test
-	public void testIngestForTheia()
+	public void testIngestProviders()
 			throws Exception {
-		testIngest("THEIA");
-	}
-
-	@Test
-	public void testIngestForAWS()
-			throws Exception {
-		testIngest("AWS");
+		for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+			testIngest(provider.providerName());
+		}
 	}
 
 	public void testIngest(

@@ -71,9 +71,11 @@ public abstract class Sentinel2ImageryProvider
 		for (Class<?> clazz : PROVIDER_CLASSES) {
 			try {
 				Sentinel2ImageryProvider provider = (Sentinel2ImageryProvider) clazz.newInstance();
-				PROVIDERS.put(
-						provider.providerName().toUpperCase(),
-						provider);
+				if (provider.isAvailable()) {
+					PROVIDERS.put(
+							provider.providerName().toUpperCase(),
+							provider);
+				}
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				LOGGER.error(
@@ -203,6 +205,11 @@ public abstract class Sentinel2ImageryProvider
 	 * Returns the available Product collection of this Provider.
 	 */
 	public abstract String[] collections();
+
+	/**
+	 * Returns {@code true} if this provider is ready for ingest imagery.
+	 */
+	public abstract boolean isAvailable();
 
 	/**
 	 * Returns the SimpleFeatureTypeBuilder which provides the Scene schema of

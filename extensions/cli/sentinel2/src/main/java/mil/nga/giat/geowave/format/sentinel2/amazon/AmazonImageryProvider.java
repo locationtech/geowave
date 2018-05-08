@@ -44,6 +44,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Envelope;
 
+import it.geosolutions.imageio.plugins.jp2ecw.JP2GDALEcwImageReaderSpi;
 import mil.nga.giat.geowave.format.sentinel2.BandFeatureIterator;
 import mil.nga.giat.geowave.format.sentinel2.DownloadRunner;
 import mil.nga.giat.geowave.format.sentinel2.RasterBandData;
@@ -78,6 +79,8 @@ public class AmazonImageryProvider extends
 	private static final Map<String, String> AWS_SCENE_RESOURCE_NAMES = new HashMap<String, String>();
 	// Map of AWS collection names.
 	private static final Map<String, String> AWS_COLLECTION_NAMES = new HashMap<String, String>();
+	// Flag to indicate whether the native JP2ECW plugin is properly setup.
+	private static int JP2ECW_PLUGIN_AVAILABLE_FLAG = 0;
 
 	static {
 		AWS_SCENE_RESOURCE_NAMES.put(
@@ -149,6 +152,49 @@ public class AmazonImageryProvider extends
 		return new String[] {
 			"SENTINEL2"
 		};
+	}
+
+	@Override
+	public boolean isAvailable() {
+		/*
+		 * TODO: At the present time, only the native JP2ECW plugin
+		 * (JP2ECWReader) seems to load JP2 files of LEVEL1C Products. Both
+		 * JP2Reader and JP2KReader fail trying to open these files.
+		 */
+		synchronized (AWS_SCENE_RESOURCE_NAMES) {
+			if (JP2ECW_PLUGIN_AVAILABLE_FLAG == 0) {
+				try {
+					System.err.println("Testing whether the JP2ECW plugin for GDAL is available...");
+
+					Class.forName("it.geosolutions.imageio.plugins.jp2ecw.JP2GDALEcwImageReaderSpi");
+					boolean available = new JP2GDALEcwImageReaderSpi().isAvailable();
+
+					if (available) {
+						String ncs_env = System.getenv("NCS_USER_PREFS");
+
+						if (ncs_env != null && ncs_env.length() == 0) {
+							LOGGER.warn("NCS_USER_PREFS environment variable is empty, ignore JP2ECW plugin.");
+							available = false;
+						}
+					}
+					if (available) {
+						System.err.println("JP2ECW plugin is available!");
+						JP2ECW_PLUGIN_AVAILABLE_FLAG = 1;
+						return true;
+					}
+				}
+				catch (final Throwable e) {
+					LOGGER.error(
+							"Unable to validate the JP2ECW plugin for GDAL",
+							e);
+				}
+				System.err
+						.println("The native JP2ECW plugin for GDAL seems not to be set in your GDAL_PROVIDER_PATH environment variable. AWS Sentinel2 provider is not available.");
+				JP2ECW_PLUGIN_AVAILABLE_FLAG = 2;
+				return false;
+			}
+		}
+		return JP2ECW_PLUGIN_AVAILABLE_FLAG == 1;
 	}
 
 	@Override

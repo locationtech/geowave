@@ -46,15 +46,11 @@ public class AnalyzeRunnerTest
 	}
 
 	@Test
-	public void testExecuteForTheia()
+	public void testExecuteProviders()
 			throws Exception {
-		testExecute("THEIA");
-	}
-
-	@Test
-	public void testExecuteForAWS()
-			throws Exception {
-		testExecute("AWS");
+		for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+			testExecute(provider.providerName());
+		}
 	}
 
 	public void testExecute(

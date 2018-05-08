@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.format.sentinel2;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -19,6 +20,7 @@ import java.text.ParseException;
 import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
+import org.geotools.coverageio.gdal.jp2ecw.JP2ECWReader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +36,11 @@ public class Tests
 
 	// Default authentication settings filename for Theia
 	public static final String THEIA_AUTHENTICATION_FILE = "auth_theia.txt";
+
+	// Raster to validate JP2 support in GDAL.
+	private final static String JP2_TEST_FILE = "../../../test/data/raster/sentinel2_band_example.jp2";
+	// Flag to indicate whether the native JP2ECW plugin is properly setup.
+	private static int JP2ECW_PLUGIN_AVAILABLE_FLAG = 0;
 
 	/**
 	 * Returns the authentication settings (user/password) to execute tests
@@ -136,5 +143,33 @@ public class Tests
 		}
 		throw new RuntimeException(
 				"No valid time-period defined for '" + providerName + "' Sentinel2 provider");
+	}
+
+	/**
+	 * Returns whether the JP2ECW plugin for GDAL is really working.
+	 */
+	public static boolean jp2ecwPluginIsWorking() {
+		synchronized (Tests.LOGGER) {
+			if (JP2ECW_PLUGIN_AVAILABLE_FLAG == 0) {
+				System.err.println("Testing whether the JP2ECW plugin for GDAL is really working...");
+
+				try {
+					final File file = new File(
+							JP2_TEST_FILE);
+					final JP2ECWReader reader = new JP2ECWReader(
+							file);
+					reader.read(null);
+					reader.dispose();
+
+					System.err.println("JP2ECW plugin is working!");
+					JP2ECW_PLUGIN_AVAILABLE_FLAG = 1;
+				}
+				catch (final Throwable e) {
+					System.err.println("JP2ECW plugin fails, Error='" + e.getMessage() + "'");
+					JP2ECW_PLUGIN_AVAILABLE_FLAG = 2;
+				}
+			}
+		}
+		return JP2ECW_PLUGIN_AVAILABLE_FLAG == 1;
 	}
 }

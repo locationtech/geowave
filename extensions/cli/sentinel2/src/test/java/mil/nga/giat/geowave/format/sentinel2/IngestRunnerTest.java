@@ -66,15 +66,11 @@ public class IngestRunnerTest
 	}
 
 	@Test
-	public void testIngestForTheia()
+	public void testIngestProviders()
 			throws Exception {
-		testIngest("THEIA");
-	}
-
-	@Test
-	public void testIngestForAWS()
-			throws Exception {
-		testIngest("AWS");
+		for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+			testIngest(provider.providerName());
+		}
 	}
 
 	public void testIngest(
@@ -82,14 +78,18 @@ public class IngestRunnerTest
 			throws Exception {
 		JAIExt.initJAIEXT();
 
+		if (providerName == "AWS" && !Tests.jp2ecwPluginIsWorking()) {
+			System.out.println("Unable to ingest Sentinel2 products with JP2 files, JP2ECW plugin is not working.");
+			return;
+		}
+
 		Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
 		if (provider == null) {
 			throw new RuntimeException(
 					"Unable to find '" + providerName + "' Sentinel2 provider");
 		}
 
-		if (!Tests.authenticationSettingsAreValid(providerName)) 
-			return;
+		if (!Tests.authenticationSettingsAreValid(providerName)) return;
 
 		Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
 		Date startDate = timePeriodSettings[0];

@@ -412,6 +412,8 @@
 								<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
 								<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
 								<BIGTABLE_EMULATOR_HOST>${bigtable.emulator.endpoint}</BIGTABLE_EMULATOR_HOST>
+								<GDAL_DIR>${gdal.dir}</GDAL_DIR>
+								<NCS_USER_PREFS></NCS_USER_PREFS>
 							</environmentVariables>
 							<systemPropertyVariables>
 								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>

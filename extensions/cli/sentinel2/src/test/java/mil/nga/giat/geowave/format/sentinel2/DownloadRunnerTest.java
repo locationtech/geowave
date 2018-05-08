@@ -15,7 +15,6 @@ import static org.junit.Assert.*;
 import java.io.File;
 import java.util.Date;
 
-import org.apache.hadoop.fs.FileUtil;
 import org.junit.Test;
 
 import it.geosolutions.jaiext.JAIExt;
@@ -55,12 +54,12 @@ public class DownloadRunnerTest
 
 		Sentinel2ImageryProvider provider = Sentinel2ImageryProvider.getProvider(providerName);
 		if (provider == null) {
-			throw new RuntimeException(
-					"Unable to find '" + providerName + "' Sentinel2 provider");
+			System.err.println("Unable to find '" + providerName
+					+ "' Sentinel2 provider. Check if it is properly setup.");
+			return;
 		}
 
-		if (!Tests.authenticationSettingsAreValid(providerName)) 
-			return;
+		if (!Tests.authenticationSettingsAreValid(providerName)) return;
 
 		Date[] timePeriodSettings = Tests.timePeriodSettings(providerName);
 		Date startDate = timePeriodSettings[0];
@@ -81,7 +80,7 @@ public class DownloadRunnerTest
 		String pass = settings[1];
 
 		Sentinel2DownloadCommandLineOptions downloadOptions = new Sentinel2DownloadCommandLineOptions();
-		downloadOptions.setOverwriteIfExists(true);
+		downloadOptions.setOverwriteIfExists(false);
 		downloadOptions.setUserIdent(iden);
 		downloadOptions.setPassword(pass);
 
@@ -93,12 +92,5 @@ public class DownloadRunnerTest
 				"scenes directory exists",
 				new File(
 						Tests.WORKSPACE_DIR + "/scenes").isDirectory());
-
-		if (sceneDir != null) {
-			assertTrue(
-					"scene path exists",
-					sceneDir.isDirectory());
-			FileUtil.fullyDelete(sceneDir);
-		}
 	}
 }

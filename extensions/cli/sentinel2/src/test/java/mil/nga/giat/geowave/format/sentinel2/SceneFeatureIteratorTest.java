@@ -92,7 +92,7 @@ public class SceneFeatureIteratorTest
 	}
 
 	@Test
-	public void testIterateForTheia()
+	public void testIterateProviders()
 			throws IOException,
 			CQLException,
 			ParseException,
@@ -100,19 +100,9 @@ public class SceneFeatureIteratorTest
 			FactoryException,
 			MalformedURLException,
 			GeneralSecurityException {
-		testIterate("THEIA");
-	}
-
-	@Test
-	public void testIterateForAWS()
-			throws IOException,
-			CQLException,
-			ParseException,
-			NoSuchAuthorityCodeException,
-			FactoryException,
-			MalformedURLException,
-			GeneralSecurityException {
-		testIterate("AWS");
+		for (Sentinel2ImageryProvider provider : Sentinel2ImageryProvider.getProviders()) {
+			testIterate(provider.providerName());
+		}
 	}
 
 	public void testIterate(
