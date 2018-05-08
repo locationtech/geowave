@@ -199,7 +199,6 @@
 <li><a href="mil/nga/giat/geowave/core/ingest/local/package-tree.html">mil.nga.giat.geowave.core.ingest.local</a>, </li>
 <li><a href="mil/nga/giat/geowave/core/ingest/operations/package-tree.html">mil.nga.giat.geowave.core.ingest.operations</a>, </li>
 <li><a href="mil/nga/giat/geowave/core/ingest/operations/options/package-tree.html">mil.nga.giat.geowave.core.ingest.operations.options</a>, </li>
-<li><a href="mil/nga/giat/geowave/core/ingest/s3/package-tree.html">mil.nga.giat.geowave.core.ingest.s3</a>, </li>
 <li><a href="mil/nga/giat/geowave/core/ingest/spark/package-tree.html">mil.nga.giat.geowave.core.ingest.spark</a>, </li>
 <li><a href="mil/nga/giat/geowave/core/ingest/spi/package-tree.html">mil.nga.giat.geowave.core.ingest.spi</a>, </li>
 <li><a href="mil/nga/giat/geowave/core/store/package-tree.html">mil.nga.giat.geowave.core.store</a>, </li>
@@ -295,9 +294,11 @@
 <li><a href="mil/nga/giat/geowave/mapreduce/package-tree.html">mil.nga.giat.geowave.mapreduce</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/copy/package-tree.html">mil.nga.giat.geowave.mapreduce.copy</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/dedupe/package-tree.html">mil.nga.giat.geowave.mapreduce.dedupe</a>, </li>
+<li><a href="mil/nga/giat/geowave/mapreduce/hdfs/package-tree.html">mil.nga.giat.geowave.mapreduce.hdfs</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/input/package-tree.html">mil.nga.giat.geowave.mapreduce.input</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/operations/package-tree.html">mil.nga.giat.geowave.mapreduce.operations</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/output/package-tree.html">mil.nga.giat.geowave.mapreduce.output</a>, </li>
+<li><a href="mil/nga/giat/geowave/mapreduce/s3/package-tree.html">mil.nga.giat.geowave.mapreduce.s3</a>, </li>
 <li><a href="mil/nga/giat/geowave/mapreduce/splits/package-tree.html">mil.nga.giat.geowave.mapreduce.splits</a>, </li>
 <li><a href="mil/nga/giat/geowave/service/package-tree.html">mil.nga.giat.geowave.service</a>, </li>
 <li><a href="mil/nga/giat/geowave/service/client/package-tree.html">mil.nga.giat.geowave.service.client</a>, </li>
@@ -316,7 +317,6 @@
 <li><a href="mil/nga/giat/geowave/test/spark/package-tree.html">mil.nga.giat.geowave.test.spark</a>, </li>
 <li><a href="mil/nga/giat/geowave/types/stanag4676/service/package-tree.html">mil.nga.giat.geowave.types.stanag4676.service</a>, </li>
 <li><a href="mil/nga/giat/geowave/types/stanag4676/service/rest/package-tree.html">mil.nga.giat.geowave.types.stanag4676.service.rest</a>, </li>
-<li><a href="org/apache/hadoop/hbase/regionserver/package-tree.html">org.apache.hadoop.hbase.regionserver</a>, </li>
 <li><a href="org/geotools/process/function/package-tree.html">org.geotools.process.function</a>, </li>
 <li><a href="org/geotools/renderer/lite/package-tree.html">org.geotools.renderer.lite</a></li>
 </ul>
@@ -1434,7 +1434,7 @@
 <li type="circle">mil.nga.giat.geowave.core.store.data.field.base.<a href="mil/nga/giat/geowave/core/store/data/field/base/FloatSerializationProvider.FloatWriter.html" title="class in mil.nga.giat.geowave.core.store.data.field.base"><span class="typeNameLink">FloatSerializationProvider.FloatWriter</span></a> (implements mil.nga.giat.geowave.core.store.data.field.<a href="mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;RowType,FieldType&gt;)</li>
 <li type="circle">org.apache.hadoop.fs.FsUrlStreamHandlerFactory (implements java.net.<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLStreamHandlerFactory.html?is-external=true" title="class or interface in java.net">URLStreamHandlerFactory</a>)
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.<a href="mil/nga/giat/geowave/core/ingest/hdfs/HdfsUrlStreamHandlerFactory.html" title="class in mil.nga.giat.geowave.core.ingest.hdfs"><span class="typeNameLink">HdfsUrlStreamHandlerFactory</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.hdfs.<a href="mil/nga/giat/geowave/mapreduce/hdfs/HdfsUrlStreamHandlerFactory.html" title="class in mil.nga.giat.geowave.mapreduce.hdfs"><span class="typeNameLink">HdfsUrlStreamHandlerFactory</span></a></li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.analytic.mapreduce.kde.<a href="mil/nga/giat/geowave/analytic/mapreduce/kde/GaussianCellMapper.LevelStore.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde"><span class="typeNameLink">GaussianCellMapper.LevelStore</span></a></li>
@@ -2238,15 +2238,15 @@
 </li>
 </ul>
 </li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.s3.<a href="mil/nga/giat/geowave/core/ingest/s3/S3Params.html" title="class in mil.nga.giat.geowave.core.ingest.s3"><span class="typeNameLink">S3Params</span></a></li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.s3.<a href="mil/nga/giat/geowave/core/ingest/s3/S3ParamsExtractor.html" title="class in mil.nga.giat.geowave.core.ingest.s3"><span class="typeNameLink">S3ParamsExtractor</span></a></li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.s3.<a href="mil/nga/giat/geowave/core/ingest/s3/S3URLStreamHandlerFactory.html" title="class in mil.nga.giat.geowave.core.ingest.s3"><span class="typeNameLink">S3URLStreamHandlerFactory</span></a> (implements java.net.<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLStreamHandlerFactory.html?is-external=true" title="class or interface in java.net">URLStreamHandlerFactory</a>)</li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.s3.<a href="mil/nga/giat/geowave/mapreduce/s3/S3Params.html" title="class in mil.nga.giat.geowave.mapreduce.s3"><span class="typeNameLink">S3Params</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.s3.<a href="mil/nga/giat/geowave/mapreduce/s3/S3ParamsExtractor.html" title="class in mil.nga.giat.geowave.mapreduce.s3"><span class="typeNameLink">S3ParamsExtractor</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.s3.<a href="mil/nga/giat/geowave/mapreduce/s3/S3URLStreamHandlerFactory.html" title="class in mil.nga.giat.geowave.mapreduce.s3"><span class="typeNameLink">S3URLStreamHandlerFactory</span></a> (implements java.net.<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLStreamHandlerFactory.html?is-external=true" title="class or interface in java.net">URLStreamHandlerFactory</a>)</li>
 <li type="circle">mil.nga.giat.geowave.analytic.param.<a href="mil/nga/giat/geowave/analytic/param/SampleParameters.html" title="class in mil.nga.giat.geowave.analytic.param"><span class="typeNameLink">SampleParameters</span></a></li>
 <li type="circle">mil.nga.giat.geowave.analytic.sample.<a href="mil/nga/giat/geowave/analytic/sample/Sampler.html" title="class in mil.nga.giat.geowave.analytic.sample"><span class="typeNameLink">Sampler</span></a>&lt;T&gt;</li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.store.query.<a href="mil/nga/giat/geowave/core/geotime/store/query/ScaledTemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query"><span class="typeNameLink">ScaledTemporalRange</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/ScanCallbackList.html" title="class in mil.nga.giat.geowave.core.store.callback"><span class="typeNameLink">ScanCallbackList</span></a>&lt;T,R&gt; (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>, mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;T,R&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.datastore.accumulo.util.<a href="mil/nga/giat/geowave/datastore/accumulo/util/ScannerClosableWrapper.html" title="class in mil.nga.giat.geowave.datastore.accumulo.util"><span class="typeNameLink">ScannerClosableWrapper</span></a> (implements java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Closeable.html?is-external=true" title="class or interface in java.io">Closeable</a>)</li>
-<li type="circle">org.apache.hadoop.hbase.regionserver.<a href="org/apache/hadoop/hbase/regionserver/ScannerContextRowScanner.html" title="class in org.apache.hadoop.hbase.regionserver"><span class="typeNameLink">ScannerContextRowScanner</span></a> (implements mil.nga.giat.geowave.datastore.hbase.server.<a href="mil/nga/giat/geowave/datastore/hbase/server/RowScanner.html" title="interface in mil.nga.giat.geowave.datastore.hbase.server">RowScanner</a>)</li>
+<li type="circle">mil.nga.giat.geowave.datastore.hbase.server.<a href="mil/nga/giat/geowave/datastore/hbase/server/ScannerContextRowScanner.html" title="class in mil.nga.giat.geowave.datastore.hbase.server"><span class="typeNameLink">ScannerContextRowScanner</span></a> (implements mil.nga.giat.geowave.datastore.hbase.server.<a href="mil/nga/giat/geowave/datastore/hbase/server/RowScanner.html" title="interface in mil.nga.giat.geowave.datastore.hbase.server">RowScanner</a>)</li>
 <li type="circle">mil.nga.giat.geowave.format.landsat8.<a href="mil/nga/giat/geowave/format/landsat8/SceneFeatureIterator.html" title="class in mil.nga.giat.geowave.format.landsat8"><span class="typeNameLink">SceneFeatureIterator</span></a> (implements org.geotools.data.simple.SimpleFeatureIterator)</li>
 <li type="circle">mil.nga.giat.geowave.format.theia.<a href="mil/nga/giat/geowave/format/theia/SceneFeatureIterator.html" title="class in mil.nga.giat.geowave.format.theia"><span class="typeNameLink">SceneFeatureIterator</span></a> (implements org.geotools.data.simple.SimpleFeatureIterator)</li>
 <li type="circle">mil.nga.giat.geowave.format.landsat8.<a href="mil/nga/giat/geowave/format/landsat8/SceneFeatureIterator.BestCloudCoverComparator.html" title="class in mil.nga.giat.geowave.format.landsat8"><span class="typeNameLink">SceneFeatureIterator.BestCloudCoverComparator</span></a> (implements java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Comparator.html?is-external=true" title="class or interface in java.util">Comparator</a>&lt;T&gt;, java.io.<a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>)</li>
@@ -2533,14 +2533,15 @@
 <li type="circle">mil.nga.giat.geowave.core.store.data.visibility.<a href="mil/nga/giat/geowave/core/store/data/visibility/UniformVisibilityWriter.html" title="class in mil.nga.giat.geowave.core.store.data.visibility"><span class="typeNameLink">UniformVisibilityWriter</span></a>&lt;RowType&gt; (implements mil.nga.giat.geowave.core.store.data.<a href="mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="interface in mil.nga.giat.geowave.core.store.data">VisibilityWriter</a>&lt;RowType&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.core.store.data.<a href="mil/nga/giat/geowave/core/store/data/UnreadFieldDataList.html" title="class in mil.nga.giat.geowave.core.store.data"><span class="typeNameLink">UnreadFieldDataList</span></a> (implements mil.nga.giat.geowave.core.store.flatten.<a href="mil/nga/giat/geowave/core/store/flatten/FlattenedUnreadData.html" title="interface in mil.nga.giat.geowave.core.store.flatten">FlattenedUnreadData</a>)</li>
 <li type="circle">mil.nga.giat.geowave.analytic.mapreduce.kmeans.<a href="mil/nga/giat/geowave/analytic/mapreduce/kmeans/UpdateCentroidCostMapReduce.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kmeans"><span class="typeNameLink">UpdateCentroidCostMapReduce</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.<a href="mil/nga/giat/geowave/mapreduce/URLClassloaderUtils.html" title="class in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">URLClassloaderUtils</span></a></li>
 <li type="circle">java.net.<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLConnection.html?is-external=true" title="class or interface in java.net"><span class="typeNameLink">URLConnection</span></a>
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.ingest.s3.<a href="mil/nga/giat/geowave/core/ingest/s3/S3URLConnection.html" title="class in mil.nga.giat.geowave.core.ingest.s3"><span class="typeNameLink">S3URLConnection</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.s3.<a href="mil/nga/giat/geowave/mapreduce/s3/S3URLConnection.html" title="class in mil.nga.giat.geowave.mapreduce.s3"><span class="typeNameLink">S3URLConnection</span></a></li>
 </ul>
 </li>
 <li type="circle">java.net.<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URLStreamHandler.html?is-external=true" title="class or interface in java.net"><span class="typeNameLink">URLStreamHandler</span></a>
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.ingest.local.<a href="mil/nga/giat/geowave/core/ingest/local/Handler.html" title="class in mil.nga.giat.geowave.core.ingest.local"><span class="typeNameLink">Handler</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.s3.<a href="mil/nga/giat/geowave/mapreduce/s3/S3URLStreamHandler.html" title="class in mil.nga.giat.geowave.mapreduce.s3"><span class="typeNameLink">S3URLStreamHandler</span></a></li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.core.cli.utils.<a href="mil/nga/giat/geowave/core/cli/utils/URLUtils.html" title="class in mil.nga.giat.geowave.core.cli.utils"><span class="typeNameLink">URLUtils</span></a></li>
@@ -3211,8 +3212,8 @@
 <li type="circle">mil.nga.giat.geowave.core.store.data.field.<a href="mil/nga/giat/geowave/core/store/data/field/ArrayWriter.Encoding.html" title="enum in mil.nga.giat.geowave.core.store.data.field"><span class="typeNameLink">ArrayWriter.Encoding</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.store.cli.remote.options.<a href="mil/nga/giat/geowave/core/store/cli/remote/options/IndexPluginOptions.PartitionStrategy.html" title="enum in mil.nga.giat.geowave.core.store.cli.remote.options"><span class="typeNameLink">IndexPluginOptions.PartitionStrategy</span></a></li>
 <li type="circle">mil.nga.giat.geowave.mapreduce.<a href="mil/nga/giat/geowave/mapreduce/GeoWaveConfiguratorBase.GeoWaveConfg.html" title="enum in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">GeoWaveConfiguratorBase.GeoWaveConfg</span></a></li>
+<li type="circle">mil.nga.giat.geowave.mapreduce.<a href="mil/nga/giat/geowave/mapreduce/URLClassloaderUtils.URLTYPE.html" title="enum in mil.nga.giat.geowave.mapreduce"><span class="typeNameLink">URLClassloaderUtils.URLTYPE</span></a></li>
 <li type="circle">mil.nga.giat.geowave.mapreduce.input.<a href="mil/nga/giat/geowave/mapreduce/input/GeoWaveInputConfigurator.InputConfig.html" title="enum in mil.nga.giat.geowave.mapreduce.input"><span class="typeNameLink">GeoWaveInputConfigurator.InputConfig</span></a></li>
-<li type="circle">mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/IngestUtils.URLTYPE.html" title="enum in mil.nga.giat.geowave.core.ingest"><span class="typeNameLink">IngestUtils.URLTYPE</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.index.dimension.<a href="mil/nga/giat/geowave/core/geotime/index/dimension/TemporalBinningStrategy.Unit.html" title="enum in mil.nga.giat.geowave.core.geotime.index.dimension"><span class="typeNameLink">TemporalBinningStrategy.Unit</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.store.filter.<a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.CompareOperation.html" title="enum in mil.nga.giat.geowave.core.geotime.store.filter"><span class="typeNameLink">SpatialQueryFilter.CompareOperation</span></a> (implements mil.nga.giat.geowave.core.geotime.store.filter.<a href="mil/nga/giat/geowave/core/geotime/store/filter/SpatialQueryFilter.SpatialQueryCompareOp.html" title="interface in mil.nga.giat.geowave.core.geotime.store.filter">SpatialQueryFilter.SpatialQueryCompareOp</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.geotime.ingest.<a href="mil/nga/giat/geowave/core/geotime/ingest/SpatialTemporalDimensionalityTypeProvider.Bias.html" title="enum in mil.nga.giat.geowave.core.geotime.ingest"><span class="typeNameLink">SpatialTemporalDimensionalityTypeProvider.Bias</span></a></li>

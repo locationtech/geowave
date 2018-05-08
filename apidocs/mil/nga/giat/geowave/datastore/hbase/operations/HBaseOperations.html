@@ -321,7 +321,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getScanCacheSize--">getScanCacheSize</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i24" class="altColor">
-<td class="colFirst"><code>org.apache.hadoop.hbase.client.ResultScanner</code></td>
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.hadoop.hbase.client.Result&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getScannedResults-org.apache.hadoop.hbase.client.Scan-java.lang.String-java.lang.String...-">getScannedResults</a></span>(org.apache.hadoop.hbase.client.Scan&nbsp;scanner,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
@@ -792,10 +792,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <ul class="blockList">
 <li class="blockList">
 <h4>getScannedResults</h4>
-<pre>public&nbsp;org.apache.hadoop.hbase.client.ResultScanner&nbsp;getScannedResults(org.apache.hadoop.hbase.client.Scan&nbsp;scanner,
-                                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
-                                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)
-                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Iterable.html?is-external=true" title="class or interface in java.lang">Iterable</a>&lt;org.apache.hadoop.hbase.client.Result&gt;&nbsp;getScannedResults(org.apache.hadoop.hbase.client.Scan&nbsp;scanner,
+                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName,
+                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)
+                                                                  throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>

@@ -124,7 +124,6 @@ mil.nga.giat.geowave.core.ingest.kafka
 mil.nga.giat.geowave.core.ingest.local
 mil.nga.giat.geowave.core.ingest.operations
 mil.nga.giat.geowave.core.ingest.operations.options
-mil.nga.giat.geowave.core.ingest.s3
 mil.nga.giat.geowave.core.ingest.spark
 mil.nga.giat.geowave.core.ingest.spi
 mil.nga.giat.geowave.core.store
@@ -220,9 +219,11 @@ mil.nga.giat.geowave.format.twitter
 mil.nga.giat.geowave.mapreduce
 mil.nga.giat.geowave.mapreduce.copy
 mil.nga.giat.geowave.mapreduce.dedupe
+mil.nga.giat.geowave.mapreduce.hdfs
 mil.nga.giat.geowave.mapreduce.input
 mil.nga.giat.geowave.mapreduce.operations
 mil.nga.giat.geowave.mapreduce.output
+mil.nga.giat.geowave.mapreduce.s3
 mil.nga.giat.geowave.mapreduce.splits
 mil.nga.giat.geowave.service
 mil.nga.giat.geowave.service.client
@@ -241,6 +242,5 @@ mil.nga.giat.geowave.test.services
 mil.nga.giat.geowave.test.spark
 mil.nga.giat.geowave.types.stanag4676.service
 mil.nga.giat.geowave.types.stanag4676.service.rest
-org.apache.hadoop.hbase.regionserver
 org.geotools.process.function
 org.geotools.renderer.lite
