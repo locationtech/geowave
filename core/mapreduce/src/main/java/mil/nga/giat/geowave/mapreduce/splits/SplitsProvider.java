@@ -98,6 +98,7 @@ public class SplitsProvider
 		// range into two down the middle and then split one of those ranges
 		// down the middle to get 3, rather than splitting one range into
 		// thirds)
+		List<IntermediateSplitInfo> unsplittable = new ArrayList<IntermediateSplitInfo>();
 		if (!statsCache.isEmpty() && !splits.isEmpty() && (minSplits != null) && (splits.size() < minSplits)) {
 			// set the ranges to at least min splits
 			do {
@@ -106,14 +107,23 @@ public class SplitsProvider
 				// increasing the size by 1
 				final IntermediateSplitInfo highestSplit = splits.pollLast();
 				final IntermediateSplitInfo otherSplit = highestSplit.split(statsCache);
-				splits.add(highestSplit);
+				// When we can't split the highest split we remove it and attempt the second highest
+				// working our way up the split set.
 				if (otherSplit == null) {
-					LOGGER.warn("Cannot meet minimum splits");
-					break;
+					unsplittable.add(highestSplit);
+				} else {
+					splits.add(highestSplit);
+					splits.add(otherSplit);
 				}
-				splits.add(otherSplit);
 			}
-			while (splits.size() < minSplits);
+			while ( splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
+			
+			//Add all unsplittable splits back to splits array
+			splits.addAll(unsplittable);
+			
+			if(splits.size() < minSplits) {
+				LOGGER.warn("Truly unable to meet split count. Actual Count: " + splits.size());
+			}
 		}
 		else if (((maxSplits != null) && (maxSplits > 0)) && (splits.size() > maxSplits)) {
 			// merge splits to fit within max splits
