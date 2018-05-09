@@ -77,12 +77,13 @@ public class SparkSqlCommand extends
 
 		final String sql = parameters.get(0);
 
+		LOGGER.debug("Input SQL: " + sql);
 		String cleanSql = initStores(
 				configFile,
 				sql,
 				sparkSqlOptions.getOutputStoreName());
 
-		LOGGER.debug("Running with SQL: " + cleanSql);
+		LOGGER.debug("Running with cleaned SQL: " + cleanSql);
 		sqlRunner.setSql(cleanSql);
 
 		stopwatch.reset();
@@ -142,9 +143,8 @@ public class SparkSqlCommand extends
 			File configFile,
 			String sql,
 			String outputStoreName ) {
-		Pattern storeDetect = Pattern.compile("(\"[^\"]*\"|'[^']*')|([%][^.,\\s]+)");
+		Pattern storeDetect = Pattern.compile("(\\\"[^\\\"]*\\\"|'[^']*')|([%][^.,\\s]+)");
 		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
-		LOGGER.debug("Input SQL: " + sql);
 
 		Matcher matchedStore = getFirstPositiveMatcher(
 				storeDetect,
@@ -153,52 +153,63 @@ public class SparkSqlCommand extends
 
 		while (matchedStore != null) {
 			String parseStore = matchedStore.group(2);
-			if (parseStore.contains(escapedDelimRegex)) {
-				String[] storeNameParts = parseStore.split(escapedDelimRegex);
-				String storeName = null;
-				String adapterName = null;
-				String viewName = null;
-				switch (storeNameParts.length) {
-					case 2:
-						viewName = storeNameParts[2];
-					case 1:
-						adapterName = storeNameParts[1];
-					case 0:
-						storeName = storeNameParts[0];
-						break;
-					default:
-						throw new ParameterException(
-								"Ambiguous datastore" + STORE_ADAPTER_DELIM + "adapter designation: " + storeNameParts);
-				}
-
-				final StoreLoader inputStoreLoader = new StoreLoader(
-						storeName);
-				if (!inputStoreLoader.loadFromConfig(configFile)) {
-					throw new ParameterException(
-							"Cannot find input store: " + inputStoreLoader.getStoreName());
-				}
-				DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
-
-				ByteArrayId adapterId = null;
-				if (adapterName != null) {
-					adapterId = new ByteArrayId(
-							adapterName);
-				}
-				viewName = sqlRunner.addInputStore(
-						storeOptions,
-						adapterId,
-						viewName);
-				if (viewName != null) {
-					replacedSQL = StringUtils.replace(
-							replacedSQL,
-							parseStore,
-							viewName,
-							-1);
-				}
-
-				matchedStore = getNextPositiveMatcher(matchedStore);
+			String originalStoreText = parseStore;
+			
+			//Drop the first character off string should be % sign
+			parseStore = parseStore.substring(1);
+			parseStore = parseStore.trim();
+			
+			LOGGER.debug("parsed store: " + parseStore);
+			
+			String[] storeNameParts = parseStore.split(escapedDelimRegex);
+			LOGGER.debug("Split Count: " + storeNameParts.length);
+			for(String split : storeNameParts) {
+				LOGGER.debug("Store split: " + split);
 			}
+			String storeName = null;
+			String adapterName = null;
+			String viewName = null;
+			switch (storeNameParts.length) {
+				case 3:
+					viewName = storeNameParts[2].trim();
+				case 2:
+					adapterName = storeNameParts[1].trim();
+				case 1:
+					storeName = storeNameParts[0].trim();
+					break;
+				default:
+					throw new ParameterException(
+							"Ambiguous datastore" + STORE_ADAPTER_DELIM + "adapter designation: " + storeNameParts);
+			}
+
+			final StoreLoader inputStoreLoader = new StoreLoader(
+					storeName);
+			if (!inputStoreLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find input store: " + inputStoreLoader.getStoreName());
+			}
+			DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+
+			ByteArrayId adapterId = null;
+			if (adapterName != null) {
+				adapterId = new ByteArrayId(
+						adapterName);
+			}
+			viewName = sqlRunner.addInputStore(
+					storeOptions,
+					adapterId,
+					viewName);
+			if (viewName != null) {
+				replacedSQL = StringUtils.replace(
+						replacedSQL,
+						originalStoreText,
+						viewName,
+						-1);
+			}
+
+			matchedStore = getNextPositiveMatcher(matchedStore);
 		}
+		
 		return replacedSQL;
 	}
 
