@@ -186,10 +186,14 @@ public class SpatialJoinRunner implements
 			addonOptions = addonOptions.setAppName(
 					appName).setMaster(
 					master).set(
-					"spark.driver.host",
-					host).set(
 					"spark.jars",
 					jar);
+			
+			if (master != "yarn") {
+				addonOptions = addonOptions.set(
+						"spark.driver.host",
+						host);
+			}
 
 			// Since default parallelism is normally set by spark-defaults only
 			// set this to config if supplied by user
