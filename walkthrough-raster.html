@@ -518,7 +518,7 @@ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/mnt</code></pre>
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/mnt/gdal</code></pre>
 </div>
 </div>
 <div class="paragraph">
@@ -541,9 +541,6 @@ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
 <ol class="loweralpha" type="a">
 <li>
 <p>If running with the GeoWave Sandbox:</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace landsat_raster
@@ -551,13 +548,9 @@ sudo tar -xvf gdal192-CentOS5.8-gcc4.1.2-x86_64.tar.gz</code></pre>
 geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector</code></pre>
 </div>
 </div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
+</li>
 <li>
 <p>If running with EMR Accumulo:</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t accumulo -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster \
@@ -566,13 +559,9 @@ geowave config cpstore landsatraster landsatvector --gwNamespace landsat_vector<
 geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
+</li>
 <li>
 <p>If running with EMR HBase</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace geowave.landsat_raster
@@ -584,23 +573,25 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 <ol class="arabic">
 <li>
 <p>Add a spatial index.</p>
-</li>
-</ol>
-</div>
 <div class="listingblock">
 <div class="content">
 <pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addindex -t spatial spatial</code></pre>
 </div>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
 <li>
 <p>Filter the dataset by calling analyze.</p>
 </li>
 </ol>
 </div>
+</li>
+</ol>
+</div>
 <div class="paragraph">
 <p>In this example we look for Band 8 images that are in Berlin.</p>
+</div>
+<div class="paragraph">
+<p>+</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -619,6 +610,9 @@ geowave landsat analyze --nbestperspatial --nbestscenes 1 --usecachedscenes --cq
 <div class="paragraph">
 <p>Call the ingest command to download the data, ingest it into the GeoWave stores, and create the mosaic image. Status can be monitored at using HBase or Accumulo web interface. See the <a href="interact-cluster.html" target="_blank">Interacting with the cluster</a> section help doing so.
 More information on the landsat ingest and analyze commands can be found <a href="https://github.com/locationtech/geowave/tree/master/extensions/cli/landsat8">here</a>.</p>
+</div>
+<div class="paragraph">
+<p>+</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -661,7 +655,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-05-14 02:35:34 +00:00
+Last updated 2018-05-14 21:02:14 +00:00
 </div>
 </div>
 </body>
