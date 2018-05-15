@@ -69,8 +69,12 @@ public class SqlQueryRunner
 						"Unable to set jar location in spark configuration",
 						e);
 			}
-			
-			session = GeoWaveSparkConf.createSessionFromParams(appName, master, host, jar);
+
+			session = GeoWaveSparkConf.createSessionFromParams(
+					appName,
+					master,
+					host,
+					jar);
 		}
 
 	}

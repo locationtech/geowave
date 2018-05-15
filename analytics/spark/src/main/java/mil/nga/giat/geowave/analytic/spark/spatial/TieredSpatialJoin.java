@@ -540,8 +540,7 @@ public class TieredSpatialJoin extends
 							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> t )
 							throws Exception {
 
-						SingleTierSubStrategy targetStrategy  = broadcastedTier.value();
-
+						SingleTierSubStrategy targetStrategy = broadcastedTier.value();
 
 						Geometry geom = t._2._2;
 
@@ -565,10 +564,11 @@ public class TieredSpatialJoin extends
 						// get added as a separate output pair
 						// TODO should this use composite IDs or just the
 						// sort keys
-						if(insertIds.isEmpty()) {
+						if (insertIds.isEmpty()) {
 							return Collections.emptyIterator();
 						}
-						List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> reprojected = Lists.newArrayListWithCapacity(insertIds.getSize());
+						List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> reprojected = Lists
+								.newArrayListWithCapacity(insertIds.getSize());
 						for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
 								.hasNext();) {
 							ByteArrayId id = iter.next();

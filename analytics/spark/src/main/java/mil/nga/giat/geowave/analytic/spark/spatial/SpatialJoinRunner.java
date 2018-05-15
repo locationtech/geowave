@@ -188,7 +188,7 @@ public class SpatialJoinRunner implements
 					master).set(
 					"spark.jars",
 					jar);
-			
+
 			if (master != "yarn") {
 				addonOptions = addonOptions.set(
 						"spark.driver.host",
