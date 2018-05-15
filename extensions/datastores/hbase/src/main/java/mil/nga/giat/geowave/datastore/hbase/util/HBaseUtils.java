@@ -33,10 +33,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.QueryRanges;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.server.ServerOpConfig.ServerOpScope;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
@@ -124,30 +124,12 @@ public class HBaseUtils
 		}
 	}
 
-	public static boolean rangesIntersect(
-			final RowRange range1,
-			final RowRange range2 ) {
-		final ByteArrayRange thisRange = new ByteArrayRange(
-				new ByteArrayId(
-						range1.getStartRow()),
-				new ByteArrayId(
-						range1.getStopRow()));
-
-		final ByteArrayRange otherRange = new ByteArrayRange(
-				new ByteArrayId(
-						range2.getStartRow()),
-				new ByteArrayId(
-						range2.getStopRow()));
-
-		return thisRange.intersects(otherRange);
-	}
-
 	public static DataStatistics getMergedStats(
 			final List<Cell> rowCells ) {
 		DataStatistics mergedStats = null;
 		for (final Cell cell : rowCells) {
 			final byte[] byteValue = CellUtil.cloneValue(cell);
-			final DataStatistics stats = (DataStatistics) PersistenceUtils.fromBinary(byteValue);
+			final DataStatistics stats = (DataStatistics) URLClassloaderUtils.fromBinary(byteValue);
 
 			if (mergedStats != null) {
 				mergedStats.merge(stats);

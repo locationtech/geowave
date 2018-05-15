@@ -65,7 +65,7 @@ public class SpatialJoinCmdOptions
 	private Double radius = 0.01;
 
 	@Parameter(names = {
-		"-n",
+		"-not",
 		"--negative",
 	}, description = "Used for testing a negative result from geometry predicate. i.e GeomIntersects() == false")
 	private boolean negativeTest = false;

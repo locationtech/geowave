@@ -65,9 +65,9 @@ public class FeatureDataUtils
 			if (classLoaderInitialized) {
 				return;
 			}
-			final ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
-			LOGGER.info("Generating patched classloader");
+			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
 			if (classLoader instanceof VFSClassLoader) {
+				LOGGER.info("Generating patched classloader");
 				final VFSClassLoader cl = (VFSClassLoader) classLoader;
 				final FileObject[] fileObjs = cl.getFileObjects();
 				final URL[] fileUrls = new URL[fileObjs.length];
@@ -75,7 +75,7 @@ public class FeatureDataUtils
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				final ClassLoader urlCL = java.security.AccessController
+				classLoader = java.security.AccessController
 						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
 							@Override
 							public URLClassLoader run() {
@@ -85,9 +85,9 @@ public class FeatureDataUtils
 								return ucl;
 							}
 						});
-				GeoTools.addClassLoader(urlCL);
-
 			}
+
+			GeoTools.addClassLoader(classLoader);
 			classLoaderInitialized = true;
 		}
 	}

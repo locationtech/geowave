@@ -82,11 +82,6 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.upplication</groupId>
-			<artifactId>s3fs</artifactId>
-			<version>1.5.3</version>
-		</dependency>
-		<dependency>
 			<groupId>com.github.jsr203hadoop</groupId>
 			<artifactId>jsr203hadoop</artifactId>
 			<version>1.0.1</version>

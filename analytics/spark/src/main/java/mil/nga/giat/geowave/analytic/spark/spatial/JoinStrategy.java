@@ -9,7 +9,7 @@ public abstract class JoinStrategy implements
 	protected GeoWaveRDD leftJoined = null;
 	protected GeoWaveRDD rightJoined = null;
 
-	private JoinOptions joinOpts = new JoinOptions();
+	protected JoinOptions joinOpts = new JoinOptions();
 
 	public GeoWaveRDD getLeftResults() {
 		return leftJoined;

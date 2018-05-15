@@ -86,15 +86,8 @@ public class KMeansRunner
 						"Unable to set jar location in spark configuration",
 						e);
 			}
-			SparkConf addonOptions = new SparkConf();
-			addonOptions = addonOptions.setAppName(
-					appName).setMaster(
-					master).set(
-					"spark.driver.host",
-					host).set(
-					"spark.jars",
-					jar);
-			session = GeoWaveSparkConf.createDefaultSession(addonOptions);
+			
+			session = GeoWaveSparkConf.createSessionFromParams(appName, master, host, jar);
 
 			jsc = JavaSparkContext.fromSparkContext(session.sparkContext());
 		}
