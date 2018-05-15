@@ -107,21 +107,23 @@ public class SplitsProvider
 				// increasing the size by 1
 				final IntermediateSplitInfo highestSplit = splits.pollLast();
 				final IntermediateSplitInfo otherSplit = highestSplit.split(statsCache);
-				// When we can't split the highest split we remove it and attempt the second highest
+				// When we can't split the highest split we remove it and
+				// attempt the second highest
 				// working our way up the split set.
 				if (otherSplit == null) {
 					unsplittable.add(highestSplit);
-				} else {
+				}
+				else {
 					splits.add(highestSplit);
 					splits.add(otherSplit);
 				}
 			}
-			while ( splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
-			
-			//Add all unsplittable splits back to splits array
+			while (splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
+
+			// Add all unsplittable splits back to splits array
 			splits.addAll(unsplittable);
-			
-			if(splits.size() < minSplits) {
+
+			if (splits.size() < minSplits) {
 				LOGGER.warn("Truly unable to meet split count. Actual Count: " + splits.size());
 			}
 		}

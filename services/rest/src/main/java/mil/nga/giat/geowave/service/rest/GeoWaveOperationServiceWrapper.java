@@ -309,7 +309,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final Future<T> futureResult = opPool.submit(task);
 				final UUID opId = UUID.randomUUID();
 				opStatuses.put(opId.toString(), futureResult);
-				setStatus(Status.SUCCESS_OK);
+				setSuccessStatus();
 				
 				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 				rm.status = RestOperationStatusMessage.StatusType.STARTED;
@@ -396,6 +396,25 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final String argumentName ) {
 			super(
 					"Missing argument: " + argumentName);
+		}
+	}
+
+	/**
+	 * This checks the method used in the request, and then uses the setStatus
+	 * method to set the appropriate method.
+	 * 
+	 * POST -> SUCCESS_CREATED (201)
+	 * 
+	 * ANY OTHER -> OK (200)
+	 * 
+	 **/
+	private void setSuccessStatus() {
+		switch (operation.getMethod()) {
+			case POST:
+				setStatus(Status.SUCCESS_CREATED);
+				break;
+			default:
+				setStatus(Status.SUCCESS_OK);
 		}
 	}
 }
