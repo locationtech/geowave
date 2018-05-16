@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallbackList;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallbackList;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataAdapter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataManager;
@@ -42,7 +43,7 @@ public class DataStoreCallbackManager
 	final private boolean captureAdapterStats;
 
 	final Map<ByteArrayId, IngestCallback<?>> icache = new HashMap<ByteArrayId, IngestCallback<?>>();
-	final Map<ByteArrayId, DeleteCallback<?>> dcache = new HashMap<ByteArrayId, DeleteCallback<?>>();
+	final Map<ByteArrayId, DeleteCallback<?, GeoWaveRow>> dcache = new HashMap<ByteArrayId, DeleteCallback<?, GeoWaveRow>>();
 
 	public DataStoreCallbackManager(
 			final DataStatisticsStore statsStore,
@@ -65,13 +66,15 @@ public class DataStoreCallbackManager
 			if ((writableAdapter instanceof StatisticsProvider) && persistStats) {
 				callbackList.add(new StatsCompositionTool<T>(
 						statsProvider,
-						statsStore));
+						statsStore,
+						index,
+						writableAdapter));
 			}
 			if (captureAdapterStats && writableAdapter instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(
 						secondaryIndexStore,
 						(SecondaryIndexDataAdapter<T>) writableAdapter,
-						index.getId()));
+						index));
 			}
 			icache.put(
 					writableAdapter.getAdapterId(),
@@ -87,7 +90,7 @@ public class DataStoreCallbackManager
 		this.persistStats = persistStats;
 	}
 
-	public <T> DeleteCallback<T> getDeleteCallback(
+	public <T> DeleteCallback<T, GeoWaveRow> getDeleteCallback(
 			final WritableDataAdapter<T> writableAdapter,
 			final PrimaryIndex index ) {
 		if (!dcache.containsKey(writableAdapter.getAdapterId())) {
@@ -95,24 +98,26 @@ public class DataStoreCallbackManager
 					writableAdapter,
 					index,
 					captureAdapterStats);
-			final List<DeleteCallback<T>> callbackList = new ArrayList<DeleteCallback<T>>();
+			final List<DeleteCallback<T, GeoWaveRow>> callbackList = new ArrayList<DeleteCallback<T, GeoWaveRow>>();
 			if ((writableAdapter instanceof StatisticsProvider) && persistStats) {
 				callbackList.add(new StatsCompositionTool<T>(
 						statsProvider,
-						statsStore));
+						statsStore,
+						index,
+						writableAdapter));
 			}
 			if (captureAdapterStats && writableAdapter instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(
 						secondaryIndexStore,
 						(SecondaryIndexDataAdapter<T>) writableAdapter,
-						index.getId()));
+						index));
 			}
 			dcache.put(
 					writableAdapter.getAdapterId(),
-					new DeleteCallbackList<T>(
+					new DeleteCallbackList<T, GeoWaveRow>(
 							callbackList));
 		}
-		return (DeleteCallback<T>) dcache.get(writableAdapter.getAdapterId());
+		return (DeleteCallback<T, GeoWaveRow>) dcache.get(writableAdapter.getAdapterId());
 
 	}
 
@@ -123,7 +128,7 @@ public class DataStoreCallbackManager
 				((Closeable) callback).close();
 			}
 		}
-		for (final DeleteCallback<?> callback : dcache.values()) {
+		for (final DeleteCallback<?, GeoWaveRow> callback : dcache.values()) {
 			if (callback instanceof Closeable) {
 				((Closeable) callback).close();
 			}

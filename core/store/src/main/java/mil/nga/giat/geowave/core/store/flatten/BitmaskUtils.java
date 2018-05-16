@@ -117,6 +117,28 @@ public class BitmaskUtils
 	}
 
 	/**
+	 * Iterates the set (true) bits within the given composite bitmask and
+	 * generates a list of field positions.
+	 *
+	 * @param compositeBitmask
+	 *            the composite bitmask
+	 * @return a list of field positions
+	 */
+	public static int getLowestFieldPosition(
+			final byte[] bitmask ) {
+		int currentByte = 0;
+		for (final byte singleByteBitMask : bitmask) {
+			for (int bit = 0; bit < 8; ++bit) {
+				if (((singleByteBitMask >>> bit) & 0x1) == 1) {
+					return (currentByte * 8) + bit;
+				}
+			}
+			currentByte++;
+		}
+		return Integer.MAX_VALUE;
+	}
+
+	/**
 	 * Generates a field subset bitmask for the given index, adapter, and fields
 	 *
 	 * @param indexModel
@@ -129,7 +151,7 @@ public class BitmaskUtils
 	 */
 	public static byte[] generateFieldSubsetBitmask(
 			final CommonIndexModel indexModel,
-			final List<String> fieldIds,
+			final List<ByteArrayId> fieldIds,
 			final DataAdapter<?> adapterAssociatedWithFieldIds ) {
 		final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 
@@ -140,11 +162,10 @@ public class BitmaskUtils
 					dimension.getFieldId()));
 		}
 
-		for (final String fieldId : fieldIds) {
+		for (final ByteArrayId fieldId : fieldIds) {
 			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
 					indexModel,
-					new ByteArrayId(
-							fieldId)));
+					fieldId));
 		}
 		return generateCompositeBitmask(fieldPositions);
 	}

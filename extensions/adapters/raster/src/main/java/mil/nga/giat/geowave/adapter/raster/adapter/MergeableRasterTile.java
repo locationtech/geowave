@@ -20,8 +20,18 @@ import mil.nga.giat.geowave.core.index.persist.Persistable;
 public class MergeableRasterTile<T extends Persistable> extends
 		RasterTile<T>
 {
-	private final RootMergeStrategy<T> mergeStrategy;
-	private final ByteArrayId dataAdapterId;
+	private RootMergeStrategy<T> mergeStrategy;
+	private ByteArrayId dataAdapterId;
+
+	public MergeableRasterTile() {
+		// this isn't really meant to be persisted, its instantiated using the
+		// other constructor for merging purposes only leveraging the
+		// RootMergeStrategy (also not persistable)
+
+		// because this implements mergeable though and is technically
+		// persistable, this constructor is provided and us registered for
+		// consistency
+	}
 
 	public MergeableRasterTile(
 			final DataBuffer dataBuffer,
@@ -47,6 +57,9 @@ public class MergeableRasterTile<T extends Persistable> extends
 					this,
 					(RasterTile<T>) merge,
 					dataAdapterId);
+		}
+		else {
+			super.merge(merge);
 		}
 	}
 }

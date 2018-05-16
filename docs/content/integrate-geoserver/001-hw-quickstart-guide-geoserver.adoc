@@ -22,11 +22,9 @@ EMR
 geowave config geoserver "$HOSTNAME:8000"
 ----
 
-Please allow 1-2 minutes for the GeoServer to restart before attempting to complete Add Layers and Styles.
-
 === Add Layers and Styles
 
-Add the layers for the demo(s) that you have completed. If you experience any errors while adding the layers, GeoServer likely needs more time to finish its restart.
+Add the layers for the demo(s) that you have completed.
 
 ==== Vector Demo Layers
 
@@ -38,10 +36,19 @@ geowave gs addlayer gdelt
 geowave gs addlayer gdelt-kde
 ----
 
-- Add the KDEColorMap and SubsamplePoints styles. These should have been downloaded at the beginning of the demo.
+- Download and add the KDEColorMap and SubsamplePoints styles.
+
+The KDEColorMap style is needed for the heatmap we produced with the KDE. The SubsamplePoints style will be used for the gdeltlayer.
+
+[NOTE]
+====
+You could use the default GeoServer points style, however the SubsamplePoints style tells the GeoWave framework to utilize Spatial Subsampling. This greatly increases the efficiency by only plotting the minimum number of points at each zoom level necessary to show an accurate representation of the total points on the map.
+====
 
 [source, bash]
 ----
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
+sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
 geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
 geowave gs addstyle SubsamplePoints -sld /mnt/SubsamplePoints.sld
 ----

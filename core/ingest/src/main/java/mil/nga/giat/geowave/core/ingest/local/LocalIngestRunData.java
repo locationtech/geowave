@@ -28,7 +28,6 @@ import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -39,7 +38,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryIndexStore;
  * This class maintains a pool of index writers keyed by the primary index. In
  * addition, it contains a static method to help create the blocking queue
  * needed by threads to execute ingest of individual GeoWaveData items.
- * 
+ *
  */
 public class LocalIngestRunData implements
 		Closeable
@@ -60,7 +59,7 @@ public class LocalIngestRunData implements
 				adapters.toArray(new WritableDataAdapter[adapters.size()]));
 		indexWriterPool = new GenericKeyedObjectPool<>(
 				new IndexWriterFactory());
-		this.indexCache = new MemoryIndexStore();
+		indexCache = new MemoryIndexStore();
 	}
 
 	public WritableDataAdapter<?> getDataAdapter(
@@ -69,14 +68,16 @@ public class LocalIngestRunData implements
 	}
 
 	public void addAdapter(
-			DataAdapter<?> adapter ) {
+			final WritableDataAdapter<?> adapter ) {
 		adapterCache.addAdapter(adapter);
 	}
 
 	public void addIndices(
 			final List<PrimaryIndex> indices ) {
-		for (PrimaryIndex index : indices) {
-			if (!indexCache.indexExists(index.getId())) indexCache.addIndex(index);
+		for (final PrimaryIndex index : indices) {
+			if (!indexCache.indexExists(index.getId())) {
+				indexCache.addIndex(index);
+			}
 		}
 	}
 
@@ -84,7 +85,7 @@ public class LocalIngestRunData implements
 	 * Return an index writer from the pool. The pool will create a new one The
 	 * pool will not be cleaned up until the end. (No items will be cleaned up
 	 * until the end)
-	 * 
+	 *
 	 * @param index
 	 * @return
 	 * @throws Exception
@@ -97,7 +98,7 @@ public class LocalIngestRunData implements
 
 	/**
 	 * Return the index writer to the pool
-	 * 
+	 *
 	 * @param index
 	 *            - the primary index used to create the writer
 	 * @param writer
@@ -128,17 +129,17 @@ public class LocalIngestRunData implements
 
 		@Override
 		public IndexWriter<?> create(
-				AdapterToIndexMapping mapping )
+				final AdapterToIndexMapping mapping )
 				throws Exception {
 			return dataStore.createWriter(
-					adapterCache.getAdapter(mapping.getAdapterId()),
+					(WritableDataAdapter<?>) adapterCache.getAdapter(mapping.getAdapterId()),
 					mapping.getIndices(indexCache));
 		}
 
 		@Override
 		public void destroyObject(
-				AdapterToIndexMapping key,
-				PooledObject<IndexWriter> p )
+				final AdapterToIndexMapping key,
+				final PooledObject<IndexWriter> p )
 				throws Exception {
 			super.destroyObject(
 					key,
@@ -148,7 +149,7 @@ public class LocalIngestRunData implements
 
 		@Override
 		public PooledObject<IndexWriter> wrap(
-				IndexWriter writer ) {
+				final IndexWriter writer ) {
 			return new DefaultPooledObject<IndexWriter>(
 					writer);
 		}

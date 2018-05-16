@@ -10,8 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.index;
 
-import java.util.List;
-
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -25,7 +23,7 @@ public interface IndexMetaData extends
 	 *            the new indices to compute an updated aggregation result on
 	 */
 	public void insertionIdsAdded(
-			List<ByteArrayId> insertionIds );
+			InsertionIds insertionIds );
 
 	/**
 	 * Update the aggregation result by removing the entries provided
@@ -34,7 +32,7 @@ public interface IndexMetaData extends
 	 *            the new indices to compute an updated aggregation result on
 	 */
 	public void insertionIdsRemoved(
-			List<ByteArrayId> insertionIds );
+			InsertionIds insertionIds );
 
 	/**
 	 * Create a JSON object that shows all the metadata handled by this object

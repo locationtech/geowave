@@ -30,8 +30,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.format.landsat8.BandFeatureIterator;
 import mil.nga.giat.geowave.format.landsat8.Landsat8BasicCommandLineOptions;
 import mil.nga.giat.geowave.format.landsat8.Landsat8DownloadCommandLineOptions;
@@ -42,6 +42,7 @@ import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +60,8 @@ import freemarker.template.Template;
 import it.geosolutions.jaiext.JAIExt;
 
 @RunWith(GeoWaveITRunner.class)
-public class LandsatIT
+public class LandsatIT extends
+		AbstractGeoWaveIT
 {
 	private static class RasterIngestTester extends
 			RasterIngestRunner
@@ -106,9 +108,10 @@ public class LandsatIT
 
 	}
 
-	@GeoWaveTestStore({
+	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
@@ -147,6 +150,10 @@ public class LandsatIT
 		LOGGER.warn("-----------------------------------------");
 	}
 
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStoreOptions;
+	}
+
 	@Test
 	public void testMosaic()
 			throws Exception {
@@ -156,7 +163,6 @@ public class LandsatIT
 
 		JAIExt.initJAIEXT();
 		MapProjection.SKIP_SANITY_CHECKS = true;
-		TestUtils.deleteAll(dataStoreOptions);
 		// just use the QA band as QA is the smallest, get the best cloud cover,
 		// but ensure it is before now so no recent collection affects the test
 		final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();

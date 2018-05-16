@@ -11,11 +11,12 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
@@ -114,14 +115,14 @@ public class GeowaveRDDExample
 			sparkConf.setMaster("local");
 			JavaSparkContext context = new JavaSparkContext(
 					sparkConf);
-
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			RDDOptions rddOpts = new RDDOptions();
+			rddOpts.setQuery(query);
+			rddOpts.setMinSplits(minSplits);
+			rddOpts.setMaxSplits(maxSplits);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDDLoader.loadRDD(
 					context.sc(),
 					inputStoreOptions,
-					query,
-					null,
-					minSplits,
-					maxSplits);
+					rddOpts).getRawRDD();
 
 			System.out.println("DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
 

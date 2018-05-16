@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.adapter.raster;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStrategyWrapper;
+import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
@@ -74,6 +75,9 @@ public class RasterAdapterPersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 613,
 					RasterFootprintStatistics::new),
+			new PersistableIdAndConstructor(
+					(short) 614,
+					MergeableRasterTile::new),
 		};
 	}
 }

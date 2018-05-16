@@ -13,15 +13,15 @@ package mil.nga.giat.geowave.test.basic;
 import java.io.File;
 import java.net.URL;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
@@ -49,11 +49,15 @@ public class GeoWaveBasicSpatialVectorIT extends
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
 
 	private static long startMillis;
+	private static final boolean POINTS_ONLY = false;
+	private static final int NUM_THREADS = 4;
 
 	@BeforeClass
 	public static void reportTestStart() {
@@ -79,7 +83,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 	@Test
 	public void testMultiThreadedIngestAndQuerySpatialPointsAndLines() {
-		testIngestAndQuerySpatialPointsAndLines(4);
+		testIngestAndQuerySpatialPointsAndLines(NUM_THREADS);
 	}
 
 	public void testIngestAndQuerySpatialPointsAndLines(
@@ -87,6 +91,9 @@ public class GeoWaveBasicSpatialVectorIT extends
 		long mark = System.currentTimeMillis();
 
 		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
+
+		// Ensure empty datastore
+		TestUtils.deleteAll(dataStore);
 
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
@@ -98,29 +105,42 @@ public class GeoWaveBasicSpatialVectorIT extends
 		long dur = (System.currentTimeMillis() - mark);
 		LOGGER.debug("Ingest (points) duration = " + dur + " ms with " + nthreads + " thread(s).");
 
-		mark = System.currentTimeMillis();
+		if (!POINTS_ONLY) {
+			mark = System.currentTimeMillis();
 
-		TestUtils.testLocalIngest(
-				dataStore,
-				DimensionalityType.SPATIAL,
-				TORNADO_TRACKS_SHAPEFILE_FILE,
-				nthreads);
+			TestUtils.testLocalIngest(
+					dataStore,
+					DimensionalityType.SPATIAL,
+					TORNADO_TRACKS_SHAPEFILE_FILE,
+					nthreads);
 
-		dur = (System.currentTimeMillis() - mark);
-		LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
+			dur = (System.currentTimeMillis() - mark);
+			LOGGER.debug("Ingest (lines) duration = " + dur + " ms with " + nthreads + " thread(s).");
+		}
 
 		try {
 			mark = System.currentTimeMillis();
 
+			URL[] expectedResultsUrls;
+			if (POINTS_ONLY) {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+			else {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+
 			testQuery(
 					new File(
 							TEST_BOX_FILTER_FILE).toURI().toURL(),
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_BOX_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+					expectedResultsUrls,
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"bounding box constraint only");
 
@@ -136,15 +156,26 @@ public class GeoWaveBasicSpatialVectorIT extends
 		try {
 			mark = System.currentTimeMillis();
 
+			URL[] expectedResultsUrls;
+			if (POINTS_ONLY) {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+			else {
+				expectedResultsUrls = new URL[] {
+					new File(
+							HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
+				};
+			}
+
 			testQuery(
 					new File(
 							TEST_POLYGON_FILTER_FILE).toURI().toURL(),
-					new URL[] {
-						new File(
-								HAIL_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_EXPECTED_POLYGON_FILTER_RESULTS_FILE).toURI().toURL()
-					},
+					expectedResultsUrls,
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					"polygon constraint only");
 
@@ -157,15 +188,25 @@ public class GeoWaveBasicSpatialVectorIT extends
 			Assert.fail("Error occurred while testing a polygon query of spatial index: '" + e.getLocalizedMessage()
 					+ "'");
 		}
-
 		try {
+			URL[] statsInputs;
+			if (POINTS_ONLY) {
+				statsInputs = new URL[] {
+					new File(
+							HAIL_SHAPEFILE_FILE).toURI().toURL()
+				};
+			}
+			else {
+				statsInputs = new URL[] {
+					new File(
+							HAIL_SHAPEFILE_FILE).toURI().toURL(),
+					new File(
+							TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
+				};
+			}
+
 			testStats(
-					new URL[] {
-						new File(
-								HAIL_SHAPEFILE_FILE).toURI().toURL(),
-						new File(
-								TORNADO_TRACKS_SHAPEFILE_FILE).toURI().toURL()
-					},
+					statsInputs,
 					TestUtils.DEFAULT_SPATIAL_INDEX,
 					true);
 		}

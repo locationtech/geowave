@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -27,11 +27,17 @@ import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.core.store.query.EverythingQuery;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
@@ -156,15 +162,24 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
 				dataStoreOptions);
-		PrimaryIndex[] indexesArray = new PrimaryIndex[indexes.size()];
+		final DataStore store = dataStoreOptions.createDataStore();
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
-		for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
-			dataAdapter.init(indexes.toArray(indexesArray));
-			GeoWaveOutputFormat.addDataAdapter(
-					job.getConfiguration(),
-					dataAdapter);
-		}
+		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
+			final PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
+			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
+				// from a controlled client, intialize the writer within the
+				// context of the datastore before distributing ingest
+				// however, after ingest we should cleanup any pre-created
+				// metadata for which there is no data
+				store.createWriter(
+						dataAdapter,
+						indexesArray).close();
 
+				GeoWaveOutputFormat.addDataAdapter(
+						job.getConfiguration(),
+						dataAdapter);
+			}
+		}
 		job.setSpeculativeExecution(false);
 
 		// add required indices
@@ -176,7 +191,32 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 						requiredIndex);
 			}
 		}
-		return job.waitForCompletion(true) ? 0 : -1;
+		final int retVal = job.waitForCompletion(true) ? 0 : -1;
+		// when it is complete, delete any empty adapters and index mappings
+		// that were created from this driver but didn't actually have data
+		// ingests
+		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
+			AdapterStore adapterStore = null;
+			AdapterIndexMappingStore adapterIndexMappingStore = null;
+			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
+				final QueryOptions queryOptions = new QueryOptions(
+						dataAdapter);
+				queryOptions.setLimit(1);
+				try (CloseableIterator<?> it = store.query(
+						queryOptions,
+						new EverythingQuery())) {
+					if (!it.hasNext()) {
+						if (adapterStore == null) {
+							adapterStore = dataStoreOptions.createAdapterStore();
+							adapterIndexMappingStore = dataStoreOptions.createAdapterIndexMappingStore();
+						}
+						adapterStore.removeAdapter(dataAdapter.getAdapterId());
+						adapterIndexMappingStore.remove(dataAdapter.getAdapterId());
+					}
+				}
+			}
+		}
+		return retVal;
 	}
 
 	abstract protected void setupMapper(

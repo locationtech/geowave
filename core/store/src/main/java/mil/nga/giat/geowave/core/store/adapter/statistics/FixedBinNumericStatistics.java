@@ -20,15 +20,15 @@ import net.sf.json.JSONObject;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram.FixedBinNumericHistogramFactory;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 /**
- * 
+ *
  * Fixed number of bins for a histogram. Unless configured, the range will
  * expand dynamically, redistributing the data as necessary into the wider bins.
- * 
+ *
  * The advantage of constraining the range of the statistic is to ignore values
  * outside the range, such as erroneous values. Erroneous values force extremes
  * in the histogram. For example, if the expected range of values falls between
@@ -36,10 +36,10 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHisto
  * population between 0 and 1, a single bin represents the single value of
  * 10000. If there are extremes in the data, then use
  * {@link FeatureNumericHistogramStatistics} instead.
- * 
- * 
+ *
+ *
  * The default number of bins is 32.
- * 
+ *
  */
 public abstract class FixedBinNumericStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -145,11 +145,6 @@ public abstract class FixedBinNumericStatistics<T> extends
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		histogram.fromBinary(buffer);
 	}
-
-	@Override
-	public abstract void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry );
 
 	protected void add(
 			final long amount,

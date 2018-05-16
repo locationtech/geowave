@@ -16,6 +16,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -46,6 +47,8 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 import mil.nga.giat.geowave.adapter.vector.BaseDataStoreTest;
 import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 
 public class GeoWaveFeatureReaderTest extends
 		BaseDataStoreTest
@@ -59,7 +62,7 @@ public class GeoWaveFeatureReaderTest extends
 	Query query = null;
 	List<String> fids = new ArrayList<String>();
 	List<String> pids = new ArrayList<String>();
-	Date stime, etime;
+	Date stime, mtime, etime;
 
 	@Before
 	public void setup()
@@ -70,11 +73,15 @@ public class GeoWaveFeatureReaderTest extends
 		type = DataUtilities.createType(
 				"GeoWaveFeatureReaderTest",
 				"geometry:Geometry:srid=4326,start:Date,end:Date,pop:java.lang.Long,pid:String");
-
+		((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+				new SpatialIndexBuilder().createIndex());
+		((GeoWaveGTDataStore) dataStore).getIndexStore().addIndex(
+				new SpatialTemporalIndexBuilder().createIndex());
 		dataStore.createSchema(type);
 
 		stime = DateUtilities.parseISO("2005-05-15T20:32:56Z");
-		etime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+		mtime = DateUtilities.parseISO("2005-05-20T20:32:56Z");
+		etime = DateUtilities.parseISO("2005-05-25T20:32:56Z");
 
 		final Transaction transaction1 = new DefaultTransaction();
 		final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
@@ -93,7 +100,7 @@ public class GeoWaveFeatureReaderTest extends
 				stime);
 		newFeature.setAttribute(
 				"end",
-				etime);
+				mtime);
 		newFeature.setAttribute(
 				"geometry",
 				factory.createPoint(new Coordinate(
@@ -112,6 +119,9 @@ public class GeoWaveFeatureReaderTest extends
 				"b" + UUID.randomUUID().toString());
 		newFeature.setAttribute(
 				"start",
+				mtime);
+		newFeature.setAttribute(
+				"end",
 				etime);
 		newFeature.setAttribute(
 				"geometry",
@@ -126,7 +136,6 @@ public class GeoWaveFeatureReaderTest extends
 		transaction1.commit();
 		transaction1.close();
 
-		// System.out.println(fids);
 		query = new Query(
 				"GeoWaveFeatureReaderTest",
 				ECQL.toFilter("IN ('" + fids.get(0) + "')"),
@@ -156,6 +165,41 @@ public class GeoWaveFeatureReaderTest extends
 	}
 
 	@Test
+	public void testSmallBBOX()
+			throws IllegalArgumentException,
+			NoSuchElementException,
+			IOException {
+		final FilterFactoryImpl factory = new FilterFactoryImpl();
+		final Query query = new Query(
+				"GeoWaveFeatureReaderTest",
+				factory.bbox(
+						"geometry",
+						28,
+						41,
+						28.5,
+						41.5,
+						"EPSG:4326"),
+				new String[] {
+					"geometry",
+					"pid"
+				});
+
+		final FeatureReader<SimpleFeatureType, SimpleFeature> reader = dataStore.getFeatureReader(
+				query,
+				Transaction.AUTO_COMMIT);
+		int count = 0;
+		while (reader.hasNext()) {
+			final SimpleFeature feature = reader.next();
+			assertTrue(fids.contains(feature.getID()));
+			count++;
+		}
+		assertEquals(
+				1,
+				count);
+
+	}
+
+	@Test
 	public void testBBOX()
 			throws IllegalArgumentException,
 			NoSuchElementException,
@@ -164,7 +208,7 @@ public class GeoWaveFeatureReaderTest extends
 		final Query query = new Query(
 				"GeoWaveFeatureReaderTest",
 				factory.bbox(
-						"",
+						"geometry",
 						-180,
 						-90,
 						180,
@@ -256,7 +300,7 @@ public class GeoWaveFeatureReaderTest extends
 				visitor,
 				null);
 		assertTrue(visitor.getMax().equals(
-				etime));
+				mtime));
 
 	}
 

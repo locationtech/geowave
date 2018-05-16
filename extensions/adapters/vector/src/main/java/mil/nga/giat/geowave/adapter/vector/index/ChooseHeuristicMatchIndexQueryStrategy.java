@@ -17,6 +17,7 @@ import java.util.NoSuchElementException;
 
 import org.opengis.feature.simple.SimpleFeature;
 
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -66,7 +67,10 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 						continue;
 					}
 					final List<MultiDimensionalNumericData> queryRanges = query.getIndexConstraints(nextIdx);
-					if (IndexUtils.isFullTableScan(queryRanges)) {
+					final int currentDimensionCount = nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
+					if (IndexUtils.isFullTableScan(queryRanges) || !queryRangeDimensionsMatch(
+							currentDimensionCount,
+							queryRanges)) {
 						// keep this is as a default in case all indices
 						// result in a full table scan
 						if (bestIdx == null) {
@@ -75,7 +79,6 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 					}
 					else {
 						double currentBitsUsed = 0;
-						final int currentDimensionCount = nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length;
 
 						if (currentDimensionCount >= bestIndexDimensionCount) {
 							for (final MultiDimensionalNumericData qr : queryRanges) {
@@ -121,5 +124,16 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 			public void close()
 					throws IOException {}
 		};
+	}
+
+	private static boolean queryRangeDimensionsMatch(
+			int indexDimensions,
+			List<MultiDimensionalNumericData> queryRanges ) {
+		for (final MultiDimensionalNumericData qr : queryRanges) {
+			if (qr.getDimensionCount() != indexDimensions) {
+				return false;
+			}
+		}
+		return true;
 	}
 }

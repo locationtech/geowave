@@ -16,15 +16,22 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.CompoundIndexStrategy;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.dimension.BasicDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
@@ -34,9 +41,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
-
-import org.junit.Assert;
-import org.junit.Test;
 
 public class HashKeyIndexStrategyTest
 {
@@ -93,9 +97,9 @@ public class HashKeyIndexStrategyTest
 							dimension1Range,
 							dimension2Range
 						});
-				for (ByteArrayId id : hashIdexStrategy.getInsertionIds(sfcIndexedRange)) {
-					Long count = counts.get(id);
-					long nextcount = count == null ? 1 : count + 1;
+				for (final ByteArrayId id : hashIdexStrategy.getInsertionPartitionKeys(sfcIndexedRange)) {
+					final Long count = counts.get(id);
+					final long nextcount = count == null ? 1 : count + 1;
 					counts.put(
 							id,
 							nextcount);
@@ -104,15 +108,15 @@ public class HashKeyIndexStrategyTest
 			}
 		}
 
-		double mean = total / counts.size();
+		final double mean = total / counts.size();
 		double diff = 0.0;
-		for (Long count : counts.values()) {
+		for (final Long count : counts.values()) {
 			diff += Math.pow(
 					mean - count,
 					2);
 		}
-		double sd = Math.sqrt(diff / counts.size());
-		assertTrue(sd < mean * 0.18);
+		final double sd = Math.sqrt(diff / counts.size());
+		assertTrue(sd < (mean * 0.18));
 	}
 
 	@Test
@@ -123,17 +127,6 @@ public class HashKeyIndexStrategyTest
 		Assert.assertArrayEquals(
 				bytes,
 				bytes2);
-	}
-
-	@Test
-	public void testNumberOfDimensionsPerIndexStrategy() {
-		final int[] numDimensionsPerStrategy = compoundIndexStrategy.getNumberOfDimensionsPerIndexStrategy();
-		Assert.assertEquals(
-				0,
-				numDimensionsPerStrategy[0]);
-		Assert.assertEquals(
-				2,
-				numDimensionsPerStrategy[1]);
 	}
 
 	@Test
@@ -158,50 +151,64 @@ public class HashKeyIndexStrategyTest
 					dimension1Range,
 					dimension2Range
 				});
-		for (ByteArrayId id : compoundIndexStrategy.getInsertionIds(sfcIndexedRange)) {
-			MultiDimensionalCoordinates coords = compoundIndexStrategy.getCoordinatesPerDimension(id);
-			assertTrue(coords.getCoordinate(
-					0).getCoordinate() > 0);
-			assertTrue(coords.getCoordinate(
-					1).getCoordinate() > 0);
-			MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(id);
+		final InsertionIds id = compoundIndexStrategy.getInsertionIds(sfcIndexedRange);
+		for (final SinglePartitionInsertionIds partitionKey : id.getPartitionKeys()) {
+			for (final ByteArrayId sortKey : partitionKey.getSortKeys()) {
+				final MultiDimensionalCoordinates coords = compoundIndexStrategy.getCoordinatesPerDimension(
+						partitionKey.getPartitionKey(),
+						sortKey);
+				assertTrue(coords.getCoordinate(
+						0).getCoordinate() > 0);
+				assertTrue(coords.getCoordinate(
+						1).getCoordinate() > 0);
+			}
+		}
+		final Iterator<SinglePartitionInsertionIds> it = id.getPartitionKeys().iterator();
+		assertTrue(it.hasNext());
+		final SinglePartitionInsertionIds partitionId = it.next();
+		assertTrue(!it.hasNext());
+		for (final ByteArrayId sortKey : partitionId.getSortKeys()) {
+			final MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(
+					partitionId.getPartitionKey(),
+					sortKey);
 			assertEquals(
 					20.02,
 					nd.getMaxValuesPerDimension()[0],
-					0.1);
+					0.01);
 			assertEquals(
 					30.59,
 					nd.getMaxValuesPerDimension()[1],
-					0.2);
+					0.1);
 			assertEquals(
 					20.01,
 					nd.getMinValuesPerDimension()[0],
-					0.1);
+					0.01);
 			assertEquals(
-					30.57,
+					30.51,
 					nd.getMinValuesPerDimension()[1],
-					0.2);
+					0.1);
 		}
 	}
 
 	@Test
 	public void testGetQueryRangesWithMaximumNumberOfRanges() {
-		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(sfcIndexedRange);
+		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(
+				sfcIndexedRange).getCompositeQueryRanges();
 		final List<ByteArrayRange> ranges = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			for (final ByteArrayRange r2 : sfcIndexRanges) {
-				final ByteArrayId start = compoundIndexStrategy.composeByteArrayId(
-						new ByteArrayId(
+				final ByteArrayId start = new ByteArrayId(
+						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
-								}),
-						r2.getStart());
-				final ByteArrayId end = compoundIndexStrategy.composeByteArrayId(
-						new ByteArrayId(
+								},
+								r2.getStart().getBytes()));
+				final ByteArrayId end = new ByteArrayId(
+						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
-								}),
-						r2.getEnd());
+								},
+								r2.getEnd().getBytes()));
 				ranges.add(new ByteArrayRange(
 						start,
 						end));
@@ -210,7 +217,8 @@ public class HashKeyIndexStrategyTest
 		final Set<ByteArrayRange> testRanges = new HashSet<>(
 				ranges);
 		final Set<ByteArrayRange> compoundIndexRanges = new HashSet<>(
-				compoundIndexStrategy.getQueryRanges(sfcIndexedRange));
+				compoundIndexStrategy.getQueryRanges(
+						sfcIndexedRange).getCompositeQueryRanges());
 		Assert.assertTrue(testRanges.containsAll(compoundIndexRanges));
 		Assert.assertTrue(compoundIndexRanges.containsAll(testRanges));
 	}

@@ -30,15 +30,16 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 public class SpatialDimensionalityTypeProvider implements
@@ -46,24 +47,24 @@ public class SpatialDimensionalityTypeProvider implements
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
-	private static final int LONGITUDE_BITS = 31;
-	private static final int LATITUDE_BITS = 31;
+	public static final int LONGITUDE_BITS = 31;
+	public static final int LATITUDE_BITS = 31;
 
-	protected static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
+	public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
 				true)
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
 	};
-	protected static final NumericDimensionField[] SPATIAL_FIELDS = new NumericDimensionField[] {
+	public static final NumericDimensionField[] SPATIAL_FIELDS = new NumericDimensionField[] {
 		new LongitudeField(),
 		new LatitudeField(
 				true)
 	// just use the same range for latitude to make square sfc values in
 	// decimal degrees (EPSG:4326)
 	};
-	protected static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
+	public static final NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
 		new LongitudeField(),
 		new LatitudeField(
 				true),
@@ -227,6 +228,12 @@ public class SpatialDimensionalityTypeProvider implements
 			return this;
 		}
 
+		public SpatialIndexBuilder setCrs(
+				final String crs ) {
+			options.crs = crs;
+			return this;
+		}
+
 		@Override
 		public PrimaryIndex createIndex() {
 			return createIndex(internalCreatePrimaryIndex(options));
@@ -235,11 +242,19 @@ public class SpatialDimensionalityTypeProvider implements
 
 	public static boolean isSpatial(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if (index == null) {
 			return false;
 		}
-		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+
+		return isSpatial(index.getIndexStrategy());
+	}
+
+	public static boolean isSpatial(
+			final NumericIndexStrategy indexStrategy ) {
+		if ((indexStrategy == null) || (indexStrategy.getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		final NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
 		if (dimensions.length != 2) {
 			return false;
 		}

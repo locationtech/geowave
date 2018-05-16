@@ -28,9 +28,11 @@ import org.junit.Test;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -293,7 +295,9 @@ public class BasicQueryTest
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
-								"index"),
+								"partition"),
+						new ByteArrayId(
+								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
 								fieldIdToValueMap),
@@ -313,7 +317,9 @@ public class BasicQueryTest
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
-								"index"),
+								"partition"),
+						new ByteArrayId(
+								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
 								fieldIdToValueMap),
@@ -340,7 +346,9 @@ public class BasicQueryTest
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
-								"index"),
+								"partition"),
+						new ByteArrayId(
+								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
 								fieldIdToValueMap),
@@ -364,7 +372,9 @@ public class BasicQueryTest
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
-								"index"),
+								"partition"),
+						new ByteArrayId(
+								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
 								fieldIdToValueMap),
@@ -386,46 +396,6 @@ public class BasicQueryTest
 				final byte[] bytes ) {}
 
 		@Override
-		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange,
-				final IndexMetaData... hints ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayRange> getQueryRanges(
-				final MultiDimensionalNumericData indexedRange,
-				final int maxEstimatedRangeDecomposition,
-				final IndexMetaData... hints ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayId> getInsertionIds(
-				final MultiDimensionalNumericData indexedData ) {
-			return null;
-		}
-
-		@Override
-		public List<ByteArrayId> getInsertionIds(
-				final MultiDimensionalNumericData indexedData,
-				final int maxEstimatedDuplicateIds ) {
-			return null;
-		}
-
-		@Override
-		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId insertionId ) {
-			return null;
-		}
-
-		@Override
-		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId insertionId ) {
-			return null;
-		}
-
-		@Override
 		public NumericDimensionDefinition[] getOrderedDimensionDefinitions() {
 			return new NumericDimensionDefinition[] {
 				new ExampleDimensionOne(),
@@ -444,26 +414,77 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getNaturalSplits() {
-			return null;
-		}
-
-		@Override
-		public int getByteOffsetFromDimensionalIndex() {
-			return 0;
-		}
-
-		@Override
 		public List<IndexMetaData> createMetaData() {
 			return Collections.emptyList();
 		}
 
 		@Override
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-				final MultiDimensionalNumericData dataRange,
-				final IndexMetaData... hints ) {
+				MultiDimensionalNumericData dataRange,
+				IndexMetaData... hints ) {
 			return null;
 		}
+
+		@Override
+		public QueryRanges getQueryRanges(
+				MultiDimensionalNumericData indexedRange,
+				IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public QueryRanges getQueryRanges(
+				MultiDimensionalNumericData indexedRange,
+				int maxEstimatedRangeDecomposition,
+				IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public InsertionIds getInsertionIds(
+				MultiDimensionalNumericData indexedData ) {
+			return null;
+		}
+
+		@Override
+		public InsertionIds getInsertionIds(
+				MultiDimensionalNumericData indexedData,
+				int maxEstimatedDuplicateIds ) {
+			return null;
+		}
+
+		@Override
+		public MultiDimensionalNumericData getRangeForId(
+				ByteArrayId partitionKey,
+				ByteArrayId sortKey ) {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getInsertionPartitionKeys(
+				MultiDimensionalNumericData insertionData ) {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getQueryPartitionKeys(
+				MultiDimensionalNumericData queryData,
+				IndexMetaData... hints ) {
+			return null;
+		}
+
+		@Override
+		public MultiDimensionalCoordinates getCoordinatesPerDimension(
+				ByteArrayId partitionKey,
+				ByteArrayId sortKey ) {
+			return null;
+		}
+
+		@Override
+		public int getPartitionKeyLength() {
+			return 0;
+		}
+
 	}
 
 	public static class ConstrainedIndexValue extends

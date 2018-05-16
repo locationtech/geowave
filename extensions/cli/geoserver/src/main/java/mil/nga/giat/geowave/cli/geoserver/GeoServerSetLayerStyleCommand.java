@@ -18,6 +18,8 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -26,6 +28,7 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 
 @GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Set GeoServer Layer Style")
@@ -42,12 +45,29 @@ public class GeoServerSetLayerStyleCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
+	private ServiceStatus status = ServiceStatus.OK;
+
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
+	}
+
+	public void setStatus(
+			ServiceStatus status ) {
+		this.status = status;
+	}
+
+	@Override
+	public Pair<ServiceStatus, String> executeService(
+			OperationParams params )
+			throws Exception {
+		String ret = computeResults(params);
+		return ImmutablePair.of(
+				status,
+				ret);
 	}
 
 	@Override
@@ -66,9 +86,21 @@ public class GeoServerSetLayerStyleCommand extends
 				styleName);
 
 		if (setLayerStyleResponse.getStatus() == Status.OK.getStatusCode()) {
+			setStatus(ServiceStatus.OK);
 			final String style = IOUtils.toString((InputStream) setLayerStyleResponse.getEntity());
 			return "Set style for GeoServer layer '" + layerName + ": OK" + style;
 
+		}
+		switch (setLayerStyleResponse.getStatus()) {
+			case 404:
+				setStatus(ServiceStatus.NOT_FOUND);
+				break;
+			case 400:
+				setStatus(ServiceStatus.DUPLICATE);
+				break;
+			default:
+				setStatus(ServiceStatus.INTERNAL_ERROR);
+				break;
 		}
 		return "Error setting style for GeoServer layer '" + layerName + "'; code = "
 				+ setLayerStyleResponse.getStatus() + " ; " + setLayerStyleResponse.getStatusInfo().toString();

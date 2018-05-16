@@ -25,7 +25,10 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.Time.Timestamp;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeArrayField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter;
+import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements
@@ -82,7 +85,16 @@ public class GeoTimePersistableRegistry implements
 					CustomCRSSpatialDimension::new),
 		    new PersistableIdAndConstructor(
 					(short) 315,
-					CustomCrsIndexModel::new)
+					CustomCrsIndexModel::new),
+			new PersistableIdAndConstructor(
+					(short) 316,
+					IndexOnlySpatialQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 317,
+					SpatialTemporalQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 318,
+					TemporalQuery::new),
 		};
 	}
 }

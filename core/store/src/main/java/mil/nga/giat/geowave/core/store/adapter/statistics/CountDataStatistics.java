@@ -18,14 +18,12 @@ import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
-import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
 public class CountDataStatistics<T> extends
 		AbstractDataStatistics<T> implements
-		IngestCallback<T>,
-		DeleteCallback<T>
+		DeleteCallback<T, GeoWaveRow>
 {
 	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
 			"COUNT_DATA");
@@ -75,8 +73,8 @@ public class CountDataStatistics<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
+			final T entry,
+			final GeoWaveRow... kvs ) {
 		if (!isSet()) {
 			count = 0;
 		}
@@ -101,24 +99,27 @@ public class CountDataStatistics<T> extends
 	/**
 	 * This is expensive, but necessary since there may be duplicates
 	 */
+	// TODO entryDeleted should only be called once with all duplicates
 	private transient HashSet<ByteArrayId> ids = new HashSet<ByteArrayId>();
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		if (ids.add(new ByteArrayId(
-				entryInfo.getDataId()))) {
-			if (!isSet()) {
-				count = 0;
+			final T entry,
+			final GeoWaveRow... kv ) {
+		if (kv.length > 0) {
+			if (ids.add(new ByteArrayId(
+					kv[0].getDataId()))) {
+				if (!isSet()) {
+					count = 0;
+				}
+				count -= 1;
 			}
-			count -= 1;
 		}
-
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"count[adapter=").append(
 				super.getDataAdapterId().getString());

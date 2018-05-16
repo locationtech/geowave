@@ -164,11 +164,15 @@ public class QueryIndexHelper
 
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final FeatureBoundingBoxStatistics bboxStats = (FeatureBoundingBoxStatistics) statsMap.get(statId);
-		if ((bboxStats != null) && (bbox != null)) {
+		if ((bboxStats != null) && bboxStats.isSet() && (bbox != null)) {
 			final Geometry geo = bboxStats.composeGeometry(featureType
 					.getGeometryDescriptor()
 					.getType()
 					.getCoordinateReferenceSystem());
+			// TODO if the query doesn't intersect the stats this will return an
+			// empty geometry, it seems that'd be an opportunity to quickly
+			// return no results rather than continuing on and hoping that an
+			// empty geometry gives no results and not a full table scan
 			return geo.intersection(bbox);
 		}
 		return bbox;

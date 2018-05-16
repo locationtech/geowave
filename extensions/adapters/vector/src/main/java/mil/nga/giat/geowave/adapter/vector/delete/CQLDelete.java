@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -16,9 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
+import org.geotools.filter.text.cql2.CQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.geotools.filter.text.cql2.CQLException;
 
 import com.beust.jcommander.IStringConverter;
 import com.beust.jcommander.Parameter;
@@ -38,7 +38,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 @GeowaveOperation(name = "cqldelete", parentOperation = VectorSection.class)
@@ -50,7 +50,7 @@ public class CQLDelete extends
 	private static Logger LOGGER = LoggerFactory.getLogger(CQLDelete.class);
 
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Parameter(names = "--cql", required = true, description = "CQL Filter for delete")
 	private String cqlStr;
@@ -66,7 +66,7 @@ public class CQLDelete extends
 
 	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws ParseException {
 		if (debug) {
 			org.apache.log4j.Logger.getRootLogger().setLevel(
@@ -81,13 +81,13 @@ public class CQLDelete extends
 					"Requires arguments: <storename>");
 		}
 
-		String storeName = parameters.get(0);
+		final String storeName = parameters.get(0);
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load store.
-		StoreLoader storeOptions = new StoreLoader(
+		final StoreLoader storeOptions = new StoreLoader(
 				storeName);
 		if (!storeOptions.loadFromConfig(configFile)) {
 			throw new ParameterException(
@@ -127,7 +127,7 @@ public class CQLDelete extends
 				LOGGER.debug(results + " results remaining after delete; time = " + stopWatch.toString());
 			}
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to read adapter",
 					e);
@@ -143,7 +143,7 @@ public class CQLDelete extends
 		long missed = 0;
 
 		try {
-			boolean success = dataStore.delete(
+			final boolean success = dataStore.delete(
 					new QueryOptions(
 							adapterId,
 							indexId),
@@ -157,7 +157,7 @@ public class CQLDelete extends
 				LOGGER.debug("CQL Delete " + (success ? "Success" : "Failure"));
 			}
 		}
-		catch (CQLException e2) {
+		catch (final CQLException e2) {
 			LOGGER.warn(
 					"Error parsing CQL",
 					e2);
@@ -200,7 +200,7 @@ public class CQLDelete extends
 	{
 		@Override
 		public ByteArrayId convert(
-				String value ) {
+				final String value ) {
 			return new ByteArrayId(
 					value);
 		}

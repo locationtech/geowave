@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -21,15 +22,16 @@ import java.util.Map.Entry;
 import javax.media.jai.Interpolation;
 
 import org.apache.hadoop.util.ToolRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.geometry.GeneralEnvelope;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
@@ -41,7 +43,7 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
@@ -55,10 +57,12 @@ import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 @Environments({
 	Environment.MAP_REDUCE
 })
-@GeoWaveTestStore({
+@GeoWaveTestStore(value = {
 	GeoWaveStoreType.ACCUMULO,
 	// GeoWaveStoreType.BIGTABLE,
-	GeoWaveStoreType.HBASE
+	GeoWaveStoreType.CASSANDRA,
+	GeoWaveStoreType.HBASE,
+	GeoWaveStoreType.DYNAMODB
 })
 public class KDERasterResizeIT
 {
@@ -80,7 +84,6 @@ public class KDERasterResizeIT
 
 	@NamespaceOverride(TEST_COVERAGE_NAMESPACE)
 	protected DataStorePluginOptions outputDataStorePluginOptions;
-
 	protected DataStorePluginOptions inputDataStorePluginOptions;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(KDERasterResizeIT.class);
@@ -112,6 +115,13 @@ public class KDERasterResizeIT
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+	}
+
+	@After
+	public void clean()
+			throws IOException {
+		TestUtils.deleteAll(inputDataStorePluginOptions);
+		TestUtils.deleteAll(outputDataStorePluginOptions);
 	}
 
 	@Test

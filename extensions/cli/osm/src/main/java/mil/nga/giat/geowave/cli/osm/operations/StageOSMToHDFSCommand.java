@@ -64,15 +64,8 @@ public class StageOSMToHDFSCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
-
-		if (!basePath.startsWith("/")) {
-			throw new ParameterException(
-					"HDFS Base path must start with forward slash /");
-		}
 
 		// These are set as main parameter arguments, to keep consistency with
 		// GeoWave.
@@ -108,11 +101,10 @@ public class StageOSMToHDFSCommand extends
 
 	public void setParameters(
 			final String fileOrDirectory,
-			final String hdfsHostPort,
 			final String hdfsPath ) {
-		parameters = new ArrayList<String>();
+		parameters.clear();
+
 		parameters.add(fileOrDirectory);
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 	}
 

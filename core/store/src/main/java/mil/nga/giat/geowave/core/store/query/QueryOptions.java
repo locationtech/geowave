@@ -18,8 +18,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import org.apache.commons.lang3.tuple.ImmutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -34,14 +38,11 @@ import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * Directs a query to restrict searches to specific adapters, indices, etc.. For
@@ -52,16 +53,16 @@ import org.apache.commons.lang3.tuple.Pair;
  * configured to persist indices or adapters, it is advised to always provide
  * adapters and indices to a QueryOptions. This maximizes the reuse of the code
  * making the query.
- * 
+ *
  * If no index is provided, all indices are checked. The data store is expected
  * to use statistics to determine which the indices that index data for the any
  * given adapter.
- * 
+ *
  * If queries are made across multiple indices, the default is to de-duplicate.
- * 
+ *
  * Container object that encapsulates additional options to be applied to a
  * {@link Query}
- * 
+ *
  * @since 0.8.7
  */
 
@@ -76,11 +77,11 @@ public class QueryOptions implements
 	 */
 	private static final long serialVersionUID = 544085046847603371L;
 
-	private static ScanCallback<Object> DEFAULT_CALLBACK = new ScanCallback<Object>() {
+	private static ScanCallback<Object, GeoWaveRow> DEFAULT_CALLBACK = new ScanCallback<Object, GeoWaveRow>() {
 		@Override
 		public void entryScanned(
-				final DataStoreEntryInfo entryInfo,
-				final Object entry ) {}
+				final Object entry,
+				final GeoWaveRow row ) {}
 	};
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = {
@@ -97,7 +98,7 @@ public class QueryOptions implements
 	private Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
-	private transient ScanCallback<?> scanCallback = DEFAULT_CALLBACK;
+	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
 	private Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
@@ -161,7 +162,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @param adapter
 	 * @param index
 	 * @param limit
@@ -174,7 +175,7 @@ public class QueryOptions implements
 			final DataAdapter<?> adapter,
 			final PrimaryIndex index,
 			final Integer limit,
-			final ScanCallback<?> scanCallback,
+			final ScanCallback<?, ?> scanCallback,
 			final String[] authorizations ) {
 		super();
 		setAdapter(adapter);
@@ -212,7 +213,7 @@ public class QueryOptions implements
 						return (DataAdapter<Object>) input;
 					}
 				});
-		this.adapterIds = Lists.transform(
+		adapterIds = Lists.transform(
 				adapters,
 				new Function<DataAdapter<?>, ByteArrayId>() {
 
@@ -237,15 +238,20 @@ public class QueryOptions implements
 
 	}
 
-	public void setAdapter(
-			final List<ByteArrayId> adapters ) {
-		if (adapters != null) {
-			this.adapters = null;
-			adapterIds = adapters;
+	public void setAdapterId(
+			final ByteArrayId adapterId ) {
+		adapterIds = Arrays.asList(adapterId);
+	}
+
+	public void setAdapterIds(
+			final List<ByteArrayId> adapterIds ) {
+		if (adapterIds != null) {
+			adapters = null;
+			this.adapterIds = adapterIds;
 		}
 		else {
-			adapterIds = Collections.emptyList();
-			this.adapters = null;
+			this.adapterIds = Collections.emptyList();
+			adapters = null;
 		}
 	}
 
@@ -284,16 +290,16 @@ public class QueryOptions implements
 		}
 		else {
 			this.indexId = null;
-			this.index = null;
+			index = null;
 		}
 	}
 
 	public PrimaryIndex getIndex() {
-		return this.index;
+		return index;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return Limit the number of data items to return
 	 */
 	public Integer getLimit() {
@@ -302,7 +308,7 @@ public class QueryOptions implements
 
 	/**
 	 * a value <= 0 or null indicates no limits
-	 * 
+	 *
 	 * @param limit
 	 */
 	public void setLimit(
@@ -317,7 +323,7 @@ public class QueryOptions implements
 		return ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
-	public ScanCallback<?> getScanCallback() {
+	public ScanCallback<?, ?> getScanCallback() {
 		return scanCallback == null ? DEFAULT_CALLBACK : scanCallback;
 	}
 
@@ -327,12 +333,12 @@ public class QueryOptions implements
 	 *            constraints
 	 */
 	public void setScanCallback(
-			final ScanCallback<?> scanCallback ) {
+			final ScanCallback<?, ?> scanCallback ) {
 		this.scanCallback = scanCallback;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return authorizations to apply to the query in addition to the
 	 *         authorizations assigned to the data store as a whole.
 	 */
@@ -349,11 +355,11 @@ public class QueryOptions implements
 	 * Return the set of adapter/index associations. If the adapters are not
 	 * provided, then look up all of them. If the index is not provided, then
 	 * look up all of them.
-	 * 
+	 *
 	 * DataStores are responsible for selecting a single adapter/index per
 	 * query. For deletions, the Data Stores are interested in all the
 	 * associations.
-	 * 
+	 *
 	 * @param adapterStore
 	 * @param
 	 * @param indexStore
@@ -378,11 +384,11 @@ public class QueryOptions implements
 	 * look up all of them. The full set of adapter/index associations is
 	 * reduced so that a single index is queried per adapter and the number
 	 * indices queried is minimized.
-	 * 
+	 *
 	 * DataStores are responsible for selecting a single adapter/index per
 	 * query. For deletions, the Data Stores are interested in all the
 	 * associations.
-	 * 
+	 *
 	 * @param adapterStore
 	 * @param adapterIndexMappingStore
 	 * @param indexStore
@@ -487,7 +493,6 @@ public class QueryOptions implements
 				}
 			}
 			return adapters.toArray(new DataAdapter[adapters.size()]);
-
 		}
 		final List<DataAdapter> list = new ArrayList<DataAdapter>();
 		if (adapterStore != null && adapterStore.getAdapters() != null) {
@@ -517,8 +522,29 @@ public class QueryOptions implements
 		return ids;
 	}
 
+	public List<ByteArrayId> getValidAdapterIds(
+			final AdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore )
+			throws IOException {
+		// Grab the list of adapter ids, either from the query (if included),
+		// Or the whole list from the adapter store...
+		final List<ByteArrayId> adapterIds = getAdapterIds(adapterStore);
+
+		// Then for each adapter, verify that it exists in the index-adapter
+		// mapping
+		Iterator<ByteArrayId> adapterIterator = adapterIds.iterator();
+		while (adapterIterator.hasNext()) {
+			AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterIterator.next());
+			if (!mapping.contains(indexId)) {
+				adapterIterator.remove();
+			}
+		}
+
+		return adapterIds;
+	}
+
 	/**
-	 * 
+	 *
 	 * @return a paring of fieldIds and their associated data adapter >>>>>>>
 	 *         wip: bitmask approach
 	 */
@@ -527,7 +553,7 @@ public class QueryOptions implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @param fieldIds
 	 *            the subset of fieldIds to be included with each query result
 	 * @param adapter
@@ -682,39 +708,61 @@ public class QueryOptions implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((adapterIds == null) ? 0 : adapterIds.hashCode());
-		result = prime * result + Arrays.hashCode(authorizations);
-		result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
-		result = prime * result + ((limit == null) ? 0 : limit.hashCode());
-		result = prime * result + Arrays.hashCode(maxResolutionSubsamplingPerDimension);
+		result = (prime * result) + ((adapterIds == null) ? 0 : adapterIds.hashCode());
+		result = (prime * result) + Arrays.hashCode(authorizations);
+		result = (prime * result) + ((indexId == null) ? 0 : indexId.hashCode());
+		result = (prime * result) + ((limit == null) ? 0 : limit.hashCode());
+		result = (prime * result) + Arrays.hashCode(maxResolutionSubsamplingPerDimension);
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		QueryOptions other = (QueryOptions) obj;
-		if (adapterIds == null) {
-			if (other.adapterIds != null) return false;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
 		}
-		else if (!adapterIds.equals(other.adapterIds)) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final QueryOptions other = (QueryOptions) obj;
+		if (adapterIds == null) {
+			if (other.adapterIds != null) {
+				return false;
+			}
+		}
+		else if (!adapterIds.equals(other.adapterIds)) {
+			return false;
+		}
 		if (!Arrays.equals(
 				authorizations,
-				other.authorizations)) return false;
+				other.authorizations)) {
+			return false;
+		}
 		if (indexId == null) {
-			if (other.indexId != null) return false;
+			if (other.indexId != null) {
+				return false;
+			}
 		}
-		else if (!indexId.equals(other.indexId)) return false;
+		else if (!indexId.equals(other.indexId)) {
+			return false;
+		}
 		if (limit == null) {
-			if (other.limit != null) return false;
+			if (other.limit != null) {
+				return false;
+			}
 		}
-		else if (!limit.equals(other.limit)) return false;
+		else if (!limit.equals(other.limit)) {
+			return false;
+		}
 		if (!Arrays.equals(
 				maxResolutionSubsamplingPerDimension,
-				other.maxResolutionSubsamplingPerDimension)) return false;
+				other.maxResolutionSubsamplingPerDimension)) {
+			return false;
+		}
 		return true;
 	}
 

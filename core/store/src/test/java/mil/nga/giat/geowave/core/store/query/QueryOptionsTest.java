@@ -115,6 +115,10 @@ public class QueryOptionsTest
 			@Override
 			public void removeAll() {}
 
+			@Override
+			public void removeAdapter(
+					ByteArrayId adapterId ) {}
+
 		};
 
 		final List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> result = ops.getAdaptersWithMinimalSetOfIndices(
@@ -273,6 +277,10 @@ public class QueryOptionsTest
 					@Override
 					public void removeAll() {}
 
+					@Override
+					public void removeAdapter(
+							final ByteArrayId adapterId ) {}
+
 				})
 				.next()
 				.getAdapterId() != null);
@@ -308,6 +316,10 @@ public class QueryOptionsTest
 
 			@Override
 			public void removeAll() {}
+
+			@Override
+			public void removeAdapter(
+					final ByteArrayId adapterId ) {}
 		};
 
 		final QueryOptions ops = new QueryOptions(

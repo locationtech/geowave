@@ -15,21 +15,21 @@ import java.text.MessageFormat;
 import java.util.Date;
 import java.util.zip.DataFormatException;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
-
 import org.HdrHistogram.AbstractHistogram;
 import org.HdrHistogram.DoubleHistogram;
 import org.HdrHistogram.Histogram;
 import org.opengis.feature.simple.SimpleFeature;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+
 /**
  * Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  * numeric attribute.
- * 
+ *
  */
 public class FeatureNumericHistogramStatistics extends
 		AbstractDataStatistics<SimpleFeature> implements
@@ -43,12 +43,12 @@ public class FeatureNumericHistogramStatistics extends
 	// Max value is determined by the level of accuracy required, using a
 	// formula provided
 	// HdrHistogram
-	private double maxValue = Math.pow(
+	private final double maxValue = (Math.pow(
 			2,
 			63) / Math.pow(
 			2,
-			14) - 1;
-	private double minValue = -(maxValue);
+			14)) - 1;
+	private final double minValue = -(maxValue);
 
 	public FeatureNumericHistogramStatistics() {
 		super();
@@ -102,15 +102,15 @@ public class FeatureNumericHistogramStatistics extends
 	public double cdf(
 			final double val ) {
 		final double percentageNegative = percentageNegative();
-		if (val < 0 || (1.0 - percentageNegative) < 0.000000001) {
+		if ((val < 0) || ((1.0 - percentageNegative) < 0.000000001)) {
 			// subtract one from percentage since negative is negated so
 			// percentage is inverted
 			return (percentageNegative > 0) ? percentageNegative
 					* (1.0 - (negativeHistogram.getPercentileAtOrBelowValue(-val) / 100.0)) : 0.0;
 		}
 		else {
-			return percentageNegative + (1.0 - percentageNegative)
-					* (positiveHistogram.getPercentileAtOrBelowValue(val) / 100.0);
+			return percentageNegative
+					+ ((1.0 - percentageNegative) * (positiveHistogram.getPercentileAtOrBelowValue(val) / 100.0));
 		}
 
 	}
@@ -227,30 +227,37 @@ public class FeatureNumericHistogramStatistics extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final SimpleFeature entry ) {
+			final SimpleFeature entry,
+			final GeoWaveRow... rows ) {
 		final Object o = entry.getAttribute(getFieldName());
 		if (o == null) {
 			return;
 		}
-		if (o instanceof Date)
+		if (o instanceof Date) {
 			add(((Date) o).getTime());
-		else if (o instanceof Number) add(((Number) o).doubleValue());
+		}
+		else if (o instanceof Number) {
+			add(((Number) o).doubleValue());
+		}
 	}
 
 	protected void add(
-			double num ) {
-		if (num < minValue || num > maxValue || Double.isNaN(num)) return;
-		if (num >= 0)
+			final double num ) {
+		if ((num < minValue) || (num > maxValue) || Double.isNaN(num)) {
+			return;
+		}
+		if (num >= 0) {
 			positiveHistogram.recordValue(num);
+		}
 		else {
 			getNegativeHistogram().recordValue(
 					-num);
 		}
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"histogram[adapter=").append(
 				super.getDataAdapterId().getString());
@@ -260,7 +267,7 @@ public class FeatureNumericHistogramStatistics extends
 		buffer.append(", bins={");
 		final MessageFormat mf = new MessageFormat(
 				"{0,number,#.######}");
-		for (double v : this.quantile(10)) {
+		for (final double v : this.quantile(10)) {
 			buffer.append(
 					mf.format(new Object[] {
 						Double.valueOf(v)
@@ -269,7 +276,7 @@ public class FeatureNumericHistogramStatistics extends
 		}
 		buffer.deleteCharAt(buffer.length() - 1);
 		buffer.append(", counts={");
-		for (long v : this.count(10)) {
+		for (final long v : count(10)) {
 			buffer.append(
 					mf.format(new Object[] {
 						Long.valueOf(v)
@@ -282,7 +289,9 @@ public class FeatureNumericHistogramStatistics extends
 	}
 
 	private DoubleHistogram getNegativeHistogram() {
-		if (this.negativeHistogram == null) negativeHistogram = new LocalDoubleHistogram();
+		if (negativeHistogram == null) {
+			negativeHistogram = new LocalDoubleHistogram();
+		}
 		return negativeHistogram;
 	}
 
@@ -299,7 +308,7 @@ public class FeatureNumericHistogramStatistics extends
 		}
 
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 5504684423053828467L;
 
@@ -312,12 +321,12 @@ public class FeatureNumericHistogramStatistics extends
 			Histogram
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 4369054277576423915L;
 
 		public LocalInternalHistogram(
-				AbstractHistogram source ) {
+				final AbstractHistogram source ) {
 			super(
 					source);
 			source.setAutoResize(true);
@@ -325,15 +334,15 @@ public class FeatureNumericHistogramStatistics extends
 		}
 
 		public LocalInternalHistogram(
-				int numberOfSignificantValueDigits ) {
+				final int numberOfSignificantValueDigits ) {
 			super(
 					numberOfSignificantValueDigits);
 			super.setAutoResize(true);
 		}
 
 		public LocalInternalHistogram(
-				long highestTrackableValue,
-				int numberOfSignificantValueDigits ) {
+				final long highestTrackableValue,
+				final int numberOfSignificantValueDigits ) {
 			super(
 					highestTrackableValue,
 					numberOfSignificantValueDigits);
@@ -341,9 +350,9 @@ public class FeatureNumericHistogramStatistics extends
 		}
 
 		public LocalInternalHistogram(
-				long lowestDiscernibleValue,
-				long highestTrackableValue,
-				int numberOfSignificantValueDigits ) {
+				final long lowestDiscernibleValue,
+				final long highestTrackableValue,
+				final int numberOfSignificantValueDigits ) {
 			super(
 					lowestDiscernibleValue,
 					highestTrackableValue,
@@ -357,7 +366,7 @@ public class FeatureNumericHistogramStatistics extends
 			StatsConfig<SimpleFeature>
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 6309383518148391565L;
 

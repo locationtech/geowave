@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,111 +12,96 @@ package mil.nga.giat.geowave.datastore.bigtable.operations;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Iterator;
+import java.util.HashSet;
 
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.client.Connection;
+import org.apache.hadoop.hbase.HConstants;
+import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.client.Result;
-import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 
-import com.google.cloud.bigtable.hbase.BigtableConfiguration;
+import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.datastore.bigtable.BigTableConnectionPool;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
-import mil.nga.giat.geowave.datastore.hbase.operations.BasicHBaseOperations;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class BigTableOperations extends
-		BasicHBaseOperations
+		HBaseOperations
 {
-
-	public BigTableOperations()
-			throws IOException {
-		this(
-				DEFAULT_TABLE_NAMESPACE);
-	}
+	private final HashSet<String> tableCache = new HashSet();
 
 	public BigTableOperations(
-			final String geowaveNamespace )
-			throws IOException {
-		this(
-				BigTableOptions.DEFAULT_PROJECT_ID,
-				BigTableOptions.DEFAULT_INSTANCE_ID,
-				geowaveNamespace);
-	}
-
-	public BigTableOperations(
-			final String projectId,
-			final String instanceId,
-			final String geowaveNamespace )
+			final BigTableOptions options )
 			throws IOException {
 		super(
-				getConnection(
-						projectId,
-						instanceId),
-				geowaveNamespace);
-	}
-
-	private static Connection getConnection(
-			final String projectId,
-			final String instanceId ) {
-
-		final Configuration config = BigtableConfiguration.configure(
-				projectId,
-				instanceId);
-
-		// TODO: Bigtable configgy things? What about connection pooling?
-		config.setBoolean(
-				"hbase.online.schema.update.enable",
-				true);
-
-		return BigtableConfiguration.connect(config);
+				BigTableConnectionPool.getInstance().getConnection(
+						options.getProjectId(),
+						options.getInstanceId()),
+				options.getGeowaveNamespace(),
+				options.getHBaseOptions());
 	}
 
 	@Override
-	public ResultScanner getScannedResults(
-			Scan scanner,
-			String tableName,
-			String... authorizations )
+	public RegionLocator getRegionLocator(
+			final String tableName )
+			throws IOException {
+		final BigtableRegionLocator regionLocator = (BigtableRegionLocator) super.getRegionLocator(tableName);
+
+		if (regionLocator != null) {
+			// Force region update
+			if (regionLocator.getAllRegionLocations().size() <= 1) {
+				regionLocator.getRegionLocation(
+						HConstants.EMPTY_BYTE_ARRAY,
+						true);
+			}
+		}
+
+		return regionLocator;
+	}
+
+	protected void forceRegionUpdate(
+			final BigtableRegionLocator regionLocator ) {
+
+	}
+
+	@Override
+	public Iterable<Result> getScannedResults(
+			final Scan scanner,
+			final String tableName,
+			final String... authorizations )
 			throws IOException {
 
-		if (tableExists(tableName)) {
-			// TODO Cache locally b/c numerous checks can be expensive
+		// Check the local cache
+		boolean tableAvailable = tableCache.contains(tableName);
+
+		// No local cache. Check the server and update cache
+		if (!tableAvailable) {
+			if (indexExists(new ByteArrayId(
+					tableName))) {
+				tableAvailable = true;
+
+				tableCache.add(tableName);
+			}
+		}
+
+		// Get the results if available
+		if (tableAvailable) {
 			return super.getScannedResults(
 					scanner,
 					tableName,
 					authorizations);
 		}
-		return new ResultScanner() {
-			@Override
-			public Iterator<Result> iterator() {
-				return Collections.emptyIterator();
-			}
 
-			@Override
-			public Result[] next(
-					int nbRows )
-					throws IOException {
-				return null;
-			}
-
-			@Override
-			public Result next()
-					throws IOException {
-				return null;
-			}
-
-			@Override
-			public void close() {}
-		};
+		// Otherwise, return empty results
+		return Collections.emptyList();
 	}
 
 	public static BigTableOperations createOperations(
 			final BigTableOptions options )
 			throws IOException {
 		return new BigTableOperations(
-				options.getProjectId(),
-				options.getInstanceId(),
-				options.getGeowaveNamespace());
+				options);
 	}
 
 }

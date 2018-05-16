@@ -25,9 +25,9 @@ import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.RemoteSection;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.RemoteSection;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.mapreduce.copy.StoreCopyJobRunner;
 
 @GeowaveOperation(name = "copy", parentOperation = RemoteSection.class)
@@ -69,9 +69,7 @@ public class CopyCommand extends
 
 		if (options.getHdfsHostPort() == null) {
 
-			Properties configProperties = ConfigOptions.loadProperties(
-					configFile,
-					null);
+			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			options.setHdfsHostPort(hdfsFSUrl);
 		}

@@ -26,15 +26,17 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
+
 import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.BasicIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
 import org.apache.commons.lang3.StringUtils;
@@ -57,14 +59,14 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	// TODO should we use different default IDs for all the different
 	// options, for now lets just use one
-	final static NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
+	public final static NumericDimensionField[] SPATIAL_TEMPORAL_FIELDS = new NumericDimensionField[] {
 		new LongitudeField(),
 		new LatitudeField(
 				true),
 		new TimeField(
 				SpatialTemporalOptions.DEFAULT_PERIODICITY)
 	};
-	final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
+	public final static NumericDimensionDefinition[] SPATIAL_TEMPORAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
 		new LatitudeDefinition(
 				true),
@@ -225,7 +227,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			return null;
 		}
 
-		protected int getSpatialPrecision() {
+		public int getSpatialPrecision() {
 			switch (this) {
 				case SPATIAL:
 					return 25;
@@ -237,7 +239,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			}
 		}
 
-		protected int getTemporalPrecision() {
+		public int getTemporalPrecision() {
 			switch (this) {
 				case SPATIAL:
 					return 10;
@@ -319,6 +321,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 			return this;
 		}
 
+		public SpatialTemporalIndexBuilder setCrs(
+				final String crs ) {
+			options.crs = crs;
+			return this;
+		}
+
 		@Override
 		public PrimaryIndex createIndex() {
 			return createIndex(internalCreatePrimaryIndex(options));
@@ -327,11 +335,19 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 	public static boolean isSpatialTemporal(
 			final PrimaryIndex index ) {
-		if ((index == null) || (index.getIndexStrategy() == null)
-				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
+		if (index == null) {
 			return false;
 		}
-		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
+
+		return isSpatialTemporal(index.getIndexStrategy());
+	}
+
+	public static boolean isSpatialTemporal(
+			final NumericIndexStrategy indexStrategy ) {
+		if ((indexStrategy == null) || (indexStrategy.getOrderedDimensionDefinitions() == null)) {
+			return false;
+		}
+		final NumericDimensionDefinition[] dimensions = indexStrategy.getOrderedDimensionDefinitions();
 		if (dimensions.length < 3) {
 			return false;
 		}

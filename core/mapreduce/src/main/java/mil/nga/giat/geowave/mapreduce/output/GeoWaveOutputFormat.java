@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -30,6 +30,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
@@ -39,10 +40,10 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
@@ -73,7 +74,7 @@ public class GeoWaveOutputFormat extends
 			}
 
 			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
-			final Index[] indices = JobContextIndexStore.getIndices(context);
+			final Index<?, ?>[] indices = JobContextIndexStore.getIndices(context);
 			if (LOGGER.isDebugEnabled()) {
 				final StringBuilder sbDebug = new StringBuilder();
 
@@ -100,7 +101,7 @@ public class GeoWaveOutputFormat extends
 				LOGGER.debug(sbDebug.toString());
 			}
 
-			for (final Index i : indices) {
+			for (final Index<?, ?> i : indices) {
 				if (!persistentIndexStore.indexExists(i.getId())) {
 					persistentIndexStore.addIndex(i);
 				}
@@ -259,7 +260,7 @@ public class GeoWaveOutputFormat extends
 	protected static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey<Object>, Object>
 	{
-		private final Map<ByteArrayId, IndexWriter> adapterIdToIndexWriterCache = new HashMap<ByteArrayId, IndexWriter>();
+		private final Map<ByteArrayId, IndexWriter<?>> adapterIdToIndexWriterCache = new HashMap<>();
 		private final AdapterStore adapterStore;
 		private final IndexStore indexStore;
 		private final DataStore dataStore;
@@ -303,7 +304,7 @@ public class GeoWaveOutputFormat extends
 						adapter,
 						ingestKey.getIndexIds());
 				if (indexWriter != null) {
-					List writeList = indexWriter.write(data);
+					final InsertionIds writeList = indexWriter.write(data);
 
 					if (!writeList.isEmpty()) {
 						success = true;
@@ -328,11 +329,11 @@ public class GeoWaveOutputFormat extends
 			}
 		}
 
-		private synchronized IndexWriter getIndexWriter(
-				final DataAdapter<?> adapter,
+		private synchronized IndexWriter<?> getIndexWriter(
+				final WritableDataAdapter<?> adapter,
 				final Collection<ByteArrayId> indexIds )
 				throws MismatchedIndexToAdapterMapping {
-			IndexWriter writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
+			IndexWriter<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
 				final List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
 				for (final ByteArrayId indexId : indexIds) {
@@ -362,7 +363,7 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
-			for (final IndexWriter indexWriter : adapterIdToIndexWriterCache.values()) {
+			for (final IndexWriter<?> indexWriter : adapterIdToIndexWriterCache.values()) {
 				indexWriter.close();
 			}
 		}

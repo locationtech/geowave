@@ -132,6 +132,9 @@ sudo mv ~/insert_jar_file_here
 Following these steps will allow you to maintain a backup jar, and update the jar used by Zeppelin. Simply restore the backup jar to the original location if you encounter errors after these steps. If you were running a Zeppelin notebook before running these steps you will need to restart the spark interpreter to update the jar file used by YARN.
 
 
+=== Github Zeppelin Notebook links
+
+- Demo Notebooks: https://github.com/locationtech/geowave/tree/master/examples/data/notebooks/zeppelin
 
 
 

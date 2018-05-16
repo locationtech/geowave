@@ -4,7 +4,7 @@
 		<artifactId>geowave-core-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.7-SNAPSHOT</version>
+		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-core-mapreduce</artifactId>
 	<name>GeoWave MapReduce</name>
@@ -18,6 +18,11 @@
 			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-core-store</artifactId>
 			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.upplication</groupId>
+			<artifactId>s3fs</artifactId>
+			<version>1.5.3</version>
 		</dependency>
         <dependency>
             <groupId>org.apache.hadoop</groupId>

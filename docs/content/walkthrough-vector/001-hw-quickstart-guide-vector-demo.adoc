@@ -16,8 +16,6 @@ SandBox:
 ----
 cd /mnt
 sudo wget s3.amazonaws.com/geowave/latest/scripts/sandbox/quickstart/geowave-env.sh
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
 ----
 
 EMR:
@@ -26,8 +24,6 @@ EMR:
 ----
 cd /mnt
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/geowave-env.sh
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
-sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
 ----
 
 This script defines a number of the variables that will be used in future commands, so we will source it here.

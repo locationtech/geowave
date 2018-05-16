@@ -29,12 +29,6 @@ public class GeoWaveMiniAccumuloClusterImpl extends
 
 	public void setExternalShutdownExecutor(
 			ExecutorService svc ) {
-		// @formatter:off
-		/*if[accumulo.api=1.6]
-		// nothing here
-		else[accumulo.api=1.6]*/
 		setShutdownExecutor(svc);
-		/*end[accumulo.api=1.6]*/
-		// @formatter:on
 	}
 }

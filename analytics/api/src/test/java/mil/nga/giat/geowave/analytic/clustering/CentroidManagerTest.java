@@ -17,7 +17,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.geotools.feature.type.BasicFeatureTypes;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TestName;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -43,6 +45,9 @@ import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 
 public class CentroidManagerTest
 {
+	@Rule
+	public TestName name = new TestName();
+
 	private void ingest(
 			final DataStore dataStore,
 			final FeatureDataAdapter adapter,
@@ -53,7 +58,6 @@ public class CentroidManagerTest
 				adapter,
 				index)) {
 			writer.write(feature);
-			writer.close();
 		}
 	}
 
@@ -95,7 +99,7 @@ public class CentroidManagerTest
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
-		final String namespace = "test_" + getClass().getName();
+		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace(namespace);

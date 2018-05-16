@@ -19,16 +19,15 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 
+import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.base.BaseDataStore;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.cli.remote.RemoteSection;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
+import mil.nga.giat.geowave.core.store.server.ServerSideOperations;
 
 /**
  * Command for trying to retrieve the version of GeoWave for a remote datastore
@@ -39,7 +38,7 @@ public class VersionCommand extends
 		ServiceEnabledCommand<Void>
 {
 	@Parameter(description = "<storename>")
-	private List<String> parameters = new ArrayList<String>();
+	private final List<String> parameters = new ArrayList<String>();
 
 	@Override
 	public void execute(
@@ -72,19 +71,23 @@ public class VersionCommand extends
 		final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		if (inputStoreOptions != null) {
-			final StoreFactoryOptions factoryOptions = inputStoreOptions.getFactoryOptions();
-			final DataStore dataStore = inputStoreOptions.createDataStore();
-
-			String version = null;
-			if (dataStore instanceof BaseDataStore) {
+			DataStoreOperations ops = inputStoreOptions.createDataStoreOperations();
+			if (ops instanceof ServerSideOperations
+					&& inputStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
 				JCommander.getConsole().println(
 						"Looking up remote datastore version for type [" + inputStoreOptions.getType() + "] and name ["
 								+ inputStoreName + "]");
-				final BaseDataStore baseDataStore = (BaseDataStore) dataStore;
-				version = baseDataStore.getVersion(factoryOptions);
+				final String version = ((ServerSideOperations) ops).getVersion();
+				JCommander.getConsole().println(
+						"Version: " + version);
 			}
-			JCommander.getConsole().println(
-					"Version: " + version);
+			else {
+				JCommander.getConsole().println(
+						"Datastore for type [" + inputStoreOptions.getType() + "] and name [" + inputStoreName
+								+ "] does not have a serverside library enabled.");
+				JCommander.getConsole().println(
+						"Commandline Version: " + VersionUtils.getVersion());
+			}
 		}
 		return null;
 	}

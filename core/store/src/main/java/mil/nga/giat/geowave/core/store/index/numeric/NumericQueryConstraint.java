@@ -10,11 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index.numeric;
 
-import java.util.Collections;
-import java.util.List;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
 
@@ -37,8 +35,8 @@ public class NumericQueryConstraint implements
 			final ByteArrayId fieldId,
 			final Number lowerValue,
 			final Number upperValue,
-			boolean inclusiveLow,
-			boolean inclusiveHigh ) {
+			final boolean inclusiveLow,
+			final boolean inclusiveHigh ) {
 		super();
 		this.fieldId = fieldId;
 		this.lowerValue = lowerValue;
@@ -80,19 +78,13 @@ public class NumericQueryConstraint implements
 				inclusiveHigh);
 	}
 
-	/**
-	 * Creates a collection of range values based on lower and upper bounds for
-	 * this constraint
-	 * 
-	 * @return
-	 */
-
-	public List<ByteArrayRange> getRange() {
-		return Collections.singletonList(new ByteArrayRange(
-				new ByteArrayId(
-						NumericIndexStrategy.toIndexByte(lowerValue.doubleValue())),
-				new ByteArrayId(
-						NumericIndexStrategy.toIndexByte(upperValue.doubleValue()))));
+	public QueryRanges getQueryRanges() {
+		return new QueryRanges(
+				new ByteArrayRange(
+						new ByteArrayId(
+								NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue())),
+						new ByteArrayId(
+								NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue()))));
 	}
 
 	/**
@@ -109,11 +101,11 @@ public class NumericQueryConstraint implements
 	 * @return new {@link FilterableConstraints}
 	 */
 
+	@Override
 	public FilterableConstraints intersect(
-			FilterableConstraints otherConstraint ) {
-		if (otherConstraint instanceof NumericQueryConstraint
-				&& ((NumericQueryConstraint) otherConstraint).fieldId.equals(this.fieldId)) {
-			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) otherConstraint);
+			final FilterableConstraints other ) {
+		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldId.equals(fieldId)) {
+			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) other);
 
 			final boolean lowEquals = lowerValue.equals(otherNumeric.lowerValue);
 			final boolean upperEquals = upperValue.equals(otherNumeric.upperValue);
@@ -154,12 +146,11 @@ public class NumericQueryConstraint implements
 	 *            constraints
 	 * @return new {@link FilterableConstraints}
 	 */
-
+	@Override
 	public FilterableConstraints union(
-			FilterableConstraints otherConstraint ) {
-		if (otherConstraint instanceof NumericQueryConstraint
-				&& ((NumericQueryConstraint) otherConstraint).fieldId.equals(this.fieldId)) {
-			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) otherConstraint);
+			final FilterableConstraints other ) {
+		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldId.equals(fieldId)) {
+			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) other);
 
 			final boolean lowEquals = lowerValue.equals(otherNumeric.lowerValue);
 			final boolean upperEquals = upperValue.equals(otherNumeric.upperValue);

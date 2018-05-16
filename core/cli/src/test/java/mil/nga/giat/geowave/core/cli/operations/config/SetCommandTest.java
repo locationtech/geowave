@@ -52,9 +52,7 @@ public class SetCommandTest
 
 		File f = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
-		Properties p = ConfigOptions.loadProperties(
-				f,
-				null);
+		Properties p = ConfigOptions.loadProperties(f);
 		assertEquals(
 				value,
 				p.getProperty(name));

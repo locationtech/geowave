@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.7-SNAPSHOT</version>
+	<version>0.9.8-SNAPSHOT</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -34,31 +35,33 @@
 	<properties>
 		<spark.version>2.2.0</spark.version>
 		<geotools.version>18.1</geotools.version>
-		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
+		<guava.version>14.0-rc1</guava.version>		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.12.1</geoserver.version>
 		<accumulo.version>1.8.1</accumulo.version>
 		<accumulo.api>1.8</accumulo.api>
 		<skipITs>true</skipITs>
-		<bigtable.version>0.9.4</bigtable.version>
+		<bigtable.version>1.2.0</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.3.1</hbase.version>
+		<hbase.version>1.4.3</hbase.version>
 		<hadoop.version>2.7.3</hadoop.version>
 		<avro.version>1.7.6</avro.version>
-		<awssdk.version>1.11.125</awssdk.version>
+		<awssdk.version>1.11.281</awssdk.version>
 		<httpclient.version>4.5.2</httpclient.version>
 		<httpcore.version>4.4.4</httpcore.version>
 		<geotools.scope>compile</geotools.scope>
 		<accumulo.scope>compile</accumulo.scope>
 		<hbase.scope>compile</hbase.scope>
 		<hadoop.scope>compile</hadoop.scope>
+		<jetty.version>9.4.8.v20171121</jetty.version>
 		<zookeeper.version>3.4.6</zookeeper.version>
 		<jersey.version>2.23.1</jersey.version>
+		<scala.version>2.11.8</scala.version>
 		<kafka.artifact>kafka_2.11</kafka.artifact>
 		<kafka.version>0.8.2.1</kafka.version>
 		<snappy.version>1.1.2.6</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
-		<fasterxml.jackson.version>2.6.5</fasterxml.jackson.version>
+		<fasterxml.jackson.version>2.6.6</fasterxml.jackson.version>
 		<spring-security.version>4.0.4.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
@@ -91,6 +94,41 @@
 	</properties>
 	<dependencyManagement>
 		<dependencies>
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-server</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>			
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-util</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>		
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-webapp</artifactId>
+				<version>${jetty.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-library</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-compiler</artifactId>
+				<version>${scala.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>jline</artifactId>
+				<version>2.11.0-M3</version>
+			</dependency>
+			<dependency>
+				<groupId>org.scala-lang</groupId>
+				<artifactId>scala-reflect</artifactId>
+				<version>${scala.version}</version>
+			</dependency>			
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
@@ -167,7 +205,18 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>14.0-rc1</version>
+				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.aol.simplereact</groupId>
+				<artifactId>cyclops-react</artifactId>
+				<version>1.0.0-RC4</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.slf4j</groupId>
+						<artifactId>jcl-over-slf4j</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.commons</groupId>
@@ -204,7 +253,7 @@
 			</dependency>
 			<dependency>
 				<groupId>com.google.cloud.bigtable</groupId>
-				<artifactId>bigtable-hbase-1.2</artifactId>
+				<artifactId>bigtable-hbase-1.x</artifactId>
 				<version>${bigtable.version}</version>
 			</dependency>
 			<dependency>
@@ -235,7 +284,7 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-server</artifactId>
 				<version>${hbase.version}</version>
-           		<type>test-jar</type>
+				<type>test-jar</type>
 				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
@@ -248,7 +297,7 @@
 				<groupId>org.apache.hbase</groupId>
 				<artifactId>hbase-common</artifactId>
 				<version>${hbase.version}</version>
-           		<type>test-jar</type>
+				<type>test-jar</type>
 				<scope>${hbase.scope}</scope>
 			</dependency>
 			<dependency>
@@ -482,8 +531,7 @@
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
 				<scope>compile</scope>
-			</dependency>
-			<dependency>
+			</dependency>			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-multipart</artifactId>
 				<version>${jersey.version}</version>
@@ -491,6 +539,16 @@
 			<dependency>
 				<groupId>org.glassfish.jersey.core</groupId>
 				<artifactId>jersey-client</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-common</artifactId>
+				<version>${jersey.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jersey.core</groupId>
+				<artifactId>jersey-server</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
 			<dependency>
@@ -508,7 +566,6 @@
 				<artifactId>jersey-proxy-client</artifactId>
 				<version>${jersey.version}</version>
 			</dependency>
-
 			<dependency>
 				<groupId>org.apache.commons</groupId>
 				<artifactId>commons-vfs2</artifactId>
@@ -537,6 +594,11 @@
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
+				<version>${fasterxml.jackson.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.fasterxml.jackson.dataformat</groupId>
+				<artifactId>jackson-dataformat-cbor</artifactId>
 				<version>${fasterxml.jackson.version}</version>
 			</dependency>
 			<dependency>
@@ -686,26 +748,6 @@
 								<sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
 								<outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
 								<stringType>String</stringType>
-							</configuration>
-						</execution>
-					</executions>
-				</plugin>
-				<plugin>
-					<groupId>com.github.os72</groupId>
-					<artifactId>protoc-jar-maven-plugin</artifactId>
-					<version>3.1.0.1</version>
-					<executions>
-						<execution>
-							<phase>generate-sources</phase>
-							<goals>
-								<goal>run</goal>
-							</goals>
-							<configuration>
-								<protocVersion>2.5.0</protocVersion>
-								<outputDirectory>src/main/java</outputDirectory>
-								<inputDirectories>
-									<include>src/main/protobuf</include>
-								</inputDirectories>
 							</configuration>
 						</execution>
 					</executions>
@@ -1169,6 +1211,7 @@
 				<accumulo.version>1.7.2</accumulo.version>
 				<accumulo.api>1.7</accumulo.api>
 				<hadoop.version>2.6.4</hadoop.version>
+				<hbase.version>1.3.1</hbase.version>
 				<geotools.version>16.0</geotools.version>
 				<geoserver.version>2.10.0</geoserver.version>
 			</properties>

@@ -39,9 +39,7 @@ public class ConfigOptionsTest
 				configfile,
 				prop);
 		if (success) {
-			Properties loadprop = ConfigOptions.loadProperties(
-					configfile,
-					key);
+			Properties loadprop = ConfigOptions.loadProperties(configfile);
 			assertEquals(
 					value,
 					loadprop.getProperty(key));

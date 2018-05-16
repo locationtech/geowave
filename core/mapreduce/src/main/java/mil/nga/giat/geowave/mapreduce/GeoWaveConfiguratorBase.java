@@ -38,9 +38,9 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
 
 /**
  * This class forms the basis for GeoWave input and output format configuration.
@@ -274,6 +274,18 @@ public class GeoWaveConfiguratorBase
 							GeoWaveConfg.DATA_ADAPTER,
 							adapter.getAdapterId().getString()),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(adapter)));
+		}
+	}
+
+	public static void removeDataAdapter(
+			final Class<?> implementingClass,
+			final Configuration conf,
+			final ByteArrayId adapterId ) {
+		if (adapterId != null) {
+			conf.unset(enumToConfKey(
+					implementingClass,
+					GeoWaveConfg.DATA_ADAPTER,
+					adapterId.getString()));
 		}
 	}
 

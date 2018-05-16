@@ -20,16 +20,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexUtils;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
-import mil.nga.giat.geowave.core.store.query.ConstraintsQuery;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
 public class ChooseBestMatchIndexQueryStrategy implements
@@ -77,10 +77,10 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						}
 					}
 					else {
-						final List<ByteArrayRange> ranges = DataStoreUtils.constraintsToByteArrayRanges(
+						final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 								constraints,
 								nextIdx.getIndexStrategy(),
-								ConstraintsQuery.MAX_RANGE_DECOMPOSITION);
+								BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION);
 						final long temp = DataStoreUtils.cardinality(
 								nextIdx,
 								stats,

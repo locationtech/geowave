@@ -29,8 +29,8 @@ import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.IndexPluginOptions;
 
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddSpatialTemporalIndexCommand extends
@@ -162,9 +162,7 @@ public class AddSpatialTemporalIndexCommand extends
 
 		final File propFile = getGeoWaveConfigFile(params);
 
-		final Properties existingProps = ConfigOptions.loadProperties(
-				propFile,
-				null);
+		final Properties existingProps = ConfigOptions.loadProperties(propFile);
 
 		// Make sure we're not already in the index.
 		final IndexPluginOptions existPlugin = new IndexPluginOptions();

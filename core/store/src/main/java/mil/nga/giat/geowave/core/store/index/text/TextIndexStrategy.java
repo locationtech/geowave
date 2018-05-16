@@ -10,15 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.index.text;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo.FieldInfo;
+import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.index.FieldIndexStrategy;
 
 public class TextIndexStrategy implements
@@ -40,14 +38,24 @@ public class TextIndexStrategy implements
 			final byte[] bytes ) {}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
-			final TextQueryConstraint indexedRange,
-			final IndexMetaData... hints ) {
-		return indexedRange.getRange();
+	public String getId() {
+		return ID;
 	}
 
 	@Override
-	public List<ByteArrayRange> getQueryRanges(
+	public List<IndexMetaData> createMetaData() {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public QueryRanges getQueryRanges(
+			final TextQueryConstraint indexedRange,
+			final IndexMetaData... hints ) {
+		return indexedRange.getQueryRanges();
+	}
+
+	@Override
+	public QueryRanges getQueryRanges(
 			final TextQueryConstraint indexedRange,
 			final int maxEstimatedRangeDecomposition,
 			final IndexMetaData... hints ) {
@@ -57,41 +65,24 @@ public class TextIndexStrategy implements
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final List<FieldInfo<String>> indexedData ) {
-		final List<ByteArrayId> insertionIds = new ArrayList<>();
-		for (FieldInfo<String> fieldInfo : indexedData) {
-			insertionIds.add(new ByteArrayId(
-					fieldInfo.getDataValue().getValue()));
-		}
-		return insertionIds;
+	public InsertionIds getInsertionIds(
+			final String indexedData ) {
+		return new InsertionIds(
+				Collections.singletonList(new ByteArrayId(
+						indexedData)));
 	}
 
 	@Override
-	public List<ByteArrayId> getInsertionIds(
-			final List<FieldInfo<String>> indexedData,
+	public InsertionIds getInsertionIds(
+			final String indexedData,
 			final int maxEstimatedDuplicateIds ) {
 		return getInsertionIds(indexedData);
 	}
 
 	@Override
-	public List<FieldInfo<String>> getRangeForId(
-			final ByteArrayId insertionId ) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public String getId() {
-		return ID;
-	}
-
-	@Override
-	public Set<ByteArrayId> getNaturalSplits() {
-		return null;
-	}
-
-	@Override
-	public List<IndexMetaData> createMetaData() {
-		return Collections.emptyList();
+	public String getRangeForId(
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKey ) {
+		return sortKey.getString();
 	}
 }

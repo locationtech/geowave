@@ -4,7 +4,7 @@
 		<artifactId>geowave-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../</relativePath>
-		<version>0.9.7-SNAPSHOT</version>
+		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-deploy</artifactId>
 	<name>GeoWave Deployment Configurations</name>
@@ -124,6 +124,11 @@
 				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-cli-theia</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-format-4676</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -181,11 +186,6 @@
 									<goal>shade</goal>
 								</goals>
 								<configuration>
-									<artifactSet>
-										<excludes>
-											<exclude>com.sun.jersey</exclude>
-										</excludes>
-									</artifactSet>
 									<filters>
 										<filter>
 											<artifact>junit:junit</artifact>
@@ -204,7 +204,7 @@
 												<exclude>META-INF/*.SF</exclude>
 												<exclude>META-INF/*.DSA</exclude>
 												<exclude>META-INF/*.RSA</exclude>
-												</excludes>
+											</excludes>
 										</filter>
 									</filters>
 									<transformers>
@@ -266,6 +266,17 @@
 					<artifactId>geowave-datastore-bigtable</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-cassandra</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<!-- This is required in case ImageDataAdapter is needed in the classpath -->
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-format-4676</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 			</dependencies>
 			<build>
 				<plugins>
@@ -287,6 +298,7 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
+											<exclude>com.fasterxml.jackson*:*</exclude>
 
 											<!-- the required version of guava should exist in geoserver's 
 												classpath, although in order to get guava's StopWatch working with HBase 

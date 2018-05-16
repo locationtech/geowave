@@ -13,7 +13,9 @@ package mil.nga.giat.geowave.test.spark;
 import java.io.IOException;
 import java.util.Date;
 
+import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
+import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.clustering.KMeansModel;
 import org.apache.spark.mllib.linalg.Vector;
 import org.junit.AfterClass;
@@ -30,25 +32,28 @@ import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.analytic.spark.kmeans.KMeansHullGenerator;
 import mil.nga.giat.geowave.analytic.spark.kmeans.KMeansRunner;
-import mil.nga.giat.geowave.analytic.spark.kmeans.KMeansUtils;
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
-import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.TestUtils.DimensionalityType;
+import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
+import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import scala.Tuple2;
 
 @RunWith(GeoWaveITRunner.class)
+@Environments({
+	Environment.SPARK
+})
 public class GeoWaveJavaSparkKMeansIT
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveJavaSparkKMeansIT.class);
@@ -59,7 +64,9 @@ public class GeoWaveJavaSparkKMeansIT
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions inputDataStore;
 
@@ -89,7 +96,7 @@ public class GeoWaveJavaSparkKMeansIT
 
 	@Test
 	public void testKMeansRunner() {
-		TestUtils.deleteAll(inputDataStore);
+		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 
 		// Load data
 		TestUtils.testLocalIngest(
@@ -101,25 +108,20 @@ public class GeoWaveJavaSparkKMeansIT
 		String adapterId = "hail";
 
 		// Create the runner
+		long mark = System.currentTimeMillis();
 		final KMeansRunner runner = new KMeansRunner();
+		runner.setJavaSparkContext(JavaSparkContext.fromSparkContext(context));
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
 		runner.setCqlFilter(CQL_FILTER);
+		runner.setUseTime(true);
+		// Set output params to write centroids + hulls to store.
+		runner.setOutputDataStore(inputDataStore);
+		runner.setCentroidTypeName("kmeans-centroids-test");
 
-		// Attempt to set the time params
-		ScaledTemporalRange scaledRange = KMeansUtils.setRunnerTimeParams(
-				runner,
-				inputDataStore,
-				new ByteArrayId(
-						adapterId));
-
-		if (scaledRange == null) {
-			Assert.fail("Failed to set time params");
-
-			TestUtils.deleteAll(inputDataStore);
-
-			runner.close();
-		}
+		runner.setGenerateHulls(true);
+		runner.setComputeHullData(true);
+		runner.setHullTypeName("kmeans-hulls-test");
 
 		// Run kmeans
 		try {
@@ -133,17 +135,20 @@ public class GeoWaveJavaSparkKMeansIT
 		// Create the output
 		final KMeansModel clusterModel = runner.getOutputModel();
 
+		long dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("KMeans duration: " + dur + " ms.");
 		// Write out the centroid features
-		DataAdapter centroidAdapter = KMeansUtils.writeClusterCentroids(
-				clusterModel,
-				inputDataStore,
-				"kmeans-centroids-test",
-				scaledRange);
+		DataAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
+				new ByteArrayId(
+						"kmeans-centroids-test"));
 
 		// Query back from the new adapter
+		mark = System.currentTimeMillis();
 		queryFeatures(
 				centroidAdapter,
 				clusterModel.clusterCenters().length);
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("Centroid verify: " + dur + " ms.");
 
 		// Generate the hulls
 		final JavaPairRDD<Integer, Iterable<Vector>> groupByRDD = KMeansHullGenerator.groupByIndex(
@@ -164,21 +169,20 @@ public class GeoWaveJavaSparkKMeansIT
 		}
 
 		// Write out the hull features w/ metadata
-		DataAdapter hullAdapter = KMeansUtils.writeClusterHulls(
-				runner.getInputCentroids(),
-				clusterModel,
-				inputDataStore,
-				"kmeans-hulls-test",
-				true);
+		DataAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
+				new ByteArrayId(
+						"kmeans-hulls-test"));
 
+		mark = System.currentTimeMillis();
 		// Query back from the new adapter
 		queryFeatures(
 				hullAdapter,
 				clusterModel.clusterCenters().length);
+		dur = (System.currentTimeMillis() - mark);
+		LOGGER.warn("Hull verify: " + dur + " ms.");
 
 		TestUtils.deleteAll(inputDataStore);
 
-		runner.close();
 	}
 
 	private void queryFeatures(

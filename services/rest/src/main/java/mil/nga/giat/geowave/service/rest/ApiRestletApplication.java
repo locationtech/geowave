@@ -144,6 +144,8 @@ public class ApiRestletApplication extends
 
 		}
 
+		String defaultConfigFile = servlet.getInitParameter("config_file");
+
 		final SwaggerApiParser apiParser = new SwaggerApiParser(
 				apiHostPort,
 				servlet.getContextPath(),
@@ -154,7 +156,8 @@ public class ApiRestletApplication extends
 			router.attach(
 					"/" + route.getPath(),
 					new GeoWaveOperationFinder(
-							route.getOperation()));
+							route.getOperation(),
+							defaultConfigFile));
 
 			apiParser.addRoute(route);
 		}

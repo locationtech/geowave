@@ -56,4 +56,12 @@ public interface AdapterStore
 	public CloseableIterator<DataAdapter<?>> getAdapters();
 
 	public void removeAll();
+
+	/**
+	 * 
+	 * @param adapterId
+	 *            the adapter ID to remove
+	 */
+	public void removeAdapter(
+			ByteArrayId adapterId );
 }

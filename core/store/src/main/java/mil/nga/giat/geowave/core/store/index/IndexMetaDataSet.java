@@ -15,21 +15,23 @@ import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
-import mil.nga.giat.geowave.core.index.IndexStrategy;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.index.SortedIndexStrategy;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import mil.nga.giat.geowave.core.store.base.DataStoreEntryInfo;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 public class IndexMetaDataSet<T> extends
 		AbstractDataStatistics<T> implements
-		DeleteCallback<T>
+		DeleteCallback<T, GeoWaveRow>
 {
 	private List<IndexMetaData> metaData;
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
@@ -50,7 +52,7 @@ public class IndexMetaDataSet<T> extends
 	public IndexMetaDataSet(
 			final ByteArrayId adapterId,
 			final ByteArrayId statisticsId,
-			final IndexStrategy<?, ?> indexStrategy ) {
+			final SortedIndexStrategy<?, ?> indexStrategy ) {
 		super(
 				adapterId,
 				composeId(statisticsId));
@@ -113,19 +115,25 @@ public class IndexMetaDataSet<T> extends
 
 	@Override
 	public void entryIngested(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsAdded(entryInfo.getInsertionIds());
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		if (!this.metaData.isEmpty()) {
+			final InsertionIds insertionIds = DataStoreUtils.keysToInsertionIds(kvs);
+			for (final IndexMetaData imd : this.metaData) {
+				imd.insertionIdsAdded(insertionIds);
+			}
 		}
 	}
 
 	@Override
 	public void entryDeleted(
-			final DataStoreEntryInfo entryInfo,
-			final T entry ) {
-		for (final IndexMetaData imd : this.metaData) {
-			imd.insertionIdsRemoved(entryInfo.getInsertionIds());
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		if (!this.metaData.isEmpty()) {
+			final InsertionIds insertionIds = DataStoreUtils.keysToInsertionIds(kvs);
+			for (final IndexMetaData imd : this.metaData) {
+				imd.insertionIdsRemoved(insertionIds);
+			}
 		}
 	}
 

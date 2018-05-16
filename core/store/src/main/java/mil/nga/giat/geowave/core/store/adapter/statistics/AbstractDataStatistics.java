@@ -19,9 +19,9 @@ import net.sf.json.JSONObject;
 abstract public class AbstractDataStatistics<T> implements
 		DataStatistics<T>
 {
-	public static final ByteArrayId STATS_SEPARATOR = new ByteArrayId(
+	protected static final ByteArrayId STATS_SEPARATOR = new ByteArrayId(
 			"_");
-	public static final String STATS_ID_SEPARATOR = "#";
+	protected static final String STATS_ID_SEPARATOR = "#";
 
 	/**
 	 * ID of source data adapter

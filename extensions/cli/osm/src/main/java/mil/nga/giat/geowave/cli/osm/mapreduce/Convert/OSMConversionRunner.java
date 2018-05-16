@@ -38,12 +38,13 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStoreFactory;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
-import mil.nga.giat.geowave.datastore.accumulo.metadata.AccumuloAdapterStore;
-import mil.nga.giat.geowave.datastore.accumulo.operations.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
+import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -61,7 +62,7 @@ public class OSMConversionRunner extends
 
 		final OSMIngestCommandArgs ingestArgs = new OSMIngestCommandArgs();
 		final DataStorePluginOptions opts = new DataStorePluginOptions();
-		opts.selectPlugin(new AccumuloDataStoreFactory().getType());
+		opts.selectPlugin(new AccumuloStoreFactoryFamily().getType());
 
 		final OperationParser parser = new OperationParser();
 		parser.addAdditionalObject(ingestArgs);
@@ -89,7 +90,7 @@ public class OSMConversionRunner extends
 
 		this.ingestOptions = ingestOptions;
 		if (!inputStoreOptions.getType().equals(
-				new AccumuloDataStoreFactory().getType())) {
+				new AccumuloStoreFactoryFamily().getType())) {
 			throw new RuntimeException(
 					"Expected accumulo data store");
 		}
@@ -162,14 +163,16 @@ public class OSMConversionRunner extends
 		GeoWaveOutputFormat.setStoreOptions(
 				job.getConfiguration(),
 				inputStoreOptions);
-
-		final AdapterStore as = new AccumuloAdapterStore(
-				new BasicAccumuloOperations(
+		final AccumuloOptions options = new AccumuloOptions();
+		final AdapterStore as = new AdapterStoreImpl(
+				new AccumuloOperations(
 						accumuloOptions.getZookeeper(),
 						accumuloOptions.getInstance(),
 						accumuloOptions.getUser(),
 						accumuloOptions.getPassword(),
-						accumuloOptions.getGeowaveNamespace()));
+						accumuloOptions.getGeowaveNamespace(),
+						options),
+				options);
 		for (final FeatureDataAdapter fda : FeatureDefinitionSet.featureAdapters.values()) {
 			as.addAdapter(fda);
 			GeoWaveOutputFormat.addDataAdapter(

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.filter;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -19,36 +20,54 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 public class PrefixIdQueryFilter implements
 		DistributableQueryFilter
 {
-	private ByteArrayId rowPrefix;
+	private byte[] partitionKey;
+	private byte[] sortKeyPrefix;
 
 	public PrefixIdQueryFilter() {}
 
 	public PrefixIdQueryFilter(
-			final ByteArrayId rowPrefix ) {
-		this.rowPrefix = rowPrefix;
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKeyPrefix ) {
+		this.partitionKey = ((partitionKey != null) && (partitionKey.getBytes() != null)) ? partitionKey.getBytes()
+				: new byte[0];
+		this.sortKeyPrefix = sortKeyPrefix.getBytes();
 	}
 
 	@Override
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		ByteArrayId rowId = persistenceEncoding.getIndexInsertionId();
+		final ByteArrayId otherPartitionKey = persistenceEncoding.getInsertionPartitionKey();
+		final byte[] otherPartitionKeyBytes = ((otherPartitionKey != null) && (otherPartitionKey.getBytes() != null)) ? otherPartitionKey
+				.getBytes() : new byte[0];
+		final ByteArrayId sortKey = persistenceEncoding.getInsertionSortKey();
 		return (Arrays.equals(
-				rowPrefix.getBytes(),
+				sortKeyPrefix,
 				Arrays.copyOf(
-						rowId.getBytes(),
-						rowId.getBytes().length)));
+						sortKey.getBytes(),
+						sortKeyPrefix.length)) && Arrays.equals(
+				partitionKey,
+				otherPartitionKeyBytes));
 	}
 
 	@Override
 	public byte[] toBinary() {
-		return rowPrefix.getBytes();
+		final ByteBuffer buf = ByteBuffer.allocate(8 + partitionKey.length + sortKeyPrefix.length);
+		buf.putInt(partitionKey.length);
+		buf.put(partitionKey);
+		buf.putInt(sortKeyPrefix.length);
+		buf.put(sortKeyPrefix);
+
+		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		rowPrefix = new ByteArrayId(
-				bytes);
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		partitionKey = new byte[buf.getInt()];
+		buf.get(partitionKey);
+		sortKeyPrefix = new byte[buf.getInt()];
+		buf.get(sortKeyPrefix);
 	}
 }

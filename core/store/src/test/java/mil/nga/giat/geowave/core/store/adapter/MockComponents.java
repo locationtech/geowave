@@ -15,12 +15,17 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.google.common.collect.Lists;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.Coordinate;
+import mil.nga.giat.geowave.core.index.CoordinateRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRanges;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinates;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.dimension.bin.BinRange;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -59,8 +64,10 @@ public class MockComponents
 		}
 
 		public MockAbstractDataAdapter(
-				ByteArrayId id ) {
-			super();
+				final ByteArrayId id ) {
+			super(
+					Lists.newArrayList(),
+					Lists.newArrayList());
 			this.id = id;
 			final List<IndexFieldHandler<Integer, TestIndexFieldType, Object>> handlers = new ArrayList<IndexFieldHandler<Integer, TestIndexFieldType, Object>>();
 			handlers.add(new IndexFieldHandler<Integer, TestIndexFieldType, Object>() {
@@ -130,9 +137,9 @@ public class MockComponents
 		}
 
 		/**
-		 * 
+		 *
 		 * Return the adapter ID
-		 * 
+		 *
 		 * @return a unique identifier for this adapter
 		 */
 		@Override
@@ -232,13 +239,6 @@ public class MockComponents
 		}
 
 		@Override
-		public EntryVisibilityHandler<Integer> getVisibilityHandler(
-				final ByteArrayId statisticsId ) {
-			return new FieldIdStatisticVisibility<Integer>(
-					new TestDimensionField().fieldId);
-		}
-
-		@Override
 		public int getPositionOfOrderedField(
 				final CommonIndexModel model,
 				final ByteArrayId fieldId ) {
@@ -289,6 +289,18 @@ public class MockComponents
 			// TODO Auto-generated method stub
 
 		}
+
+		@Override
+		public EntryVisibilityHandler<Integer> getVisibilityHandler(
+				final CommonIndexModel indexModel,
+				final DataAdapter<Integer> adapter,
+				final ByteArrayId statisticsId ) {
+			return new FieldIdStatisticVisibility<Integer>(
+					new TestDimensionField().fieldId,
+					indexModel,
+					adapter);
+		}
+
 	} // class MockAbstractDataAdapter
 
 	public static class IntegerRangeDataStatistics extends
@@ -611,32 +623,33 @@ public class MockComponents
 
 		@Override
 		public byte[] toBinary() {
-			return null;
+			return new byte[] {};
 		}
 
 		@Override
 		public void fromBinary(
-				final byte[] bytes ) {
-
-		}
+				final byte[] bytes ) {}
 
 		@Override
-		public List<ByteArrayRange> getQueryRanges(
+		public QueryRanges getQueryRanges(
 				final MultiDimensionalNumericData indexedRange,
 				final IndexMetaData... hints ) {
-			return null;
+			return getQueryRanges(
+					indexedRange,
+					-1,
+					hints);
 		}
 
 		@Override
-		public List<ByteArrayRange> getQueryRanges(
+		public QueryRanges getQueryRanges(
 				final MultiDimensionalNumericData indexedRange,
 				final int maxEstimatedRangeDecomposition,
 				final IndexMetaData... hints ) {
-			return null;
+			return new QueryRanges();
 		}
 
 		@Override
-		public List<ByteArrayId> getInsertionIds(
+		public InsertionIds getInsertionIds(
 				final MultiDimensionalNumericData indexedData ) {
 			final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
 			for (final NumericData data : indexedData.getDataPerDimension()) {
@@ -644,26 +657,15 @@ public class MockComponents
 						Double.toString(
 								data.getCentroid()).getBytes()));
 			}
-			return ids;
+			return new InsertionIds(
+					ids);
 		}
 
 		@Override
-		public List<ByteArrayId> getInsertionIds(
+		public InsertionIds getInsertionIds(
 				final MultiDimensionalNumericData indexedData,
 				final int maxEstimatedDuplicateIds ) {
 			return this.getInsertionIds(indexedData);
-		}
-
-		@Override
-		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId insertionId ) {
-			return null;
-		}
-
-		@Override
-		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId insertionId ) {
-			return null;
 		}
 
 		@Override
@@ -684,25 +686,67 @@ public class MockComponents
 		}
 
 		@Override
-		public Set<ByteArrayId> getNaturalSplits() {
-			return null;
-		}
-
-		@Override
-		public int getByteOffsetFromDimensionalIndex() {
-			return 0;
-		}
-
-		@Override
 		public List<IndexMetaData> createMetaData() {
 			return Collections.emptyList();
 		}
 
 		@Override
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-				MultiDimensionalNumericData dataRange,
-				IndexMetaData... hints ) {
+				final MultiDimensionalNumericData dataRange,
+				final IndexMetaData... hints ) {
+			final CoordinateRange[][] coordinateRangesPerDimension = new CoordinateRange[dataRange.getDimensionCount()][];
+			for (int d = 0; d < coordinateRangesPerDimension.length; d++) {
+				coordinateRangesPerDimension[d] = new CoordinateRange[1];
+				coordinateRangesPerDimension[d][0] = new CoordinateRange(
+						(long) dataRange.getMinValuesPerDimension()[0],
+						(long) dataRange.getMaxValuesPerDimension()[0],
+						new byte[] {});
+			}
+			return new MultiDimensionalCoordinateRanges[] {
+				new MultiDimensionalCoordinateRanges(
+						new byte[] {},
+						coordinateRangesPerDimension)
+			};
+		}
+
+		@Override
+		public MultiDimensionalNumericData getRangeForId(
+				final ByteArrayId partitionKey,
+				final ByteArrayId sortKey ) {
 			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getInsertionPartitionKeys(
+				final MultiDimensionalNumericData insertionData ) {
+			return null;
+		}
+
+		@Override
+		public Set<ByteArrayId> getQueryPartitionKeys(
+				final MultiDimensionalNumericData queryData,
+				final IndexMetaData... hints ) {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
+		@Override
+		public MultiDimensionalCoordinates getCoordinatesPerDimension(
+				final ByteArrayId partitionKey,
+				final ByteArrayId sortKey ) {
+			return new MultiDimensionalCoordinates(
+					new byte[] {},
+					new Coordinate[] {
+						new Coordinate(
+								(long) Double.parseDouble(new String(
+										sortKey.getBytes())),
+								new byte[] {})
+					});
+		}
+
+		@Override
+		public int getPartitionKeyLength() {
+			return 0;
 		}
 	}
 
@@ -747,7 +791,7 @@ public class MockComponents
 
 		@Override
 		public byte[] toBinary() {
-			return null;
+			return new byte[] {};
 		}
 
 		@Override

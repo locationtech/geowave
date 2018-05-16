@@ -216,9 +216,7 @@ public class PasswordConverter extends
 
 	protected Properties getGeoWaveConfigProperties() {
 		File geowaveConfigPropsFile = getGeoWaveConfigFile();
-		return ConfigOptions.loadProperties(
-				geowaveConfigPropsFile,
-				null);
+		return ConfigOptions.loadProperties(geowaveConfigPropsFile);
 	}
 
 	protected File getGeoWaveConfigFile() {

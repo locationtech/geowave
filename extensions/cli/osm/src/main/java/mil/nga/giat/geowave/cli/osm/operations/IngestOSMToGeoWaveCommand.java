@@ -31,9 +31,9 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.operations.remote.options.StoreLoader;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 @GeowaveOperation(name = "ingest", parentOperation = OSMSection.class)
@@ -119,11 +119,9 @@ public class IngestOSMToGeoWaveCommand extends
 	}
 
 	public void setParameters(
-			final String hdfsHostPort,
 			final String hdfsPath,
 			final String storeName ) {
 		parameters = new ArrayList<String>();
-		parameters.add(hdfsHostPort);
 		parameters.add(hdfsPath);
 		parameters.add(storeName);
 	}
@@ -154,15 +152,8 @@ public class IngestOSMToGeoWaveCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-		Properties configProperties = ConfigOptions.loadProperties(
-				configFile,
-				null);
+		Properties configProperties = ConfigOptions.loadProperties(configFile);
 		String hdfsHostPort = ConfigHDFSCommand.getHdfsUrl(configProperties);
-
-		if (!basePath.startsWith("/")) {
-			throw new ParameterException(
-					"HDFS Base path must start with forward slash /");
-		}
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {

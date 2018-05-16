@@ -23,7 +23,8 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.datastore.accumulo.BasicAccumuloOperations;
+import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
+import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,14 +56,18 @@ public class SimpleIngestProducerConsumer extends
 		}
 		namespace = args[5];
 		instance = args[2];
+		final AccumuloOptions options = new AccumuloOptions();
 		try {
-			final BasicAccumuloOperations bao = si.getAccumuloOperationsInstance(
+			final AccumuloOperations bao = si.getAccumuloOperationsInstance(
 					args[1],
 					args[2],
 					args[3],
 					args[4],
-					args[5]);
-			geowaveDataStore = si.getAccumuloGeowaveDataStore(bao);
+					args[5],
+					options);
+			geowaveDataStore = si.getAccumuloGeowaveDataStore(
+					bao,
+					options);
 		}
 		catch (final Exception e) {
 			log.error(

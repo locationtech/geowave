@@ -27,14 +27,13 @@ import mil.nga.giat.geowave.core.store.query.BasicQuery;
 public class TemporalQuery extends
 		BasicQuery
 {
-
 	public TemporalQuery(
 			final TemporalConstraints contraints ) {
 		super(
 				createTemporalConstraints(contraints));
 	}
 
-	protected TemporalQuery() {
+	public TemporalQuery() {
 		super();
 	}
 

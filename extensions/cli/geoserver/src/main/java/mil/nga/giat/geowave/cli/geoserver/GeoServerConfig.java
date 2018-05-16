@@ -55,9 +55,7 @@ public class GeoServerConfig
 		this.propFile = propFile;
 
 		if (propFile != null && propFile.exists()) {
-			gsConfigProperties = ConfigOptions.loadProperties(
-					propFile,
-					null);
+			gsConfigProperties = ConfigOptions.loadProperties(propFile);
 		}
 		else {
 			gsConfigProperties = new Properties();

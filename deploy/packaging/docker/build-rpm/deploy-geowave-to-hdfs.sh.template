@@ -16,6 +16,11 @@ dependency_tests() {
     done
 }
 
+read_dom () {
+    local IFS=\>
+    read -d \< ENTITY CONTENT
+}
+
 # Sanity check of environment
 dependency_tests
 
@@ -144,4 +149,44 @@ fi
 su $HDFS_USER -c "hadoop fs -chown -R $DATASTORE_USER:$DATASTORE_USER $DATASTORE_LIB_DIR"
 if [ $? -ne 0 ]; then
     echo >&2 "Unable to change ownership of the $DATASTORE_LIB_DIR directory in hdfs. Aborting."; exit 1;
+fi
+
+#Find hbase conf path
+if [[ -x "$(command -v hbase)" ]]
+    PATHS=$(hbase classpath)
+    IFS=':' read -ra CLASSPATHS <<< "$PATHS"
+
+    for i in "${CLASSPATHS[@]}"
+    do
+      if [[ $i = *"hbase/conf" ]]; then
+         CONFPATH=$i
+         break
+      fi
+    done    
+fi
+
+GOTELEM=0
+# If using Hbase on AWS, scan hbase configs, find configured bucket and copy library over.
+if [[ -x "$(command -v aws)" ]] && [ ! -z "$CONFPATH" ] && [[ -e "$CONFPATH/hbase-site.xml" ]]; then
+
+  while read_dom; do
+    if [[ -z  "$(echo -e "${CONTENT}" | tr -d '[:space:]')"  ]]; then
+      continue;
+    fi
+
+    if [[ $ENTITY = "name" ]] && [ $CONTENT = "hbase.rootdir" ]; then
+      GOTELEM=1;
+      continue
+    fi
+
+    if [[ $GOTELEM -eq 1 ]] && [[ $CONTENT = "s3://"* ]]; then
+      CONTENT=${CONTENT%/}
+      echo -e "s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar"
+      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar
+    fi
+
+    if [ $GOTELEM -eq 1 ]; then
+      break
+    fi
+  done < $CONFPATH/hbase-site.xml
 fi

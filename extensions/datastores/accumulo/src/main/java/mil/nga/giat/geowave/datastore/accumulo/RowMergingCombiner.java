@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,9 +21,9 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
+import mil.nga.giat.geowave.core.store.server.RowMergingAdapterOptionProvider;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class RowMergingCombiner extends
 		MergingCombiner
@@ -40,6 +40,13 @@ public class RowMergingCombiner extends
 				new ByteArrayId(
 						key.getColumnQualifier().getBytes()),
 				binary);
+	}
+
+	@Override
+	protected String getColumnOptionValue(
+			final Map<String, String> options ) {
+		// if this is "row" merging than it is by adapter ID
+		return options.get(RowMergingAdapterOptionProvider.ADAPTER_IDS_OPTION);
 	}
 
 	@Override
@@ -60,7 +67,7 @@ public class RowMergingCombiner extends
 				env);
 		final String rowTransformStr = options.get(RowMergingAdapterOptionProvider.ROW_TRANSFORM_KEY);
 		final byte[] rowTransformBytes = ByteArrayUtils.byteArrayFromString(rowTransformStr);
-		rowTransform = (RowTransform<Mergeable>) AccumuloUtils.fromBinary(rowTransformBytes);
+		rowTransform = (RowTransform<Mergeable>) URLClassloaderUtils.fromBinary(rowTransformBytes);
 		rowTransform.initOptions(options);
 	}
 

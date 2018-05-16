@@ -117,7 +117,6 @@ public class GeoWaveDataStoreComponents
 		dataStore.delete(
 				options,
 				new DataIdQuery(
-						adapter.getAdapterId(),
 						adapter.getDataId(feature)));
 	}
 
@@ -134,8 +133,7 @@ public class GeoWaveDataStoreComponents
 				options,
 				new DataIdQuery(
 						new ByteArrayId(
-								StringUtils.stringToBinary(fid)),
-						adapter.getAdapterId()));
+								StringUtils.stringToBinary(fid))));
 
 	}
 

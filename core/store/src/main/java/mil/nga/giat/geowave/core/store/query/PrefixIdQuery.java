@@ -24,15 +24,22 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class PrefixIdQuery implements
 		Query
 {
-	private final ByteArrayId rowPrefix;
+	private final ByteArrayId sortKeyPrefix;
+	private final ByteArrayId partitionKey;
 
 	public PrefixIdQuery(
-			final ByteArrayId rowPrefix ) {
-		this.rowPrefix = rowPrefix;
+			final ByteArrayId partitionKey,
+			final ByteArrayId sortKeyPrefix ) {
+		this.partitionKey = partitionKey;
+		this.sortKeyPrefix = sortKeyPrefix;
 	}
 
-	public ByteArrayId getRowPrefix() {
-		return rowPrefix;
+	public ByteArrayId getPartitionKey() {
+		return partitionKey;
+	}
+
+	public ByteArrayId getSortKeyPrefix() {
+		return sortKeyPrefix;
 	}
 
 	@Override
@@ -40,7 +47,8 @@ public class PrefixIdQuery implements
 			final PrimaryIndex index ) {
 		final List<QueryFilter> filters = new ArrayList<>();
 		filters.add(new PrefixIdQueryFilter(
-				rowPrefix));
+				partitionKey,
+				sortKeyPrefix));
 		return filters;
 	}
 

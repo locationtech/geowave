@@ -111,6 +111,7 @@ public class AccumuloSecondaryIndexUtils
 				adapter.getAdapterId(),
 				dataId,
 				null,
+				null,
 				0,
 				commonData,
 				unknownData,
