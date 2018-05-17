@@ -61,11 +61,11 @@ public class GeoServerIngestIT
 	private static final String REFERENCE_25_WMS_IMAGE_PATH = "src/test/resources/wms/wms-grid-2.5.gif";
 
 	@GeoWaveTestStore(value = {
-			GeoWaveStoreType.ACCUMULO,
-			GeoWaveStoreType.BIGTABLE,
-			GeoWaveStoreType.HBASE,
-			GeoWaveStoreType.CASSANDRA,
-			GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

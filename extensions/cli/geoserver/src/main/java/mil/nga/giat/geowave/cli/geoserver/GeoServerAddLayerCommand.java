@@ -133,8 +133,7 @@ public class GeoServerAddLayerCommand extends
 			return "Add GeoServer layer for '" + gwStore + ": OK : " + jsonResponse.toString(2);
 		}
 		String errorMessage = "Error adding GeoServer layer for store '" + gwStore + "': "
-				+ addLayerResponse.getEntity() + "\nGeoServer Response Code = "
-				+ addLayerResponse.getStatus();
+				+ addLayerResponse.getEntity() + "\nGeoServer Response Code = " + addLayerResponse.getStatus();
 		return handleError(
 				addLayerResponse,
 				errorMessage);

@@ -63,7 +63,7 @@ public class AddIndexGroupCommand extends
 	public String computeResults(
 			final OperationParams params )
 			throws Exception {
-		
+
 		return addIndexGroup(params);
 	}
 

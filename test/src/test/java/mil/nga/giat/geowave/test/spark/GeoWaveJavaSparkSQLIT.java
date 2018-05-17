@@ -168,7 +168,7 @@ public class GeoWaveJavaSparkSQLIT extends
 		TestUtils.deleteAll(dataStore);
 	}
 
-  @Test
+	@Test
 	public void testSpatialJoin()
 			throws Exception {
 

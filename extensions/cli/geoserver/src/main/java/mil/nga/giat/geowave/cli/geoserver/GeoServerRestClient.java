@@ -422,7 +422,8 @@ public class GeoServerRestClient
 
 					if (addCsResponse.getStatus() != Status.CREATED.getStatusCode()) {
 						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCsResponse.getStatus()
-								+ ",\"Message\":\"Adding coverage store returned error: "+addCsResponse.readEntity(String.class)+"\"},";
+								+ ",\"Message\":\"Adding coverage store returned error: "
+								+ addCsResponse.readEntity(String.class) + "\"},";
 						buf.append(ret);
 						if (retStatus == -1) {
 							retStatus = addCsResponse.getStatus();
@@ -435,9 +436,11 @@ public class GeoServerRestClient
 				}
 				//
 				else if (getCsResponse.getStatus() != Status.OK.getStatusCode()) {
-					// GeoServer get commands will almost always return a 200 or 404 unless there is a sever error
+					// GeoServer get commands will almost always return a 200 or
+					// 404 unless there is a sever error
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getCsResponse.getStatus()
-					+ ",\"Message\":\"Checking Existence of coverage store returned error: "+getCsResponse.readEntity(String.class)+"\"},";					
+							+ ",\"Message\":\"Checking Existence of coverage store returned error: "
+							+ getCsResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
 					if (retStatus == -1) {
 						retStatus = getCsResponse.getStatus();
@@ -470,13 +473,14 @@ public class GeoServerRestClient
 				// If any layers get added, we will return a 200
 				if (addCvResponse.getStatus() == Status.CREATED.getStatusCode()) {
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
-					+ ",\"Message\":\"Coverage added successfully\"},";					
+							+ ",\"Message\":\"Coverage added successfully\"},";
 					buf.append(ret);
 					layerAdded = true;
 				}
 				else {
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
-					+ ",\"Message\":\"Adding coverage returned error: "+addCvResponse.readEntity(String.class)+"\"},";					
+							+ ",\"Message\":\"Adding coverage returned error: "
+							+ addCvResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
 					// If there are multiple different error codes, just return
 					// a 400
@@ -501,7 +505,8 @@ public class GeoServerRestClient
 							storeName);
 					if (addDsResponse.getStatus() != Status.CREATED.getStatusCode()) {
 						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addDsResponse.getStatus()
-						+ ",\"Message\":\"Adding data store returned error: "+addDsResponse.readEntity(String.class)+"\"},";	
+								+ ",\"Message\":\"Adding data store returned error: "
+								+ addDsResponse.readEntity(String.class) + "\"},";
 						buf.append(ret);
 						if (retStatus == -1) {
 							retStatus = addDsResponse.getStatus();
@@ -513,9 +518,11 @@ public class GeoServerRestClient
 					}
 				}
 				else if (getDsResponse.getStatus() != Status.OK.getStatusCode()) {
-					// GeoServer get commands will almost always return a 200 or 404 unless there is a sever error
+					// GeoServer get commands will almost always return a 200 or
+					// 404 unless there is a sever error
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getDsResponse.getStatus()
-					+ ",\"Message\":\"Checking Existence of data store returned error: "+getDsResponse.readEntity(String.class)+"\"},";					
+							+ ",\"Message\":\"Checking Existence of data store returned error: "
+							+ getDsResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
 					if (retStatus == -1) {
 						retStatus = getDsResponse.getStatus();
@@ -551,13 +558,14 @@ public class GeoServerRestClient
 				// If any layers get added, we will return a 200
 				if (addFlResponse.getStatus() == Status.CREATED.getStatusCode()) {
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
-					+ ",\"Message\":\"Feature Layer added successfully\"},";					
+							+ ",\"Message\":\"Feature Layer added successfully\"},";
 					buf.append(ret);
 					layerAdded = true;
 				}
 				else {
 					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
-					+ ",\"Message\":\"Adding data store error: "+addFlResponse.readEntity(String.class)+"\"},";					
+							+ ",\"Message\":\"Adding data store error: " + addFlResponse.readEntity(String.class)
+							+ "\"},";
 					buf.append(ret);
 					// If there are multiple different error codes, just return
 					// a 400
