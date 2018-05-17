@@ -33,7 +33,7 @@ import net.sf.json.JSONObject;
 @GeowaveOperation(name = "rmfl", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer feature Layer")
 public class GeoServerRemoveFeatureLayerCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(description = "<layer name>")
 	private List<String> parameters = new ArrayList<String>();

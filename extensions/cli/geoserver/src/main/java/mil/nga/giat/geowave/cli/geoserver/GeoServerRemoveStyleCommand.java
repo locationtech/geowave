@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 @GeowaveOperation(name = "rmstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer Style")
 public class GeoServerRemoveStyleCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(description = "<style name>")
 	private List<String> parameters = new ArrayList<String>();

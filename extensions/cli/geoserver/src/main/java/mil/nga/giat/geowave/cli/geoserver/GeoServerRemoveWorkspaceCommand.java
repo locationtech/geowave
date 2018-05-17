@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 @GeowaveOperation(name = "rmws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer workspace")
 public class GeoServerRemoveWorkspaceCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(description = "<workspace name>")
 	private List<String> parameters = new ArrayList<String>();

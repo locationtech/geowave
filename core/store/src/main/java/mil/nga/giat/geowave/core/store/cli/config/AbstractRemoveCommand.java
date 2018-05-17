@@ -19,6 +19,7 @@ import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.restlet.data.Status;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
@@ -37,6 +38,14 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 public abstract class AbstractRemoveCommand extends
 		ServiceEnabledCommand<String>
 {
+
+	/**
+	 * Return "200 OK" for all removal commands.
+	 */
+	@Override
+	public Status getSuccessStatus() {
+		return Status.SUCCESS_OK;
+	}
 
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();

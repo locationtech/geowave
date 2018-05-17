@@ -14,6 +14,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,14 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 public class ClearCommand extends
 		ServiceEnabledCommand<Void>
 {
+
+	/**
+	 * Return "200 OK" for all clear commands.
+	 */
+	@Override
+	public Status getSuccessStatus() {
+		return Status.SUCCESS_OK;
+	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
 

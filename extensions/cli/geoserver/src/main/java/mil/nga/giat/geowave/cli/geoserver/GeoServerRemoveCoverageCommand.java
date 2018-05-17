@@ -32,7 +32,7 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 @GeowaveOperation(name = "rmcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove a GeoServer coverage")
 public class GeoServerRemoveCoverageCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(names = {
 		"-ws",

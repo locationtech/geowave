@@ -36,6 +36,14 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 public class GeoServerSetLayerStyleCommand extends
 		GeoServerCommand<String>
 {
+	/**
+	 * Return "200 OK" for the set layer command.
+	 */
+	@Override
+	public org.restlet.data.Status getSuccessStatus() {
+		return org.restlet.data.Status.SUCCESS_OK;
+	}
+
 	@Parameter(names = {
 		"-sn",
 		"--styleName"
