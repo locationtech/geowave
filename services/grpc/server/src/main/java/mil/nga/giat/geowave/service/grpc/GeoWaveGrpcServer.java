@@ -5,8 +5,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grpc.Server;
-import io.grpc.ServerBuilder;
+import io.grpcshaded.Server;
+import io.grpcshaded.ServerBuilder;
 
 public class GeoWaveGrpcServer
 {
@@ -21,8 +21,8 @@ public class GeoWaveGrpcServer
 
 		LOGGER.info("Starting gRPC server");
 		GeoWaveGrpcServer server = null;
-		// default to port 8090 unless there is a command line argument
-		int port = 8090;
+		// use default port unless there is a command line argument
+		int port = GeoWaveGrpcServiceOptions.port;
 		if (args.length > 0) {
 			try {
 				port = Integer.parseInt(args[0]);
@@ -67,7 +67,7 @@ public class GeoWaveGrpcServer
 		// more services as desired
 		server = ServerBuilder.forPort(
 				port).addService(
-				new GeoWaveGrpcVectorQueryService()).build();
+				new GeoWaveGrpcVectorService()).build();
 	}
 
 	/** Start serving requests. */

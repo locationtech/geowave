@@ -3,6 +3,9 @@ package mil.nga.giat.geowave.service.grpc;
 import java.io.File;
 import java.util.Map;
 
+import io.grpcshaded.stub.StreamObserver;
+import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,14 +29,14 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 	@Override
 	public void kdeCommand(
 			KdeCommandParameters request,
-			io.grpc.stub.StreamObserver<VoidResponse> responseObserver ) {
+			StreamObserver<VoidResponse> responseObserver ) {
 		KdeCommand cmd = new KdeCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -41,11 +44,12 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 
 		cmd.prepare(params);
 		try {
-			cmd.executeService(params);
+			cmd.computeResults(params);
 		}
-		catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		catch (final Exception e) {
+			LOGGER.error(
+					"Exception encountered executing command",
+					e);
 		}
 		LOGGER.info("Executing KdeCommand...");
 		try {
@@ -65,14 +69,14 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 	@Override
 	public void dBScanCommand(
 			DBScanCommandParameters request,
-			io.grpc.stub.StreamObserver<VoidResponse> responseObserver ) {
+			StreamObserver<VoidResponse> responseObserver ) {
 		DBScanCommand cmd = new DBScanCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -81,7 +85,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 		cmd.prepare(params);
 		LOGGER.info("Executing DBScanCommand...");
 		try {
-
+			cmd.computeResults(params);
 			VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -97,14 +101,14 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 	@Override
 	public void nearestNeighborCommand(
 			NearestNeighborCommandParameters request,
-			io.grpc.stub.StreamObserver<VoidResponse> responseObserver ) {
+			StreamObserver<VoidResponse> responseObserver ) {
 		NearestNeighborCommand cmd = new NearestNeighborCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -113,7 +117,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 		cmd.prepare(params);
 		LOGGER.info("Executing NearestNeighborCommand...");
 		try {
-
+			cmd.computeResults(params);
 			VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();

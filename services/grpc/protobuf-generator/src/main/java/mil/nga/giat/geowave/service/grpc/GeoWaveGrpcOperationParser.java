@@ -20,11 +20,14 @@ public class GeoWaveGrpcOperationParser
 		else if ((type == Integer.class) || (type == int.class)) {
 			return "int32";
 		}
-		else if ((type == long.class) || (type == Long.class)) {
+		else if ((type == Long.class) || (type == long.class)) {
 			return "long";
 		}
 		else if ((type == Float.class) || (type == float.class)) {
-			return "number";
+			return "float";
+		}
+		else if ((type == Double.class) || (type == double.class)) {
+			return "double";
 		}
 		else if ((type == Boolean.class) || (type == boolean.class)) {
 			return "bool";
@@ -63,7 +66,11 @@ public class GeoWaveGrpcOperationParser
 		}
 		else if (baseType.equalsIgnoreCase(Float.class.getTypeName())
 				|| baseType.equalsIgnoreCase(float.class.getTypeName())) {
-			return "number";
+			return "float";
+		}
+		else if (baseType.equalsIgnoreCase(Double.class.getTypeName())
+				|| baseType.equalsIgnoreCase(double.class.getTypeName())) {
+			return "double";
 		}
 		else if (baseType.equalsIgnoreCase(Boolean.class.getTypeName())
 				|| baseType.equalsIgnoreCase(boolean.class.getTypeName())) {

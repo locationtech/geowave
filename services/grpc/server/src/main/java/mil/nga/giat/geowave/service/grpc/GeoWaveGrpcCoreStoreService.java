@@ -6,6 +6,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.stub.StreamObserver;
+import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -35,14 +38,14 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void removeAdapterCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RemoveAdapterCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		RemoveAdapterCommand cmd = new RemoveAdapterCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -52,8 +55,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RemoveAdapterCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -69,15 +71,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void removeStoreCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RemoveStoreCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		RemoveStoreCommand cmd = new RemoveStoreCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -87,8 +89,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RemoveStoreCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -105,15 +106,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void listAdapterCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ListAdapterCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		ListAdapterCommand cmd = new ListAdapterCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -123,8 +124,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing ListAdapterCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -141,14 +141,14 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void calculateStatCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.CalculateStatCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		CalculateStatCommand cmd = new CalculateStatCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -158,8 +158,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing CalculateStatCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -175,15 +174,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void removeIndexGroupCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RemoveIndexGroupCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		RemoveIndexGroupCommand cmd = new RemoveIndexGroupCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -193,8 +192,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RemoveIndexGroupCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -211,14 +209,14 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void recalculateStatsCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RecalculateStatsCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		RecalculateStatsCommand cmd = new RecalculateStatsCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -228,8 +226,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RecalculateStatsCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -245,15 +242,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void listStatsCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ListStatsCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		ListStatsCommand cmd = new ListStatsCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -263,8 +260,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing ListStatsCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -281,15 +277,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void listIndexCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ListIndexCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		ListIndexCommand cmd = new ListIndexCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -299,8 +295,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing ListIndexCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -317,14 +312,14 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void clearCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ClearCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		ClearCommand cmd = new ClearCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -334,8 +329,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing ClearCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -351,15 +345,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void versionCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.VersionCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		VersionCommand cmd = new VersionCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -369,8 +363,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing VersionCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -386,15 +379,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void addIndexGroupCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.AddIndexGroupCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		AddIndexGroupCommand cmd = new AddIndexGroupCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -404,8 +397,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing AddIndexGroupCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -422,15 +414,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void removeIndexCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RemoveIndexCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		RemoveIndexCommand cmd = new RemoveIndexCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -440,8 +432,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RemoveIndexCommand...");
 		try {
-			final String result = cmd.executeService(
-					params).getValue();
+			final String result = cmd.computeResults(params);
 			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -458,15 +449,15 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void removeStatCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.RemoveStatCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		RemoveStatCommand cmd = new RemoveStatCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -476,8 +467,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		LOGGER.info("Executing RemoveStatCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
