@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.core.cli.api;
 
+import org.restlet.data.Status;
+
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 public abstract class ServiceEnabledCommand<T> extends
@@ -33,6 +35,25 @@ public abstract class ServiceEnabledCommand<T> extends
 			return HttpMethod.GET;
 		}
 		return HttpMethod.POST;
+	}
+
+	/**
+	 * Get the status code to return if execution was success.
+	 * 
+	 * By default: POST -> 201 OTHER -> 200
+	 * 
+	 * Should be overridden in subclasses as needed (i.e., for a POST that does
+	 * not create anything).
+	 * 
+	 * @return The potential status if REST call is successful.
+	 */
+	public Status getSuccessStatus() {
+		switch (getMethod()) {
+			case POST:
+				return Status.SUCCESS_CREATED;
+			default:
+				return Status.SUCCESS_OK;
+		}
 	}
 
 	/**

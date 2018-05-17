@@ -296,6 +296,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();	
 			
 			if(operation.runAsync()) {
 				final Context appContext = Application.getCurrent().getContext();
@@ -309,22 +310,18 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final Future<T> futureResult = opPool.submit(task);
 				final UUID opId = UUID.randomUUID();
 				opStatuses.put(opId.toString(), futureResult);
-				setSuccessStatus();
 				
-				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 				rm.status = RestOperationStatusMessage.StatusType.STARTED;
 				rm.message = "Async operation started with ID in data field. Check status at /operation_status?id=";
 				rm.data = opId.toString();
-				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-				return rep;
 			} else {
-				final T result = operation.computeResults(params);
-				final RestOperationStatusMessage rm = new RestOperationStatusMessage();			
+				final T result = operation.computeResults(params);		
 				rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
 				rm.data = result;
-				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-				return rep;
 			}
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			setStatus(operation.getSuccessStatus());
+			return rep;
 		}
 		catch (final NotAuthorizedException e){
 			LOGGER.error(
@@ -396,25 +393,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final String argumentName ) {
 			super(
 					"Missing argument: " + argumentName);
-		}
-	}
-
-	/**
-	 * This checks the method used in the request, and then uses the setStatus
-	 * method to set the appropriate method.
-	 * 
-	 * POST -> SUCCESS_CREATED (201)
-	 * 
-	 * ANY OTHER -> OK (200)
-	 * 
-	 **/
-	private void setSuccessStatus() {
-		switch (operation.getMethod()) {
-			case POST:
-				setStatus(Status.SUCCESS_CREATED);
-				break;
-			default:
-				setStatus(Status.SUCCESS_OK);
 		}
 	}
 }
