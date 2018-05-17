@@ -7,6 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.stub.StreamObserver;
+import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -31,15 +34,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void localToHdfsCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.LocalToHdfsCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		LocalToHdfsCommand cmd = new LocalToHdfsCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -49,8 +52,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing LocalToHdfsCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -67,14 +69,14 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void sparkToGeowaveCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.SparkToGeowaveCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		SparkToGeowaveCommand cmd = new SparkToGeowaveCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -86,8 +88,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing SparkToGeowaveCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -103,15 +104,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void kafkaToGeowaveCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		KafkaToGeowaveCommand cmd = new KafkaToGeowaveCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -121,8 +122,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing KafkaToGeowaveCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -139,15 +139,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void listPluginsCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ListPluginsCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.RepeatedStringResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.RepeatedStringResponse> responseObserver ) {
 
 		ListPluginsCommand cmd = new ListPluginsCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -157,8 +157,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing ListPluginsCommand...");
 		try {
-			final List<String> result = cmd.executeService(
-					params).getValue();
+			final List<String> result = cmd.computeResults(params);
 			final RepeatedStringResponse resp = RepeatedStringResponse.newBuilder().addAllResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
@@ -175,15 +174,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void localToKafkaCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.LocalToKafkaCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		LocalToKafkaCommand cmd = new LocalToKafkaCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -193,8 +192,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing LocalToKafkaCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -210,14 +208,14 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void localToMapReduceToGeowaveCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		LocalToMapReduceToGeowaveCommand cmd = new LocalToMapReduceToGeowaveCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -227,8 +225,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing LocalToMapReduceToGeowaveCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -244,15 +241,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void localToGeowaveCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.LocalToGeowaveCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		LocalToGeowaveCommand cmd = new LocalToGeowaveCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -262,8 +259,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing LocalToGeowaveCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
@@ -279,15 +275,15 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void mapReduceToGeowaveCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		MapReduceToGeowaveCommand cmd = new MapReduceToGeowaveCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -297,8 +293,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing MapReduceToGeowaveCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();

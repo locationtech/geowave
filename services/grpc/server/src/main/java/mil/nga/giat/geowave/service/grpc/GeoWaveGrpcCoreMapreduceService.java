@@ -6,6 +6,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.stub.StreamObserver;
+import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
@@ -22,15 +25,15 @@ public class GeoWaveGrpcCoreMapreduceService extends
 	@Override
 	public void configHDFSCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ConfigHDFSCommandParameters request,
-			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 
 		ConfigHDFSCommand cmd = new ConfigHDFSCommand();
-		Map<com.google.protoshadebuf3.Descriptors.FieldDescriptor, Object> m = request.getAllFields();
+		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
 				cmd);
 
-		final File configFile = ConfigOptions.getDefaultPropertyFile();
+		final File configFile = GeoWaveGrpcServiceOptions.geowaveConfigFile;
 		final OperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
@@ -40,8 +43,7 @@ public class GeoWaveGrpcCoreMapreduceService extends
 
 		LOGGER.info("Executing ConfigHDFSCommand...");
 		try {
-			cmd.executeService(
-					params).getValue();
+			cmd.computeResults(params);
 			final VoidResponse resp = VoidResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();

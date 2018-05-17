@@ -16,6 +16,16 @@
 		  <version>1.2.0</version>
 		</dependency>
 		<dependency>
+				<groupId>com.google.guava</groupId>
+				<artifactId>guava</artifactId>
+				<version>23.2-jre</version>
+			</dependency>
+		<dependency>
+		  <groupId>io.grpc</groupId>
+		  <artifactId>grpc-netty</artifactId>
+		  <version>1.2.0</version>
+		</dependency>
+		<dependency>
 		  <groupId>io.grpc</groupId>
 		  <artifactId>grpc-stub</artifactId>
 		  <version>1.2.0</version>
@@ -52,38 +62,7 @@
           </dependency>
         </dependencies>
       </plugin>	
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <filters>
-                <filter>
-                  <artifact>*:*</artifact>
-                  <includes>
-                    <include>mil/nga/giat/**</include>
-                    <include>com/google/protobuf/**</include>
-                    <include>io/grpc/protobuf/**</include>
-                  </includes>
-                </filter>
-              </filters>
-              <relocations>
-                <relocation>
-                  <pattern>com.google.protobuf</pattern>
-                  <shadedPattern>com.google.protoshadebuf3</shadedPattern>
-                </relocation>
-              </relocations>
-              <createSourcesJar>true</createSourcesJar>
-              <shadeSourcesContent>true</shadeSourcesContent>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+     
       <plugin>
 		<groupId>com.github.os72</groupId>
 		<artifactId>protoc-jar-maven-plugin</artifactId>
@@ -114,6 +93,52 @@
 			</execution>
 		</executions>
 	</plugin>
+	<plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <filters>
+                <filter>
+                  <artifact>*:*</artifact>
+                  <includes>
+                    <!--  <include>mil/nga/giat/**</include>
+                    <include>com/google/protobuf/**</include>
+                    <include>io/grpc/protobuf/**</include>-->
+                    <include>mil/nga/giat/**</include>
+                    <include>com/google/**</include>
+                    <include>io/grpc/**</include>
+                    <include>io/netty/**</include>
+                  </includes>
+                </filter>
+              </filters>
+              <relocations>
+                <relocation>
+                  <!--  <pattern>com.google.protobuf</pattern>
+                  <shadedPattern>com.google.protoshadebuf3</shadedPattern>-->
+                  <pattern>com.google</pattern>
+                  <shadedPattern>com.googleshaded</shadedPattern>
+                </relocation>
+                <relocation>
+                   <pattern>io.grpc</pattern>
+                  <shadedPattern>io.grpcshaded</shadedPattern>
+                </relocation>
+                <relocation>
+                   <pattern>io.netty</pattern>
+                  <shadedPattern>io.nettyshaded</shadedPattern>
+                </relocation>
+              </relocations>
+              <createSourcesJar>true</createSourcesJar>
+              <shadeSourcesContent>true</shadeSourcesContent>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
 </project>

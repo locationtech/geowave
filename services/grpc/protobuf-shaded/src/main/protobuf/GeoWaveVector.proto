@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
+ * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
  * 
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
@@ -9,13 +9,17 @@
  * http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
 syntax = "proto3";
-
+import "GeoWaveReturnTypes.proto";
+//import "google/protobuf/timestamp.proto";
 option java_multiple_files = true;
 option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
-option java_outer_classname = "VectorQueryService";
+option java_outer_classname = "VectorService";
 
 // Interface exported by the server.
-service VectorQuery {
+service Vector {
+  // Ingest for vector data
+  rpc VectorIngest(stream VectorIngestParameters) returns (stream StringResponse) {}
+
   // Standard query for accessing vector data
   rpc VectorQuery(VectorQueryParameters) returns (stream Feature) {}
   
@@ -32,26 +36,21 @@ message VectorQueryParameters {
 	string query = 3;		// required
 }
 
-// Base query parameters as defined by AbstractGeoWaveQuery.java
-message BaseGeoWaveQueryParameters {
+// Base parameters needed to access data, adapter, and index stores
+message VectorStoreParameters {
 	string storeName = 1;	// required
 	bytes indexId = 2;		// optional	
 	bytes adapterId = 3;		// optional
 }
 
-message TemporalConstraints {
-	string startTime = 1; //ISO format e.g. 2005-05-17T19:32:56Z
-	string endTime = 2;
-}
-
 // A CQL query string to be executed by the server
 message CQLQueryParameters {
-  BaseGeoWaveQueryParameters baseParams = 1;
+  VectorStoreParameters baseParams = 1;
   string cql = 2;
 }
 
 message SpatialQueryParameters {
-	BaseGeoWaveQueryParameters baseParams = 1;
+	VectorStoreParameters baseParams = 1;
 	string geometry = 2;	//ISO 19107 Geometry text definition
 }
 
@@ -61,8 +60,31 @@ message SpatialTemporalQueryParameters {
 	string compareOperation = 3;	//see mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation for enum values to use here
 }
 
+message VectorIngestParameters {
+	VectorStoreParameters baseParams = 1;	//this should only be set on the first feature sent to the server
+	map<string, FeatureAttribute> feature = 2;
+}
+
 //a feature in this case is just a map of string key value pairs (aka SimpleFeature)
 message Feature {
-	map<string, string> attributes = 1;
+	map<string, FeatureAttribute> attributes = 1;
+}
+
+message FeatureAttribute {
+	string classType = 1;
+	oneof value {
+    string valString = 4;
+    int32  valInt32 = 5;
+    int64  valInt64 = 6;
+    float  valFloat = 7;
+    double valDouble = 8;
+    //google.protobuf.Timestamp valDate = 9;
+    string valGeometry = 10;
+  }
+}
+
+message TemporalConstraints {
+	string startTime = 1; //ISO format e.g. 2005-05-17T19:32:56Z
+	string endTime = 2;
 }
 
