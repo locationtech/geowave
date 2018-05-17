@@ -70,7 +70,7 @@ public class GeoServerIngestIT
 	protected DataStorePluginOptions dataStorePluginOptions;
 
 	private static long startMillis;
-	private final static String testName = "GeoServerServicesIT";
+	private final static String testName = "GeoServerIngestIT";
 
 	@BeforeClass
 	public static void setup() {
@@ -125,8 +125,8 @@ public class GeoServerIngestIT
 			}
 		}
 		TestUtils.assertStatusCode(
-				"Unable to create 'testomatic' workspace",
-				200,
+				"Should Create 'testomatic' Workspace",
+				201,
 				geoServerServiceClient.addWorkspace("testomatic"));
 		configServiceClient.addStore(
 				TestUtils.TEST_NAMESPACE,
@@ -134,16 +134,16 @@ public class GeoServerIngestIT
 				TestUtils.TEST_NAMESPACE,
 				dataStorePluginOptions.getOptionsAsMap());
 		TestUtils.assertStatusCode(
-				"Unable to add " + TestUtils.TEST_NAMESPACE + " datastore",
-				200,
+				"Should Add " + TestUtils.TEST_NAMESPACE + " Datastore",
+				201,
 				geoServerServiceClient.addDataStore(
 						TestUtils.TEST_NAMESPACE,
 						"testomatic",
 						TestUtils.TEST_NAMESPACE));
 
 		TestUtils.assertStatusCode(
-				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' style",
-				200,
+				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "' Style",
+				201,
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
@@ -154,27 +154,27 @@ public class GeoServerIngestIT
 						ServicesTestEnvironment.TEST_SLD_NO_DIFFERENCE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE));
 		TestUtils.assertStatusCode(
-				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' style",
-				200,
+				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "' Style",
+				201,
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_MINOR_SUBSAMPLE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE));
 		TestUtils.assertStatusCode(
-				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "' style",
-				200,
+				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "' Style",
+				201,
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_MAJOR_SUBSAMPLE_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE));
 		TestUtils.assertStatusCode(
-				"Unable to publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "' style",
-				200,
+				"Should Publish '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "' Style",
+				201,
 				geoServerServiceClient.addStyle(
 						ServicesTestEnvironment.TEST_SLD_DISTRIBUTED_RENDER_FILE,
 						ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 
 		TestUtils.assertStatusCode(
-				"Unable to publish '" + SimpleIngest.FEATURE_NAME + "' layer",
-				200,
+				"Should Publish '" + SimpleIngest.FEATURE_NAME + "' Layer",
+				201,
 				geoServerServiceClient.addLayer(
 						TestUtils.TEST_NAMESPACE,
 						WORKSPACE,
@@ -379,33 +379,33 @@ public class GeoServerIngestIT
 		final Response workspace = geoServerServiceClient.removeWorkspace(WORKSPACE);
 
 		TestUtils.assertStatusCode(
-				"Unable to delete layer '" + SimpleIngest.FEATURE_NAME + "'",
+				"Should Delete Layer '" + SimpleIngest.FEATURE_NAME + "'",
 				200,
 				layer);
 		TestUtils.assertStatusCode(
-				"Unable to delete datastore '" + TestUtils.TEST_NAMESPACE + "'",
+				"Should Delete Datastore '" + TestUtils.TEST_NAMESPACE + "'",
 				200,
 				datastore);
 		TestUtils.assertStatusCode(
-				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
+				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_NO_DIFFERENCE + "'",
 				200,
 				styleNoDifference);
 
 		TestUtils.assertStatusCode(
-				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
+				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MINOR_SUBSAMPLE + "'",
 				200,
 				styleMinor);
 		TestUtils.assertStatusCode(
-				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
+				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_MAJOR_SUBSAMPLE + "'",
 				200,
 				styleMajor);
 		TestUtils.assertStatusCode(
-				"Unable to delete workspace '" + WORKSPACE + "'",
+				"Should Delete Workspace '" + WORKSPACE + "'",
 				200,
 				workspace);
 
 		TestUtils.assertStatusCode(
-				"Unable to delete style '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "'",
+				"Should Delete Style '" + ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER + "'",
 				200,
 				geoServerServiceClient.removeStyle(ServicesTestEnvironment.TEST_STYLE_NAME_DISTRIBUTED_RENDER));
 	}
