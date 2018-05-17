@@ -23,6 +23,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
+import org.restlet.data.Status;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -46,6 +47,15 @@ import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 public class ConfigGeoServerCommand extends
 		ServiceEnabledCommand<String>
 {
+	
+	/**
+	 * Return "200 OK" for the config geoserver command.
+	 */
+	@Override
+	public Status getSuccessStatus() {
+		return Status.SUCCESS_OK;
+	}
+	
 	@Parameter(names = {
 		"-u",
 		"--username"
