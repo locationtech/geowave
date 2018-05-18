@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.restlet.data.Status;
+
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -19,6 +21,13 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 public class ConfigHDFSCommand extends
 		ServiceEnabledCommand<Void>
 {
+	/**
+	 * Return "200 OK" for the config HDFS command.
+	 */
+	@Override
+	public Status getSuccessStatus() {
+		return Status.SUCCESS_OK;
+	}
 
 	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defaultFS";
 	private static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";
