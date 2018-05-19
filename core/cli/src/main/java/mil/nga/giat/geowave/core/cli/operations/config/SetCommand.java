@@ -47,7 +47,7 @@ public class SetCommand extends
 	public Status getSuccessStatus() {
 		return Status.SUCCESS_OK;
 	}
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);
 
 	@Parameter(description = "<name> <value>")
