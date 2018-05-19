@@ -20,6 +20,8 @@ import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
+import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
@@ -41,6 +43,8 @@ import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
 import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.service.rest.exceptions.UnsupportedMediaTypeException;
+import mil.nga.giat.geowave.service.rest.field.RequestParameters;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
@@ -72,15 +76,28 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	@Post("form:json")
+	// Accept JSON. Return JSON.
+	@Post("json")
 	public Representation restPost(
 			final Representation request )
 			throws Exception {
 		if (HttpMethod.POST.equals(operation.getMethod())) {
 
+			try {
+				RequestParameters parameters = new RequestParameters();
+				parameters.inject(request);
+			}
+			catch (UnsupportedMediaTypeException e) {
+				setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+			}
+			catch (Exception e) {
+				setStatus(Status.SERVER_ERROR_INTERNAL);
+			}
+
+			// return handleRequest(parameters); // MAKE THIS WORK
 			final Form form = new Form(
 					request);
-			return handleRequest(form);
+			return handleRequest(form); // OLD WAY
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
