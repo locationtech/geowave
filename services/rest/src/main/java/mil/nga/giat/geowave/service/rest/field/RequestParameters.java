@@ -1,9 +1,8 @@
 package mil.nga.giat.geowave.service.rest.field;
 
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,65 +11,28 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.restlet.data.Form;
-import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
-
-import mil.nga.giat.geowave.service.rest.exceptions.UnsupportedMediaTypeException;
 
 public class RequestParameters
 {
 
 	private Map<String, Object> keyValuePairs;
-	private Constructor<Form> formConstructor;
 
-	public RequestParameters() {
+	public RequestParameters(
+			Representation request )
+			throws IOException {
 		keyValuePairs = new HashMap<String, Object>();
+		injectJsonParams(request.getText());
 	}
 
 	public RequestParameters(
-			Class<Form> formClass )
-			throws NoSuchMethodException,
-			SecurityException {
-		this();
-		formConstructor = formClass.getConstructor(Representation.class);
+			Form form ) {
+		keyValuePairs = new HashMap<String, Object>();
+		injectFormParams(form);
 	}
 
 	/**
-	 * Inject the APPLICATION_WWW_FORM or APPLICATION_JSON parameters from the
-	 * request. Other media types throw UnsupportedMediaTypeException, which
-	 * should be handled to return a 415 to the user.
-	 * 
-	 * @param request
-	 *            The request object to pull parameters from.
-	 * @throws IOException
-	 * @throws UnsupportedMediaTypeException
-	 */
-	public void inject(
-			Representation request )
-			throws IOException,
-			UnsupportedMediaTypeException {
-		if (request == null) {
-			// Is this right? Under what circumstances would the request entity
-			// be null?
-			throw new UnsupportedMediaTypeException();
-		}
-		else if (request.getMediaType().isCompatible(
-				MediaType.APPLICATION_JSON)) {
-			injectJsonParams(request.getText());
-		}
-		else if (request.getMediaType().isCompatible(
-				MediaType.APPLICATION_WWW_FORM)) {
-			injectFormParams(new Form(
-					request));
-		}
-		else {
-			throw new UnsupportedMediaTypeException();
-		}
-	}
-
-	/**
-	 * Returns the specified parameter. Execute inject(Representation request)
-	 * first.
+	 * Returns the specified parameter.
 	 * 
 	 * Possible return types: String List<String>
 	 * 
@@ -83,12 +45,52 @@ public class RequestParameters
 		return keyValuePairs.get(parameter);
 	}
 
+	public String getString(
+			String parameter ) {
+		return (String) getValue(parameter);
+	}
+
+	public List<?> getList(
+			String parameter ) {
+		Object value = getValue(parameter);
+		try {
+			return (List<?>) value;
+		}
+		catch (ClassCastException e) {
+			try {
+				return Arrays.asList(((String) value).split(","));
+			}
+			catch (ClassCastException ee) {
+				return jsonArrayToList((JSONArray) value);
+			}
+
+		}
+	}
+
+	public Object[] getArray(
+			String parameter ) {
+		Object value = getValue(parameter);
+		try {
+			return (Object[]) value;
+		}
+		catch (ClassCastException e) {
+			try {
+				return ((String) value).split(",");
+			}
+			catch (ClassCastException ee) {
+				return jsonArrayToArray((JSONArray) value);
+			}
+
+		}
+	}
+
 	private void injectFormParams(
 			Form form ) {
 		for (String key : form.getNames()) {
 			keyValuePairs.put(
 					key,
-					form.getFirst(key));
+					form.getFirst(
+							key).getValue());
 		}
 	}
 
@@ -98,14 +100,9 @@ public class RequestParameters
 				jsonString);
 		for (String key : json.keySet()) {
 			try {
-				JSONArray arr = json.getJSONArray(key);
-				List<String> injectedList = new ArrayList<String>();
-				for (int i = 0; i < arr.length(); i++) {
-					injectedList.add(arr.getString(i));
-				}
 				keyValuePairs.put(
 						key,
-						injectedList);
+						json.getJSONArray(key));
 				continue;
 			}
 			catch (JSONException e) {
@@ -115,6 +112,26 @@ public class RequestParameters
 					key,
 					json.get(key));
 		}
+	}
+
+	private Object[] jsonArrayToArray(
+			JSONArray jsonArray ) {
+		int jsonArrayLenth = jsonArray.length();
+		Object[] outArray = new Object[jsonArrayLenth];
+		for (int i = 0; i < jsonArrayLenth; i++) {
+			outArray[i] = jsonArray.get(i);
+		}
+		return outArray;
+	}
+
+	private List<Object> jsonArrayToList(
+			JSONArray jsonArray ) {
+		int jsonArrayLenth = jsonArray.length();
+		List<Object> outList = new ArrayList<Object>();
+		for (int i = 0; i < jsonArrayLenth; i++) {
+			outList.add(jsonArray.get(i));
+		}
+		return outList;
 	}
 
 }

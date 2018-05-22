@@ -1,27 +1,21 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
-
-import java.util.Arrays;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.ForbiddenException;
 import javax.ws.rs.NotAuthorizedException;
-import javax.ws.rs.NotFoundException;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.data.Form;
 import org.restlet.data.MediaType;
-import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
@@ -37,13 +31,12 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
 import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
 import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
-import mil.nga.giat.geowave.service.rest.exceptions.UnsupportedMediaTypeException;
+import mil.nga.giat.geowave.service.rest.exceptions.MissingArgumentException;
 import mil.nga.giat.geowave.service.rest.field.RequestParameters;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
@@ -67,7 +60,6 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	public Representation restGet()
 			throws Exception {
 		if (HttpMethod.GET.equals(operation.getMethod())) {
-			// TODO is this null correct?
 			return handleRequest(null);
 		}
 		else {
@@ -76,79 +68,87 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	// Accept JSON. Return JSON.
-	@Post("json")
+	@Post("form|json:json")
 	public Representation restPost(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.POST.equals(operation.getMethod())) {
-
-			try {
-				RequestParameters parameters = new RequestParameters();
-				parameters.inject(request);
-			}
-			catch (UnsupportedMediaTypeException e) {
-				setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-			}
-			catch (Exception e) {
-				setStatus(Status.SERVER_ERROR_INTERNAL);
-			}
-
-			// return handleRequest(parameters); // MAKE THIS WORK
-			final Form form = new Form(
-					request);
-			return handleRequest(form); // OLD WAY
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.POST,
+				request);
 	}
 
-	@Delete("form:json")
+	@Delete("form|json:json")
 	public Representation restDelete(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.DELETE.equals(operation.getMethod())) {
-
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.DELETE,
+				request);
 	}
 
-	@Patch("form:json")
+	@Patch("form|json:json")
 	public Representation restPatch(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.PATCH.equals(operation.getMethod())) {
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.PATCH,
+				request);
 	}
 
-	@Put("form:json")
+	@Put("form|json:json")
 	public Representation restPut(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.PUT.equals(operation.getMethod())) {
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
+		return handleRequestWithPayload(
+				HttpMethod.PUT,
+				request);
+	}
+
+	private Representation handleRequestWithPayload(
+			HttpMethod requiredMethod,
+			Representation request ) {
+		// First check that the request is the requiredMethod, return 405 if
+		// not.
+		if (requiredMethod.equals(operation.getMethod())) {
+			RequestParameters requestParameters;
+			// Then check which MediaType is the request, which determines the
+			// constructor used for RequestParameters.
+			if (checkMediaType(
+					MediaType.APPLICATION_JSON,
+					request)) {
+				try {
+					requestParameters = new RequestParameters(
+							request);
+				}
+				catch (IOException e) {
+					setStatus(Status.SERVER_ERROR_INTERNAL);
+					return null;
+				}
+			}
+			else if (checkMediaType(
+					MediaType.APPLICATION_WWW_FORM,
+					request)) {
+				// else {
+
+				requestParameters = new RequestParameters(
+						new Form(
+								request));
+			}
+			else {
+				// This should be redundant; restlet should return a 415 anyway
+				// if the request is not form or json.
+				setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
+				return null;
+			}
+			// Finally, handle the request with the parameters, whose type
+			// should no longer matter.
+			return handleRequest(requestParameters);
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
+
 	}
 
 	/**
@@ -167,7 +167,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	 * @throws InstantiationException
 	 */
 	private void injectParameters(
-			final Form form,
+			final RequestParameters requestParameters,
 			final Object instance )
 			throws MissingArgumentException,
 			InstantiationException,
@@ -178,23 +178,13 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			Object objValue = null;
 
 			if (List.class.isAssignableFrom(f.getType())) {
-				final String[] parameters = getFieldValues(
-						form,
-						f.getName());
-
-				objValue = Arrays.asList(parameters);
+				objValue = requestParameters.getList(f.getName());
 			}
 			else if (f.getType().isArray()) {
-				final String[] parameters = getFieldValues(
-						form,
-						f.getName());
-
-				objValue = parameters;
+				objValue = requestParameters.getArray(f.getName());
 			}
 			else {
-				final String strValue = getFieldValue(
-						form,
-						f.getName());
+				final String strValue = (String) requestParameters.getString(f.getName());
 				if (strValue != null) {
 					if (Long.class.isAssignableFrom(f.getType()) || long.class.isAssignableFrom(f.getType())) {
 						objValue = Long.valueOf(strValue);
@@ -241,48 +231,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	private String[] getFieldValues(
-			final Form form,
-			final String name ) {
-		String[] val = null;
-		if (form != null) {
-			val = form.getValuesArray(name);
-		}
-		if ((val == null) || (val.length == 0)) {
-			val = getQuery().getValuesArray(
-					name);
-		}
-		String str = getFieldValue(
-				form,
-				name);
-		if (str == null) {
-			return val;
-		}
-		else {
-
-			return str.split(",");
-		}
-	}
-
-	private String getFieldValue(
-			final Form form,
-			final String name ) {
-		String val = null;
-		if (form != null) {
-			val = form.getFirstValue(name);
-		}
-		if (val == null) {
-			val = getQueryValue(name);
-		}
-		return val;
-	}
-
 	private Representation handleRequest(
-			final Form form )
+			final RequestParameters parameters )
 			 {
 
-		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
-				.getFirstValue("config_file");
+		final String configFileParameter = (parameters == null) ? getQueryValue("config_file") : (String) parameters
+				.getValue("config_file");
 
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : (initContextConfigFile != null) ? new File(
@@ -295,7 +249,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			injectParameters(
-					form,
+					parameters,
 					operation);
 		}
 		catch (final Exception e) {
@@ -398,18 +352,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	public static class MissingArgumentException extends
-			Exception
-	{
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		private MissingArgumentException(
-				final String argumentName ) {
-			super(
-					"Missing argument: " + argumentName);
+	private boolean checkMediaType(
+			MediaType expectedType,
+			Representation request ) {
+		if (request == null) {
+			return false;
 		}
+		return expectedType.isCompatible(request.getMediaType());
 	}
 }

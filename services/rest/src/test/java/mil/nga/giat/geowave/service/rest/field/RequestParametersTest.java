@@ -5,14 +5,18 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.restlet.data.Form;
 import org.restlet.data.MediaType;
+import org.restlet.data.Parameter;
 import org.restlet.representation.Representation;
 
 import mil.nga.giat.geowave.service.rest.exceptions.UnsupportedMediaTypeException;
@@ -24,6 +28,18 @@ public class RequestParametersTest
 
 	private JSONObject testJSON;
 
+	private int testNumber = 42;
+	private String testKey = "foo";
+	private String testString = "bar";
+	private List<String> testList = new ArrayList<String>(
+			Arrays.asList(
+					"bar",
+					"baz"));
+	private String[] testArray = {
+		"foo",
+		"bar"
+	};
+
 	private Representation mockedJsonRequest(
 			String jsonString )
 			throws IOException {
@@ -34,10 +50,6 @@ public class RequestParametersTest
 				jsonString);
 
 		return request;
-	}
-
-	private Representation mockedFormRequest() {
-		return mockedRequest(MediaType.APPLICATION_WWW_FORM);
 	}
 
 	private Representation mockedRequest(
@@ -52,95 +64,196 @@ public class RequestParametersTest
 		return request;
 	}
 
+	private Form mockedForm(Map<String,String> inputKeyValuePairs) {
+		String keyName;
+		Form form = Mockito.mock(Form.class);
+		Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
+		Mockito.when(form.getFirst(Mockito.anyString())).thenAnswer(i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
+		
+		return form;
+	}
+
+	private Parameter mockedFormParameter(
+			String value ) {
+		Parameter param = Mockito.mock(Parameter.class);
+
+		Mockito.when(
+				param.getValue()).thenReturn(
+				value);
+
+		return param;
+	}
+
 	@Before
 	public void setUp()
-			throws Exception {
-		classUnderTest = new RequestParameters();
-	}
+			throws Exception {}
 
 	@After
 	public void tearDown()
 			throws Exception {}
 
-	@Test(expected = UnsupportedMediaTypeException.class)
-	public void injectThrowsWithNullRequest()
-			throws Exception {
-		classUnderTest.inject(null);
-	}
-
-	@Test(expected = UnsupportedMediaTypeException.class)
-	public void injectThrowsWithWrongMediaType()
-			throws Exception {
-		Representation request = mockedRequest(MediaType.APPLICATION_PDF);
-
-		classUnderTest.inject(request);
-	}
-
 	@Test
-	public void injectSuccessfulWithJson()
+	public void instantiationSuccessfulWithJson()
 			throws Exception {
 		Representation request = mockedJsonRequest("{}");
 
-		classUnderTest.inject(request);
+		classUnderTest = new RequestParameters(
+				request);
 	}
 
 	@Test
-	public void injectSuccessfulWithForm()
+	public void instantiationSuccessfulWithForm()
 			throws Exception {
-		Representation request = mockedFormRequest();
+		Map<String, String> testKVP = new HashMap<String, String>();
 
-		classUnderTest.inject(request);
+		Form form = mockedForm(testKVP);
+
+		classUnderTest = new RequestParameters(
+				form);
 	}
 
 	@Test
 	public void getValueReturnsJsonString()
 			throws Exception {
 		testJSON = new JSONObject();
-		String testString = "bar";
 		testJSON.put(
-				"foo",
-				"bar");
+				testKey,
+				testString);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest.inject(request);
+		classUnderTest = new RequestParameters(
+				request);
 
 		assertEquals(
 				testString,
-				classUnderTest.getValue("foo"));
+				classUnderTest.getValue(testKey));
 	}
 
 	@Test
-	public void getValueReturnsJsonList()
+	public void getStringReturnsJsonString()
 			throws Exception {
 		testJSON = new JSONObject();
-		List<String> testList = new ArrayList<String>(
-				Arrays.asList(
-						"bar",
-						"baz"));
+
 		testJSON.put(
-				"foo",
+				testKey,
+				testString);
+		Representation request = mockedJsonRequest(testJSON.toString());
+		classUnderTest = new RequestParameters(
+				request);
+
+		assertEquals(
+				testString,
+				classUnderTest.getString(testKey));
+	}
+
+	@Test
+	public void getListReturnsJsonList()
+			throws Exception {
+		testJSON = new JSONObject();
+
+		testJSON.put(
+				testKey,
 				testList);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest.inject(request);
+		classUnderTest = new RequestParameters(
+				request);
 
 		assertEquals(
 				testList,
-				classUnderTest.getValue("foo"));
+				classUnderTest.getList(testKey));
+	}
+
+	@Test
+	public void getArrayReturnsJsonArray()
+			throws Exception {
+		testJSON = new JSONObject();
+
+		testJSON.put(
+				testKey,
+				testArray);
+		Representation request = mockedJsonRequest(testJSON.toString());
+		classUnderTest = new RequestParameters(
+				request);
+
+		assertArrayEquals(
+				testArray,
+				classUnderTest.getArray(testKey));
 	}
 
 	@Test
 	public void getValueReturnsJsonNumber()
 			throws Exception {
 		testJSON = new JSONObject();
-		int testNumber = 42;
+
 		testJSON.put(
-				"foo",
+				testKey,
 				testNumber);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest.inject(request);
+		classUnderTest = new RequestParameters(
+				request);
 
 		assertEquals(
 				testNumber,
-				classUnderTest.getValue("foo"));
+				classUnderTest.getValue(testKey));
+	}
+
+	@Test
+	public void getStringReturnsFormString()
+			throws Exception {
+		Map<String, String> testKVP = new HashMap<String, String>();
+
+		Form form = mockedForm(testKVP);
+		testKVP.put(
+				testKey,
+				testString);
+
+		classUnderTest = new RequestParameters(
+				form);
+
+		assertEquals(
+				testString,
+				classUnderTest.getString(testKey));
+	}
+
+	@Test
+	public void getListReturnsFormList()
+			throws Exception {
+		Map<String, String> testKVP = new HashMap<String, String>();
+
+		String testJoinedString = String.join(
+				",",
+				testList);
+		Form form = mockedForm(testKVP);
+		testKVP.put(
+				testKey,
+				testJoinedString);
+
+		classUnderTest = new RequestParameters(
+				form);
+
+		assertEquals(
+				testList,
+				classUnderTest.getList(testKey));
+	}
+
+	@Test
+	public void getArrayReturnsFormArray()
+			throws Exception {
+		Map<String, String> testKVP = new HashMap<String, String>();
+
+		String testJoinedString = String.join(
+				",",
+				testArray);
+		Form form = mockedForm(testKVP);
+		testKVP.put(
+				testKey,
+				testJoinedString);
+
+		classUnderTest = new RequestParameters(
+				form);
+
+		assertArrayEquals(
+				testArray,
+				classUnderTest.getArray(testKey));
 	}
 
 }

@@ -1,31 +1,25 @@
 package mil.nga.giat.geowave.service.rest;
 
-import static org.junit.Assert.*;
+import java.io.IOException;
 
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.Invocation;
-import javax.ws.rs.client.WebTarget;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.math3.util.Pair;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
-import org.restlet.Application;
-import org.restlet.Context;
 import org.restlet.Response;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 
 public class GeoWaveOperationServiceWrapperTest
 {
+
+	private GeoWaveOperationServiceWrapper classUnderTest;
 
 	private ServiceEnabledCommand mockedOperation(
 			HttpMethod method,
@@ -53,8 +47,27 @@ public class GeoWaveOperationServiceWrapperTest
 		Mockito.when(
 				operation.getSuccessStatus()).thenReturn(
 				successStatus);
+		Mockito.when(
+				operation.computeResults(Mockito.any())).thenReturn(
+				null);
 
 		return operation;
+	}
+
+	private Representation mockedRequest(
+			MediaType mediaType )
+			throws IOException {
+
+		Representation request = Mockito.mock(Representation.class);
+
+		Mockito.when(
+				request.getMediaType()).thenReturn(
+				mediaType);
+		Mockito.when(
+				request.getText()).thenReturn(
+				"{}");
+
+		return request;
 	}
 
 	@Before
@@ -77,15 +90,15 @@ public class GeoWaveOperationServiceWrapperTest
 				HttpMethod.GET,
 				expectedSuccessStatus);
 
-		GeoWaveOperationServiceWrapper gwOpServWrap = new GeoWaveOperationServiceWrapper(
+		classUnderTest = new GeoWaveOperationServiceWrapper(
 				operation,
 				null);
-		gwOpServWrap.setResponse(new Response(
+		classUnderTest.setResponse(new Response(
 				null));
-		gwOpServWrap.restGet();
+		classUnderTest.restGet();
 		Assert.assertEquals(
 				expectedSuccessStatus,
-				gwOpServWrap.getResponse().getStatus());
+				classUnderTest.getResponse().getStatus());
 	}
 
 	@Test
@@ -100,15 +113,15 @@ public class GeoWaveOperationServiceWrapperTest
 				HttpMethod.POST,
 				expectedSuccessStatus);
 
-		GeoWaveOperationServiceWrapper gwOpServWrap = new GeoWaveOperationServiceWrapper(
+		classUnderTest = new GeoWaveOperationServiceWrapper(
 				operation,
 				null);
-		gwOpServWrap.setResponse(new Response(
+		classUnderTest.setResponse(new Response(
 				null));
-		gwOpServWrap.restPost(null);
+		classUnderTest.restPost(mockedRequest(MediaType.APPLICATION_JSON));
 		Assert.assertEquals(
 				expectedSuccessStatus,
-				gwOpServWrap.getResponse().getStatus());
+				classUnderTest.getResponse().getStatus());
 	}
 
 	@Test
@@ -125,18 +138,18 @@ public class GeoWaveOperationServiceWrapperTest
 				expectedSuccessStatus,
 				true);
 
-		GeoWaveOperationServiceWrapper gwOpServWrap = new GeoWaveOperationServiceWrapper(
+		classUnderTest = new GeoWaveOperationServiceWrapper(
 				operation,
 				null);
-		gwOpServWrap.setResponse(new Response(
+		classUnderTest.setResponse(new Response(
 				null));
-		gwOpServWrap.restPost(null);
+		classUnderTest.restPost(null);
 
 		// TODO: Returns 500. Error Caught at
 		// "final Context appContext = Application.getCurrent().getContext();"
 		Assert.assertEquals(
 				expectedSuccessStatus,
-				gwOpServWrap.getResponse().getStatus());
+				classUnderTest.getResponse().getStatus());
 	}
 
 }
