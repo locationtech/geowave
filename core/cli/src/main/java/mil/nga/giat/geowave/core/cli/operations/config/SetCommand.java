@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,7 +28,6 @@ import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;

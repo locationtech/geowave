@@ -103,8 +103,8 @@ public class GeoServerIT
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
-	 	GeoWaveStoreType.CASSANDRA,
-	 	GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
