@@ -13,6 +13,8 @@ public class RequestParametersForm extends
 			Form form ) {
 		super();
 		for (String key : form.getNames()) {
+			// For each parameter in the form, add the parameter name and value
+			// to the Map<String, Object>.
 			keyValuePairs.put(
 					key,
 					form.getFirst(

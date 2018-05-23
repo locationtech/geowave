@@ -135,10 +135,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 								request));
 			}
 			else {
-				// This should be redundant; restlet should return a 415 anyway
-				// if the request is not form or json.
-				setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-				return null;
+				// If MediaType is not set, then the parameters are likely to be
+				// found in the URL.
+
+				requestParameters = new RequestParametersForm(
+						getQuery());
 			}
 			// Finally, handle the request with the parameters, whose type
 			// should no longer matter.
@@ -352,6 +353,17 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
+	/**
+	 * Checks that the desired MediaType is compatible with the one present in
+	 * the request.
+	 * 
+	 * @param expectedType
+	 *            The expected type.
+	 * @param request
+	 *            The request whose MediaType is being checked.
+	 * @return true, if the MediaTypes match. --- OR false, if the MediaTypes do
+	 *         not match, or the request is null.
+	 */
 	private boolean checkMediaType(
 			MediaType expectedType,
 			Representation request ) {

@@ -44,26 +44,30 @@ public class RequestParametersJson extends
 		JSONObject json = new JSONObject(
 				jsonString);
 		for (String key : json.keySet()) {
+			// For each parameter in the form, add the parameter name and value
+			// to the Map<String, Object>.
 			try {
+				// First try to add the value as a JSONArray.
 				keyValuePairs.put(
 						key,
 						json.getJSONArray(key));
-				continue;
 			}
 			catch (JSONException e) {
-
+				// If that does not work, add the parameter as an Object.
+				keyValuePairs.put(
+						key,
+						json.get(key));
 			}
-			keyValuePairs.put(
-					key,
-					json.get(key));
 		}
 	}
 
 	private Object[] jsonArrayToArray(
 			JSONArray jsonArray ) {
+		// Initialize the output Array.
 		int jsonArrayLenth = jsonArray.length();
 		Object[] outArray = new Object[jsonArrayLenth];
 		for (int i = 0; i < jsonArrayLenth; i++) {
+			// Then add each JSONArray element to it.
 			outArray[i] = jsonArray.get(i);
 		}
 		return outArray;
@@ -71,9 +75,11 @@ public class RequestParametersJson extends
 
 	private List<Object> jsonArrayToList(
 			JSONArray jsonArray ) {
+		// Initialize the output List.
 		int jsonArrayLenth = jsonArray.length();
 		List<Object> outList = new ArrayList<Object>();
 		for (int i = 0; i < jsonArrayLenth; i++) {
+			// Then add each JSONArray element to it.
 			outList.add(jsonArray.get(i));
 		}
 		return outList;

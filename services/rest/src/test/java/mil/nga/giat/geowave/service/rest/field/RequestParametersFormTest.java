@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.json.JSONObject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,9 +20,6 @@ public class RequestParametersFormTest
 
 	private RequestParametersForm classUnderTest;
 
-	private JSONObject testJSON;
-
-	private int testNumber = 42;
 	private String testKey = "foo";
 	private String testString = "bar";
 	private List<String> testList = new ArrayList<String>(
