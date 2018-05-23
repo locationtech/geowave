@@ -1010,6 +1010,17 @@ public class TestUtils
 				responseCode);
 	}
 
+	/**
+	 * Asserts that the response has the expected Status Code. The assertion
+	 * message is formatted to include the provided string.
+	 * 
+	 * @param msg
+	 *            String message to include in the assertion message.
+	 * @param expectedCode
+	 *            Integer HTTP Status code to expect from the response.
+	 * @param response
+	 *            The Response object on which .getStatus() will be performed.
+	 */
 	public static void assertStatusCode(
 			String msg,
 			int expectedCode,
@@ -1023,6 +1034,15 @@ public class TestUtils
 				response.getStatus());
 	}
 
+	/**
+	 * Asserts that the response has the expected Status Code. The assertion
+	 * message automatically formatted.
+	 * 
+	 * @param expectedCode
+	 *            Integer HTTP Status code to expect from the response.
+	 * @param response
+	 *            The Response object on which .getStatus() will be performed.
+	 */
 	// Overload method with option to automatically generate assertion message.
 	public static void assertStatusCode(
 			int expectedCode,
