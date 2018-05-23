@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -323,5 +324,11 @@ public class ConfigServicesIT
 				"GeoServer was not set correctly",
 				"test-geoserver",
 				(String) values.get("geoserver.url"));
+	}
+
+	@Test
+	@Ignore
+	public void addSpatialTemporalIndex() {
+		// TODO: Implement this test
 	}
 }
