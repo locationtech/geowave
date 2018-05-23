@@ -8,8 +8,11 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
+import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.data.MediaType;
+import org.restlet.data.Method;
+import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 
@@ -95,6 +98,9 @@ public class GeoWaveOperationServiceWrapperTest
 				null);
 		classUnderTest.setResponse(new Response(
 				null));
+		classUnderTest.setRequest(new Request(
+				Method.GET,
+				"foo.bar"));
 		classUnderTest.restGet();
 		Assert.assertEquals(
 				expectedSuccessStatus,

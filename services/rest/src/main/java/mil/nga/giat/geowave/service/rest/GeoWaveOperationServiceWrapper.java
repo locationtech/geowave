@@ -62,7 +62,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	public Representation restGet()
 			throws Exception {
 		if (HttpMethod.GET.equals(operation.getMethod())) {
-			return handleRequest(null);
+			// Still send query parameters for GETs to the RequestParameters
+			// class, but don't check for JSON or other Form payloads.
+			return handleRequest(new RequestParametersForm(
+					getQuery()));
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
