@@ -38,6 +38,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.exceptions.MissingArgumentException;
 import mil.nga.giat.geowave.service.rest.field.RequestParameters;
+import mil.nga.giat.geowave.service.rest.field.RequestParametersForm;
+import mil.nga.giat.geowave.service.rest.field.RequestParametersJson;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
@@ -117,7 +119,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					MediaType.APPLICATION_JSON,
 					request)) {
 				try {
-					requestParameters = new RequestParameters(
+					requestParameters = new RequestParametersJson(
 							request);
 				}
 				catch (IOException e) {
@@ -128,9 +130,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			else if (checkMediaType(
 					MediaType.APPLICATION_WWW_FORM,
 					request)) {
-				// else {
-
-				requestParameters = new RequestParameters(
+				requestParameters = new RequestParametersForm(
 						new Form(
 								request));
 			}

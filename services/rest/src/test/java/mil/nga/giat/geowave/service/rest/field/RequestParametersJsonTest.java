@@ -21,10 +21,10 @@ import org.restlet.representation.Representation;
 
 import mil.nga.giat.geowave.service.rest.exceptions.UnsupportedMediaTypeException;
 
-public class RequestParametersTest
+public class RequestParametersJsonTest
 {
 
-	private RequestParameters classUnderTest;
+	private RequestParametersJson classUnderTest;
 
 	private JSONObject testJSON;
 
@@ -64,26 +64,6 @@ public class RequestParametersTest
 		return request;
 	}
 
-	private Form mockedForm(Map<String,String> inputKeyValuePairs) {
-		String keyName;
-		Form form = Mockito.mock(Form.class);
-		Mockito.when(form.getNames()).thenReturn(inputKeyValuePairs.keySet());
-		Mockito.when(form.getFirst(Mockito.anyString())).thenAnswer(i -> mockedFormParameter(inputKeyValuePairs.get(i.getArguments()[0])));
-		
-		return form;
-	}
-
-	private Parameter mockedFormParameter(
-			String value ) {
-		Parameter param = Mockito.mock(Parameter.class);
-
-		Mockito.when(
-				param.getValue()).thenReturn(
-				value);
-
-		return param;
-	}
-
 	@Before
 	public void setUp()
 			throws Exception {}
@@ -97,19 +77,8 @@ public class RequestParametersTest
 			throws Exception {
 		Representation request = mockedJsonRequest("{}");
 
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
-	}
-
-	@Test
-	public void instantiationSuccessfulWithForm()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
-
-		Form form = mockedForm(testKVP);
-
-		classUnderTest = new RequestParameters(
-				form);
 	}
 
 	@Test
@@ -120,7 +89,7 @@ public class RequestParametersTest
 				testKey,
 				testString);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
 
 		assertEquals(
@@ -137,7 +106,7 @@ public class RequestParametersTest
 				testKey,
 				testString);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
 
 		assertEquals(
@@ -154,7 +123,7 @@ public class RequestParametersTest
 				testKey,
 				testList);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
 
 		assertEquals(
@@ -171,7 +140,7 @@ public class RequestParametersTest
 				testKey,
 				testArray);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
 
 		assertArrayEquals(
@@ -188,72 +157,12 @@ public class RequestParametersTest
 				testKey,
 				testNumber);
 		Representation request = mockedJsonRequest(testJSON.toString());
-		classUnderTest = new RequestParameters(
+		classUnderTest = new RequestParametersJson(
 				request);
 
 		assertEquals(
 				testNumber,
 				classUnderTest.getValue(testKey));
-	}
-
-	@Test
-	public void getStringReturnsFormString()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
-
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testString);
-
-		classUnderTest = new RequestParameters(
-				form);
-
-		assertEquals(
-				testString,
-				classUnderTest.getString(testKey));
-	}
-
-	@Test
-	public void getListReturnsFormList()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
-
-		String testJoinedString = String.join(
-				",",
-				testList);
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testJoinedString);
-
-		classUnderTest = new RequestParameters(
-				form);
-
-		assertEquals(
-				testList,
-				classUnderTest.getList(testKey));
-	}
-
-	@Test
-	public void getArrayReturnsFormArray()
-			throws Exception {
-		Map<String, String> testKVP = new HashMap<String, String>();
-
-		String testJoinedString = String.join(
-				",",
-				testArray);
-		Form form = mockedForm(testKVP);
-		testKVP.put(
-				testKey,
-				testJoinedString);
-
-		classUnderTest = new RequestParameters(
-				form);
-
-		assertArrayEquals(
-				testArray,
-				classUnderTest.getArray(testKey));
 	}
 
 }
