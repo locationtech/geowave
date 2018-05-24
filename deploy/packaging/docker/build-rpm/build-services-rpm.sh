@@ -177,7 +177,7 @@ fpm -s pleaserun -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCser
     --iteration $TIME_TAG \
     --vendor geowave --description "Geowave gRPC service" \
     --url "https://locationtech.github.io/geowave" \
-    "/usr/local/bin/geowave option option > /usr/local/geowave/grpc/logs/grpc.log"
+    "/usr/local/bin/geowave option option >> /usr/local/geowave/grpc/logs/grpc.log"
 
     
 
