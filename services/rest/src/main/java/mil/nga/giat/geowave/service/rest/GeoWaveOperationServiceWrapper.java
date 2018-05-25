@@ -9,10 +9,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.data.Form;
