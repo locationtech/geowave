@@ -55,6 +55,7 @@ import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -62,10 +63,18 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
 import mil.nga.giat.geowave.service.client.AnalyticServiceClient;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
 import mil.nga.giat.geowave.service.client.GeoServerServiceClient;
@@ -91,6 +100,7 @@ public class RemoteIT
 	private static final String LOCK_FILE = "src/test/resources/wfs-requests/lock.xml";
 	private static final String QUERY_FILE = "src/test/resources/wfs-requests/query.xml";
 	private static final String UPDATE_FILE = "src/test/resources/wfs-requests/update.xml";
+	private static ConfigServiceClient configServiceClient;
 
 	private RemoteServiceClient remoteServiceClient;
 
@@ -101,9 +111,9 @@ public class RemoteIT
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE,
-		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+	 	GeoWaveStoreType.HBASE,
+	 	GeoWaveStoreType.CASSANDRA,
+	 	GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -127,9 +137,54 @@ public class RemoteIT
 	}
 
 	@Before
-	public void initialize() {
-		// Perform ingest operations here, so there is data on which to run the
-		// remote commands.
+	public void initialize()
+			throws MismatchedIndexToAdapterMapping,
+			IOException {
+		remoteServiceClient = new RemoteServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+		configServiceClient = new ConfigServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+		startMillis = System.currentTimeMillis();
+		TestUtils.printStartOfTest(
+				LOGGER,
+				testName);
+
+		final DataStore ds = dataStoreOptions.createDataStore();
+		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
+		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
+				new SimpleFeatureBuilder(
+						sft),
+				8675309);
+		LOGGER.info(String.format(
+				"Beginning to ingest a uniform grid of %d features",
+				features.size()));
+		int ingestedFeatures = 0;
+		final int featuresPer5Percent = features.size() / 20;
+		try (IndexWriter writer = ds.createWriter(
+				fda,
+				idx)) {
+			for (final SimpleFeature feat : features) {
+				writer.write(feat);
+				ingestedFeatures++;
+				if ((ingestedFeatures % featuresPer5Percent) == 0) {
+					LOGGER.info(String.format(
+							"Ingested %d percent of features",
+							(ingestedFeatures / featuresPer5Percent) * 5));
+				}
+			}
+		}
+		configServiceClient.addStore(
+				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getOptionsAsMap());
+		configServiceClient.addStore(
+				"test",
+				dataStoreOptions.getType(),
+				TestUtils.TEST_NAMESPACE,
+				dataStoreOptions.getOptionsAsMap());
 	}
 
 	@After
@@ -181,9 +236,12 @@ public class RemoteIT
 	}
 
 	@Test
-	@Ignore
 	public void liststats() {
-		// TODO: Implement this test
+		TestUtils.assertStatusCode(
+				"Should Successfully <Insert Objective Here>",
+				200,
+				remoteServiceClient.listStats("test"));
+		// TODO: Make calls to non-existent stores return something other than 500
 	}
 
 	@Test
@@ -206,7 +264,7 @@ public class RemoteIT
 
 	@Test
 	@Ignore
-	public void verison() {
+	public void version() {
 		// TODO: Implement this test
 	}
 
