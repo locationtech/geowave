@@ -208,13 +208,15 @@ mil.nga.giat.geowave.format.gpx
 mil.nga.giat.geowave.format.landsat8
 mil.nga.giat.geowave.format.landsat8.index
 mil.nga.giat.geowave.format.landsat8.qa
+mil.nga.giat.geowave.format.sentinel2
+mil.nga.giat.geowave.format.sentinel2.amazon
+mil.nga.giat.geowave.format.sentinel2.theia
 mil.nga.giat.geowave.format.stanag4676
 mil.nga.giat.geowave.format.stanag4676.image
 mil.nga.giat.geowave.format.stanag4676.parser
 mil.nga.giat.geowave.format.stanag4676.parser.model
 mil.nga.giat.geowave.format.stanag4676.parser.util
 mil.nga.giat.geowave.format.tdrive
-mil.nga.giat.geowave.format.theia
 mil.nga.giat.geowave.format.twitter
 mil.nga.giat.geowave.mapreduce
 mil.nga.giat.geowave.mapreduce.copy
