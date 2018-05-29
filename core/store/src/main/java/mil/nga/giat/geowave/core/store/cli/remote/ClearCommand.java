@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +40,8 @@ public class ClearCommand extends
 	 * Return "200 OK" for all clear commands.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
