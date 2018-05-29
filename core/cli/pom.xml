@@ -12,7 +12,6 @@
 	
 	<properties>
 		<commons-codec.version>1.7</commons-codec.version>
-		<restlet.version>2.4.0</restlet.version>
 	</properties>
 	
 	<dependencies>	
@@ -47,11 +46,6 @@
 			<groupId>org.bouncycastle</groupId>
 			<artifactId>bcprov-jdk15on</artifactId>
 			<version>1.54</version>
-		</dependency>
-		<dependency>
-			<groupId>org.restlet.jse</groupId>
-			<artifactId>org.restlet</artifactId>
-			<version>${restlet.version}</version>
 		</dependency>
 	</dependencies>
 </project>

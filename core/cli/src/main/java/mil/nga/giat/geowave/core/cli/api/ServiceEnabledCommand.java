@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.core.cli.api;
 
-import org.restlet.data.Status;
-
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 public abstract class ServiceEnabledCommand<T> extends
