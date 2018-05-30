@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationFinder.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.MissingArgumentException.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/service/rest/MainResource.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" target="_top">Frames</a></li>
@@ -74,7 +74,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -127,25 +127,6 @@ extends org.restlet.resource.ServerResource</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.MissingArgumentException.html" title="class in mil.nga.giat.geowave.service.rest">GeoWaveOperationServiceWrapper.MissingArgumentException</a></span></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -271,9 +252,9 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restGet()
 <ul class="blockList">
 <li class="blockList">
 <h4>restPost</h4>
-<pre>@Post(value="form:json")
+<pre>@Post(value="form|json:json")
 public&nbsp;org.restlet.representation.Representation&nbsp;restPost(org.restlet.representation.Representation&nbsp;request)
-                                                                            throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                                                                 throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -286,9 +267,9 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restPost(org.restlet.
 <ul class="blockList">
 <li class="blockList">
 <h4>restDelete</h4>
-<pre>@Delete(value="form:json")
+<pre>@Delete(value="form|json:json")
 public&nbsp;org.restlet.representation.Representation&nbsp;restDelete(org.restlet.representation.Representation&nbsp;request)
-                                                                                throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                                                                     throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -301,9 +282,9 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restDelete(org.restle
 <ul class="blockList">
 <li class="blockList">
 <h4>restPatch</h4>
-<pre>@Patch(value="form:json")
+<pre>@Patch(value="form|json:json")
 public&nbsp;org.restlet.representation.Representation&nbsp;restPatch(org.restlet.representation.Representation&nbsp;request)
-                                                                              throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                                                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -316,9 +297,9 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restPatch(org.restlet
 <ul class="blockListLast">
 <li class="blockList">
 <h4>restPut</h4>
-<pre>@Put(value="form:json")
+<pre>@Put(value="form|json:json")
 public&nbsp;org.restlet.representation.Representation&nbsp;restPut(org.restlet.representation.Representation&nbsp;request)
-                                                                          throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+                                                                               throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
@@ -354,7 +335,7 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restPut(org.restlet.r
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationFinder.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.MissingArgumentException.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../mil/nga/giat/geowave/service/rest/MainResource.html" title="class in mil.nga.giat.geowave.service.rest"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../index.html?mil/nga/giat/geowave/service/rest/GeoWaveOperationServiceWrapper.html" target="_top">Frames</a></li>
@@ -378,7 +359,7 @@ public&nbsp;org.restlet.representation.Representation&nbsp;restPut(org.restlet.r
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

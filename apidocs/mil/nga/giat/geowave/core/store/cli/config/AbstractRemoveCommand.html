@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,24 +212,18 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Servi
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;patternPrefix)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#getEntryName--">getEntryName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#getStatus--">getStatus</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#setEntryName-java.lang.String-">setEntryName</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;entryName)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#setStatus-mil.nga.giat.geowave.core.cli.api.ServiceStatus-">setStatus</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>&nbsp;status)</code>&nbsp;</td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#successStatusIs200--">successStatusIs200</a></span>()</code>
+<div class="block">Return "200 OK" for all removal commands.</div>
+</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -315,6 +309,22 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Servi
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="successStatusIs200--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>successStatusIs200</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;successStatusIs200()</pre>
+<div class="block">Return "200 OK" for all removal commands.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#successStatusIs200--">successStatusIs200</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The potential status if REST call is successful.</dd>
+</dl>
+</li>
+</ul>
 <a name="getEntryName--">
 <!--   -->
 </a>
@@ -324,22 +334,6 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Servi
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getEntryName()</pre>
 </li>
 </ul>
-<a name="executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>executeService</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;executeService(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
-                                                                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
-</dl>
-</li>
-</ul>
 <a name="computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-java.lang.String-">
 <!--   -->
 </a>
@@ -347,25 +341,12 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Servi
 <li class="blockList">
 <h4>computeResults</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;computeResults(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params,
-                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;patternPrefix)</pre>
-</li>
-</ul>
-<a name="getStatus--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getStatus</h4>
-<pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>&nbsp;getStatus()</pre>
-</li>
-</ul>
-<a name="setStatus-mil.nga.giat.geowave.core.cli.api.ServiceStatus-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setStatus</h4>
-<pre>public&nbsp;void&nbsp;setStatus(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>&nbsp;status)</pre>
+                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;patternPrefix)
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
+<dl>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
+</dl>
 </li>
 </ul>
 <a name="setEntryName-java.lang.String-">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -242,6 +242,12 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/ConfigGeoServerCommand.html#setWorkspace-java.lang.String-">setWorkspace</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspace)</code>&nbsp;</td>
 </tr>
 <tr id="i11" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/ConfigGeoServerCommand.html#successStatusIs200--">successStatusIs200</a></span>()</code>
+<div class="block">Return "200 OK" for the config geoserver command.</div>
+</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/cli/geoserver/ConfigGeoServerCommand.html#usage--">usage</a></span>()</code>
 <div class="block">Method to allow commands the option to override the default usage from
@@ -254,7 +260,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnab
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.cli.api.<a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getId--">getId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getMethod--">getMethod</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getPath--">getPath</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">runAsync</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getId--">getId</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getMethod--">getMethod</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#getPath--">getPath</a>, <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#runAsync--">runAsync</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.DefaultOperation">
@@ -301,6 +307,22 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnab
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="successStatusIs200--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>successStatusIs200</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;successStatusIs200()</pre>
+<div class="block">Return "200 OK" for the config geoserver command.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#successStatusIs200--">successStatusIs200</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>The potential status if REST call is successful.</dd>
+</dl>
+</li>
+</ul>
 <a name="prepare-mil.nga.giat.geowave.core.cli.api.OperationParams-">
 <!--   -->
 </a>

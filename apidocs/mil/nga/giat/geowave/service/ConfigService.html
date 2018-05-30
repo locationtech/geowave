@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6,"i15":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -161,6 +161,43 @@ public interface <span class="typeNameLabel">ConfigService</span></pre>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addCassandraStore-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Integer-java.lang.Boolean-java.lang.Integer-java.lang.String-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-">addCassandraStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;contactPoint,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;batchWriteSize,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;durableWrites,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;replicationFactor,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistAdapter,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistIndex,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistDataStatistics,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;createTable,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache,
+                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableServerSideLibrary)</code>&nbsp;</td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addDynamoDBStore-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.String-java.lang.Long-java.lang.Long-java.lang.Integer-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-">addDynamoDBStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;region,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;writeCapacity,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;readCapacity,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxConnections,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;protocol,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableCacheResponseMetadata,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistAdapter,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistIndex,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistDataStatistics,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;createTable,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache,
+                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableServerSideLibrary)</code>&nbsp;</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addHBaseStore-java.lang.String-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-">addHBaseStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;zookeeper,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
@@ -174,12 +211,12 @@ public interface <span class="typeNameLabel">ConfigService</span></pre>
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addIndexGroup-java.lang.String-java.lang.String-">addIndexGroup</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexes)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addSpatialIndex-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Integer-java.lang.String-java.lang.Boolean-java.lang.String-">addSpatialIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
@@ -189,7 +226,7 @@ public interface <span class="typeNameLabel">ConfigService</span></pre>
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;storeTime,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crs)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addSpatialTemporalIndex-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Integer-java.lang.String-java.lang.String-java.lang.String-java.lang.Long-java.lang.String-">addSpatialTemporalIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
@@ -201,14 +238,14 @@ public interface <span class="typeNameLabel">ConfigService</span></pre>
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;maxDuplicates,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;crs)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#addStore-java.lang.String-java.lang.String-java.lang.String-java.util.Map-">addStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;type,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
         <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;additionalQueryParams)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#configGeoServer-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.String-">configGeoServer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;GeoServer_URL,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;username,
@@ -229,27 +266,27 @@ public interface <span class="typeNameLabel">ConfigService</span></pre>
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sslKeyManagerAlgorithm,
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;sslKeyManagerProvider)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#configHDFS-java.lang.String-">configHDFS</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;HDFS_DefaultFS_URL)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#list-java.lang.String-">list</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;filters)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#removeIndex-java.lang.String-">removeIndex</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#removeIndexGroup-java.lang.String-">removeIndexGroup</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#removeStore-java.lang.String-">removeStore</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name)</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/ConfigService.html#set-java.lang.String-java.lang.String-java.lang.Boolean-">set</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value,
@@ -392,6 +429,90 @@ javax.ws.rs.core.Response&nbsp;addBigTableStore(@QueryParam(value="name")
                                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
                                                                                                                          @QueryParam(value="enableBlockCache")
                                                                                                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache)</pre>
+</li>
+</ul>
+<a name="addDynamoDBStore-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.String-java.lang.Long-java.lang.Long-java.lang.Integer-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addDynamoDBStore</h4>
+<pre>@POST
+ @Produces(value="application/json")
+ @Path(value="/addstore/dynamodb")
+javax.ws.rs.core.Response&nbsp;addDynamoDBStore(@QueryParam(value="name")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                                                                                                                         @QueryParam(value="makeDefault")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
+                                                                                                                         @QueryParam(value="endpoint")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;endpoint,
+                                                                                                                         @QueryParam(value="region")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;region,
+                                                                                                                         @QueryParam(value="writeCapacity")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;writeCapacity,
+                                                                                                                         @QueryParam(value="readCapacity")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Long.html?is-external=true" title="class or interface in java.lang">Long</a>&nbsp;readCapacity,
+                                                                                                                         @QueryParam(value="maxConnections")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxConnections,
+                                                                                                                         @QueryParam(value="protocol")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;protocol,
+                                                                                                                         @QueryParam(value="enableCacheResponseMetadata")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableCacheResponseMetadata,
+                                                                                                                         @QueryParam(value="geowaveNamespace")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                                                                                                                         @QueryParam(value="persistAdapter")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistAdapter,
+                                                                                                                         @QueryParam(value="persistIndex")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistIndex,
+                                                                                                                         @QueryParam(value="persistDataStatistics")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistDataStatistics,
+                                                                                                                         @QueryParam(value="createTable")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;createTable,
+                                                                                                                         @QueryParam(value="useAltIndex")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
+                                                                                                                         @QueryParam(value="enableBlockCache")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache,
+                                                                                                                         @QueryParam(value="enableServerSideLibrary")
+                                                                                                                         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableServerSideLibrary)</pre>
+</li>
+</ul>
+<a name="addCassandraStore-java.lang.String-java.lang.Boolean-java.lang.String-java.lang.Integer-java.lang.Boolean-java.lang.Integer-java.lang.String-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-java.lang.Boolean-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addCassandraStore</h4>
+<pre>@POST
+ @Produces(value="application/json")
+ @Path(value="/addstore/cassandra")
+javax.ws.rs.core.Response&nbsp;addCassandraStore(@QueryParam(value="name")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;name,
+                                                                                                                           @QueryParam(value="makeDefault")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;makeDefault,
+                                                                                                                           @QueryParam(value="contactPoint")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;contactPoint,
+                                                                                                                           @QueryParam(value="batchWriteSize")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;batchWriteSize,
+                                                                                                                           @QueryParam(value="durableWrites")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;durableWrites,
+                                                                                                                           @QueryParam(value="replicationFactor")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;replicationFactor,
+                                                                                                                           @QueryParam(value="geowaveNamespace")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;geowaveNamespace,
+                                                                                                                           @QueryParam(value="persistAdapter")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistAdapter,
+                                                                                                                           @QueryParam(value="persistIndex")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistIndex,
+                                                                                                                           @QueryParam(value="persistDataStatistics")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;persistDataStatistics,
+                                                                                                                           @QueryParam(value="createTable")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;createTable,
+                                                                                                                           @QueryParam(value="useAltIndex")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;useAltIndex,
+                                                                                                                           @QueryParam(value="enableBlockCache")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableBlockCache,
+                                                                                                                           @QueryParam(value="enableServerSideLibrary")
+                                                                                                                           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Boolean.html?is-external=true" title="class or interface in java.lang">Boolean</a>&nbsp;enableServerSideLibrary)</pre>
 </li>
 </ul>
 <a name="addStore-java.lang.String-java.lang.String-java.lang.String-java.util.Map-">

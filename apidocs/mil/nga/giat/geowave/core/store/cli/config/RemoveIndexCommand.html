@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -212,17 +212,13 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/con
 <div class="block">Execute the command, and return whether we want to continue execution</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/RemoveIndexCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</code>&nbsp;</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.cli.config.AbstractRemoveCommand">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.cli.config.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html" title="class in mil.nga.giat.geowave.core.store.cli.config">AbstractRemoveCommand</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-java.lang.String-">computeResults</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#getEntryName--">getEntryName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#getStatus--">getStatus</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#setEntryName-java.lang.String-">setEntryName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#setStatus-mil.nga.giat.geowave.core.cli.api.ServiceStatus-">setStatus</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-java.lang.String-">computeResults</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#getEntryName--">getEntryName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#setEntryName-java.lang.String-">setEntryName</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#successStatusIs200--">successStatusIs200</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand">
@@ -289,22 +285,11 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/con
 <ul class="blockList">
 <li class="blockList">
 <h4>execute</h4>
-<pre>public&nbsp;void&nbsp;execute(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</pre>
+<pre>public&nbsp;void&nbsp;execute(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
+             throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/Command.html#execute-mil.nga.giat.geowave.core.cli.api.OperationParams-">Command</a></code></span></div>
 <div class="block">Execute the command, and return whether we want to continue execution</div>
-</li>
-</ul>
-<a name="executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>executeService</h4>
-<pre>public&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceStatus.html" title="enum in mil.nga.giat.geowave.core.cli.api">ServiceStatus</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;executeService(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
-                                                                         throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
-<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html#executeService-mil.nga.giat.geowave.core.cli.api.OperationParams-">executeService</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/config/AbstractRemoveCommand.html" title="class in mil.nga.giat.geowave.core.store.cli.config">AbstractRemoveCommand</a></code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
@@ -316,10 +301,13 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/cli/con
 <ul class="blockListLast">
 <li class="blockList">
 <h4>computeResults</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;computeResults(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;computeResults(<a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/OperationParams.html" title="interface in mil.nga.giat.geowave.core.cli.api">OperationParams</a>&nbsp;params)
+                      throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html#computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-">computeResults</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceEnabledCommand.html" title="class in mil.nga.giat.geowave.core.cli.api">ServiceEnabledCommand</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
 </li>
 </ul>
