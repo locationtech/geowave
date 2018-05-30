@@ -13,14 +13,10 @@ package mil.nga.giat.geowave.core.store.cli.config;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
@@ -33,7 +29,8 @@ public class RemoveStoreCommand extends
 	@Override
 	public String computeResults(
 
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 
 		// Search for properties relevant to the given name
 		pattern = DataStorePluginOptions.getStoreNamespace(getEntryName());
@@ -44,18 +41,9 @@ public class RemoveStoreCommand extends
 	}
 
 	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				super.getStatus(),
-				ret);
-	}
-
-	@Override
 	public void execute(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		computeResults(params);
 	}
 }

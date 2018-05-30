@@ -96,7 +96,8 @@ public class GeoWaveJavaSparkIT extends
 	}
 
 	@Test
-	public void testLoadRDD() {
+	public void testLoadRDD()
+			throws Exception {
 		// Set up Spark
 		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 

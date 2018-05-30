@@ -36,6 +36,14 @@ public class ClearCommand extends
 		ServiceEnabledCommand<Void>
 {
 
+	/**
+	 * Return "200 OK" for all clear commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
 
 	@Parameter(description = "<store name>")

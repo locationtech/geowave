@@ -27,6 +27,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "getfl", parentOperation = GeoServerSection.class)
@@ -38,29 +40,12 @@ public class GeoServerGetFeatureLayerCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -78,17 +63,13 @@ public class GeoServerGetFeatureLayerCommand extends
 
 		if (getLayerResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getLayerResponse.getEntity());
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer layer info for '" + layerName + "': " + jsonResponse.toString(2);
 		}
-		switch (getLayerResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer layer info for '" + layerName + "'; code = " + getLayerResponse.getStatus();
+		String errorMessage = "Error getting GeoServer layer info for '" + layerName + "': "
+				+ getLayerResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ getLayerResponse.getStatus();
+		return handleError(
+				getLayerResponse,
+				errorMessage);
 	}
 }

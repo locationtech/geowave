@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.cli.geoserver;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.NotAuthorizedException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
@@ -28,6 +29,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
 
 @GeowaveOperation(name = "addws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add GeoServer workspace")
@@ -38,29 +40,12 @@ public class GeoServerAddWorkspaceCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -76,20 +61,13 @@ public class GeoServerAddWorkspaceCommand extends
 
 		final Response addWorkspaceResponse = geoserverClient.addWorkspace(wsName);
 		if (addWorkspaceResponse.getStatus() == Status.CREATED.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			return "Add workspace '" + wsName + "' to GeoServer: OK";
 		}
-		switch (addWorkspaceResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error adding workspace '" + wsName + "' to GeoServer; code = " + addWorkspaceResponse.getStatus();
+		String errorMessage = "Error adding workspace '" + wsName + "' to GeoServer: "
+				+ addWorkspaceResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ addWorkspaceResponse.getStatus();
+		return handleError(
+				addWorkspaceResponse,
+				errorMessage);
 	}
 }

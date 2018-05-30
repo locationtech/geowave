@@ -47,7 +47,9 @@ public class ConfigServicesIT
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 
@@ -90,8 +92,8 @@ public class ConfigServicesIT
 	@Test
 	public void testAddStore() {
 		TestUtils.assertStatusCode(
-				"Unable to create store",
-				200,
+				"Should Create Store",
+				201,
 				configServiceClient.addStore(
 						storeName,
 						dataStorePluginOptions.getType(),
@@ -114,8 +116,8 @@ public class ConfigServicesIT
 		Response firstAdd = configServiceClient.addSpatialIndex(spatialIndexName);
 
 		TestUtils.assertStatusCode(
-				"Unable to create index",
-				200,
+				"Should Create Spatial Index",
+				201,
 				firstAdd);
 
 		Response secondAdd = configServiceClient.addSpatialIndex(spatialIndexName);
@@ -133,8 +135,8 @@ public class ConfigServicesIT
 		Response firstAdd = configServiceClient.addSpatialTemporalIndex(spatialTemporalIndexName);
 
 		TestUtils.assertStatusCode(
-				"Unable to create index",
-				200,
+				"Should Create Spatial Temporal Index",
+				201,
 				firstAdd);
 
 		Response secondAdd = configServiceClient.addSpatialTemporalIndex(spatialTemporalIndexName);
@@ -159,8 +161,8 @@ public class ConfigServicesIT
 				indexes);
 
 		TestUtils.assertStatusCode(
-				"Unable to create index group",
-				200,
+				"Should Create Index Group",
+				201,
 				firstAdd);
 
 		Response secondAdd = configServiceClient.addIndexGroup(
@@ -196,7 +198,7 @@ public class ConfigServicesIT
 
 		Response firstRemove = configServiceClient.removeStore("test_remove_store");
 		TestUtils.assertStatusCode(
-				"Unable to remove store",
+				"Should Remove Store",
 				200,
 				firstRemove);
 
@@ -216,7 +218,7 @@ public class ConfigServicesIT
 
 		Response firstRemove = configServiceClient.removeIndex("test_remove_index");
 		TestUtils.assertStatusCode(
-				"Unable to remove index",
+				"Should Remove Index",
 				200,
 				firstRemove);
 
@@ -243,7 +245,7 @@ public class ConfigServicesIT
 
 		Response firstRemove = configServiceClient.removeIndexGroup("test_remove_index_group");
 		TestUtils.assertStatusCode(
-				"Unable to remove index group",
+				"Should Remove Index Group",
 				200,
 				firstRemove);
 
@@ -261,7 +263,7 @@ public class ConfigServicesIT
 		// Should always return 200
 		Response config = configServiceClient.configHDFS("localhost:8020");
 		TestUtils.assertStatusCode(
-				"Unable to configure HDFS",
+				"Should Configure HDFS",
 				200,
 				config);
 	}
@@ -274,7 +276,7 @@ public class ConfigServicesIT
 				"Property",
 				"Value");
 		TestUtils.assertStatusCode(
-				"Unable to set property",
+				"Should Set Property",
 				200,
 				set);
 		String list = configServiceClient.list().readEntity(
@@ -296,7 +298,7 @@ public class ConfigServicesIT
 		// Should always return 200
 		Response list = configServiceClient.list();
 		TestUtils.assertStatusCode(
-				"Unable to return list",
+				"Should Return List",
 				200,
 				list);
 	}
@@ -307,7 +309,7 @@ public class ConfigServicesIT
 		// Should always return 200
 		Response configGeoserver = configServiceClient.configGeoServer("test-geoserver");
 		TestUtils.assertStatusCode(
-				"Unable to configure GeoServer",
+				"Should Configure Geoserver",
 				200,
 				configGeoserver);
 		String list = configServiceClient.list().readEntity(

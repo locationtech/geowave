@@ -154,16 +154,16 @@ public class SparkSqlCommand extends
 		while (matchedStore != null) {
 			String parseStore = matchedStore.group(2);
 			String originalStoreText = parseStore;
-			
-			//Drop the first character off string should be % sign
+
+			// Drop the first character off string should be % sign
 			parseStore = parseStore.substring(1);
 			parseStore = parseStore.trim();
-			
+
 			LOGGER.debug("parsed store: " + parseStore);
-			
+
 			String[] storeNameParts = parseStore.split(escapedDelimRegex);
 			LOGGER.debug("Split Count: " + storeNameParts.length);
-			for(String split : storeNameParts) {
+			for (String split : storeNameParts) {
 				LOGGER.debug("Store split: " + split);
 			}
 			String storeName = null;
@@ -209,7 +209,7 @@ public class SparkSqlCommand extends
 
 			matchedStore = getNextPositiveMatcher(matchedStore);
 		}
-		
+
 		return replacedSQL;
 	}
 

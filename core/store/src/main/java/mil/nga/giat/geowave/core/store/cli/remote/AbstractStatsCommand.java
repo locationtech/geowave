@@ -35,6 +35,15 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 public abstract class AbstractStatsCommand<T> extends
 		ServiceEnabledCommand<T>
 {
+
+	/**
+	 * Return "200 OK" for all stats commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@ParametersDelegate

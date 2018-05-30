@@ -27,6 +27,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "addfl", parentOperation = GeoServerSection.class)
@@ -50,8 +52,6 @@ public class GeoServerAddFeatureLayerCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
@@ -60,24 +60,10 @@ public class GeoServerAddFeatureLayerCommand extends
 				computeResults(params));
 	}
 
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
-
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <layer name>");
@@ -97,20 +83,13 @@ public class GeoServerAddFeatureLayerCommand extends
 
 		if (addLayerResponse.getStatus() == Status.CREATED.getStatusCode()) {
 			final JSONObject listObj = JSONObject.fromObject(addLayerResponse.getEntity());
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer add layer response " + layerName + ":" + listObj.toString(2);
 		}
-		switch (addLayerResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error adding GeoServer layer " + layerName + "; code = " + addLayerResponse.getStatus();
+		String errorMessage = "Error adding GeoServer layer " + layerName + ": "
+				+ addLayerResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ addLayerResponse.getStatus();
+		return handleError(
+				addLayerResponse,
+				errorMessage);
 	}
 }

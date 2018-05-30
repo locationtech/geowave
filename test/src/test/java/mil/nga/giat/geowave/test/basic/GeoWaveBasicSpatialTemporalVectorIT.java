@@ -103,7 +103,8 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 	}
 
 	@Test
-	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
+	public void testIngestAndQuerySpatialTemporalPointsAndLines()
+			throws Exception {
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
@@ -237,8 +238,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 
 	private void testSpatialTemporalLocalExportAndReingestWithCQL(
 			final URL filterURL )
-			throws CQLException,
-			IOException {
+			throws Exception {
 
 		final SimpleFeature savedFilter = TestUtils.resourceToFeature(filterURL);
 

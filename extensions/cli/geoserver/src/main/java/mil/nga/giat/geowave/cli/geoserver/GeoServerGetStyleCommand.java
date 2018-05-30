@@ -29,6 +29,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "getstyle", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Get GeoServer Style info")
@@ -39,29 +41,12 @@ public class GeoServerGetStyleCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String style = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -78,18 +63,13 @@ public class GeoServerGetStyleCommand extends
 
 		if (getStyleResponse.getStatus() == Status.OK.getStatusCode()) {
 			final String styleInfo = IOUtils.toString((InputStream) getStyleResponse.getEntity());
-			setStatus(ServiceStatus.OK);
-			return "\nGeoServer style info for '" + style + "':\n" + styleInfo;
-
+			return "\nGeoServer style info for '" + style + "': " + styleInfo;
 		}
-		switch (getStyleResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer style info for '" + style + "'; code = " + getStyleResponse.getStatus();
+		String errorMessage = "Error getting GeoServer style info for '" + style + "': "
+				+ getStyleResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ getStyleResponse.getStatus();
+		return handleError(
+				getStyleResponse,
+				errorMessage);
 	}
 }

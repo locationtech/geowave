@@ -27,6 +27,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "getcv", parentOperation = GeoServerSection.class)
@@ -50,29 +52,12 @@ public class GeoServerGetCoverageCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -97,17 +82,12 @@ public class GeoServerGetCoverageCommand extends
 
 		if (getCvgResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(getCvgResponse.getEntity());
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer coverage info for '" + cvgName + "': " + jsonResponse.toString(2);
 		}
-		switch (getCvgResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer coverage info for " + cvgName + "; code = " + getCvgResponse.getStatus();
+		String errorMessage = "Error getting GeoServer coverage info for " + cvgName + ": "
+				+ getCvgResponse.readEntity(String.class) + "\nGeoServer Response Code = " + getCvgResponse.getStatus();
+		return handleError(
+				getCvgResponse,
+				errorMessage);
 	}
 }

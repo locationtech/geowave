@@ -68,7 +68,10 @@ public class GeowaveSparkIngestIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -80,7 +83,7 @@ public class GeowaveSparkIngestIT extends
 		stopwatch.start();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*  RUNNING GeoWaveJavaSparkIT           *");
+		LOGGER.warn("*  RUNNING GeoWaveJavaSparkIngestIT           *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -90,7 +93,7 @@ public class GeowaveSparkIngestIT extends
 		stopwatch.stop();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("* FINISHED GeoWaveJavaSparkIT           *");
+		LOGGER.warn("* FINISHED GeoWaveJavaSparkIngestIT           *");
 		LOGGER.warn("*         " + stopwatch.getTimeString() + " elapsed.             *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");

@@ -59,7 +59,7 @@ public class IndexLoaderTest
 
 	@Test
 	public void testIndexGroup()
-			throws IOException {
+			throws Exception {
 		final AddIndexCommand addIndex = new AddIndexCommand();
 		addIndex.setType("test");
 		addIndex.setParameters("index1");
@@ -96,7 +96,7 @@ public class IndexLoaderTest
 
 	@Test
 	public void testMutlipleIndexGroupsAndIndices()
-			throws IOException {
+			throws Exception {
 		final AddIndexCommand addIndex = new AddIndexCommand();
 		addIndex.setType("test");
 		addIndex.setParameters("index1");

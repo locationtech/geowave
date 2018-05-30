@@ -1,8 +1,5 @@
 package mil.nga.giat.geowave.core.cli.api;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 public abstract class ServiceEnabledCommand<T> extends
@@ -10,14 +7,6 @@ public abstract class ServiceEnabledCommand<T> extends
 		Command
 {
 	protected String path = null;
-
-	public Pair<ServiceStatus, T> executeService(
-			OperationParams params )
-			throws Exception {
-		return ImmutablePair.of(
-				ServiceStatus.OK,
-				computeResults(params));
-	}
 
 	abstract public T computeResults(
 			OperationParams params )
@@ -44,6 +33,25 @@ public abstract class ServiceEnabledCommand<T> extends
 			return HttpMethod.GET;
 		}
 		return HttpMethod.POST;
+	}
+
+	/**
+	 * Get the status code to return if execution was success.
+	 * 
+	 * By default: POST -> 201 OTHER -> 200
+	 * 
+	 * Should be overridden in subclasses as needed (i.e., for a POST that does
+	 * not create anything).
+	 * 
+	 * @return The potential status if REST call is successful.
+	 */
+	public Boolean successStatusIs200() {
+		switch (getMethod()) {
+			case POST:
+				return false;
+			default:
+				return true;
+		}
 	}
 
 	/**
