@@ -408,12 +408,24 @@ public class TestUtils
 			final DataStorePluginOptions dataStore )
 			throws Exception {
 		final ListStatsCommand listStats = new ListStatsCommand();
-		listStats.setInputStoreOptions(dataStore);
 		listStats.setParameters(
-				null,
+				"test",
 				null);
+
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
 		try {
-			listStats.execute(new ManualOperationParams());
+			listStats.execute(params);
 		}
 		catch (final ParameterException e) {
 			throw new RuntimeException(
