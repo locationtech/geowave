@@ -50,8 +50,6 @@ public abstract class AbstractStatsCommand<T> extends
 	@ParametersDelegate
 	private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
 
-	private DataStorePluginOptions inputStoreOptions = null;
-
 	public void run(
 			final OperationParams params,
 			final List<String> parameters ) {
@@ -64,15 +62,13 @@ public abstract class AbstractStatsCommand<T> extends
 
 		// Attempt to load input store if not already provided (test purposes).
 
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					storeName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				storeName);
+		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		try {
 			// Various stores needed
@@ -154,11 +150,6 @@ public abstract class AbstractStatsCommand<T> extends
 			authsArray[i] = authsArray[i].trim();
 		}
 		return authsArray;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 }

@@ -98,16 +98,14 @@ public class GeowaveRDDExample
 
 		try {
 			DataStorePluginOptions inputStoreOptions = null;
-			// Attempt to load input store.
-			if (inputStoreOptions == null) {
-				final StoreLoader inputStoreLoader = new StoreLoader(
-						storeName);
-				if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
-					throw new IOException(
-							"Cannot find store name: " + inputStoreLoader.getStoreName());
-				}
-				inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+
+			final StoreLoader inputStoreLoader = new StoreLoader(
+					storeName);
+			if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
+				throw new IOException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 			SparkConf sparkConf = new SparkConf();
 
