@@ -356,7 +356,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}

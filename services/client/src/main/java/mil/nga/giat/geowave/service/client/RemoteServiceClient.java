@@ -58,9 +58,9 @@ public class RemoteServiceClient
 	}
 
 	public Response version(
-			final String store_name ) {
+			final String storename ) {
 
-		final Response resp = remoteService.version(store_name);
+		final Response resp = remoteService.version(storename);
 		return resp;
 	}
 

@@ -200,7 +200,7 @@ public class RemoteIT
 				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
 		TestUtils.assertStatusCode(
 				"Should fail to clear for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.clear("nonexistent-store"));
 	}
 	
@@ -208,7 +208,7 @@ public class RemoteIT
 	public void clear2() {
 		TestUtils.assertStatusCode(
 				"Should fail to clear for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.clear("nonexistent-store"));
 		TestUtils.assertStatusCode(
 				"Should successfully clear for existent store", 
@@ -224,7 +224,7 @@ public class RemoteIT
 				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
 		TestUtils.assertStatusCode(
 				"Should fail to list adapters for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.listAdapter("nonexistent-store"));
 	}
 	
@@ -232,7 +232,7 @@ public class RemoteIT
 	public void listadapter2() {
 		TestUtils.assertStatusCode(
 				"Should fail to list adapters for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.listAdapter("nonexistent-store"));
 		TestUtils.assertStatusCode(
 				"Should successfully list adapters for existent store", 
@@ -244,7 +244,7 @@ public class RemoteIT
 	public void listindex1() {
 		TestUtils.assertStatusCode(
 				"Should fail to list indices for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.listIndex("nonexistent-store"));
 		TestUtils.assertStatusCode(
 				"Should successfully list indices for existent store", 
@@ -260,7 +260,7 @@ public class RemoteIT
 				remoteServiceClient.listIndex(TestUtils.TEST_NAMESPACE));
 		TestUtils.assertStatusCode(
 				"Should fail to list indices for nonexistent store", 
-				404, 
+				400, 
 				remoteServiceClient.listIndex("nonexistent-store"));
 	}
 
@@ -272,7 +272,7 @@ public class RemoteIT
 				remoteServiceClient.listStats(TestUtils.TEST_NAMESPACE));
 		TestUtils.assertStatusCode(
 				"Should fail to liststats for nonexistent store",
-				404,
+				400,
 				remoteServiceClient.listStats("nonexistent-store"));
 	}
 	
@@ -280,7 +280,7 @@ public class RemoteIT
 	public void liststats2() {
 		TestUtils.assertStatusCode(
 				"Should fail to liststats for nonexistent store",
-				404,
+				400,
 				remoteServiceClient.listStats("nonexistent-store"));
 		TestUtils.assertStatusCode(
 				"Should successfully liststats for existent store",
@@ -298,7 +298,7 @@ public class RemoteIT
 	public void rmadapter1() {
 		TestUtils.assertStatusCode(
 				"Should fail to remove adapter for nonexistent store",
-				404,
+				400,
 				remoteServiceClient.removeAdapter("nonexistent-store", ""));
 		TestUtils.assertStatusCode(
 				"Should successfully remove adapter for existent store and existent adapter",
@@ -306,7 +306,7 @@ public class RemoteIT
 				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
 		TestUtils.assertStatusCode(
 				"Should fail to remove adapter for existent store and nonexistent adapter",
-				404,
+				400,
 				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "nonexistent-adapter"));
 	}
 	
@@ -337,7 +337,7 @@ public class RemoteIT
 		
 		TestUtils.assertStatusCode(
 				"Should fail to return version for nonexistent store",
-				200,
+				400,
 				remoteServiceClient.version("nonexistent-store"));
 	}
 	
@@ -345,7 +345,7 @@ public class RemoteIT
 	public void version2() {
 		TestUtils.assertStatusCode(
 				"Should fail to return version for nonexistent store",
-				200,
+				400,
 				remoteServiceClient.version("nonexistent-store"));
 		TestUtils.assertStatusCode(
 				"Should successfully return version for existent store",
