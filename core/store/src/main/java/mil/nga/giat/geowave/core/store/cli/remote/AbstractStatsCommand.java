@@ -41,8 +41,8 @@ public abstract class AbstractStatsCommand<T> extends
 	 * Return "200 OK" for all stats commands.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);

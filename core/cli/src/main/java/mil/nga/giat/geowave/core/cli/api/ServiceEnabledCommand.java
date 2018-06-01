@@ -1,7 +1,5 @@
 package mil.nga.giat.geowave.core.cli.api;
 
-import org.restlet.data.Status;
-
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 
 public abstract class ServiceEnabledCommand<T> extends
@@ -47,12 +45,12 @@ public abstract class ServiceEnabledCommand<T> extends
 	 * 
 	 * @return The potential status if REST call is successful.
 	 */
-	public Status getSuccessStatus() {
+	public Boolean successStatusIs200() {
 		switch (getMethod()) {
 			case POST:
-				return Status.SUCCESS_CREATED;
+				return false;
 			default:
-				return Status.SUCCESS_OK;
+				return true;
 		}
 	}
 

@@ -33,6 +33,6 @@
 		<module>cli/geoserver</module>
 		<module>cli/osm</module>
 		<module>cli/landsat8</module>
-		<module>cli/theia</module>
+		<module>cli/sentinel2</module>
 	</modules>
 </project>

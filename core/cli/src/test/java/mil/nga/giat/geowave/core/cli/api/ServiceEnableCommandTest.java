@@ -1,12 +1,9 @@
 package mil.nga.giat.geowave.core.cli.api;
 
-import static org.junit.Assert.*;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.restlet.data.Status;
 
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
 
@@ -58,8 +55,8 @@ public class ServiceEnableCommandTest
 				HttpMethod.GET);
 
 		Assert.assertEquals(
-				Status.SUCCESS_OK,
-				classUnderTest.getSuccessStatus());
+				true,
+				classUnderTest.successStatusIs200());
 	}
 
 	@Test
@@ -69,8 +66,8 @@ public class ServiceEnableCommandTest
 				HttpMethod.POST);
 
 		Assert.assertEquals(
-				Status.SUCCESS_CREATED,
-				classUnderTest.getSuccessStatus());
+				false,
+				classUnderTest.successStatusIs200());
 	}
 
 }

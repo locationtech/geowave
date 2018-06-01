@@ -297,7 +297,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				rm.data = result;
 			}
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-			setStatus(operation.getSuccessStatus());
+			if(operation.successStatusIs200()){
+				setStatus(Status.SUCCESS_OK);
+			}
+			else{
+				setStatus(Status.SUCCESS_CREATED);
+			}
 			return rep;
 		}
 		catch (final NotAuthorizedException e){

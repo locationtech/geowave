@@ -25,8 +25,8 @@ public class ConfigHDFSCommand extends
 	 * Return "200 OK" for the config HDFS command.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defaultFS";
