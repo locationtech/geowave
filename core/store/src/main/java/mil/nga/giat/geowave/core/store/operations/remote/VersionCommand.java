@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.core.store.server.ServerSideOperations;
 @GeowaveOperation(name = "version", parentOperation = RemoteSection.class)
 @Parameters(commandDescription = "Get the version of GeoWave running on the instance of a remote datastore")
 public class VersionCommand extends
-		ServiceEnabledCommand<Void>
+		ServiceEnabledCommand<String>
 {
 	@Parameter(description = "<storename>")
 	private final List<String> parameters = new ArrayList<String>();
@@ -48,7 +48,7 @@ public class VersionCommand extends
 	}
 
 	@Override
-	public Void computeResults(
+	public String computeResults(
 			final OperationParams params )
 			throws Exception {
 		if (parameters.size() < 1) {
@@ -63,13 +63,13 @@ public class VersionCommand extends
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
-			JCommander.getConsole().println(
-					"Cannot find store name: " + inputStoreLoader.getStoreName());
-			return null;
+			String ret = "Cannot find store name: " + inputStoreLoader.getStoreName();
+			throw new ParameterException(
+					ret);
 		}
 
 		final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-
+		// TODO: This return probably should be formatted as JSON
 		if (inputStoreOptions != null) {
 			DataStoreOperations ops = inputStoreOptions.createDataStoreOperations();
 			if (ops instanceof ServerSideOperations
@@ -77,16 +77,20 @@ public class VersionCommand extends
 				JCommander.getConsole().println(
 						"Looking up remote datastore version for type [" + inputStoreOptions.getType() + "] and name ["
 								+ inputStoreName + "]");
-				final String version = ((ServerSideOperations) ops).getVersion();
+				final String version = "Version: " + ((ServerSideOperations) ops).getVersion();
 				JCommander.getConsole().println(
-						"Version: " + version);
+						version);
+				return version;
 			}
 			else {
+				String ret1 = "Datastore for type [" + inputStoreOptions.getType() + "] and name [" + inputStoreName
+						+ "] does not have a serverside library enabled.";
 				JCommander.getConsole().println(
-						"Datastore for type [" + inputStoreOptions.getType() + "] and name [" + inputStoreName
-								+ "] does not have a serverside library enabled.");
+						ret1);
+				String ret2 = "Commandline Version: " + VersionUtils.getVersion();
 				JCommander.getConsole().println(
-						"Commandline Version: " + VersionUtils.getVersion());
+						ret2);
+				return ret1 + '\n' + ret2;
 			}
 		}
 		return null;
