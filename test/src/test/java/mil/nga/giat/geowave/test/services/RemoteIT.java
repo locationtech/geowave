@@ -104,7 +104,7 @@ public class RemoteIT
 
 	private RemoteServiceClient remoteServiceClient;
 
-	private String store_name;
+	private String store_name = TestUtils.TEST_NAMESPACE;
 
 	private final static String testName = "RemoteIT";
 
@@ -125,7 +125,6 @@ public class RemoteIT
 		TestUtils.printStartOfTest(
 				LOGGER,
 				testName);
-
 	}
 
 	@AfterClass
@@ -180,35 +179,11 @@ public class RemoteIT
 				dataStoreOptions.getType(),
 				TestUtils.TEST_NAMESPACE,
 				dataStoreOptions.getOptionsAsMap());
-		configServiceClient.addStore(
-				"test",
-				dataStoreOptions.getType(),
-				TestUtils.TEST_NAMESPACE,
-				dataStoreOptions.getOptionsAsMap());
 	}
 
 	@After
 	public void cleanupWorkspace() {
-		// Remove everything created in the @Before method, so each test starts
-		// with a clean slate.
-
-		// If confident the initialization data does not change during the test,
-		// you may move the setup/tear down actions to the @BeforeClass and
-		// @AfterClass methods.
-	}
-
-	@Test
-	@Ignore
-	public void example() {
-		// Tests should contain calls to the REST services methods, checking
-		// them for proper response and status codes.
-
-		// Use this method to check:
-
-		TestUtils.assertStatusCode(
-				"Should Successfully <Insert Objective Here>",
-				200,
-				remoteServiceClient.listAdapter(store_name));
+		configServiceClient.removeStore(TestUtils.TEST_NAMESPACE);
 	}
 
 	@Test
@@ -218,30 +193,99 @@ public class RemoteIT
 	}
 
 	@Test
-	@Ignore
-	public void clear() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	@Ignore
-	public void listadapter() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	@Ignore
-	public void listindex() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	public void liststats() {
+	public void clear1() {
 		TestUtils.assertStatusCode(
-				"Should Successfully <Insert Objective Here>",
+				"Should successfully clear for existent store", 
+				200, 
+				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
+		TestUtils.assertStatusCode(
+				"Should fail to clear for nonexistent store", 
+				404, 
+				remoteServiceClient.clear("nonexistent-store"));
+	}
+	
+	@Test
+	public void clear2() {
+		TestUtils.assertStatusCode(
+				"Should fail to clear for nonexistent store", 
+				404, 
+				remoteServiceClient.clear("nonexistent-store"));
+		TestUtils.assertStatusCode(
+				"Should successfully clear for existent store", 
+				200, 
+				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
+	}
+
+	@Test
+	public void listadapter1() {
+		TestUtils.assertStatusCode(
+				"Should successfully list adapters for existent store", 
+				200, 
+				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
+		TestUtils.assertStatusCode(
+				"Should fail to list adapters for nonexistent store", 
+				404, 
+				remoteServiceClient.listAdapter("nonexistent-store"));
+	}
+	
+	@Test
+	public void listadapter2() {
+		TestUtils.assertStatusCode(
+				"Should fail to list adapters for nonexistent store", 
+				404, 
+				remoteServiceClient.listAdapter("nonexistent-store"));
+		TestUtils.assertStatusCode(
+				"Should successfully list adapters for existent store", 
+				200, 
+				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
+	}
+
+	@Test
+	public void listindex1() {
+		TestUtils.assertStatusCode(
+				"Should fail to list indices for nonexistent store", 
+				404, 
+				remoteServiceClient.listIndex("nonexistent-store"));
+		TestUtils.assertStatusCode(
+				"Should successfully list indices for existent store", 
+				200, 
+				remoteServiceClient.listIndex(TestUtils.TEST_NAMESPACE));
+	}
+	
+	@Test
+	public void listindex2() {
+		TestUtils.assertStatusCode(
+				"Should successfully list indices for existent store", 
+				200, 
+				remoteServiceClient.listIndex(TestUtils.TEST_NAMESPACE));
+		TestUtils.assertStatusCode(
+				"Should fail to list indices for nonexistent store", 
+				404, 
+				remoteServiceClient.listIndex("nonexistent-store"));
+	}
+
+	@Test
+	public void liststats1() {
+		TestUtils.assertStatusCode(
+				"Should successfully liststats for existent store",
 				200,
-				remoteServiceClient.listStats("test"));
-		// TODO: Make calls to non-existent stores return something other than 500
+				remoteServiceClient.listStats(TestUtils.TEST_NAMESPACE));
+		TestUtils.assertStatusCode(
+				"Should fail to liststats for nonexistent store",
+				404,
+				remoteServiceClient.listStats("nonexistent-store"));
+	}
+	
+	@Test
+	public void liststats2() {
+		TestUtils.assertStatusCode(
+				"Should fail to liststats for nonexistent store",
+				404,
+				remoteServiceClient.listStats("nonexistent-store"));
+		TestUtils.assertStatusCode(
+				"Should successfully liststats for existent store",
+				200,
+				remoteServiceClient.listStats(TestUtils.TEST_NAMESPACE));
 	}
 
 	@Test
@@ -251,11 +295,33 @@ public class RemoteIT
 	}
 
 	@Test
-	@Ignore
-	public void rmadapter() {
-		// TODO: Implement this test
+	public void rmadapter1() {
+		TestUtils.assertStatusCode(
+				"Should fail to remove adapter for nonexistent store",
+				404,
+				remoteServiceClient.removeAdapter("nonexistent-store", ""));
+		TestUtils.assertStatusCode(
+				"Should successfully remove adapter for existent store and existent adapter",
+				200,
+				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
+		TestUtils.assertStatusCode(
+				"Should fail to remove adapter for existent store and nonexistent adapter",
+				404,
+				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "nonexistent-adapter"));
 	}
-
+	
+	@Test
+	public void rmadapter2() {
+		TestUtils.assertStatusCode(
+				"Should successfully remove adapter for existent store and existent adapter",
+				200,
+				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
+		TestUtils.assertStatusCode(
+				"Should fail to remove an already removed adapter",
+				400,
+				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
+	}
+	
 	@Test
 	@Ignore
 	public void rmstat() {
@@ -263,9 +329,28 @@ public class RemoteIT
 	}
 
 	@Test
-	@Ignore
-	public void version() {
-		// TODO: Implement this test
+	public void version1() {
+		TestUtils.assertStatusCode(
+				"Should successfully return version for existent store",
+				200,
+				remoteServiceClient.version(TestUtils.TEST_NAMESPACE));
+		
+		TestUtils.assertStatusCode(
+				"Should fail to return version for nonexistent store",
+				200,
+				remoteServiceClient.version("nonexistent-store"));
+	}
+	
+	@Test
+	public void version2() {
+		TestUtils.assertStatusCode(
+				"Should fail to return version for nonexistent store",
+				200,
+				remoteServiceClient.version("nonexistent-store"));
+		TestUtils.assertStatusCode(
+				"Should successfully return version for existent store",
+				200,
+				remoteServiceClient.version(TestUtils.TEST_NAMESPACE));
 	}
 
 }

@@ -29,6 +29,8 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.ParameterException;
+
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
@@ -339,6 +341,17 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final ParameterException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e.getMessage());
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}
