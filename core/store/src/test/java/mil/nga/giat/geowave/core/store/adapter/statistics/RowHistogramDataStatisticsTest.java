@@ -24,7 +24,7 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 
-public class RowHistogramDataStaticticsTest
+public class RowHistogramDataStatisticsTest
 {
 	static final long base = 7l;
 
