@@ -31,9 +31,21 @@ public class SimpleFeatureIngestOptions implements
 	private FeatureSerializationOptionProvider serializationFormatOptionProvider = new FeatureSerializationOptionProvider();
 
 	@ParametersDelegate
+	private GeometrySimpOptionProvider simpOptionProvider = new GeometrySimpOptionProvider();
+
+	@ParametersDelegate
 	private Object pluginOptions = null;
 
 	public SimpleFeatureIngestOptions() {}
+
+	public GeometrySimpOptionProvider getGeometrySimpOptionProvider() {
+		return simpOptionProvider;
+	}
+
+	public void setGeometrySimpOptionProvider(
+			final GeometrySimpOptionProvider simpOptionProvider ) {
+		this.simpOptionProvider = simpOptionProvider;
+	}
 
 	public CQLFilterOptionProvider getCqlFilterOptionProvider() {
 		return cqlFilterOptionProvider;
