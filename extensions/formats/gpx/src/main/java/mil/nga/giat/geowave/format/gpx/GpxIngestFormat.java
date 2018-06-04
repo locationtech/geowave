@@ -11,7 +11,11 @@
 package mil.nga.giat.geowave.format.gpx;
 
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
+import mil.nga.giat.geowave.adapter.vector.ingest.SimpleFeatureIngestOptions;
 import mil.nga.giat.geowave.core.ingest.spi.IngestFormatOptionProvider;
+
+import com.beust.jcommander.ParametersDelegate;
+
 import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 
 /**
@@ -22,10 +26,14 @@ import mil.nga.giat.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFor
 public class GpxIngestFormat extends
 		AbstractSimpleFeatureIngestFormat<GpxTrack>
 {
+	private final GeometrySimpOptionProvider simplifyOptProvider = new GeometrySimpOptionProvider();
+	
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<GpxTrack> newPluginInstance(
 			IngestFormatOptionProvider options ) {
-		return new GpxIngestPlugin();
+		GpxIngestPlugin plugin = new GpxIngestPlugin();
+		plugin.setSimplifyOptionProvider(simplifyOptProvider);
+		return plugin;
 	}
 
 	@Override
@@ -36,6 +44,11 @@ public class GpxIngestFormat extends
 	@Override
 	public String getIngestFormatDescription() {
 		return "xml files adhering to the schema of gps exchange format";
+	}
+	
+	@Override
+	protected Object internalGetIngestFormatOptionProviders() {
+		return simplifyOptProvider;
 	}
 
 }

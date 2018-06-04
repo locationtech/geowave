@@ -67,6 +67,8 @@ public class GpxIngestPlugin extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GpxIngestPlugin.class);
 
 	private final static String TAG_SEPARATOR = " ||| ";
+	
+	private GeometrySimpOptionProvider simplifyOptProvider = null;
 
 	private Map<Long, GpxTrack> metadata = null;
 	private static final AtomicLong currentFreeTrackId = new AtomicLong(
@@ -224,7 +226,11 @@ public class GpxIngestPlugin extends
 					getAdditionalData(gpxTrack),
 					false, // waypoints, even dups, are unique, due to QGis
 							// behavior
-					globalVisibility);
+					globalVisibility,
+					this.simplifyOptProvider.getMaxVertices(),
+					this.simplifyOptProvider.getSimpLimit(),
+					this.simplifyOptProvider.getTolerance(),
+					this.simplifyOptProvider.getMaxLength());
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
@@ -312,5 +318,10 @@ public class GpxIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
+	}
+
+	public void setSimplifyOptionProvider(
+			GeometrySimpOptionProvider simplifyOptProvider ) {
+		this.simplifyOptProvider = simplifyOptProvider;
 	}
 }

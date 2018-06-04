@@ -36,6 +36,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
+import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -43,8 +45,11 @@ import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.geometry.BoundingBox;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
 
 /**
  * Consumes a GPX file. The consumer is an iterator, parsing the input stream
@@ -93,12 +98,15 @@ public class GPXConsumer implements
 	final String globalVisibility;
 	final Map<String, Map<String, String>> additionalData;
 	final boolean uniqueWayPoints;
+	final int maxVertices;
+	final int simpMinVertCount;
+	final double simpTolerance;
+	final double maxLength;
 
 	final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
 	final Stack<GPXDataElement> currentElementStack = new Stack<GPXDataElement>();
-	final GPXDataElement top = new GPXDataElement(
-			"gpx");
+	GPXDataElement top = null;
 
 	static final NumberFormat LatLongFormat = new DecimalFormat(
 			"0000000000");
@@ -129,7 +137,11 @@ public class GPXConsumer implements
 			final String inputID,
 			final Map<String, Map<String, String>> additionalData,
 			final boolean uniqueWayPoints,
-			final String globalVisibility ) {
+			final String globalVisibility,
+			final int maxVertCount,
+			final int simpMinCount,
+			final double tolerance,
+			final double maxLength) {
 		super();
 		this.fileStream = fileStream;
 		this.primaryIndexIds = primaryIndexIds;
@@ -137,6 +149,16 @@ public class GPXConsumer implements
 		this.uniqueWayPoints = uniqueWayPoints;
 		this.additionalData = additionalData;
 		this.globalVisibility = globalVisibility;
+		this.maxVertices = maxVertCount;
+		this.simpMinVertCount = simpMinCount;
+		this.simpTolerance = tolerance;
+		this.maxLength = maxLength;
+		this.top = new GPXDataElement(
+				"gpx",
+				this.maxVertices,
+				this.simpMinVertCount,
+				this.simpTolerance,
+				this.maxLength);
 		pointBuilder = new SimpleFeatureBuilder(
 				pointType);
 		waypointBuilder = new SimpleFeatureBuilder(
@@ -237,7 +259,11 @@ public class GPXConsumer implements
 						node,
 						currentElement)) {
 					final GPXDataElement newElement = new GPXDataElement(
-							event.asStartElement().getName().getLocalPart());
+							event.asStartElement().getName().getLocalPart(),
+							this.maxVertices,
+							this.simpMinVertCount,
+							this.simpTolerance,
+							this.maxLength);
 					currentElement.addChild(newElement);
 					currentElement = newElement;
 					currentElementStack.push(currentElement);
@@ -497,10 +523,23 @@ public class GPXConsumer implements
 		GPXDataElement parent;
 		long id = 0;
 		int childIdCounter = 0;
+		
+		int maxTrackVertices = Integer.MAX_VALUE;
+		int simpMinVertices = Integer.MAX_VALUE;
+		double tolerance = 0.0;
+		double maxLineLength = Double.MAX_VALUE;
 
 		public GPXDataElement(
-				final String myElType ) {
+				final String myElType,
+				final int maxVertices,
+				final int simpMin,
+				final double simpTolerance,
+				final double maxLength) {
 			elementType = myElType;
+			maxTrackVertices = maxVertices;
+			simpMinVertices = simpMin;
+			tolerance = simpTolerance;
+			maxLineLength = maxLength;
 		}
 
 		@Override
@@ -754,15 +793,27 @@ public class GPXConsumer implements
 
 				final List<Coordinate> childSequence = buildCoordinates();
 
-				if (childSequence.size() == 0) {
+				int childCoordCount = childSequence.size();
+				if (childCoordCount == 0) {
 					return false;
 				}
 
-				if (childSequence.size() > 1) {
+				if (childCoordCount > 1) {
+					LineString geom = GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
+							.toArray(new Coordinate[childSequence.size()]));
+					
+					if(childCoordCount > this.simpMinVertices ) {
+						geom = (LineString) DouglasPeuckerSimplifier.simplify(geom, this.tolerance);
+						childCoordCount = geom.getNumPoints();
+					}
+					
+					if(childCoordCount > this.maxTrackVertices || geom.isEmpty() || !geom.isValid() || geom.getEnvelopeInternal().maxExtent()  > this.maxLineLength) {
+						return false;
+					}
+					
 					builder.set(
 							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
-									.toArray(new Coordinate[childSequence.size()])));
+							geom);
 				}
 				else {
 					builder.set(
@@ -772,7 +823,7 @@ public class GPXConsumer implements
 				setAttribute(
 						builder,
 						"NumberPoints",
-						Long.valueOf(childSequence.size()));
+						Long.valueOf(childCoordCount));
 
 				final Long minTime = getStartTime();
 				if (minTime != null) {
