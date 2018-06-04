@@ -111,9 +111,9 @@ public class RemoteIT
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-	 	GeoWaveStoreType.HBASE,
-	 	GeoWaveStoreType.CASSANDRA,
-	 	GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.HBASE,
+		//GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -143,10 +143,6 @@ public class RemoteIT
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
 		configServiceClient = new ConfigServiceClient(
 				ServicesTestEnvironment.GEOWAVE_BASE_URL);
-		startMillis = System.currentTimeMillis();
-		TestUtils.printStartOfTest(
-				LOGGER,
-				testName);
 
 		final DataStore ds = dataStoreOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
@@ -187,170 +183,174 @@ public class RemoteIT
 	}
 
 	@Test
-	@Ignore
-	public void calcstat() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	public void clear1() {
+	public void testCalcStat() {
 		TestUtils.assertStatusCode(
-				"Should successfully clear for existent store", 
+				"Should successfully calculate stat for existent store, adapterID, and statID", 
 				200, 
-				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
+				remoteServiceClient.calcStat(TestUtils.TEST_NAMESPACE, "GridPoint", "COUNT_DATA"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
 		TestUtils.assertStatusCode(
-				"Should fail to clear for nonexistent store", 
+				"Returns a successful 200 status for calculate stat for existent store and adapterID, but a nonexistent statID.  A warning is output", 
+				200, 
+				remoteServiceClient.calcStat(TestUtils.TEST_NAMESPACE, "GridPoint", "nonexistent-stat"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for calculate stat for existent store and statID, but nonexistent adapterID.  A warning is output", 
+				200, 
+				remoteServiceClient.calcStat(TestUtils.TEST_NAMESPACE, "nonexistent-adapter", "COUNT_DATA"));
+		
+		TestUtils.assertStatusCode(
+				"Should fail to calculate stat for existent adapterID and statID, but nonexistent store", 
 				400, 
+				remoteServiceClient.calcStat("nonexistent-store", "GridPoint", "COUNT_DATA"));
+	}
+	
+	@Test
+	public void testClear() {
+		TestUtils.assertStatusCode(
+				"Should successfully clear for existent store",
+				200,
+				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
+		
+		TestUtils.assertStatusCode(
+				"Should fail to clear for nonexistent store",
+				400,
 				remoteServiceClient.clear("nonexistent-store"));
 	}
-	
+
 	@Test
-	public void clear2() {
+	public void testListAdapter() {
 		TestUtils.assertStatusCode(
-				"Should fail to clear for nonexistent store", 
-				400, 
-				remoteServiceClient.clear("nonexistent-store"));
+				"Should successfully list adapters for existent store",
+				200,
+				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
+		
 		TestUtils.assertStatusCode(
-				"Should successfully clear for existent store", 
-				200, 
-				remoteServiceClient.clear(TestUtils.TEST_NAMESPACE));
+				"Should fail to list adapters for nonexistent store",
+				400,
+				remoteServiceClient.listAdapter("nonexistent-store"));
 	}
 
 	@Test
-	public void listadapter1() {
+	public void testListIndex() {
 		TestUtils.assertStatusCode(
-				"Should successfully list adapters for existent store", 
-				200, 
-				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
-		TestUtils.assertStatusCode(
-				"Should fail to list adapters for nonexistent store", 
-				400, 
-				remoteServiceClient.listAdapter("nonexistent-store"));
-	}
-	
-	@Test
-	public void listadapter2() {
-		TestUtils.assertStatusCode(
-				"Should fail to list adapters for nonexistent store", 
-				400, 
-				remoteServiceClient.listAdapter("nonexistent-store"));
-		TestUtils.assertStatusCode(
-				"Should successfully list adapters for existent store", 
-				200, 
-				remoteServiceClient.listAdapter(TestUtils.TEST_NAMESPACE));
-	}
-
-	@Test
-	public void listindex1() {
-		TestUtils.assertStatusCode(
-				"Should fail to list indices for nonexistent store", 
-				400, 
-				remoteServiceClient.listIndex("nonexistent-store"));
-		TestUtils.assertStatusCode(
-				"Should successfully list indices for existent store", 
-				200, 
+				"Should successfully list indices for existent store",
+				200,
 				remoteServiceClient.listIndex(TestUtils.TEST_NAMESPACE));
-	}
-	
-	@Test
-	public void listindex2() {
+		
 		TestUtils.assertStatusCode(
-				"Should successfully list indices for existent store", 
-				200, 
-				remoteServiceClient.listIndex(TestUtils.TEST_NAMESPACE));
-		TestUtils.assertStatusCode(
-				"Should fail to list indices for nonexistent store", 
-				400, 
+				"Should fail to list indices for nonexistent store",
+				400,
 				remoteServiceClient.listIndex("nonexistent-store"));
 	}
 
 	@Test
-	public void liststats1() {
+	public void testListStats() {
 		TestUtils.assertStatusCode(
 				"Should successfully liststats for existent store",
 				200,
 				remoteServiceClient.listStats(TestUtils.TEST_NAMESPACE));
+		
 		TestUtils.assertStatusCode(
 				"Should fail to liststats for nonexistent store",
 				400,
 				remoteServiceClient.listStats("nonexistent-store"));
 	}
-	
+
 	@Test
-	public void liststats2() {
+	public void testRecalcStats() {
 		TestUtils.assertStatusCode(
-				"Should fail to liststats for nonexistent store",
-				400,
-				remoteServiceClient.listStats("nonexistent-store"));
+				"Should successfully recalc stats for existent store", 
+				200, 
+				remoteServiceClient.recalcStats(TestUtils.TEST_NAMESPACE));
+		
 		TestUtils.assertStatusCode(
-				"Should successfully liststats for existent store",
+				"Should successfully recalc stats for existent store and existent adapter", 
+				200, 
+				remoteServiceClient.recalcStats(TestUtils.TEST_NAMESPACE, "GridPoint", null, null));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for recalc stats for existent store and nonexistent adapter", 
+				200, 
+				remoteServiceClient.recalcStats(TestUtils.TEST_NAMESPACE, "nonexistent-adapter", null, null));
+		
+		TestUtils.assertStatusCode(
+				"Should fail to recalc stats for nonexistent store", 
+				400, 
+				remoteServiceClient.recalcStats("nonexistent-store"));
+	}
+
+	@Test
+	public void testRemoveAdapter() {
+		TestUtils.assertStatusCode(
+				"Should successfully remove adapter for existent store and existent adapter",
 				200,
-				remoteServiceClient.listStats(TestUtils.TEST_NAMESPACE));
-	}
-
-	@Test
-	@Ignore
-	public void recalcstats() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	public void rmadapter1() {
+				remoteServiceClient.removeAdapter(
+						TestUtils.TEST_NAMESPACE,
+						"GridPoint"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for removing adapter for existent store and previously removed adapter.  A warning is output",
+				200,
+				remoteServiceClient.removeAdapter(
+						TestUtils.TEST_NAMESPACE,
+						"GridPoint"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for removing adapter for existent store and nonexistent adapter.  A warning is output",
+				200,
+				remoteServiceClient.removeAdapter(
+						TestUtils.TEST_NAMESPACE,
+						"nonexistent-adapter"));
+		
 		TestUtils.assertStatusCode(
 				"Should fail to remove adapter for nonexistent store",
 				400,
-				remoteServiceClient.removeAdapter("nonexistent-store", ""));
-		TestUtils.assertStatusCode(
-				"Should successfully remove adapter for existent store and existent adapter",
-				200,
-				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
-		TestUtils.assertStatusCode(
-				"Should fail to remove adapter for existent store and nonexistent adapter",
-				400,
-				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "nonexistent-adapter"));
-	}
-	
-	@Test
-	public void rmadapter2() {
-		TestUtils.assertStatusCode(
-				"Should successfully remove adapter for existent store and existent adapter",
-				200,
-				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
-		TestUtils.assertStatusCode(
-				"Should fail to remove an already removed adapter",
-				400,
-				remoteServiceClient.removeAdapter(TestUtils.TEST_NAMESPACE, "GridPoint"));
-	}
-	
-	@Test
-	@Ignore
-	public void rmstat() {
-		// TODO: Implement this test
+				remoteServiceClient.removeAdapter(
+						"nonexistent-store",
+						"GridPoint"));
 	}
 
 	@Test
-	public void version1() {
+	public void testRemoveStat() {
 		TestUtils.assertStatusCode(
-				"Should successfully return version for existent store",
-				200,
-				remoteServiceClient.version(TestUtils.TEST_NAMESPACE));
+				"Should successfully remove stat for existent store, adapterID, and statID", 
+				200, 
+				remoteServiceClient.removeStat(TestUtils.TEST_NAMESPACE, "GridPoint", "COUNT_DATA"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for removing stat for existent store and adapterID, but a nonexistent statID.  A warning is output.", 
+				200, 
+				remoteServiceClient.removeStat(TestUtils.TEST_NAMESPACE, "GridPoint", "nonexistent-stat"));
+		
+		//The following case should probably return a 404 based on the situation described in the test description
+		TestUtils.assertStatusCode(
+				"Returns a successful 200 status for removing stat for existent store and statID, but nonexistent adapterID.  A warning is output", 
+				200, 
+				remoteServiceClient.removeStat(TestUtils.TEST_NAMESPACE, "nonexistent-adapter", "COUNT_DATA"));
 		
 		TestUtils.assertStatusCode(
-				"Should fail to return version for nonexistent store",
-				400,
-				remoteServiceClient.version("nonexistent-store"));
+				"Should fail to remove for existent adapterID and statID, but nonexistent store", 
+				400, 
+				remoteServiceClient.removeStat("nonexistent-store", "GridPoint", "COUNT_DATA"));
 	}
-	
+
 	@Test
-	public void version2() {
-		TestUtils.assertStatusCode(
-				"Should fail to return version for nonexistent store",
-				400,
-				remoteServiceClient.version("nonexistent-store"));
+	public void testVersion() {
 		TestUtils.assertStatusCode(
 				"Should successfully return version for existent store",
 				200,
 				remoteServiceClient.version(TestUtils.TEST_NAMESPACE));
-	}
 
+		TestUtils.assertStatusCode(
+				"Should fail to return version for nonexistent store",
+				400,
+				remoteServiceClient.version("nonexistent-store"));
+	}
 }

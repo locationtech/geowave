@@ -67,7 +67,7 @@ public class RemoteServiceClient
 	public Response listStats(
 			final String store_name ) {
 
-		return recalcStats(
+		return listStats(
 				store_name,
 				null,
 				null,
