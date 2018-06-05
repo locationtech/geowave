@@ -104,6 +104,5 @@ public class HBaseDataStore extends
 						true);
 			}
 		}
-
 	}
 }

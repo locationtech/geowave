@@ -10,24 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.PluginOptions;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
-import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
 import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
@@ -37,7 +30,6 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 public abstract class AbstractRemoveCommand extends
 		ServiceEnabledCommand<String>
 {
-
 	/**
 	 * Return "200 OK" for all removal commands.
 	 */

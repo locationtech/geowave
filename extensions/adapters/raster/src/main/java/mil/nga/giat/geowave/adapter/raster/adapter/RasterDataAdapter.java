@@ -189,7 +189,6 @@ public class RasterDataAdapter implements
 	private RootMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
 	private Interpolation interpolation;
-	private MathTransform transform;
 
 	public RasterDataAdapter() {}
 

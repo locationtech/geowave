@@ -280,8 +280,8 @@ public class ServerSideOperationsObserver extends
 			}
 			final String[] uniqueOpSplit = uniqueOp.split("\\.");
 			opStore.addOperation(
-					uniqueOpSplit[1],
-					uniqueOpSplit[2],
+					HBaseUtils.readConfigSafeTableName(uniqueOpSplit[1]),
+					HBaseUtils.readConfigSafeTableName(uniqueOpSplit[2]),
 					uniqueOpSplit[3],
 					priority,
 					scopes,
