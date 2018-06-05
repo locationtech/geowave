@@ -239,6 +239,10 @@
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
@@ -280,9 +284,23 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/PartitionStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">PartitionStatistics</a>&lt;T&gt;</span></code>
+<div class="block">This class is responsible for maintaining all unique Partition IDs that are
+ being used within a dataset.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;</span></code>
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatisticsSet</a>&lt;T&gt;</span></code>
+<div class="block">This class really just needs to get ingest callbacks and collect individual
+ RowRangeHistogramStatistics per partition.</div>
 </td>
 </tr>
 <tr class="altColor">

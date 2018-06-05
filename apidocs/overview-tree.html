@@ -391,8 +391,10 @@
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.stats.<a href="mil/nga/giat/geowave/adapter/raster/stats/OverviewStatistics.html" title="class in mil.nga.giat.geowave.adapter.raster.stats"><span class="typeNameLink">OverviewStatistics</span></a></li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/PartitionStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">PartitionStatistics</span></a>&lt;T&gt;</li>
 <li type="circle">mil.nga.giat.geowave.adapter.raster.stats.<a href="mil/nga/giat/geowave/adapter/raster/stats/RasterFootprintStatistics.html" title="class in mil.nga.giat.geowave.adapter.raster.stats"><span class="typeNameLink">RasterFootprintStatistics</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">RowRangeHistogramStatistics</span></a>&lt;T&gt;</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">RowRangeHistogramStatisticsSet</span></a>&lt;T&gt; (implements mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T&gt;)</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.format.geotools.vector.<a href="mil/nga/giat/geowave/format/geotools/vector/AbstractFieldRetypingSource.html" title="class in mil.nga.giat.geowave.format.geotools.vector"><span class="typeNameLink">AbstractFieldRetypingSource</span></a> (implements mil.nga.giat.geowave.format.geotools.vector.<a href="mil/nga/giat/geowave/format/geotools/vector/RetypingVectorDataPlugin.RetypingVectorDataSource.html" title="interface in mil.nga.giat.geowave.format.geotools.vector">RetypingVectorDataPlugin.RetypingVectorDataSource</a>)
@@ -2882,7 +2884,12 @@
 <li type="circle">mil.nga.giat.geowave.core.store.index.<a href="mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="typeNameLink">IndexStore</span></a></li>
 <li type="circle">mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback"><span class="typeNameLink">IngestCallback</span></a>&lt;T&gt;
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)
+<ul>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
 </ul>
 </li>
 <li type="circle">mil.nga.giat.geowave.core.ingest.spi.<a href="mil/nga/giat/geowave/core/ingest/spi/IngestFormatOptionProvider.html" title="interface in mil.nga.giat.geowave.core.ingest.spi"><span class="typeNameLink">IngestFormatOptionProvider</span></a></li>
@@ -3002,7 +3009,12 @@
 </li>
 </ul>
 </li>
-<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;, mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>)
+<ul>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
 <li type="circle">mil.nga.giat.geowave.core.store.query.<a href="mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query"><span class="typeNameLink">DistributableQuery</span></a> (also extends mil.nga.giat.geowave.core.store.query.<a href="mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter"><span class="typeNameLink">DistributableQueryFilter</span></a> (also extends mil.nga.giat.geowave.core.store.filter.<a href="mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>)</li>
 <li type="circle">mil.nga.giat.geowave.core.store.index.<a href="mil/nga/giat/geowave/core/store/index/FieldIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.store.index"><span class="typeNameLink">FieldIndexStrategy</span></a>&lt;ConstraintType,FieldType&gt;</li>
@@ -3049,7 +3061,12 @@
 <li type="circle">mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.<a href="mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce"><span class="typeNameLink">IngestWithReducer</span></a>&lt;I,K,V,O&gt; (also extends mil.nga.giat.geowave.core.ingest.<a href="mil/nga/giat/geowave/core/ingest/DataAdapterProvider.html" title="interface in mil.nga.giat.geowave.core.ingest">DataAdapterProvider</a>&lt;T&gt;)</li>
 <li type="circle">mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index"><span class="typeNameLink">Mergeable</span></a>
 <ul>
-<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;)</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatistics</span></a>&lt;T&gt; (also extends mil.nga.giat.geowave.core.store.callback.<a href="mil/nga/giat/geowave/core/store/callback/IngestCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">IngestCallback</a>&lt;T&gt;)
+<ul>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
+</ul>
+</li>
+<li type="circle">mil.nga.giat.geowave.core.store.adapter.statistics.<a href="mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics"><span class="typeNameLink">DataStatisticsSet</span></a>&lt;T&gt;</li>
 <li type="circle">mil.nga.giat.geowave.core.index.<a href="mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index"><span class="typeNameLink">IndexMetaData</span></a></li>
 </ul>
 </li>

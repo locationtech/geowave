@@ -87,13 +87,17 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsSet.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsSet</a>&lt;T&gt;</td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a></td>
 <td class="colLast">
 <div class="block">This is responsible for persisting data statistics (either in memory or to
  disk depending on the implementation).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/StatisticsProvider.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">StatisticsProvider</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">This interface defines the set of statistics to capture for a specific
@@ -161,10 +165,24 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/PartitionStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">PartitionStatistics</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">This class is responsible for maintaining all unique Partition IDs that are
+ being used within a dataset.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatistics</a>&lt;T&gt;</td>
 <td class="colLast">
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/RowRangeHistogramStatisticsSet.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">RowRangeHistogramStatisticsSet</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">This class really just needs to get ingest callbacks and collect individual
+ RowRangeHistogramStatistics per partition.</div>
 </td>
 </tr>
 <tr class="rowColor">
