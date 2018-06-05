@@ -27,11 +27,10 @@ public class PartitionStatisticsTest
 						new byte[] {
 							(byte) (counter++ % 32)
 						}),
-				Arrays.asList(
-						new ByteArrayId(
-								String.format(
-										"\12%5h",
-										base + id) + "20030f89")));
+				Arrays.asList(new ByteArrayId(
+						String.format(
+								"\12%5h",
+								base + id) + "20030f89")));
 		return GeoWaveKeyImpl.createKeys(
 				insertionIds,
 				new byte[] {},
@@ -48,27 +47,24 @@ public class PartitionStatisticsTest
 
 		for (long i = 0; i < 10000; i++) {
 			final GeoWaveRow row = new GeoWaveRowImpl(
-					genKey(
-							i),
+					genKey(i),
 					new GeoWaveValue[] {});
 			stats.entryIngested(
 					1,
 					row);
 		}
 
-		System.out.println(
-				stats.toString());
+		System.out.println(stats.toString());
 
 		assertEquals(
 				32,
 				stats.getPartitionKeys().size());
 		for (byte i = 0; i < 32; i++) {
-			Assert.assertTrue(
-					stats.getPartitionKeys().contains(
-							new ByteArrayId(
-									new byte[] {
-										i
-									})));
+			Assert.assertTrue(stats.getPartitionKeys().contains(
+					new ByteArrayId(
+							new byte[] {
+								i
+							})));
 		}
 	}
 }

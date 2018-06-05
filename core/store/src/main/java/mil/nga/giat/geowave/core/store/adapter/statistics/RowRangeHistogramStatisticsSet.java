@@ -80,35 +80,12 @@ public class RowRangeHistogramStatisticsSet<T> extends
 			T entry,
 			GeoWaveRow... rows ) {
 		if (rows != null) {
-			if (rows.length == 1) {
-				// if there's only one row its simple
+			// call entry ingested once per row
+			for (final GeoWaveRow row : rows) {
 				getPartitionStatistic(
-						getPartitionKey(rows[0].getPartitionKey())).entryIngested(
+						getPartitionKey(row.getPartitionKey())).entryIngested(
 						entry,
-						rows);
-			}
-			else {
-				// otherwise we keep a map per partition to call ingested once
-				// per partition on each partition's individual statistic
-				Map<ByteArrayId, List<GeoWaveRow>> rowsPerPartition = new HashMap<>();
-				for (final GeoWaveRow row : rows) {
-					ByteArrayId p = getPartitionKey(row.getPartitionKey());
-					List<GeoWaveRow> r = rowsPerPartition.get(p);
-					if (r == null) {
-						r = new ArrayList<>();
-						rowsPerPartition.put(
-								p,
-								r);
-					}
-					r.add(row);
-				}
-				for (Entry<ByteArrayId, List<GeoWaveRow>> e : rowsPerPartition.entrySet()) {
-					getPartitionStatistic(
-							e.getKey()).entryIngested(
-							entry,
-							e.getValue().toArray(
-									new GeoWaveRow[e.getValue().size()]));
-				}
+						row);
 			}
 		}
 	}

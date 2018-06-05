@@ -11,6 +11,13 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
+/**
+ * This class is responsible for maintaining all unique Partition IDs that are
+ * being used within a dataset.
+ *
+ * @param <T>
+ *            The type of the row to keep statistics on
+ */
 public class PartitionStatistics<T> extends
 		AbstractDataStatistics<T>
 {

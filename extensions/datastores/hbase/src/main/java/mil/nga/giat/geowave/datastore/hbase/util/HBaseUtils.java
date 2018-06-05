@@ -41,8 +41,7 @@ import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(
-			HBaseUtils.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseUtils.class);
 
 	public static String getQualifiedTableName(
 			final String tableNamespace,
@@ -51,8 +50,7 @@ public class HBaseUtils
 			return unqualifiedTableName;
 		}
 
-		if (unqualifiedTableName.contains(
-				tableNamespace)) {
+		if (unqualifiedTableName.contains(tableNamespace)) {
 			return unqualifiedTableName;
 		}
 
@@ -108,8 +106,7 @@ public class HBaseUtils
 		d.addColumns(
 				columnFamily,
 				columnQualifier);
-		m.add(
-				d);
+		m.add(d);
 		return m;
 	}
 
@@ -152,14 +149,11 @@ public class HBaseUtils
 			final List<Cell> rowCells ) {
 		DataStatistics mergedStats = null;
 		for (final Cell cell : rowCells) {
-			final byte[] byteValue = CellUtil.cloneValue(
-					cell);
-			final DataStatistics stats = (DataStatistics) URLClassloaderUtils.fromBinary(
-					byteValue);
+			final byte[] byteValue = CellUtil.cloneValue(cell);
+			final DataStatistics stats = (DataStatistics) URLClassloaderUtils.fromBinary(byteValue);
 
 			if (mergedStats != null) {
-				mergedStats.merge(
-						stats);
+				mergedStats.merge(stats);
 			}
 			else {
 				mergedStats = stats;
@@ -171,21 +165,17 @@ public class HBaseUtils
 
 	public static ImmutableSet<ServerOpScope> stringToScopes(
 			final String value ) {
-		final String[] scopes = value.split(
-				",");
-		return Sets.immutableEnumSet(
-				Iterables.transform(
-						Arrays.asList(
-								scopes),
-						new Function<String, ServerOpScope>() {
+		final String[] scopes = value.split(",");
+		return Sets.immutableEnumSet(Iterables.transform(
+				Arrays.asList(scopes),
+				new Function<String, ServerOpScope>() {
 
-							@Override
-							public ServerOpScope apply(
-									final String input ) {
-								return ServerOpScope.valueOf(
-										input);
-							}
-						}));
+					@Override
+					public ServerOpScope apply(
+							final String input ) {
+						return ServerOpScope.valueOf(input);
+					}
+				}));
 	}
 
 	/**
