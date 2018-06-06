@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.stub.StreamObserver;
 import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
 
@@ -30,10 +31,16 @@ import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringRespo
 import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
 
 public class GeoWaveGrpcCoreStoreService extends
-		CoreStoreImplBase
+		CoreStoreImplBase implements
+		GeoWaveGrpcServiceSpi
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcCoreStoreService.class.getName());
+
+	@Override
+	public BindableService getBindableService() {
+		return (BindableService) this;
+	}
 
 	@Override
 	public void removeAdapterCommand(

@@ -25,6 +25,7 @@ import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.stub.StreamObserver;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
@@ -63,9 +64,15 @@ import mil.nga.giat.geowave.service.grpc.protobuf.VectorGrpc;
 import mil.nga.giat.geowave.service.grpc.protobuf.VectorQueryParameters;
 
 public class GeoWaveGrpcVectorService extends
-		VectorGrpc.VectorImplBase
+		VectorGrpc.VectorImplBase implements
+		GeoWaveGrpcServiceSpi
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcVectorService.class.getName());
+
+	@Override
+	public BindableService getBindableService() {
+		return (BindableService) this;
+	}
 
 	@Override
 	public void vectorQuery(
