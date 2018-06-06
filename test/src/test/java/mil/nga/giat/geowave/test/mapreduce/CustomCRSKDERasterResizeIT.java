@@ -39,11 +39,13 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.operations.KdeCommand;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -61,7 +63,7 @@ import mil.nga.giat.geowave.test.annotation.NamespaceOverride;
 })
 @GeoWaveTestStore({
 	GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
+	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.HBASE
 })
 public class CustomCRSKDERasterResizeIT
@@ -129,6 +131,22 @@ public class CustomCRSKDERasterResizeIT
 				"geotools-vector",
 				1);
 
+		File configFile = File.createTempFile(
+				"test_export",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-in");
+		addStore.setPluginOptions(inputDataStorePluginOptions);
+		addStore.execute(params);
+		addStore.setParameters("test-out");
+		addStore.setPluginOptions(outputDataStorePluginOptions);
+		addStore.execute(params);
+
 		String outputIndex = "raster-spatial";
 		final IndexPluginOptions outputIndexOptions = new IndexPluginOptions();
 		outputIndexOptions.selectPlugin("spatial");
@@ -164,11 +182,8 @@ public class CustomCRSKDERasterResizeIT
 
 			// We're going to override these anyway.
 			command.setParameters(
-					null,
-					null);
-
-			command.setInputStoreOptions(inputDataStorePluginOptions);
-			command.setOutputStoreOptions(outputDataStorePluginOptions);
+					"test-in",
+					"test-out");
 
 			command.getKdeOptions().setOutputIndex(
 					outputIndex);
@@ -195,7 +210,7 @@ public class CustomCRSKDERasterResizeIT
 			command.setOutputIndexOptions(Collections.singletonList(outputIndexOptions));
 
 			ToolRunner.run(
-					command.createRunner(new ManualOperationParams()),
+					command.createRunner(params),
 					new String[] {});
 		}
 
@@ -224,11 +239,8 @@ public class CustomCRSKDERasterResizeIT
 
 			// We're going to override these anyway.
 			command.setParameters(
-					null,
-					null);
-
-			command.setInputStoreOptions(outputDataStorePluginOptions);
-			command.setOutputStoreOptions(outputDataStorePluginOptions);
+					"test-out",
+					"test-out");
 
 			command.getOptions().setInputCoverageName(
 					originalTileSizeCoverageName);
@@ -257,7 +269,7 @@ public class CustomCRSKDERasterResizeIT
 							targetRes));
 
 			ToolRunner.run(
-					command.createRunner(new ManualOperationParams()),
+					command.createRunner(params),
 					new String[] {});
 		}
 

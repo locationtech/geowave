@@ -20,10 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import kafka.server.KafkaConfig;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.ingest.operations.KafkaToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToKafkaCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -98,9 +101,26 @@ public class KafkaTestUtils
 
 		// Execute Command
 		final KafkaToGeowaveCommand kafkaToGeowave = new KafkaToGeowaveCommand();
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddIndexCommand addIndex = new AddIndexCommand();
+		addIndex.setParameters("test-index");
+		addIndex.setPluginOptions(indexOption);
+		addIndex.execute(params);
+
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(options);
+		addStore.execute(params);
+
 		kafkaToGeowave.setPluginFormats(ingestFormatOptions);
-		kafkaToGeowave.setInputIndexOptions(Arrays.asList(indexOption));
-		kafkaToGeowave.setInputStoreOptions(options);
+
 		kafkaToGeowave.getKafkaOptions().setConsumerTimeoutMs(
 				"5000");
 		kafkaToGeowave.getKafkaOptions().setReconnectOnTimeout(
@@ -114,10 +134,10 @@ public class KafkaTestUtils
 		kafkaToGeowave.getKafkaOptions().setZookeeperConnect(
 				ZookeeperTestEnvironment.getInstance().getZookeeper());
 		kafkaToGeowave.setParameters(
-				null,
-				null);
+				"test-store",
+				"test-index");
 
-		kafkaToGeowave.execute(new ManualOperationParams());
+		kafkaToGeowave.execute(params);
 
 		// Wait for ingest to complete. This works because we have set
 		// Kafka Consumer to Timeout and set the timeout at 5000 ms, and

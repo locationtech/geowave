@@ -113,9 +113,4 @@ public class MergeDataCommand extends
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
 	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
 }

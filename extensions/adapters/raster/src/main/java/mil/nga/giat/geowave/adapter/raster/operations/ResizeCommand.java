@@ -69,7 +69,7 @@ public class ResizeCommand extends
 
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-
+		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -78,6 +78,7 @@ public class ResizeCommand extends
 		}
 		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
+		// Attempt to load output store.
 		final StoreLoader outputStoreLoader = new StoreLoader(
 				outputStoreName);
 		if (!outputStoreLoader.loadFromConfig(configFile)) {
@@ -125,17 +126,8 @@ public class ResizeCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputStoreOptions;
 	}
 
-	public void setOutputStoreOptions(
-			final DataStorePluginOptions outputStoreOptions ) {
-		this.outputStoreOptions = outputStoreOptions;
-	}
 }
