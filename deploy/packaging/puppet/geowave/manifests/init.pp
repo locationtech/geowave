@@ -10,7 +10,8 @@ class geowave(
   $ajp_port               = $geowave::params::ajp_port_ajp,
   $shutdown_port          = $geowave::params::shutdown_port,
   $set_public_dns         = $geowave::params::set_public_dns,
-  $public_dns             = $geowave::params::public_dns
+  $public_dns             = $geowave::params::public_dns,
+  $install_grpc		  = $geowave::params::install_grpc
 ) inherits geowave::params {
 
   if $geowave_version == undef { fail("geowave_version parameter is required") }
@@ -40,4 +41,8 @@ class geowave(
       class {'geowave::restservices':}
     }
   }
+  if $install_grpc {
+    class {'geowave::grpc':}
+  }
 }
+

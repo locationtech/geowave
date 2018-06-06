@@ -167,7 +167,7 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices"
     --url "https://locationtech.github.io/geowave" \
     restservices.war=${GEOWAVE_DIR}/tomcat8/webapps/restservices.war
 
-fpm -s pleaserun -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCservice" -a ${ARGS[arch]} \
+fpm -s pleaserun -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc" -a ${ARGS[arch]} \
     -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCservice.$TIME_TAG.noarch.rpm \
     --pleaserun-name geowave-grpc \
     -v ${GEOWAVE_VERSION} \
@@ -184,7 +184,7 @@ fpm -s pleaserun -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCser
 #Move the rpms to the repo to indexed later
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
-cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCservice.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gRPCservice.$TIME_TAG.noarch.rpm
+cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm
 
 # Move the restservices war to the repo
 cp restservices.war $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}.war
