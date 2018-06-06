@@ -34,6 +34,7 @@ import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
+import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcIT;
 import mil.nga.giat.geowave.test.services.ConfigServicesIT;
 import mil.nga.giat.geowave.test.services.FileUploadIT;
 import mil.nga.giat.geowave.test.services.GeoServerIT;
@@ -75,6 +76,7 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	IngestIT.class,
 	FileUploadIT.class,
 	SplitsProviderIT.class
+	GeoWaveGrpcIT.class
 })
 public class GeoWaveITSuite
 {

@@ -2,25 +2,44 @@ package mil.nga.giat.geowave.service.grpc;
 
 import java.io.IOException;
 
+import java.util.ServiceLoader;
+import java.util.ServiceConfigurationError;
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.Server;
 import io.grpcshaded.ServerBuilder;
+import io.grpcshaded.netty.NettyServerBuilder;
 
 public class GeoWaveGrpcServer
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcServer.class.getName());
+	private Server server = null;
 
-	private final int port;
-	private final Server server;
+	private static GeoWaveGrpcServer instance;
+	private ServiceLoader<GeoWaveGrpcServiceSpi> serviceLoader;
+
+	private GeoWaveGrpcServer() {
+		serviceLoader = ServiceLoader.load(GeoWaveGrpcServiceSpi.class);
+	}
+
+	public static synchronized GeoWaveGrpcServer getInstance() {
+		if (instance == null) {
+			instance = new GeoWaveGrpcServer();
+		}
+		return instance;
+	}
 
 	public static void main(
 			String[] args )
 			throws InterruptedException {
 
 		LOGGER.info("Starting gRPC server");
-		GeoWaveGrpcServer server = null;
+		final GeoWaveGrpcServer grpcServer = GeoWaveGrpcServer.getInstance();
+
 		// use default port unless there is a command line argument
 		int port = GeoWaveGrpcServiceOptions.port;
 		if (args.length > 0) {
@@ -36,20 +55,10 @@ public class GeoWaveGrpcServer
 		}
 
 		try {
-			server = new GeoWaveGrpcServer(
-					port);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Exception encountered instantiating gRPC server",
-					e);
-		}
-
-		try {
-			server.start();
+			grpcServer.start(port);
 			// HP Fortify "NULL Pointer Dereference" false positive
 			// NullPointerExceptions are being caught
-			server.blockUntilShutdown();
+			grpcServer.blockUntilShutdown();
 		}
 		catch (final IOException | NullPointerException e) {
 			LOGGER.error(
@@ -58,23 +67,29 @@ public class GeoWaveGrpcServer
 		}
 	}
 
-	public GeoWaveGrpcServer(
+	/** Start serving requests. */
+	public void start(
 			int port )
 			throws IOException {
-		this.port = port;
+		final ServerBuilder<?> builder = NettyServerBuilder.forPort(port);
 
-		// This is a bare-bones implementation to be used as a template, add
-		// more services as desired
-		server = ServerBuilder.forPort(
-				port).addService(
-				new GeoWaveGrpcVectorService()).build();
-	}
+		try {
+			Iterator<GeoWaveGrpcServiceSpi> grpcServices = serviceLoader.iterator();
+			while (grpcServices.hasNext()) {
+				GeoWaveGrpcServiceSpi s = grpcServices.next();
+				builder.addService(s.getBindableService());
+			}
+		}
+		catch (final ServiceConfigurationError e) {
+			LOGGER.error(
+					"Exception encountered initializing services for gRPC server",
+					e);
+		}
 
-	/** Start serving requests. */
-	public void start()
-			throws IOException {
+		server = builder.build();
 		server.start();
 		LOGGER.info("Server started, listening on " + port);
+
 		Runtime.getRuntime().addShutdownHook(
 				new Thread() {
 					@Override

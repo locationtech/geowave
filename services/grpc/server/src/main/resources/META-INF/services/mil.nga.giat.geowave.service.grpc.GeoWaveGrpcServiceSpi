@@ -1,0 +1,8 @@
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcAnalyticMapreduceService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcAnalyticSparkService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCliGeoserverService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreCliService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreIngestService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreMapreduceService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreStoreService
+mil.nga.giat.geowave.service.grpc.GeoWaveGrpcVectorService

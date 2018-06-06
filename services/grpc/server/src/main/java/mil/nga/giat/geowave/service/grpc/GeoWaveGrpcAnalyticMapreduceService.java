@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.service.grpc;
 import java.io.File;
 import java.util.Map;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.stub.StreamObserver;
 import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
 
@@ -22,9 +23,15 @@ import mil.nga.giat.geowave.service.grpc.protobuf.KdeCommandParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.NearestNeighborCommandParameters;
 
 public class GeoWaveGrpcAnalyticMapreduceService extends
-		AnalyticMapreduceGrpc.AnalyticMapreduceImplBase
+		AnalyticMapreduceGrpc.AnalyticMapreduceImplBase implements
+		GeoWaveGrpcServiceSpi
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcAnalyticMapreduceService.class.getName());
+
+	@Override
+	public BindableService getBindableService() {
+		return (BindableService) this;
+	}
 
 	@Override
 	public void kdeCommand(

@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.stub.StreamObserver;
 import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
 
@@ -17,10 +18,16 @@ import mil.nga.giat.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapreduc
 import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
 
 public class GeoWaveGrpcCoreMapreduceService extends
-		CoreMapreduceImplBase
+		CoreMapreduceImplBase implements
+		GeoWaveGrpcServiceSpi
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcCoreMapreduceService.class.getName());
+
+	@Override
+	public BindableService getBindableService() {
+		return (BindableService) this;
+	}
 
 	@Override
 	public void configHDFSCommand(

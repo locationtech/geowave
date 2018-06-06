@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import io.grpcshaded.BindableService;
 import io.grpcshaded.stub.StreamObserver;
 import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
 
@@ -22,9 +23,15 @@ import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.MapStringSt
 import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
 
 public class GeoWaveGrpcCoreCliService extends
-		CoreCliImplBase
+		CoreCliImplBase implements
+		GeoWaveGrpcServiceSpi
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcCoreCliService.class.getName());
+
+	@Override
+	public BindableService getBindableService() {
+		return (BindableService) this;
+	}
 
 	@Override
 	public void setCommand(
