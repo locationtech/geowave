@@ -21,6 +21,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
+import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -36,7 +37,6 @@ public class RowRangeHistogramStatistics<T> extends
 {
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"ROW_RANGE_HISTOGRAM");
-	private static final NumericHistogramFactory HistFactory = new MinimalBinDistanceHistogramFactory();
 	private NumericHistogram histogram;
 
 	public RowRangeHistogramStatistics() {
@@ -56,7 +56,7 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	private static NumericHistogram createHistogram() {
-		return HistFactory.create(1024);
+		return new TDigestNumericHistogram();
 	}
 
 	public static ByteArrayId composeId(
@@ -112,11 +112,12 @@ public class RowRangeHistogramStatistics<T> extends
 	public double cardinality(
 			final byte[] start,
 			final byte[] end ) {
-		return ((end == null ? histogram.getTotalCount() : histogram.sum(
+		return (end == null ? histogram.getTotalCount() : (histogram.sum(
 				ByteUtils.toDouble(end),
-				true)) - (start == null ? 0 : histogram.sum(
-				ByteUtils.toDouble(start),
-				false)));
+				true))// should be inclusive
+				- (start == null ? 0 : histogram.sum(
+						ByteUtils.toDouble(start),
+						false))); // should be exclusive
 	}
 
 	public double[] quantile(
@@ -127,11 +128,6 @@ public class RowRangeHistogramStatistics<T> extends
 			result[bin] = quantile(binSize * (bin + 1));
 		}
 		return result;
-	}
-
-	public long[] count(
-			final int bins ) {
-		return histogram.count(bins);
 	}
 
 	public double cdf(
@@ -150,14 +146,7 @@ public class RowRangeHistogramStatistics<T> extends
 		return cdf(stop) - cdf(start);
 	}
 
-	public long getLeftMostCount(
-			final ByteArrayId partition ) {
-		return (long) Math.ceil(histogram.sum(
-				histogram.getMinValue(),
-				true));
-	}
-
-	public long totalSampleSize() {
+	public long getTotalCount() {
 		return histogram.getTotalCount();
 	}
 
@@ -208,9 +197,7 @@ public class RowRangeHistogramStatistics<T> extends
 
 	protected void add(
 			final double num ) {
-		histogram.add(
-				1,
-				num);
+		histogram.add(num);
 	}
 
 	@Override
@@ -220,26 +207,19 @@ public class RowRangeHistogramStatistics<T> extends
 		buffer.append(
 				"histogram[index=").append(
 				indexAndPartition.getLeft().getString());
-		if (indexAndPartition.getRight() != null && indexAndPartition.getRight().getBytes() != null
-				&& indexAndPartition.getRight().getBytes().length > 0) {
+		if ((indexAndPartition.getRight() != null) && (indexAndPartition.getRight().getBytes() != null)
+				&& (indexAndPartition.getRight().getBytes().length > 0)) {
 			buffer.append(
 					", partitionAsHex=").append(
 					indexAndPartition.getRight().getHexString());
 		}
 		if (histogram != null) {
-			buffer.append(", bins={");
-			for (final double v : histogram.quantile(10)) {
-				buffer.append(v);
+			buffer.append(", quantiles={");
+			for (int i = 1; i < 10; i++) {
+
+				buffer.append((i * 10) + "%: " + histogram.quantile(i * 0.1));
 				buffer.append(' ');
 			}
-			buffer.deleteCharAt(buffer.length() - 1);
-			buffer.append("}, counts={");
-			for (final long v : histogram.count(10)) {
-				buffer.append(
-						v).append(
-						' ');
-			}
-
 			buffer.deleteCharAt(buffer.length() - 1);
 			buffer.append("}]");
 		}
@@ -276,24 +256,13 @@ public class RowRangeHistogramStatistics<T> extends
 			histogramJson.put(
 					"range_max",
 					histogram.getMaxValue());
-			histogramJson.put(
-					"totalCount",
-					histogram.getTotalCount());
-			final JSONArray binsArray = new JSONArray();
-			for (final double v : histogram.quantile(10)) {
-				binsArray.add(v);
+			final JSONArray quantilesArray = new JSONArray();
+			for (int i = 1; i < 10; i++) {
+				quantilesArray.add((i * 10) + "%: " + histogram.quantile(i * 0.1));
 			}
 			histogramJson.put(
-					"bins",
-					binsArray);
-
-			final JSONArray countsArray = new JSONArray();
-			for (final long v : histogram.count(10)) {
-				countsArray.add(v);
-			}
-			histogramJson.put(
-					"counts",
-					countsArray);
+					"quantiles",
+					quantilesArray);
 			jo.put(
 					"histogram",
 					histogramJson);

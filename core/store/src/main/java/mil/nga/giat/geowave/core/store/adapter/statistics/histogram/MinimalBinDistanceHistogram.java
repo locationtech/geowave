@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -35,14 +35,14 @@ import java.util.Random;
 
 /**
  * Dynamic Histogram:
- * 
+ *
  * Derived from work for Hive and based on Yael Ben-Haim and Elad Tom-Tov,
  * "A streaming parallel decision tree algorithm", J. Machine Learning Research
  * 11 (2010), pp. 849--872.
- * 
+ *
  * Note: the paper refers to a bins as a pair (p,m) where p = lower bound and m
  * = count. Some of the interpolation treats the pair as a coordinate.
- * 
+ *
  * Although there are no approximation guarantees, it appears to work well with
  * adequate data and a large number of histogram bins.
  */
@@ -96,16 +96,17 @@ public class MinimalBinDistanceHistogram implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the total number of consumed values
 	 */
 
+	@Override
 	public long getTotalCount() {
 		return totalCount;
 	}
 
 	/**
-	 * 
+	 *
 	 * @return the number of bins used
 	 */
 	public int getNumBins() {
@@ -113,18 +114,19 @@ public class MinimalBinDistanceHistogram implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @param other
 	 *            A serialized histogram created by the serialize() method
 	 * @see #merge
 	 */
+	@Override
 	public void merge(
 			final NumericHistogram other ) {
 		if (other == null) {
 			return;
 		}
 
-		MinimalBinDistanceHistogram myTypeOfHist = (MinimalBinDistanceHistogram) other;
+		final MinimalBinDistanceHistogram myTypeOfHist = (MinimalBinDistanceHistogram) other;
 
 		totalCount += myTypeOfHist.totalCount;
 		maxValue = Math.max(
@@ -146,7 +148,7 @@ public class MinimalBinDistanceHistogram implements
 			// Tom-Tov paper.
 
 			final ArrayList<Bin> mergedBins = new ArrayList<Bin>(
-					getNumBins() + other.getNumBins());
+					getNumBins() + myTypeOfHist.getNumBins());
 			mergedBins.addAll(bins);
 			for (final Bin oldBin : myTypeOfHist.bins) {
 				mergedBins.add(new Bin(
@@ -168,10 +170,11 @@ public class MinimalBinDistanceHistogram implements
 	 * called either allocate() or merge() first. This method implements
 	 * Algorithm #1 from Ben-Haim and Tom-Tov,
 	 * "A Streaming Parallel Decision Tree Algorithm", JMLR 2010.
-	 * 
+	 *
 	 * @param v
 	 *            The data point to add to the histogram approximation.
 	 */
+	@Override
 	public void add(
 			final double v ) {
 		this.add(
@@ -180,8 +183,8 @@ public class MinimalBinDistanceHistogram implements
 	}
 
 	public void add(
-			long count,
-			double v ) {
+			final long count,
+			final double v ) {
 		// Binary search to find the closest bucket that v should go into.
 		// 'bin' should be interpreted as the bin to shift right in order to
 		// accomodate
@@ -222,7 +225,7 @@ public class MinimalBinDistanceHistogram implements
 		// just increment 'bin'. This is not done now because we don't want to
 		// make any
 		// assumptions about the range of numeric data being analyzed.
-		if ((bin < bins.size()) && Math.abs(bins.get(bin).lowerBound - v) < 1E-12) {
+		if ((bin < bins.size()) && (Math.abs(bins.get(bin).lowerBound - v) < 1E-12)) {
 			bins.get(bin).count += count;
 		}
 		else {
@@ -286,13 +289,13 @@ public class MinimalBinDistanceHistogram implements
 	}
 
 	/**
-	 * 
+	 *
 	 * @return The quantiles over the given number of bins.
 	 */
 	public double[] quantile(
 			final int bins ) {
-		double increment = 1.0 / (double) bins;
-		double[] result = new double[bins];
+		final double increment = 1.0 / bins;
+		final double[] result = new double[bins];
 		double val = increment;
 		for (int i = 0; i < bins; i++, val += increment) {
 			result[i] = quantile(val);
@@ -303,12 +306,13 @@ public class MinimalBinDistanceHistogram implements
 	/**
 	 * Gets an approximate quantile value from the current histogram. Some
 	 * popular quantiles are 0.5 (median), 0.95, and 0.98.
-	 * 
+	 *
 	 * @param q
 	 *            The requested quantile, must be strictly within the range
 	 *            (0,1).
 	 * @return The quantile value.
 	 */
+	@Override
 	public double quantile(
 			final double q ) {
 		double csum = 0;
@@ -332,7 +336,7 @@ public class MinimalBinDistanceHistogram implements
 
 	/**
 	 * Estimate number of values consumed up to provided value.
-	 * 
+	 *
 	 * @param val
 	 * @return the number of estimated points
 	 */
@@ -384,6 +388,7 @@ public class MinimalBinDistanceHistogram implements
 		return r > 1.0 ? r : (inclusive ? 1.0 : r);
 	}
 
+	@Override
 	public double cdf(
 			final double val ) {
 		return sum(
@@ -394,9 +399,9 @@ public class MinimalBinDistanceHistogram implements
 	public long[] count(
 			final int bins ) {
 		final long[] result = new long[bins];
-		double start = this.getMinValue();
-		double range = maxValue - start;
-		double increment = range / bins;
+		double start = getMinValue();
+		final double range = maxValue - start;
+		final double increment = range / bins;
 		start += increment;
 		long last = 0;
 		for (int bin = 0; bin < bins; bin++, start += increment) {
@@ -409,12 +414,14 @@ public class MinimalBinDistanceHistogram implements
 		return result;
 	}
 
+	@Override
 	public int bufferSize() {
 		// 20 = 8 bytes for total count, 4 bytes for number of used bins, 4
 		// bytes for number of bins, 8 bytes for maxValue
 		return (bins.size() * Bin.bufferSize()) + 24;
 	}
 
+	@Override
 	public void toBinary(
 			final ByteBuffer buffer ) {
 		buffer.putLong(totalCount);
@@ -426,6 +433,7 @@ public class MinimalBinDistanceHistogram implements
 		}
 	}
 
+	@Override
 	public void fromBinary(
 			final ByteBuffer buffer ) {
 		totalCount = buffer.getLong();
@@ -492,29 +500,41 @@ public class MinimalBinDistanceHistogram implements
 			int result = 1;
 			long temp;
 			temp = Double.doubleToLongBits(count);
-			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
 			temp = Double.doubleToLongBits(lowerBound);
-			result = prime * result + (int) (temp ^ (temp >>> 32));
+			result = (prime * result) + (int) (temp ^ (temp >>> 32));
 			return result;
 		}
 
 		@Override
 		public boolean equals(
-				Object obj ) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
-			Bin other = (Bin) obj;
-			if (Double.doubleToLongBits(count) != Double.doubleToLongBits(other.count)) return false;
-			if (Double.doubleToLongBits(lowerBound) != Double.doubleToLongBits(other.lowerBound)) return false;
+				final Object obj ) {
+			if (this == obj) {
+				return true;
+			}
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final Bin other = (Bin) obj;
+			if (Double.doubleToLongBits(count) != Double.doubleToLongBits(other.count)) {
+				return false;
+			}
+			if (Double.doubleToLongBits(lowerBound) != Double.doubleToLongBits(other.lowerBound)) {
+				return false;
+			}
 			return true;
 		}
 	}
 
+	@Override
 	public double getMaxValue() {
 		return maxValue;
 	};
 
+	@Override
 	public double getMinValue() {
 		return !bins.isEmpty() ? bins.get(0).lowerBound : 0.0;
 	};
@@ -525,16 +545,16 @@ public class MinimalBinDistanceHistogram implements
 
 		@Override
 		public NumericHistogram create(
-				int bins ) {
+				final int bins ) {
 			return new MinimalBinDistanceHistogram(
 					bins);
 		}
 
 		@Override
 		public NumericHistogram create(
-				int bins,
-				double minValue,
-				double maxValue ) {
+				final int bins,
+				final double minValue,
+				final double maxValue ) {
 			return new MinimalBinDistanceHistogram(
 					bins);
 		}

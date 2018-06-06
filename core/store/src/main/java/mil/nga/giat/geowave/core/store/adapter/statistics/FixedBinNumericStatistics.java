@@ -19,6 +19,7 @@ import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram.FixedBinNumericHistogramFactory;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
@@ -46,10 +47,8 @@ public abstract class FixedBinNumericStatistics<T> extends
 {
 	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
 			"FIXED_BIN_NUMERIC_HISTOGRAM");
-	// private static final NumericHistogramFactory HistFactory = new
-	// MinimalBinDistanceHistogramFactory();
-	private static final NumericHistogramFactory HistFactory = new FixedBinNumericHistogramFactory();
-	NumericHistogram histogram = HistFactory.create(1024);
+	FixedBinNumericHistogram histogram = new FixedBinNumericHistogram(
+			1024);
 
 	protected FixedBinNumericStatistics() {
 		super();
@@ -70,7 +69,8 @@ public abstract class FixedBinNumericStatistics<T> extends
 		super(
 				adapterId,
 				statisticsId);
-		histogram = HistFactory.create(bins);
+		histogram = new FixedBinNumericHistogram(
+				bins);
 	}
 
 	public FixedBinNumericStatistics(
@@ -82,7 +82,7 @@ public abstract class FixedBinNumericStatistics<T> extends
 		super(
 				adapterId,
 				statisticsId);
-		histogram = HistFactory.create(
+		histogram = new FixedBinNumericHistogram(
 				bins,
 				minValue,
 				maxValue);
