@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -262,26 +262,18 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setInputIndexOptions-java.util.List-">setInputIndexOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;inputIndexOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setKafkaOptions-mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions-">setKafkaOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaConsumerCommandLineOptions</a>&nbsp;kafkaOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setInputStoreOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</code>&nbsp;</td>
-</tr>
-<tr id="i15" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setKafkaOptions-mil.nga.giat.geowave.core.ingest.kafka.KafkaConsumerCommandLineOptions-">setKafkaOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/kafka/KafkaConsumerCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.kafka">KafkaConsumerCommandLineOptions</a>&nbsp;kafkaOptions)</code>&nbsp;</td>
-</tr>
-<tr id="i16" class="altColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setLocalInputOptions-mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions-">setLocalInputOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalInputCommandLineOptions.html" title="class in mil.nga.giat.geowave.core.ingest.local">LocalInputCommandLineOptions</a>&nbsp;localInputOptions)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setParameters-java.lang.String-java.lang.String-">setParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storeName,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;commaSeparatedIndexes)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/KafkaToGeowaveCommand.html#setPluginFormats-mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions-">setPluginFormats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/operations/options/IngestFormatPluginOptions.html" title="class in mil.nga.giat.geowave.core.ingest.operations.options">IngestFormatPluginOptions</a>&nbsp;pluginFormats)</code>&nbsp;</td>
 </tr>
@@ -523,15 +515,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getInputStoreOptions()</pre>
 </li>
 </ul>
-<a name="setInputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setInputStoreOptions</h4>
-<pre>public&nbsp;void&nbsp;setInputStoreOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</pre>
-</li>
-</ul>
 <a name="getInputIndexOptions--">
 <!--   -->
 </a>
@@ -539,15 +522,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <li class="blockList">
 <h4>getInputIndexOptions</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;getInputIndexOptions()</pre>
-</li>
-</ul>
-<a name="setInputIndexOptions-java.util.List-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setInputIndexOptions</h4>
-<pre>public&nbsp;void&nbsp;setInputIndexOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;inputIndexOptions)</pre>
 </li>
 </ul>
 <a name="computeResults-mil.nga.giat.geowave.core.cli.api.OperationParams-">

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -233,21 +233,13 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setInputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setInputStoreOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setKdeOptions-mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions-">setKdeOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setKdeOptions-mil.nga.giat.geowave.analytic.mapreduce.kde.KDECommandLineOptions-">setKdeOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/kde/KDECommandLineOptions.html" title="class in mil.nga.giat.geowave.analytic.mapreduce.kde">KDECommandLineOptions</a>&nbsp;kdeOptions)</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setOutputIndexOptions-java.util.List-">setOutputIndexOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/IndexPluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">IndexPluginOptions</a>&gt;&nbsp;outputIndexOptions)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setOutputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setOutputStoreOptions</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions)</code>&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/mapreduce/operations/KdeCommand.html#setParameters-java.lang.String-java.lang.String-">setParameters</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputStore,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;outputStore)</code>&nbsp;</td>
@@ -406,15 +398,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getInputStoreOptions()</pre>
 </li>
 </ul>
-<a name="setInputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setInputStoreOptions</h4>
-<pre>public&nbsp;void&nbsp;setInputStoreOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;inputStoreOptions)</pre>
-</li>
-</ul>
 <a name="getOutputStoreOptions--">
 <!--   -->
 </a>
@@ -422,15 +405,6 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/ServiceE
 <li class="blockList">
 <h4>getOutputStoreOptions</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;getOutputStoreOptions()</pre>
-</li>
-</ul>
-<a name="setOutputStoreOptions-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>setOutputStoreOptions</h4>
-<pre>public&nbsp;void&nbsp;setOutputStoreOptions(<a href="../../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;outputStoreOptions)</pre>
 </li>
 </ul>
 <a name="getOutputIndexOptions--">
