@@ -252,13 +252,13 @@ public class TestUtils
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		String indexParam = "";
+		StringBuilder indexParam = new StringBuilder();
 		for (int i = 0; i < indexOptions.size(); i++) {
 			AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters("test-index" + i);
 			addIndex.setPluginOptions(indexOptions.get(i));
 			addIndex.execute(params);
-			indexParam += "test-index" + i + ",";
+			indexParam.append("test-index" + i + ",");
 		}
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
@@ -266,7 +266,7 @@ public class TestUtils
 		localIngester.setParameters(
 				ingestFilePath,
 				"test-store",
-				indexParam);
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
 
 		AddStoreCommand addStore = new AddStoreCommand();
@@ -313,13 +313,13 @@ public class TestUtils
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
-		String indexParam = "";
+		StringBuilder indexParam = new StringBuilder();
 		for (int i = 0; i < indexOptions.size(); i++) {
 			AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters("test-index" + i);
 			addIndex.setPluginOptions(indexOptions.get(i));
 			addIndex.execute(operationParams);
-			indexParam += "test-index" + i + ",";
+			indexParam.append("test-index" + i + ",");
 		}
 
 		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
@@ -332,7 +332,7 @@ public class TestUtils
 		localIngester.setParameters(
 				ingestFilePath,
 				"test-store",
-				indexParam);
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
 
 		AddStoreCommand addStore = new AddStoreCommand();

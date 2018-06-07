@@ -98,13 +98,13 @@ public class MapReduceTestUtils
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(operationParams);
 
-		String indexParam = "";
+		StringBuilder indexParam = new StringBuilder();
 		for (int i = 0; i < indexOptions.size(); i++) {
 			AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters("test-index" + i);
 			addIndex.setPluginOptions(indexOptions.get(i));
 			addIndex.execute(operationParams);
-			indexParam += "test-index" + i + ",";
+			indexParam.append("test-index" + i + ",");
 		}
 
 		mrGw.setPluginFormats(ingestFormatOptions);
@@ -112,7 +112,7 @@ public class MapReduceTestUtils
 				ingestFilePath,
 				env.getHdfsBaseDirectory(),
 				"test-store",
-				indexParam);
+				indexParam.toString());
 		mrGw.getMapReduceOptions().setJobTrackerHostPort(
 				env.getJobtracker());
 
