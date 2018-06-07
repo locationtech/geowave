@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.cli.osm.operations.IngestOSMToGeoWaveCommand;
 import mil.nga.giat.geowave.cli.osm.operations.StageOSMToHDFSCommand;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import mil.nga.giat.geowave.test.AccumuloStoreTestEnvironment;
@@ -108,8 +109,12 @@ public class MapReduceIT
 		IngestOSMToGeoWaveCommand ingest = new IngestOSMToGeoWaveCommand();
 		ingest.setParameters(
 				hdfsPath,
-				null);
-		ingest.setInputStoreOptions(dataStoreOptions);
+				"test-store");
+
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStoreOptions);
+		addStore.execute(mrEnv.getOperationParams());
 
 		ingest.getIngestOptions().setJobName(
 				"ConversionTest");

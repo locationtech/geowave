@@ -82,16 +82,13 @@ public class KmeansParallelCommand extends
 			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
 		}
 
-		// Attempt to load store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		// Save a reference to the store in the property management.
 		PersistableStore persistedStore = new PersistableStore(
@@ -149,11 +146,6 @@ public class KmeansParallelCommand extends
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	public KMeansParallelOptions getKmeansParallelOptions() {

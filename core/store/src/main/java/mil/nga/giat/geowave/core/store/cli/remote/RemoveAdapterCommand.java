@@ -65,11 +65,6 @@ public class RemoveAdapterCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	@Override
 	public Void computeResults(
 			final OperationParams params ) {
@@ -85,16 +80,13 @@ public class RemoveAdapterCommand extends
 		// Attempt to load store.
 		final File configFile = getGeoWaveConfigFile(params);
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		LOGGER.info("Deleting everything in store: " + inputStoreName + " with adapter id: " + adapterId);
 		final QueryOptions options = new QueryOptions();

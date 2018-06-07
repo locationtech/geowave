@@ -67,26 +67,21 @@ public class KmeansSparkCommand extends
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
 
-		// Attempt to load stores.
-		if (inputDataStore == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find input store: " + inputStoreLoader.getStoreName());
-			}
-			inputDataStore = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find input store: " + inputStoreLoader.getStoreName());
 		}
+		inputDataStore = inputStoreLoader.getDataStorePlugin();
 
-		if (outputDataStore == null) {
-			final StoreLoader outputStoreLoader = new StoreLoader(
-					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find output store: " + outputStoreLoader.getStoreName());
-			}
-			outputDataStore = outputStoreLoader.getDataStorePlugin();
+		final StoreLoader outputStoreLoader = new StoreLoader(
+				outputStoreName);
+		if (!outputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find output store: " + outputStoreLoader.getStoreName());
 		}
+		outputDataStore = outputStoreLoader.getDataStorePlugin();
 
 		// Save a reference to the store in the property management.
 		final PersistableStore persistedStore = new PersistableStore(
@@ -156,18 +151,8 @@ public class KmeansSparkCommand extends
 		return inputDataStore;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		inputDataStore = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputDataStore;
-	}
-
-	public void setOutputStoreOptions(
-			final DataStorePluginOptions outputStoreOptions ) {
-		outputDataStore = outputStoreOptions;
 	}
 
 	public KMeansSparkOptions getKMeansSparkOptions() {
