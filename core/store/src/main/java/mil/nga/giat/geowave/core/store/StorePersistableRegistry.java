@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.MaxDuplicatesStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.PartitionStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
@@ -149,7 +150,10 @@ public class StorePersistableRegistry implements
 					DataStatisticsAggregation::new),
 			new PersistableIdAndConstructor(
 					(short) 235,
-					InsertionIdQueryFilter::new)
+					InsertionIdQueryFilter::new),
+			new PersistableIdAndConstructor(
+					(short) 236,
+					PartitionStatistics::new)
 		};
 	}
 }

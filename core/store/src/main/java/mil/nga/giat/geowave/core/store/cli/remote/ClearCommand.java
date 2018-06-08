@@ -72,11 +72,6 @@ public class ClearCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	@Override
 	public Void computeResults(
 			final OperationParams params ) {
@@ -90,6 +85,7 @@ public class ClearCommand extends
 		// Attempt to load store.
 		final File configFile = getGeoWaveConfigFile(params);
 
+		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {

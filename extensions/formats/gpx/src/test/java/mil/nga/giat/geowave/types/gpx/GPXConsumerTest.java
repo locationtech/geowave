@@ -289,7 +289,7 @@ public class GPXConsumerTest
 					final Set<String> ids = new HashSet<String>();
 					while (consumer.hasNext()) {
 						final String id = consumer.next().getValue().getID();
-						// insure uniqueness...even for duplicate points
+						// ensure uniqueness...even for duplicate points
 						assertTrue(!ids.contains(id));
 						ids.add(id);
 					}

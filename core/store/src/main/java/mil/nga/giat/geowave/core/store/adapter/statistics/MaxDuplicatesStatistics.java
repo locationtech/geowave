@@ -45,20 +45,20 @@ public class MaxDuplicatesStatistics<T> extends
 
 	public MaxDuplicatesStatistics(
 			final ByteArrayId dataAdapterId,
-			final ByteArrayId statisticsId ) {
+			final ByteArrayId indexId ) {
 		super(
 				dataAdapterId,
-				composeId(statisticsId));
+				composeId(indexId));
 	}
 
 	public static ByteArrayId composeId(
-			final ByteArrayId statisticsId ) {
+			final ByteArrayId indexId ) {
 		return new ByteArrayId(
 				ArrayUtils.addAll(
 						ArrayUtils.addAll(
 								STATS_TYPE.getBytes(),
 								STATS_SEPARATOR.getBytes()),
-						statisticsId.getBytes()));
+						indexId.getBytes()));
 	}
 
 	@Override

@@ -148,11 +148,6 @@ public class KmeansParallelCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public KMeansParallelOptions getKmeansParallelOptions() {
 		return kmeansParallelOptions;
 	}

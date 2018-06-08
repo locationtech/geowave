@@ -142,18 +142,8 @@ public class LocalToGeowaveCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public List<IndexPluginOptions> getInputIndexOptions() {
 		return inputIndexOptions;
-	}
-
-	public void setInputIndexOptions(
-			final List<IndexPluginOptions> inputIndexOptions ) {
-		this.inputIndexOptions = inputIndexOptions;
 	}
 
 	@Override

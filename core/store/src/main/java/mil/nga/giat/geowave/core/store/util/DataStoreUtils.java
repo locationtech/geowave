@@ -121,16 +121,19 @@ public class DataStoreUtils
 			final PrimaryIndex index,
 			final Map<ByteArrayId, DataStatistics<T>> stats,
 			final QueryRanges queryRanges ) {
-		final RowRangeHistogramStatistics rangeStats = (RowRangeHistogramStatistics) stats
-				.get(RowRangeHistogramStatistics.composeId(index.getId()));
-		if (rangeStats == null) {
-			return Long.MAX_VALUE - 1;
-		}
+
 		long count = 0;
 		for (final SinglePartitionQueryRanges partitionRange : queryRanges.getPartitionQueryRanges()) {
+			final RowRangeHistogramStatistics rangeStats = (RowRangeHistogramStatistics) stats
+					.get(RowRangeHistogramStatistics.composeId(
+							index.getId(),
+							partitionRange.getPartitionKey() != null ? partitionRange.getPartitionKey()
+									: new ByteArrayId()));
+			if (rangeStats == null) {
+				return Long.MAX_VALUE - 1;
+			}
 			for (final ByteArrayRange range : partitionRange.getSortKeyRanges()) {
 				count += rangeStats.cardinality(
-						partitionRange.getPartitionKey() != null ? partitionRange.getPartitionKey().getBytes() : null,
 						range.getStart().getBytes(),
 						range.getEnd().getBytes());
 			}
