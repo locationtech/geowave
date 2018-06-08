@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -115,7 +115,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  encoding and decoding is done in base-64. These methods should be used for
  converting data that is binary in nature to a String representation for
  transport. Use StringUtils for serializing and deserializing text-based data.
- 
+
  Additionally, this class has methods for manipulating byte arrays, such as
  combining or incrementing them.</div>
 </li>
@@ -209,6 +209,14 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayUtils.html#uuidToByteArray-java.util.UUID-">uuidToByteArray</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/UUID.html?is-external=true" title="class or interface in java.util">UUID</a>&nbsp;uuid)</code>
 <div class="block">Converts a UUID to a byte array</div>
 </td>
+</tr>
+<tr id="i9" class="rowColor">
+<td class="colFirst"><code>static long</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayUtils.html#variableLengthDecode-byte:A-">variableLengthDecode</a></span>(byte[]&nbsp;b)</code>&nbsp;</td>
+</tr>
+<tr id="i10" class="altColor">
+<td class="colFirst"><code>static byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayUtils.html#variableLengthEncode-long-">variableLengthEncode</a></span>(long&nbsp;n)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -377,10 +385,10 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <div class="block">Combines two variable length byte arrays into one large byte array and
  appends the length of each individual byte array in sequential order at
  the end of the combined byte array.
- 
+
  Given byte_array_1 of length 8 + byte_array_2 of length 16, the result
  will be byte_array1 + byte_array_2 + 8 + 16.
- 
+
  Lengths are put after the individual arrays so they don't impact sorting
  when used within the key of a sorted key-value data store.</div>
 <dl>
@@ -396,10 +404,28 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="splitVariableLengthArrays-byte:A-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>splitVariableLengthArrays</h4>
 <pre>public static&nbsp;org.apache.commons.lang3.tuple.Pair&lt;byte[],byte[]&gt;&nbsp;splitVariableLengthArrays(byte[]&nbsp;combinedArray)</pre>
+</li>
+</ul>
+<a name="variableLengthEncode-long-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>variableLengthEncode</h4>
+<pre>public static&nbsp;byte[]&nbsp;variableLengthEncode(long&nbsp;n)</pre>
+</li>
+</ul>
+<a name="variableLengthDecode-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>variableLengthDecode</h4>
+<pre>public static&nbsp;long&nbsp;variableLengthDecode(byte[]&nbsp;b)</pre>
 </li>
 </ul>
 </li>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6,"i11":6,"i12":6,"i13":6,"i14":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6,"i6":6,"i7":6,"i8":6,"i9":6,"i10":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -101,7 +101,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Known Implementing Classes:</dt>
-<dd><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">FixedBinNumericHistogram</a>, <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/MinimalBinDistanceHistogram.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">MinimalBinDistanceHistogram</a></dd>
+<dd><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">FixedBinNumericHistogram</a>, <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/MinimalBinDistanceHistogram.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">MinimalBinDistanceHistogram</a>, <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/TDigestNumericHistogram.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">TDigestNumericHistogram</a></dd>
 </dl>
 <hr>
 <br>
@@ -129,64 +129,49 @@ var activeTableTab = "activeTableTab";
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#add-double-">add</a></span>(double&nbsp;v)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#add-long-double-">add</a></span>(long&nbsp;count,
-   double&nbsp;v)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#bufferSize--">bufferSize</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#cdf-double-">cdf</a></span>(double&nbsp;val)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#cdf-double-">cdf</a></span>(double&nbsp;val)</code>
+<div class="block">Returns the fraction of all points added which are <= x.</div>
+</td>
 </tr>
-<tr id="i4" class="altColor">
-<td class="colFirst"><code>long[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#count-int-">count</a></span>(int&nbsp;bins)</code>&nbsp;</td>
-</tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#fromBinary-java.nio.ByteBuffer-">fromBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#getMaxValue--">getMaxValue</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#getMinValue--">getMinValue</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
-<td class="colFirst"><code>int</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#getNumBins--">getNumBins</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i9" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>long</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#getTotalCount--">getTotalCount</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#merge-mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram-">merge</a></span>(<a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a>&nbsp;other)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-double-">quantile</a></span>(double&nbsp;q)</code>
 <div class="block">Gets an approximate quantile value from the current histogram.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
-<td class="colFirst"><code>double[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-int-">quantile</a></span>(int&nbsp;bins)</code>&nbsp;</td>
-</tr>
-<tr id="i13" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>double</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#sum-double-boolean-">sum</a></span>(double&nbsp;val,
    boolean&nbsp;inclusive)</code>
 <div class="block">Estimate number of values consumed up to provided value.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#toBinary-java.nio.ByteBuffer-">toBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/ByteBuffer.html?is-external=true" title="class or interface in java.nio">ByteBuffer</a>&nbsp;buffer)</code>&nbsp;</td>
 </tr>
@@ -205,32 +190,6 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getTotalCount--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getTotalCount</h4>
-<pre>long&nbsp;getTotalCount()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the total number of consumed values</dd>
-</dl>
-</li>
-</ul>
-<a name="getNumBins--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getNumBins</h4>
-<pre>int&nbsp;getNumBins()</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>the number of bins used</dd>
-</dl>
-</li>
-</ul>
 <a name="merge-mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram-">
 <!--   -->
 </a>
@@ -253,29 +212,6 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
-<a name="add-long-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>add</h4>
-<pre>void&nbsp;add(long&nbsp;count,
-         double&nbsp;v)</pre>
-</li>
-</ul>
-<a name="quantile-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>quantile</h4>
-<pre>double[]&nbsp;quantile(int&nbsp;bins)</pre>
-<dl>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The quantiles over the given number of bins.</dd>
-</dl>
-</li>
-</ul>
 <a name="quantile-double-">
 <!--   -->
 </a>
@@ -294,6 +230,20 @@ var activeTableTab = "activeTableTab";
 </dl>
 </li>
 </ul>
+<a name="cdf-double-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>cdf</h4>
+<pre>double&nbsp;cdf(double&nbsp;val)</pre>
+<div class="block">Returns the fraction of all points added which are <= x.</div>
+<dl>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the cumulative distribution function (cdf) result</dd>
+</dl>
+</li>
+</ul>
 <a name="sum-double-boolean-">
 <!--   -->
 </a>
@@ -309,24 +259,6 @@ var activeTableTab = "activeTableTab";
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of estimated points</dd>
 </dl>
-</li>
-</ul>
-<a name="cdf-double-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>cdf</h4>
-<pre>double&nbsp;cdf(double&nbsp;val)</pre>
-</li>
-</ul>
-<a name="count-int-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>count</h4>
-<pre>long[]&nbsp;count(int&nbsp;bins)</pre>
 </li>
 </ul>
 <a name="bufferSize--">
@@ -372,10 +304,19 @@ var activeTableTab = "activeTableTab";
 <a name="getMinValue--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getMinValue</h4>
 <pre>double&nbsp;getMinValue()</pre>
+</li>
+</ul>
+<a name="getTotalCount--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getTotalCount</h4>
+<pre>long&nbsp;getTotalCount()</pre>
 </li>
 </ul>
 </li>

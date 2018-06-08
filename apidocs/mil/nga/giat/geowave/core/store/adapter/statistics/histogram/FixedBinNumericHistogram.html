@@ -206,7 +206,9 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>double</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html#cdf-double-">cdf</a></span>(double&nbsp;val)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/FixedBinNumericHistogram.html#cdf-double-">cdf</a></span>(double&nbsp;val)</code>
+<div class="block">Returns the fraction of all points added which are <= x.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>long[]</code></td>
@@ -334,12 +336,6 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 <li class="blockList">
 <h4>quantile</h4>
 <pre>public&nbsp;double[]&nbsp;quantile(int&nbsp;bins)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#quantile-int-">quantile</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>The quantiles over the given number of bins.</dd>
-</dl>
 </li>
 </ul>
 <a name="cdf-double-">
@@ -349,9 +345,13 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 <li class="blockList">
 <h4>cdf</h4>
 <pre>public&nbsp;double&nbsp;cdf(double&nbsp;val)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#cdf-double-">NumericHistogram</a></code></span></div>
+<div class="block">Returns the fraction of all points added which are <= x.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#cdf-double-">cdf</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>the cumulative distribution function (cdf) result</dd>
 </dl>
 </li>
 </ul>
@@ -421,10 +421,6 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 <li class="blockList">
 <h4>count</h4>
 <pre>public&nbsp;long[]&nbsp;count(int&nbsp;bins)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#count-int-">count</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="merge-mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram-">
@@ -504,8 +500,6 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 <h4>getNumBins</h4>
 <pre>public&nbsp;int&nbsp;getNumBins()</pre>
 <dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#getNumBins--">getNumBins</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the number of bins used</dd>
 </dl>
@@ -534,10 +528,6 @@ implements <a href="../../../../../../../../../mil/nga/giat/geowave/core/store/a
 <h4>add</h4>
 <pre>public&nbsp;void&nbsp;add(long&nbsp;amount,
                 double&nbsp;num)</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html#add-long-double-">add</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/histogram/NumericHistogram.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics.histogram">NumericHistogram</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="getMaxValue--">
