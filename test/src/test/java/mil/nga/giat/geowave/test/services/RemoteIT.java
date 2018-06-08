@@ -112,7 +112,7 @@ public class RemoteIT
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
-		//GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStoreOptions;

@@ -53,7 +53,7 @@ public class AsyncOperationStatusResource extends
 		catch (final Exception e) {
 			LOGGER.error(
 					"Error exception: ",
-					e.getMessage());
+					e.getCause());
 			status.status = RestOperationStatusMessage.StatusType.ERROR;
 			status.message = "exception occurred";
 			status.data = e;

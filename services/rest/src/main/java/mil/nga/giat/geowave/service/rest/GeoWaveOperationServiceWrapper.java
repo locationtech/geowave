@@ -182,43 +182,44 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		for (final RestFieldValue f : fields) {
 
 			Object objValue = null;
+			Class<?> type = f.getType();
 
-			if (List.class.isAssignableFrom(f.getType())) {
+			if (List.class.isAssignableFrom(type)) {
 				objValue = requestParameters.getList(f.getName());
 			}
-			else if (f.getType().isArray()) {
+			else if (type.isArray()) {
 				objValue = requestParameters.getArray(f.getName());
 			}
 			else {
 				final String strValue = (String) requestParameters.getString(f.getName());
 				if (strValue != null) {
-					if (Long.class.isAssignableFrom(f.getType()) || long.class.isAssignableFrom(f.getType())) {
+					if (Long.class.isAssignableFrom(type) || long.class.isAssignableFrom(type)) {
 						objValue = Long.valueOf(strValue);
 					}
-					else if (Integer.class.isAssignableFrom(f.getType()) || int.class.isAssignableFrom(f.getType())) {
+					else if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
 						objValue = Integer.valueOf(strValue);
 					}
-					else if (Short.class.isAssignableFrom(f.getType()) || short.class.isAssignableFrom(f.getType())) {
+					else if (Short.class.isAssignableFrom(type) || short.class.isAssignableFrom(type)) {
 						objValue = Short.valueOf(strValue);
 					}
-					else if (Byte.class.isAssignableFrom(f.getType()) || byte.class.isAssignableFrom(f.getType())) {
+					else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
 						objValue = Byte.valueOf(strValue);
 					}
-					else if (Double.class.isAssignableFrom(f.getType()) || double.class.isAssignableFrom(f.getType())) {
+					else if (Double.class.isAssignableFrom(type) || double.class.isAssignableFrom(type)) {
 						objValue = Double.valueOf(strValue);
 					}
-					else if (Float.class.isAssignableFrom(f.getType()) || float.class.isAssignableFrom(f.getType())) {
+					else if (Float.class.isAssignableFrom(type) || float.class.isAssignableFrom(type)) {
 						objValue = Float.valueOf(strValue);
 					}
-					else if (Boolean.class.isAssignableFrom(f.getType()) || boolean.class.isAssignableFrom(f.getType())) {
+					else if (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type)) {
 						objValue = Boolean.valueOf(strValue);
 					}
-					else if (String.class.isAssignableFrom(f.getType())) {
+					else if (String.class.isAssignableFrom(type)) {
 						objValue = strValue;
 					}
-					else if (Enum.class.isAssignableFrom(f.getType())) {
+					else if (Enum.class.isAssignableFrom(type)) {
 						objValue = Enum.valueOf(
-								(Class<Enum>) f.getType(),
+								(Class<Enum>) type,
 								strValue);
 					}
 					else {
