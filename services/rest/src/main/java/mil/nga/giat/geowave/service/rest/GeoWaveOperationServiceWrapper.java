@@ -339,18 +339,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}
-		catch (final DuplicateEntryException e){
-			LOGGER.error(
-					"Entered an error handling a request.",
-					e.getMessage());
-			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
-			rm.status = RestOperationStatusMessage.StatusType.ERROR;
-			rm.message = e.getMessage();
-			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-			return rep;
-		}
-		catch (final ParameterException e){
+		catch (final DuplicateEntryException | ParameterException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
 					e.getMessage());
