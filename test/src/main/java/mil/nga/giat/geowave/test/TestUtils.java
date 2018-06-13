@@ -29,12 +29,10 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
-import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -54,8 +52,6 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -85,7 +81,6 @@ import com.vividsolutions.jts.geom.Point;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 
 public class TestUtils
 {
@@ -446,6 +441,7 @@ public class TestUtils
 		File configFile = File.createTempFile(
 				"test_stats",
 				null);
+
 		ManualOperationParams params = new ManualOperationParams();
 
 		params.getContext().put(
