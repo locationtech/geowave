@@ -294,7 +294,7 @@ public class FeatureDataUtils
 		// Build type using new name
 		SimpleFeatureTypeBuilder sftBuilder = new SimpleFeatureTypeBuilder();
 		sftBuilder.init(oldType);
-		sftBuilder.setName(newAdapterId.toString());
+		sftBuilder.setName(newAdapterId.getString());
 		SimpleFeatureType newType = sftBuilder.buildFeatureType();
 
 		// Create new adapter that will use new typename
