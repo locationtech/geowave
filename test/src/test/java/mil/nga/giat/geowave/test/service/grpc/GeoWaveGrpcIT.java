@@ -39,7 +39,11 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
+import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServer;
 import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServiceOptions;
+import mil.nga.giat.geowave.service.grpc.cli.StartGrpcServerCommand;
+import mil.nga.giat.geowave.service.grpc.cli.StartGrpcServerCommandOptions;
+import mil.nga.giat.geowave.service.grpc.cli.StopGrpcServerCommand;
 import mil.nga.giat.geowave.service.grpc.protobuf.Feature;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -70,7 +74,7 @@ public class GeoWaveGrpcIT extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcIT.class);
 	private static File configFile = null;
-	private static GeoWaveGrpcTestServer server = null;
+	private static GeoWaveGrpcServer server = null;
 	private static GeoWaveGrpcTestClient client = null;
 
 	protected DataStorePluginOptions dataStore;
@@ -316,10 +320,13 @@ public class GeoWaveGrpcIT extends
 		configS3.setS3UrlParameter("s3.amazonaws.com");
 		configS3.execute(operationParams);
 
-		// setup and start gRPC test server
-		server = new GeoWaveGrpcTestServer(
-				GeoWaveGrpcServiceOptions.port);
-		server.start();
+		// mimic starting the server from command line
+		StartGrpcServerCommand startCmd = new StartGrpcServerCommand();
+		StartGrpcServerCommandOptions grpcCmdOpts = new StartGrpcServerCommandOptions();
+		grpcCmdOpts.setPort(GeoWaveGrpcServiceOptions.port);
+		startCmd.setCommandOptions(grpcCmdOpts);
+		startCmd.execute(operationParams);
+		server = GeoWaveGrpcServer.getInstance();
 
 		// fire up the client
 		client = new GeoWaveGrpcTestClient(
@@ -330,7 +337,10 @@ public class GeoWaveGrpcIT extends
 	static protected void shutdown() {
 		try {
 			client.shutdown();
-			server.stop();
+		
+			// mimic terminating the server from cli
+			StopGrpcServerCommand stopCmd = new StopGrpcServerCommand();
+			stopCmd.execute(operationParams);
 		}
 		catch (final Exception e) {
 			LOGGER.error(

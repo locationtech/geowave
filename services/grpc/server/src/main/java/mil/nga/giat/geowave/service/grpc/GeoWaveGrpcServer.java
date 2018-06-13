@@ -33,40 +33,6 @@ public class GeoWaveGrpcServer
 		return instance;
 	}
 
-	public static void main(
-			String[] args )
-			throws InterruptedException {
-
-		LOGGER.info("Starting gRPC server");
-		final GeoWaveGrpcServer grpcServer = GeoWaveGrpcServer.getInstance();
-
-		// use default port unless there is a command line argument
-		int port = GeoWaveGrpcServiceOptions.port;
-		if (args.length > 0) {
-			try {
-				port = Integer.parseInt(args[0]);
-			}
-			catch (NumberFormatException e) {
-				LOGGER.error(
-						"Exception encountered: Argument" + args[0] + " must be an integer.",
-						e);
-				return;
-			}
-		}
-
-		try {
-			grpcServer.start(port);
-			// HP Fortify "NULL Pointer Dereference" false positive
-			// NullPointerExceptions are being caught
-			grpcServer.blockUntilShutdown();
-		}
-		catch (final IOException | NullPointerException e) {
-			LOGGER.error(
-					"Exception encountered starting gRPC server",
-					e);
-		}
-	}
-
 	/** Start serving requests. */
 	public void start(
 			int port )
