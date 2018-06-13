@@ -29,12 +29,10 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
-import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -54,8 +52,6 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeProviderSpi;
-import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeRegistry;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
@@ -85,7 +81,6 @@ import com.vividsolutions.jts.geom.Point;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 
 public class TestUtils
 {
@@ -244,19 +239,36 @@ public class TestUtils
 			}
 			indexOptions.add(indexOption);
 		}
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
 
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(params);
+			indexParam.append("test-index" + i + ",");
+		}
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
-		localIngester.execute(new ManualOperationParams());
 
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
+		localIngester.execute(params);
 		verifyStats(dataStore);
 
 	}
@@ -296,6 +308,15 @@ public class TestUtils
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(operationParams);
+			indexParam.append("test-index" + i + ",");
+		}
+
 		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
 		configS3.setS3UrlParameter(s3Url);
 		configS3.execute(operationParams);
@@ -303,13 +324,16 @@ public class TestUtils
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
+
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
 		localIngester.execute(operationParams);
 
 		verifyStats(dataStore);
@@ -408,12 +432,24 @@ public class TestUtils
 			final DataStorePluginOptions dataStore )
 			throws Exception {
 		final ListStatsCommand listStats = new ListStatsCommand();
-		listStats.setInputStoreOptions(dataStore);
 		listStats.setParameters(
-				null,
+				"test",
 				null);
+
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
 		try {
-			listStats.execute(new ManualOperationParams());
+			listStats.execute(params);
 		}
 		catch (final ParameterException e) {
 			throw new RuntimeException(

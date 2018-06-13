@@ -40,6 +40,7 @@ public class S3URLConnection extends
 		final ClientConfiguration clientConfig = buildClientConfig();
 
 		final AmazonS3 s3Client = new AmazonS3Client(
+				new DefaultGeoWaveAWSCredentialsProvider(),
 				clientConfig);
 
 		final S3Object object = s3Client.getObject(
@@ -79,5 +80,4 @@ public class S3URLConnection extends
 
 		return clientConfig;
 	}
-
 }
