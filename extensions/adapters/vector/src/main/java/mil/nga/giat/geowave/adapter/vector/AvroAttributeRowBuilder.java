@@ -10,11 +10,12 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import java.util.Map;
 
 import org.opengis.feature.simple.SimpleFeature;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 
 /**
  * A GeoWave RowBuilder, used internally by AbstractDataAdapter to construct
@@ -39,11 +40,20 @@ public class AvroAttributeRowBuilder implements
 
 	@Override
 	public void setField(
-			final PersistentValue<Object> fieldValue ) {
+			ByteArrayId id,
+			Object fieldValue ) {
 		// Only interested in the relevant fields
-		if (fieldValue.getId().equals(
-				AvroFeatureAttributeHandler.FIELD_ID)) {
-			object = fieldValue.getValue();
+		if (id.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			object = fieldValue;
+		}
+
+	}
+
+	@Override
+	public void setFields(
+			Map<ByteArrayId, Object> values ) {
+		if (values.containsKey(AvroFeatureAttributeHandler.FIELD_ID)) {
+			object = values.get(AvroFeatureAttributeHandler.FIELD_ID);
 		}
 	}
 }

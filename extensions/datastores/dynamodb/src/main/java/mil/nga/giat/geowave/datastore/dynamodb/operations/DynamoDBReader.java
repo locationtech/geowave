@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.dynamodb.operations;
 
+import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +16,9 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import com.amazonaws.services.dynamodbv2.model.QueryResult;
 import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -29,9 +32,12 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
+import mil.nga.giat.geowave.core.store.operations.ParallelDecoder;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
+import mil.nga.giat.geowave.core.store.operations.SimpleParallelDecoder;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedScan;
@@ -41,34 +47,38 @@ import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 
-public class DynamoDBReader implements
-		Reader
+public class DynamoDBReader<T> implements
+		Reader<T>
 {
 	private static final boolean ASYNC = false;
-	private final ReaderParams readerParams;
-	private final RecordReaderParams recordReaderParams;
+	private final ReaderParams<T> readerParams;
+	private final RecordReaderParams<T> recordReaderParams;
 	private final DynamoDBOperations operations;
-	private Iterator<DynamoDBRow> iterator;
+	private Iterator<T> iterator;
+	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
+	private Closeable closeable = null;
 
 	private ClientVisibilityFilter visibilityFilter;
 
 	public DynamoDBReader(
-			final ReaderParams readerParams,
+			final ReaderParams<T> readerParams,
 			final DynamoDBOperations operations ) {
 		this.readerParams = readerParams;
 		recordReaderParams = null;
 		processAuthorizations(readerParams.getAdditionalAuthorizations());
 		this.operations = operations;
+		this.rowTransformer = readerParams.getRowTransformer();
 		initScanner();
 	}
 
 	public DynamoDBReader(
-			final RecordReaderParams recordReaderParams,
+			final RecordReaderParams<T> recordReaderParams,
 			final DynamoDBOperations operations ) {
 		readerParams = null;
 		this.recordReaderParams = recordReaderParams;
 		processAuthorizations(recordReaderParams.getAdditionalAuthorizations());
 		this.operations = operations;
+		this.rowTransformer = recordReaderParams.getRowTransformer();
 
 		initRecordScanner();
 	}
@@ -114,7 +124,8 @@ public class DynamoDBReader implements
 
 		startRead(
 				requests,
-				tableName);
+				tableName,
+				true);
 	}
 
 	protected void initRecordScanner() {
@@ -145,14 +156,32 @@ public class DynamoDBReader implements
 		}
 		startRead(
 				requests,
-				tableName);
+				tableName,
+				false);
 	}
 
 	private void startRead(
 			final List<QueryRequest> requests,
-			final String tableName ) {
+			final String tableName,
+			final boolean parallelDecode) {
 		Iterator<Map<String, AttributeValue>> rawIterator;
 		Predicate<DynamoDBRow> adapterIdFilter = null;
+
+		Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> rawToDynamoDBRow = new Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> () {
+
+			@Override
+			public Iterator<DynamoDBRow> apply(
+					Iterator<Map<String, AttributeValue>> input ) {
+				return new GeoWaveRowMergingIterator<DynamoDBRow>(
+						Iterators.filter(
+								Iterators.transform(
+										input,
+										new DynamoDBRow.GuavaRowTranslationHelper()),
+								visibilityFilter));
+			}
+			
+		};
+
 		if (!requests.isEmpty()) {
 			if (ASYNC) {
 				rawIterator = Iterators.concat(
@@ -189,7 +218,7 @@ public class DynamoDBReader implements
 				// filtering by adapter ID
 				if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
 					adapterIdFilter = new Predicate<DynamoDBRow>() {
-
+	
 						@Override
 						public boolean apply(
 								final DynamoDBRow input ) {
@@ -197,29 +226,41 @@ public class DynamoDBReader implements
 									new ByteArrayId(
 											input.getAdapterId()));
 						}
-
+	
 					};
 				}
 			}
 		}
 
-		iterator = new GeoWaveRowMergingIterator<DynamoDBRow>(
-				Iterators.filter(
-						Iterators.transform(
-								rawIterator,
-								new DynamoDBRow.GuavaRowTranslationHelper()),
-						visibilityFilter));
+		Iterator<DynamoDBRow> rowIter = rawToDynamoDBRow.apply(rawIterator);
 		if (adapterIdFilter != null) {
-			iterator = Iterators.filter(
-					iterator,
+			rowIter = Iterators.filter(
+					rowIter,
 					adapterIdFilter);
+		}
+		if (parallelDecode) {
+			ParallelDecoder<T> decoder = new SimpleParallelDecoder<T>(rowTransformer, Iterators.transform(rowIter, r -> (GeoWaveRow) r));
+			try {
+				decoder.startDecode();
+			}
+			catch (Exception e) {
+				Throwables.propagate(e);
+			}
+			iterator = decoder;
+			closeable = decoder;
+		} else {
+			iterator = rowTransformer.apply(Iterators.transform(rowIter,  r -> (GeoWaveRow) r));
+			closeable = null;
 		}
 	}
 
 	@Override
 	public void close()
 			throws Exception {
-
+		if (closeable != null) {
+			closeable.close();
+			closeable = null;
+		}
 	}
 
 	@Override
@@ -228,7 +269,7 @@ public class DynamoDBReader implements
 	}
 
 	@Override
-	public GeoWaveRow next() {
+	public T next() {
 		return iterator.next();
 	}
 

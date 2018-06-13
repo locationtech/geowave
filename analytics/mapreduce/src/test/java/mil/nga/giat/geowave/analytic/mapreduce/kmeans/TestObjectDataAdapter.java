@@ -12,10 +12,12 @@ package mil.nga.giat.geowave.analytic.mapreduce.kmeans;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -30,8 +32,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.HadoopDataAdapter;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
-
-import com.vividsolutions.jts.geom.Geometry;
 
 public class TestObjectDataAdapter extends
 		AbstractDataAdapter<TestObject> implements
@@ -183,18 +183,30 @@ public class TestObjectDataAdapter extends
 
 			@Override
 			public void setField(
-					final PersistentValue<Object> fieldValue ) {
-				if (fieldValue.getId().equals(
-						GEOM)) {
-					geom = (Geometry) fieldValue.getValue();
+					ByteArrayId id,
+					Object fieldValue ) {
+				if (id.equals(GEOM)) {
+					geom = (Geometry) fieldValue;
 				}
-				else if (fieldValue.getId().equals(
-						ID)) {
-					id = (String) fieldValue.getValue();
+				else if (id.equals(ID)) {
+					this.id = (String) fieldValue;
 				}
-				else if (fieldValue.getId().equals(
-						GROUP_ID)) {
-					groupID = (String) fieldValue.getValue();
+				else if (id.equals(GROUP_ID)) {
+					groupID = (String) fieldValue;
+				}
+			}
+
+			@Override
+			public void setFields(
+					Map<ByteArrayId, Object> values ) {
+				if (values.containsKey(GEOM)) {
+					geom = (Geometry) values.get(GEOM);
+				}
+				if (values.containsKey(ID)) {
+					this.id = (String) values.get(ID);
+				}
+				if (values.containsKey(GROUP_ID)) {
+					groupID = (String) values.get(GROUP_ID);
 				}
 			}
 

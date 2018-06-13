@@ -80,13 +80,6 @@ public class CloseableIteratorWrapper<E> implements
 	}
 
 	@Override
-	protected void finalize()
-			throws Throwable {
-		super.finalize();
-		closeable.close();
-	}
-
-	@Override
 	public void close()
 			throws IOException {
 		try {

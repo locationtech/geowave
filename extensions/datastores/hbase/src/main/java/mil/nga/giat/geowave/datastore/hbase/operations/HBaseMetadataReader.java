@@ -6,6 +6,7 @@ import java.util.NavigableMap;
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,10 +70,14 @@ public class HBaseMetadataReader implements
 				scanner.setMaxVersions(); // Get all versions
 			}
 
+			String[] additionalAuthorizations = query.getAuthorizations();
+			if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
+				scanner.setAuthorizations(new Authorizations(
+						additionalAuthorizations));
+			}
 			final Iterable<Result> rS = operations.getScannedResults(
 					scanner,
-					AbstractGeoWavePersistence.METADATA_TABLE,
-					query.getAuthorizations());
+					AbstractGeoWavePersistence.METADATA_TABLE);
 			final Iterator<Result> it = rS.iterator();
 			final Iterator<GeoWaveMetadata> transformedIt = Iterators.transform(
 					it,

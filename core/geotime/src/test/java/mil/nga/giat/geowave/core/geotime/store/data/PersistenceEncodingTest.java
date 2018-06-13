@@ -18,7 +18,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.PrecisionModel;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -32,7 +41,6 @@ import mil.nga.giat.geowave.core.geotime.store.dimension.TimeField;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
@@ -48,14 +56,6 @@ import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.junit.Before;
-import org.junit.Test;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class PersistenceEncodingTest
 {
@@ -451,21 +451,36 @@ public class PersistenceEncodingTest
 
 				@Override
 				public void setField(
-						final PersistentValue<Object> fieldValue ) {
-					if (fieldValue.getId().equals(
-							GEOM)) {
-						geom = (Geometry) fieldValue.getValue();
+						ByteArrayId id,
+						Object fieldValue ) {
+					if (id.equals(GEOM)) {
+						geom = (Geometry) fieldValue;
 					}
-					else if (fieldValue.getId().equals(
-							ID)) {
-						id = (String) fieldValue.getValue();
+					else if (id.equals(ID)) {
+						this.id = (String) fieldValue;
 					}
-					else if (fieldValue.getId().equals(
-							START_TIME)) {
-						stime = (Date) fieldValue.getValue();
+					else if (id.equals(START_TIME)) {
+						stime = (Date) fieldValue;
 					}
 					else {
-						etime = (Date) fieldValue.getValue();
+						etime = (Date) fieldValue;
+					}
+				}
+
+				@Override
+				public void setFields(
+						Map<ByteArrayId, Object> values ) {
+					if (values.containsKey(GEOM)) {
+						geom = (Geometry) values.get(GEOM);
+					}
+					if (values.containsKey(ID)) {
+						this.id = (String) values.get(ID);
+					}
+					if (values.containsKey(START_TIME)) {
+						stime = (Date) values.get(START_TIME);
+					}
+					if (values.containsKey(END_TIME)) {
+						etime = (Date) values.get(END_TIME);
 					}
 				}
 

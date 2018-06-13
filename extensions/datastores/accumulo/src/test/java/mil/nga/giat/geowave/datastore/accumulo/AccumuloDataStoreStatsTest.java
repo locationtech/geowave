@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -743,24 +744,34 @@ public class AccumuloDataStoreStatsTest
 				private Geometry geom;
 
 				@Override
-				public void setField(
-						final PersistentValue<Object> fieldValue ) {
-					if (fieldValue.getId().equals(
-							GEOM)) {
-						geom = (Geometry) fieldValue.getValue();
-					}
-					else if (fieldValue.getId().equals(
-							ID)) {
-						id = (String) fieldValue.getValue();
-					}
-				}
-
-				@Override
 				public TestGeometry buildRow(
 						final ByteArrayId dataId ) {
 					return new TestGeometry(
 							geom,
 							id);
+				}
+
+				@Override
+				public void setField(
+						ByteArrayId id,
+						Object fieldValue ) {
+					if (id.equals(GEOM)) {
+						geom = (Geometry) fieldValue;
+					}
+					else if (id.equals(ID)) {
+						this.id = (String) fieldValue;
+					}
+				}
+
+				@Override
+				public void setFields(
+						Map<ByteArrayId, Object> values ) {
+					if (values.containsKey(GEOM)) {
+						geom = (Geometry) values.get(GEOM);
+					}
+					if (values.containsKey(ID)) {
+						this.id = (String) values.get(ID);
+					}
 				}
 			};
 		}

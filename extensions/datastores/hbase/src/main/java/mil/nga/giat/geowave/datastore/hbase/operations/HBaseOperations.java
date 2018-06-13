@@ -52,7 +52,6 @@ import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
-import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -193,6 +192,10 @@ public class HBaseOperations implements
 				(HBaseOptions) options.getStoreOptions());
 	}
 
+	public Connection getConnection() {
+		return conn;
+	}
+
 	public boolean isSchemaUpdateEnabled() {
 		return schemaUpdateEnabled;
 	}
@@ -274,7 +277,7 @@ public class HBaseOperations implements
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				if (!admin.isTableAvailable(tableName)) {
+				if (!admin.tableExists(tableName)) {
 					final HTableDescriptor desc = new HTableDescriptor(
 							tableName);
 
@@ -384,7 +387,7 @@ public class HBaseOperations implements
 		final List<String> newColumnFamilies = new ArrayList<>();
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				if (admin.isTableAvailable(tableName)) {
+				if (admin.tableExists(tableName)) {
 					final HTableDescriptor existingTableDescriptor = admin.getTableDescriptor(tableName);
 					final HColumnDescriptor[] existingColumnDescriptors = existingTableDescriptor.getColumnFamilies();
 					for (final HColumnDescriptor hColumnDescriptor : existingColumnDescriptors) {
@@ -400,7 +403,9 @@ public class HBaseOperations implements
 						if (!addIfNotExist) {
 							return false;
 						}
-						admin.disableTable(tableName);
+						disableTable(
+								admin,
+								tableName);
 						for (final String newColumnFamily : newColumnFamilies) {
 							final HColumnDescriptor column = new HColumnDescriptor(
 									newColumnFamily);
@@ -413,7 +418,9 @@ public class HBaseOperations implements
 							cfCacheSet.add(newColumnFamily);
 						}
 
-						admin.enableTable(tableName);
+						enableTable(
+								admin,
+								tableName);
 						waitForUpdate(
 								admin,
 								tableName,
@@ -427,6 +434,36 @@ public class HBaseOperations implements
 		}
 
 		return true;
+	}
+
+	private void enableTable(
+			final Admin admin,
+			final TableName tableName )
+			throws IOException {
+		admin.enableTableAsync(tableName);
+		while (!admin.isTableEnabled(tableName)) {
+			try {
+				Thread.sleep(10);
+			}
+			catch (InterruptedException e) {
+				// Do nothing
+			}
+		}
+	}
+
+	private void disableTable(
+			final Admin admin,
+			final TableName tableName )
+			throws IOException {
+		admin.disableTableAsync(tableName);
+		while (!admin.isTableDisabled(tableName)) {
+			try {
+				Thread.sleep(10);
+			}
+			catch (InterruptedException e) {
+				// Do nothing
+			}
+		}
 	}
 
 	private void waitForUpdate(
@@ -463,8 +500,10 @@ public class HBaseOperations implements
 				if ((tableNamespace == null) || tableName.getNameAsString().startsWith(
 						tableNamespace)) {
 					synchronized (ADMIN_MUTEX) {
-						if (admin.isTableAvailable(tableName)) {
-							admin.disableTable(tableName);
+						if (admin.tableExists(tableName)) {
+							disableTable(
+									admin,
+									tableName);
 							admin.deleteTable(tableName);
 						}
 					}
@@ -546,8 +585,7 @@ public class HBaseOperations implements
 			scan.addFamily(adapterId.getBytes());
 			scanner = getScannedResults(
 					scan,
-					indexId.getString(),
-					additionalAuthorizations);
+					indexId.getString());
 			for (final Result result : scanner) {
 				deleter.delete(
 						new HBaseRow(
@@ -582,14 +620,8 @@ public class HBaseOperations implements
 
 	public Iterable<Result> getScannedResults(
 			final Scan scanner,
-			final String tableName,
-			final String... authorizations )
+			final String tableName )
 			throws IOException {
-		if ((authorizations != null) && (authorizations.length > 0)) {
-			scanner.setAuthorizations(new Authorizations(
-					authorizations));
-		}
-
 		final Table table = conn.getTable(getTableName(tableName));
 
 		final ResultScanner results = table.getScanner(scanner);
@@ -599,10 +631,28 @@ public class HBaseOperations implements
 		return results;
 	}
 
+	public <T> void startParallelScan(
+			final HBaseParallelDecoder<T> scanner,
+			final String tableName )
+			throws Exception {
+		scanner.setTableName(getTableName(tableName));
+		scanner.startDecode();
+	}
+
 	public RegionLocator getRegionLocator(
 			final String tableName )
 			throws IOException {
-		return conn.getRegionLocator(getTableName(tableName));
+		return getRegionLocator(getTableName(tableName));
+	}
+
+	public RegionLocator getRegionLocator(
+			TableName tableName )
+			throws IOException {
+		return conn.getRegionLocator(tableName);
+	}
+
+	public boolean parallelDecodeEnabled() {
+		return true;
 	}
 
 	public Table getTable(
@@ -638,7 +688,9 @@ public class HBaseOperations implements
 						LOGGER.debug(tableNameStr + " does not have coprocessor. Adding " + coprocessorName);
 
 						LOGGER.debug("- disable table...");
-						admin.disableTable(tableName);
+						disableTable(
+								admin,
+								tableName);
 
 						LOGGER.debug("- add coprocessor...");
 
@@ -677,7 +729,9 @@ public class HBaseOperations implements
 								td);
 
 						LOGGER.debug("- enable table...");
-						admin.enableTable(tableName);
+						enableTable(
+								admin,
+								tableName);
 
 						waitForUpdate(
 								admin,
@@ -794,9 +848,8 @@ public class HBaseOperations implements
 		// distributed process, but this is primarily used for efficiency not
 		// correctness so it seems ok to just let it compact in the background
 		// but we can consider blocking and waiting for completion
-		try {
-			conn.getAdmin().compact(
-					getTableName(index.getId().getString()));
+		try (Admin admin = conn.getAdmin()) {
+			admin.compact(getTableName(index.getId().getString()));
 		}
 		catch (final IOException e) {
 			LOGGER.error(
@@ -996,9 +1049,9 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final ReaderParams readerParams ) {
-		final HBaseReader hbaseReader = new HBaseReader(
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> readerParams ) {
+		final HBaseReader<T> hbaseReader = new HBaseReader<T>(
 				readerParams,
 				this);
 
@@ -1006,9 +1059,9 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final RecordReaderParams recordReaderParams ) {
-		return new HBaseReader(
+	public <T> Reader<T> createReader(
+			final RecordReaderParams<T> recordReaderParams ) {
+		return new HBaseReader<T>(
 				recordReaderParams,
 				this);
 	}
@@ -1080,8 +1133,8 @@ public class HBaseOperations implements
 		return null;
 	}
 
-	public Mergeable aggregateServerSide(
-			final ReaderParams readerParams ) {
+	public <T> Mergeable aggregateServerSide(
+			final ReaderParams<T> readerParams ) {
 		final String tableName = readerParams.getIndex().getId().getString();
 
 		try {
@@ -1286,12 +1339,11 @@ public class HBaseOperations implements
 	public Map<String, ImmutableSet<ServerOpScope>> listServerOps(
 			final String index ) {
 		final Map<String, ImmutableSet<ServerOpScope>> map = new HashMap<>();
-		try {
+		try (Admin admin = conn.getAdmin()) {
 			final TableName tableName = getTableName(index);
 			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(tableName.getNamespaceAsString());
 			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(tableName.getQualifierAsString());
-			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
-					tableName);
+			final HTableDescriptor desc = admin.getTableDescriptor(tableName);
 			final Map<String, String> config = desc.getConfiguration();
 
 			for (final Entry<String, String> e : config.entrySet()) {
@@ -1322,12 +1374,11 @@ public class HBaseOperations implements
 			final String serverOpName,
 			final ServerOpScope scope ) {
 		final Map<String, String> map = new HashMap<>();
-		try {
+		try (Admin admin = conn.getAdmin()) {
 			final TableName tableName = getTableName(index);
 			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(tableName.getNamespaceAsString());
 			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(tableName.getQualifierAsString());
-			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
-					tableName);
+			final HTableDescriptor desc = admin.getTableDescriptor(tableName);
 			final Map<String, String> config = desc.getConfiguration();
 
 			for (final Entry<String, String> e : config.entrySet()) {
@@ -1359,20 +1410,19 @@ public class HBaseOperations implements
 			final String serverOpName,
 			final ImmutableSet<ServerOpScope> scopes ) {
 		final TableName table = getTableName(index);
-		try {
-			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
-					table);
+		try (Admin admin = conn.getAdmin()) {
+			final HTableDescriptor desc = admin.getTableDescriptor(table);
 
 			if (removeConfig(
 					desc,
 					HBaseUtils.writeTableNameAsConfigSafe(table.getNamespaceAsString()),
 					HBaseUtils.writeTableNameAsConfigSafe(table.getQualifierAsString()),
 					serverOpName)) {
-				conn.getAdmin().modifyTable(
+				admin.modifyTable(
 						table,
 						desc);
 				waitForUpdate(
-						conn.getAdmin(),
+						admin,
 						table,
 						SLEEP_INTERVAL);
 			}
@@ -1468,9 +1518,8 @@ public class HBaseOperations implements
 			final Map<String, String> properties,
 			final ImmutableSet<ServerOpScope> configuredScopes ) {
 		final TableName table = getTableName(index);
-		try {
-			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
-					table);
+		try (Admin admin = conn.getAdmin()) {
+			final HTableDescriptor desc = admin.getTableDescriptor(table);
 
 			addConfig(
 					desc,
@@ -1481,11 +1530,11 @@ public class HBaseOperations implements
 					operationClass,
 					configuredScopes,
 					properties);
-			conn.getAdmin().modifyTable(
+			admin.modifyTable(
 					table,
 					desc);
 			waitForUpdate(
-					conn.getAdmin(),
+					admin,
 					table,
 					SLEEP_INTERVAL);
 		}
@@ -1506,9 +1555,8 @@ public class HBaseOperations implements
 			final ImmutableSet<ServerOpScope> currentScopes,
 			final ImmutableSet<ServerOpScope> newScopes ) {
 		final TableName table = getTableName(index);
-		try {
-			final HTableDescriptor desc = conn.getAdmin().getTableDescriptor(
-					table);
+		try (Admin admin = conn.getAdmin()) {
+			final HTableDescriptor desc = admin.getTableDescriptor(table);
 
 			final String namespace = HBaseUtils.writeTableNameAsConfigSafe(table.getNamespaceAsString());
 			final String qualifier = HBaseUtils.writeTableNameAsConfigSafe(table.getQualifierAsString());
@@ -1526,11 +1574,11 @@ public class HBaseOperations implements
 					operationClass,
 					newScopes,
 					properties);
-			conn.getAdmin().modifyTable(
+			admin.modifyTable(
 					table,
 					desc);
 			waitForUpdate(
-					conn.getAdmin(),
+					admin,
 					table,
 					SLEEP_INTERVAL);
 		}
@@ -1547,7 +1595,7 @@ public class HBaseOperations implements
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				return admin.isTableAvailable(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+				return admin.tableExists(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
 			}
 		}
 	}
