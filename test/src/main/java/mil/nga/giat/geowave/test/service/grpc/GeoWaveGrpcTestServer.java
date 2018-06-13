@@ -9,14 +9,14 @@ import io.grpcshaded.netty.NettyServerBuilder;
 import io.grpcshaded.Server;
 import io.grpcshaded.ServerBuilder;
 
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcAnalyticMapreduceService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcAnalyticSparkService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCliGeoserverService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreCliService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreIngestService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreMapreduceService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcCoreStoreService;
-import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcVectorService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcAnalyticMapreduceService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcAnalyticSparkService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcCliGeoserverService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcCoreCliService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcCoreIngestService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcCoreMapreduceService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcCoreStoreService;
+import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcVectorService;
 
 public class GeoWaveGrpcTestServer
 {
