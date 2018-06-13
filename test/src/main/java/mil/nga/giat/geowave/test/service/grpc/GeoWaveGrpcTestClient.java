@@ -412,18 +412,18 @@ public class GeoWaveGrpcTestClient
 
 	public boolean nearestNeighborCommand() {
 		ArrayList<String> adapters = new ArrayList<String>();
-		adapters.add(GeoWaveGrpcTestUtils.adapterId);
+		adapters.add("gpxpoint");
 		NearestNeighborCommandParameters request = NearestNeighborCommandParameters.newBuilder().addParameters(
-				GeoWaveGrpcTestUtils.storeName).setExtractMinInputSplit(
+				GeoWaveGrpcTestUtils.storeName).addAllAdapterIds(
+				adapters).setExtractMinInputSplit(
 				"2").setExtractMaxInputSplit(
 				"6").setPartitionMaxDistance(
-				"1000").setOutputReducerCount(
+				"10").setOutputReducerCount(
 				"4").setMapReduceHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setMapReduceJobtrackerHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setOutputHdfsOutputPath(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "_out").setMapReduceHdfsBaseDir(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).addAllAdapterIds(
-				adapters).build();
+				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).build();
 		analyticMapreduceBlockingStub.nearestNeighborCommand(request);
 		return true;
 	}
@@ -435,7 +435,7 @@ public class GeoWaveGrpcTestClient
 		KdeCommandParameters request = KdeCommandParameters.newBuilder().addAllParameters(
 				params).setCoverageName(
 				"grpc_kde").setFeatureType(
-				GeoWaveGrpcTestUtils.adapterId).setHdfsHostPort(
+				"gpxpoint").setHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setJobTrackerOrResourceManHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setMinLevel(
 				5).setMaxLevel(
@@ -1128,12 +1128,11 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SparkSqlCommand() {
 		ArrayList<String> params = new ArrayList<String>();
-		params.add(GeoWaveGrpcTestUtils.storeName);
+		params.add("select * from " + GeoWaveGrpcTestUtils.storeName + "[|gpxpoint]");
 		SparkSqlCommandParameters request = SparkSqlCommandParameters.newBuilder().addAllParameters(
-				params).setCsvOutputFile(
-				"csv").setOutputStoreName(
+				params).setOutputStoreName(
 				GeoWaveGrpcTestUtils.outputStoreName).setOutputTypeName(
-				GeoWaveGrpcTestUtils.adapterId).setShowResults(
+				"gpxpoint").setShowResults(
 				5).build();
 		analyticSparkBlockingStub.sparkSqlCommand(request);
 		return true;
@@ -1148,12 +1147,12 @@ public class GeoWaveGrpcTestClient
 		SpatialJoinCommandParameters request = SpatialJoinCommandParameters.newBuilder().addAllParameters(
 				params).setAppName(
 				"test-app2").setMaster(
-				"yarn").setHost(
+				"local[*]").setHost(
 				"localhost").setLeftAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setRightAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setOutLeftAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setOutRightAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setPredicate(
+				"gpxpoint").setRightAdapterId(
+				"gpxpoint").setOutLeftAdapterId(
+				"gpxpoint_l").setOutRightAdapterId(
+				"gpxpoint_r").setPredicate(
 				"GeomIntersects").setRadius(
 				0.1).setNegativeTest(
 				false).build();
