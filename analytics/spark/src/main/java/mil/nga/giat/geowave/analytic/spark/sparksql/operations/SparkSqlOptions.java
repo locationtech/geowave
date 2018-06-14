@@ -5,6 +5,24 @@ import com.beust.jcommander.Parameter;
 public class SparkSqlOptions
 {
 	@Parameter(names = {
+		"-n",
+		"--name"
+	}, description = "The spark application name")
+	private String appName = "Spatial Join Spark";
+
+	@Parameter(names = {
+		"-ho",
+		"--host"
+	}, description = "The spark driver host")
+	private String host = "localhost";
+
+	@Parameter(names = {
+		"-m",
+		"--master"
+	}, description = "The spark master designation")
+	private String master = "yarn";
+
+	@Parameter(names = {
 		"--csv"
 	}, description = "The output CSV file name")
 	private String csvOutputFile = null;
@@ -29,6 +47,33 @@ public class SparkSqlOptions
 
 	public String getOutputStoreName() {
 		return outputStoreName;
+	}
+
+	public String getAppName() {
+		return appName;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public String getMaster() {
+		return master;
+	}
+
+	public void setAppName(
+			String name ) {
+		appName = name;
+	}
+
+	public void setHost(
+			String h ) {
+		host = h;
+	}
+
+	public void setMaster(
+			String m ) {
+		master = m;
 	}
 
 	public void setOutputStoreName(
