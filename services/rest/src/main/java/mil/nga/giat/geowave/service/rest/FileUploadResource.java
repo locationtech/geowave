@@ -29,7 +29,7 @@ public class FileUploadResource extends
 		ServerResource
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncOperationStatusResource.class);
-	
+
 	/**
 	 * processes uploaded file, storing in a temporary directory
 	 *
@@ -48,14 +48,14 @@ public class FileUploadResource extends
 					MediaType.MULTIPART_FORM_DATA)) {
 				// 1/ Create a factory for disk-based file items
 				final DiskFileItemFactory factory = new DiskFileItemFactory();
-				factory.setSizeThreshold(2147483647); //size of signed integer
-	
+				factory.setSizeThreshold(Integer.MAX_VALUE);
+
 				// 2/ Create a new file upload handler based on the Restlet
 				// FileUpload extension that will parse Restlet requests and
 				// generates FileItems.
 				final RestletFileUpload upload = new RestletFileUpload(
 						factory);
-	
+
 				final List<FileItem> fileList = upload.parseRepresentation(entity);
 				if (fileList.size() != 1) {
 					throw new ParameterException(
@@ -86,7 +86,7 @@ public class FileUploadResource extends
 						"Operation only supports Multipart Form Data media type.");
 			}
 		}
-		catch(final ParameterException e) {
+		catch (final ParameterException e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
 					e.getMessage());
@@ -94,10 +94,11 @@ public class FileUploadResource extends
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
 			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(
+					rm);
 			return rep;
 		}
-		catch(final BadRequestException e) {
+		catch (final BadRequestException e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
 					e.getMessage());
@@ -105,10 +106,11 @@ public class FileUploadResource extends
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
 			setStatus(Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE);
-			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(
+					rm);
 			return rep;
 		}
-		catch(final Exception e) {
+		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
 					e.getMessage());
@@ -117,7 +119,8 @@ public class FileUploadResource extends
 			rm.message = "exception occurred";
 			rm.data = e;
 			setStatus(Status.SERVER_ERROR_INTERNAL);
-			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(
+					rm);
 			return rep;
 		}
 		return new JacksonRepresentation<RestOperationStatusMessage>(

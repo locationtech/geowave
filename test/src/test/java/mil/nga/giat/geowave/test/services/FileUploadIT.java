@@ -21,11 +21,14 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.service.client.FileUploadServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
+import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -40,6 +43,15 @@ public class FileUploadIT
 	private final static String testName = "FileUploadIT";
 
 	private static long startMillis;
+
+	@GeoWaveTestStore(value = {
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
+	})
+	protected DataStorePluginOptions dataStoreOptions;
 
 	@BeforeClass
 	public static void startTimer() {
@@ -67,12 +79,12 @@ public class FileUploadIT
 				201,
 				fileUploadServiceClient.uploadFile("data/osm_gpx_test_case/public/000/992/000992764.gpx"));
 	}
-	
+
 	@Test(expected = NullPointerException.class)
 	public void fileUploadNull() {
 		fileUploadServiceClient.uploadFile(null);
 	}
-	
+
 	@Test(expected = ProcessingException.class)
 	public void fileUploadDirectory() {
 		fileUploadServiceClient.uploadFile("data/osm_gpx_test_case");
