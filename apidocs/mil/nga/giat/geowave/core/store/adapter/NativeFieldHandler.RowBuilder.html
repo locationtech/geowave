@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6};
+var methods = {"i0":6,"i1":6,"i2":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,9 +143,14 @@ var activeTableTab = "activeTableTab";
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-mil.nga.giat.geowave.core.store.data.PersistentValue-">setField</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&gt;&nbsp;fieldValue)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-mil.nga.giat.geowave.core.index.ByteArrayId-FieldType-">setField</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&nbsp;fieldValue)</code>
 <div class="block">Set a field ID/value pair</div>
 </td>
+</tr>
+<tr id="i2" class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&gt;&nbsp;values)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -162,18 +167,30 @@ var activeTableTab = "activeTableTab";
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="setField-mil.nga.giat.geowave.core.store.data.PersistentValue-">
+<a name="setField-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">
+<!--   -->
+</a><a name="setField-mil.nga.giat.geowave.core.index.ByteArrayId-FieldType-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setField</h4>
-<pre>void&nbsp;setField(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&gt;&nbsp;fieldValue)</pre>
+<pre>void&nbsp;setField(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&nbsp;fieldValue)</pre>
 <div class="block">Set a field ID/value pair</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fieldValue</code> - the field ID/value pair</dd>
 </dl>
+</li>
+</ul>
+<a name="setFields-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setFields</h4>
+<pre>void&nbsp;setFields(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&gt;&nbsp;values)</pre>
 </li>
 </ul>
 <a name="buildRow-mil.nga.giat.geowave.core.index.ByteArrayId-">

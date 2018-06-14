@@ -93,14 +93,14 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.datastore.accumulo.operations</div>
-<h2 title="Class AccumuloReader" class="title">Class AccumuloReader</h2>
+<h2 title="Class AccumuloReader" class="title">Class AccumuloReader&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloReader</li>
+<li>mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloReader&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">AccumuloReader</span>
+<pre>public class <span class="typeNameLabel">AccumuloReader&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -134,10 +134,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html#AccumuloReader-org.apache.accumulo.core.client.ScannerBase-int-boolean-boolean-">AccumuloReader</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html#AccumuloReader-org.apache.accumulo.core.client.ScannerBase-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">AccumuloReader</a></span>(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+              <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;&nbsp;transformer,
               int&nbsp;partitionKeyLength,
               boolean&nbsp;wholeRowEncoding,
-              boolean&nbsp;clientSideRowMerging)</code>&nbsp;</td>
+              boolean&nbsp;clientSideRowMerging,
+              boolean&nbsp;parallel)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -163,7 +165,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html#hasNext--">hasNext</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -195,16 +197,18 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloReader-org.apache.accumulo.core.client.ScannerBase-int-boolean-boolean-">
+<a name="AccumuloReader-org.apache.accumulo.core.client.ScannerBase-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloReader</h4>
 <pre>public&nbsp;AccumuloReader(org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;&nbsp;transformer,
                       int&nbsp;partitionKeyLength,
                       boolean&nbsp;wholeRowEncoding,
-                      boolean&nbsp;clientSideRowMerging)</pre>
+                      boolean&nbsp;clientSideRowMerging,
+                      boolean&nbsp;parallel)</pre>
 </li>
 </ul>
 </li>
@@ -240,7 +244,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <pre>public&nbsp;boolean&nbsp;hasNext()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -250,10 +254,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <ul class="blockListLast">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;next()</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&nbsp;next()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html" title="type parameter in AccumuloReader">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

@@ -235,12 +235,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createMetadataWriter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
@@ -783,7 +783,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <ul class="blockList">
 <li class="blockList">
 <h4>createReader</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&nbsp;createReader(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;&nbsp;createReader(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#createReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-">createReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a></code></dd>
@@ -828,7 +828,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <ul class="blockList">
 <li class="blockList">
 <h4>createReader</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&nbsp;createReader(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</pre>
+<pre>public&nbsp;&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;&nbsp;createReader(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStoreOperations</a></code></dd>

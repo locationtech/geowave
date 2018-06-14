@@ -103,7 +103,7 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
@@ -125,7 +125,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -137,12 +137,33 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ParallelDecoder.html" title="class in mil.nga.giat.geowave.core.store.operations">ParallelDecoder</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">An abstract class that offers data stores a way to scan and decode rows in
+ parallel.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ParallelDecoder.RowProvider.html" title="class in mil.nga.giat.geowave.core.store.operations">ParallelDecoder.RowProvider</a></td>
+<td class="colLast">
+<div class="block">Row provider used by the parallel decoder to get <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities"><code>GeoWaveRow</code></a>s from
+ the underlying database.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderClosableWrapper.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderClosableWrapper</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a></td>
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;</td>
 <td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/SimpleParallelDecoder.html" title="class in mil.nga.giat.geowave.core.store.operations">SimpleParallelDecoder</a>&lt;T&gt;</td>
+<td class="colLast">
+<div class="block">An implementation of <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ParallelDecoder.html" title="class in mil.nga.giat.geowave.core.store.operations"><code>ParallelDecoder</code></a> that consumes a single
+ <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities"><code>GeoWaveRow</code></a> iterator and decodes it in parallel.</div>
+</td>
 </tr>
 </tbody>
 </table>

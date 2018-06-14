@@ -91,10 +91,6 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.splits">mil.nga.giat.geowave.mapreduce.splits</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -116,7 +112,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -133,38 +129,20 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addConstraintsScanIteratorSettings-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-mil.nga.giat.geowave.core.store.DataStoreOptions-">addConstraintsScanIteratorSettings</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&nbsp;params,
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addConstraintsScanIteratorSettings-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-mil.nga.giat.geowave.core.store.DataStoreOptions-">addConstraintsScanIteratorSettings</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;&nbsp;params,
                                   org.apache.accumulo.core.client.ScannerBase&nbsp;scanner,
                                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;options)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addFieldSubsettingToIterator-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&nbsp;params,
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addFieldSubsettingToIterator-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-">addFieldSubsettingToIterator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;&nbsp;params,
                             org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>protected void</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addIndexFilterToIterator-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-">addIndexFilterToIterator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&nbsp;params,
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;void</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#addIndexFilterToIterator-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-org.apache.accumulo.core.client.ScannerBase-">addIndexFilterToIterator</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;&nbsp;params,
                         org.apache.accumulo.core.client.ScannerBase&nbsp;scanner)</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.operations">
-<!--   -->
-</a>
-<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code>protected org.apache.hadoop.hbase.client.Scan</code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseReader.html#createStandardScanner-mil.nga.giat.geowave.core.store.operations.BaseReaderParams-">createStandardScanner</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -182,7 +160,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

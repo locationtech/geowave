@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -140,10 +140,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset--">PersistentDataset</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset-java.util.Map-">PersistentDataset</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset-mil.nga.giat.geowave.core.index.ByteArrayId-T-">PersistentDataset</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentValue-">PersistentDataset</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;value)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset-java.util.Map-">PersistentDataset</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;fieldIdToValueMap)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -162,18 +163,25 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#addValue-mil.nga.giat.geowave.core.store.data.PersistentValue-">addValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;value)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#addValue-mil.nga.giat.geowave.core.index.ByteArrayId-T-">addValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>
 <div class="block">Add the field ID/value pair to this data set.</div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#addValues-java.util.Map-">addValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</code>
+<div class="block">Add several values to the data set.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#getValue-mil.nga.giat.geowave.core.index.ByteArrayId-">getValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Given a field ID, get the associated value</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&gt;</code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#getValues--">getValues</a></span>()</code>
 <div class="block">Get all of the values from this persistent data set</div>
 </td>
@@ -209,13 +217,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;PersistentDataset()</pre>
 </li>
 </ul>
-<a name="PersistentDataset-mil.nga.giat.geowave.core.store.data.PersistentValue-">
+<a name="PersistentDataset-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">
+<!--   -->
+</a><a name="PersistentDataset-mil.nga.giat.geowave.core.index.ByteArrayId-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>PersistentDataset</h4>
-<pre>public&nbsp;PersistentDataset(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;value)</pre>
+<pre>public&nbsp;PersistentDataset(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</pre>
 </li>
 </ul>
 <a name="PersistentDataset-java.util.Map-">
@@ -235,18 +246,31 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="addValue-mil.nga.giat.geowave.core.store.data.PersistentValue-">
+<a name="addValue-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">
+<!--   -->
+</a><a name="addValue-mil.nga.giat.geowave.core.index.ByteArrayId-T-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>addValue</h4>
-<pre>public&nbsp;void&nbsp;addValue(<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;value)</pre>
+<pre>public&nbsp;void&nbsp;addValue(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</pre>
 <div class="block">Add the field ID/value pair to this data set. Do not overwrite.</div>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>value</code> - the field ID/value pair to add</dd>
 </dl>
+</li>
+</ul>
+<a name="addValues-java.util.Map-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addValues</h4>
+<pre>public&nbsp;void&nbsp;addValues(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</pre>
+<div class="block">Add several values to the data set.</div>
 </li>
 </ul>
 <a name="getValue-mil.nga.giat.geowave.core.index.ByteArrayId-">
@@ -272,7 +296,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockListLast">
 <li class="blockList">
 <h4>getValues</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&gt;&nbsp;getValues()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;getValues()</pre>
 <div class="block">Get all of the values from this persistent data set</div>
 <dl>
 <dt><span class="returnLabel">Returns:</span></dt>

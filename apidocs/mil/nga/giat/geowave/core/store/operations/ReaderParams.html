@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderClosableWrapper.html" title="class in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/SimpleParallelDecoder.html" title="class in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/operations/ReaderParams.html" target="_top">Frames</a></li>
@@ -93,17 +93,17 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.core.store.operations</div>
-<h2 title="Class ReaderParams" class="title">Class ReaderParams</h2>
+<h2 title="Class ReaderParams" class="title">Class ReaderParams&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">mil.nga.giat.geowave.core.store.operations.BaseReaderParams</a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">mil.nga.giat.geowave.core.store.operations.BaseReaderParams</a>&lt;T&gt;</li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.core.store.operations.ReaderParams</li>
+<li>mil.nga.giat.geowave.core.store.operations.ReaderParams&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -114,8 +114,8 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">ReaderParams</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></pre>
+<pre>public class <span class="typeNameLabel">ReaderParams&lt;T&gt;</span>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -134,7 +134,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html#ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-java.lang.String...-">ReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html#ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">ReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
             double[]&nbsp;maxResolutionSubsamplingPerDimension,
@@ -148,6 +148,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRangesArray.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRangesArray</a>&gt;&nbsp;coordinateRanges,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;&nbsp;rowTransformer,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -195,7 +196,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.operations.<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></h3>
-<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdapterIds--">getAdapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdapterStore--">getAdapterStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAggregation--">getAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getFieldSubsets--">getFieldSubsets</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getIndex--">getIndex</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getLimit--">getLimit</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getMaxResolutionSubsamplingPerDimension--">getMaxResolutionSubsamplingPerDimension</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isAggregation--">isAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isMixedVisibility--">isMixedVisibility</a></code></li>
+<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdapterIds--">getAdapterIds</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdapterStore--">getAdapterStore</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAdditionalAuthorizations--">getAdditionalAuthorizations</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getAggregation--">getAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getFieldSubsets--">getFieldSubsets</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getIndex--">getIndex</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getLimit--">getLimit</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getMaxResolutionSubsamplingPerDimension--">getMaxResolutionSubsamplingPerDimension</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getRowTransformer--">getRowTransformer</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isAggregation--">isAggregation</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isMixedVisibility--">isMixedVisibility</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -218,7 +219,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-java.lang.String...-">
+<a name="ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -238,6 +239,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRangesArray.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRangesArray</a>&gt;&nbsp;coordinateRanges,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;&nbsp;rowTransformer,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</pre>
 </li>
 </ul>
@@ -258,7 +260,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRangesArray.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRangesArray</a>&gt;&nbsp;getCoordinateRanges()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getCoordinateRanges--">getCoordinateRanges</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getCoordinateRanges--">getCoordinateRanges</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -271,7 +273,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;getConstraints()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getConstraints--">getConstraints</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getConstraints--">getConstraints</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -293,7 +295,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <pre>public&nbsp;boolean&nbsp;isServersideAggregation()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isServersideAggregation--">isServersideAggregation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#isServersideAggregation--">isServersideAggregation</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -315,7 +317,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&nbsp;getFilter()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getFilter--">getFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#getFilter--">getFilter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">BaseReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -348,7 +350,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderClosableWrapper.html" title="class in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/SimpleParallelDecoder.html" title="class in mil.nga.giat.geowave.core.store.operations"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/core/store/operations/ReaderParams.html" target="_top">Frames</a></li>

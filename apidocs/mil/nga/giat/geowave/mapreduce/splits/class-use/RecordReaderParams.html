@@ -119,12 +119,12 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected org.apache.accumulo.core.client.Scanner</code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#getScanner-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">getScanner</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;params)</code>&nbsp;</td>
+<td class="colFirst"><code>protected &lt;T&gt;&nbsp;org.apache.accumulo.core.client.Scanner</code></td>
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#getScanner-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">getScanner</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;params)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -141,8 +141,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -153,7 +153,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraReader.html#CassandraReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations-">CassandraReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraReader.html#CassandraReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations-">CassandraReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraReader.html" title="type parameter in CassandraReader">T</a>&gt;&nbsp;recordReaderParams,
                <a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html" title="class in mil.nga.giat.geowave.datastore.cassandra.operations">CassandraOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -171,8 +171,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -183,7 +183,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;recordReaderParams,
               <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in mil.nga.giat.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -201,8 +201,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;recordReaderParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -213,7 +213,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;recordReaderParams,
            <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -231,8 +231,8 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MapReduceDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+<td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">MapReduceDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStoreOperations.html#createReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

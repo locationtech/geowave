@@ -178,6 +178,10 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -573,6 +577,19 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/package-summary.html">mil.nga.giat.geowave.core.store.entities</a> with type parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveRowIteratorTransformer.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html#NO_OP_TRANSFORMER">NO_OP_TRANSFORMER</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/package-summary.html">mil.nga.giat.geowave.core.store.entities</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -745,6 +762,18 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/package-summary.html">mil.nga.giat.geowave.core.store.operations</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/SimpleParallelDecoder.html#SimpleParallelDecoder-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.util.Iterator-">SimpleParallelDecoder</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/SimpleParallelDecoder.html" title="type parameter in SimpleParallelDecoder">T</a>&gt;&nbsp;rowTransformer,
+                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;sourceIterator)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.core.store.util">
 <!--   -->
@@ -805,6 +834,19 @@
 </tr>
 </tbody>
 </table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/package-summary.html">mil.nga.giat.geowave.core.store.util</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryTransformer.html" title="type parameter in NativeEntryTransformer">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">NativeEntryTransformer.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryTransformer.html#apply-java.util.Iterator-">apply</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;rowIter)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
 <caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/package-summary.html">mil.nga.giat.geowave.core.store.util</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -846,12 +888,31 @@
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryIteratorWrapper.html#NativeEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryIteratorWrapper</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
-                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&nbsp;scannerIt,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
                           <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
                           byte[]&nbsp;fieldSubsetBitmask,
                           double[]&nbsp;maxResolutionSubsamplingPerDimension,
                           boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryIteratorWrapper.html#NativeEntryIteratorWrapper-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.Iterator-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryIteratorWrapper</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scannerIt,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryIteratorWrapper.html" title="type parameter in NativeEntryIteratorWrapper">T</a>,? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
+                          byte[]&nbsp;fieldSubsetBitmask,
+                          double[]&nbsp;maxResolutionSubsamplingPerDimension,
+                          boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryTransformer.html#NativeEntryTransformer-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-byte:A-double:A-boolean-">NativeEntryTransformer</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;clientFilter,
+                      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/util/NativeEntryTransformer.html" title="type parameter in NativeEntryTransformer">T</a>,? extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;scanCallback,
+                      byte[]&nbsp;fieldSubsetBitmask,
+                      double[]&nbsp;maxResolutionSubsamplingPerDimension,
+                      boolean&nbsp;decodePersistenceEncoding)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -929,19 +990,6 @@
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.operations</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.operations</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloReader.html#next--">next</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/package-summary.html">mil.nga.giat.geowave.datastore.accumulo.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -990,19 +1038,6 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/package-summary.html">mil.nga.giat.geowave.datastore.cassandra.operations</a></h3>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/package-summary.html">mil.nga.giat.geowave.datastore.cassandra.operations</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraReader.html#next--">next</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/package-summary.html">mil.nga.giat.geowave.datastore.cassandra.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -1078,19 +1113,6 @@
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb.operations</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb.operations</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DynamoDBReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#next--">next</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/package-summary.html">mil.nga.giat.geowave.datastore.dynamodb.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -1136,19 +1158,6 @@
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a></h3>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
-<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a> that return <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Method and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseReader.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseReader.html#next--">next</a></span>()</code>&nbsp;</td>
-</tr>
-</tbody>
-</table>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/package-summary.html">mil.nga.giat.geowave.datastore.hbase.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -1167,6 +1176,26 @@
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseWriter.html#write-mil.nga.giat.geowave.core.store.entities.GeoWaveRow:A-">write</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>[]&nbsp;rows)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.mapreduce.input">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a> in <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/input/package-summary.html">mil.nga.giat.geowave.mapreduce.input</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
+<caption><span>Constructor parameters in <a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/input/package-summary.html">mil.nga.giat.geowave.mapreduce.input</a> with type arguments of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Constructor and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-mil.nga.giat.geowave.core.store.operations.Reader-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;queryFilter,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                          <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                          boolean&nbsp;isOutputWritable)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

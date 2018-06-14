@@ -93,14 +93,14 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">mil.nga.giat.geowave.datastore.dynamodb.operations</div>
-<h2 title="Class DynamoDBReader" class="title">Class DynamoDBReader</h2>
+<h2 title="Class DynamoDBReader" class="title">Class DynamoDBReader&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBReader</li>
+<li>mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBReader&lt;T&gt;</li>
 </ul>
 </li>
 </ul>
@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">DynamoDBReader</span>
+<pre>public class <span class="typeNameLabel">DynamoDBReader&lt;T&gt;</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a></pre>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -134,11 +134,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;readerParams,
               <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in mil.nga.giat.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#DynamoDBReader-mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams-mil.nga.giat.geowave.datastore.dynamodb.operations.DynamoDBOperations-">DynamoDBReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;recordReaderParams,
               <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in mil.nga.giat.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -179,7 +179,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#initScanner--">initScanner</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html#next--">next</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
@@ -217,7 +217,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <ul class="blockList">
 <li class="blockList">
 <h4>DynamoDBReader</h4>
-<pre>public&nbsp;DynamoDBReader(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams,
+<pre>public&nbsp;DynamoDBReader(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;readerParams,
                       <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in mil.nga.giat.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</pre>
 </li>
 </ul>
@@ -227,7 +227,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <ul class="blockListLast">
 <li class="blockList">
 <h4>DynamoDBReader</h4>
-<pre>public&nbsp;DynamoDBReader(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&nbsp;recordReaderParams,
+<pre>public&nbsp;DynamoDBReader(<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="class in mil.nga.giat.geowave.mapreduce.splits">RecordReaderParams</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;&nbsp;recordReaderParams,
                       <a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html" title="class in mil.nga.giat.geowave.datastore.dynamodb.operations">DynamoDBOperations</a>&nbsp;operations)</pre>
 </li>
 </ul>
@@ -282,7 +282,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <pre>public&nbsp;boolean&nbsp;hasNext()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -292,10 +292,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <ul class="blockList">
 <li class="blockList">
 <h4>next</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&nbsp;next()</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&nbsp;next()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBReader.html" title="type parameter in DynamoDBReader">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

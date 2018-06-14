@@ -882,6 +882,33 @@
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;org.opengis.feature.simple.SimpleFeature,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">AvroFeatureDataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/AvroFeatureDataAdapter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AvroAttributeRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/AvroAttributeRowBuilder.html#setField-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">setField</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fieldValue)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">FeatureRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureRowBuilder.html#setField-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">setField</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fieldValue)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/package-summary.html">mil.nga.giat.geowave.adapter.vector</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">AvroAttributeRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/AvroAttributeRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">FeatureRowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/FeatureRowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;&nbsp;values)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -3434,6 +3461,26 @@
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">AdapterStore.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#removeAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">removeAdapter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">NativeFieldHandler.RowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setField-mil.nga.giat.geowave.core.index.ByteArrayId-FieldType-">setField</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&nbsp;fieldValue)</code>
+<div class="block">Set a field ID/value pair</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/package-summary.html">mil.nga.giat.geowave.core.store.adapter</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">NativeFieldHandler.RowBuilder.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html#setFields-java.util.Map-">setFields</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/NativeFieldHandler.RowBuilder.html" title="type parameter in NativeFieldHandler.RowBuilder">FieldType</a>&gt;&nbsp;values)</code>&nbsp;</td>
+</tr>
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing constructors, and an explanation">
@@ -3948,6 +3995,21 @@
 </tbody>
 </table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> that return types with arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">PersistentDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#getValues--">getValues</a></span>()</code>
+<div class="block">Get all of the values from this persistent data set</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> with parameters of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
@@ -3955,27 +4017,49 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">PersistentDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#addValue-mil.nga.giat.geowave.core.index.ByteArrayId-T-">addValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+        <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>
+<div class="block">Add the field ID/value pair to this data set.</div>
+</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldVisibilityHandler.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldVisibilityHandler</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html" title="type parameter in VisibilityWriter">RowType</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">VisibilityWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/VisibilityWriter.html#getFieldVisibilityHandler-mil.nga.giat.geowave.core.index.ByteArrayId-">getFieldVisibilityHandler</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a writer for an individual field given the ID</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldReader.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldReader</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html" title="type parameter in DataReader">FieldType</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataReader.html#getReader-mil.nga.giat.geowave.core.index.ByteArrayId-">getReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a reader for an individual field.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a></code></td>
 <td class="colLast"><span class="typeNameLabel">PersistentDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#getValue-mil.nga.giat.geowave.core.index.ByteArrayId-">getValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Given a field ID, get the associated value</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/field/FieldWriter.html" title="interface in mil.nga.giat.geowave.core.store.data.field">FieldWriter</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">RowType</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html" title="type parameter in DataWriter">FieldType</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">DataWriter.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/DataWriter.html#getWriter-mil.nga.giat.geowave.core.index.ByteArrayId-">getWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>
 <div class="block">Get a writer for an individual field given the ID.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Method parameters in <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/package-summary.html">mil.nga.giat.geowave.core.store.data</a> with type arguments of type <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">PersistentDataset.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#addValues-java.util.Map-">addValues</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&gt;&nbsp;values)</code>
+<div class="block">Add several values to the data set.</div>
 </td>
 </tr>
 </tbody>
@@ -4020,6 +4104,10 @@
                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="class in mil.nga.giat.geowave.core.store.data">PersistentDataset</a>&lt;byte[]&gt;&nbsp;unknownData)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html#PersistentDataset-mil.nga.giat.geowave.core.index.ByteArrayId-T-">PersistentDataset</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
+                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentDataset.html" title="type parameter in PersistentDataset">T</a>&nbsp;value)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html#PersistentValue-mil.nga.giat.geowave.core.index.ByteArrayId-T-">PersistentValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id,
                <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/PersistentValue.html" title="type parameter in PersistentValue">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
@@ -5313,7 +5401,7 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#BaseReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-java.lang.Integer-java.lang.String...-">BaseReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html#BaseReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-java.lang.Integer-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">BaseReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                 <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                 double[]&nbsp;maxResolutionSubsamplingPerDimension,
@@ -5321,10 +5409,11 @@
                 org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldSubsets,
                 boolean&nbsp;isMixedVisibility,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+                <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/BaseReaderParams.html" title="type parameter in BaseReaderParams">T</a>&gt;&nbsp;rowTransformer,
                 <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html#ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-java.lang.String...-">ReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html#ReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-boolean-boolean-mil.nga.giat.geowave.core.index.QueryRanges-mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter-java.lang.Integer-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">ReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
             double[]&nbsp;maxResolutionSubsamplingPerDimension,
@@ -5338,6 +5427,7 @@
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/MultiDimensionalCoordinateRangesArray.html" title="class in mil.nga.giat.geowave.core.index">MultiDimensionalCoordinateRangesArray</a>&gt;&nbsp;coordinateRanges,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
+            <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="type parameter in ReaderParams">T</a>&gt;&nbsp;rowTransformer,
             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -6669,7 +6759,7 @@
                      <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/SplitsProvider.html" title="class in mil.nga.giat.geowave.mapreduce.splits">SplitsProvider</a>&nbsp;splitsProvider)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html#RecordReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-java.lang.String...-">RecordReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html#RecordReaderParams-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.AdapterStore-java.util.List-double:A-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-boolean-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.lang.Integer-mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer-java.lang.String...-">RecordReaderParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;adapterIds,
                   double[]&nbsp;maxResolutionSubsamplingPerDimension,
@@ -6678,6 +6768,7 @@
                   boolean&nbsp;isMixedVisibility,
                   <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;rowRange,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
+                  <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/RecordReaderParams.html" title="type parameter in RecordReaderParams">T</a>&gt;&nbsp;rowTransformer,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
