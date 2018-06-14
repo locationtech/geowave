@@ -1128,10 +1128,12 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SparkSqlCommand() {
 		ArrayList<String> params = new ArrayList<String>();
-		params.add("select * from " + GeoWaveGrpcTestUtils.storeName + "[|gpxpoint]");
+		params.add("select * from %" + GeoWaveGrpcTestUtils.storeName + "|gpxpoint");
 		SparkSqlCommandParameters request = SparkSqlCommandParameters.newBuilder().addAllParameters(
 				params).setOutputStoreName(
-				GeoWaveGrpcTestUtils.outputStoreName).setOutputTypeName(
+				GeoWaveGrpcTestUtils.outputStoreName).setMaster("local[*]")
+				.setAppName("sparkSqlTestApp")
+				.setHost("localhost").setOutputTypeName(
 				"gpxpoint").setShowResults(
 				5).build();
 		analyticSparkBlockingStub.sparkSqlCommand(request);

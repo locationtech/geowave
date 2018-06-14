@@ -85,6 +85,9 @@ public class SparkSqlCommand extends
 
 		LOGGER.debug("Running with cleaned SQL: " + cleanSql);
 		sqlRunner.setSql(cleanSql);
+		sqlRunner.setAppName(sparkSqlOptions.getAppName());
+		sqlRunner.setHost(sparkSqlOptions.getHost());
+		sqlRunner.setMaster(sparkSqlOptions.getMaster());
 
 		stopwatch.reset();
 		stopwatch.start();

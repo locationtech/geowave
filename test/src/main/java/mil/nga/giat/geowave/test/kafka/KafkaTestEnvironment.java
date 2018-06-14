@@ -51,11 +51,13 @@ public class KafkaTestEnvironment implements
 		}
 
 		final KafkaConfig config = KafkaTestUtils.getKafkaBrokerConfig();
-		kafkaServer = new KafkaServerStartable(
-				config);
-
-		kafkaServer.startup();
-		Thread.sleep(3000);
+		if(kafkaServer == null) {
+			kafkaServer = new KafkaServerStartable(
+					config);
+	
+			kafkaServer.startup();
+			Thread.sleep(3000);
+		}
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public class KafkaTestEnvironment implements
 			throws Exception {
 		LOGGER.info("Shutting down Kafka Server...");
 		kafkaServer.shutdown();
-
+		kafkaServer = null;
 		FileUtils.forceDeleteOnExit(KafkaTestUtils.DEFAULT_LOG_DIR);
 	}
 

@@ -206,12 +206,7 @@ public class GeoWaveGrpcIT extends
 
 		// Analytic Spark Tests
 		Assert.assertTrue(client.KmeansSparkCommand());
-
-		// TODO this command will currently fail due to lack of parameters
-		// need to add command options for setting master and host which are
-		// currently
-		// set internally by the runner itself rather than by the command class.
-		// Assert.assertTrue(client.SparkSqlCommand());
+		Assert.assertTrue(client.SparkSqlCommand());
 
 		// TODO this command will currently fail (locally) due to the reliance
 		// on spark api
@@ -337,7 +332,7 @@ public class GeoWaveGrpcIT extends
 	static protected void shutdown() {
 		try {
 			client.shutdown();
-		
+
 			// mimic terminating the server from cli
 			StopGrpcServerCommand stopCmd = new StopGrpcServerCommand();
 			stopCmd.execute(operationParams);
