@@ -20,6 +20,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.Scan;
 
 import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
+import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.datastore.bigtable.BigTableConnectionPool;
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 public class BigTableOperations extends
 		HBaseOperations
 {
-	private final HashSet<String> tableCache = new HashSet();
+	private final HashSet<String> tableCache = Sets.newHashSet();
 
 	public BigTableOperations(
 			final BigTableOptions options )
@@ -60,6 +61,13 @@ public class BigTableOperations extends
 		return regionLocator;
 	}
 
+	@Override
+	public boolean parallelDecodeEnabled() {
+		// TODO: Rows that should be merged are ending up in different regions
+		// which causes parallel decode to return incorrect results.
+		return false;
+	}
+
 	protected void forceRegionUpdate(
 			final BigtableRegionLocator regionLocator ) {
 
@@ -67,9 +75,8 @@ public class BigTableOperations extends
 
 	@Override
 	public Iterable<Result> getScannedResults(
-			final Scan scanner,
-			final String tableName,
-			final String... authorizations )
+			Scan scanner,
+			String tableName )
 			throws IOException {
 
 		// Check the local cache
@@ -89,8 +96,7 @@ public class BigTableOperations extends
 		if (tableAvailable) {
 			return super.getScannedResults(
 					scanner,
-					tableName,
-					authorizations);
+					tableName);
 		}
 
 		// Otherwise, return empty results

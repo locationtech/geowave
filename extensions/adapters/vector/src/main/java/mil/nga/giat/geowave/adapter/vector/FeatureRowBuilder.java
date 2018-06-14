@@ -10,13 +10,15 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 
 /**
  * A GeoWave RowBuilder, used internally by AbstractDataAdapter to construct
@@ -44,10 +46,23 @@ public class FeatureRowBuilder implements
 
 	@Override
 	public void setField(
-			final PersistentValue<Object> fieldValue ) {
+			ByteArrayId id,
+			Object fieldValue ) {
 		builder.set(
-				fieldValue.getId().getString(),
-				fieldValue.getValue());
+				id.getString(),
+				fieldValue);
+
+	}
+
+	@Override
+	public void setFields(
+			Map<ByteArrayId, Object> values ) {
+		for (Entry<ByteArrayId, Object> entry : values.entrySet()) {
+			builder.set(
+					entry.getKey().getString(),
+					entry.getValue());
+		}
+
 	}
 
 }

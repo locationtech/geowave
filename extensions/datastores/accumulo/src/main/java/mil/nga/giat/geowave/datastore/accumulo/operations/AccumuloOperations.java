@@ -68,6 +68,7 @@ import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -180,7 +181,6 @@ public class AccumuloOperations implements
 				instanceName,
 				userName,
 				password);
-
 	}
 
 	/**
@@ -970,8 +970,8 @@ public class AccumuloOperations implements
 
 	}
 
-	protected ScannerBase getScanner(
-			final ReaderParams params ) {
+	protected <T> ScannerBase getScanner(
+			final ReaderParams<T> params ) {
 		final List<ByteArrayRange> ranges = params.getQueryRanges().getCompositeQueryRanges();
 		final String tableName = StringUtils.stringFromBinary(params.getIndex().getId().getBytes());
 		ScannerBase scanner;
@@ -1051,8 +1051,8 @@ public class AccumuloOperations implements
 		return scanner;
 	}
 
-	protected void addConstraintsScanIteratorSettings(
-			final BaseReaderParams params,
+	protected <T> void addConstraintsScanIteratorSettings(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner,
 			final DataStoreOptions options ) {
 		addFieldSubsettingToIterator(
@@ -1160,8 +1160,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addIndexFilterToIterator(
-			final BaseReaderParams params,
+	protected <T> void addIndexFilterToIterator(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
 		if ((coords != null) && !coords.isEmpty()) {
@@ -1182,8 +1182,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addFieldSubsettingToIterator(
-			final BaseReaderParams params,
+	protected <T> void addFieldSubsettingToIterator(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
 			final List<String> fieldIds = params.getFieldSubsets().getLeft();
@@ -1205,8 +1205,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addRowScanIteratorSettings(
-			final ReaderParams params,
+	protected <T> void addRowScanIteratorSettings(
+			final ReaderParams<T> params,
 			final ScannerBase scanner ) {
 		addFieldSubsettingToIterator(
 				params,
@@ -1221,9 +1221,10 @@ public class AccumuloOperations implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Reader createReader(
-			final ReaderParams params ) {
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> params ) {
 		final ScannerBase scanner = getScanner(params);
 
 		addConstraintsScanIteratorSettings(
@@ -1231,15 +1232,17 @@ public class AccumuloOperations implements
 				scanner,
 				options);
 
-		return new AccumuloReader(
+		return new AccumuloReader<T>(
 				scanner,
+				(GeoWaveRowIteratorTransformer<T>) params.getRowTransformer(),
 				params.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				params.isMixedVisibility() && !params.isServersideAggregation(),
-				params.isClientsideRowMerging());
+				params.isClientsideRowMerging(),
+				true);
 	}
 
-	protected Scanner getScanner(
-			final RecordReaderParams params ) {
+	protected <T> Scanner getScanner(
+			final RecordReaderParams<T> params ) {
 		final GeoWaveRowRange range = params.getRowRange();
 		final String tableName = StringUtils.stringFromBinary(params.getIndex().getId().getBytes());
 		Scanner scanner;
@@ -1303,18 +1306,21 @@ public class AccumuloOperations implements
 		return scanner;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Reader createReader(
-			final RecordReaderParams readerParams ) {
+	public <T> Reader<T> createReader(
+			final RecordReaderParams<T> readerParams ) {
 		final ScannerBase scanner = getScanner(readerParams);
 		addConstraintsScanIteratorSettings(
 				readerParams,
 				scanner,
 				options);
-		return new AccumuloReader(
+		return new AccumuloReader<T>(
 				scanner,
+				(GeoWaveRowIteratorTransformer<T>) readerParams.getRowTransformer(),
 				readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
+				false,
 				false);
 	}
 

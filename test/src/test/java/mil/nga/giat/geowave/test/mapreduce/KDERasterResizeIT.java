@@ -373,7 +373,8 @@ public class KDERasterResizeIT
 									new Double(
 											expectedResults[x][y][b]),
 									new Double(
-											sample));
+											sample),
+									TestUtils.DOUBLE_EPSILON);
 						}
 					}
 				}

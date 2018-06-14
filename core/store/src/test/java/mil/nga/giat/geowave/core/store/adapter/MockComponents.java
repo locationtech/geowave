@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.core.store.adapter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.google.common.collect.Lists;
@@ -196,14 +197,24 @@ public class MockComponents
 
 				@Override
 				public void setField(
-						final PersistentValue<Object> fieldValue ) {
-					if (fieldValue.getId().equals(
-							INTEGER)) {
-						intValue = (Integer) fieldValue.getValue();
+						ByteArrayId id,
+						Object fieldValue ) {
+					if (id.equals(INTEGER)) {
+						intValue = (Integer) fieldValue;
 					}
-					else if (fieldValue.getId().equals(
-							ID)) {
-						myid = (String) fieldValue.getValue();
+					else if (id.equals(ID)) {
+						myid = (String) fieldValue;
+					}
+				}
+
+				@Override
+				public void setFields(
+						Map<ByteArrayId, Object> values ) {
+					if (values.containsKey(INTEGER)) {
+						intValue = (Integer) values.get(INTEGER);
+					}
+					if (values.containsKey(ID)) {
+						myid = (String) values.get(ID);
 					}
 				}
 

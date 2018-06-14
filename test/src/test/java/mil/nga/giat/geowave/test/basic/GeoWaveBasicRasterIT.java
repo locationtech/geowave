@@ -54,7 +54,6 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeoWaveBasicRasterIT extends
 		AbstractGeoWaveIT
 {
-	private static final double DOUBLE_TOLERANCE = 1E-10d;
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
@@ -476,7 +475,7 @@ public class GeoWaveBasicRasterIT extends
 										x,
 										y,
 										b),
-								DOUBLE_TOLERANCE);
+								TestUtils.DOUBLE_EPSILON);
 
 					}
 				}
