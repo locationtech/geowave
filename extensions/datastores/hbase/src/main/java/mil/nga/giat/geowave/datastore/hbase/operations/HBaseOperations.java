@@ -36,6 +36,7 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.RegionException;
 import org.apache.hadoop.hbase.TableExistsException;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.TableNotFoundException;
@@ -56,6 +57,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
@@ -122,6 +124,7 @@ public class HBaseOperations implements
 	public static final Object ADMIN_MUTEX = new Object();
 	private static final long SLEEP_INTERVAL = HConstants.DEFAULT_HBASE_SERVER_PAUSE;
 	private static final String SPLIT_STRING = Pattern.quote(".");
+	private static final int MAX_AGGREGATE_RETRIES = 3;
 
 	protected final Connection conn;
 
@@ -1072,7 +1075,6 @@ public class HBaseOperations implements
 			final String... authorizations )
 			throws Exception {
 		final TableName tableName = getTableName(indexId.getString());
-
 		return new HBaseDeleter(
 				getBufferedMutator(tableName));
 	}
@@ -1223,8 +1225,6 @@ public class HBaseOperations implements
 
 			final AggregationProtos.AggregationRequest request = requestBuilder.build();
 
-			final Table table = getTable(tableName);
-
 			byte[] startRow = null;
 			byte[] endRow = null;
 
@@ -1235,24 +1235,52 @@ public class HBaseOperations implements
 				endRow = aggRange.getEnd().getBytes();
 			}
 
-			final Map<byte[], ByteString> results = table.coprocessorService(
-					AggregationProtos.AggregationService.class,
-					startRow,
-					endRow,
-					new Batch.Call<AggregationProtos.AggregationService, ByteString>() {
-						@Override
-						public ByteString call(
-								final AggregationProtos.AggregationService counter )
-								throws IOException {
-							final BlockingRpcCallback<AggregationProtos.AggregationResponse> rpcCallback = new BlockingRpcCallback<AggregationProtos.AggregationResponse>();
-							counter.aggregate(
-									null,
-									request,
-									rpcCallback);
-							final AggregationProtos.AggregationResponse response = rpcCallback.get();
-							return response.hasValue() ? response.getValue() : null;
-						}
-					});
+			Map<byte[], ByteString> results = null;
+			boolean shouldRetry;
+			int retries = 0;
+			do {
+				shouldRetry = false;
+
+				try (final Table table = getTable(tableName)) {
+					results = table.coprocessorService(
+							AggregationProtos.AggregationService.class,
+							startRow,
+							endRow,
+							new Batch.Call<AggregationProtos.AggregationService, ByteString>() {
+								@Override
+								public ByteString call(
+										final AggregationProtos.AggregationService counter )
+										throws IOException {
+									final BlockingRpcCallback<AggregationProtos.AggregationResponse> rpcCallback = new BlockingRpcCallback<AggregationProtos.AggregationResponse>();
+									counter.aggregate(
+											null,
+											request,
+											rpcCallback);
+									AggregationProtos.AggregationResponse response = rpcCallback.get();
+									if (response == null) {
+										// Region returned no response
+										throw new RegionException();
+									}
+									return response.hasValue() ? response.getValue() : null;
+								}
+							});
+					break;
+				}
+				catch (RegionException e) {
+					retries++;
+					if (retries <= MAX_AGGREGATE_RETRIES) {
+						LOGGER.warn("GREP Aggregate timed out due to unavailable region. Retrying (" + retries + " of "
+								+ MAX_AGGREGATE_RETRIES + ")");
+						shouldRetry = true;
+					}
+				}
+			}
+			while (shouldRetry);
+
+			if (results == null) {
+				LOGGER.error("Aggregate timed out and exceeded max retries.");
+				return null;
+			}
 
 			Mergeable total = null;
 
@@ -1317,10 +1345,9 @@ public class HBaseOperations implements
 
 	public List<ByteArrayId> getTableRegions(
 			final String tableNameStr ) {
-		final ArrayList<ByteArrayId> regionIdList = new ArrayList();
+		final ArrayList<ByteArrayId> regionIdList = Lists.newArrayList();
 
-		try {
-			final RegionLocator locator = getRegionLocator(tableNameStr);
+		try (final RegionLocator locator = getRegionLocator(tableNameStr)) {
 			for (final HRegionLocation regionLocation : locator.getAllRegionLocations()) {
 				regionIdList.add(new ByteArrayId(
 						regionLocation.getRegionInfo().getRegionName()));
@@ -1641,6 +1668,7 @@ public class HBaseOperations implements
 							return response.getVersionInfoList();
 						}
 					});
+			table.close();
 			if ((versionInfoResponse == null) || versionInfoResponse.isEmpty()) {
 				LOGGER.error("No response from version coprocessor");
 			}
