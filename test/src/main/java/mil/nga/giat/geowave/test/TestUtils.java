@@ -127,6 +127,8 @@ public class TestUtils
 
 	public static final CoordinateReferenceSystem CUSTOM_CRS;
 
+	public static final double DOUBLE_EPSILON = 1E-8d;
+
 	static {
 		try {
 			CUSTOM_CRS = CRS.decode(

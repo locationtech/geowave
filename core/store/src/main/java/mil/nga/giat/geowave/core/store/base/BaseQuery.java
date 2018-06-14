@@ -16,6 +16,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
@@ -65,13 +66,14 @@ abstract class BaseQuery
 		this.authorizations = authorizations;
 	}
 
-	protected Reader getReader(
+	protected <C> Reader<C> getReader(
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
-		return operations.createReader(new ReaderParams(
+			final Integer limit,
+			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
+		return operations.createReader(new ReaderParams<C>(
 				index,
 				adapterStore,
 				adapterIds,
@@ -86,6 +88,7 @@ abstract class BaseQuery
 				limit,
 				getCoordinateRanges(),
 				getConstraints(),
+				rowTransformer,
 				getAdditionalAuthorizations()));
 	}
 

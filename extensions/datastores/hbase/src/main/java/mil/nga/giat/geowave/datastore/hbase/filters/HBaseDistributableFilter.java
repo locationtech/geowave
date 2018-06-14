@@ -305,9 +305,7 @@ public class HBaseDistributableFilter extends
 			final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
 					.getAdapterExtendedData();
 			if (existingExtValues != null) {
-				for (final PersistentValue<Object> val : existingExtValues.getValues()) {
-					adapterExtendedValues.addValue(val);
-				}
+				adapterExtendedValues.addValues(existingExtValues.getValues());
 			}
 		}
 
@@ -383,9 +381,9 @@ public class HBaseDistributableFilter extends
 				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
-					commonData.addValue(new PersistentValue<CommonIndexValue>(
+					commonData.addValue(
 							commonIndexFieldId,
-							fieldValue));
+							fieldValue);
 				}
 				else {
 					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());

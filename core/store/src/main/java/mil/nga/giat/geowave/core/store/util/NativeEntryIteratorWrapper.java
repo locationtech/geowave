@@ -2,8 +2,6 @@ package mil.nga.giat.geowave.core.store.util;
 
 import java.util.Iterator;
 
-import org.apache.log4j.Logger;
-
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
@@ -26,7 +24,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	public NativeEntryIteratorWrapper(
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
-			final Iterator scannerIt,
+			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
 			final byte[] fieldSubsetBitmask,
@@ -44,6 +42,7 @@ public class NativeEntryIteratorWrapper<T> extends
 		initializeBitPosition(maxResolutionSubsamplingPerDimension);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected T decodeRow(
 			final GeoWaveRow row,
