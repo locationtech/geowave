@@ -67,7 +67,11 @@ import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcTestServer;
 	Environment.SPARK
 })
 @GeoWaveTestStore(value = {
-	GeoWaveStoreType.ACCUMULO
+	GeoWaveStoreType.ACCUMULO,
+	GeoWaveStoreType.BIGTABLE,
+	GeoWaveStoreType.CASSANDRA,
+	GeoWaveStoreType.DYNAMODB,
+	GeoWaveStoreType.HBASE
 })
 public class GeoWaveGrpcIT extends
 		AbstractGeoWaveBasicVectorIT
@@ -111,7 +115,7 @@ public class GeoWaveGrpcIT extends
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 
-		if (configFile.exists()) {
+		if (configFile != null && configFile.exists()) {
 			configFile.delete();
 		}
 	}
@@ -158,7 +162,13 @@ public class GeoWaveGrpcIT extends
 		Assert.assertTrue(client.SparkToGeowaveCommand());
 
 		// Vector Service Tests
-		client.vectorIngest();
+		client.vectorIngest(
+				-90,
+				90,
+				-180,
+				180,
+				5,
+				5);
 		Assert.assertNotEquals(
 				0,
 				client.numFeaturesProcessed);
@@ -198,6 +208,17 @@ public class GeoWaveGrpcIT extends
 		Assert.assertEquals(
 				"TEST_VAL",
 				map.get("TEST_KEY"));
+
+		// clear out the stores and ingest a smaller sample
+		// set for the more demanding operations
+		TestUtils.deleteAll(dataStore);
+		client.vectorIngest(
+				0,
+				10,
+				0,
+				10,
+				5,
+				5);
 
 		// Analytic Mapreduce Tests
 		Assert.assertTrue(client.nearestNeighborCommand());
@@ -268,10 +289,6 @@ public class GeoWaveGrpcIT extends
 						BasicKafkaIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
-
-		// KafkaTestUtils.testKafkaStage(OSM_GPX_INPUT_DIR);
-		// MapReduceTestUtils.testMapReduceStage(
-		// OSM_GPX_INPUT_DIR);
 
 		// set up the config file for the services
 		configFile = File.createTempFile(
