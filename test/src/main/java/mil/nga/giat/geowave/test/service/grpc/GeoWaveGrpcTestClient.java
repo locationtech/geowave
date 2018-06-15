@@ -184,7 +184,13 @@ public class GeoWaveGrpcTestClient
 	}
 
 	// Vector Service Methods
-	public void vectorIngest()
+	public void vectorIngest(
+			int minLat,
+			int maxLat,
+			int minLon,
+			int maxLon,
+			int latStepDegs,
+			int lonStepDegs )
 			throws InterruptedException,
 			UnsupportedEncodingException {
 		LOGGER.info("Performing Vector Ingest...");
@@ -229,8 +235,8 @@ public class GeoWaveGrpcTestClient
 		// Build up and add features to the request here...
 		VectorIngestParameters.Builder requestBuilder = VectorIngestParameters.newBuilder();
 		FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
-		for (int longitude = -180; longitude <= 180; longitude += 5) {
-			for (int latitude = -90; latitude <= 90; latitude += 5) {
+		for (int longitude = minLon; longitude <= maxLon; longitude += lonStepDegs) {
+			for (int latitude = minLat; latitude <= maxLat; latitude += latStepDegs) {
 				attBuilder.setValGeometry(GeometryUtils.GEOMETRY_FACTORY.createPoint(
 						new Coordinate(
 								longitude,
@@ -412,10 +418,11 @@ public class GeoWaveGrpcTestClient
 
 	public boolean nearestNeighborCommand() {
 		ArrayList<String> adapters = new ArrayList<String>();
-		adapters.add("gpxpoint");
+		adapters.add(GeoWaveGrpcTestUtils.adapterId);
 		NearestNeighborCommandParameters request = NearestNeighborCommandParameters.newBuilder().addParameters(
 				GeoWaveGrpcTestUtils.storeName).addAllAdapterIds(
-				adapters).setExtractMinInputSplit(
+				adapters).setExtractQuery(
+				GeoWaveGrpcTestUtils.wktSpatialQuery).setExtractMinInputSplit(
 				"2").setExtractMaxInputSplit(
 				"6").setPartitionMaxDistance(
 				"10").setOutputReducerCount(
@@ -435,7 +442,7 @@ public class GeoWaveGrpcTestClient
 		KdeCommandParameters request = KdeCommandParameters.newBuilder().addAllParameters(
 				params).setCoverageName(
 				"grpc_kde").setFeatureType(
-				"gpxpoint").setHdfsHostPort(
+				GeoWaveGrpcTestUtils.adapterId).setHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setJobTrackerOrResourceManHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setMinLevel(
 				5).setMaxLevel(
@@ -1128,13 +1135,14 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SparkSqlCommand() {
 		ArrayList<String> params = new ArrayList<String>();
-		params.add("select * from %" + GeoWaveGrpcTestUtils.storeName + "|gpxpoint");
+		params.add("select * from %" + GeoWaveGrpcTestUtils.storeName + "|" + GeoWaveGrpcTestUtils.adapterId);
 		SparkSqlCommandParameters request = SparkSqlCommandParameters.newBuilder().addAllParameters(
 				params).setOutputStoreName(
-				GeoWaveGrpcTestUtils.outputStoreName).setMaster("local[*]")
-				.setAppName("sparkSqlTestApp")
-				.setHost("localhost").setOutputTypeName(
-				"gpxpoint").setShowResults(
+				GeoWaveGrpcTestUtils.outputStoreName).setMaster(
+				"local[*]").setAppName(
+				"sparkSqlTestApp").setHost(
+				"localhost").setOutputTypeName(
+				GeoWaveGrpcTestUtils.adapterId).setShowResults(
 				5).build();
 		analyticSparkBlockingStub.sparkSqlCommand(request);
 		return true;
@@ -1151,10 +1159,10 @@ public class GeoWaveGrpcTestClient
 				"test-app2").setMaster(
 				"local[*]").setHost(
 				"localhost").setLeftAdapterId(
-				"gpxpoint").setRightAdapterId(
-				"gpxpoint").setOutLeftAdapterId(
-				"gpxpoint_l").setOutRightAdapterId(
-				"gpxpoint_r").setPredicate(
+				GeoWaveGrpcTestUtils.adapterId).setRightAdapterId(
+				GeoWaveGrpcTestUtils.adapterId).setOutLeftAdapterId(
+				GeoWaveGrpcTestUtils.adapterId + "_l").setOutRightAdapterId(
+				GeoWaveGrpcTestUtils.adapterId + "_r").setPredicate(
 				"GeomIntersects").setRadius(
 				0.1).setNegativeTest(
 				false).build();
