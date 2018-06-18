@@ -82,33 +82,41 @@ public class IngestUtils
 			return;
 		}
 
-		Field factoryField = URL.class.getDeclaredField("factory");
+		Field lockField = URL.class.getDeclaredField("streamHandlerLock");
 		// HP Fortify "Access Control" false positive
 		// The need to change the accessibility here is
 		// necessary, has been review and judged to be safe
-		factoryField.setAccessible(true);
+		lockField.setAccessible(true);
+		synchronized (lockField.get(null)) {
 
-		URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
-
-		if (urlStreamHandlerFactory == null) {
-			if (urlType == URLTYPE.S3) {
-				URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
-				hasS3Handler = true;
+			// check again synchronized
+			if (urlType == URLTYPE.S3 && hasS3Handler) {
+				return;
 			}
-			else { // HDFS
-				URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory());
-				hasHdfsHandler = true;
+			else if (urlType == URLTYPE.HDFS && hasHdfsHandler) {
+				return;
 			}
 
-		}
-		else {
-			Field lockField = URL.class.getDeclaredField("streamHandlerLock");
+			Field factoryField = URL.class.getDeclaredField("factory");
 			// HP Fortify "Access Control" false positive
 			// The need to change the accessibility here is
 			// necessary, has been review and judged to be safe
-			lockField.setAccessible(true);
-			synchronized (lockField.get(null)) {
+			factoryField.setAccessible(true);
 
+			URLStreamHandlerFactory urlStreamHandlerFactory = (URLStreamHandlerFactory) factoryField.get(null);
+
+			if (urlStreamHandlerFactory == null) {
+				if (urlType == URLTYPE.S3) {
+					URL.setURLStreamHandlerFactory(new S3URLStreamHandlerFactory());
+					hasS3Handler = true;
+				}
+				else { // HDFS
+					URL.setURLStreamHandlerFactory(new HdfsUrlStreamHandlerFactory());
+					hasHdfsHandler = true;
+				}
+
+			}
+			else {
 				factoryField.set(
 						null,
 						null);
