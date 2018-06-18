@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -171,7 +171,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.adapter.vector.ingest.<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#filterOptionProvider">filterOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#serializationFormatOptionProvider">serializationFormatOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#typeNameProvider">typeNameProvider</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#filterOptionProvider">filterOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#serializationFormatOptionProvider">serializationFormatOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#simpOptionProvider">simpOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#typeNameProvider">typeNameProvider</a></code></li>
 </ul>
 </li>
 </ul>
@@ -211,36 +211,40 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/format/gpx/MaxExtentOptProvider.html" title="class in mil.nga.giat.geowave.format.gpx">MaxExtentOptProvider</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getExtentOptionProvider--">getExtentOptionProvider</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getFileExtensionFilters--">getFileExtensionFilters</a></span>()</code>
 <div class="block">Gets a list of file extensions that this plugin supports.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/IngestPluginBase.html" title="interface in mil.nga.giat.geowave.core.ingest">IngestPluginBase</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getIngestWithAvroPlugin--">getIngestWithAvroPlugin</a></span>()</code>
 <div class="block">An implementation of ingestion that ingests Avro Java objects into
  GeoWave</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getRequiredIndices--">getRequiredIndices</a></span>()</code>
 <div class="block">Get an array of indices that are required by this ingest implementation.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getSupportedIndexableTypes--">getSupportedIndexableTypes</a></span>()</code>
 <div class="block">return a set of classes that can be indexed by this data adapter
  provider, used for compatibility checking with an index provider</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected org.opengis.feature.simple.SimpleFeatureType[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#getTypes--">getTypes</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithMapper.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithMapper</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#ingestWithMapper--">ingestWithMapper</a></span>()</code>
 <div class="block">An implementation of ingestion that can be persisted to a mapper within
@@ -248,7 +252,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
  GeoWave from intermediate data</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/ingest/hdfs/mapreduce/IngestWithReducer.html" title="interface in mil.nga.giat.geowave.core.ingest.hdfs.mapreduce">IngestWithReducer</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>,?,?,org.opengis.feature.simple.SimpleFeature&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#ingestWithReducer--">ingestWithReducer</a></span>()</code>
 <div class="block">An implementation of ingestion that can be persisted to a mapper and
@@ -257,14 +261,14 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
  GeoWave from the key-value pairs emitted by the mapper.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#init-java.net.URL-">init</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;baseDirectory)</code>
 <div class="block">Initialize the plugin and give it the base directory that is provided by
  the user.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#isUseReducerPreferred--">isUseReducerPreferred</a></span>()</code>
 <div class="block">Returns a flag indicating to the ingestion framework whether it should
@@ -273,20 +277,24 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
  are non-null.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#setExtentOptionProvider-mil.nga.giat.geowave.format.gpx.MaxExtentOptProvider-">setExtentOptionProvider</a></span>(<a href="../../../../../../mil/nga/giat/geowave/format/gpx/MaxExtentOptProvider.html" title="class in mil.nga.giat.geowave.format.gpx">MaxExtentOptProvider</a>&nbsp;extentOptProvider)</code>&nbsp;</td>
+</tr>
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#supportsFile-java.net.URL-">supportsFile</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;file)</code>
 <div class="block">This method will be called for every file that matches the given
  extensions.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#toAvroObjects-java.net.URL-">toAvroObjects</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input)</code>
 <div class="block">Converts the supported file into an Avro encoded Java object.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxIngestPlugin.html#toGeoWaveDataInternal-mil.nga.giat.geowave.format.gpx.GpxTrack-java.util.Collection-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../mil/nga/giat/geowave/format/gpx/GpxTrack.html" title="class in mil.nga.giat.geowave.format.gpx">GpxTrack</a>&nbsp;gpxTrack,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
@@ -298,7 +306,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.adapter.vector.ingest.<a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">AbstractSimpleFeatureIngestPlugin</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#newAdapter-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler-">newAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setFilterProvider-mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider-">setFilterProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setSerializationFormatProvider-mil.nga.giat.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider-">setSerializationFormatProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setTypeNameProvider-mil.nga.giat.geowave.adapter.vector.ingest.TypeNameOptionProvider-">setTypeNameProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toBinary--">toBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveData-java.net.URL-java.util.Collection-java.lang.String-">toGeoWaveData</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#wrapIteratorWithFilters-mil.nga.giat.geowave.core.store.CloseableIterator-">wrapIteratorWithFilters</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#fromBinary-byte:A-">fromBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#getDataAdapters-java.lang.String-">getDataAdapters</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#newAdapter-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler-">newAdapter</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setFilterProvider-mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider-">setFilterProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setGeometrySimpOptionProvider-mil.nga.giat.geowave.adapter.vector.ingest.GeometrySimpOptionProvider-">setGeometrySimpOptionProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setSerializationFormatProvider-mil.nga.giat.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider-">setSerializationFormatProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setTypeNameProvider-mil.nga.giat.geowave.adapter.vector.ingest.TypeNameOptionProvider-">setTypeNameProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toBinary--">toBinary</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveData-java.net.URL-java.util.Collection-java.lang.String-">toGeoWaveData</a>, <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#wrapIteratorWithFilters-mil.nga.giat.geowave.core.store.CloseableIterator-">wrapIteratorWithFilters</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -553,7 +561,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <a name="getSupportedIndexableTypes--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getSupportedIndexableTypes</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;? extends <a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>&gt;[]&nbsp;getSupportedIndexableTypes()</pre>
@@ -564,6 +572,24 @@ extends <a href="../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/Ab
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the classes that are indexable by this adapter provider</dd>
 </dl>
+</li>
+</ul>
+<a name="setExtentOptionProvider-mil.nga.giat.geowave.format.gpx.MaxExtentOptProvider-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setExtentOptionProvider</h4>
+<pre>public&nbsp;void&nbsp;setExtentOptionProvider(<a href="../../../../../../mil/nga/giat/geowave/format/gpx/MaxExtentOptProvider.html" title="class in mil.nga.giat.geowave.format.gpx">MaxExtentOptProvider</a>&nbsp;extentOptProvider)</pre>
+</li>
+</ul>
+<a name="getExtentOptionProvider--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getExtentOptionProvider</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/format/gpx/MaxExtentOptProvider.html" title="class in mil.nga.giat.geowave.format.gpx">MaxExtentOptProvider</a>&nbsp;getExtentOptionProvider()</pre>
 </li>
 </ul>
 </li>

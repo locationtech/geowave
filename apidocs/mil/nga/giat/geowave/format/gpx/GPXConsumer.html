@@ -208,12 +208,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableI
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GPXConsumer.html#GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-">GPXConsumer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileStream,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/gpx/GPXConsumer.html#GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-double-">GPXConsumer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/io/InputStream.html?is-external=true" title="class or interface in java.io">InputStream</a>&nbsp;fileStream,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputID,
            <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;additionalData,
            boolean&nbsp;uniqueWayPoints,
-           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
+           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
+           double&nbsp;maxLength)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -355,7 +356,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableI
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-">
+<a name="GPXConsumer-java.io.InputStream-java.util.Collection-java.lang.String-java.util.Map-boolean-java.lang.String-double-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -366,7 +367,8 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableI
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;inputID,
                    <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&gt;&nbsp;additionalData,
                    boolean&nbsp;uniqueWayPoints,
-                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</pre>
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility,
+                   double&nbsp;maxLength)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>fileStream</code> - </dd>

@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":6,"i10":10};
+var methods = {"i0":10,"i1":10,"i2":6,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":6,"i11":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -166,6 +166,10 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#serializationFormatOptionProvider">serializationFormatOptionProvider</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/GeometrySimpOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">GeometrySimpOptionProvider</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#simpOptionProvider">simpOptionProvider</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#typeNameProvider">typeNameProvider</a></span></code>&nbsp;</td>
 </tr>
@@ -228,20 +232,24 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setSerializationFormatProvider-mil.nga.giat.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider-">setSerializationFormatProvider</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/FeatureSerializationOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">FeatureSerializationOptionProvider</a>&nbsp;serializationFormatOptionProvider)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setGeometrySimpOptionProvider-mil.nga.giat.geowave.adapter.vector.ingest.GeometrySimpOptionProvider-">setGeometrySimpOptionProvider</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/GeometrySimpOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">GeometrySimpOptionProvider</a>&nbsp;geometryProvider)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setTypeNameProvider-mil.nga.giat.geowave.adapter.vector.ingest.TypeNameOptionProvider-">setTypeNameProvider</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a>&nbsp;typeNameProvider)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setSerializationFormatProvider-mil.nga.giat.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider-">setSerializationFormatProvider</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/FeatureSerializationOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">FeatureSerializationOptionProvider</a>&nbsp;serializationFormatOptionProvider)</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#setTypeNameProvider-mil.nga.giat.geowave.adapter.vector.ingest.TypeNameOptionProvider-">setTypeNameProvider</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a>&nbsp;typeNameProvider)</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveData-java.net.URL-java.util.Collection-java.lang.String-">toGeoWaveData</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/net/URL.html?is-external=true" title="class or interface in java.net">URL</a>&nbsp;input,
              <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
@@ -250,13 +258,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
  directly ingested into GeoWave</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected abstract <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#toGeoWaveDataInternal-I-java.util.Collection-java.lang.String-">toGeoWaveDataInternal</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html" title="type parameter in AbstractSimpleFeatureIngestPlugin">I</a>&nbsp;hdfsObject,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&gt;&nbsp;primaryIndexIds,
                      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;globalVisibility)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/AbstractSimpleFeatureIngestPlugin.html#wrapIteratorWithFilters-mil.nga.giat.geowave.core.store.CloseableIterator-">wrapIteratorWithFilters</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/ingest/GeoWaveData.html" title="class in mil.nga.giat.geowave.core.ingest">GeoWaveData</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;geowaveData)</code>&nbsp;</td>
 </tr>
@@ -352,10 +360,19 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 <a name="typeNameProvider">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>typeNameProvider</h4>
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a> typeNameProvider</pre>
+</li>
+</ul>
+<a name="simpOptionProvider">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>simpOptionProvider</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/GeometrySimpOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">GeometrySimpOptionProvider</a> simpOptionProvider</pre>
 </li>
 </ul>
 </li>
@@ -408,6 +425,15 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/
 <li class="blockList">
 <h4>setTypeNameProvider</h4>
 <pre>public&nbsp;void&nbsp;setTypeNameProvider(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a>&nbsp;typeNameProvider)</pre>
+</li>
+</ul>
+<a name="setGeometrySimpOptionProvider-mil.nga.giat.geowave.adapter.vector.ingest.GeometrySimpOptionProvider-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>setGeometrySimpOptionProvider</h4>
+<pre>public&nbsp;void&nbsp;setGeometrySimpOptionProvider(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/GeometrySimpOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">GeometrySimpOptionProvider</a>&nbsp;geometryProvider)</pre>
 </li>
 </ul>
 <a name="toBinary--">
