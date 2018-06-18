@@ -263,7 +263,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			LOGGER.error("Entered an error handling a request.", e.getMessage());
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";
@@ -309,7 +309,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final NotAuthorizedException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -320,7 +320,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final ForbiddenException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -331,7 +331,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final TargetNotFoundException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -342,7 +342,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final DuplicateEntryException | ParameterException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -353,7 +353,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";

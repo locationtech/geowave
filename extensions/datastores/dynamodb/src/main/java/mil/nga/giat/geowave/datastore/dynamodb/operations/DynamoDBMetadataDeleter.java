@@ -19,14 +19,14 @@ public class DynamoDBMetadataDeleter implements
 	private final static Logger LOGGER = Logger.getLogger(DynamoDBMetadataDeleter.class);
 
 	private final DynamoDBOperations operations;
-	private final String metadataTypeName;
+	private final MetadataType metadataType;
 
 	public DynamoDBMetadataDeleter(
 			final DynamoDBOperations operations,
 			final MetadataType metadataType ) {
 		super();
 		this.operations = operations;
-		metadataTypeName = metadataType.name();
+		this.metadataType = metadataType;
 	}
 
 	@Override
@@ -38,8 +38,9 @@ public class DynamoDBMetadataDeleter implements
 			final MetadataQuery metadata ) {
 		// the nature of metadata deleter is that primary ID is always
 		// well-defined and it is deleting a single entry at a time
-		final String tableName = operations.getQualifiedTableName(AbstractGeoWavePersistence.METADATA_TABLE);
 
+		final String tableName = operations.getMetadataTableName(metadataType);
+		
 		final Map<String, AttributeValue> key = new HashMap<>();
 		key.put(
 				DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
@@ -50,11 +51,11 @@ public class DynamoDBMetadataDeleter implements
 					DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
 					new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
 		}
-
+		
 		operations.getClient().deleteItem(
 				tableName,
 				key);
-
+		
 		return true;
 	}
 
