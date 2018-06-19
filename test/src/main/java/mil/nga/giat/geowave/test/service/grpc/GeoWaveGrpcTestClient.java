@@ -552,7 +552,7 @@ public class GeoWaveGrpcTestClient
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.adapterId);
-		params.add("count");
+		params.add("FEATURE_BBOX#geometry");
 		RemoveStatCommandParameters request = RemoveStatCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.removeStatCommand(request);
@@ -563,7 +563,7 @@ public class GeoWaveGrpcTestClient
 		ArrayList<String> params = new ArrayList<String>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.adapterId);
-		params.add("count");
+		params.add("FEATURE_BBOX#geometry");
 		CalculateStatCommandParameters request = CalculateStatCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.calculateStatCommand(request);
