@@ -19,6 +19,7 @@ import java.nio.ByteBuffer;
 import org.apache.commons.math.util.MathUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
@@ -43,6 +44,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -103,9 +105,9 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 									// size, 128 fails on DynamoDB exceeding
 									// maximum size
 		final double westLon = 0;
-		final double eastLon = 45;
+		final double eastLon = 62500;
 		final double southLat = 0;
-		final double northLat = 45;
+		final double northLat = 62500;
 		ingestAndQueryNoDataMergeStrategy(
 				coverageName,
 				tileSize,
@@ -130,10 +132,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		final int noDataTileSize = 64;
 		final int summingTileSize = 32;
 		final int sumAndAveragingTileSize = 8;
-		final double westLon = 45;
-		final double eastLon = 47.8125;
-		final double southLat = -47.8125;
-		final double northLat = -45;
+		final double westLon = 0;
+		final double eastLon = 244.140625;
+		final double southLat = 0;
+		final double northLat = 244.140625;
 
 		ingestGeneralPurpose(
 				summingCoverageName,
@@ -144,7 +146,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				northLat,
 				summingNumBands,
 				summingNumRasters,
-				new SummingMergeStrategy());
+				new GeoWaveBasicRasterIT.SummingMergeStrategy());
 
 		ingestGeneralPurpose(
 				sumAndAveragingCoverageName,
@@ -155,7 +157,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				northLat,
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
-				new SumAndAveragingMergeStrategy());
+				new GeoWaveBasicRasterIT.SumAndAveragingMergeStrategy());
 
 		ingestNoDataMergeStrategy(
 				noDataCoverageName,
@@ -174,7 +176,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				northLat,
 				summingNumBands,
 				summingNumRasters,
-				new SummingExpectedValue());
+				new GeoWaveBasicRasterIT.SummingExpectedValue());
 
 		queryNoDataMergeStrategy(
 				noDataCoverageName,
@@ -189,7 +191,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				northLat,
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
-				new SumAndAveragingExpectedValue());
+				new GeoWaveBasicRasterIT.SumAndAveragingExpectedValue());
 
 		TestUtils.deleteAll(dataStoreOptions);
 	}
@@ -343,7 +345,6 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				raster1,
 				raster2,
 				tileSize);
-
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
 				TestUtils.createCustomCRSPrimaryIndex())) {
@@ -435,7 +436,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 			final double northLat,
 			final int numBands,
 			final int numRasters,
-			final ExpectedValue expectedValue )
+			final GeoWaveBasicRasterIT.ExpectedValue expectedValue )
 			throws IOException {
 		final DataStore dataStore = dataStoreOptions.createDataStore();
 
@@ -489,204 +490,4 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		}
 	}
 
-	private static interface ExpectedValue
-	{
-		public double getExpectedValue(
-				int x,
-				int y,
-				int b,
-				int numRasters,
-				int tileSize );
-	}
-
-	private static class SummingExpectedValue implements
-			ExpectedValue
-	{
-		@Override
-		public double getExpectedValue(
-				final int x,
-				final int y,
-				final int b,
-				final int numRasters,
-				final int tileSize ) {
-			double sum = 0;
-			for (int r = 0; r < numRasters; r++) {
-				sum += TestUtils.getTileValue(
-						x,
-						y,
-						b,
-						r,
-						tileSize);
-			}
-			return sum;
-		}
-	}
-
-	private static class SumAndAveragingExpectedValue implements
-			ExpectedValue
-	{
-		@Override
-		public double getExpectedValue(
-				final int x,
-				final int y,
-				final int b,
-				final int numRasters,
-				final int tileSize ) {
-			double sum = 0;
-			final boolean isSum = ((b % 2) == 0);
-
-			for (int r = 0; r < numRasters; r++) {
-				sum += TestUtils.getTileValue(
-						x,
-						y,
-						isSum ? b : b - 1,
-						r,
-						tileSize);
-			}
-			if (isSum) {
-				return sum;
-			}
-			else {
-				return sum / numRasters;
-			}
-		}
-	}
-
-	/**
-	 * this will sum up every band
-	 */
-	public static class SummingMergeStrategy extends
-			SimpleAbstractMergeStrategy<Persistable>
-	{
-
-		public SummingMergeStrategy() {
-			super();
-		}
-
-		@Override
-		protected double getSample(
-				final int x,
-				final int y,
-				final int b,
-				final double thisSample,
-				final double nextSample ) {
-			return thisSample + nextSample;
-		}
-	}
-
-	/**
-	 * this will sum up every even band and place the average of the previous
-	 * band in each odd band
-	 */
-	public static class SumAndAveragingMergeStrategy implements
-			RasterTileMergeStrategy<MergeCounter>
-	{
-
-		public SumAndAveragingMergeStrategy() {
-			super();
-		}
-
-		@Override
-		public void merge(
-				final RasterTile<MergeCounter> thisTile,
-				final RasterTile<MergeCounter> nextTile,
-				final SampleModel sampleModel ) {
-			if (nextTile instanceof MergeableRasterTile) {
-				final WritableRaster nextRaster = Raster.createWritableRaster(
-						sampleModel,
-						nextTile.getDataBuffer(),
-						null);
-				final WritableRaster thisRaster = Raster.createWritableRaster(
-						sampleModel,
-						thisTile.getDataBuffer(),
-						null);
-				final MergeCounter mergeCounter = thisTile.getMetadata();
-				// we're merging, this is the incremented new number of merges
-				final int newNumMerges = mergeCounter.getNumMerges() + nextTile.getMetadata().getNumMerges() + 1;
-
-				// we've merged 1 more tile than the total number of merges (ie.
-				// if we've performed 1 merge, we've seen 2 tiles)
-				final int totalTiles = newNumMerges + 1;
-				final int maxX = nextRaster.getMinX() + nextRaster.getWidth();
-				final int maxY = nextRaster.getMinY() + nextRaster.getHeight();
-				for (int x = nextRaster.getMinX(); x < maxX; x++) {
-					for (int y = nextRaster.getMinY(); y < maxY; y++) {
-						for (int b = 0; (b + 1) < nextRaster.getNumBands(); b += 2) {
-							final double thisSample = thisRaster.getSampleDouble(
-									x,
-									y,
-									b);
-							final double nextSample = nextRaster.getSampleDouble(
-									x,
-									y,
-									b);
-
-							final double sum = thisSample + nextSample;
-							final double average = sum / totalTiles;
-							thisRaster.setSample(
-									x,
-									y,
-									b,
-									sum);
-							thisRaster.setSample(
-									x,
-									y,
-									b + 1,
-									average);
-						}
-					}
-				}
-				thisTile.setMetadata(new MergeCounter(
-						newNumMerges));
-			}
-		}
-
-		@Override
-		public MergeCounter getMetadata(
-				final GridCoverage tileGridCoverage,
-				final RasterDataAdapter dataAdapter ) {
-			// initial merge counter
-			return new MergeCounter();
-		}
-
-		@Override
-		public byte[] toBinary() {
-			return new byte[] {};
-		}
-
-		@Override
-		public void fromBinary(
-				final byte[] bytes ) {}
-	}
-
-	public static class MergeCounter implements
-			Persistable
-	{
-		private int mergeCounter = 0;
-
-		public MergeCounter() {}
-
-		protected MergeCounter(
-				final int mergeCounter ) {
-			this.mergeCounter = mergeCounter;
-		}
-
-		public int getNumMerges() {
-			return mergeCounter;
-		}
-
-		@Override
-		public byte[] toBinary() {
-			final ByteBuffer buf = ByteBuffer.allocate(12);
-			buf.putInt(mergeCounter);
-			return buf.array();
-		}
-
-		@Override
-		public void fromBinary(
-				final byte[] bytes ) {
-			final ByteBuffer buf = ByteBuffer.wrap(bytes);
-			mergeCounter = buf.getInt();
-		}
-	}
 }

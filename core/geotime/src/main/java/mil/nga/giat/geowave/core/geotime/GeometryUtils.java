@@ -15,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -69,6 +70,23 @@ public class GeometryUtils
 					e);
 			throw new RuntimeException(
 					"Unable to initialize " + DEFAULT_CRS_STR + " object",
+					e);
+		}
+	}
+	public static final String CUSTOM_CRS_STR = "EPSG:3857";
+	public static final CoordinateReferenceSystem CUSTOM_CRS;
+	static {
+		try {
+			CUSTOM_CRS = CRS.decode(
+					CUSTOM_CRS_STR,
+					true);
+		}
+		catch (final Exception e) {
+			LOGGER.error(
+					"Unable to decode " + CUSTOM_CRS_STR + " CRS",
+					e);
+			throw new RuntimeException(
+					"Unable to initialize " + CUSTOM_CRS_STR + " object",
 					e);
 		}
 	}
@@ -174,17 +192,30 @@ public class GeometryUtils
 		 * LatitudeDefinition.class, new ConstraintData( rangeLatitude, false));
 		 * return new ConstraintSet( constraintsPerDimension);
 		 */
-
-		constraintsPerDimension.put(
-				CustomCRSUnboundedSpatialDimensionX.class,
-				new ConstraintData(
-						rangeLongitude,
-						false));
-		constraintsPerDimension.put(
-				CustomCRSUnboundedSpatialDimensionY.class,
-				new ConstraintData(
-						rangeLatitude,
-						false));
+		if (env instanceof ReferencedEnvelope) {
+			constraintsPerDimension.put(
+					LongitudeDefinition.class,
+					new ConstraintData(
+							rangeLongitude,
+							false));
+			constraintsPerDimension.put(
+					LatitudeDefinition.class,
+					new ConstraintData(
+							rangeLatitude,
+							false));
+		}
+		else {
+			constraintsPerDimension.put(
+					CustomCRSUnboundedSpatialDimensionX.class,
+					new ConstraintData(
+							rangeLongitude,
+							false));
+			constraintsPerDimension.put(
+					CustomCRSUnboundedSpatialDimensionY.class,
+					new ConstraintData(
+							rangeLatitude,
+							false));
+		}
 		return new ConstraintSet(
 				constraintsPerDimension);
 	}

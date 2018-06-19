@@ -43,6 +43,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -343,7 +344,6 @@ public class GeoWaveBasicRasterIT extends
 				raster1,
 				raster2,
 				tileSize);
-
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
@@ -487,7 +487,7 @@ public class GeoWaveBasicRasterIT extends
 		}
 	}
 
-	private static interface ExpectedValue
+	static interface ExpectedValue
 	{
 		public double getExpectedValue(
 				int x,
@@ -497,7 +497,7 @@ public class GeoWaveBasicRasterIT extends
 				int tileSize );
 	}
 
-	private static class SummingExpectedValue implements
+	static class SummingExpectedValue implements
 			ExpectedValue
 	{
 		@Override
@@ -520,7 +520,7 @@ public class GeoWaveBasicRasterIT extends
 		}
 	}
 
-	private static class SumAndAveragingExpectedValue implements
+	static class SumAndAveragingExpectedValue implements
 			ExpectedValue
 	{
 		@Override

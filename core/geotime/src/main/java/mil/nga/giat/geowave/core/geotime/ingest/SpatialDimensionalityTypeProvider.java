@@ -112,7 +112,6 @@ public class SpatialDimensionalityTypeProvider implements
 		String crsCode = null;
 		NumericDimensionField<?>[] fields = null;
 		NumericDimensionField<?>[] fields_temporal = null;
-		CoordinateReferenceSystem crs = null;
 
 		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_DIMENSIONS;
@@ -121,8 +120,9 @@ public class SpatialDimensionalityTypeProvider implements
 			crsCode = "EPSG:4326";
 		}
 		else {
-			crs = decodeCRS(options.crs);
-			CoordinateSystem cs = crs.getCoordinateSystem();
+			decodeCRS(options.crs);
+			CoordinateSystem cs = decodeCRS(
+					options.crs).getCoordinateSystem();
 			isDefaultCRS = false;
 			crsCode = options.crs;
 			dimensions = new NumericDimensionDefinition[cs.getDimension()];
@@ -257,7 +257,6 @@ public class SpatialDimensionalityTypeProvider implements
 			BaseIndexBuilder<SpatialIndexBuilder>
 	{
 		private final SpatialOptions options;
-		private String crs;
 
 		public SpatialIndexBuilder() {
 			super();
@@ -294,10 +293,11 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 		boolean hasLat = false, hasLon = false;
 		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof LatitudeDefinition) {
+			if (definition instanceof LatitudeDefinition || definition instanceof CustomCRSUnboundedSpatialDimensionY) {
 				hasLat = true;
 			}
-			else if (definition instanceof LongitudeDefinition) {
+			else if (definition instanceof LongitudeDefinition
+					|| definition instanceof CustomCRSUnboundedSpatialDimensionX) {
 				hasLon = true;
 			}
 		}

@@ -5,12 +5,14 @@ import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
@@ -40,6 +42,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class WebMercatorRasterTest
 {
+	public static final String CRS_STR = "EPSG:3857";
+
 	@Test
 	public void testStoreRetrieve()
 			throws MismatchedIndexToAdapterMapping,
@@ -78,9 +82,17 @@ public class WebMercatorRasterTest
 				namesPerBand,
 				new NoDataMergeStrategy());
 		PrimaryIndex index = new SpatialIndexBuilder().setCrs(
-				"EPSG:3857") // 3857
+				CRS_STR) // 3857
 				.createIndex();
 		adapter.init(index);
+		double bounds = CRS.decode(
+				CRS_STR).getCoordinateSystem().getAxis(
+				0).getMaximumValue();
+		if (!Double.isFinite(bounds)) {
+			bounds = 250000;
+		}
+		bounds /= 32.0;
+		System.err.println(bounds);
 		for (double xTile = 0; xTile < xTiles; xTile++) {
 			for (double yTile = 0; yTile < yTiles; yTile++) {
 				try (IndexWriter<GridCoverage> writer = dataStore.createWriter(
@@ -93,30 +105,26 @@ public class WebMercatorRasterTest
 							raster,
 							new double[][] {
 								{
-									0
+									xTile * 3 + yTile * 24
 								},
 								{
-									0
+									xTile * 3 + yTile * 24 + 1
 								},
 								{
-									0
+									xTile * 3 + yTile * 24 + 2
 								}
 							});
-					// RasterUtils.fillWithNoDataValues(raster, new double[][] {
-					// { xTile * 3 + yTile * 24 },
-					// { xTile * 3 + yTile * 24 + 1 },
-					// { xTile * 3 + yTile * 24 + 2 } });
 					writer.write(RasterUtils.createCoverageTypeDouble(
 							"test",
-							xTile * 64,
-							(xTile + 1) * 64,
-							yTile * 64,
-							(yTile + 1) * 64,
+							xTile * bounds,
+							(xTile + 1) * bounds,
+							yTile * bounds,
+							(yTile + 1) * bounds,
 							minsPerBand,
 							maxesPerBand,
 							namesPerBand,
 							raster,
-							"EPSG:3857"));
+							CRS_STR));
 				}
 			}
 		}
@@ -133,29 +141,30 @@ public class WebMercatorRasterTest
 			i++;
 		}
 		System.err.println("there are '" + i + "' tiles");
-
+		int grid[][] = new int[8][8];
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.createConfig(
 						Collections.EMPTY_MAP,
 						""));
-		for (int xTile = 1; xTile < xTiles - 1; xTile++) {
-			for (int yTile = 1; yTile < yTiles - 1; yTile++) {
+		for (int xTile = 1; xTile < xTiles; xTile++) {
+			for (int yTile = 1; yTile < yTiles; yTile++) {
 				final GeneralEnvelope queryEnvelope = new GeneralEnvelope(
 						new double[] {
 							// this is exactly on a tile boundary, so there
 							// will be no
 							// scaling on the tile composition/rendering
-							xTile * 64 - 15,
-							yTile * 64 - 15
+
+							(xTile - 15 / 64.0) * bounds,
+							(yTile - 15 / 64.0) * bounds
 						},
 						new double[] {
 							// these values are also on a tile boundary, to
 							// avoid
 							// scaling
-							xTile * 64 + 15,
-							yTile * 64 + 15
+							(xTile + 15 / 64.0) * bounds,
+							(yTile + 15 / 64.0) * bounds
 						});
-				queryEnvelope.setCoordinateReferenceSystem(CRS.decode("EPSG:3857"));
+				queryEnvelope.setCoordinateReferenceSystem(CRS.decode(CRS_STR));
 				final GridCoverage gridCoverage = reader.renderGridCoverage(
 						"test",
 						new Rectangle(
@@ -167,6 +176,23 @@ public class WebMercatorRasterTest
 						null);
 				Raster img = gridCoverage.getRenderedImage().getData();
 
+				grid[xTile - 1][yTile - 1] = img.getSample(
+						0,
+						16,
+						0);
+				grid[xTile - 1][yTile] = img.getSample(
+						0,
+						0,
+						0);
+				grid[xTile][yTile - 1] = img.getSample(
+						16,
+						16,
+						0);
+				grid[xTile][yTile] = img.getSample(
+						16,
+						0,
+						0);
+
 				double expectedMinXMinYValue = (xTile - 1) * 3 + (yTile - 1) * 24;
 				double expectedMinXMaxYValue = (xTile - 1) * 3 + yTile * 24;
 				double expectedMaxXMinYValue = xTile * 3 + (yTile - 1) * 24;
@@ -175,11 +201,11 @@ public class WebMercatorRasterTest
 						new QueryOptions(),
 						new IndexOnlySpatialQuery(
 								new GeometryFactory().toGeometry(new Envelope(
-										(xTile - 1) * 64,
-										xTile * 64,
-										(yTile - 1) * 64,
-										yTile * 64)),
-								"EPSG:3857"))) {
+										((xTile - 1) * 64) / 8,
+										(xTile * 64) / 8,
+										((yTile - 1) * 64) / 8,
+										(yTile * 64) / 8)),
+								CRS_STR))) {
 					int count = 0;
 					while (it.hasNext()) {
 						count++;
@@ -188,53 +214,59 @@ public class WebMercatorRasterTest
 					System.err.println(count);
 				}
 
-//				for (int x = 0; x < 32; x++) {
-//					for (int y = 0; y < 32; y++) {
-//
-//						for (int b = 0; b < 3; b++) {
-//							double expectedValue;
-//							if (x > 15) {
-//								if (y > 15) {
-//									expectedValue = expectedMaxXMaxYValue;
-//								}
-//								else {
-//									expectedValue = expectedMaxXMinYValue;
-//								}
-//							}
-//							else if (y > 15) {
-//								expectedValue = expectedMinXMaxYValue;
-//							}
-//							else {
-//								expectedValue = expectedMinXMinYValue;
-//							}
-//							expectedValue += b;
-//							System.err.println(String.format(
-//									"Value=%d at x=%d;y=%d;b=%d",
-//									img.getSample(
-//											x,
-//											y,
-//											b),
-//									x,
-//									y,
-//									b));
-//
-//							Assert.assertEquals(
-//									String.format(
-//											"Value didn't match expected at x=%d;y=%d;b=%d",
-//											x,
-//											y,
-//											b),
-//									expectedValue,
-//									img.getSample(
-//											x,
-//											y,
-//											b),
-//									FloatCompareUtils.COMP_EPSILON);
-//						}
-//					}
-//				}
+				for (int x = 0; x < 32; x++) {
+					for (int y = 0; y < 32; y++) {
+
+						for (int b = 0; b < 3; b++) {
+							double expectedValue;
+							if (x > 15) {
+								if (y <= 15) {
+									expectedValue = expectedMaxXMaxYValue;
+								}
+								else {
+									expectedValue = expectedMaxXMinYValue;
+								}
+							}
+							else if (y <= 15) {
+								expectedValue = expectedMinXMaxYValue;
+							}
+							else {
+								expectedValue = expectedMinXMinYValue;
+							}
+							expectedValue += b;
+							System.err.println(String.format(
+									"Value=%d at x=%d;y=%d;b=%d",
+									img.getSample(
+											x,
+											y,
+											b),
+									x,
+									y,
+									b));
+
+							Assert.assertEquals(
+									String.format(
+											"Value didn't match expected at x=%d;y=%d;b=%d",
+											x,
+											y,
+											b),
+									expectedValue,
+									img.getSample(
+											x,
+											y,
+											b),
+									FloatCompareUtils.COMP_EPSILON);
+						}
+					}
+				}
 
 			}
+		}
+		for (int t = 7; t >= 0; t--) {
+			for (int s = 0; s < 8; s++) {
+				System.out.print(grid[s][t] + " ");
+			}
+			System.out.print('\n');
 		}
 		try (CloseableIterator it = dataStore.query(
 				new QueryOptions(),
@@ -254,7 +286,7 @@ public class WebMercatorRasterTest
 								5000,
 								-5000,
 								5000)),
-						"EPSG:3857"))) {
+						CRS_STR))) {
 			int count = 0;
 			while (it.hasNext()) {
 				count++;
