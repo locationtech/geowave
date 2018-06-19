@@ -25,11 +25,6 @@
             <artifactId>geowave-core-cli</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>mil.nga.giat</groupId>
-            <artifactId>geowave-core-ingest</artifactId>
-            <version>${project.version}</version>
-        </dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
 			<artifactId>accumulo-minicluster</artifactId>

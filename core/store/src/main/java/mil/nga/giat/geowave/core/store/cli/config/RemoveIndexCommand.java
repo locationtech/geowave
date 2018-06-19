@@ -10,12 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
@@ -32,24 +26,16 @@ public class RemoveIndexCommand extends
 
 	@Override
 	public void execute(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		computeResults(params);
 
 	}
 
 	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				super.getStatus(),
-				ret);
-	}
-
-	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 
 		pattern = IndexPluginOptions.getIndexNamespace(getEntryName());
 		return super.computeResults(

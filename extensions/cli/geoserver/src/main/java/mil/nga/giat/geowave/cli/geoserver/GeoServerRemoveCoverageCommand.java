@@ -27,11 +27,12 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "rmcv", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove a GeoServer coverage")
 public class GeoServerRemoveCoverageCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(names = {
 		"-ws",
@@ -49,29 +50,12 @@ public class GeoServerRemoveCoverageCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String cvgName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -95,20 +79,12 @@ public class GeoServerRemoveCoverageCommand extends
 				cvgName);
 
 		if (getCvgResponse.getStatus() == Status.OK.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			return "\nRemove GeoServer coverage '" + cvgName + "': OK";
 		}
-		switch (getCvgResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error removing GeoServer coverage " + cvgName + "; code = " + getCvgResponse.getStatus();
+		String errorMessage = "Error removing GeoServer coverage '" + cvgName + "': "
+				+ getCvgResponse.readEntity(String.class) + "\nGeoServer Response Code = " + getCvgResponse.getStatus();
+		return handleError(
+				getCvgResponse,
+				errorMessage);
 	}
 }

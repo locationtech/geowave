@@ -82,16 +82,13 @@ public class KmeansJumpCommand extends
 			commonOptions.setMapReduceHdfsHostPort(hdfsFSUrl);
 		}
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		// Save a reference to the store in the property management.
 		PersistableStore persistedStore = new PersistableStore(

@@ -70,7 +70,8 @@ public class QueryRanges
 				if (ranges == null) {
 					sortRangesPerPartition.put(
 							r.getPartitionKey(),
-							r.getSortKeyRanges());
+							new ArrayList<>(
+									r.getSortKeyRanges()));
 				}
 				else {
 					ranges.addAll(r.getSortKeyRanges());

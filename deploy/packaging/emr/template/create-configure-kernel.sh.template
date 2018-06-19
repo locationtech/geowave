@@ -76,7 +76,10 @@ END
 
 #Use jq to remove unnecessary keys
 GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
-KERNEL_JSON=$HOME/.local/share/jupyter/kernels/pythonwithpixiedustspark22/kernel.json
+#Grab all pixiedust kernels installed (should only be one by default), and use for master kernel changes.
+KERNEL_DIR=$HOME/.local/share/jupyter/kernels/
+PIXIEDUST_KERNELS="$(find $KERNEL_DIR -type d -name 'pythonwithpixiedustspark*')"
+KERNEL_JSON=$PIXIEDUST_KERNELS/kernel.json
 jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
 jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
 

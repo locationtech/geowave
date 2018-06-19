@@ -19,6 +19,7 @@ import mil.nga.giat.geowave.test.TestEnvironment;
 import mil.nga.giat.geowave.test.kafka.KafkaTestEnvironment;
 import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
 import mil.nga.giat.geowave.test.services.ServicesTestEnvironment;
+import mil.nga.giat.geowave.test.spark.SparkTestEnvironment;
 
 /**
  * The <code>Environments</code> annotation specifies the GeoWave test
@@ -42,7 +43,9 @@ public @interface Environments {
 		KAFKA(
 				KafkaTestEnvironment.getInstance()),
 		SERVICES(
-				ServicesTestEnvironment.getInstance());
+				ServicesTestEnvironment.getInstance()),
+		SPARK(
+				SparkTestEnvironment.getInstance());
 		private final TestEnvironment testEnvironment;
 
 		private Environment(

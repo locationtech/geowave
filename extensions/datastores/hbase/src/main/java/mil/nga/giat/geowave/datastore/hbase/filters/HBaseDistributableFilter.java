@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -43,6 +42,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 /**
  * This class wraps our Distributable filters in an HBase filter so that a
@@ -102,8 +102,8 @@ public class HBaseDistributableFilter extends
 	@Override
 	public byte[] toByteArray()
 			throws IOException {
-		final byte[] modelBinary = PersistenceUtils.toBinary(model);
-		final byte[] filterListBinary = PersistenceUtils.toBinary(filterList);
+		final byte[] modelBinary = URLClassloaderUtils.toBinary(model);
+		final byte[] filterListBinary = URLClassloaderUtils.toBinary(filterList);
 
 		final ByteBuffer buf = ByteBuffer.allocate(modelBinary.length + filterListBinary.length + 9);
 
@@ -120,7 +120,7 @@ public class HBaseDistributableFilter extends
 			final byte[] modelBytes ) {
 		filterList.clear();
 		if ((filterBytes != null) && (filterBytes.length > 0)) {
-			final List<Persistable> decodedFilterList = PersistenceUtils.fromBinaryAsList(filterBytes);
+			final List<Persistable> decodedFilterList = URLClassloaderUtils.fromBinaryAsList(filterBytes);
 
 			if (decodedFilterList == null) {
 				LOGGER.error("Failed to decode filter list");
@@ -137,7 +137,7 @@ public class HBaseDistributableFilter extends
 			}
 		}
 
-		model = (CommonIndexModel) PersistenceUtils.fromBinary(modelBytes);
+		model = (CommonIndexModel) URLClassloaderUtils.fromBinary(modelBytes);
 
 		if (model == null) {
 			LOGGER.error("Failed to decode index model");
@@ -305,9 +305,7 @@ public class HBaseDistributableFilter extends
 			final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
 					.getAdapterExtendedData();
 			if (existingExtValues != null) {
-				for (final PersistentValue<Object> val : existingExtValues.getValues()) {
-					adapterExtendedValues.addValue(val);
-				}
+				adapterExtendedValues.addValues(existingExtValues.getValues());
 			}
 		}
 
@@ -383,9 +381,9 @@ public class HBaseDistributableFilter extends
 				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
-					commonData.addValue(new PersistentValue<CommonIndexValue>(
+					commonData.addValue(
 							commonIndexFieldId,
-							fieldValue));
+							fieldValue);
 				}
 				else {
 					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());

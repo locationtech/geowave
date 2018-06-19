@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellComparator;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.KeyValue.Type;
@@ -23,8 +24,8 @@ import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.operations.MetadataType;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class MergingServerOp implements
 		HBaseServerOp
@@ -36,12 +37,12 @@ public class MergingServerOp implements
 	protected Mergeable getMergeable(
 			final Cell cell,
 			final byte[] bytes ) {
-		return (Mergeable) PersistenceUtils.fromBinary(bytes);
+		return (Mergeable) URLClassloaderUtils.fromBinary(bytes);
 	}
 
 	protected byte[] getBinary(
 			final Mergeable mergeable ) {
-		return PersistenceUtils.toBinary(mergeable);
+		return URLClassloaderUtils.toBinary(mergeable);
 	}
 
 	@Override
@@ -147,6 +148,9 @@ public class MergingServerOp implements
 								rowCells.addAll(cells);
 							}
 						}
+						// these have to stay in order and they can get out of
+						// order when adding cells from 2 maps
+						rowCells.sort(new CellComparator());
 					}
 				}
 			}

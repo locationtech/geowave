@@ -31,7 +31,8 @@ public class MemoryFactoryHelper implements
 		synchronized (OPERATIONS_CACHE) {
 			DataStoreOperations operations = OPERATIONS_CACHE.get(options.getGeowaveNamespace());
 			if (operations == null) {
-				operations = new MemoryDataStoreOperations();
+				operations = new MemoryDataStoreOperations(
+						options.getStoreOptions().isServerSideLibraryEnabled());
 				OPERATIONS_CACHE.put(
 						options.getGeowaveNamespace(),
 						operations);

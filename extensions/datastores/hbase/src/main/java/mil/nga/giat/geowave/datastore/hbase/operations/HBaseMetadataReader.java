@@ -1,17 +1,18 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
 import java.util.Iterator;
+import java.util.NavigableMap;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
+import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
@@ -22,6 +23,7 @@ import mil.nga.giat.geowave.core.store.operations.MetadataReader;
 import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils.ScannerClosableWrapper;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class HBaseMetadataReader implements
 		MetadataReader
@@ -49,15 +51,13 @@ public class HBaseMetadataReader implements
 			final byte[] columnFamily = StringUtils.stringToBinary(metadataType.name());
 			final byte[] columnQualifier = query.getSecondaryId();
 
-			if (columnFamily != null) {
-				if (columnQualifier != null) {
-					scanner.addColumn(
-							columnFamily,
-							columnQualifier);
-				}
-				else {
-					scanner.addFamily(columnFamily);
-				}
+			if (columnQualifier != null) {
+				scanner.addColumn(
+						columnFamily,
+						columnQualifier);
+			}
+			else {
+				scanner.addFamily(columnFamily);
 			}
 
 			if (query.hasPrimaryId()) {
@@ -70,30 +70,53 @@ public class HBaseMetadataReader implements
 				scanner.setMaxVersions(); // Get all versions
 			}
 
-			final ResultScanner rS = operations.getScannedResults(
+			String[] additionalAuthorizations = query.getAuthorizations();
+			if ((additionalAuthorizations != null) && (additionalAuthorizations.length > 0)) {
+				scanner.setAuthorizations(new Authorizations(
+						additionalAuthorizations));
+			}
+			final Iterable<Result> rS = operations.getScannedResults(
 					scanner,
-					AbstractGeoWavePersistence.METADATA_TABLE,
-					query.getAuthorizations());
+					AbstractGeoWavePersistence.METADATA_TABLE);
 			final Iterator<Result> it = rS.iterator();
-
-			return new CloseableIteratorWrapper<>(
-					new ScannerClosableWrapper(
-							rS),
-					Iterators.transform(
-							it,
-							new com.google.common.base.Function<Result, GeoWaveMetadata>() {
-								@Override
-								public GeoWaveMetadata apply(
-										final Result result ) {
-									return new GeoWaveMetadata(
-											result.getRow(),
-											columnQualifier,
-											null,
-											getMergedStats(
-													result,
-													clientsideStatsMerge));
+			final Iterator<GeoWaveMetadata> transformedIt = Iterators.transform(
+					it,
+					new com.google.common.base.Function<Result, GeoWaveMetadata>() {
+						@Override
+						public GeoWaveMetadata apply(
+								final Result result ) {
+							byte[] resultantCQ;
+							if (columnQualifier == null) {
+								final NavigableMap<byte[], byte[]> familyMap = result.getFamilyMap(columnFamily);
+								if ((familyMap != null) && !familyMap.isEmpty()) {
+									resultantCQ = familyMap.firstKey();
 								}
-							}));
+								else {
+									resultantCQ = new byte[0];
+								}
+							}
+							else {
+								resultantCQ = columnQualifier;
+							}
+							return new GeoWaveMetadata(
+									result.getRow(),
+									resultantCQ,
+									null,
+									getMergedStats(
+											result,
+											clientsideStatsMerge));
+						}
+					});
+			if (rS instanceof ResultScanner) {
+				return new CloseableIteratorWrapper<>(
+						new ScannerClosableWrapper(
+								(ResultScanner) rS),
+						transformedIt);
+			}
+			else {
+				return new CloseableIterator.Wrapper<>(
+						transformedIt);
+			}
 
 		}
 		catch (final Exception e) {
@@ -112,6 +135,6 @@ public class HBaseMetadataReader implements
 			return result.value();
 		}
 
-		return PersistenceUtils.toBinary(HBaseUtils.getMergedStats(result.listCells()));
+		return URLClassloaderUtils.toBinary(HBaseUtils.getMergedStats(result.listCells()));
 	}
 }

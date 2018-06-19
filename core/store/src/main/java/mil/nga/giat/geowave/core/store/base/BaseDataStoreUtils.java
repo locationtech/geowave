@@ -5,6 +5,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -20,6 +21,8 @@ import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -31,7 +34,6 @@ import mil.nga.giat.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -97,7 +99,7 @@ public class BaseDataStoreUtils
 				adapter,
 				adapterId,
 				adapterStore)) {
-			LOGGER.error("Could not retrieve adapter from adapter store.");
+			LOGGER.error("Could not retrieve adapter " + adapterId.getString() + " from adapter store.");
 			return null;
 		}
 
@@ -143,7 +145,7 @@ public class BaseDataStoreUtils
 
 	public static CloseableIterator<Object> aggregate(
 			final CloseableIterator<Object> it,
-			final Aggregation aggregationFunction ) {
+			final Aggregation<?, ?, Object> aggregationFunction ) {
 		if ((it != null) && it.hasNext()) {
 			synchronized (aggregationFunction) {
 				aggregationFunction.clearResult();
@@ -227,7 +229,7 @@ public class BaseDataStoreUtils
 				value.getVisibility(),
 				-1).getFieldsRead();
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
-			final ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
+			ByteArrayId fieldId = decodePackage.getDataAdapter().getFieldIdForPosition(
 					decodePackage.getIndex().getIndexModel(),
 					fieldInfo.getFieldPosition());
 			final FieldReader<? extends CommonIndexValue> indexFieldReader = decodePackage
@@ -238,30 +240,25 @@ public class BaseDataStoreUtils
 			if (indexFieldReader != null) {
 				final CommonIndexValue indexValue = indexFieldReader.readField(fieldInfo.getValue());
 				indexValue.setVisibility(value.getVisibility());
-				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+				decodePackage.getIndexData().addValue(
 						fieldId,
 						indexValue);
-				decodePackage.getIndexData().addValue(
-						val);
 			}
 			else {
 				final FieldReader<?> extFieldReader = decodePackage.getDataAdapter().getReader(
 						fieldId);
 				if (extFieldReader != null) {
 					final Object objValue = extFieldReader.readField(fieldInfo.getValue());
-					final PersistentValue<Object> val = new PersistentValue<Object>(
-							fieldId,
-							objValue);
 					// TODO GEOWAVE-1018, do we care about visibility
 					decodePackage.getExtendedData().addValue(
-							val);
+							fieldId,
+							objValue);
 				}
 				else {
 					LOGGER.error("field reader not found for data entry, the value may be ignored");
 					decodePackage.getUnknownData().addValue(
-							new PersistentValue<byte[]>(
-									fieldId,
-									fieldInfo.getValue()));
+							fieldId,
+							fieldInfo.getValue());
 				}
 			}
 		}
@@ -278,10 +275,6 @@ public class BaseDataStoreUtils
 				entry,
 				indexModel);
 		final InsertionIds insertionIds = encodedData.getInsertionIds(index);
-		final PersistentDataset extendedData = encodedData.getAdapterExtendedData();
-		final PersistentDataset indexedData = encodedData.getCommonData();
-		final List<PersistentValue> extendedValues = extendedData.getValues();
-		final List<PersistentValue> commonValues = indexedData.getValues();
 
 		List<FieldInfo<?>> fieldInfoList = new ArrayList<FieldInfo<?>>();
 
@@ -289,21 +282,29 @@ public class BaseDataStoreUtils
 				entry).getBytes();
 		final byte[] adapterId = adapter.getAdapterId().getBytes();
 		if (!insertionIds.isEmpty()) {
-			for (final PersistentValue fieldValue : commonValues) {
+			for (final Entry<ByteArrayId, CommonIndexValue> fieldValue : encodedData
+					.getCommonData()
+					.getValues()
+					.entrySet()) {
 				final FieldInfo<?> fieldInfo = getFieldInfo(
 						indexModel,
-						fieldValue,
+						fieldValue.getKey(),
+						fieldValue.getValue(),
 						entry,
 						customFieldVisibilityWriter);
 				if (fieldInfo != null) {
 					fieldInfoList.add(fieldInfo);
 				}
 			}
-			for (final PersistentValue<?> fieldValue : extendedValues) {
+			for (final Entry<ByteArrayId, Object> fieldValue : encodedData
+					.getAdapterExtendedData()
+					.getValues()
+					.entrySet()) {
 				if (fieldValue.getValue() != null) {
 					final FieldInfo<?> fieldInfo = getFieldInfo(
 							adapter,
-							fieldValue,
+							fieldValue.getKey(),
+							fieldValue.getValue(),
 							entry,
 							customFieldVisibilityWriter);
 					if (fieldInfo != null) {
@@ -359,12 +360,12 @@ public class BaseDataStoreUtils
 		for (final FieldInfo<?> fieldInfo : originalList) {
 			int fieldPosition = writableAdapter.getPositionOfOrderedField(
 					model,
-					fieldInfo.getDataValue().getId());
+					fieldInfo.getFieldId());
 			if (fieldPosition == -1) {
 				// this is just a fallback for unexpected failures
 				fieldPosition = writableAdapter.getPositionOfOrderedField(
 						model,
-						fieldInfo.getDataValue().getId());
+						fieldInfo.getFieldId());
 			}
 			final ByteArrayId currViz = new ByteArrayId(
 					fieldInfo.getVisibility());
@@ -376,7 +377,7 @@ public class BaseDataStoreUtils
 						fieldInfo));
 			}
 			else {
-				final List<Pair<Integer, FieldInfo<?>>> listForViz = new ArrayList<>();
+				final List<Pair<Integer, FieldInfo<?>>> listForViz = new LinkedList<>();
 				listForViz.add(new ImmutablePair<Integer, FieldInfo<?>>(
 						fieldPosition,
 						fieldInfo));
@@ -387,28 +388,29 @@ public class BaseDataStoreUtils
 		}
 		if (!sharedVisibility) {
 			// at a minimum, must return transformed (bitmasked) fieldInfos
-			final List<FieldInfo<?>> bitmaskedFieldInfos = new ArrayList<>();
+			final List<FieldInfo<?>> bitmaskedFieldInfos = new ArrayList<>(
+					vizToFieldMap.size());
 			for (final List<Pair<Integer, FieldInfo<?>>> list : vizToFieldMap.values()) {
 				// every list must have exactly one element
 				final Pair<Integer, FieldInfo<?>> fieldInfo = list.get(0);
-				bitmaskedFieldInfos.add(new FieldInfo<>(
-						new PersistentValue<Object>(
-								new ByteArrayId(
-										BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft())),
-								fieldInfo.getRight().getDataValue().getValue()),
+				bitmaskedFieldInfos.add(new FieldInfo<Object>(
+						new ByteArrayId(
+								BitmaskUtils.generateCompositeBitmask(fieldInfo.getLeft())),
+						fieldInfo.getRight().getDataValue(),
 						fieldInfo.getRight().getWrittenValue(),
 						fieldInfo.getRight().getVisibility()));
 			}
 			return bitmaskedFieldInfos;
 		}
 		for (final Entry<ByteArrayId, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
-			final List<byte[]> fieldInfoBytesList = new ArrayList<>();
 			int totalLength = 0;
 			final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 			final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();
 			Collections.sort(
 					fieldInfoList,
 					new BitmaskedPairComparator());
+			final List<byte[]> fieldInfoBytesList = new ArrayList<>(
+					fieldInfoList.size());
 			for (final Pair<Integer, FieldInfo<?>> fieldInfoPair : fieldInfoList) {
 				final FieldInfo<?> fieldInfo = fieldInfoPair.getRight();
 				final ByteBuffer fieldInfoBytes = ByteBuffer.allocate(4 + fieldInfo.getWrittenValue().length);
@@ -424,10 +426,9 @@ public class BaseDataStoreUtils
 			}
 			final byte[] compositeBitmask = BitmaskUtils.generateCompositeBitmask(fieldPositions);
 			final FieldInfo<?> composite = new FieldInfo<T>(
-					new PersistentValue<T>(
-							new ByteArrayId(
-									compositeBitmask),
-							null), // unnecessary
+					new ByteArrayId(
+							compositeBitmask),
+					null,
 					allFields.array(),
 					entry.getKey().getBytes());
 			retVal.add(composite);
@@ -437,30 +438,30 @@ public class BaseDataStoreUtils
 
 	private static <T> FieldInfo<?> getFieldInfo(
 			final DataWriter dataWriter,
-			final PersistentValue<?> fieldValue,
+			final ByteArrayId fieldId,
+			final Object fieldValue,
 			final T entry,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
-		final FieldWriter fieldWriter = dataWriter.getWriter(fieldValue.getId());
+		final FieldWriter fieldWriter = dataWriter.getWriter(fieldId);
 		final FieldVisibilityHandler<T, Object> customVisibilityHandler = customFieldVisibilityWriter
-				.getFieldVisibilityHandler(fieldValue.getId());
+				.getFieldVisibilityHandler(fieldId);
 		if (fieldWriter != null) {
-			final Object value = fieldValue.getValue();
 			return new FieldInfo(
+					fieldId,
 					fieldValue,
-					fieldWriter.writeField(value),
+					fieldWriter.writeField(fieldValue),
 					DataStoreUtils.mergeVisibilities(
 							customVisibilityHandler.getVisibility(
 									entry,
-									fieldValue.getId(),
-									value),
+									fieldId,
+									fieldValue),
 							fieldWriter.getVisibility(
 									entry,
-									fieldValue.getId(),
-									value)));
+									fieldId,
+									fieldValue)));
 		}
-		else if (fieldValue.getValue() != null) {
-			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for "
-					+ fieldValue.getValue());
+		else if (fieldValue != null) {
+			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue);
 		}
 		return null;
 	}

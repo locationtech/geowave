@@ -10,22 +10,18 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.config;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Properties;
 import java.util.Set;
 
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 
 /**
@@ -34,13 +30,18 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 public abstract class AbstractRemoveCommand extends
 		ServiceEnabledCommand<String>
 {
+	/**
+	 * Return "200 OK" for all removal commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
 
 	@Parameter(description = "<name>", required = true, arity = 1)
 	private List<String> parameters = new ArrayList<String>();
 
 	protected String pattern = null;
-
-	private ServiceStatus status = ServiceStatus.OK;
 
 	public String getEntryName() {
 		if (parameters.size() < 1) {
@@ -52,19 +53,10 @@ public abstract class AbstractRemoveCommand extends
 				0).trim();
 	}
 
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
-
 	public String computeResults(
 			final OperationParams params,
-			final String patternPrefix ) {
+			final String patternPrefix )
+			throws Exception {
 		// this ensures we are only exact-matching rather than using the prefix
 		final String pattern = patternPrefix + ".";
 		final Properties existingProps = getGeoWaveConfigProperties(params);
@@ -91,23 +83,13 @@ public abstract class AbstractRemoveCommand extends
 		int endSize = existingProps.size();
 
 		if (endSize < startSize) {
-			setStatus(ServiceStatus.OK);
 			return patternPrefix + " successfully removed";
 		}
 		else {
-			setStatus(ServiceStatus.NOT_FOUND);
-			return patternPrefix + " does not exist";
+			throw new TargetNotFoundException(
+					patternPrefix + " does not exist");
 
 		}
-	}
-
-	public ServiceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
 	}
 
 	public void setEntryName(

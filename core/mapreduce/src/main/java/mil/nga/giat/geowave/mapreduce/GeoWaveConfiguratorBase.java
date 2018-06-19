@@ -277,6 +277,18 @@ public class GeoWaveConfiguratorBase
 		}
 	}
 
+	public static void removeDataAdapter(
+			final Class<?> implementingClass,
+			final Configuration conf,
+			final ByteArrayId adapterId ) {
+		if (adapterId != null) {
+			conf.unset(enumToConfKey(
+					implementingClass,
+					GeoWaveConfg.DATA_ADAPTER,
+					adapterId.getString()));
+		}
+	}
+
 	public static DataAdapter<?> getDataAdapter(
 			final Class<?> implementingClass,
 			final JobContext context,

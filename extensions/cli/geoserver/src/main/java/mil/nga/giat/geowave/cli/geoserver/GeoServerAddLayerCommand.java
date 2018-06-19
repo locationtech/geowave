@@ -30,6 +30,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "addlayer", parentOperation = GeoServerSection.class)
@@ -71,29 +73,12 @@ public class GeoServerAddLayerCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	public static class AddOptionConverter implements
@@ -119,7 +104,8 @@ public class GeoServerAddLayerCommand extends
 
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <store name>");
@@ -143,21 +129,13 @@ public class GeoServerAddLayerCommand extends
 				style);
 
 		if (addLayerResponse.getStatus() == Status.OK.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			final JSONObject jsonResponse = JSONObject.fromObject(addLayerResponse.getEntity());
 			return "Add GeoServer layer for '" + gwStore + ": OK : " + jsonResponse.toString(2);
 		}
-		switch (addLayerResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error adding GeoServer layer for store '" + gwStore + "; code = " + addLayerResponse.getStatus();
+		String errorMessage = "Error adding GeoServer layer for store '" + gwStore + "': "
+				+ addLayerResponse.getEntity() + "\nGeoServer Response Code = " + addLayerResponse.getStatus();
+		return handleError(
+				addLayerResponse,
+				errorMessage);
 	}
 }

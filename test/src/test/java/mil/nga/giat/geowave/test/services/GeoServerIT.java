@@ -97,10 +97,14 @@ public class GeoServerIT
 	private String query;
 	private String update;
 
+	private final static String testName = "GeoServerIT";
+
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -109,23 +113,18 @@ public class GeoServerIT
 	@BeforeClass
 	public static void startTimer() {
 		startMillis = System.currentTimeMillis();
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING GeoServerIT           *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		TestUtils.printStartOfTest(
+				LOGGER,
+				testName);
+
 	}
 
 	@AfterClass
 	public static void reportTest() {
-		LOGGER.warn("-----------------------------------------");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED GeoServerIT             *");
-		LOGGER
-				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
-						+ "s elapsed.                 *");
-		LOGGER.warn("*                                       *");
-		LOGGER.warn("-----------------------------------------");
+		TestUtils.printEndOfTest(
+				LOGGER,
+				testName,
+				startMillis);
 	}
 
 	@Before
@@ -166,7 +165,9 @@ public class GeoServerIT
 		configServiceClient.configGeoServer("localhost:9011");
 		// create the workspace
 		Response addWs = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
-		success &= (addWs.getStatus() == 200);
+		success &= (addWs.getStatus() == 201);
+		Response addWsBad = geoServerServiceClient.addWorkspace(ServicesTestEnvironment.TEST_WORKSPACE);
+		success &= (addWsBad.getStatus() == 400);
 		// enable wfs & wms
 		success &= enableWfs();
 		success &= enableWms();
@@ -180,13 +181,23 @@ public class GeoServerIT
 				TestUtils.TEST_NAMESPACE,
 				ServicesTestEnvironment.TEST_WORKSPACE,
 				TestUtils.TEST_NAMESPACE);
-		success &= (addDs.getStatus() == 200);
+		success &= (addDs.getStatus() == 201);
+		Response addDsBad = geoServerServiceClient.addDataStore(
+				TestUtils.TEST_NAMESPACE,
+				ServicesTestEnvironment.TEST_WORKSPACE,
+				TestUtils.TEST_NAMESPACE);
+		// Make sure that we handle duplicates correctly
+		success &= (addDsBad.getStatus() == 400);
 		// make sure the datastore exists
 		Response getDs = geoServerServiceClient.getDataStore(
 				TestUtils.TEST_NAMESPACE,
 				ServicesTestEnvironment.TEST_WORKSPACE);
-		success &= (getDs.getStatus() == 200);
-
+		success &= (getDs.getStatus() == 201);
+		Response getDsBad = geoServerServiceClient.getDataStore(
+				TestUtils.TEST_NAMESPACE_BAD,
+				ServicesTestEnvironment.TEST_WORKSPACE);
+		// Make sure that we handle duplicates correctly
+		success &= (getDsBad.getStatus() == 404);
 		success &= createLayers();
 
 		if (!success) {

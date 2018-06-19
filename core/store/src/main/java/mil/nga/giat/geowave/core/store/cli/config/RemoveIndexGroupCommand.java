@@ -32,7 +32,8 @@ public class RemoveIndexGroupCommand extends
 
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 
 		// Search for properties relevant to the given name
 		pattern = IndexGroupPluginOptions.getIndexGroupNamespace(getEntryName());
@@ -43,18 +44,9 @@ public class RemoveIndexGroupCommand extends
 	}
 
 	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				super.getStatus(),
-				ret);
-	}
-
-	@Override
 	public void execute(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		computeResults(params);
 	}
 }

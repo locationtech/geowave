@@ -11,7 +11,8 @@ import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
+import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -97,16 +98,14 @@ public class GeowaveRDDExample
 
 		try {
 			DataStorePluginOptions inputStoreOptions = null;
-			// Attempt to load input store.
-			if (inputStoreOptions == null) {
-				final StoreLoader inputStoreLoader = new StoreLoader(
-						storeName);
-				if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
-					throw new IOException(
-							"Cannot find store name: " + inputStoreLoader.getStoreName());
-				}
-				inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+
+			final StoreLoader inputStoreLoader = new StoreLoader(
+					storeName);
+			if (!inputStoreLoader.loadFromConfig(ConfigOptions.getDefaultPropertyFile())) {
+				throw new IOException(
+						"Cannot find store name: " + inputStoreLoader.getStoreName());
 			}
+			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 			SparkConf sparkConf = new SparkConf();
 
@@ -114,14 +113,14 @@ public class GeowaveRDDExample
 			sparkConf.setMaster("local");
 			JavaSparkContext context = new JavaSparkContext(
 					sparkConf);
-
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDD.rddForSimpleFeatures(
+			RDDOptions rddOpts = new RDDOptions();
+			rddOpts.setQuery(query);
+			rddOpts.setMinSplits(minSplits);
+			rddOpts.setMaxSplits(maxSplits);
+			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDDLoader.loadRDD(
 					context.sc(),
 					inputStoreOptions,
-					query,
-					null,
-					minSplits,
-					maxSplits);
+					rddOpts).getRawRDD();
 
 			System.out.println("DataStore " + storeName + " loaded into RDD with " + javaRdd.count() + " features.");
 

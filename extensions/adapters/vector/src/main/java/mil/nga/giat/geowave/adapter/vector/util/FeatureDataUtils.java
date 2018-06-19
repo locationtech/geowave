@@ -42,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
@@ -64,9 +65,9 @@ public class FeatureDataUtils
 			if (classLoaderInitialized) {
 				return;
 			}
-			final ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
-			LOGGER.info("Generating patched classloader");
+			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
 			if (classLoader instanceof VFSClassLoader) {
+				LOGGER.info("Generating patched classloader");
 				final VFSClassLoader cl = (VFSClassLoader) classLoader;
 				final FileObject[] fileObjs = cl.getFileObjects();
 				final URL[] fileUrls = new URL[fileObjs.length];
@@ -74,7 +75,7 @@ public class FeatureDataUtils
 					fileUrls[i] = new URL(
 							fileObjs[i].toString());
 				}
-				final ClassLoader urlCL = java.security.AccessController
+				classLoader = java.security.AccessController
 						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
 							@Override
 							public URLClassLoader run() {
@@ -84,9 +85,9 @@ public class FeatureDataUtils
 								return ucl;
 							}
 						});
-				GeoTools.addClassLoader(urlCL);
-
 			}
+
+			GeoTools.addClassLoader(classLoader);
 			classLoaderInitialized = true;
 		}
 	}
@@ -253,7 +254,7 @@ public class FeatureDataUtils
 		// if no id provided, locate a single featureadapter
 		if (adapterId == null) {
 			final List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(dataStore);
-			if (adapterIdList.size() == 1) {
+			if (adapterIdList.size() >= 1) {
 				adapterId = adapterIdList.get(0);
 			}
 			else if (adapterIdList.isEmpty()) {
@@ -278,6 +279,29 @@ public class FeatureDataUtils
 		}
 
 		return null;
+	}
+
+	public static FeatureDataAdapter cloneFeatureDataAdapter(
+			final DataStorePluginOptions storeOptions,
+			final ByteArrayId originalAdapterId,
+			final ByteArrayId newAdapterId ) {
+
+		// Get original feature type info
+		SimpleFeatureType oldType = FeatureDataUtils.getFeatureType(
+				storeOptions,
+				originalAdapterId);
+
+		// Build type using new name
+		SimpleFeatureTypeBuilder sftBuilder = new SimpleFeatureTypeBuilder();
+		sftBuilder.init(oldType);
+		sftBuilder.setName(newAdapterId.toString());
+		SimpleFeatureType newType = sftBuilder.buildFeatureType();
+
+		// Create new adapter that will use new typename
+		FeatureDataAdapter newAdapter = new FeatureDataAdapter(
+				newType);
+
+		return newAdapter;
 	}
 
 	public static String getGeomField(

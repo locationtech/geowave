@@ -27,17 +27,16 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "rmws", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer workspace")
 public class GeoServerRemoveWorkspaceCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(description = "<workspace name>")
 	private List<String> parameters = new ArrayList<String>();
 	private String wsName = null;
-
-	private ServiceStatus status = ServiceStatus.OK;
 
 	@Override
 	public void execute(
@@ -45,21 +44,6 @@ public class GeoServerRemoveWorkspaceCommand extends
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -75,21 +59,13 @@ public class GeoServerRemoveWorkspaceCommand extends
 
 		final Response deleteWorkspaceResponse = geoserverClient.deleteWorkspace(wsName);
 		if (deleteWorkspaceResponse.getStatus() == Status.OK.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			return "Delete workspace '" + wsName + "' from GeoServer: OK";
 		}
-		switch (deleteWorkspaceResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error deleting workspace '" + wsName + "' from GeoServer; code = "
+		String errorMessage = "Error deleting workspace '" + wsName + "' from GeoServer: "
+				+ deleteWorkspaceResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ deleteWorkspaceResponse.getStatus();
+		return handleError(
+				deleteWorkspaceResponse,
+				errorMessage);
 	}
 }

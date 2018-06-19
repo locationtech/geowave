@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 public class ServerSideOperationsObserver extends
 		BaseRegionObserver
 {
+
 	private final static Logger LOGGER = Logger.getLogger(ServerSideOperationsObserver.class);
 	public static final String SERVER_OP_PREFIX = "serverop";
 	public static final String SERVER_OP_SCOPES_KEY = "scopes";
@@ -279,8 +280,8 @@ public class ServerSideOperationsObserver extends
 			}
 			final String[] uniqueOpSplit = uniqueOp.split("\\.");
 			opStore.addOperation(
-					uniqueOpSplit[1],
-					uniqueOpSplit[2],
+					HBaseUtils.readConfigSafeTableName(uniqueOpSplit[1]),
+					HBaseUtils.readConfigSafeTableName(uniqueOpSplit[2]),
 					uniqueOpSplit[3],
 					priority,
 					scopes,

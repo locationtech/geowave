@@ -146,13 +146,28 @@ public class DBScanIT extends
 			getBuilder());
 
 	@Test
-	public void testDBScan()
-			throws Exception {
-		TestUtils.deleteAll(dataStorePluginOptions);
+	public void testDBScan() {
 		dataGenerator.setIncludePolygons(false);
-		ingest(dataStorePluginOptions.createDataStore());
-		runScan(new SpatialQuery(
-				dataGenerator.getBoundingRegion()));
+		try {
+			ingest(dataStorePluginOptions.createDataStore());
+		}
+		catch (IOException e1) {
+			e1.printStackTrace();
+			TestUtils.deleteAll(dataStorePluginOptions);
+			Assert.fail("Unable to ingest data in DBScanIT");
+		}
+
+		try {
+			runScan(new SpatialQuery(
+					dataGenerator.getBoundingRegion()));
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			TestUtils.deleteAll(dataStorePluginOptions);
+			Assert.fail("Exception during scan of DBScanIT");
+		}
+
+		TestUtils.deleteAll(dataStorePluginOptions);
 	}
 
 	private void runScan(

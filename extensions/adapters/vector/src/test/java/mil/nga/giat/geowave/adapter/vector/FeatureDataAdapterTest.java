@@ -19,6 +19,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -51,6 +52,7 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.IndexFieldHandler;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
@@ -143,7 +145,7 @@ public class FeatureDataAdapterTest
 						new SpatialOptions()).getIndexModel());
 
 		GeometryWrapper wrapper = null;
-		for (final PersistentValue<?> pv : persistenceEncoding.getCommonData().getValues()) {
+		for (final Entry<ByteArrayId, ?> pv : persistenceEncoding.getCommonData().getValues().entrySet()) {
 			if (pv.getValue() instanceof GeometryWrapper) {
 				wrapper = (GeometryWrapper) pv.getValue();
 			}

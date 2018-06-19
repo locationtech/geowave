@@ -25,6 +25,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -33,7 +35,6 @@ import net.sf.json.JSONObject;
 public class GeoServerListWorkspacesCommand extends
 		GeoServerCommand<List<String>>
 {
-	private ServiceStatus status = ServiceStatus.OK;
 
 	@Override
 	public void execute(
@@ -43,21 +44,6 @@ public class GeoServerListWorkspacesCommand extends
 			JCommander.getConsole().println(
 					string);
 		}
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, List<String>> executeService(
-			OperationParams params )
-			throws Exception {
-		List<String> ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -81,18 +67,13 @@ public class GeoServerListWorkspacesCommand extends
 			}
 
 			results.add("---\n");
+			return results;
 		}
-		else {
-			results.add("Error getting GeoServer workspace list; code = " + getWorkspacesResponse.getStatus());
-		}
-		switch (getWorkspacesResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return results;
+		String errorMessage = "Error getting GeoServer workspace list: "
+				+ getWorkspacesResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ getWorkspacesResponse.getStatus();
+		return handleError(
+				getWorkspacesResponse,
+				errorMessage);
 	}
 }

@@ -116,4 +116,11 @@ public class SerializableAdapterStore implements
 			LOGGER.warn("Unable to initialized AdapterStore; the store is not serializable");
 		}
 	}
+
+	@Override
+	public void removeAdapter(
+			ByteArrayId adapterId ) {
+		getAdapterStore().removeAdapter(
+				adapterId);
+	}
 }

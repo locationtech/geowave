@@ -365,6 +365,10 @@ public class GeoServerRestClient
 			final String adapterId,
 			final String defaultStyle ) {
 		// retrieve the adapter info list for the store
+		boolean layerAdded = false;
+		int retStatus = -1;
+		StringBuilder buf = new StringBuilder(
+				"{\"adapters\":[");
 		final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
 				storeName,
 				adapterId);
@@ -389,6 +393,7 @@ public class GeoServerRestClient
 		if (!workspaceExists(workspaceName)) {
 			LOGGER.debug("addlayer needs to create the " + workspaceName + " workspace");
 
+			// If the WS cannot be created, return the error
 			final Response addWsResponse = addWorkspace(workspaceName);
 			if (addWsResponse.getStatus() != Status.CREATED.getStatusCode()) {
 				return addWsResponse;
@@ -416,11 +421,34 @@ public class GeoServerRestClient
 							null);
 
 					if (addCsResponse.getStatus() != Status.CREATED.getStatusCode()) {
-						return addCsResponse;
+						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCsResponse.getStatus()
+								+ ",\"Message\":\"Adding coverage store returned error: "
+								+ addCsResponse.readEntity(String.class) + "\"},";
+						buf.append(ret);
+						if (retStatus == -1) {
+							retStatus = addCsResponse.getStatus();
+						}
+						else if (retStatus != addCsResponse.getStatus()) {
+							retStatus = 400;
+						}
+						continue;
 					}
 				}
+				//
 				else if (getCsResponse.getStatus() != Status.OK.getStatusCode()) {
-					return getCsResponse;
+					// GeoServer get commands will almost always return a 200 or
+					// 404 unless there is a sever error
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getCsResponse.getStatus()
+							+ ",\"Message\":\"Checking Existence of coverage store returned error: "
+							+ getCsResponse.readEntity(String.class) + "\"},";
+					buf.append(ret);
+					if (retStatus == -1) {
+						retStatus = getCsResponse.getStatus();
+					}
+					else if (retStatus != getCsResponse.getStatus()) {
+						retStatus = 400;
+					}
+					continue;
 				}
 
 				// See if the coverage already exists
@@ -430,6 +458,10 @@ public class GeoServerRestClient
 						dataAdapterInfo.adapterId);
 				if (getCvResponse.getStatus() == Status.OK.getStatusCode()) {
 					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
+					retStatus = 400;
+					String ret = "{ \"Adapter\":\"" + adapterId
+							+ "\",\"Status\":400,\"Message\":\"Coverage already exists\"},";
+					buf.append(ret);
 					continue;
 				}
 
@@ -438,8 +470,26 @@ public class GeoServerRestClient
 						workspaceName,
 						cvgStoreName,
 						dataAdapterInfo.adapterId);
-				if (addCvResponse.getStatus() != Status.CREATED.getStatusCode()) {
-					return addCvResponse;
+				// If any layers get added, we will return a 200
+				if (addCvResponse.getStatus() == Status.CREATED.getStatusCode()) {
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
+							+ ",\"Message\":\"Coverage added successfully\"},";
+					buf.append(ret);
+					layerAdded = true;
+				}
+				else {
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
+							+ ",\"Message\":\"Adding coverage returned error: "
+							+ addCvResponse.readEntity(String.class) + "\"},";
+					buf.append(ret);
+					// If there are multiple different error codes, just return
+					// a 400
+					if (retStatus == -1) {
+						retStatus = addCvResponse.getStatus();
+					}
+					else if (retStatus != addCvResponse.getStatus()) {
+						retStatus = 400;
+					}
 				}
 			}
 			// handle datastores and feature layers
@@ -454,11 +504,33 @@ public class GeoServerRestClient
 							dataStoreName,
 							storeName);
 					if (addDsResponse.getStatus() != Status.CREATED.getStatusCode()) {
-						return addDsResponse;
+						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addDsResponse.getStatus()
+								+ ",\"Message\":\"Adding data store returned error: "
+								+ addDsResponse.readEntity(String.class) + "\"},";
+						buf.append(ret);
+						if (retStatus == -1) {
+							retStatus = addDsResponse.getStatus();
+						}
+						else if (retStatus != addDsResponse.getStatus()) {
+							retStatus = 400;
+						}
+						continue;
 					}
 				}
 				else if (getDsResponse.getStatus() != Status.OK.getStatusCode()) {
-					return getDsResponse;
+					// GeoServer get commands will almost always return a 200 or
+					// 404 unless there is a sever error
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getDsResponse.getStatus()
+							+ ",\"Message\":\"Checking Existence of data store returned error: "
+							+ getDsResponse.readEntity(String.class) + "\"},";
+					buf.append(ret);
+					if (retStatus == -1) {
+						retStatus = getDsResponse.getStatus();
+					}
+					else if (retStatus != getDsResponse.getStatus()) {
+						retStatus = 400;
+					}
+					continue;
 				}
 
 				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
@@ -467,6 +539,10 @@ public class GeoServerRestClient
 				final Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
 					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
+					retStatus = 400;
+					String ret = "{ \"Adapter\":\"" + adapterId
+							+ "\",\"Status\":400,\"Message\":\"Feature Layer already exists\"},";
+					buf.append(ret);
 					continue;
 				}
 
@@ -479,20 +555,46 @@ public class GeoServerRestClient
 						dataStoreName,
 						dataAdapterInfo.adapterId,
 						defaultStyle);
-				if (addFlResponse.getStatus() != Status.CREATED.getStatusCode()) {
-					return addFlResponse;
+				// If any layers get added, we will return a 200
+				if (addFlResponse.getStatus() == Status.CREATED.getStatusCode()) {
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
+							+ ",\"Message\":\"Feature Layer added successfully\"},";
+					buf.append(ret);
+					layerAdded = true;
+				}
+				else {
+					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
+							+ ",\"Message\":\"Adding data store error: " + addFlResponse.readEntity(String.class)
+							+ "\"},";
+					buf.append(ret);
+					// If there are multiple different error codes, just return
+					// a 400
+					if (retStatus == -1) {
+						retStatus = addFlResponse.getStatus();
+					}
+					else if (retStatus != addFlResponse.getStatus()) {
+						retStatus = 400;
+					}
 				}
 			}
 		}
 
 		// Report back to the caller the adapter IDs and the types that were
 		// used to create the layers
-		final JSONObject jsonObj = getJsonFromAdapters(
-				adapterInfoList,
-				"Successfully added:");
 
-		return Response.ok(
-				jsonObj.toString(defaultIndentation)).build();
+		buf.deleteCharAt(buf.length() - 1);
+		buf.append("]}");
+		if (layerAdded) {
+			return Response.ok(
+					buf.toString()).build();
+		}
+		else {
+
+			String ret = buf.toString();
+			return Response.status(
+					400).entity(
+					ret).build();
+		}
 	}
 
 	/**
@@ -1070,12 +1172,16 @@ public class GeoServerRestClient
 			final String styleName,
 			final InputStream fileInStream ) {
 
-		getWebTarget().path(
+		Response addStyleResponse = getWebTarget().path(
 				"rest/styles").request().post(
 				Entity.entity(
 						"{'style':{'name':'" + styleName + "','filename':'" + styleName + ".sld'}}",
 						MediaType.APPLICATION_JSON));
-
+		// Return the reponse if this style is not correctly created. This
+		// method actually makes 2 rest calls to GeoServer
+		if (addStyleResponse.getStatus() != Status.CREATED.getStatusCode()) {
+			return addStyleResponse;
+		}
 		return getWebTarget().path(
 				"rest/styles/" + styleName).request().put(
 				Entity.entity(

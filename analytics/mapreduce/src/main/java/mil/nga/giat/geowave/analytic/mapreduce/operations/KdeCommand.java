@@ -79,41 +79,34 @@ public class KdeCommand extends
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
 		PrimaryIndex outputPrimaryIndex = null;
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStore);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStore);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		// Attempt to load output store.
-		if (outputStoreOptions == null) {
-			final StoreLoader outputStoreLoader = new StoreLoader(
-					outputStore);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + outputStoreLoader.getStoreName());
-			}
-			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+		final StoreLoader outputStoreLoader = new StoreLoader(
+				outputStore);
+		if (!outputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + outputStoreLoader.getStoreName());
 		}
-		if ((kdeOptions.getOutputIndex() != null) && !kdeOptions.getOutputIndex().trim().isEmpty()) {
-			if (outputIndexOptions == null) {
-				String outputIndex = kdeOptions.getOutputIndex();
+		outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
-				// Load the Indices
-				final IndexLoader indexLoader = new IndexLoader(
-						outputIndex);
-				if (!indexLoader.loadFromConfig(configFile)) {
-					throw new ParameterException(
-							"Cannot find index(s) by name: " + outputIndex);
-				}
-				outputIndexOptions = indexLoader.getLoadedIndexes();
+		if ((kdeOptions.getOutputIndex() != null) && !kdeOptions.getOutputIndex().trim().isEmpty()) {
+			String outputIndex = kdeOptions.getOutputIndex();
+
+			// Load the Indices
+			final IndexLoader indexLoader = new IndexLoader(
+					outputIndex);
+			if (!indexLoader.loadFromConfig(configFile)) {
+				throw new ParameterException(
+						"Cannot find index(s) by name: " + outputIndex);
 			}
+			outputIndexOptions = indexLoader.getLoadedIndexes();
 
 			for (final IndexPluginOptions dimensionType : outputIndexOptions) {
 				if (dimensionType.getType().equals(
@@ -169,18 +162,8 @@ public class KdeCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputStoreOptions;
-	}
-
-	public void setOutputStoreOptions(
-			final DataStorePluginOptions outputStoreOptions ) {
-		this.outputStoreOptions = outputStoreOptions;
 	}
 
 	public List<IndexPluginOptions> getOutputIndexOptions() {

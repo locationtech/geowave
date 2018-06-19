@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.commons.fileupload.FileItem;
@@ -46,9 +47,9 @@ public class FileUploadResource extends
 			final Representation entity )
 			throws Exception {
 		UploadedFile result;
-		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(
-				entity.getMediaType(),
-				true)) {
+		if (isMediaType(
+				entity,
+				MediaType.MULTIPART_FORM_DATA)) {
 			// 1/ Create a factory for disk-based file items
 			final DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setSizeThreshold(1000240);
@@ -89,6 +90,17 @@ public class FileUploadResource extends
 		}
 
 		return result;
+	}
+
+	private boolean isMediaType(
+			Representation entity,
+			MediaType desiredType ) {
+		if (entity == null) {
+			return false;
+		}
+		return desiredType.equals(
+				entity.getMediaType(),
+				true);
 	}
 
 }

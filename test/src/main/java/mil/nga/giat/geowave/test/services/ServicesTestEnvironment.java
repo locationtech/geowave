@@ -50,7 +50,8 @@ public class ServicesTestEnvironment implements
 		"hadoop",
 		"protobuf",
 		"guava",
-		"restlet"
+		"restlet",
+		"spring"
 	};
 
 	protected static final int JETTY_PORT = 9011;

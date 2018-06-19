@@ -25,6 +25,7 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONObject;
 
 @GeowaveOperation(name = "listfl", parentOperation = GeoServerSection.class)
@@ -50,29 +51,12 @@ public class GeoServerListFeatureLayersCommand extends
 	}, required = false, description = "Show only GeoWave feature layers (default: false)")
 	private Boolean geowaveOnly = false;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -86,17 +70,12 @@ public class GeoServerListFeatureLayersCommand extends
 
 		if (listLayersResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject listObj = JSONObject.fromObject(listLayersResponse.getEntity());
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer layer list: " + listObj.toString(2);
 		}
-		switch (listLayersResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer layer list; code = " + listLayersResponse.getStatus();
+		String errorMessage = "Error getting GeoServer layer list: " + listLayersResponse.readEntity(String.class)
+				+ "\nGeoServer Response Code = " + listLayersResponse.getStatus();
+		return handleError(
+				listLayersResponse,
+				errorMessage);
 	}
 }

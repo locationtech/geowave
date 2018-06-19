@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.SchemaConverter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -66,12 +67,12 @@ public class SimpleFeatureDataFrame
 	}
 
 	public Dataset<Row> getDataFrame(
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> pairRDD ) {
+			GeoWaveRDD pairRDD ) {
 		if (rowRDD == null) {
 			SimpleFeatureMapper mapper = new SimpleFeatureMapper(
 					schema);
 
-			rowRDD = pairRDD.values().map(
+			rowRDD = pairRDD.getRawRDD().values().map(
 					mapper);
 		}
 
@@ -85,7 +86,7 @@ public class SimpleFeatureDataFrame
 	}
 
 	public Dataset<Row> resetDataFrame(
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> pairRDD ) {
+			GeoWaveRDD pairRDD ) {
 		rowRDD = null;
 		dataFrame = null;
 

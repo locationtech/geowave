@@ -46,8 +46,6 @@ import org.apache.spark.api.java.JavaRDD;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
-import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData;
@@ -62,6 +60,8 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
+import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils.URLTYPE;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
 
 import org.slf4j.Logger;
@@ -238,42 +238,24 @@ public class SparkIngestDriver implements
 		// Ingest Plugins
 		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configProperties,
-					DataStorePluginOptions.getStoreNamespace(inputStoreName),
-					configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(
+				configProperties,
+				DataStorePluginOptions.getStoreNamespace(inputStoreName),
+				null)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configProperties,
-					DataStorePluginOptions.getStoreNamespace(inputStoreName),
-					null)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final IndexLoader indexLoader = new IndexLoader(
+				indexList);
+		if (!indexLoader.loadFromConfig(configProperties)) {
+			throw new ParameterException(
+					"Cannot find index(s) by name: " + indexList);
 		}
-		// Load the Indexes
-		if (indexOptions == null) {
-			final IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configProperties)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			indexOptions = indexLoader.getLoadedIndexes();
-		}
+		indexOptions = indexLoader.getLoadedIndexes();
 
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
@@ -452,7 +434,7 @@ public class SparkIngestDriver implements
 			throws URISyntaxException {
 
 		try {
-			IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+			URLClassloaderUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 		}
 		catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 			LOGGER.error(

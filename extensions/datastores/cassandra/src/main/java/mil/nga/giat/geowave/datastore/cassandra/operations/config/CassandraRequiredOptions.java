@@ -12,7 +12,7 @@ public class CassandraRequiredOptions extends
 		StoreFactoryOptions
 {
 	@Parameter(names = "--contactPoints", required = true, description = "A single contact point or a comma delimited set of contact points to connect to the Cassandra cluster.")
-	private String contactPoint;
+	private String contactPoints;
 
 	@ParametersDelegate
 	private final CassandraOptions additionalOptions = new CassandraOptions();
@@ -23,12 +23,12 @@ public class CassandraRequiredOptions extends
 	}
 
 	public String getContactPoint() {
-		return contactPoint;
+		return contactPoints;
 	}
 
 	public void setContactPoint(
-			final String contactPoint ) {
-		this.contactPoint = contactPoint;
+			final String contactPoints ) {
+		this.contactPoints = contactPoints;
 	}
 
 	@Override

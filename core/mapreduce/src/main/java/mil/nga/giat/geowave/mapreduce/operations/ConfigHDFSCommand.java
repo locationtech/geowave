@@ -19,6 +19,13 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 public class ConfigHDFSCommand extends
 		ServiceEnabledCommand<Void>
 {
+	/**
+	 * Return "200 OK" for the config HDFS command.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
 
 	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defaultFS";
 	private static final String HDFS_DEFAULTFS_URL = HDFS_DEFAULTFS_PREFIX + ".url";

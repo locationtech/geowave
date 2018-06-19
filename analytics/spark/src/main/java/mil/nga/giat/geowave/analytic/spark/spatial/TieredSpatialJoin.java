@@ -19,14 +19,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaFutureAction;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
+import org.apache.spark.api.java.function.PairFunction;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.sql.SparkSession;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.geometry.BoundingBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,14 +35,19 @@ import com.google.common.collect.Lists;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
+import breeze.util.Iterators;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveIndexedRDD;
+import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
+import mil.nga.giat.geowave.analytic.spark.RDDUtils;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.analytic.spark.spatial.JoinOptions.BuildSide;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import mil.nga.giat.geowave.core.index.InsertionIds;
-import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.SFCFactory.SFCType;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -50,7 +56,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.tiered.SingleTierSubStrategy;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
-import mil.nga.giat.geowave.core.index.sfc.xz.XZHierarchicalIndexStrategy;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import scala.Tuple2;
 import scala.reflect.ClassTag;
@@ -72,69 +77,111 @@ public class TieredSpatialJoin extends
 	@Override
 	public void join(
 			SparkSession spark,
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> leftRDD,
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> rightRDD,
-			GeomFunction predicate,
-			NumericIndexStrategy indexStrategy )
+			GeoWaveIndexedRDD leftRDD,
+			GeoWaveIndexedRDD rightRDD,
+			GeomFunction predicate)
 			throws InterruptedException,
 			ExecutionException {
 		// Get SparkContext from session
 		SparkContext sc = spark.sparkContext();
+		
+		Broadcast<NumericIndexStrategy> broadcastLeft = leftRDD.getIndexStrategy();
+		Broadcast<NumericIndexStrategy> broadcastRight = rightRDD.getIndexStrategy();
+		NumericIndexStrategy leftStrategy = broadcastLeft.getValue();
+		NumericIndexStrategy rightStrategy = broadcastRight.getValue();
 
-		// TODO: Revisit how strategy is applied to join. I don't like how the
-		// default strategy is created
-		// as it doesn't consider SpatialTemporal (not handled currently anyway)
-		// and default strategy shouldn't be created at this point
-		// it should be abstracted out to store level (SpatialJoinRunner), but
-		// since this is currently the only interface available
-		// this solution maintains join working across strategies without
-		// creating too much throwaway code
-		// for something that will be handled naturally as the interface is
-		// fleshed out further.
-		HierarchicalNumericIndexStrategy tieredStrategy = null;
-		if (indexStrategy == null || !indexStrategy.getClass().isInstance(
-				HierarchicalNumericIndexStrategy.class)) {
-			LOGGER.warn(
-					"Hierarchial index strategy must be provided for tiered join. Using default tiered index strategy");
-			tieredStrategy = this.createDefaultStrategy();
-		}
-		else if (indexStrategy.getClass().isInstance(
-				XZHierarchicalIndexStrategy.class)) {
-			LOGGER.warn(
-					"XZOrder index strategy not compatible with tiered join. Using default tiered index strategy");
-			tieredStrategy = this.createDefaultStrategy();
-		}
-		else {
-			tieredStrategy = (HierarchicalNumericIndexStrategy) indexStrategy;
+		//Check if either dataset supports the join
+		TieredSFCIndexStrategy tieredStrategy = null;
+		boolean reindexLeft = false;
+		boolean reindexRight = false;
+		if(supportsJoin(leftStrategy) && supportsJoin(rightStrategy)) {
+			if(leftStrategy.equals(rightStrategy)) {
+				//Both strategies match we don't have to reindex
+				tieredStrategy = (TieredSFCIndexStrategy) leftStrategy;
+			} else {
+				//Join build side determines what side we will build strategy off of when strategies support but don't match
+				if(this.getJoinOptions().getJoinBuildSide() == JoinOptions.BuildSide.LEFT) {
+					reindexRight = true;
+					tieredStrategy = (TieredSFCIndexStrategy) leftStrategy;
+				} else {
+					reindexLeft = true;
+					tieredStrategy = (TieredSFCIndexStrategy) rightStrategy;
+				}
+				
+			}
+			
+		} else if(supportsJoin(leftStrategy)) {
+			reindexRight = true;
+			tieredStrategy = (TieredSFCIndexStrategy) leftStrategy;
+			
+		} else if(supportsJoin(rightStrategy)) {
+			reindexLeft = true;
+			tieredStrategy = (TieredSFCIndexStrategy) rightStrategy;
+		} else {
+			tieredStrategy = (TieredSFCIndexStrategy) createDefaultStrategy(leftStrategy);
+			if(tieredStrategy == null) {
+				tieredStrategy = (TieredSFCIndexStrategy) createDefaultStrategy(rightStrategy);
+			}
+			if(tieredStrategy == null) {
+				LOGGER.error("Cannot create default strategy from either provided strategy. Datasets cannot be joined.");
+				return;
+			}
+			reindexLeft = true;
+			reindexRight = true;
 		}
 
 		SubStrategy[] tierStrategies = tieredStrategy.getSubStrategies();
 		int tierCount = tierStrategies.length;
-		ClassTag<HierarchicalNumericIndexStrategy> tieredClassTag = scala.reflect.ClassTag$.MODULE$.apply(
-				tieredStrategy.getClass());
+		
+		ClassTag<SingleTierSubStrategy> singleTierClassTag = scala.reflect.ClassTag$.MODULE$.apply(
+				SingleTierSubStrategy.class);
 
 		ClassTag<GeomFunction> geomFuncClassTag = scala.reflect.ClassTag$.MODULE$.apply(
 				predicate.getClass());
 		// Create broadcast variable for indexing strategy
-		Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy = sc.broadcast(
-				tieredStrategy,
-				tieredClassTag);
+		// Cast is safe because we must be instance of TieredSFCIndexStrategy to support join.
+		Broadcast<TieredSFCIndexStrategy> broadcastStrategy = (Broadcast<TieredSFCIndexStrategy>)RDDUtils.broadcastIndexStrategy(
+				sc,
+				tieredStrategy);
+		
 		Broadcast<GeomFunction> geomPredicate = sc.broadcast(
 				predicate,
 				geomFuncClassTag);
-
-		// TODO: Buffering of geometry and indexing should be moved out to steps
-		// before actual join logic.
-		// Technically this is worst case scenario where we reindex and buffer
-		// both sets of data.
+		// If needed reindex one of the strategies we will wrap the buffer operation into the reindex operation
+		// Otherwise we buffer based off the buildside of the join.
 		double bufferDistance = predicate.getBufferAmount();
-
-		// Generate Index RDDs for each set of data.
-		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> leftIndex = this.indexData(
-				leftRDD,
-				broadcastStrategy,
-				bufferDistance);
+		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> leftIndex = null;
+		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> rightIndex = null;
+		if(reindexLeft && reindexRight) {
+			leftRDD.reindex(broadcastStrategy);
+			rightRDD.reindex(broadcastStrategy);
+			if(joinOpts.getJoinBuildSide() == BuildSide.LEFT) {
+				rightIndex = rightRDD.getIndexedGeometryRDD(bufferDistance);
+				leftIndex = leftRDD.getIndexedGeometryRDD();
+			} else {
+				leftIndex = leftRDD.getIndexedGeometryRDD(bufferDistance);
+				rightIndex = rightRDD.getIndexedGeometryRDD();
+			}
+		} else if(reindexLeft) {
+			leftRDD.reindex(broadcastStrategy);
+			leftIndex = leftRDD.getIndexedGeometryRDD(bufferDistance);
+			rightIndex = rightRDD.getIndexedGeometryRDD();
+		} else if(reindexRight) {
+			rightRDD.reindex(broadcastStrategy);
+			rightIndex = rightRDD.getIndexedGeometryRDD(bufferDistance);
+			leftIndex = leftRDD.getIndexedGeometryRDD();
+		} else {
+			leftIndex = leftRDD.getIndexedGeometryRDD();
+			rightIndex = rightRDD.getIndexedGeometryRDD();
+			if(joinOpts.getJoinBuildSide() == BuildSide.LEFT) {
+				rightIndex = this.bufferData(rightIndex, broadcastStrategy, bufferDistance);
+			} else {
+				leftIndex = this.bufferData(leftIndex, broadcastStrategy, bufferDistance);
+			}
+		}
+		
 		leftIndex.cache();
+		rightIndex.cache();
 		JavaFutureAction<List<Byte>> leftFuture = leftIndex
 				.keys()
 				.map(
@@ -142,12 +189,6 @@ public class TieredSpatialJoin extends
 				.distinct(
 						1)
 				.collectAsync();
-
-		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> rightIndex = this.indexData(
-				rightRDD,
-				broadcastStrategy,
-				bufferDistance);
-		rightIndex.cache();
 		JavaFutureAction<List<Byte>> rightFuture = rightIndex
 				.keys()
 				.map(
@@ -170,13 +211,13 @@ public class TieredSpatialJoin extends
 		int leftTierCount = leftDataTiers.size();
 		int rightTierCount = rightDataTiers.size();
 
-		LOGGER.warn(
+		LOGGER.debug(
 				"Tier Count: " + tierCount);
-		LOGGER.warn(
+		LOGGER.debug(
 				"Left Tier Count: " + leftTierCount + " Right Tier Count: " + rightTierCount);
-		LOGGER.warn(
+		LOGGER.debug(
 				"Left Tiers: " + leftDataTiers);
-		LOGGER.warn(
+		LOGGER.debug(
 				"Right Tiers: " + rightDataTiers);
 
 		Map<Byte, HashSet<Byte>> rightReprojectMap = new HashMap<Byte, HashSet<Byte>>();
@@ -225,13 +266,22 @@ public class TieredSpatialJoin extends
 							leftIndex,
 							leftTierId);
 				}
+				//Filter and broadcast tier sub-strategy
+				SubStrategy targetStrategy = tierStrategies[leftTierId];
+				SingleTierSubStrategy tierStrategy = (SingleTierSubStrategy) targetStrategy.getIndexStrategy();
+				if(tierStrategy.tier != leftTierId) {
+					LOGGER.warn("My assumption was wrong! Expected Tier= " + leftTierId + " current tier= " + tierStrategy.tier);
+				}
+				Broadcast<SingleTierSubStrategy> broadcastedTier = sc.broadcast(tierStrategy, singleTierClassTag);
+				
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> rightTiers = this.filterTiers(
 						rightIndex,
 						higherRightTiers);
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reproject = this.reprojectToTier(
 						rightTiers,
 						leftTierId,
-						broadcastStrategy);
+						broadcastedTier,
+                        bufferDistance);
 				finalMatches = this.joinAndCompareTiers(
 						leftTier,
 						reproject,
@@ -239,6 +289,8 @@ public class TieredSpatialJoin extends
 						highestPartCount);
 				this.addMatches(
 						finalMatches);
+				
+				broadcastedTier.unpersist();
 			}
 
 			if (rightDataTiers.contains(
@@ -270,6 +322,15 @@ public class TieredSpatialJoin extends
 					rightTierId);
 
 			if (higherLeftTiers != null) {
+				
+				//Filter and broadcast tier sub-strategy
+				SubStrategy targetStrategy = tierStrategies[rightTierId];
+				SingleTierSubStrategy tierStrategy = (SingleTierSubStrategy) targetStrategy.getIndexStrategy();
+				if(tierStrategy.tier != rightTierId) {
+					LOGGER.warn("My assumption was wrong! Expected Tier= " + rightTierId + " current tier= " + tierStrategy.tier);
+				}
+				
+				Broadcast<SingleTierSubStrategy> broadcastedTier = sc.broadcast(tierStrategy, singleTierClassTag);
 
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> rightTier = this.filterTier(
 						rightIndex,
@@ -284,7 +345,8 @@ public class TieredSpatialJoin extends
 				JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reproject = this.reprojectToTier(
 						leftTiers,
 						rightTierId,
-						broadcastStrategy);
+						broadcastedTier,
+                        bufferDistance);
 				JavaPairRDD<GeoWaveInputKey, Geometry> finalMatches = this.joinAndCompareTiers(
 						reproject,
 						rightTier,
@@ -293,6 +355,7 @@ public class TieredSpatialJoin extends
 				this.addMatches(
 						finalMatches);
 
+				broadcastedTier.unpersist();
 			}
 
 		}
@@ -312,46 +375,65 @@ public class TieredSpatialJoin extends
 		this.combinedResults.isEmpty();
 
 		// Join against original dataset to give final joined rdds on each side
+		if(this.getJoinOptions().isNegativePredicate()) {
+			this.setLeftResults(new GeoWaveRDD(leftRDD.getGeoWaveRDD().getRawRDD().subtractByKey(this.combinedResults)));
+			this.setRightResults(new GeoWaveRDD(rightRDD.getGeoWaveRDD().getRawRDD().subtractByKey(this.combinedResults)));
+		} else {
 		this.setLeftResults(
-				leftRDD.join(
+				 new GeoWaveRDD(leftRDD.getGeoWaveRDD().getRawRDD().join(
 						this.combinedResults).mapToPair(
 								t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(
 										t._1(),
-										t._2._1())));
+										t._2._1()))));
 		this.setRightResults(
-				rightRDD.join(
+				new GeoWaveRDD(rightRDD.getGeoWaveRDD().getRawRDD().join(
 						this.combinedResults).mapToPair(
 								t -> new Tuple2<GeoWaveInputKey, SimpleFeature>(
 										t._1(),
-										t._2._1())));
+										t._2._1()))));
+		}
 
 		// Finally mark the final joined set on each side as cached so it
 		// doesn't recalculate work.
-		leftJoined.cache();
-		rightJoined.cache();
+		leftJoined.getRawRDD().cache();
+		rightJoined.getRawRDD().cache();
 	}
 
-	// TODO: This doesn't consider SpatialTemporal
-	private TieredSFCIndexStrategy createDefaultStrategy() {
-		final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
-			new LongitudeDefinition(),
-			new LatitudeDefinition(
-					true)
-		// just use the same range for latitude to make square sfc values in
-		// decimal degrees (EPSG:4326)
-		};
-		final int LONGITUDE_BITS = 31;
-		final int LATITUDE_BITS = 31;
-		return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
-				SPATIAL_DIMENSIONS,
-				new int[] {
-					// TODO this is only valid for 2D coordinate
-					// systems, again consider the possibility of being
-					// flexible enough to handle n-dimensions
-					LONGITUDE_BITS,
-					LATITUDE_BITS
-				},
-				SFCType.HILBERT);
+	public boolean supportsJoin(
+			NumericIndexStrategy indexStrategy ) {
+		if (indexStrategy != null && indexStrategy.getClass().isInstance(
+				TieredSFCIndexStrategy.class)) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public NumericIndexStrategy createDefaultStrategy(
+			NumericIndexStrategy indexStrategy ) {
+		if (SpatialDimensionalityTypeProvider.isSpatial(indexStrategy)) {
+			return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+					SpatialDimensionalityTypeProvider.SPATIAL_DIMENSIONS,
+					new int[] {
+						SpatialDimensionalityTypeProvider.LONGITUDE_BITS,
+						SpatialDimensionalityTypeProvider.LATITUDE_BITS
+					},
+					SFCType.HILBERT);
+		}
+		else if (SpatialTemporalDimensionalityTypeProvider.isSpatialTemporal(indexStrategy)) {
+			SpatialTemporalOptions options = new SpatialTemporalOptions();
+			return TieredSFCIndexFactory.createFullIncrementalTieredStrategy(
+					SpatialTemporalDimensionalityTypeProvider.SPATIAL_TEMPORAL_DIMENSIONS,
+					new int[] {
+						options.getBias().getSpatialPrecision(),
+						options.getBias().getSpatialPrecision(),
+						options.getBias().getTemporalPrecision()
+					},
+					SFCType.HILBERT,
+					options.getMaxDuplicates());
+		}
+
+		return null;
 	}
 
 	private void addMatches(
@@ -364,51 +446,32 @@ public class TieredSpatialJoin extends
 		}
 	}
 
-	// TODO: Move to separate class/function that can be applied per rdd.
-	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexData(
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> data,
-			Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy,
+	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> bufferData(
+			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> data,
+			Broadcast<TieredSFCIndexStrategy> broadcastStrategy,
 			double bufferDistance ) {
-		// Flat map is used because each pair can potentially yield 1+ output
-		// rows within rdd.
-		// Instead of storing whole feature on index maybe just output Key +
-		// Bounds
 		JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexedData = data
-				.flatMapToPair(new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
+				.flatMapToPair(new PairFlatMapFunction<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 					@Override
 					public Iterator<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> call(
-							Tuple2<GeoWaveInputKey, SimpleFeature> t )
+							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> t )
 							throws Exception {
 
 						// Flattened output array.
 						List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> result = new ArrayList<>();
 
-						// Pull feature to index from tuple
-						SimpleFeature inputFeature = t._2;
-
-						Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
+						Geometry geom = t._2._2;
 						if (geom == null) {
 							return result.iterator();
 						}
-						// Extract bounding box from input feature
-						BoundingBox bounds = inputFeature.getBounds();
+
+						Envelope internalEnvelope = geom.getEnvelopeInternal();
 						NumericRange xRange = new NumericRange(
-								bounds.getMinX() - bufferDistance,
-								bounds.getMaxX() + bufferDistance);
+								internalEnvelope.getMinX() - bufferDistance,
+								internalEnvelope.getMaxX() + bufferDistance);
 						NumericRange yRange = new NumericRange(
-								bounds.getMinY() - bufferDistance,
-								bounds.getMaxY() + bufferDistance);
-
-						if (bounds.isEmpty()) {
-							Envelope internalEnvelope = geom.getEnvelopeInternal();
-							xRange = new NumericRange(
-									internalEnvelope.getMinX() - bufferDistance,
-									internalEnvelope.getMaxX() + bufferDistance);
-							yRange = new NumericRange(
-									internalEnvelope.getMinY() - bufferDistance,
-									internalEnvelope.getMaxY() + bufferDistance);
-
-						}
+								internalEnvelope.getMinY() - bufferDistance,
+								internalEnvelope.getMaxY() + bufferDistance);
 
 						NumericData[] boundsRange = {
 							xRange,
@@ -436,12 +499,9 @@ public class TieredSpatialJoin extends
 							// There may be value in decomposing the id and
 							// storing tier + sfcIndex as a tuple key of the new
 							// RDD
-							Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(
-									t._1,
-									geom);
 							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
 									id,
-									valuePair);
+									t._2);
 							result.add(indexPair);
 						}
 
@@ -470,7 +530,8 @@ public class TieredSpatialJoin extends
 	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> reprojectToTier(
 			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> higherRightTiers,
 			byte targetTierId,
-			Broadcast<HierarchicalNumericIndexStrategy> broadcastStrategy ) {
+			Broadcast<SingleTierSubStrategy> broadcastedTier,
+			double bufferDistance ) {
 		return higherRightTiers
 				.flatMapToPair(new PairFlatMapFunction<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 
@@ -479,59 +540,47 @@ public class TieredSpatialJoin extends
 							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> t )
 							throws Exception {
 
-						List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> reprojected = new ArrayList<>();
+						SingleTierSubStrategy targetStrategy = broadcastedTier.value();
 
-						SubStrategy[] strats = broadcastStrategy.value().getSubStrategies();
+						Geometry geom = t._2._2;
 
-						int stratCount = strats.length;
-						SingleTierSubStrategy targetStrategy = null;
-						for (int i = 0; i < stratCount; i++) {
-							SingleTierSubStrategy tierStrategy = (SingleTierSubStrategy) strats[i].getIndexStrategy();
-							if (tierStrategy != null && tierStrategy.tier == targetTierId) {
-								targetStrategy = tierStrategy;
-								break;
-							}
+						NumericRange xRange = new NumericRange(
+								geom.getEnvelopeInternal().getMinX() - bufferDistance,
+								geom.getEnvelopeInternal().getMaxX() + bufferDistance);
+						NumericRange yRange = new NumericRange(
+								geom.getEnvelopeInternal().getMinY() - bufferDistance,
+								geom.getEnvelopeInternal().getMaxY() + bufferDistance);
+						NumericData[] boundsRange = {
+							xRange,
+							yRange
+						};
+						// Convert the data to how the api expects and index
+						// using strategy above
+						BasicNumericDataset convertedBounds = new BasicNumericDataset(
+								boundsRange);
+						InsertionIds insertIds = targetStrategy.getInsertionIds(convertedBounds);
+
+						// When we span more than one row each individual
+						// get added as a separate output pair
+						// TODO should this use composite IDs or just the
+						// sort keys
+						if (insertIds.isEmpty()) {
+							return Collections.emptyIterator();
 						}
-						if (targetStrategy != null) {
-							Geometry geom = t._2._2;
-
-							NumericRange xRange = new NumericRange(
-									geom.getEnvelopeInternal().getMinX(),
-									geom.getEnvelopeInternal().getMaxX());
-							NumericRange yRange = new NumericRange(
-									geom.getEnvelopeInternal().getMinY(),
-									geom.getEnvelopeInternal().getMaxY());
-							NumericData[] boundsRange = {
-								xRange,
-								yRange
-							};
-
-							// Convert the data to how the api expects and index
-							// using strategy above
-							BasicNumericDataset convertedBounds = new BasicNumericDataset(
-									boundsRange);
-							InsertionIds insertIds = targetStrategy.getInsertionIds(convertedBounds);
-
-							// When we span more than one row each individual
-							// get added as a separate output pair
-							// TODO should this use composite IDs or just the
-							// sort keys
-							for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
-									.hasNext();) {
-								ByteArrayId id = iter.next();
-								// Id decomposes to byte array of Tier, Bin, SFC
-								// (Hilbert in this case) id)
-								// There may be value in decomposing the id and
-								// storing tier + sfcIndex as a tuple key of new
-								// RDD
-								Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
-										id,
-										t._2);
-								reprojected.add(indexPair);
-							}
-						}
-						else {
-							LOGGER.warn("Tier '" + targetTierId + "' not found in index strategy");
+						List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> reprojected = Lists
+								.newArrayListWithCapacity(insertIds.getSize());
+						for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+								.hasNext();) {
+							ByteArrayId id = iter.next();
+							// Id decomposes to byte array of Tier, Bin, SFC
+							// (Hilbert in this case) id)
+							// There may be value in decomposing the id and
+							// storing tier + sfcIndex as a tuple key of new
+							// RDD
+							Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
+									id,
+									t._2);
+							reprojected.add(indexPair);
 						}
 						return reprojected.iterator();
 					}

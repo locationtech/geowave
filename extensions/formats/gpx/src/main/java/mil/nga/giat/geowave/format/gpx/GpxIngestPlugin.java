@@ -11,14 +11,12 @@
 package mil.nga.giat.geowave.format.gpx;
 
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -44,6 +42,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
@@ -69,6 +68,9 @@ public class GpxIngestPlugin extends
 	private final static String TAG_SEPARATOR = " ||| ";
 
 	private Map<Long, GpxTrack> metadata = null;
+
+	private MaxExtentOptProvider extentOptProvider = new MaxExtentOptProvider();
+
 	private static final AtomicLong currentFreeTrackId = new AtomicLong(
 			0);
 
@@ -224,7 +226,8 @@ public class GpxIngestPlugin extends
 					getAdditionalData(gpxTrack),
 					false, // waypoints, even dups, are unique, due to QGis
 							// behavior
-					globalVisibility);
+					globalVisibility,
+					this.extentOptProvider.getMaxExtent());
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
@@ -312,5 +315,14 @@ public class GpxIngestPlugin extends
 			GeometryWrapper.class,
 			Time.class
 		};
+	}
+
+	public void setExtentOptionProvider(
+			MaxExtentOptProvider extentOptProvider ) {
+		this.extentOptProvider = extentOptProvider;
+	}
+
+	public MaxExtentOptProvider getExtentOptionProvider() {
+		return this.extentOptProvider;
 	}
 }
