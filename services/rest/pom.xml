@@ -134,6 +134,11 @@
    			<version>1.9.5</version>
    			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-adapter-vector</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 	</dependencies>
 	<profiles>
 		<profile>

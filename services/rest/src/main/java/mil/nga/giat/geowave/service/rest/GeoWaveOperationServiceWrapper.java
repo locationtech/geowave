@@ -46,6 +46,8 @@ import mil.nga.giat.geowave.service.rest.field.RequestParametersJson;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
+import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
@@ -227,7 +229,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					else if (Enum.class.isAssignableFrom(type)) {
 						objValue = Enum.valueOf(
 								(Class<Enum>) type,
-								strValue);
+								strValue.toUpperCase());
+					}
+					else if (CQLFilterOptionProvider.FilterParameter.class.isAssignableFrom(type)) {
+						objValue = new ConvertCQLStrToFilterConverter().convert(strValue);
 					}
 					else {
 						throw new RuntimeException(
@@ -281,6 +286,25 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
+			
+			try {
+				injectParameters(
+						parameters,
+						operation);
+			}
+			catch (final Exception e) {
+				LOGGER.error("Entered an error handling a request.", e.getMessage());
+				setStatus(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						e);
+				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+				rm.status = RestOperationStatusMessage.StatusType.ERROR;
+				rm.message = "exception occurred";
+				rm.data = e;
+				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+				return rep;
+			}
+			
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();	
 			
 			if(operation.runAsync()) {

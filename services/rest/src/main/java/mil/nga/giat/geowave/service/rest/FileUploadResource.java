@@ -97,7 +97,7 @@ public class FileUploadResource extends
 		catch (final ParameterException e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -109,7 +109,7 @@ public class FileUploadResource extends
 		catch (final BadRequestException e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -121,7 +121,7 @@ public class FileUploadResource extends
 		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";
