@@ -20,6 +20,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	private Integer bitPosition = null;
 	private ByteArrayId skipUntilRow;
 	private boolean reachedEnd = false;
+	private boolean adapterValid = true;
 
 	public NativeEntryIteratorWrapper(
 			final AdapterStore adapterStore,
@@ -41,27 +42,32 @@ public class NativeEntryIteratorWrapper<T> extends
 
 		initializeBitPosition(maxResolutionSubsamplingPerDimension);
 	}
-
+	
 	@SuppressWarnings("unchecked")
-	@Override
-	protected T decodeRow(
-			final GeoWaveRow row,
-			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
-		if (bitPosition == null || passesSkipFilter(row)) {
-			return (T) BaseDataStoreUtils.decodeRow(
-					row,
-					clientFilter,
-					null,
-					adapterStore,
-					index,
-					scanCallback,
-					fieldSubsetBitmask,
-					decodePersistenceEncoding);
-		}
-
-		return null;
-	}
+    @Override
+    protected T decodeRow(
+            final GeoWaveRow row,
+            final QueryFilter clientFilter,
+            final PrimaryIndex index ) {
+        if (adapterValid && (bitPosition == null || passesSkipFilter(row))) {
+            Object decodedRow = BaseDataStoreUtils.decodeRow(
+                    row,
+                    clientFilter,
+                    null,
+                    adapterStore,
+                    index,
+                    scanCallback,
+                    fieldSubsetBitmask,
+                    decodePersistenceEncoding);
+            if (decodedRow == null) {
+                adapterValid = false;
+                // Attempting to decode future rows with the same adapter is pointless.
+            } else {
+                return (T) decodedRow;
+            }
+        }
+        return null;
+    }
 
 	private boolean passesSkipFilter(
 			final GeoWaveRow row ) {
