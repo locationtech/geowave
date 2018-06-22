@@ -10,6 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.cli;
 
+import java.util.Properties;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +39,12 @@ public class GeoWaveMain
 
 	public static void main(
 			final String[] args ) {
+
+		// Point to correct jul log properties file.
+		Properties props = System.getProperties();
+		props.setProperty(
+				"java.util.logging.config.file",
+				"jul-geowave-cli.properties");
 
 		// Take an initial stab at running geowave with the given arguments.
 		final OperationParser parser = new OperationParser(
