@@ -672,7 +672,8 @@ public class AccumuloUtils
 						true);
 			}
 			catch (final IOException | AdapterException e) {
-				// May need to address repeating adaptor log in this class, or calling class.
+				// May need to address repeating adaptor log in this class, or
+				// calling class.
 				LOGGER.error(
 						"unable to decode row",
 						e);

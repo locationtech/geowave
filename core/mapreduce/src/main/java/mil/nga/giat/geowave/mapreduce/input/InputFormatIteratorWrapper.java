@@ -86,7 +86,8 @@ public class InputFormatIteratorWrapper<T> implements
 					null,
 					null,
 					true);
-		} catch (AdapterException e) {
+		}
+		catch (AdapterException e) {
 			return null;
 		}
 		if (value == null) {

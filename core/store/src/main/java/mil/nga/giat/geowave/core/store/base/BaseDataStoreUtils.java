@@ -75,7 +75,8 @@ public class BaseDataStoreUtils
 	 * and HBase; Unification in progress
 	 *
 	 * Override this method if you can't pass in a GeoWaveRow!
-	 * @throws AdapterException 
+	 * 
+	 * @throws AdapterException
 	 */
 	public static <T> Object decodeRow(
 			final GeoWaveRow geowaveRow,
@@ -85,14 +86,16 @@ public class BaseDataStoreUtils
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
-			final boolean decodeRow ) throws AdapterException {
+			final boolean decodeRow )
+			throws AdapterException {
 		final ByteArrayId adapterId = new ByteArrayId(
 				geowaveRow.getAdapterId());
 
 		if ((adapter == null) && (adapterStore == null)) {
 			String msg = "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
 			LOGGER.error(msg);
-			throw new AdapterException(msg);
+			throw new AdapterException(
+					msg);
 		}
 		final IntermediaryReadEntryInfo decodePackage = new IntermediaryReadEntryInfo(
 				index,
@@ -104,7 +107,8 @@ public class BaseDataStoreUtils
 				adapterStore)) {
 			String msg = "Could not retrieve adapter " + adapterId.getString() + " from adapter store.";
 			LOGGER.error(msg);
-			throw new AdapterException(msg);
+			throw new AdapterException(
+					msg);
 		}
 
 		// Verify the adapter matches the data
@@ -112,7 +116,8 @@ public class BaseDataStoreUtils
 			if (!decodePackage.verifyAdapter(adapterId)) {
 				String msg = "Adapter verify failed: adapter does not match data.";
 				LOGGER.error(msg);
-				throw new AdapterException(msg);
+				throw new AdapterException(
+						msg);
 			}
 		}
 
