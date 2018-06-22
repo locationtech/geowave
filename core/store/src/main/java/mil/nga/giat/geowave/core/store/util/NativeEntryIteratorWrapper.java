@@ -5,6 +5,7 @@ import java.util.Iterator;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
@@ -49,24 +50,25 @@ public class NativeEntryIteratorWrapper<T> extends
 			final GeoWaveRow row,
 			final QueryFilter clientFilter,
 			final PrimaryIndex index ) {
+		Object decodedRow = null;
 		if (adapterValid && (bitPosition == null || passesSkipFilter(row))) {
-			Object decodedRow = BaseDataStoreUtils.decodeRow(
-					row,
-					clientFilter,
-					null,
-					adapterStore,
-					index,
-					scanCallback,
-					fieldSubsetBitmask,
-					decodePersistenceEncoding);
-			if (decodedRow == null) {
+			try {
+				decodedRow = BaseDataStoreUtils.decodeRow(
+						row,
+						clientFilter,
+						null,
+						adapterStore,
+						index,
+						scanCallback,
+						fieldSubsetBitmask,
+						decodePersistenceEncoding);
+			} catch (AdapterException e) {
 				adapterValid = false;
-				// Attempting to decode future rows with the same adapter is pointless.
-			} else {
-				return (T) decodedRow;
+				// Attempting to decode future rows with the same adapter is
+				// pointless.
 			}
 		}
-		return null;
+		return (T) decodedRow;
 	}
 
 	private boolean passesSkipFilter(
