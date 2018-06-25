@@ -40,12 +40,6 @@ public class GeoWaveMain
 	public static void main(
 			final String[] args ) {
 
-		// Point to correct jul log properties file.
-		Properties props = System.getProperties();
-		props.setProperty(
-				"java.util.logging.config.file",
-				"jul-geowave-cli.properties");
-
 		// Take an initial stab at running geowave with the given arguments.
 		final OperationParser parser = new OperationParser(
 				prepRegistry());
