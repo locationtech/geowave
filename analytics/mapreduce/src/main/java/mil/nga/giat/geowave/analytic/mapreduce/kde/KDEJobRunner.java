@@ -129,6 +129,7 @@ public class KDEJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
+		System.out.println("~~~~ START RUN JOB ~~~~");
 		Configuration conf = super.getConf();
 		if (conf == null) {
 			conf = new Configuration();
@@ -136,6 +137,7 @@ public class KDEJobRunner extends
 		}
 
 		PrimaryIndex inputPrimaryIndex = null;
+		System.out.println("~~~~ CREATE INDEX ~~~~");
 		final CloseableIterator<Index<?, ?>> it1 = inputDataStoreOptions.createIndexStore().getIndices();
 		while (it1.hasNext()) {
 			Index<?, ?> index = it1.next();
@@ -145,6 +147,7 @@ public class KDEJobRunner extends
 			}
 		}
 
+		System.out.println("~~~~ GEO UTIL STUFF 1 ~~~~");
 		CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
 		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
 
@@ -153,10 +156,12 @@ public class KDEJobRunner extends
 		String outputCrsCode = null;
 
 		if (outputPrimaryIndex != null) {
+			System.out.println("~~~~ GEO UTIL STUFF 2 ~~~~");
 			outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
 			outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
 		}
 		else {
+			System.out.println("~~~~ SPATIAL DIM STUFF ~~~~");
 			SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
 			SpatialOptions so = sdp.createOptions();
 			so.setCrs(inputCrsCode);
@@ -165,6 +170,7 @@ public class KDEJobRunner extends
 			outputCrsCode = inputCrsCode;
 		}
 
+		System.out.println("~~~~ COORD SYSTEM STUFF ~~~~");
 		CoordinateSystem cs = outputIndexCrs.getCoordinateSystem();
 		CoordinateSystemAxis csx = cs.getAxis(0);
 		CoordinateSystemAxis csy = cs.getAxis(1);
@@ -193,26 +199,33 @@ public class KDEJobRunner extends
 
 			// first clone the outputDataStoreOptions, then set it to a tmp
 			// namespace
+			System.out.println("~~~~ GET OPTIONS AS MAP ~~~~");
 			final Map<String, String> configOptions = outputDataStoreOptions.getOptionsAsMap();
+
+			System.out.println("~~~~ POP OPTIONS FROM LIST ~~~~");
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
 					configOptions);
 			options.setGeowaveNamespace(outputDataStoreOptions.getGeowaveNamespace() + "_tmp");
+			System.out.println("~~~~ NEW DS PLUGIN ~~~~");
 			outputDataStoreOptions = new DataStorePluginOptions(
 					options);
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
 		}
 		else {
+			System.out.println("~~~~ GET COVERAGE NAME ~~~~");
 			rasterResizeOutputDataStoreOptions = null;
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName();
 		}
 
 		if (kdeCommandLineOptions.getHdfsHostPort() == null) {
+			System.out.println("~~~~ HDFS POSRT ~~~~");
 			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
 		}
 
+		System.out.println("~~~~ Set Invoc CMDS ~~~~");
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				kdeCommandLineOptions.getHdfsHostPort(),
 				kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
