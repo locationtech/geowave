@@ -129,7 +129,6 @@ public class KDEJobRunner extends
 	@SuppressWarnings("deprecation")
 	public int runJob()
 			throws Exception {
-		System.out.println("~~~~ START RUN JOB ~~~~");
 		Configuration conf = super.getConf();
 		if (conf == null) {
 			conf = new Configuration();
@@ -137,7 +136,6 @@ public class KDEJobRunner extends
 		}
 
 		PrimaryIndex inputPrimaryIndex = null;
-		System.out.println("~~~~ CREATE INDEX ~~~~");
 		final CloseableIterator<Index<?, ?>> it1 = inputDataStoreOptions.createIndexStore().getIndices();
 		while (it1.hasNext()) {
 			Index<?, ?> index = it1.next();
@@ -147,7 +145,6 @@ public class KDEJobRunner extends
 			}
 		}
 
-		System.out.println("~~~~ GEO UTIL STUFF 1 ~~~~");
 		CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
 		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
 
@@ -156,12 +153,10 @@ public class KDEJobRunner extends
 		String outputCrsCode = null;
 
 		if (outputPrimaryIndex != null) {
-			System.out.println("~~~~ GEO UTIL STUFF 2 ~~~~");
 			outputIndexCrs = GeometryUtils.getIndexCrs(outputPrimaryIndex);
 			outputCrsCode = GeometryUtils.getCrsCode(outputIndexCrs);
 		}
 		else {
-			System.out.println("~~~~ SPATIAL DIM STUFF ~~~~");
 			SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
 			SpatialOptions so = sdp.createOptions();
 			so.setCrs(inputCrsCode);
@@ -170,7 +165,6 @@ public class KDEJobRunner extends
 			outputCrsCode = inputCrsCode;
 		}
 
-		System.out.println("~~~~ COORD SYSTEM STUFF ~~~~");
 		CoordinateSystem cs = outputIndexCrs.getCoordinateSystem();
 		CoordinateSystemAxis csx = cs.getAxis(0);
 		CoordinateSystemAxis csy = cs.getAxis(1);
@@ -199,39 +193,32 @@ public class KDEJobRunner extends
 
 			// first clone the outputDataStoreOptions, then set it to a tmp
 			// namespace
-			System.out.println("~~~~ GET OPTIONS AS MAP ~~~~");
 			final Map<String, String> configOptions = outputDataStoreOptions.getOptionsAsMap();
 
-			System.out.println("~~~~ POP OPTIONS FROM LIST ~~~~");
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
 					configOptions);
 			options.setGeowaveNamespace(outputDataStoreOptions.getGeowaveNamespace() + "_tmp");
-			System.out.println("~~~~ NEW DS PLUGIN ~~~~");
 			outputDataStoreOptions = new DataStorePluginOptions(
 					options);
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName() + TMP_COVERAGE_SUFFIX;
 		}
 		else {
-			System.out.println("~~~~ GET COVERAGE NAME ~~~~");
 			rasterResizeOutputDataStoreOptions = null;
 			kdeCoverageName = kdeCommandLineOptions.getCoverageName();
 		}
 
 		if (kdeCommandLineOptions.getHdfsHostPort() == null) {
-			System.out.println("~~~~ HDFS POSRT ~~~~");
 			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			kdeCommandLineOptions.setHdfsHostPort(hdfsFSUrl);
 		}
 
-		System.out.println("~~~~ Set Invoc CMDS ~~~~");
 		GeoWaveConfiguratorBase.setRemoteInvocationParams(
 				kdeCommandLineOptions.getHdfsHostPort(),
 				kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
 				conf);
 		
-		System.out.println("~~~~ Level Stuff ~~~~");
 		conf.setInt(
 				MAX_LEVEL_KEY,
 				kdeCommandLineOptions.getMaxLevel());
@@ -242,7 +229,6 @@ public class KDEJobRunner extends
 				COVERAGE_NAME_KEY,
 				kdeCoverageName);
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
-			System.out.println("~~~~ CQL filter ~~~~");
 			conf.set(
 					GaussianCellMapper.CQL_FILTER_KEY,
 					kdeCommandLineOptions.getCqlFilter());
@@ -266,23 +252,18 @@ public class KDEJobRunner extends
 				OUTPUT_CRSCODE_KEY,
 				outputCrsCode);
 
-		System.out.println("~~~~ Job1 Setup ~~~~");
 		preJob1Setup(conf);
 
-		System.out.println("~~~~ new Job Obj ~~~~");
 		final Job job = new Job(
 				conf);
 
 
-		System.out.println("~~~~ set Jar ~~~~");
 		job.setJarByClass(this.getClass());
 
-		System.out.println("~~~~ add Job Dep ~~~~");
 		addJobClasspathDependencies(
 				job,
 				conf);
 
-		System.out.println("~~~~ more job sets ~~~~");
 		job.setJobName(getJob1Name());
 
 		job.setMapperClass(getJob1Mapper());
@@ -298,7 +279,6 @@ public class KDEJobRunner extends
 		job.setNumReduceTasks(8);
 		job.setSpeculativeExecution(false);
 
-		System.out.println("~~~~ create Stores ~~~~");
 		final AdapterStore adapterStore = inputDataStoreOptions.createAdapterStore();
 		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
@@ -308,7 +288,6 @@ public class KDEJobRunner extends
 
 		if (kdeCommandLineOptions.getIndexId() != null) {
 
-			System.out.println("~~~~ KDE index ~~~~");
 			final Index index = indexStore.getIndex(new ByteArrayId(
 					kdeCommandLineOptions.getIndexId()));
 			if ((index != null) && (index instanceof PrimaryIndex)) {
@@ -317,7 +296,6 @@ public class KDEJobRunner extends
 			}
 		}
 
-		System.out.println("~~~~ set Query Options ~~~~");
 		GeoWaveInputFormat.setQueryOptions(
 				job.getConfiguration(),
 				queryOptions);
@@ -336,7 +314,6 @@ public class KDEJobRunner extends
 			Geometry bbox = null;
 			if (adapter instanceof FeatureDataAdapter) {
 
-				System.out.println("~~~~ get Geometry ~~~~");
 				final String geometryAttribute = ((FeatureDataAdapter) adapter)
 						.getFeatureType()
 						.getGeometryDescriptor()
@@ -352,7 +329,6 @@ public class KDEJobRunner extends
 			}
 
 			if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
-				System.out.println("~~~~ set input Query ~~~~");
 				GeoWaveInputFormat.setQuery(
 						job.getConfiguration(),
 						new SpatialQuery(
@@ -360,12 +336,10 @@ public class KDEJobRunner extends
 			}
 		}
 
-		System.out.println("~~~~ File System Stuff ~~~~");
 		FileSystem fs = null;
 		try {
 			fs = FileSystem.get(conf);
 
-			System.out.println("~~~~ FS DELETE ~~~~");
 			fs.delete(
 					new Path(
 							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
@@ -379,9 +353,7 @@ public class KDEJobRunner extends
 									+ kdeCommandLineOptions.getMinLevel() + "_" + kdeCommandLineOptions.getMaxLevel()
 									+ "_" + kdeCommandLineOptions.getCoverageName() + "/basic"));
 
-			System.out.println("~~~~ Wait for Completion ~~~~");
 			final boolean job1Success = job.waitForCompletion(true);
-			System.out.println("~~~~ Job Complete ~~~~");
 			boolean job2Success = false;
 			boolean postJob2Success = false;
 
