@@ -173,7 +173,7 @@ public class GeoServerIT
 		success &= enableWfs();
 		success &= enableWms();
 		// create the datastore
-		configServiceClient.addStore(
+		configServiceClient.addStoreReRoute(
 				TestUtils.TEST_NAMESPACE,
 				dataStoreOptions.getType(),
 				TestUtils.TEST_NAMESPACE,

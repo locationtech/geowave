@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
@@ -463,6 +464,51 @@ public class ConfigServiceClient implements
 		return resp;
 	}
 
+	public Response addIndex(
+			final String name,
+			final String type ) {
+		return addIndex(
+				name,
+				type,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+	}
+
+	@Override
+	public Response addIndex(
+			final String name,
+			final String type,
+			final Boolean makeDefault,
+			final String nameOverride,
+			final Integer numPartitions,
+			final String partitionStrategy,
+			final Boolean storeTime,
+			final String periodicity,
+			final String bias,
+			final Long maxDuplicates,
+			final String crs ) {
+		final Response resp = configService.addIndex(
+				name,
+				type,
+				makeDefault,
+				nameOverride,
+				numPartitions,
+				partitionStrategy,
+				storeTime,
+				periodicity,
+				bias,
+				maxDuplicates,
+				crs);
+		return resp;
+	}
+
 	public Response configGeoServer(
 			final String GeoServer_URL ) {
 
@@ -586,7 +632,7 @@ public class ConfigServiceClient implements
 	}
 
 	@Override
-	public Response addStore(
+	public Response addStoreReRoute(
 			String name,
 			String type,
 			String geowaveNamespace,
