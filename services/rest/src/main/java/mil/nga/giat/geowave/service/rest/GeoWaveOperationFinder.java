@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.service.rest;
 
+import java.util.logging.Level;
+
 import org.restlet.Request;
 import org.restlet.Response;
 import org.restlet.resource.Finder;
@@ -26,9 +28,18 @@ public class GeoWaveOperationFinder extends
 			final Class<? extends ServerResource> targetClass,
 			final Request request,
 			final Response response ) {
-		return new GeoWaveOperationServiceWrapper<>(
-				operation,
-				defaultConfigFile);
+		try {
+			return new GeoWaveOperationServiceWrapper<>(
+					operation.getClass().newInstance(),
+					defaultConfigFile);
+		} catch (InstantiationException | IllegalAccessException e) {
+			getLogger().log(
+					Level.SEVERE,
+					"Unable to instantiate Service Resource",
+					e);
+			return null;
+			
+		}
 	}
 
 	@Override
