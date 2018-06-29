@@ -115,8 +115,7 @@ public class IngestFromHdfsDriver
 					// if an appropriate sequence file does not exist, continue
 
 					// TODO: we should probably clean up the type name to make
-					// it
-					// HDFS path safe in case there are invalid characters
+					// it HDFS path safe in case there are invalid characters
 					final Path inputFile = new Path(
 							hdfsBaseDirectory,
 							pluginProvider.getKey());

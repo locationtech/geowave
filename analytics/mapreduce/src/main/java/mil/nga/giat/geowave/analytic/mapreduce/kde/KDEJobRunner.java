@@ -218,7 +218,7 @@ public class KDEJobRunner extends
 				kdeCommandLineOptions.getHdfsHostPort(),
 				kdeCommandLineOptions.getJobTrackerOrResourceManHostPort(),
 				conf);
-		
+
 		conf.setInt(
 				MAX_LEVEL_KEY,
 				kdeCommandLineOptions.getMaxLevel());
@@ -256,7 +256,6 @@ public class KDEJobRunner extends
 
 		final Job job = new Job(
 				conf);
-
 
 		job.setJarByClass(this.getClass());
 
@@ -477,9 +476,12 @@ public class KDEJobRunner extends
 			if (fs != null) {
 				try {
 					fs.close();
-					}
+				}
 				catch (IOException e) {
-					// Attempt to close, but don't throw an error if it is already closed.
+					LOGGER.info(e.getMessage());
+					// Attempt to close, but don't throw an error if it is
+					// already closed.
+					// Log message, so find bugs does not complain.
 				}
 			}
 		}
