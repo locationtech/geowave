@@ -194,7 +194,6 @@ public class KDEJobRunner extends
 			// first clone the outputDataStoreOptions, then set it to a tmp
 			// namespace
 			final Map<String, String> configOptions = outputDataStoreOptions.getOptionsAsMap();
-
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					outputDataStoreOptions.getFactoryFamily().getDataStoreFactory().createOptionsInstance(),
 					configOptions);
@@ -253,12 +252,10 @@ public class KDEJobRunner extends
 				outputCrsCode);
 
 		preJob1Setup(conf);
-
 		final Job job = new Job(
 				conf);
 
 		job.setJarByClass(this.getClass());
-
 		addJobClasspathDependencies(
 				job,
 				conf);
@@ -277,7 +274,6 @@ public class KDEJobRunner extends
 		job.setOutputFormatClass(SequenceFileOutputFormat.class);
 		job.setNumReduceTasks(8);
 		job.setSpeculativeExecution(false);
-
 		final AdapterStore adapterStore = inputDataStoreOptions.createAdapterStore();
 		final IndexStore indexStore = inputDataStoreOptions.createIndexStore();
 		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
@@ -286,7 +282,6 @@ public class KDEJobRunner extends
 				adapter);
 
 		if (kdeCommandLineOptions.getIndexId() != null) {
-
 			final Index index = indexStore.getIndex(new ByteArrayId(
 					kdeCommandLineOptions.getIndexId()));
 			if ((index != null) && (index instanceof PrimaryIndex)) {
@@ -338,7 +333,6 @@ public class KDEJobRunner extends
 		FileSystem fs = null;
 		try {
 			fs = FileSystem.get(conf);
-
 			fs.delete(
 					new Path(
 							"/tmp/" + inputDataStoreOptions.getGeowaveNamespace() + "_stats_"
