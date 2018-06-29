@@ -307,7 +307,6 @@ public class KDEJobRunner extends
 		if (kdeCommandLineOptions.getCqlFilter() != null) {
 			Geometry bbox = null;
 			if (adapter instanceof FeatureDataAdapter) {
-
 				final String geometryAttribute = ((FeatureDataAdapter) adapter)
 						.getFeatureType()
 						.getGeometryDescriptor()
