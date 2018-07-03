@@ -13,7 +13,6 @@ package mil.nga.giat.geowave.core.store.cli.remote;
 import java.io.IOException;
 import java.util.List;
 
-import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
