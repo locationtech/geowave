@@ -165,9 +165,7 @@ public class DeleteWriterTest
 				operations,
 				options);
 
-		statsStore = new DataStatisticsStoreImpl(
-				operations,
-				options);
+		statsStore = ((AccumuloDataStore) mockDataStore).getStatisticsStore();
 
 		adapter = new TestGeometryAdapter();
 		final GeometryFactory factory = new GeometryFactory();

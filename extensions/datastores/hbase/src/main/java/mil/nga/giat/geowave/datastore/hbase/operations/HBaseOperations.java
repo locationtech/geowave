@@ -1269,7 +1269,7 @@ public class HBaseOperations implements
 				catch (RegionException e) {
 					retries++;
 					if (retries <= MAX_AGGREGATE_RETRIES) {
-						LOGGER.warn("GREP Aggregate timed out due to unavailable region. Retrying (" + retries + " of "
+						LOGGER.warn("Aggregate timed out due to unavailable region. Retrying (" + retries + " of "
 								+ MAX_AGGREGATE_RETRIES + ")");
 						shouldRetry = true;
 					}

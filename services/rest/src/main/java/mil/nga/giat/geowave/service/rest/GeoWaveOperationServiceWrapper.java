@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -189,6 +190,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			}
 			else if (type.isArray()) {
 				objValue = requestParameters.getArray(f.getName());
+				if (objValue != null) {
+					objValue = Arrays.copyOf(
+							(Object[]) objValue,
+							((Object[]) objValue).length,
+							f.getType());
+				}
 			}
 			else {
 				final String strValue = (String) requestParameters.getString(f.getName());
@@ -260,7 +267,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					operation);
 		}
 		catch (final Exception e) {
-			LOGGER.error("Entered an error handling a request.", e.getMessage());
+			LOGGER.error("Could not convert parameters", e);
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
 					e);

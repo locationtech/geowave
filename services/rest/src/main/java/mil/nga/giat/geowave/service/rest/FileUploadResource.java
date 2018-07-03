@@ -1,17 +1,23 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.Post;
+import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +35,8 @@ public class FileUploadResource extends
 		ServerResource
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(AsyncOperationStatusResource.class);
+
+	private static final String KEY_BATCH_UUID = "batchUUID";
 
 	/**
 	 * processes uploaded file, storing in a temporary directory
@@ -138,4 +146,27 @@ public class FileUploadResource extends
 				true);
 	}
 
+	private String createBatchDirname() {
+		final UUID uuid;
+		final String provided = StringUtils.trimToEmpty(getQueryValue(KEY_BATCH_UUID));
+		if (provided.isEmpty()) {
+			uuid = UUID.randomUUID();
+		}
+		else {
+			try {
+				uuid = UUID.fromString(provided);
+			}
+			catch (IllegalArgumentException e) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format(
+								"'%s' must be a valid UUID",
+								KEY_BATCH_UUID));
+			}
+		}
+
+		return String.format(
+				"upload-batch.%s",
+				uuid);
+	}
 }
