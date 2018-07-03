@@ -94,8 +94,7 @@ public class SpatialTemporalQueryTest
 						new byte[0])));
 
 		return new CommonIndexedPersistenceEncoding(
-				new ByteArrayId(
-						"1"),
+				(short) 1,
 				new ByteArrayId(
 						"1"),
 				new ByteArrayId(

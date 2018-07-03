@@ -11,7 +11,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.spark.SparkConf;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
@@ -24,12 +23,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDDLoader;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveSparkConf;
 import mil.nga.giat.geowave.analytic.spark.RDDOptions;
-import mil.nga.giat.geowave.analytic.spark.kmeans.KMeansRunner;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI;
@@ -37,8 +36,12 @@ import mil.nga.giat.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI.UDFNameAn
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
@@ -52,8 +55,8 @@ public class SqlQueryRunner
 
 	private SparkSession session;
 
-	private HashMap<String, InputStoreInfo> inputStores = new HashMap<String, InputStoreInfo>();
-	private List<ExtractedGeomPredicate> extractedPredicates = new ArrayList<ExtractedGeomPredicate>();
+	private final HashMap<String, InputStoreInfo> inputStores = new HashMap<String, InputStoreInfo>();
+	private final List<ExtractedGeomPredicate> extractedPredicates = new ArrayList<ExtractedGeomPredicate>();
 	private String sql = null;
 
 	public SqlQueryRunner() {}
@@ -69,8 +72,12 @@ public class SqlQueryRunner
 						"Unable to set jar location in spark configuration",
 						e);
 			}
-			
-			session = GeoWaveSparkConf.createSessionFromParams(appName, master, host, jar);
+
+			session = GeoWaveSparkConf.createSessionFromParams(
+					appName,
+					master,
+					host,
+					jar);
 		}
 
 	}
@@ -93,9 +100,9 @@ public class SqlQueryRunner
 
 		// Create a version of the sql without string literals to check for
 		// subquery syntax in sql statement.
-		Pattern stringLit = Pattern.compile("(?:\\'|\\\").*?(?:\\'|\\\")");
-		Matcher m = stringLit.matcher(sql);
-		String cleanedSql = m.replaceAll("");
+		final Pattern stringLit = Pattern.compile("(?:\\'|\\\").*?(?:\\'|\\\")");
+		final Matcher m = stringLit.matcher(sql);
+		final String cleanedSql = m.replaceAll("");
 		LOGGER.debug("cleaned SQL statement: " + cleanedSql);
 		// This regex checks for the presence of multiple sql actions being done
 		// in one sql statement.
@@ -111,41 +118,42 @@ public class SqlQueryRunner
 			LogicalPlan plan = null;
 			plan = session.sessionState().sqlParser().parsePlan(
 					sql);
-			JsonParser gsonParser = new JsonParser();
-			JsonElement jElement = gsonParser.parse(plan.prettyJson());
+			final JsonParser gsonParser = new JsonParser();
+			final JsonElement jElement = gsonParser.parse(plan.prettyJson());
 			if (jElement.isJsonArray()) {
-				JsonArray jArray = jElement.getAsJsonArray();
-				int size = jArray.size();
+				final JsonArray jArray = jElement.getAsJsonArray();
+				final int size = jArray.size();
 				for (int iObj = 0; iObj < size; iObj++) {
-					JsonElement childElement = jArray.get(iObj);
+					final JsonElement childElement = jArray.get(iObj);
 					if (childElement.isJsonObject()) {
-						JsonObject jObj = childElement.getAsJsonObject();
-						String objClass = jObj.get(
+						final JsonObject jObj = childElement.getAsJsonObject();
+						final String objClass = jObj.get(
 								"class").getAsString();
 						if (Objects.equals(
 								objClass,
 								"org.apache.spark.sql.catalyst.plans.logical.Filter")) {
 							// Search through filter Object to determine if
 							// GeomPredicate function present in condition.
-							JsonElement conditionElements = jObj.get("condition");
+							final JsonElement conditionElements = jObj.get("condition");
 							if (conditionElements.isJsonArray()) {
-								JsonArray conditionArray = conditionElements.getAsJsonArray();
-								int condSize = conditionArray.size();
+								final JsonArray conditionArray = conditionElements.getAsJsonArray();
+								final int condSize = conditionArray.size();
 								for (int iCond = 0; iCond < condSize; iCond++) {
-									JsonElement childCond = conditionArray.get(iCond);
+									final JsonElement childCond = conditionArray.get(iCond);
 									if (childCond.isJsonObject()) {
-										JsonObject condObj = childCond.getAsJsonObject();
-										String condClass = condObj.get(
+										final JsonObject condObj = childCond.getAsJsonObject();
+										final String condClass = condObj.get(
 												"class").getAsString();
 										if (Objects.equals(
 												condClass,
 												"org.apache.spark.sql.catalyst.analysis.UnresolvedFunction")) {
-											String udfName = condObj.get(
+											final String udfName = condObj.get(
 													"name").getAsJsonObject().get(
 													"funcName").getAsString();
-											UDFNameAndConstructor geomUDF = UDFRegistrySPI.findFunctionByName(udfName);
+											final UDFNameAndConstructor geomUDF = UDFRegistrySPI
+													.findFunctionByName(udfName);
 											if (geomUDF != null) {
-												ExtractedGeomPredicate relevantPredicate = new ExtractedGeomPredicate();
+												final ExtractedGeomPredicate relevantPredicate = new ExtractedGeomPredicate();
 												relevantPredicate.predicate = geomUDF.getPredicateConstructor().get();
 												relevantPredicate.predicateName = udfName;
 												extractedPredicates.add(relevantPredicate);
@@ -165,30 +173,30 @@ public class SqlQueryRunner
 		if (extractedPredicates.size() == 1) {
 			// This pattern detects the word where outside of quoted areas and
 			// captures it in group 2
-			Pattern whereDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bWHERE\\b)");
-			Pattern andOrDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bAND|OR\\b)");
-			Pattern orderGroupDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bORDER BY|GROUP BY\\b)");
-			Matcher filterStart = getFirstPositiveMatcher(
+			final Pattern whereDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bWHERE\\b)");
+			final Pattern andOrDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bAND|OR\\b)");
+			final Pattern orderGroupDetect = Pattern.compile("(?i)(\"[^\"]*\"|'[^']*')|(\\bORDER BY|GROUP BY\\b)");
+			final Matcher filterStart = getFirstPositiveMatcher(
 					whereDetect,
 					sql);
 			if (filterStart == null) {
 				LOGGER.error("There should be a where clause matching the pattern. Running default SQL");
 				return runDefaultSQL();
 			}
-			int whereStart = filterStart.start(2);
+			final int whereStart = filterStart.start(2);
 			int whereEnd = sql.length();
-			Matcher filterEnd = getFirstPositiveMatcher(
+			final Matcher filterEnd = getFirstPositiveMatcher(
 					orderGroupDetect,
 					sql.substring(whereStart));
 			if (filterEnd != null) {
 				whereEnd = filterEnd.start(2);
 			}
-			String filterClause = sql.substring(
+			final String filterClause = sql.substring(
 					whereStart,
 					whereEnd);
 			LOGGER.warn("Extracted Filter Clause: " + filterClause);
 
-			Matcher compoundFilter = getFirstPositiveMatcher(
+			final Matcher compoundFilter = getFirstPositiveMatcher(
 					andOrDetect,
 					filterClause);
 			if (compoundFilter != null) {
@@ -197,13 +205,13 @@ public class SqlQueryRunner
 				return runDefaultSQL();
 			}
 
-			ExtractedGeomPredicate pred = extractedPredicates.get(0);
+			final ExtractedGeomPredicate pred = extractedPredicates.get(0);
 			// Parse filter string for predicate location
-			int functionPos = filterClause.indexOf(pred.predicateName);
-			int funcArgStart = filterClause.indexOf(
+			final int functionPos = filterClause.indexOf(pred.predicateName);
+			final int funcArgStart = filterClause.indexOf(
 					"(",
 					functionPos);
-			int funcArgEnd = filterClause.indexOf(
+			final int funcArgEnd = filterClause.indexOf(
 					")",
 					funcArgStart);
 			String funcArgs = filterClause.substring(
@@ -213,15 +221,15 @@ public class SqlQueryRunner
 					"\\s",
 					"");
 			LOGGER.warn("Function Args: " + funcArgs);
-			String[] args = funcArgs.split(Pattern.quote(","));
+			final String[] args = funcArgs.split(Pattern.quote(","));
 			if (args.length == 2) {
 				// Determine valid table relations that map to input stores
-				String[] tableRelations = getTableRelations(args);
+				final String[] tableRelations = getTableRelations(args);
 				pred.leftTableRelation = tableRelations[0];
 				pred.rightTableRelation = tableRelations[1];
 			}
 
-			if (pred.leftTableRelation == null || pred.rightTableRelation == null) {
+			if ((pred.leftTableRelation == null) || (pred.rightTableRelation == null)) {
 				LOGGER.warn("Cannot translate table identifier to geowave rdd for join.");
 				return runDefaultSQL();
 			}
@@ -232,8 +240,8 @@ public class SqlQueryRunner
 					pred.predicateName,
 					"GeomDistance")) {
 				// Look ahead two tokens for logical operand and scalar|boolean
-				String afterFunc = filterClause.substring(funcArgEnd + 1);
-				String[] tokens = afterFunc.split(" ");
+				final String afterFunc = filterClause.substring(funcArgEnd + 1);
+				final String[] tokens = afterFunc.split(" ");
 
 				double radius = 0.0;
 				if (tokens.length < 2) {
@@ -242,17 +250,17 @@ public class SqlQueryRunner
 				}
 				else {
 
-					String logicalOperand = tokens[0].trim();
-					if (logicalOperand == ">" || logicalOperand == ">=") {
+					final String logicalOperand = tokens[0].trim();
+					if ((logicalOperand == ">") || (logicalOperand == ">=")) {
 						negativePredicate = true;
 					}
-					String radiusStr = tokens[1].trim();
+					final String radiusStr = tokens[1].trim();
 					if (!org.apache.commons.lang3.math.NumberUtils.isNumber(radiusStr)) {
 						LOGGER.warn("Could not extract radius for distance join. Running default SQL");
 						return runDefaultSQL();
 					}
 					else {
-						Double r = org.apache.commons.lang3.math.NumberUtils.createDouble(radiusStr);
+						final Double r = org.apache.commons.lang3.math.NumberUtils.createDouble(radiusStr);
 						if (r == null) {
 							LOGGER.warn("Could not extract radius for distance join. Running default SQL");
 							return runDefaultSQL();
@@ -263,24 +271,23 @@ public class SqlQueryRunner
 				((GeomWithinDistance) pred.predicate).setRadius(radius);
 			}
 			// At this point we are performing a join
-			SpatialJoinRunner joinRunner = new SpatialJoinRunner(
+			final SpatialJoinRunner joinRunner = new SpatialJoinRunner(
 					session);
 			// Collect input store info for join
-			InputStoreInfo leftStore = inputStores.get(pred.leftTableRelation);
-			InputStoreInfo rightStore = inputStores.get(pred.rightTableRelation);
+			final InputStoreInfo leftStore = inputStores.get(pred.leftTableRelation);
+			final InputStoreInfo rightStore = inputStores.get(pred.rightTableRelation);
 
 			joinRunner.setNegativeTest(negativePredicate);
 
 			// Setup store info for runner
-			PrimaryIndex[] leftIndices = leftStore.storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
-					leftStore.adapterId).getIndices(
-					leftStore.storeOptions.createIndexStore());
-			PrimaryIndex[] rightIndices = rightStore.storeOptions
-					.createAdapterIndexMappingStore()
-					.getIndicesForAdapter(
-							rightStore.adapterId)
-					.getIndices(
-							rightStore.storeOptions.createIndexStore());
+			final PrimaryIndex[] leftIndices = leftStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+					leftStore.getOrCreateInternalAdapterStore().getInternalAdapterId(
+							leftStore.adapterId)).getIndices(
+					leftStore.getOrCreateIndexStore());
+			final PrimaryIndex[] rightIndices = rightStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+					rightStore.getOrCreateInternalAdapterStore().getInternalAdapterId(
+							rightStore.adapterId)).getIndices(
+					rightStore.getOrCreateIndexStore());
 			;
 			NumericIndexStrategy leftStrat = null;
 			if (leftIndices.length > 0) {
@@ -301,14 +308,17 @@ public class SqlQueryRunner
 
 			joinRunner.setPredicate(pred.predicate);
 
+			joinRunner.setLeftStore(leftStore.storeOptions);
+			joinRunner.setRightStore(rightStore.storeOptions);
+
 			// Execute the join
 			joinRunner.run();
 
 			// Load results into dataframes and replace original views with
 			// joined views
-			SimpleFeatureDataFrame leftResultFrame = new SimpleFeatureDataFrame(
+			final SimpleFeatureDataFrame leftResultFrame = new SimpleFeatureDataFrame(
 					session);
-			SimpleFeatureDataFrame rightResultFrame = new SimpleFeatureDataFrame(
+			final SimpleFeatureDataFrame rightResultFrame = new SimpleFeatureDataFrame(
 					session);
 
 			leftResultFrame.init(
@@ -318,8 +328,8 @@ public class SqlQueryRunner
 					rightStore.storeOptions,
 					rightStore.adapterId);
 
-			Dataset<Row> leftFrame = leftResultFrame.getDataFrame(joinRunner.getLeftResults());
-			Dataset<Row> rightFrame = rightResultFrame.getDataFrame(joinRunner.getRightResults());
+			final Dataset<Row> leftFrame = leftResultFrame.getDataFrame(joinRunner.getLeftResults());
+			final Dataset<Row> rightFrame = rightResultFrame.getDataFrame(joinRunner.getRightResults());
 			leftFrame.createOrReplaceTempView(leftStore.viewName);
 			rightFrame.createOrReplaceTempView(rightStore.viewName);
 		}
@@ -337,14 +347,14 @@ public class SqlQueryRunner
 	}
 
 	private Matcher getFirstPositiveMatcher(
-			Pattern compiledPattern,
-			String sql ) {
-		Matcher returnMatch = compiledPattern.matcher(sql);
+			final Pattern compiledPattern,
+			final String sql ) {
+		final Matcher returnMatch = compiledPattern.matcher(sql);
 		return getNextPositiveMatcher(returnMatch);
 	}
 
 	private Matcher getNextPositiveMatcher(
-			Matcher lastMatch ) {
+			final Matcher lastMatch ) {
 		while (lastMatch.find()) {
 			if (lastMatch.group(2) != null) {
 				return lastMatch;
@@ -354,8 +364,8 @@ public class SqlQueryRunner
 	}
 
 	private String[] getTableRelations(
-			String[] predicateArgs ) {
-		String[] outputRelations = {
+			final String[] predicateArgs ) {
+		final String[] outputRelations = {
 			getTableNameFromArg(predicateArgs[0].trim()),
 			getTableNameFromArg(predicateArgs[1].trim())
 		};
@@ -363,11 +373,11 @@ public class SqlQueryRunner
 	}
 
 	private String getTableNameFromArg(
-			String funcArg ) {
-		String[] attribSplit = funcArg.split(Pattern.quote("."));
+			final String funcArg ) {
+		final String[] attribSplit = funcArg.split(Pattern.quote("."));
 		// If we split into two parts the first part will be the relation name
 		if (attribSplit.length == 2) {
-			InputStoreInfo storeInfo = inputStores.get(attribSplit[0].trim());
+			final InputStoreInfo storeInfo = inputStores.get(attribSplit[0].trim());
 			if (storeInfo != null) {
 				return storeInfo.viewName;
 			}
@@ -377,16 +387,17 @@ public class SqlQueryRunner
 
 	private void loadStoresAndViews()
 			throws IOException {
-		Collection<InputStoreInfo> addStores = inputStores.values();
+		final Collection<InputStoreInfo> addStores = inputStores.values();
 
-		for (InputStoreInfo storeInfo : addStores) {
+		for (final InputStoreInfo storeInfo : addStores) {
 
-			DataAdapter<?> adapter = storeInfo.storeOptions.createAdapterStore().getAdapter(
-					storeInfo.adapterId);
-			QueryOptions queryOptions = new QueryOptions(
+			final DataAdapter<?> adapter = storeInfo.getOrCreateAdapterStore().getAdapter(
+					storeInfo.getOrCreateInternalAdapterStore().getInternalAdapterId(
+							storeInfo.adapterId));
+			final QueryOptions queryOptions = new QueryOptions(
 					adapter);
 
-			RDDOptions rddOpts = new RDDOptions();
+			final RDDOptions rddOpts = new RDDOptions();
 			rddOpts.setQueryOptions(queryOptions);
 			storeInfo.rdd = GeoWaveRDDLoader.loadRDD(
 					session.sparkContext(),
@@ -423,8 +434,8 @@ public class SqlQueryRunner
 		ByteArrayId addAdapter = adapterId;
 		// If adapterId is null we grab first adapter available from store
 		if (addAdapter == null) {
-			List<ByteArrayId> adapterIds = FeatureDataUtils.getFeatureAdapterIds(storeOptions);
-			int adapterCount = adapterIds.size();
+			final List<ByteArrayId> adapterIds = FeatureDataUtils.getFeatureAdapterIds(storeOptions);
+			final int adapterCount = adapterIds.size();
 			if (adapterCount > 0) {
 				addAdapter = adapterIds.get(0);
 			}
@@ -442,7 +453,7 @@ public class SqlQueryRunner
 			return addView;
 		}
 		// Create and add new store info if we make it to this point
-		InputStoreInfo inputInfo = new InputStoreInfo(
+		final InputStoreInfo inputInfo = new InputStoreInfo(
 				storeOptions,
 				addAdapter,
 				addView);
@@ -453,7 +464,7 @@ public class SqlQueryRunner
 	}
 
 	public void removeInputStore(
-			String viewName ) {
+			final String viewName ) {
 		inputStores.remove(viewName);
 	}
 
@@ -489,18 +500,51 @@ public class SqlQueryRunner
 	private class InputStoreInfo
 	{
 		public InputStoreInfo(
-				DataStorePluginOptions storeOptions,
-				ByteArrayId adapterId,
-				String viewName ) {
+				final DataStorePluginOptions storeOptions,
+				final ByteArrayId adapterId,
+				final String viewName ) {
 			this.storeOptions = storeOptions;
 			this.adapterId = adapterId;
 			this.viewName = viewName;
 		}
 
-		private DataStorePluginOptions storeOptions;
-		private ByteArrayId adapterId;
-		private String viewName;
+		private final DataStorePluginOptions storeOptions;
+		private IndexStore indexStore = null;
+		private PersistentAdapterStore adapterStore = null;
+		private InternalAdapterStore internalAdapterStore = null;
+		private AdapterIndexMappingStore adapterIndexMappingStore = null;
+		private final ByteArrayId adapterId;
+		private final String viewName;
 		private GeoWaveRDD rdd = null;
+
+		private IndexStore getOrCreateIndexStore() {
+			if (indexStore == null) {
+				indexStore = storeOptions.createIndexStore();
+			}
+			return indexStore;
+		}
+
+		private PersistentAdapterStore getOrCreateAdapterStore() {
+			if (adapterStore == null) {
+				adapterStore = storeOptions.createAdapterStore();
+			}
+			return adapterStore;
+
+		}
+
+		private InternalAdapterStore getOrCreateInternalAdapterStore() {
+			if (internalAdapterStore == null) {
+				internalAdapterStore = storeOptions.createInternalAdapterStore();
+			}
+			return internalAdapterStore;
+		}
+
+		private AdapterIndexMappingStore getOrCreateAdapterIndexMappingStore() {
+			if (adapterIndexMappingStore == null) {
+				adapterIndexMappingStore = storeOptions.createAdapterIndexMappingStore();
+			}
+			return adapterIndexMappingStore;
+		}
 	}
 
 	private class ExtractedGeomPredicate

@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.store.metadata;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -100,12 +101,13 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public DataStatistics<?> getDataStatistics(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
 		return internalGetObject(
 				statisticsId,
-				adapterId,
+				new ByteArrayId(
+						ByteArrayUtils.shortToByteArray(internalAdapterId)),
 				// for data statistics we don't want to log if its not found
 				false,
 				authorizations);
@@ -116,8 +118,9 @@ public class DataStatisticsStoreImpl extends
 			final GeoWaveMetadata entry ) {
 		final DataStatistics<?> stats = super.entryToValue(entry);
 		if (stats != null) {
-			stats.setDataAdapterId(new ByteArrayId(
-					entry.getSecondaryId()));
+			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
+			stats.setStatisticsId(new ByteArrayId(
+					entry.getPrimaryId()));
 			final byte[] visibility = entry.getVisibility();
 			if (visibility != null) {
 				stats.setVisibility(visibility);
@@ -135,14 +138,15 @@ public class DataStatisticsStoreImpl extends
 	@Override
 	protected ByteArrayId getSecondaryId(
 			final DataStatistics<?> persistedObject ) {
-		return persistedObject.getDataAdapterId();
+		return new ByteArrayId(
+				ByteArrayUtils.shortToByteArray(persistedObject.getInternalDataAdapterId()));
 	}
 
 	@Override
 	public void setStatistics(
 			final DataStatistics<?> statistics ) {
 		removeStatistics(
-				statistics.getDataAdapterId(),
+				statistics.getInternalDataAdapterId(),
 				statistics.getStatisticsId());
 		addObject(statistics);
 	}
@@ -155,21 +159,23 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public boolean removeStatistics(
-			final ByteArrayId adapterId,
+			final short adapterId,
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
 		return deleteObject(
 				statisticsId,
-				adapterId,
+				new ByteArrayId(
+						ByteArrayUtils.shortToByteArray(adapterId)),
 				authorizations);
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			final ByteArrayId adapterId,
+			final short adapterId,
 			final String... authorizations ) {
 		return getAllObjectsWithSecondaryId(
-				adapterId,
+				new ByteArrayId(
+						ByteArrayUtils.shortToByteArray(adapterId)),
 				authorizations);
 	}
 
@@ -181,10 +187,11 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public void removeAllStatistics(
-			final ByteArrayId adapterId,
+			final short adapterId,
 			final String... authorizations ) {
 		deleteObjects(
-				adapterId,
+				new ByteArrayId(
+						ByteArrayUtils.shortToByteArray(adapterId)),
 				authorizations);
 	}
 }

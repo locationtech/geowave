@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.adapter.statistics.EmptyStatisticVisibility;
@@ -27,12 +28,12 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class DataStoreStatisticsProvider<T> implements
 		StatisticsProvider<T>
 {
-	final DataAdapter<T> adapter;
+	final InternalDataAdapter<T> adapter;
 	final boolean includeAdapterStats;
 	final PrimaryIndex index;
 
 	public DataStoreStatisticsProvider(
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final boolean includeAdapterStats ) {
 		super();
@@ -44,9 +45,9 @@ public class DataStoreStatisticsProvider<T> implements
 	@Override
 	public ByteArrayId[] getSupportedStatisticsTypes() {
 		final ByteArrayId[] idsFromAdapter;
-		if ((adapter instanceof StatisticsProvider) && includeAdapterStats) {
+		if ((adapter.getAdapter() instanceof StatisticsProvider) && includeAdapterStats) {
 			adapter.init(index);
-			idsFromAdapter = ((StatisticsProvider) adapter).getSupportedStatisticsTypes();
+			idsFromAdapter = ((StatisticsProvider) adapter.getAdapter()).getSupportedStatisticsTypes();
 		}
 		else {
 			idsFromAdapter = new ByteArrayId[0];
@@ -65,29 +66,42 @@ public class DataStoreStatisticsProvider<T> implements
 	@Override
 	public DataStatistics<T> createDataStatistics(
 			final ByteArrayId statisticsType ) {
+
+		DataStatistics<T> stats = null;
 		if (statisticsType.equals(RowRangeHistogramStatistics.STATS_TYPE)) {
-			return new RowRangeHistogramStatistics(
-					adapter.getAdapterId(),
+			stats = new RowRangeHistogramStatistics(
+					adapter.getInternalAdapterId(),
 					index.getId());
+			return stats;
 		}
 		if (statisticsType.equals(IndexMetaDataSet.STATS_TYPE)) {
-			return new IndexMetaDataSet(
-					adapter.getAdapterId(),
+			stats = new IndexMetaDataSet(
+					adapter.getInternalAdapterId(),
 					index.getId(),
 					index.getIndexStrategy());
+			return stats;
 		}
 		if (statisticsType.equals(DifferingFieldVisibilityEntryCount.STATS_TYPE)) {
-			return new DifferingFieldVisibilityEntryCount<>(
-					adapter.getAdapterId(),
+			stats = new DifferingFieldVisibilityEntryCount<>(
+					adapter.getInternalAdapterId(),
 					index.getId());
+			return stats;
 		}
 		if (statisticsType.equals(DuplicateEntryCount.STATS_TYPE)) {
-			return new DuplicateEntryCount<>(
-					adapter.getAdapterId(),
+			stats = new DuplicateEntryCount<>(
+					adapter.getInternalAdapterId(),
 					index.getId());
+			return stats;
 		}
-		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter)
-				.createDataStatistics(statisticsType) : null;
+		if (adapter.getAdapter() instanceof StatisticsProvider) {
+			stats = ((StatisticsProvider) adapter.getAdapter()).createDataStatistics(statisticsType);
+			if (stats != null) {
+				stats.setInternalDataAdapterId(adapter.getInternalAdapterId());
+				return stats;
+			}
+		}
+		return null;
+
 	}
 
 	@Override

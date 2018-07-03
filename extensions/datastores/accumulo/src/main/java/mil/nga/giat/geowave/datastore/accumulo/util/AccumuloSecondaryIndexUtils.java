@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -49,7 +50,7 @@ public class AccumuloSecondaryIndexUtils
 	public static <T> T decodeRow(
 			final Key key,
 			final Value value,
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index ) {
 		Map<Key, Value> rowMapping;
 		try {
@@ -108,7 +109,7 @@ public class AccumuloSecondaryIndexUtils
 			}
 		}
 		final IndexedAdapterPersistenceEncoding encodedData = new IndexedAdapterPersistenceEncoding(
-				adapter.getAdapterId(),
+				adapter.getInternalAdapterId(),
 				dataId,
 				null,
 				null,

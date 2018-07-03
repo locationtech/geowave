@@ -9,6 +9,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -27,8 +28,8 @@ public class MergingEntryIterator<T> extends
 {
 	private final static Logger LOGGER = Logger.getLogger(NativeEntryIteratorWrapper.class);
 
-	private final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters;
-	private final Map<ByteArrayId, RowTransform> transforms;
+	private final Map<Short, RowMergingDataAdapter> mergingAdapters;
+	private final Map<Short, RowTransform> transforms;
 
 	public MergingEntryIterator(
 			final AdapterStore adapterStore,
@@ -36,7 +37,7 @@ public class MergingEntryIterator<T> extends
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, GeoWaveRow> scanCallback,
-			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters,
+			final Map<Short, RowMergingDataAdapter> mergingAdapters,
 			final double[] maxResolutionSubsamplingPerDimension ) {
 		super(
 				adapterStore,
@@ -48,19 +49,20 @@ public class MergingEntryIterator<T> extends
 				maxResolutionSubsamplingPerDimension,
 				true);
 		this.mergingAdapters = mergingAdapters;
-		transforms = new HashMap<ByteArrayId, RowTransform>();
+		transforms = new HashMap<Short, RowTransform>();
 	}
 
 	protected GeoWaveRow getNextEncodedResult() {
 		GeoWaveRow nextResult = scannerIt.next();
 
-		final ByteArrayId adapterId = new ByteArrayId(
-				nextResult.getAdapterId());
+		final short internalAdapterId = nextResult.getInternalAdapterId();
 
-		final RowMergingDataAdapter mergingAdapter = mergingAdapters.get(adapterId);
+		final RowMergingDataAdapter mergingAdapter = mergingAdapters.get(internalAdapterId);
 
 		if ((mergingAdapter != null) && (mergingAdapter.getTransform() != null)) {
-			final RowTransform rowTransform = getRowTransform(mergingAdapter);
+			final RowTransform rowTransform = getRowTransform(
+					internalAdapterId,
+					mergingAdapter);
 
 			// This iterator expects a single GeoWaveRow w/ multiple fieldValues
 			// (HBase)
@@ -73,13 +75,16 @@ public class MergingEntryIterator<T> extends
 	}
 
 	private RowTransform getRowTransform(
+			short internalAdapterId,
 			RowMergingDataAdapter mergingAdapter ) {
-		RowTransform transform = transforms.get(mergingAdapter.getAdapterId());
+		RowTransform transform = transforms.get(internalAdapterId);
 		if (transform == null) {
 			transform = mergingAdapter.getTransform();
 			// set strategy
 			try {
-				transform.initOptions(mergingAdapter.getOptions(null));
+				transform.initOptions(mergingAdapter.getOptions(
+						internalAdapterId,
+						null));
 			}
 			catch (final IOException e) {
 				LOGGER.error(
@@ -87,7 +92,7 @@ public class MergingEntryIterator<T> extends
 						e);
 			}
 			transforms.put(
-					mergingAdapter.getAdapterId(),
+					internalAdapterId,
 					transform);
 		}
 
@@ -106,8 +111,7 @@ public class MergingEntryIterator<T> extends
 
 		for (GeoWaveValue fieldValue : singleRow.getFieldValues()) {
 			final Mergeable mergeable = rowTransform.getRowAsMergeableObject(
-					new ByteArrayId(
-							singleRow.getAdapterId()),
+					singleRow.getInternalAdapterId(),
 					new ByteArrayId(
 							fieldValue.getFieldMask()),
 					fieldValue.getValue());
@@ -130,7 +134,7 @@ public class MergingEntryIterator<T> extends
 		return new GeoWaveRowImpl(
 				new GeoWaveKeyImpl(
 						singleRow.getDataId(),
-						singleRow.getAdapterId(),
+						singleRow.getInternalAdapterId(),
 						singleRow.getPartitionKey(),
 						singleRow.getSortKey(),
 						singleRow.getNumberOfDuplicates()),

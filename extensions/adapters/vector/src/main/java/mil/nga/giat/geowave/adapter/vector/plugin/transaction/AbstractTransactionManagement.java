@@ -19,6 +19,8 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 
 import org.opengis.feature.simple.SimpleFeature;
@@ -40,8 +42,11 @@ public abstract class AbstractTransactionManagement implements
 	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics() {
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
 		final GeotoolsFeatureDataAdapter adapter = components.getAdapter();
+		short internalAdapterId = components.getGTstore().getInternalAdapterStore().getInternalAdapterId(
+				adapter.getAdapterId());
+
 		try (CloseableIterator<DataStatistics<?>> it = components.getStatsStore().getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				composeAuthorizations())) {
 			while (it.hasNext()) {
 				final DataStatistics<?> stat = it.next();

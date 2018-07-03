@@ -60,17 +60,17 @@ class IntermediaryWriteEntryInfo
 	}
 
 	private final byte[] dataId;
-	private final byte[] adapterId;
+	private final short internalAdapterId;
 	private final InsertionIds insertionIds;
 	private final List<FieldInfo<?>> fieldInfo;
 
 	public IntermediaryWriteEntryInfo(
 			final byte[] dataId,
-			final byte[] adapterId,
+			final short internalAdapterId,
 			final InsertionIds insertionIds,
 			final List<FieldInfo<?>> fieldInfo ) {
 		this.dataId = dataId;
-		this.adapterId = adapterId;
+		this.internalAdapterId = internalAdapterId;
 		this.insertionIds = insertionIds;
 		this.fieldInfo = fieldInfo;
 	}
@@ -81,8 +81,8 @@ class IntermediaryWriteEntryInfo
 				dataId).getString();
 	}
 
-	public byte[] getAdapterId() {
-		return adapterId;
+	public short getInternalAdapterId() {
+		return internalAdapterId;
 	}
 
 	public InsertionIds getInsertionIds() {
@@ -106,7 +106,7 @@ class IntermediaryWriteEntryInfo
 		final GeoWaveKey[] keys = GeoWaveKeyImpl.createKeys(
 				insertionIds,
 				dataId,
-				adapterId);
+				internalAdapterId);
 		return Arrays
 				.stream(
 						keys)

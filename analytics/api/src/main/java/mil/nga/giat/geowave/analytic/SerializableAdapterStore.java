@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,43 +18,43 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 
 /**
- * 
+ *
  * Support for adapter stores that are Serializable. Rather than for an adapter
  * store to serialize its state, wrap an adapter store. If the adapter store is
  * not serializable, then log a warning message upon serialization.
- * 
- * 
+ *
+ *
  */
 
 public class SerializableAdapterStore implements
-		AdapterStore,
+		TransientAdapterStore,
 		Serializable
 {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 1L;
 
 	final static Logger LOGGER = LoggerFactory.getLogger(SerializableAdapterStore.class);
 
-	transient AdapterStore adapterStore;
+	transient TransientAdapterStore adapterStore;
 
 	public SerializableAdapterStore() {
 
 	}
 
 	public SerializableAdapterStore(
-			AdapterStore adapterStore ) {
+			final TransientAdapterStore adapterStore ) {
 		super();
 		this.adapterStore = adapterStore;
 	}
 
-	private AdapterStore getAdapterStore() {
+	private TransientAdapterStore getAdapterStore() {
 		if (adapterStore == null) {
 			throw new IllegalStateException(
 					"AdapterStore has not been initialized");
@@ -110,7 +110,7 @@ public class SerializableAdapterStore implements
 			throws IOException,
 			ClassNotFoundException {
 		if (in.readBoolean()) {
-			adapterStore = (AdapterStore) in.readObject();
+			adapterStore = (TransientAdapterStore) in.readObject();
 		}
 		else {
 			LOGGER.warn("Unable to initialized AdapterStore; the store is not serializable");
@@ -119,7 +119,7 @@ public class SerializableAdapterStore implements
 
 	@Override
 	public void removeAdapter(
-			ByteArrayId adapterId ) {
+			final ByteArrayId adapterId ) {
 		getAdapterStore().removeAdapter(
 				adapterId);
 	}

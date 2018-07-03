@@ -1,13 +1,3 @@
-/*******************************************************************************
- * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
- * See the NOTICE file distributed with this work for additional
- * information regarding copyright ownership.
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Apache License,
- * Version 2.0 which accompanies this distribution and is available at
- * http://www.apache.org/licenses/LICENSE-2.0.txt
- ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster.adapter.merge;
 
 import java.awt.image.SampleModel;
@@ -22,65 +12,60 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import javax.media.jai.remote.SerializableState;
 import javax.media.jai.remote.SerializerFactory;
+
+import org.opengis.coverage.grid.GridCoverage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.opengis.coverage.grid.GridCoverage;
-
-/**
- * 
- * 
- * @param <T>
- */
-public class RootMergeStrategy<T extends Persistable> implements
+public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
+		ServerMergeStrategy,
 		Mergeable
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(RootMergeStrategy.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(MultiAdapterServerMergeStrategy.class);
 	// the purpose for these maps instead of a list of samplemodel and adapter
 	// ID pairs is to allow for multiple adapters to share the same sample model
 	protected Map<Integer, SampleModel> sampleModels = new HashMap<Integer, SampleModel>();
-	public Map<ByteArrayId, Integer> adapterIdToSampleModelKey = new HashMap<ByteArrayId, Integer>();
+	public Map<Short, Integer> adapterIdToSampleModelKey = new HashMap<Short, Integer>();
 
 	public Map<Integer, RasterTileMergeStrategy<T>> childMergeStrategies = new HashMap<Integer, RasterTileMergeStrategy<T>>();
-	public Map<ByteArrayId, Integer> adapterIdToChildMergeStrategyKey = new HashMap<ByteArrayId, Integer>();
+	public Map<Short, Integer> adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>();
 
-	public RootMergeStrategy() {}
+	public MultiAdapterServerMergeStrategy() {}
 
-	public RootMergeStrategy(
-			final ByteArrayId adapterId,
-			final SampleModel sampleModel,
-			final RasterTileMergeStrategy<T> mergeStrategy ) {
+	public MultiAdapterServerMergeStrategy(
+			SingleAdapterServerMergeStrategy singleAdapterMergeStrategy ) {
 		sampleModels.put(
 				0,
-				sampleModel);
+				singleAdapterMergeStrategy.sampleModel);
 		adapterIdToSampleModelKey.put(
-				adapterId,
+				singleAdapterMergeStrategy.internalAdapterId,
 				0);
 		childMergeStrategies.put(
 				0,
-				mergeStrategy);
+				singleAdapterMergeStrategy.mergeStrategy);
 		adapterIdToChildMergeStrategyKey.put(
-				adapterId,
+				singleAdapterMergeStrategy.internalAdapterId,
 				0);
 	}
 
 	public SampleModel getSampleModel(
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		synchronized (this) {
-			final Integer sampleModelId = adapterIdToSampleModelKey.get(adapterId);
+			final Integer sampleModelId = adapterIdToSampleModelKey.get(internalAdapterId);
 			if (sampleModelId != null) {
 				return sampleModels.get(sampleModelId);
 			}
@@ -89,9 +74,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 	}
 
 	public RasterTileMergeStrategy<T> getChildMergeStrategy(
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		synchronized (this) {
-			final Integer childMergeStrategyId = adapterIdToChildMergeStrategyKey.get(adapterId);
+			final Integer childMergeStrategyId = adapterIdToChildMergeStrategyKey.get(internalAdapterId);
 			if (childMergeStrategyId != null) {
 				return childMergeStrategies.get(childMergeStrategyId);
 			}
@@ -103,8 +88,8 @@ public class RootMergeStrategy<T extends Persistable> implements
 	public void merge(
 			final Mergeable merge ) {
 		synchronized (this) {
-			if ((merge != null) && (merge instanceof RootMergeStrategy)) {
-				final RootMergeStrategy<T> other = (RootMergeStrategy) merge;
+			if ((merge != null) && (merge instanceof MultiAdapterServerMergeStrategy)) {
+				final MultiAdapterServerMergeStrategy<T> other = (MultiAdapterServerMergeStrategy) merge;
 				mergeMaps(
 						sampleModels,
 						adapterIdToSampleModelKey,
@@ -121,9 +106,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 
 	private static <T> void mergeMaps(
 			final Map<Integer, T> thisValues,
-			final Map<ByteArrayId, Integer> thisAdapterIdToValueKeys,
+			final Map<Short, Integer> thisAdapterIdToValueKeys,
 			final Map<Integer, T> otherValues,
-			final Map<ByteArrayId, Integer> otherAdapterIdToValueKeys ) {
+			final Map<Short, Integer> otherAdapterIdToValueKeys ) {
 		// this was generalized to apply to both sample models and merge
 		// strategies, comments refer to sample models but in general it is also
 		// applied to merge strategies
@@ -133,10 +118,10 @@ public class RootMergeStrategy<T extends Persistable> implements
 		for (final Entry<Integer, T> sampleModelEntry : otherValues.entrySet()) {
 			if (!thisValues.containsValue(sampleModelEntry.getValue())) {
 				// we need to add this sample model
-				final List<ByteArrayId> adapterIds = new ArrayList<ByteArrayId>();
+				final List<Short> adapterIds = new ArrayList<Short>();
 				// find all adapter IDs associated with this sample
 				// model
-				for (final Entry<ByteArrayId, Integer> adapterIdEntry : otherAdapterIdToValueKeys.entrySet()) {
+				for (final Entry<Short, Integer> adapterIdEntry : otherAdapterIdToValueKeys.entrySet()) {
 					if (adapterIdEntry.getValue().equals(
 							sampleModelEntry.getKey())) {
 						adapterIds.add(adapterIdEntry.getKey());
@@ -153,7 +138,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 		}
 		// next check for adapter IDs that exist in 'other' that do not
 		// exist in 'this'
-		for (final Entry<ByteArrayId, Integer> adapterIdEntry : otherAdapterIdToValueKeys.entrySet()) {
+		for (final Entry<Short, Integer> adapterIdEntry : otherAdapterIdToValueKeys.entrySet()) {
 			if (!thisAdapterIdToValueKeys.containsKey(adapterIdEntry.getKey())) {
 				// find the sample model associated with the adapter ID
 				// in 'other' and find what Integer it is with in 'this'
@@ -178,10 +163,10 @@ public class RootMergeStrategy<T extends Persistable> implements
 	}
 
 	private static synchronized <T> void addValue(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final T sampleModel,
 			final Map<Integer, T> values,
-			final Map<ByteArrayId, Integer> adapterIdToValueKeys ) {
+			final Map<Short, Integer> adapterIdToValueKeys ) {
 		int nextId = 1;
 		boolean idAvailable = false;
 		while (!idAvailable) {
@@ -204,7 +189,7 @@ public class RootMergeStrategy<T extends Persistable> implements
 		values.put(
 				nextId,
 				sampleModel);
-		for (final ByteArrayId adapterId : adapterIds) {
+		for (final Short adapterId : adapterIds) {
 			adapterIdToValueKeys.put(
 					adapterId,
 					nextId);
@@ -247,10 +232,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 			}
 		}
 
-		for (final Entry<ByteArrayId, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
+		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				final byte[] keyBytes = entry.getKey().getBytes();
-				byteCount += keyBytes.length + 8;
+				byteCount += 6;
 				successfullySerializedModelAdapters++;
 			}
 		}
@@ -271,10 +255,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 			successfullySerializedMergeIds.add(entry.getKey());
 		}
 
-		for (final Entry<ByteArrayId, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
+		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedMergeIds.contains(entry.getValue())) {
-				final byte[] keyBytes = entry.getKey().getBytes();
-				byteCount += keyBytes.length + 8;
+				byteCount += 6;
 				successfullySerializedMergeAdapters++;
 			}
 		}
@@ -288,11 +271,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 		}
 
 		buf.putInt(successfullySerializedModelAdapters);
-		for (final Entry<ByteArrayId, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
+		for (final Entry<Short, Integer> entry : adapterIdToSampleModelKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				final byte[] keyBytes = entry.getKey().getBytes();
-				buf.putInt(keyBytes.length);
-				buf.put(keyBytes);
+				buf.putShort(entry.getKey());
 				buf.putInt(entry.getValue());
 			}
 		}
@@ -305,11 +286,9 @@ public class RootMergeStrategy<T extends Persistable> implements
 		}
 
 		buf.putInt(successfullySerializedMergeAdapters);
-		for (final Entry<ByteArrayId, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
+		for (final Entry<Short, Integer> entry : adapterIdToChildMergeStrategyKey.entrySet()) {
 			if (successfullySerializedModelIds.contains(entry.getValue())) {
-				final byte[] keyBytes = entry.getKey().getBytes();
-				buf.putInt(keyBytes.length);
-				buf.put(keyBytes);
+				buf.putShort(entry.getKey());
 				buf.putInt(entry.getValue());
 			}
 		}
@@ -354,15 +333,11 @@ public class RootMergeStrategy<T extends Persistable> implements
 			}
 		}
 		final int sampleModelAdapterIdSize = buf.getInt();
-		adapterIdToSampleModelKey = new HashMap<ByteArrayId, Integer>(
+		adapterIdToSampleModelKey = new HashMap<Short, Integer>(
 				sampleModelAdapterIdSize);
 		for (int i = 0; i < sampleModelAdapterIdSize; i++) {
-			final int keyLength = buf.getInt();
-			final byte[] keyBytes = new byte[keyLength];
-			buf.get(keyBytes);
 			adapterIdToSampleModelKey.put(
-					new ByteArrayId(
-							keyBytes),
+					buf.getShort(),
 					buf.getInt());
 		}
 
@@ -394,43 +369,42 @@ public class RootMergeStrategy<T extends Persistable> implements
 			}
 		}
 		final int mergeStrategyAdapterIdSize = buf.getInt();
-		adapterIdToChildMergeStrategyKey = new HashMap<ByteArrayId, Integer>(
+		adapterIdToChildMergeStrategyKey = new HashMap<Short, Integer>(
 				mergeStrategyAdapterIdSize);
 		for (int i = 0; i < mergeStrategyAdapterIdSize; i++) {
-			final int keyLength = buf.getInt();
-			final byte[] keyBytes = new byte[keyLength];
-			buf.get(keyBytes);
 			adapterIdToChildMergeStrategyKey.put(
-					new ByteArrayId(
-							keyBytes),
+					buf.getShort(),
 					buf.getInt());
 		}
 	}
 
+	// public T getMetadata(
+	// final GridCoverage tileGridCoverage,
+	// final Map originalCoverageProperties,
+	// final RasterDataAdapter dataAdapter ) {
+	// final RasterTileMergeStrategy<T> childMergeStrategy =
+	// getChildMergeStrategy(dataAdapter.getAdapterId());
+	// if (childMergeStrategy != null) {
+	// return childMergeStrategy.getMetadata(
+	// tileGridCoverage,
+	// dataAdapter);
+	// }
+	// return null;
+	// }
+
+	@Override
 	public void merge(
-			final RasterTile<T> thisTile,
-			final RasterTile<T> nextTile,
-			final ByteArrayId dataAdapterId ) {
-		final RasterTileMergeStrategy<T> childMergeStrategy = getChildMergeStrategy(dataAdapterId);
+			final RasterTile thisTile,
+			final RasterTile nextTile,
+			final short internalAdapterId ) {
+		final RasterTileMergeStrategy<T> childMergeStrategy = getChildMergeStrategy(internalAdapterId);
 
 		if (childMergeStrategy != null) {
 			childMergeStrategy.merge(
 					thisTile,
 					nextTile,
-					getSampleModel(dataAdapterId));
+					getSampleModel(internalAdapterId));
 		}
 	}
 
-	public T getMetadata(
-			final GridCoverage tileGridCoverage,
-			final Map originalCoverageProperties,
-			final RasterDataAdapter dataAdapter ) {
-		final RasterTileMergeStrategy<T> childMergeStrategy = getChildMergeStrategy(dataAdapter.getAdapterId());
-		if (childMergeStrategy != null) {
-			return childMergeStrategy.getMetadata(
-					tileGridCoverage,
-					dataAdapter);
-		}
-		return null;
-	}
 }

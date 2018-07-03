@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -15,8 +15,6 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.hadoop.conf.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
@@ -27,6 +25,8 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -57,6 +57,7 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -86,6 +87,7 @@ public class DBScanIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(DBScanIT.class);
 	private static long startMillis;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStorePluginOptions;
 	}
@@ -151,7 +153,7 @@ public class DBScanIT extends
 		try {
 			ingest(dataStorePluginOptions.createDataStore());
 		}
-		catch (IOException e1) {
+		catch (final IOException e1) {
 			e1.printStackTrace();
 			TestUtils.deleteAll(dataStorePluginOptions);
 			Assert.fail("Unable to ingest data in DBScanIT");
@@ -161,7 +163,7 @@ public class DBScanIT extends
 			runScan(new SpatialQuery(
 					dataGenerator.getBoundingRegion()));
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			e.printStackTrace();
 			TestUtils.deleteAll(dataStorePluginOptions);
 			Assert.fail("Exception during scan of DBScanIT");
@@ -230,6 +232,9 @@ public class DBScanIT extends
 				dataStorePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
+				dataStorePluginOptions.createInternalAdapterStore().addAdapterId(
+						new ByteArrayId(
+								"concave_hull")),
 				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
 						new SpatialOptions()).getId().getString(),
 				"bx5",

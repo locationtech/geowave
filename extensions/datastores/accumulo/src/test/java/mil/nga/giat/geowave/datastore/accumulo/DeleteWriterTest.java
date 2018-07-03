@@ -54,6 +54,7 @@ import mil.nga.giat.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -61,6 +62,7 @@ import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
 import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
@@ -81,6 +83,7 @@ public class DeleteWriterTest
 	private InsertionIds rowIds3;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
+	InternalAdapterStore internalAdapterStore;
 	protected AccumuloOptions options = new AccumuloOptions();
 
 	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider().createPrimaryIndex(
@@ -164,6 +167,9 @@ public class DeleteWriterTest
 		mockDataStore = new AccumuloDataStore(
 				operations,
 				options);
+
+		internalAdapterStore = new InternalAdapterStoreImpl(
+				operations);
 
 		statsStore = new DataStatisticsStoreImpl(
 				operations,
@@ -273,8 +279,9 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteByInsertionId() {
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
@@ -310,7 +317,7 @@ public class DeleteWriterTest
 								"test_pt_1")));
 		assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				2,
@@ -319,8 +326,9 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteBySpatialConstraint() {
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
@@ -346,7 +354,7 @@ public class DeleteWriterTest
 				spatialQuery);
 		assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				2,
@@ -355,8 +363,9 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteByPrefixId() {
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
@@ -387,7 +396,7 @@ public class DeleteWriterTest
 				prefixIdQuery);
 		assertTrue(!it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				2,
@@ -396,8 +405,9 @@ public class DeleteWriterTest
 
 	@Test
 	public void testDeleteByDataId() {
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		assertEquals(
 				3,
@@ -434,7 +444,7 @@ public class DeleteWriterTest
 		// assertTrue(
 		// !it2.hasNext());
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
-				adapter.getAdapterId(),
+				internalAdapterId,
 				CountDataStatistics.STATS_TYPE);
 		// TODO: BUG, this should be 0
 		assertEquals(

@@ -16,7 +16,7 @@ message AggregationRequest {
   optional bytes model = 4;
   optional bytes visLabels = 5;
   optional bytes adapter = 6;
-  optional bytes adapterId = 7;
+  optional bytes internalAdapterId = 7;
   optional bytes numericIndexStrategyFilter = 8;
   optional bool blockCaching = 9;
   optional int32 cacheSize = 10;

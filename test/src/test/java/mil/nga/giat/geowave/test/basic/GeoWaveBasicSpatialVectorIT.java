@@ -57,7 +57,7 @@ public class GeoWaveBasicSpatialVectorIT extends
 
 	private static long startMillis;
 	private static final boolean POINTS_ONLY = false;
-	private static final int NUM_THREADS = 4;
+	private static final int NUM_THREADS = 1;
 
 	@BeforeClass
 	public static void reportTestStart() {

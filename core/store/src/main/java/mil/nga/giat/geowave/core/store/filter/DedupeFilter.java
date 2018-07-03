@@ -28,12 +28,12 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 public class DedupeFilter implements
 		DistributableQueryFilter
 {
-	private final Map<ByteArrayId, Set<ByteArrayId>> adapterIdToVisitedDataIdMap;
+	private final Map<Short, Set<ByteArrayId>> adapterIdToVisitedDataIdMap;
 
 	private boolean dedupAcrossIndices = false;
 
 	public DedupeFilter() {
-		adapterIdToVisitedDataIdMap = new HashMap<ByteArrayId, Set<ByteArrayId>>();
+		adapterIdToVisitedDataIdMap = new HashMap<Short, Set<ByteArrayId>>();
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class DedupeFilter implements
 			// and this is only intended to support a single index
 			return true;
 		}
-		final ByteArrayId adapterId = persistenceEncoding.getAdapterId();
+		final short adapterId = persistenceEncoding.getInternalAdapterId();
 		final ByteArrayId dataId = persistenceEncoding.getDataId();
 		Set<ByteArrayId> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
 		if (visitedDataIds == null) {

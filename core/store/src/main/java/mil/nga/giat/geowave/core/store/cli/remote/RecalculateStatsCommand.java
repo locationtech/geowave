@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreStatisticsProvider;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
@@ -60,7 +61,7 @@ public class RecalculateStatsCommand extends
 	@Override
 	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
-			final DataAdapter<?> adapter,
+			final InternalDataAdapter<?> adapter,
 			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
@@ -72,7 +73,7 @@ public class RecalculateStatsCommand extends
 
 			boolean isFirstTime = true;
 			for (final PrimaryIndex index : mappingStore.getIndicesForAdapter(
-					adapter.getAdapterId()).getIndices(
+					adapter.getInternalAdapterId()).getIndices(
 					indexStore)) {
 
 				@SuppressWarnings({

@@ -8,6 +8,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -24,7 +25,7 @@ class BaseInsertionIdQuery<T> extends
 	private final QueryRanges ranges;
 
 	public BaseInsertionIdQuery(
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<?> adapter,
 			final PrimaryIndex index,
 			final InsertionIdQuery query,
 			final ScanCallback<T, ?> scanCallback,
@@ -32,7 +33,7 @@ class BaseInsertionIdQuery<T> extends
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
-				Collections.<ByteArrayId> singletonList(adapter.getAdapterId()),
+				Collections.<Short> singletonList(adapter.getInternalAdapterId()),
 				index,
 				query,
 				dedupeFilter,

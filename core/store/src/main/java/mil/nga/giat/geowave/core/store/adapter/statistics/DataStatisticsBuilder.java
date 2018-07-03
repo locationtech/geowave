@@ -15,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreStatisticsProvider;
 import mil.nga.giat.geowave.core.store.EntryVisibilityHandler;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
@@ -28,7 +29,7 @@ public class DataStatisticsBuilder<T> implements
 		DeleteCallback<T, GeoWaveRow>,
 		ScanCallback<T, GeoWaveRow>
 {
-	private final StatisticsProvider<T> statisticsProvider;
+	private final DataStoreStatisticsProvider<T> statisticsProvider;
 	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final EntryVisibilityHandler<T> visibilityHandler;
@@ -36,7 +37,7 @@ public class DataStatisticsBuilder<T> implements
 	public DataStatisticsBuilder(
 			final PrimaryIndex index,
 			final DataAdapter<T> adapter,
-			final StatisticsProvider<T> statisticsProvider,
+			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final ByteArrayId statisticsId ) {
 		this.statisticsProvider = statisticsProvider;
 		this.statisticsId = statisticsId;

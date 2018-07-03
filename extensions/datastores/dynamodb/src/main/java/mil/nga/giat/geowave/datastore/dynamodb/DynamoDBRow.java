@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Function;
 
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
@@ -70,28 +71,28 @@ public class DynamoDBRow extends
 
 		final ByteBuffer metadataBuf = ByteBuffer.wrap(
 				rangeKey,
-				length - 12,
-				12);
-		final int adapterIdLength = metadataBuf.getInt();
+				length - 8,
+				8);
 		final int dataIdLength = metadataBuf.getInt();
 		final int numberOfDuplicates = metadataBuf.getInt();
 
 		final ByteBuffer buf = ByteBuffer.wrap(
 				rangeKey,
 				0,
-				length - 20);
-		final byte[] sortKey = new byte[length - 20 - adapterIdLength - dataIdLength];
-		final byte[] adapterId = new byte[adapterIdLength];
+				length - 16);
+		final byte[] sortKey = new byte[length - 16 - 2 - dataIdLength];
 		final byte[] dataId = new byte[dataIdLength];
 
 		// Range key (row ID) = adapterId + sortKey + dataId
-		buf.get(adapterId);
+		byte[] internalAdapterIdBytes = new byte[2];
+		buf.get(internalAdapterIdBytes);
+		short internalAdapterId = ByteArrayUtils.byteArrayToShort(internalAdapterIdBytes);
 		buf.get(sortKey);
 		buf.get(dataId);
 
 		return new GeoWaveKeyImpl(
 				dataId,
-				adapterId,
+				internalAdapterId,
 				partitionKey,
 				DynamoDBUtils.decodeSortableBase64(sortKey),
 				numberOfDuplicates);
@@ -118,8 +119,8 @@ public class DynamoDBRow extends
 	}
 
 	@Override
-	public byte[] getAdapterId() {
-		return key.getAdapterId();
+	public short getInternalAdapterId() {
+		return key.getInternalAdapterId();
 	}
 
 	@Override
@@ -148,13 +149,11 @@ public class DynamoDBRow extends
 	public static byte[] getRangeKey(
 			final GeoWaveKey key ) {
 		final byte[] sortKey = DynamoDBUtils.encodeSortableBase64(key.getSortKey());
-		final ByteBuffer buffer = ByteBuffer.allocate(sortKey.length + key.getAdapterId().length
-				+ key.getDataId().length + 20);
-		buffer.put(key.getAdapterId());
+		final ByteBuffer buffer = ByteBuffer.allocate(sortKey.length + key.getDataId().length + 18);
+		buffer.put(ByteArrayUtils.shortToByteArray(key.getInternalAdapterId()));
 		buffer.put(sortKey);
 		buffer.put(key.getDataId());
 		buffer.putLong(Long.MAX_VALUE - System.nanoTime());
-		buffer.putInt(key.getAdapterId().length);
 		buffer.putInt(key.getDataId().length);
 		buffer.putInt(key.getNumberOfDuplicates());
 		buffer.rewind();

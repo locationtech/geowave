@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -24,8 +24,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.processing.AbstractOperation;
 import org.geotools.coverage.processing.BaseStatisticsOperationJAI;
@@ -33,6 +31,8 @@ import org.geotools.coverage.processing.CoverageProcessor;
 import org.geotools.coverage.processing.operation.Histogram;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.parameter.ParameterValueGroup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryCollection;
@@ -63,10 +63,17 @@ public class HistogramStatistics extends
 	}
 
 	public HistogramStatistics(
-			final ByteArrayId dataAdapterId,
+			final HistogramConfig histogramConfig ) {
+		this(
+				null,
+				histogramConfig);
+	}
+
+	public HistogramStatistics(
+			final Short internalAdapterId,
 			final HistogramConfig histogramConfig ) {
 		super(
-				dataAdapterId,
+				internalAdapterId,
 				STATS_TYPE);
 		this.histogramConfig = histogramConfig;
 	}

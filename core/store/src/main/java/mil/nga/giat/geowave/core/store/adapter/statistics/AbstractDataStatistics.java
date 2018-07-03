@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
@@ -26,36 +27,42 @@ abstract public class AbstractDataStatistics<T> implements
 	/**
 	 * ID of source data adapter
 	 */
-	protected ByteArrayId dataAdapterId;
+	protected Short internalDataAdapterId;
 	protected byte[] visibility;
 	/**
 	 * ID of statistic to be tracked
 	 */
 	protected ByteArrayId statisticsId;
 
-	protected AbstractDataStatistics() {}
-
-	public AbstractDataStatistics(
-			final ByteArrayId dataAdapterId,
+	@Override
+	public void setStatisticsId(
 			final ByteArrayId statisticsId ) {
-		this.dataAdapterId = dataAdapterId;
 		this.statisticsId = statisticsId;
 	}
 
-	@Override
-	public ByteArrayId getDataAdapterId() {
-		return dataAdapterId;
-	}
+	protected AbstractDataStatistics() {}
 
-	@Override
-	public void setDataAdapterId(
-			final ByteArrayId dataAdapterId ) {
-		this.dataAdapterId = dataAdapterId;
+	public AbstractDataStatistics(
+			final Short internalDataAdapterId,
+			final ByteArrayId statisticsId ) {
+		this.internalDataAdapterId = internalDataAdapterId;
+		this.statisticsId = statisticsId;
 	}
 
 	@Override
 	public byte[] getVisibility() {
 		return visibility;
+	}
+
+	@Override
+	public Short getInternalDataAdapterId() {
+		return internalDataAdapterId;
+	}
+
+	@Override
+	public void setInternalDataAdapterId(
+			final short internalDataAdapterId ) {
+		this.internalDataAdapterId = internalDataAdapterId;
 	}
 
 	@Override
@@ -71,12 +78,10 @@ abstract public class AbstractDataStatistics<T> implements
 
 	protected ByteBuffer binaryBuffer(
 			final int size ) {
-		final byte aidBytes[] = dataAdapterId.getBytes();
 		final byte sidBytes[] = statisticsId.getBytes();
-		final ByteBuffer buffer = ByteBuffer.allocate(size + 8 + sidBytes.length + aidBytes.length);
-		buffer.putInt(aidBytes.length);
-		buffer.putInt(sidBytes.length);
-		buffer.put(aidBytes);
+		final ByteBuffer buffer = ByteBuffer.allocate(size + 4 + sidBytes.length);
+		buffer.putShort(internalDataAdapterId);
+		buffer.putShort((short) sidBytes.length);
 		buffer.put(sidBytes);
 
 		return buffer;
@@ -86,14 +91,10 @@ abstract public class AbstractDataStatistics<T> implements
 			final byte[] bytes ) {
 
 		final ByteBuffer buffer = ByteBuffer.wrap(bytes);
-		final int alen = buffer.getInt();
-		final byte aidBytes[] = new byte[alen];
-		final int slen = buffer.getInt();
+		internalDataAdapterId = buffer.getShort();
+		final int slen = Short.toUnsignedInt(buffer.getShort());
 		final byte sidBytes[] = new byte[slen];
 
-		buffer.get(aidBytes);
-		dataAdapterId = new ByteArrayId(
-				aidBytes);
 		buffer.get(sidBytes);
 		statisticsId = new ByteArrayId(
 				sidBytes);
@@ -130,15 +131,17 @@ abstract public class AbstractDataStatistics<T> implements
 		return newStats;
 	}
 
-	public JSONObject toJSONObject()
+	@Override
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				"AbstractDataStatistics");
 		jo.put(
 				"dataAdapterID",
-				dataAdapterId.getString());
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsID",
 				statisticsId.getString());
@@ -147,7 +150,7 @@ abstract public class AbstractDataStatistics<T> implements
 
 	@Override
 	public String toString() {
-		return "AbstractDataStatistics [dataAdapterId=" + dataAdapterId.getString() + ", statisticsId="
+		return "AbstractDataStatistics [internalDataAdapterId=" + internalDataAdapterId + ", statisticsId="
 				+ statisticsId.getString() + "]";
 	}
 }

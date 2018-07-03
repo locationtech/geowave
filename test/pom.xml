@@ -474,12 +474,12 @@
 										<classfiles>
 											<fileset dir="../"
 												includes="**/target/classes/**,**/target/munged/classes/**"
-												excludes="**/analytics/api/target/classes/**,**/analytics/mapreduce/target/classes/**,**/accumulo/target/classes/**" />
+												excludes="**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
 											<fileset dir="../"
 												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
-												excludes="**/analytics/api/src/main/java/**,**/analytics/mapreduce/src/main/java/**,**/accumulo/target/src/main/java/**" />
+												excludes="**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
@@ -531,8 +531,8 @@
 						<sourceDirectory>../extensions/formats/stanag4676/service/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/formats/avro/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/formats/gdelt/src/main/java</sourceDirectory>
-						<sourceDirectory>../analytics/api/target/munged/main</sourceDirectory>
-						<sourceDirectory>../analytics/mapreduce/target/munged/main</sourceDirectory>
+						<sourceDirectory>../analytics/api/src/main/java</sourceDirectory>
+						<sourceDirectory>../analytics/mapreduce/src/main/java</sourceDirectory>
 						<sourceDirectory>../analytics/spark/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>

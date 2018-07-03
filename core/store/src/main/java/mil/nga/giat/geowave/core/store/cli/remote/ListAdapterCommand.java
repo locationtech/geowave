@@ -29,6 +29,7 @@ import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 
@@ -95,10 +96,10 @@ public class ListAdapterCommand extends
 			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 		}
 
-		final CloseableIterator<DataAdapter<?>> it = inputStoreOptions.createAdapterStore().getAdapters();
+		final CloseableIterator<InternalDataAdapter<?>> it = inputStoreOptions.createAdapterStore().getAdapters();
 		final StringBuffer buffer = new StringBuffer();
 		while (it.hasNext()) {
-			final DataAdapter<?> adapter = it.next();
+			final InternalDataAdapter<?> adapter = it.next();
 			buffer.append(
 					adapter.getAdapterId().getString()).append(
 					' ');

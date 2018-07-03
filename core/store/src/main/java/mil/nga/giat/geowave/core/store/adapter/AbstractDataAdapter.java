@@ -186,7 +186,8 @@ abstract public class AbstractDataAdapter<T> implements
 					// Don't waste time converting IDs to String if "info" level
 					// is not enabled
 					LOGGER.info("Unable to find field handler for data adapter '"
-							+ StringUtils.stringFromBinary(getAdapterId().getBytes()) + "' and indexed field '"
+					// + StringUtils.stringFromBinary(getAdapterId().getBytes())
+					// + "' and indexed field '"
 							+ StringUtils.stringFromBinary(dimension.getFieldId().getBytes()));
 				}
 				continue;
@@ -215,7 +216,6 @@ abstract public class AbstractDataAdapter<T> implements
 		}
 
 		return new AdapterPersistenceEncoding(
-				getAdapterId(),
 				getDataId(entry),
 				indexData,
 				extendedData);

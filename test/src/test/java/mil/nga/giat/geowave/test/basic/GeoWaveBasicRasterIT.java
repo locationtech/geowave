@@ -30,7 +30,7 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 
 import org.junit.Assert;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
@@ -311,7 +311,6 @@ public class GeoWaveBasicRasterIT extends
 					}
 				}
 			}
-
 			// there should be exactly one
 			Assert.assertFalse(it.hasNext());
 		}
@@ -391,6 +390,7 @@ public class GeoWaveBasicRasterIT extends
 				"test-key",
 				"test-value");
 		try (IndexWriter writer = dataStore.createWriter(
+
 				mergeStrategyOverriddenAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (int r = 0; r < numRasters; r++) {
@@ -589,7 +589,7 @@ public class GeoWaveBasicRasterIT extends
 				final RasterTile<MergeCounter> thisTile,
 				final RasterTile<MergeCounter> nextTile,
 				final SampleModel sampleModel ) {
-			if (nextTile instanceof MergeableRasterTile) {
+			if (nextTile instanceof ServerMergeableRasterTile) {
 				final WritableRaster nextRaster = Raster.createWritableRaster(
 						sampleModel,
 						nextTile.getDataBuffer(),

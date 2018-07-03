@@ -32,12 +32,14 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloDataStore;
@@ -56,7 +58,7 @@ public class SimpleIngestTest
 			new byte[0]);
 	AccumuloOperations accumuloOperations;
 	IndexStore indexStore;
-	AdapterStore adapterStore;
+	PersistentAdapterStore adapterStore;
 	DataStatisticsStore statsStore;
 	AccumuloDataStore mockDataStore;
 
@@ -100,7 +102,9 @@ public class SimpleIngestTest
 						accumuloOperations,
 						accumuloOptions),
 				accumuloOperations,
-				accumuloOptions);
+				accumuloOptions,
+				new InternalAdapterStoreImpl(
+						accumuloOperations));
 
 		accumuloOptions.setCreateTable(true);
 		accumuloOptions.setUseAltIndex(true);

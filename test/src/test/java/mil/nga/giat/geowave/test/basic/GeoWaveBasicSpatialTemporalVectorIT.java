@@ -40,6 +40,8 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -262,7 +264,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 				endDate = (Date) endObj;
 			}
 		}
-		final AdapterStore adapterStore = dataStore.createAdapterStore();
+		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
 		final VectorLocalExportCommand exportCommand = new VectorLocalExportCommand();
 		final VectorLocalExportOptions options = exportCommand.getOptions();
 		final File exportDir = new File(
@@ -278,14 +280,14 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		final double west = env.getMinX();
 		final double south = env.getMinY();
 		final double north = env.getMaxY();
-		try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+		try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 			while (adapterIt.hasNext()) {
-				final DataAdapter<?> adapter = adapterIt.next();
+				final InternalDataAdapter<?> adapter = adapterIt.next();
 				final List<String> adapterIds = new ArrayList<String>();
 				adapterIds.add(adapter.getAdapterId().getString());
 				options.setAdapterIds(adapterIds);
-				if (adapter instanceof GeotoolsFeatureDataAdapter) {
-					final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
+				if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
+					final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter.getAdapter();
 					final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
 
 					String startTimeAttribute;

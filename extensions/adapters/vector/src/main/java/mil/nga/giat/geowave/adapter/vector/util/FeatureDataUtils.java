@@ -51,6 +51,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 public class FeatureDataUtils
@@ -269,9 +272,11 @@ public class FeatureDataUtils
 			}
 		}
 
-		final AdapterStore adapterStore = dataStore.createAdapterStore();
+		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter<?> adapter = adapterStore.getAdapter(
+				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
 			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
@@ -307,9 +312,11 @@ public class FeatureDataUtils
 	public static String getGeomField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		final AdapterStore adapterStore = dataStore.createAdapterStore();
+		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter<?> adapter = adapterStore.getAdapter(
+				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
 			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
@@ -326,9 +333,11 @@ public class FeatureDataUtils
 	public static String getTimeField(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		final AdapterStore adapterStore = dataStore.createAdapterStore();
+		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter adapter = adapterStore.getAdapter(adapterId);
+		final DataAdapter<?> adapter = adapterStore.getAdapter(
+				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
 			final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter;
@@ -361,11 +370,11 @@ public class FeatureDataUtils
 
 	public static int getFeatureAdapterCount(
 			final DataStorePluginOptions dataStore ) {
-		final CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+		final CloseableIterator<InternalDataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 		int featureAdapters = 0;
 
 		while (adapterIt.hasNext()) {
-			final DataAdapter adapter = adapterIt.next();
+			final DataAdapter<?> adapter = adapterIt.next().getAdapter();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapters++;
 			}
@@ -378,10 +387,10 @@ public class FeatureDataUtils
 			final DataStorePluginOptions dataStore ) {
 		final ArrayList<ByteArrayId> featureAdapterIds = new ArrayList<>();
 
-		final CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+		final CloseableIterator<InternalDataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 
 		while (adapterIt.hasNext()) {
-			final DataAdapter adapter = adapterIt.next();
+			final DataAdapter<?> adapter = adapterIt.next().getAdapter();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapterIds.add(adapter.getAdapterId());
 			}

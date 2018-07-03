@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,9 +18,9 @@ import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.opengis.coverage.grid.GridCoverage;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.operations.ResizeCommand;
@@ -31,14 +31,17 @@ import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
-import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.MetadataType;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -51,7 +54,9 @@ public class RasterTileResizeJobRunner extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(RasterTileResizeJobRunner.class);
 
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
+	public static final String NEW_INTERNAL_ADAPTER_ID_KEY = "NEW_INTERNAL_ADAPTER_ID";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";
+	public static final String OLD_INTERNAL_ADAPTER_ID_KEY = "OLD_INTERNAL_ADAPTER_ID";
 
 	private final DataStorePluginOptions inputStoreOptions;
 	private final DataStorePluginOptions outputStoreOptions;
@@ -118,9 +123,12 @@ public class RasterTileResizeJobRunner extends
 				job.getConfiguration(),
 				inputStoreOptions);
 
+		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
+		final short internalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
+				rasterResizeOptions.getInputCoverageName()));
 		final DataAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
-				new ByteArrayId(
-						rasterResizeOptions.getInputCoverageName()));
+				internalAdapterId).getAdapter();
+
 		if (adapter == null) {
 			throw new IllegalArgumentException(
 					"Adapter for coverage '" + rasterResizeOptions.getInputCoverageName()
@@ -131,6 +139,7 @@ public class RasterTileResizeJobRunner extends
 				(RasterDataAdapter) adapter,
 				rasterResizeOptions.getOutputCoverageName(),
 				rasterResizeOptions.getOutputTileSize());
+
 		JobContextAdapterStore.addDataAdapter(
 				job.getConfiguration(),
 				adapter);
@@ -159,9 +168,43 @@ public class RasterTileResizeJobRunner extends
 				job.getConfiguration(),
 				index);
 		final DataStore store = outputStoreOptions.createDataStore();
-		final IndexWriter writer = store.createWriter(
+		store.createWriter(
 				newAdapter,
-				index);
+				index).close();
+		final short newInternalAdapterId = outputStoreOptions.createInternalAdapterStore().addAdapterId(
+				newAdapter.getAdapterId());
+		// what if the adapter IDs are the same, but the internal IDs are
+		// different (unlikely corner case, but seemingly possible)
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				job.getConfiguration(),
+				newAdapter.getAdapterId(),
+				newInternalAdapterId);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				job.getConfiguration(),
+				adapter.getAdapterId(),
+				internalAdapterId);
+
+		job.getConfiguration().setInt(
+				OLD_INTERNAL_ADAPTER_ID_KEY,
+				internalAdapterId);
+
+		job.getConfiguration().setInt(
+				NEW_INTERNAL_ADAPTER_ID_KEY,
+				newInternalAdapterId);
+		if (outputStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
+			try {
+				// this is done primarily to ensure stats merging is enabled
+				// before the
+				// distributed ingest
+				outputStoreOptions.createDataStoreOperations().createMetadataWriter(
+						MetadataType.STATS).close();
+			}
+			catch (final Exception e) {
+				LOGGER.error(
+						"Unable to create stats writer",
+						e);
+			}
+		}
 		boolean retVal = false;
 		try {
 			retVal = job.waitForCompletion(true);
@@ -171,9 +214,20 @@ public class RasterTileResizeJobRunner extends
 					"Error waiting for map reduce tile resize job: ",
 					ex);
 		}
-		finally {
-			writer.close();
+
+		CloseableIterator<Object> obj = outputStoreOptions.createDataStore().query(
+				new QueryOptions(
+						new ByteArrayId(
+								rasterResizeOptions.getOutputCoverageName()),
+						index.getId()),
+				null);
+		int i = 0;
+		while (obj.hasNext()) {
+			obj.next();
+			i++;
 		}
+		System.err.println("Raster Resize: there are '" + i + "' tiles");
+
 		return retVal ? 0 : 1;
 	}
 

@@ -10,19 +10,19 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.filter;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 public class AdapterIdQueryFilter implements
 		DistributableQueryFilter
 {
-	private ByteArrayId adapterId;
+	private Short adapterId;
 
 	public AdapterIdQueryFilter() {}
 
 	public AdapterIdQueryFilter(
-			final ByteArrayId adapterId ) {
+			final short adapterId ) {
 		this.adapterId = adapterId;
 	}
 
@@ -30,26 +30,25 @@ public class AdapterIdQueryFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		return (adapterId == null) || adapterId.equals(persistenceEncoding.getAdapterId());
+		return (adapterId == null) || adapterId.equals((Short) persistenceEncoding.getInternalAdapterId());
 	}
 
 	@Override
 	public byte[] toBinary() {
 		if (adapterId == null) {
-			return new byte[] {};
+			return ByteArrayUtils.shortToByteArray((short) 0);
 		}
-		return adapterId.getBytes();
+		return ByteArrayUtils.shortToByteArray(adapterId);
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		if (bytes.length == 0) {
+		if (ByteArrayUtils.byteArrayToShort(bytes) == 0) {
 			adapterId = null;
 		}
 		else {
-			adapterId = new ByteArrayId(
-					bytes);
+			adapterId = ByteArrayUtils.byteArrayToShort(bytes);
 		}
 	}
 }

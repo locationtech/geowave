@@ -94,9 +94,10 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.MultiAdapterServerMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.SingleAdapterServerMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.warp.WarpRIF;
 import mil.nga.giat.geowave.adapter.raster.stats.HistogramConfig;
@@ -186,7 +187,7 @@ public class RasterDataAdapter implements
 	private boolean buildPyramid;
 	private ByteArrayId[] supportedStatsTypes;
 	private EntryVisibilityHandler<GridCoverage> visibilityHandler;
-	private RootMergeStrategy<?> mergeStrategy;
+	private RasterTileMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
 	private Interpolation interpolation;
 	private MathTransform transform;
@@ -256,7 +257,15 @@ public class RasterDataAdapter implements
 		staticInit();
 
 		final RenderedImage img = originalGridCoverage.getRenderedImage();
-		sampleModel = img.getSampleModel();
+		SampleModel imgSampleModel = img.getSampleModel();
+		if (imgSampleModel.getWidth() != tileSize || imgSampleModel.getHeight() != tileSize) {
+			this.sampleModel = imgSampleModel.createCompatibleSampleModel(
+					tileSize,
+					tileSize);
+		}
+		else {
+			this.sampleModel = imgSampleModel;
+		}
 		colorModel = img.getColorModel();
 		this.metadata = metadata;
 		this.coverageName = coverageName;
@@ -290,17 +299,7 @@ public class RasterDataAdapter implements
 		}
 
 		this.buildPyramid = buildPyramid;
-		if (mergeStrategy != null) {
-			this.mergeStrategy = new RootMergeStrategy(
-					getAdapterId(),
-					sampleModel.createCompatibleSampleModel(
-							tileSize,
-							tileSize),
-					mergeStrategy);
-		}
-		else {
-			this.mergeStrategy = null;
-		}
+		this.mergeStrategy = mergeStrategy;
 		init();
 	}
 
@@ -356,8 +355,7 @@ public class RasterDataAdapter implements
 				adapter.equalizeHistogram,
 				interpolationToByte(adapter.interpolation),
 				adapter.buildPyramid,
-				adapter.mergeStrategy == null ? null : adapter.mergeStrategy.getChildMergeStrategy(adapter
-						.getAdapterId()));
+				adapter.mergeStrategy == null ? null : adapter.mergeStrategy);
 	}
 
 	public RasterDataAdapter(
@@ -433,7 +431,14 @@ public class RasterDataAdapter implements
 
 		this.coverageName = coverageName;
 		this.tileSize = tileSize;
-		this.sampleModel = sampleModel;
+		if (sampleModel.getWidth() != tileSize || sampleModel.getHeight() != tileSize) {
+			this.sampleModel = sampleModel.createCompatibleSampleModel(
+					tileSize,
+					tileSize);
+		}
+		else {
+			this.sampleModel = sampleModel;
+		}
 		this.colorModel = colorModel;
 		this.metadata = metadata;
 		this.minsPerBand = minsPerBand;
@@ -447,17 +452,7 @@ public class RasterDataAdapter implements
 		this.buildPyramid = buildPyramid;
 		this.equalizeHistogram = equalizeHistogram;
 		interpolation = Interpolation.getInstance(interpolationType);
-		if (mergeStrategy != null) {
-			this.mergeStrategy = new RootMergeStrategy(
-					getAdapterId(),
-					sampleModel.createCompatibleSampleModel(
-							tileSize,
-							tileSize),
-					mergeStrategy);
-		}
-		else {
-			this.mergeStrategy = null;
-		}
+		this.mergeStrategy = mergeStrategy;
 		init();
 	}
 
@@ -1252,17 +1247,16 @@ public class RasterDataAdapter implements
 		return originalCoverageProperties;
 	}
 
-	public MergeableRasterTile<?> getRasterTileFromCoverage(
+	public ClientMergeableRasterTile<?> getRasterTileFromCoverage(
 			final GridCoverage entry ) {
-		return new MergeableRasterTile(
+		return new ClientMergeableRasterTile(
+				mergeStrategy,
+				sampleModel,
 				getRaster(
 						entry).getDataBuffer(),
 				mergeStrategy == null ? null : mergeStrategy.getMetadata(
 						entry,
-						getProperties(entry),
-						this),
-				mergeStrategy,
-				getAdapterId());
+						this));
 	}
 
 	public Raster getRaster(
@@ -1288,7 +1282,6 @@ public class RasterDataAdapter implements
 		final AdapterPersistenceEncoding encoding;
 		if (entry instanceof FitToIndexGridCoverage) {
 			encoding = new FitToIndexPersistenceEncoding(
-					getAdapterId(),
 					new ByteArrayId(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
@@ -1300,7 +1293,6 @@ public class RasterDataAdapter implements
 			// this shouldn't happen
 			LOGGER.warn("Grid coverage is not fit to the index");
 			encoding = new AdapterPersistenceEncoding(
-					getAdapterId(),
 					new ByteArrayId(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
@@ -1681,7 +1673,7 @@ public class RasterDataAdapter implements
 		}
 		else {
 			buf.get(mergeStrategyBinary);
-			mergeStrategy = (RootMergeStrategy<?>) PersistenceUtils.fromBinary(mergeStrategyBinary);
+			mergeStrategy = (RasterTileMergeStrategy<?>) PersistenceUtils.fromBinary(mergeStrategyBinary);
 		}
 		buildPyramid = (buf.get() != 0);
 		equalizeHistogram = (buf.get() != 0);
@@ -1706,34 +1698,28 @@ public class RasterDataAdapter implements
 	@Override
 	public DataStatistics<GridCoverage> createDataStatistics(
 			final ByteArrayId statisticsType ) {
+		DataStatistics<GridCoverage> retVal = null;
 		if (OverviewStatistics.STATS_TYPE.equals(statisticsType)) {
-			return new OverviewStatistics(
-					new ByteArrayId(
-							coverageName));
+			retVal = new OverviewStatistics();
 		}
 		else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsType)) {
-			return new RasterBoundingBoxStatistics(
-					new ByteArrayId(
-							coverageName));
+			retVal = new RasterBoundingBoxStatistics();
 		}
 		else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsType)) {
-			return new RasterFootprintStatistics(
-					new ByteArrayId(
-							coverageName));
+			retVal = new RasterFootprintStatistics();
 		}
 		else if (HistogramStatistics.STATS_TYPE.equals(statisticsType) && (histogramConfig != null)) {
-			return new HistogramStatistics(
-					new ByteArrayId(
-							coverageName),
+			retVal = new HistogramStatistics(
 					histogramConfig);
 		}
-		// HP Fortify "Log Forging" false positive
-		// What Fortify considers "user input" comes only
-		// from users with OS-level access anyway
-		LOGGER.warn("Unrecognized statistics type " + statisticsType.getString() + " using count statistic");
-		return new CountDataStatistics<GridCoverage>(
-				getAdapterId(),
-				statisticsType);
+		else {
+			// HP Fortify "Log Forging" false positive
+			// What Fortify considers "user input" comes only
+			// from users with OS-level access anyway
+			LOGGER.warn("Unrecognized statistics type " + statisticsType.getString() + " using count statistic");
+			retVal = new CountDataStatistics<GridCoverage>();
+		}
+		return retVal;
 	}
 
 	public double[][] getNoDataValuesPerBand() {
@@ -1919,10 +1905,15 @@ public class RasterDataAdapter implements
 
 	}
 
-	public Map<String, String> getConfiguredOptions() {
+	public Map<String, String> getConfiguredOptions(
+			short internalAdapterId ) {
 		final Map<String, String> configuredOptions = new HashMap<String, String>();
 		if (mergeStrategy != null) {
-			final String mergeStrategyStr = ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(mergeStrategy));
+			final String mergeStrategyStr = ByteArrayUtils.byteArrayToString(PersistenceUtils
+					.toBinary(new SingleAdapterServerMergeStrategy(
+							internalAdapterId,
+							sampleModel,
+							mergeStrategy)));
 
 			configuredOptions.put(
 					RasterTileRowTransform.MERGE_STRATEGY_KEY,
@@ -1998,8 +1989,9 @@ public class RasterDataAdapter implements
 
 	@Override
 	public Map<String, String> getOptions(
+			short internalAdapterId,
 			final Map<String, String> existingOptions ) {
-		final Map<String, String> configuredOptions = getConfiguredOptions();
+		final Map<String, String> configuredOptions = getConfiguredOptions(internalAdapterId);
 		if (existingOptions == null) {
 			return configuredOptions;
 		}
@@ -2071,9 +2063,36 @@ public class RasterDataAdapter implements
 		if (RasterTileRowTransform.MERGE_STRATEGY_KEY.equals(optionKey)) {
 			final byte[] currentStrategyBytes = ByteArrayUtils.byteArrayFromString(currentValue);
 			final byte[] nextStrategyBytes = ByteArrayUtils.byteArrayFromString(nextValue);
-			final RootMergeStrategy currentStrategy = (RootMergeStrategy) PersistenceUtils
-					.fromBinary(currentStrategyBytes);
-			final RootMergeStrategy nextStrategy = (RootMergeStrategy) PersistenceUtils.fromBinary(nextStrategyBytes);
+			final Object currentObj = PersistenceUtils.fromBinary(currentStrategyBytes);
+			MultiAdapterServerMergeStrategy currentStrategy;
+			if (currentObj instanceof SingleAdapterServerMergeStrategy) {
+				currentStrategy = new MultiAdapterServerMergeStrategy<>(
+						(SingleAdapterServerMergeStrategy) currentObj);
+
+			}
+			else if (currentObj instanceof MultiAdapterServerMergeStrategy) {
+				currentStrategy = (MultiAdapterServerMergeStrategy) currentObj;
+			}
+			else {
+				// this is unexpected behavior and should never happen, consider
+				// logging a message
+				return nextValue;
+			}
+			final Object nextObj = PersistenceUtils.fromBinary(nextStrategyBytes);
+			MultiAdapterServerMergeStrategy nextStrategy;
+			if (nextObj instanceof SingleAdapterServerMergeStrategy) {
+				nextStrategy = new MultiAdapterServerMergeStrategy<>(
+						(SingleAdapterServerMergeStrategy) nextObj);
+
+			}
+			else if (nextObj instanceof MultiAdapterServerMergeStrategy) {
+				nextStrategy = (MultiAdapterServerMergeStrategy) nextObj;
+			}
+			else {
+				// this is unexpected behavior and should never happen, consider
+				// logging a message
+				return currentValue;
+			}
 			currentStrategy.merge(nextStrategy);
 			return ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(currentStrategy));
 		}

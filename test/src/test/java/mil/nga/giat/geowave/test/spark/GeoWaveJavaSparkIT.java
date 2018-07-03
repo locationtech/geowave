@@ -32,6 +32,7 @@ import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -181,12 +182,12 @@ public class GeoWaveJavaSparkIT extends
 				1);
 
 		// Retrieve the adapters
-		CloseableIterator<DataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
+		CloseableIterator<InternalDataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 		DataAdapter hailAdapter = null;
 		DataAdapter tornadoAdapter = null;
 
 		while (adapterIt.hasNext()) {
-			DataAdapter adapter = adapterIt.next();
+			DataAdapter adapter = adapterIt.next().getAdapter();
 			String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
 			if (adapterName.equals("hail")) {

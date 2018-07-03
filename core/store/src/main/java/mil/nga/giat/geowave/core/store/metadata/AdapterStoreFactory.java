@@ -4,9 +4,10 @@ import mil.nga.giat.geowave.core.store.BaseStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryHelper;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 
 public class AdapterStoreFactory extends
-		BaseStoreFactory<AdapterStore>
+		BaseStoreFactory<PersistentAdapterStore>
 {
 
 	public AdapterStoreFactory(
@@ -20,7 +21,7 @@ public class AdapterStoreFactory extends
 	}
 
 	@Override
-	public AdapterStore createStore(
+	public PersistentAdapterStore createStore(
 			final StoreFactoryOptions options ) {
 		return new AdapterStoreImpl(
 				helper.createOperations(options),

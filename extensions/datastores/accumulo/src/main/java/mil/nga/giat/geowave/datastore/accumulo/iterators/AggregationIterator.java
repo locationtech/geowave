@@ -38,6 +38,7 @@ import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
@@ -64,7 +65,7 @@ public class AggregationIterator extends
 	public static final int AGGREGATION_QUERY_ITERATOR_PRIORITY = 25;
 	protected QueryFilterIterator queryFilterIterator;
 	private Aggregation aggregationFunction;
-	private DataAdapter adapter;
+	private InternalDataAdapter adapter;
 	private boolean aggregationReturned = false;
 	private Text startRowOfAggregation = null;
 	private final Text currentRow = new Text();
@@ -170,8 +171,8 @@ public class AggregationIterator extends
 				startRowOfAggregation = currentRow;
 			}
 		}
-		else if (persistenceEncoding.getAdapterId().getString().equals(
-				adapter.getAdapterId().getString())) {
+		else if (((Short) (persistenceEncoding.getInternalAdapterId()))
+				.equals((Short) (adapter.getInternalAdapterId()))) {
 			final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
 			if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 				((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -187,7 +188,7 @@ public class AggregationIterator extends
 			}
 
 			final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
-					persistenceEncoding.getAdapterId(),
+					persistenceEncoding.getInternalAdapterId(),
 					persistenceEncoding.getDataId(),
 					persistenceEncoding.getInsertionPartitionKey(),
 					persistenceEncoding.getInsertionSortKey(),
@@ -231,7 +232,7 @@ public class AggregationIterator extends
 			if (options.containsKey(ADAPTER_OPTION_NAME)) {
 				final String adapterStr = options.get(ADAPTER_OPTION_NAME);
 				final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-				adapter = (DataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+				adapter = (InternalDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
 			}
 
 			// now go from index strategy, constraints, and max decomp to a set

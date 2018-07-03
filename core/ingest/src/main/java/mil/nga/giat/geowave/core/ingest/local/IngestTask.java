@@ -160,7 +160,7 @@ public class IngestTask implements
 			for (Entry<ByteArrayId, IndexWriter> writerEntry : indexWriters.entrySet()) {
 				try {
 					runData.releaseIndexWriter(
-							adapterMappings.get(writerEntry.getKey()),
+							writerEntry.getKey(),
 							writerEntry.getValue());
 				}
 				catch (Exception e) {
@@ -186,9 +186,12 @@ public class IngestTask implements
 			GeoWaveData<?> geowaveData,
 			WritableDataAdapter adapter )
 			throws Exception {
-		AdapterToIndexMapping mapping = adapterMappings.get(adapter.getAdapterId());
 
-		if (mapping == null) {
+		ByteArrayId adapterId = adapter.getAdapterId();
+		// Write the data to the data store.
+		IndexWriter writer = indexWriters.get(adapterId);
+
+		if (writer == null) {
 			List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
 			for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
 				PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
@@ -205,26 +208,16 @@ public class IngestTask implements
 				}
 				indices.add(index);
 			}
-			runData.addIndices(indices);
 			runData.addAdapter(adapter);
 
-			mapping = new AdapterToIndexMapping(
-					adapter.getAdapterId(),
-					indices.toArray(new PrimaryIndex[indices.size()]));
-			adapterMappings.put(
-					mapping.getAdapterId(),
-					mapping);
-
 			// If we have the index checked out already, use that.
-			if (!indexWriters.containsKey(mapping.getAdapterId())) {
-				indexWriters.put(
-						mapping.getAdapterId(),
-						runData.getIndexWriter(mapping));
-			}
+			writer = runData.getIndexWriter(
+					adapterId,
+					indices);
+			indexWriters.put(
+					adapterId,
+					writer);
 		}
-
-		// Write the data to the data store.
-		IndexWriter writer = indexWriters.get(mapping.getAdapterId());
 
 		// Time the DB write
 		long hack = System.currentTimeMillis();

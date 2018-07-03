@@ -63,6 +63,7 @@ import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -84,6 +85,7 @@ public class KMeansDistortionMapReduceTest
 			ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 	final FeatureDataAdapter testObjectAdapter = new FeatureDataAdapter(
 			ftype);
+	short internalAdapterId = 1234;
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
@@ -114,6 +116,14 @@ public class KMeansDistortionMapReduceTest
 				reduceDriver.getConfiguration(),
 				testObjectAdapter);
 
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				mapDriver.getConfiguration(),
+				testObjectAdapter.getAdapterId(),
+				internalAdapterId);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				reduceDriver.getConfiguration(),
+				testObjectAdapter.getAdapterId(),
+				internalAdapterId);
 		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
@@ -234,7 +244,7 @@ public class KMeansDistortionMapReduceTest
 			throws IOException {
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAdapterId(testObjectAdapter.getAdapterId());
+		inputKey.setInternalAdapterId(internalAdapterId);
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
 

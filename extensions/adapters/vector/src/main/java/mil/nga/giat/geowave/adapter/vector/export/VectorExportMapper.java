@@ -35,7 +35,7 @@ public class VectorExportMapper extends
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Logger.class);
 	private int batchSize;
-	private final Map<ByteArrayId, AvroSFCWriter> adapterIdToAvroWriterMap = new HashMap<ByteArrayId, AvroSFCWriter>();
+	private final Map<Short, AvroSFCWriter> adapterIdToAvroWriterMap = new HashMap<Short, AvroSFCWriter>();
 	private final NullWritable outVal = NullWritable.get();
 	private final AvroKey<AvroSimpleFeatureCollection> outKey = new AvroKey<AvroSimpleFeatureCollection>();
 
@@ -46,13 +46,13 @@ public class VectorExportMapper extends
 			final Mapper<GeoWaveInputKey, SimpleFeature, AvroKey<AvroSimpleFeatureCollection>, NullWritable>.Context context )
 			throws IOException,
 			InterruptedException {
-		AvroSFCWriter avroWriter = adapterIdToAvroWriterMap.get(key.getAdapterId());
+		AvroSFCWriter avroWriter = adapterIdToAvroWriterMap.get(key.getInternalAdapterId());
 		if (avroWriter == null) {
 			avroWriter = new AvroSFCWriter(
 					value.getFeatureType(),
 					batchSize);
 			adapterIdToAvroWriterMap.put(
-					key.getAdapterId(),
+					key.getInternalAdapterId(),
 					avroWriter);
 		}
 		final AvroSimpleFeatureCollection retVal = avroWriter.write(value);

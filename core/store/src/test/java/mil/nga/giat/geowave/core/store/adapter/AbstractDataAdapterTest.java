@@ -58,7 +58,7 @@ public class AbstractDataAdapterTest
 				testIndexModel);
 		final Integer afterValue = mockAbstractDataAdapter.decode(
 				new IndexedAdapterPersistenceEncoding(
-						testEncoding.getAdapterId(),
+						testEncoding.getInternalAdapterId(),
 						testEncoding.getDataId(),
 						null,
 						null,

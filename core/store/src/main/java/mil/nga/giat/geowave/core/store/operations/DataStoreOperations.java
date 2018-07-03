@@ -5,6 +5,7 @@ import java.io.IOException;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public interface DataStoreOperations
@@ -23,7 +24,7 @@ public interface DataStoreOperations
 
 	public boolean deleteAll(
 			ByteArrayId indexId,
-			ByteArrayId adapterId,
+			Short adapterId,
 			String... additionalAuthorizations );
 
 	public boolean insureAuthorizations(
@@ -51,7 +52,7 @@ public interface DataStoreOperations
 	 */
 	public Writer createWriter(
 			ByteArrayId indexId,
-			ByteArrayId adapterId );
+			short internalAdapterId );
 
 	public MetadataWriter createMetadataWriter(
 			MetadataType metadataType );
@@ -72,6 +73,6 @@ public interface DataStoreOperations
 
 	public boolean mergeData(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore );
 }

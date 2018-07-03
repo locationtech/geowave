@@ -194,7 +194,7 @@ public class PersistentDataFormatter implements
 		final Text insertionIdText = new Text(
 				sbInsertion.toString());
 		final Text adapterIdText = new Text(
-				StringUtils.stringFromBinary(rowId.getAdapterId()));
+				(Short.toString(rowId.getInternalAdapterId())));
 		final Text dataIdText = new Text(
 				StringUtils.stringFromBinary(rowId.getDataId()));
 		final Text duplicatesText = new Text(

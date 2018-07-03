@@ -17,6 +17,7 @@ import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 
 abstract public class TimeRangeDataStatistics<T> extends
@@ -30,10 +31,10 @@ abstract public class TimeRangeDataStatistics<T> extends
 	}
 
 	public TimeRangeDataStatistics(
-			final ByteArrayId dataAdapterId,
+			final Short internalAdapterId,
 			final String fieldId ) {
 		super(
-				dataAdapterId,
+				internalAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						fieldId));
@@ -51,13 +52,16 @@ abstract public class TimeRangeDataStatistics<T> extends
 	 * Convert Time Range statistics to a JSON object
 	 */
 
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject(
+			InternalAdapterStore store )
 			throws JSONException {
 		JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
-
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsID",
 				getStatisticsId().getString());

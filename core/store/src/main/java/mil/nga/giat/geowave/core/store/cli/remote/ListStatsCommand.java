@@ -30,6 +30,8 @@ import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -68,7 +70,7 @@ public class ListStatsCommand extends
 	@Override
 	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
-			final DataAdapter<?> adapter,
+			final InternalDataAdapter<?> adapter,
 			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
@@ -78,6 +80,7 @@ public class ListStatsCommand extends
 		}
 
 		final DataStatisticsStore statsStore = storeOptions.createDataStatisticsStore();
+		final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
 		final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
 		final StringBuilder builder = new StringBuilder();
@@ -94,11 +97,10 @@ public class ListStatsCommand extends
 							adapter.getAdapterId().getString());
 					while (statsIt.hasNext()) {
 						final DataStatistics<?> stats = statsIt.next();
-						if (!stats.getDataAdapterId().equals(
-								adapter.getAdapterId())) {
+						if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
 							continue;
 						}
-						resultsArray.add(stats.toJSONObject());
+						resultsArray.add(stats.toJSONObject(internalAdapterStore));
 					}
 					outputObject.put(
 							"stats",
@@ -115,8 +117,7 @@ public class ListStatsCommand extends
 			else {
 				while (statsIt.hasNext()) {
 					final DataStatistics<?> stats = statsIt.next();
-					if (!stats.getDataAdapterId().equals(
-							adapter.getAdapterId())) {
+					if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
 						continue;
 					}
 					builder.append("[");

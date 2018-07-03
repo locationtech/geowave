@@ -34,6 +34,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -59,9 +60,9 @@ public class AccumuloSplitsProvider extends
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
 			final PrimaryIndex index,
-			final List<DataAdapter<Object>> adapters,
+			final List<Short> adapters,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
 			final DistributableQuery query,

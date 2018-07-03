@@ -41,6 +41,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.MoreExecutors;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
@@ -48,6 +49,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
@@ -196,7 +198,7 @@ public class CassandraOperations implements
 
 	public BatchedRangeRead getBatchedRangeRead(
 			final String tableName,
-			final List<ByteArrayId> adapterIds,
+			final Collection<Short> adapterIds,
 			final Collection<SinglePartitionQueryRanges> ranges ) {
 		PreparedStatement preparedRead;
 		synchronized (state.preparedRangeReadsPerTable) {
@@ -242,7 +244,7 @@ public class CassandraOperations implements
 			final String tableName,
 			final byte[] partitionKey,
 			final byte[] sortKey,
-			final ByteArrayId adapterId ) {
+			final Short internalAdapterId ) {
 		PreparedStatement preparedRead;
 		synchronized (state.preparedRowReadPerTable) {
 			preparedRead = state.preparedRowReadPerTable.get(tableName);
@@ -276,7 +278,7 @@ public class CassandraOperations implements
 				this,
 				partitionKey,
 				sortKey,
-				adapterId == null ? null : adapterId.getBytes());
+				internalAdapterId == null ? null : internalAdapterId);
 
 	}
 
@@ -362,14 +364,14 @@ public class CassandraOperations implements
 	public boolean deleteRows(
 			final String tableName,
 			final byte[][] dataIds,
-			final byte[] adapterId,
+			final short internalAdapterId,
 			final String... additionalAuthorizations ) {
 		session.execute(QueryBuilder.delete().from(
 				gwNamespace,
 				tableName).where(
 				QueryBuilder.eq(
 						CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-						ByteBuffer.wrap(adapterId))).and(
+						internalAdapterId)).and(
 				QueryBuilder.in(
 						CassandraField.GW_DATA_ID_KEY.getFieldName(),
 						Lists.transform(
@@ -381,10 +383,8 @@ public class CassandraOperations implements
 	public CloseableIterator<CassandraRow> getRows(
 			final String tableName,
 			final byte[][] dataIds,
-			final byte[] adapterId,
+			final Short internalAdapterId,
 			final String... additionalAuthorizations ) {
-		final ByteArrayId adapterIdObj = new ByteArrayId(
-				adapterId);
 		final Set<ByteArrayId> dataIdsSet = new HashSet<ByteArrayId>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
@@ -404,8 +404,7 @@ public class CassandraOperations implements
 							public boolean apply(
 									final GeoWaveRow input ) {
 								return dataIdsSet.contains(new ByteArrayId(
-										input.getDataId())) && new ByteArrayId(
-										input.getAdapterId()).equals(adapterIdObj);
+										input.getDataId())) && (input.getInternalAdapterId() == internalAdapterId);
 							}
 						}));
 	}
@@ -427,7 +426,7 @@ public class CassandraOperations implements
 							ByteBuffer.wrap(row.getSortKey()))).and(
 					QueryBuilder.eq(
 							CassandraField.GW_ADAPTER_ID_KEY.getFieldName(),
-							ByteBuffer.wrap(row.getAdapterId()))).and(
+							row.getInternalAdapterId())).and(
 					QueryBuilder.eq(
 							CassandraField.GW_DATA_ID_KEY.getFieldName(),
 							ByteBuffer.wrap(row.getDataId()))).and(
@@ -525,7 +524,7 @@ public class CassandraOperations implements
 	@Override
 	public boolean deleteAll(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId,
+			final Short internalAdapterId,
 			final String... additionalAuthorizations ) {
 		return false;
 	}
@@ -540,7 +539,7 @@ public class CassandraOperations implements
 	@Override
 	public Writer createWriter(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		if (options.isCreateTable()) {
 			synchronized (CREATE_TABLE_MUTEX) {
 				try {
@@ -582,7 +581,8 @@ public class CassandraOperations implements
 						create.addPartitionKey(
 								PRIMARY_ID_KEY,
 								DataType.blob());
-						if (MetadataType.STATS.equals(metadataType)) {
+						if (MetadataType.STATS.equals(metadataType)
+								|| MetadataType.INTERNAL_ADAPTER.equals(metadataType)) {
 							create.addClusteringColumn(
 									SECONDARY_ID_KEY,
 									DataType.blob());
@@ -647,7 +647,7 @@ public class CassandraOperations implements
 	@Override
 	public boolean mergeData(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// TODO Auto-generated method stub
 		return false;

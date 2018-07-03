@@ -68,7 +68,6 @@ public class CopyCommand extends
 		File configFile = getGeoWaveConfigFile(params);
 
 		if (options.getHdfsHostPort() == null) {
-
 			Properties configProperties = ConfigOptions.loadProperties(configFile);
 			String hdfsFSUrl = ConfigHDFSCommand.getHdfsUrl(configProperties);
 			options.setHdfsHostPort(hdfsFSUrl);

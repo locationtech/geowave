@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,8 +22,8 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 
 public class FieldVisibilityCount<T> extends
 		AbstractDataStatistics<T> implements
@@ -39,26 +39,26 @@ public class FieldVisibilityCount<T> extends
 	}
 
 	private FieldVisibilityCount(
-			final ByteArrayId dataAdapterId,
+			final short internalDataAdapterId,
 			final ByteArrayId statisticsId,
 			final Map<ByteArrayId, Long> countsPerVisibility ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(statisticsId));
 		this.countsPerVisibility = countsPerVisibility;
 	}
 
 	public FieldVisibilityCount(
-			final ByteArrayId dataAdapterId,
+			final short internalDataAdapterId,
 			final ByteArrayId statisticsId ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(statisticsId));
 		countsPerVisibility = new HashMap<ByteArrayId, Long>();
 	}
 
 	public static ByteArrayId composeId(
-			ByteArrayId statisticsId ) {
+			final ByteArrayId statisticsId ) {
 		return composeId(
 				STATS_TYPE.getString(),
 				statisticsId.getString());
@@ -74,13 +74,13 @@ public class FieldVisibilityCount<T> extends
 			buf.putInt(key.length);
 			buf.put(key);
 			buf.putLong(entry.getValue());
-			byte[] serializedEntry = buf.array();
+			final byte[] serializedEntry = buf.array();
 			serializedCounts.add(serializedEntry);
 			bufferSize += serializedEntry.length;
 		}
-		ByteBuffer buf = super.binaryBuffer(bufferSize);
+		final ByteBuffer buf = super.binaryBuffer(bufferSize);
 		buf.putInt(serializedCounts.size());
-		for (byte[] count : serializedCounts) {
+		for (final byte[] count : serializedCounts) {
 			buf.put(count);
 		}
 		return buf.array();
@@ -89,7 +89,7 @@ public class FieldVisibilityCount<T> extends
 	@Override
 	public DataStatistics<T> duplicate() {
 		return new FieldVisibilityCount<T>(
-				dataAdapterId,
+				internalDataAdapterId,
 				statisticsId,
 				this.countsPerVisibility);
 	}
@@ -115,7 +115,7 @@ public class FieldVisibilityCount<T> extends
 	@Override
 	public void entryIngested(
 			final T entry,
-			GeoWaveRow... kvs ) {
+			final GeoWaveRow... kvs ) {
 		updateEntry(
 				1,
 				kvs);
@@ -123,9 +123,9 @@ public class FieldVisibilityCount<T> extends
 
 	private void updateEntry(
 			final int incrementValue,
-			GeoWaveRow... kvs ) {
-		for (GeoWaveRow row : kvs) {
-			GeoWaveValue[] values = row.getFieldValues();
+			final GeoWaveRow... kvs ) {
+		for (final GeoWaveRow row : kvs) {
+			final GeoWaveValue[] values = row.getFieldValues();
 			for (final GeoWaveValue v : values) {
 				ByteArrayId visibility = new ByteArrayId(
 						new byte[] {});
@@ -147,7 +147,7 @@ public class FieldVisibilityCount<T> extends
 	@Override
 	public void entryDeleted(
 			final T entry,
-			GeoWaveRow... kvs ) {
+			final GeoWaveRow... kvs ) {
 		updateEntry(
 				-1,
 				kvs);

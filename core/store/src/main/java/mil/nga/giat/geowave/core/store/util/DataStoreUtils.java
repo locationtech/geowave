@@ -177,9 +177,7 @@ public class DataStoreUtils
 				rowId2.getSortKey())) {
 			return false;
 		}
-		if (!Arrays.equals(
-				rowId1.getAdapterId(),
-				rowId2.getAdapterId())) {
+		if (rowId1.getInternalAdapterId() != rowId2.getInternalAdapterId()) {
 			return false;
 		}
 

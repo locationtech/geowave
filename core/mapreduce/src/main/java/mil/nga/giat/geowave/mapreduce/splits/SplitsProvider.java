@@ -32,8 +32,13 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
@@ -57,8 +62,9 @@ public class SplitsProvider
 			final DataStoreOperations operations,
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore,
 			final IndexStore indexStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final Integer minSplits,
@@ -70,20 +76,22 @@ public class SplitsProvider
 
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
-		final Map<ByteArrayId, List<ByteArrayId>> indexIdToAdaptersMap = new HashMap<>();
-		for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+		final Map<ByteArrayId, List<Short>> indexIdToAdaptersMap = new HashMap<>();
+		for (final Pair<PrimaryIndex, List<Short>> indexAdapterIdPair : BaseDataStoreUtils
 				.getAdaptersWithMinimalSetOfIndices(
+						queryOptions,
 						adapterStore,
+						internalAdapterStore,
 						adapterIndexMappingStore,
 						indexStore)) {
 			indexIdToAdaptersMap.put(
-					indexAdapterPair.getKey().getId(),
-					MapReduceUtils.idsFromAdapters(indexAdapterPair.getValue()));
+					indexAdapterIdPair.getKey().getId(),
+					indexAdapterIdPair.getValue());
 			populateIntermediateSplits(
 					splits,
 					operations,
-					indexAdapterPair.getLeft(),
-					indexAdapterPair.getValue(),
+					indexAdapterIdPair.getLeft(),
+					indexAdapterIdPair.getValue(),
 					statsCache,
 					adapterStore,
 					statsStore,
@@ -107,21 +115,23 @@ public class SplitsProvider
 				// increasing the size by 1
 				final IntermediateSplitInfo highestSplit = splits.pollLast();
 				final IntermediateSplitInfo otherSplit = highestSplit.split(statsCache);
-				// When we can't split the highest split we remove it and attempt the second highest
+				// When we can't split the highest split we remove it and
+				// attempt the second highest
 				// working our way up the split set.
 				if (otherSplit == null) {
 					unsplittable.add(highestSplit);
-				} else {
+				}
+				else {
 					splits.add(highestSplit);
 					splits.add(otherSplit);
 				}
 			}
-			while ( splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
-			
-			//Add all unsplittable splits back to splits array
+			while (splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
+
+			// Add all unsplittable splits back to splits array
 			splits.addAll(unsplittable);
-			
-			if(splits.size() < minSplits) {
+
+			if (splits.size() < minSplits) {
 				LOGGER.warn("Truly unable to meet split count. Actual Count: " + splits.size());
 			}
 		}
@@ -155,9 +165,9 @@ public class SplitsProvider
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
 			final PrimaryIndex index,
-			final List<DataAdapter<Object>> adapters,
+			final List<Short> adapterIds,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
 			final DistributableQuery query,
@@ -190,7 +200,7 @@ public class SplitsProvider
 
 		RowRangeHistogramStatistics<?> statistics = getHistStats(
 				index,
-				adapters,
+				adapterIds,
 				adapterStore,
 				statsStore,
 				statsCache,
@@ -277,8 +287,8 @@ public class SplitsProvider
 
 	protected RowRangeHistogramStatistics<?> getHistStats(
 			final PrimaryIndex index,
-			final List<DataAdapter<Object>> adapters,
-			final AdapterStore adapterStore,
+			final List<Short> adapterIds,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
 			final String[] authorizations )
@@ -289,7 +299,7 @@ public class SplitsProvider
 			try {
 				rangeStats = getRangeStats(
 						index,
-						adapters,
+						adapterIds,
 						adapterStore,
 						statsStore,
 						authorizations);
@@ -327,14 +337,14 @@ public class SplitsProvider
 
 	private RowRangeHistogramStatistics<?> getRangeStats(
 			final PrimaryIndex index,
-			final List<DataAdapter<Object>> adapters,
-			final AdapterStore adapterStore,
+			final List<Short> adapterIds,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore store,
 			final String[] authorizations ) {
 		RowRangeHistogramStatistics<?> singleStats = null;
-		for (final DataAdapter<?> adapter : adapters) {
+		for (final Short adapterId : adapterIds) {
 			final RowRangeHistogramStatistics<?> rowStat = (RowRangeHistogramStatistics<?>) store.getDataStatistics(
-					adapter.getAdapterId(),
+					adapterId,
 					RowRangeHistogramStatistics.composeId(index.getId()),
 					authorizations);
 			if (singleStats == null) {

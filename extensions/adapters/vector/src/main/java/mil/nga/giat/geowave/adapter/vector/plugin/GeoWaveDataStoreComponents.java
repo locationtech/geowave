@@ -25,6 +25,8 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -69,7 +71,12 @@ public class GeoWaveDataStoreComponents
 		// indicies and writing it to the adapterStore, in cases where the
 		// featuredataadapter was created from geotools datastore's createSchema
 		adapter.init(adapterIndices);
-		gtStore.adapterStore.addAdapter(adapter);
+		short internalAdapterId = gtStore.getInternalAdapterStore().getInternalAdapterId(
+				adapter.getAdapterId());
+		InternalDataAdapter<?> internalDataAdapter = new InternalDataAdapterWrapper(
+				adapter,
+				internalAdapterId);
+		gtStore.adapterStore.addAdapter(internalDataAdapter);
 	}
 
 	public IndexStore getIndexStore() {

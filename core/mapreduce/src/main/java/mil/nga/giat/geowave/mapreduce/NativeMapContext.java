@@ -52,14 +52,6 @@ public class NativeMapContext<KEYIN, VALUEIN> implements
 
 	public NativeMapContext(
 			final MapContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> context,
-			final AdapterStore adapterStore ) {
-		this.context = context;
-		this.serializationTool = new HadoopWritableSerializationTool(
-				adapterStore);
-	}
-
-	public NativeMapContext(
-			final MapContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> context,
 			final HadoopWritableSerializationTool serializationTool ) {
 		this.context = context;
 		this.serializationTool = serializationTool;
@@ -167,7 +159,7 @@ public class NativeMapContext<KEYIN, VALUEIN> implements
 		context.write(
 				key,
 				serializationTool.toWritable(
-						key.getAdapterId(),
+						key.getInternalAdapterId(),
 						value));
 	}
 

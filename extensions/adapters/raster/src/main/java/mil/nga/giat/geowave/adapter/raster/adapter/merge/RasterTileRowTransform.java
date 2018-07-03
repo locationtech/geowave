@@ -13,7 +13,7 @@ package mil.nga.giat.geowave.adapter.raster.adapter.merge;
 import java.io.IOException;
 import java.util.Map;
 
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
@@ -31,20 +31,20 @@ public class RasterTileRowTransform<T extends Persistable> implements
 {
 	public static final String TRANSFORM_NAME = "RasterTile";
 	public static final String MERGE_STRATEGY_KEY = "MERGE_STRATEGY";
-	private RootMergeStrategy<T> mergeStrategy;
+	private ServerMergeStrategy<T> mergeStrategy;
 	// this priority is fairly arbitrary at the moment
 	private static final int RASTER_TILE_PRIORITY = 4;
 
 	public Mergeable transform(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final Mergeable mergeable ) {
 		if ((mergeable != null) && (mergeable instanceof RasterTile)) {
 			final RasterTile<T> rasterTile = (RasterTile) mergeable;
-			return new MergeableRasterTile<T>(
+			return new ServerMergeableRasterTile<T>(
 					rasterTile.getDataBuffer(),
 					rasterTile.getMetadata(),
 					mergeStrategy,
-					adapterId);
+					internalAdapterId);
 		}
 		return mergeable;
 	}
@@ -56,13 +56,13 @@ public class RasterTileRowTransform<T extends Persistable> implements
 		final String mergeStrategyStr = options.get(MERGE_STRATEGY_KEY);
 		if (mergeStrategyStr != null) {
 			final byte[] mergeStrategyBytes = ByteArrayUtils.byteArrayFromString(mergeStrategyStr);
-			mergeStrategy = (RootMergeStrategy<T>) PersistenceUtils.fromBinary(mergeStrategyBytes);
+			mergeStrategy = (ServerMergeStrategy<T>) PersistenceUtils.fromBinary(mergeStrategyBytes);
 		}
 	}
 
 	@Override
 	public Mergeable getRowAsMergeableObject(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final ByteArrayId fieldId,
 			final byte[] rowValueBinary ) {
 		final RasterTile mergeable = new RasterTile();
@@ -71,7 +71,7 @@ public class RasterTileRowTransform<T extends Persistable> implements
 			mergeable.fromBinary(rowValueBinary);
 		}
 		return transform(
-				adapterId,
+				internalAdapterId,
 				mergeable);
 	}
 

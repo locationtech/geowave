@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -34,13 +34,14 @@ public class OverviewStatistics extends
 	private Resolution[] resolutions = new Resolution[] {};
 
 	public OverviewStatistics() {
-		super();
+		this(
+				null);
 	}
 
 	public OverviewStatistics(
-			final ByteArrayId dataAdapterId ) {
+			final Short internalAdapterId ) {
 		super(
-				dataAdapterId,
+				internalAdapterId,
 				STATS_TYPE);
 	}
 

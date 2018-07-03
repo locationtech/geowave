@@ -167,7 +167,7 @@ public class KSamplerMapReduce
 								nestedGroupCentroidAssigner.getGroupForLevel(wrapper),
 								1.0 - rank, // sorts in ascending order
 								key.getDataId().getBytes())));
-				outputKey.setAdapterId(key.getAdapterId());
+				outputKey.setInternalAdapterId(key.getInternalAdapterId());
 				outputKey.setGeoWaveKey(key.getGeoWaveKey());
 				context.write(
 						outputKey,

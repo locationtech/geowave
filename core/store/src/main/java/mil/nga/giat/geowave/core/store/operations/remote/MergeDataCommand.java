@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.RemoteSection;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
@@ -81,7 +82,7 @@ public class MergeDataCommand extends
 			}
 			inputIndexOptions = indexLoader.getLoadedIndexes();
 		}
-		final AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+		final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();
 		final DataStoreOperations operations = inputStoreOptions.createDataStoreOperations();
 

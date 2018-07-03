@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,29 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
-import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
-import mil.nga.giat.geowave.analytic.AnalyticFeature;
-import mil.nga.giat.geowave.analytic.Projection;
-import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
-import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
-import mil.nga.giat.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce;
-import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
-import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
-import mil.nga.giat.geowave.analytic.param.HullParameters;
-import mil.nga.giat.geowave.analytic.param.PartitionParameters;
-import mil.nga.giat.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
-import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
-import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mrunit.mapreduce.MapDriver;
 import org.apache.hadoop.mrunit.mapreduce.ReduceDriver;
@@ -57,6 +34,29 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.FeatureWritable;
+import mil.nga.giat.geowave.analytic.AdapterWithObjectWritable;
+import mil.nga.giat.geowave.analytic.AnalyticFeature;
+import mil.nga.giat.geowave.analytic.Projection;
+import mil.nga.giat.geowave.analytic.SimpleFeatureProjection;
+import mil.nga.giat.geowave.analytic.clustering.ClusteringUtils;
+import mil.nga.giat.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
+import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce;
+import mil.nga.giat.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
+import mil.nga.giat.geowave.analytic.param.ClusteringParameters;
+import mil.nga.giat.geowave.analytic.param.HullParameters;
+import mil.nga.giat.geowave.analytic.param.PartitionParameters;
+import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
+import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+
 public class DBScanMapReduceTest
 {
 
@@ -67,6 +67,7 @@ public class DBScanMapReduceTest
 			new PrecisionModel(
 					0.000001),
 			4326);
+	short internalAdapterId = 1234;
 	final NNMapReduce.NNMapper<ClusterItem> nnMapper = new NNMapReduce.NNMapper<ClusterItem>();
 	final NNMapReduce.NNReducer<ClusterItem, GeoWaveInputKey, ObjectWritable, Map<ByteArrayId, Cluster>> nnReducer = new DBScanMapReduce.DBScanMapHullReducer();
 
@@ -115,7 +116,14 @@ public class DBScanMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				adapter);
-
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				mapDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				internalAdapterId);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				reduceDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				internalAdapterId);
 		serializations();
 	}
 
@@ -166,9 +174,6 @@ public class DBScanMapReduceTest
 	public void testReducer()
 			throws IOException {
 
-		final ByteArrayId adapterId = new ByteArrayId(
-				ftype.getTypeName());
-
 		final SimpleFeature feature1 = createTestFeature(
 				"f1",
 				new Coordinate(
@@ -212,49 +217,49 @@ public class DBScanMapReduceTest
 
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature1.getID())),
 				feature1);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature2.getID())),
 				feature2);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature3.getID())),
 				feature3);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature4.getID())),
 				feature4);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature5.getID())),
 				feature5);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature6.getID())),
 				feature6);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature7.getID())),
 				feature7);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						adapterId,
+						internalAdapterId,
 						new ByteArrayId(
 								feature8.getID())),
 				feature8);
@@ -399,8 +404,6 @@ public class DBScanMapReduceTest
 	public void test8With4()
 			throws IOException {
 
-		final ByteArrayId adapterId = new ByteArrayId(
-				ftype.getTypeName());
 		final Random r = new Random(
 				3434);
 		for (int i = 0; i < 8; i++) {
@@ -411,7 +414,7 @@ public class DBScanMapReduceTest
 							round(30.0 + (r.nextGaussian() * 0.00001))));
 			mapDriver.addInput(
 					new GeoWaveInputKey(
-							adapterId,
+							internalAdapterId,
 							new ByteArrayId(
 									feature.getID())),
 					feature);
@@ -439,8 +442,6 @@ public class DBScanMapReduceTest
 	public void testScale()
 			throws IOException {
 
-		final ByteArrayId adapterId = new ByteArrayId(
-				ftype.getTypeName());
 		final Random r = new Random(
 				3434);
 		for (int i = 0; i < 10000; i++) {
@@ -451,7 +452,7 @@ public class DBScanMapReduceTest
 							round(30.0 + (r.nextGaussian() * 0.0001))));
 			mapDriver.addInput(
 					new GeoWaveInputKey(
-							adapterId,
+							internalAdapterId,
 							new ByteArrayId(
 									feature.getID())),
 					feature);

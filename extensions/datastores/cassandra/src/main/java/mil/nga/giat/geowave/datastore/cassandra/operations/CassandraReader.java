@@ -111,8 +111,7 @@ public class CassandraReader implements
 									public boolean apply(
 											final CassandraRow input ) {
 										return readerParams.getAdapterIds().contains(
-												new ByteArrayId(
-														input.getAdapterId()));
+												input.getInternalAdapterId());
 									}
 								}));
 			}
@@ -124,7 +123,7 @@ public class CassandraReader implements
 	}
 
 	protected void initRecordScanner() {
-		final List<ByteArrayId> adapterIds = recordReaderParams.getAdapterIds() != null ? recordReaderParams
+		final Collection<Short> adapterIds = recordReaderParams.getAdapterIds() != null ? recordReaderParams
 				.getAdapterIds() : Lists.newArrayList();
 
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();

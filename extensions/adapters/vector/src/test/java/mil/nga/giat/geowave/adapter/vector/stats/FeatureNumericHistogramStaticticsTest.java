@@ -99,8 +99,7 @@ public class FeatureNumericHistogramStaticticsTest
 	public void testPositive() {
 
 		final FeatureNumericHistogramStatistics stat = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final Random rand = new Random(
@@ -117,8 +116,7 @@ public class FeatureNumericHistogramStaticticsTest
 		}
 
 		final FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final double start2 = next;
@@ -175,8 +173,7 @@ public class FeatureNumericHistogramStaticticsTest
 	public void testRapidIncreaseInRange() {
 
 		final FeatureNumericHistogramStatistics stat1 = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final Random rand = new Random(
@@ -189,8 +186,7 @@ public class FeatureNumericHistogramStaticticsTest
 
 		for (long i = 0; i < 100; i++) {
 			final FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
-					new ByteArrayId(
-							"sp.geostuff"),
+					(short) -1,
 					"pop");
 			for (int j = 0; j < 100; j++) {
 				stat2.entryIngested(create(4839000434.547854578 * rand.nextDouble() * rand.nextGaussian()));
@@ -209,8 +205,7 @@ public class FeatureNumericHistogramStaticticsTest
 	public void testNegative() {
 
 		final FeatureNumericHistogramStatistics stat = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final Random rand = new Random(
@@ -227,8 +222,7 @@ public class FeatureNumericHistogramStaticticsTest
 		}
 
 		final FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final double start2 = next;
@@ -288,8 +282,7 @@ public class FeatureNumericHistogramStaticticsTest
 	public void testMix() {
 
 		final FeatureNumericHistogramStatistics stat = new FeatureNumericHistogramStatistics(
-				new ByteArrayId(
-						"sp.geostuff"),
+				(short) -1,
 				"pop");
 
 		final Random rand = new Random(
@@ -301,8 +294,7 @@ public class FeatureNumericHistogramStaticticsTest
 		double next = 0;
 		for (int i = 1; i < 300; i++) {
 			final FeatureNumericHistogramStatistics stat2 = new FeatureNumericHistogramStatistics(
-					new ByteArrayId(
-							"sp.geostuff"),
+					(short) -1,
 					"pop");
 			final double m = 10000.0 * Math.pow(
 					10.0,

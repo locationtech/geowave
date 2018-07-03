@@ -71,8 +71,7 @@ public class SpatialQueryTest
 						geomData)));
 
 		return new IndexedPersistenceEncoding(
-				new ByteArrayId(
-						"1"),
+				(short) 1,
 				new ByteArrayId(
 						"1"),
 				new ByteArrayId(

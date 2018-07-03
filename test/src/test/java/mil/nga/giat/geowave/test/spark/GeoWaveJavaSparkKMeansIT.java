@@ -38,6 +38,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -138,9 +139,12 @@ public class GeoWaveJavaSparkKMeansIT
 		long dur = (System.currentTimeMillis() - mark);
 		LOGGER.warn("KMeans duration: " + dur + " ms.");
 		// Write out the centroid features
-		DataAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
+
+		short centroidInternalAdapterId = inputDataStore.createInternalAdapterStore().getInternalAdapterId(
 				new ByteArrayId(
 						"kmeans-centroids-test"));
+		DataAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
+				centroidInternalAdapterId);
 
 		// Query back from the new adapter
 		mark = System.currentTimeMillis();
@@ -168,10 +172,12 @@ public class GeoWaveJavaSparkKMeansIT
 
 		}
 
-		// Write out the hull features w/ metadata
-		DataAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
+		short hullInternalAdapterId = inputDataStore.createInternalAdapterStore().getInternalAdapterId(
 				new ByteArrayId(
 						"kmeans-hulls-test"));
+		// Write out the hull features w/ metadata
+		DataAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
+				hullInternalAdapterId);
 
 		mark = System.currentTimeMillis();
 		// Query back from the new adapter

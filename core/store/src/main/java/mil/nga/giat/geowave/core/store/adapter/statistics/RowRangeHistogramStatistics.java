@@ -20,6 +20,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
@@ -47,10 +48,17 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	public RowRangeHistogramStatistics(
-			final ByteArrayId dataAdapterId,
+			final ByteArrayId statisticsId ) {
+		this(
+				null,
+				statisticsId);
+	}
+
+	public RowRangeHistogramStatistics(
+			final Short internalDataAdapterId,
 			final ByteArrayId statisticsId ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(statisticsId));
 	}
 
@@ -69,7 +77,7 @@ public class RowRangeHistogramStatistics<T> extends
 	@Override
 	public DataStatistics<T> duplicate() {
 		return new RowRangeHistogramStatistics<T>(
-				dataAdapterId,
+				internalDataAdapterId,
 				decomposeFromId(statisticsId));// indexId
 	}
 
@@ -332,13 +340,16 @@ public class RowRangeHistogramStatistics<T> extends
 	 */
 
 	@Override
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
 		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
-
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsID",
 				statisticsId.getString());

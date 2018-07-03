@@ -277,8 +277,7 @@ public class HBaseDistributableFilter extends
 			final FlattenedUnreadData unreadData ) {
 
 		return new DeferredReadCommonIndexedPersistenceEncoding(
-				new ByteArrayId(
-						rowKey.getAdapterId()),
+				rowKey.getInternalAdapterId(),
 				new ByteArrayId(
 						rowKey.getDataId()),
 				new ByteArrayId(
@@ -312,7 +311,7 @@ public class HBaseDistributableFilter extends
 		}
 
 		adapterEncoding = new IndexedAdapterPersistenceEncoding(
-				persistenceEncoding.getAdapterId(),
+				persistenceEncoding.getInternalAdapterId(),
 				persistenceEncoding.getDataId(),
 				persistenceEncoding.getInsertionPartitionKey(),
 				persistenceEncoding.getInsertionSortKey(),

@@ -44,6 +44,9 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import mil.nga.giat.geowave.core.store.index.Index;
@@ -93,9 +96,10 @@ public class VectorLocalExportCommand extends
 			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 		}
 
-		AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+		PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 		IndexStore indexStore = inputStoreOptions.createIndexStore();
 		DataStore dataStore = inputStoreOptions.createDataStore();
+		InternalAdapterStore internaAdapterStore = inputStoreOptions.createInternalAdapterStore();
 
 		try (final DataFileWriter<AvroSimpleFeatureCollection> dfw = new DataFileWriter<AvroSimpleFeatureCollection>(
 				new GenericDatumWriter<AvroSimpleFeatureCollection>(
@@ -108,28 +112,29 @@ public class VectorLocalExportCommand extends
 			final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<GeotoolsFeatureDataAdapter>();
 			if ((options.getAdapterIds() != null) && !options.getAdapterIds().isEmpty()) {
 				for (final String adapterId : options.getAdapterIds()) {
-					final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+					short internalAdapterId = internaAdapterStore.getInternalAdapterId(new ByteArrayId(
 							adapterId));
-					if (adapter == null) {
+					final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(internalAdapterId);
+					if (internalDataAdapter == null) {
 						JCommander.getConsole().println(
 								"Type '" + adapterId + "' not found");
 						continue;
 					}
-					else if (!(adapter instanceof GeotoolsFeatureDataAdapter)) {
+					else if (!(internalDataAdapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
 						JCommander.getConsole().println(
 								"Type '" + adapterId + "' does not support vector export. Instance of "
-										+ adapter.getClass());
+										+ internalDataAdapter.getAdapter().getClass());
 						continue;
 					}
-					featureAdapters.add((GeotoolsFeatureDataAdapter) adapter);
+					featureAdapters.add((GeotoolsFeatureDataAdapter) internalDataAdapter.getAdapter());
 				}
 			}
 			else {
-				final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
+				final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
 				while (adapters.hasNext()) {
-					final DataAdapter<?> adapter = adapters.next();
-					if (adapter instanceof GeotoolsFeatureDataAdapter) {
-						featureAdapters.add((GeotoolsFeatureDataAdapter) adapter);
+					final InternalDataAdapter<?> adapter = adapters.next();
+					if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
+						featureAdapters.add((GeotoolsFeatureDataAdapter) adapter.getAdapter());
 					}
 				}
 				adapters.close();

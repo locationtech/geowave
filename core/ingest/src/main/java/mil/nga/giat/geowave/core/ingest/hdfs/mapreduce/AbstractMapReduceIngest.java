@@ -30,7 +30,8 @@ import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -196,8 +197,9 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		// that were created from this driver but didn't actually have data
 		// ingests
 		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-			AdapterStore adapterStore = null;
+			PersistentAdapterStore adapterStore = null;
 			AdapterIndexMappingStore adapterIndexMappingStore = null;
+			InternalAdapterStore internalAdapterStore = null;
 			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 				final QueryOptions queryOptions = new QueryOptions(
 						dataAdapter);
@@ -208,10 +210,16 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 					if (!it.hasNext()) {
 						if (adapterStore == null) {
 							adapterStore = dataStoreOptions.createAdapterStore();
+							internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
 							adapterIndexMappingStore = dataStoreOptions.createAdapterIndexMappingStore();
 						}
-						adapterStore.removeAdapter(dataAdapter.getAdapterId());
-						adapterIndexMappingStore.remove(dataAdapter.getAdapterId());
+						final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(dataAdapter
+								.getAdapterId());
+						if (internalAdapterId != null) {
+							internalAdapterStore.remove(internalAdapterId);
+							adapterStore.removeAdapter(internalAdapterId);
+							adapterIndexMappingStore.remove(internalAdapterId);
+						}
 					}
 				}
 			}

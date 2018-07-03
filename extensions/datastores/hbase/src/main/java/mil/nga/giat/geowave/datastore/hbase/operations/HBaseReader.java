@@ -16,11 +16,12 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
@@ -188,11 +189,12 @@ public class HBaseReader implements
 				recordReaderParams,
 				filterList);
 		if (!filterList.getFilters().isEmpty()) {
-			if (filterList.getFilters().size() > 1){
+			if (filterList.getFilters().size() > 1) {
 				rscanner.setFilter(filterList);
 			}
-			else{
-				rscanner.setFilter(filterList.getFilters().get(0));
+			else {
+				rscanner.setFilter(filterList.getFilters().get(
+						0));
 			}
 		}
 		try {
@@ -244,11 +246,12 @@ public class HBaseReader implements
 				readerParams,
 				filterList);
 		if (!filterList.getFilters().isEmpty()) {
-			if (filterList.getFilters().size() > 1){
+			if (filterList.getFilters().size() > 1) {
 				multiScanner.setFilter(filterList);
 			}
-			else{
-				multiScanner.setFilter(filterList.getFilters().get(0));
+			else {
+				multiScanner.setFilter(filterList.getFilters().get(
+						0));
 			}
 		}
 
@@ -325,6 +328,7 @@ public class HBaseReader implements
 			BaseReaderParams params,
 			FilterList filterList ) {
 		final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
+
 		if (wholeRowEncoding) {
 			hbdFilter.setWholeRowFilter(true);
 		}
@@ -397,20 +401,20 @@ public class HBaseReader implements
 				readerParams);
 
 		if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
-			for (final ByteArrayId adapterId : readerParams.getAdapterIds()) {
+			for (final Short adapterId : readerParams.getAdapterIds()) {
 				// TODO: This prevents the client from sending bad column family
 				// requests to hbase. There may be a more efficient way to do
 				// this, via the datastore's AIM store.
 
 				if (operations.verifyColumnFamily(
-						adapterId.getString(),
+						adapterId,
 						true, // because they're not added
 						readerParams.getIndex().getId().getString(),
 						false)) {
-					scanner.addFamily(adapterId.getBytes());
+					scanner.addFamily(StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId)));
 				}
 				else {
-					LOGGER.info("Adapter ID: " + adapterId.getString() + " not found in table: "
+					LOGGER.warn("Adapter ID: " + adapterId + " not found in table: "
 							+ readerParams.getIndex().getId().getString());
 				}
 			}

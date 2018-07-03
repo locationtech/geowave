@@ -20,6 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.DataStoreStatisticsProvider;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
@@ -54,7 +55,7 @@ public class StatsCompositionTool<T> implements
 	protected boolean skipFlush = false;
 
 	public StatsCompositionTool(
-			final StatisticsProvider<T> statisticsProvider,
+			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final PrimaryIndex index,
 			final DataAdapter<T> adapter ) {
 		this.statisticsStore = null;
@@ -65,7 +66,7 @@ public class StatsCompositionTool<T> implements
 	}
 
 	public StatsCompositionTool(
-			final StatisticsProvider<T> statisticsProvider,
+			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
 			final PrimaryIndex index,
 			final DataAdapter<T> adapter ) {
@@ -79,7 +80,7 @@ public class StatsCompositionTool<T> implements
 	private void init(
 			final PrimaryIndex index,
 			final DataAdapter<T> adapter,
-			final StatisticsProvider<T> statisticsProvider ) {
+			final DataStoreStatisticsProvider<T> statisticsProvider ) {
 		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsTypes();
 		statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
 				statisticsIds.length);

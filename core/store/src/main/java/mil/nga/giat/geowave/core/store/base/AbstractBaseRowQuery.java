@@ -6,6 +6,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -41,7 +42,7 @@ abstract class AbstractBaseRowQuery<T> extends
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final Integer limit ) {
 		Reader reader = getReader(
 				operations,

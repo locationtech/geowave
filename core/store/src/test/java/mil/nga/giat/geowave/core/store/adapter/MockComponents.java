@@ -221,7 +221,6 @@ public class MockComponents
 			return new ByteArrayId[] {
 				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
-						getAdapterId(),
 						getAdapterId()).getStatisticsId()
 			};
 		}
@@ -230,11 +229,9 @@ public class MockComponents
 		public DataStatistics<Integer> createDataStatistics(
 				final ByteArrayId statisticsId ) {
 			if (statisticsId == CountDataStatistics.STATS_TYPE) {
-				return new CountDataStatistics<Integer>(
-						getAdapterId());
+				return new CountDataStatistics<Integer>();
 			}
 			return new IntegerRangeDataStatistics(
-					getAdapterId(),
 					getAdapterId());
 		}
 
@@ -312,10 +309,9 @@ public class MockComponents
 		}
 
 		public IntegerRangeDataStatistics(
-				final ByteArrayId dataAdapterId,
 				final ByteArrayId statisticsId ) {
 			super(
-					dataAdapterId,
+					null,
 					statisticsId);
 		}
 

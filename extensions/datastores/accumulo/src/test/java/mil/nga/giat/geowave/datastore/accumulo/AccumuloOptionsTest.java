@@ -45,8 +45,10 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AbstractDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -63,6 +65,7 @@ import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
@@ -83,7 +86,8 @@ public class AccumuloOptionsTest
 
 	IndexStore indexStore;
 
-	AdapterStore adapterStore;
+	PersistentAdapterStore adapterStore;
+	InternalAdapterStore internalAdapterStore;
 
 	DataStatisticsStore statsStore;
 
@@ -127,6 +131,9 @@ public class AccumuloOptionsTest
 				accumuloOperations,
 				accumuloOptions);
 
+		internalAdapterStore = new InternalAdapterStoreImpl(
+				accumuloOperations);
+
 		mockDataStore = new AccumuloDataStore(
 				indexStore,
 				adapterStore,
@@ -136,7 +143,8 @@ public class AccumuloOptionsTest
 						accumuloOperations,
 						options),
 				accumuloOperations,
-				accumuloOptions);
+				accumuloOptions,
+				internalAdapterStore);
 	}
 
 	@Test
@@ -422,10 +430,11 @@ public class AccumuloOptionsTest
 
 			}
 
+			short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 			// the adapter should not exist in the metadata table
 			assertEquals(
 					false,
-					adapterStore.adapterExists(adapter.getAdapterId()));
+					adapterStore.adapterExists(internalAdapterId));
 
 		}
 
@@ -478,17 +487,19 @@ public class AccumuloOptionsTest
 				}
 			}
 
+			short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 			// the adapter should not exist in the metadata table
 			assertEquals(
 					true,
-					adapterStore.adapterExists(adapter.getAdapterId()));
+					adapterStore.adapterExists(internalAdapterId));
 
 		}
 
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 		// the adapter should exist in the metadata table
 		assertEquals(
 				true,
-				adapterStore.adapterExists(adapter.getAdapterId()));
+				adapterStore.adapterExists(internalAdapterId));
 	}
 
 	@Test

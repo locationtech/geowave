@@ -118,7 +118,7 @@ public class CQLQueryFilterTest
 		for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
 			for (final ByteArrayId sortKey : partitionIds.getSortKeys()) {
 				encodings.add(new IndexedAdapterPersistenceEncoding(
-						encoding.getAdapterId(),
+						encoding.getInternalAdapterId(),
 						encoding.getDataId(),
 						partitionIds.getPartitionKey(),
 						sortKey,

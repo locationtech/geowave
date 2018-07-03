@@ -22,7 +22,9 @@ import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -131,7 +133,7 @@ public class DataStorePluginOptions extends
 				getFactoryOptions());
 	}
 
-	public AdapterStore createAdapterStore() {
+	public PersistentAdapterStore createAdapterStore() {
 		return getFactoryFamily().getAdapterStoreFactory().createStore(
 				getFactoryOptions());
 	}
@@ -153,6 +155,11 @@ public class DataStorePluginOptions extends
 
 	public AdapterIndexMappingStore createAdapterIndexMappingStore() {
 		return getFactoryFamily().getAdapterIndexMappingStoreFactory().createStore(
+				getFactoryOptions());
+	}
+
+	public InternalAdapterStore createInternalAdapterStore() {
+		return getFactoryFamily().getInternalAdapterStoreFactory().createStore(
 				getFactoryOptions());
 	}
 
