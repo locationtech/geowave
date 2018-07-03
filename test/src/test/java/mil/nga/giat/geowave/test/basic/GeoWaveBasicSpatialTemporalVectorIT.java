@@ -36,10 +36,12 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportCommand;
 import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportOptions;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -271,7 +273,20 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		exportDir.delete();
 		exportDir.mkdirs();
 
-		exportCommand.setInputStoreOptions(dataStore);
+		exportCommand.setParameters("test");
+
+		File configFile = File.createTempFile(
+				"test_export",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
 		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();
@@ -319,8 +334,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 							exportDir,
 							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
 					options.setCqlFilter(cqlPredicate);
-					exportCommand.setParameters(null);
-					exportCommand.execute(new ManualOperationParams());
+					exportCommand.execute(params);
 				}
 			}
 		}

@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +40,8 @@ public class SetCommand extends
 	 * Return "200 OK" for the set command.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);

@@ -139,11 +139,6 @@ public class IngestOSMToGeoWaveCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public List<String> computeResults(
 			final OperationParams params )
 			throws Exception {

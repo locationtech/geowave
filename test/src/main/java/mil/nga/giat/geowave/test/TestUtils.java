@@ -127,6 +127,8 @@ public class TestUtils
 
 	public static final CoordinateReferenceSystem CUSTOM_CRS;
 
+	public static final double DOUBLE_EPSILON = 1E-8d;
+
 	static {
 		try {
 			CUSTOM_CRS = CRS.decode(
@@ -244,19 +246,36 @@ public class TestUtils
 			}
 			indexOptions.add(indexOption);
 		}
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
 
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(params);
+			indexParam.append("test-index" + i + ",");
+		}
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
-		localIngester.execute(new ManualOperationParams());
 
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
+		localIngester.execute(params);
 		verifyStats(dataStore);
 
 	}
@@ -296,6 +315,15 @@ public class TestUtils
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(operationParams);
+			indexParam.append("test-index" + i + ",");
+		}
+
 		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
 		configS3.setS3UrlParameter(s3Url);
 		configS3.execute(operationParams);
@@ -303,13 +331,16 @@ public class TestUtils
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
+
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
 		localIngester.execute(operationParams);
 
 		verifyStats(dataStore);

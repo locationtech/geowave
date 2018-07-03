@@ -68,6 +68,7 @@ import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -133,8 +134,8 @@ public class AccumuloOperations implements
 	private final Map<String, Long> locGrpCache;
 	private long cacheTimeoutMillis;
 	private String password;
-	private final Map<String, Set<String>> insuredAuthorizationCache = new HashMap<>();
-	private final Map<String, Set<ByteArrayId>> insuredPartitionCache = new HashMap<>();
+	private final Map<String, Set<String>> ensuredAuthorizationCache = new HashMap<>();
+	private final Map<String, Set<ByteArrayId>> ensuredPartitionCache = new HashMap<>();
 	private final AccumuloOptions options;
 
 	/**
@@ -180,7 +181,6 @@ public class AccumuloOperations implements
 				instanceName,
 				userName,
 				password);
-
 	}
 
 	/**
@@ -416,8 +416,8 @@ public class AccumuloOperations implements
 				tableNamespace,
 				AccumuloStoreFactoryFamily.TYPE).deleteAll();
 		locGrpCache.clear();
-		insuredAuthorizationCache.clear();
-		insuredPartitionCache.clear();
+		ensuredAuthorizationCache.clear();
+		ensuredPartitionCache.clear();
 	}
 
 	public boolean delete(
@@ -635,7 +635,7 @@ public class AccumuloOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		String user;
@@ -645,28 +645,28 @@ public class AccumuloOperations implements
 		else {
 			user = clientUser;
 		}
-		final Set<String> uninsuredAuths = new HashSet<String>();
-		Set<String> insuredAuths = insuredAuthorizationCache.get(user);
-		if (insuredAuths == null) {
-			uninsuredAuths.addAll(Arrays.asList(authorizations));
-			insuredAuths = new HashSet<String>();
-			insuredAuthorizationCache.put(
+		final Set<String> unensuredAuths = new HashSet<String>();
+		Set<String> ensuredAuths = ensuredAuthorizationCache.get(user);
+		if (ensuredAuths == null) {
+			unensuredAuths.addAll(Arrays.asList(authorizations));
+			ensuredAuths = new HashSet<String>();
+			ensuredAuthorizationCache.put(
 					user,
-					insuredAuths);
+					ensuredAuths);
 		}
 		else {
 			for (final String auth : authorizations) {
-				if (!insuredAuths.contains(auth)) {
-					uninsuredAuths.add(auth);
+				if (!ensuredAuths.contains(auth)) {
+					unensuredAuths.add(auth);
 				}
 			}
 		}
-		if (!uninsuredAuths.isEmpty()) {
+		if (!unensuredAuths.isEmpty()) {
 			try {
 				Authorizations auths = connector.securityOperations().getUserAuthorizations(
 						user);
 				final List<byte[]> newSet = new ArrayList<byte[]>();
-				for (final String auth : uninsuredAuths) {
+				for (final String auth : unensuredAuths) {
 					if (!auths.contains(auth)) {
 						newSet.add(auth.getBytes(StringUtils.UTF8_CHAR_SET));
 					}
@@ -682,13 +682,13 @@ public class AccumuloOperations implements
 
 					LOGGER.trace(clientUser + " has authorizations " + ArrayUtils.toString(auths.getAuthorizations()));
 				}
-				for (final String auth : uninsuredAuths) {
-					insuredAuths.add(auth);
+				for (final String auth : unensuredAuths) {
+					ensuredAuths.add(auth);
 				}
 			}
 			catch (AccumuloException | AccumuloSecurityException e) {
 				LOGGER.error(
-						"Unable to add authorizations '" + Arrays.toString(uninsuredAuths.toArray(new String[] {}))
+						"Unable to add authorizations '" + Arrays.toString(unensuredAuths.toArray(new String[] {}))
 								+ "'",
 						e);
 				return false;
@@ -722,13 +722,13 @@ public class AccumuloOperations implements
 		this.cacheTimeoutMillis = cacheTimeoutMillis;
 	}
 
-	public void insurePartition(
+	public void ensurePartition(
 			final ByteArrayId partition,
 			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
-		Set<ByteArrayId> existingPartitions = insuredPartitionCache.get(qName);
+		Set<ByteArrayId> existingPartitions = ensuredPartitionCache.get(qName);
 		try {
-			synchronized (insuredPartitionCache) {
+			synchronized (ensuredPartitionCache) {
 				if (existingPartitions == null) {
 					Collection<Text> splits;
 					splits = connector.tableOperations().listSplits(
@@ -738,7 +738,7 @@ public class AccumuloOperations implements
 						existingPartitions.add(new ByteArrayId(
 								s.getBytes()));
 					}
-					insuredPartitionCache.put(
+					ensuredPartitionCache.put(
 							qName,
 							existingPartitions);
 				}
@@ -970,8 +970,8 @@ public class AccumuloOperations implements
 
 	}
 
-	protected ScannerBase getScanner(
-			final ReaderParams params ) {
+	protected <T> ScannerBase getScanner(
+			final ReaderParams<T> params ) {
 		final List<ByteArrayRange> ranges = params.getQueryRanges().getCompositeQueryRanges();
 		final String tableName = StringUtils.stringFromBinary(params.getIndex().getId().getBytes());
 		ScannerBase scanner;
@@ -1051,8 +1051,8 @@ public class AccumuloOperations implements
 		return scanner;
 	}
 
-	protected void addConstraintsScanIteratorSettings(
-			final BaseReaderParams params,
+	protected <T> void addConstraintsScanIteratorSettings(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner,
 			final DataStoreOptions options ) {
 		addFieldSubsettingToIterator(
@@ -1160,8 +1160,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addIndexFilterToIterator(
-			final BaseReaderParams params,
+	protected <T> void addIndexFilterToIterator(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
 		if ((coords != null) && !coords.isEmpty()) {
@@ -1182,8 +1182,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addFieldSubsettingToIterator(
-			final BaseReaderParams params,
+	protected <T> void addFieldSubsettingToIterator(
+			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
 			final List<String> fieldIds = params.getFieldSubsets().getLeft();
@@ -1205,8 +1205,8 @@ public class AccumuloOperations implements
 		}
 	}
 
-	protected void addRowScanIteratorSettings(
-			final ReaderParams params,
+	protected <T> void addRowScanIteratorSettings(
+			final ReaderParams<T> params,
 			final ScannerBase scanner ) {
 		addFieldSubsettingToIterator(
 				params,
@@ -1221,9 +1221,10 @@ public class AccumuloOperations implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Reader createReader(
-			final ReaderParams params ) {
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> params ) {
 		final ScannerBase scanner = getScanner(params);
 
 		addConstraintsScanIteratorSettings(
@@ -1231,15 +1232,17 @@ public class AccumuloOperations implements
 				scanner,
 				options);
 
-		return new AccumuloReader(
+		return new AccumuloReader<T>(
 				scanner,
+				(GeoWaveRowIteratorTransformer<T>) params.getRowTransformer(),
 				params.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				params.isMixedVisibility() && !params.isServersideAggregation(),
-				params.isClientsideRowMerging());
+				params.isClientsideRowMerging(),
+				true);
 	}
 
-	protected Scanner getScanner(
-			final RecordReaderParams params ) {
+	protected <T> Scanner getScanner(
+			final RecordReaderParams<T> params ) {
 		final GeoWaveRowRange range = params.getRowRange();
 		final String tableName = StringUtils.stringFromBinary(params.getIndex().getId().getBytes());
 		Scanner scanner;
@@ -1303,18 +1306,21 @@ public class AccumuloOperations implements
 		return scanner;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Reader createReader(
-			final RecordReaderParams readerParams ) {
+	public <T> Reader<T> createReader(
+			final RecordReaderParams<T> readerParams ) {
 		final ScannerBase scanner = getScanner(readerParams);
 		addConstraintsScanIteratorSettings(
 				readerParams,
 				scanner,
 				options);
-		return new AccumuloReader(
+		return new AccumuloReader<T>(
 				scanner,
+				(GeoWaveRowIteratorTransformer<T>) readerParams.getRowTransformer(),
 				readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
+				false,
 				false);
 	}
 

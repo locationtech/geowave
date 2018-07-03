@@ -151,18 +151,8 @@ public class KmeansSparkCommand extends
 		return inputDataStore;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		inputDataStore = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputDataStore;
-	}
-
-	public void setOutputStoreOptions(
-			final DataStorePluginOptions outputStoreOptions ) {
-		outputDataStore = outputStoreOptions;
 	}
 
 	public KMeansSparkOptions getKMeansSparkOptions() {

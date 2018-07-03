@@ -44,24 +44,24 @@ public class FeatureBoundingBoxStatistics extends
 
 	public FeatureBoundingBoxStatistics(
 			final ByteArrayId dataAdapterId,
-			final String statisticsId ) {
+			final String fieldName ) {
 		this(
 				dataAdapterId,
-				statisticsId,
+				fieldName,
 				null,
 				null);
 	}
 
 	public FeatureBoundingBoxStatistics(
 			final ByteArrayId dataAdapterId,
-			final String statisticsId,
+			final String fieldName,
 			final SimpleFeatureType reprojectedType,
 			final MathTransform transform ) {
 		super(
 				dataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
-						statisticsId));
+						fieldName));
 		this.reprojectedType = reprojectedType;
 		this.transform = transform;
 	}

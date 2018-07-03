@@ -26,17 +26,17 @@ public class GeoWaveOperationServiceWrapperTest
 
 	private ServiceEnabledCommand mockedOperation(
 			HttpMethod method,
-			Status successStatus )
+			Boolean successStatusIs200 )
 			throws Exception {
 		return mockedOperation(
 				method,
-				successStatus,
+				successStatusIs200,
 				false);
 	}
 
 	private ServiceEnabledCommand mockedOperation(
 			HttpMethod method,
-			Status successStatus,
+			Boolean successStatusIs200,
 			boolean isAsync )
 			throws Exception {
 		ServiceEnabledCommand operation = Mockito.mock(ServiceEnabledCommand.class);
@@ -48,8 +48,8 @@ public class GeoWaveOperationServiceWrapperTest
 				operation.runAsync()).thenReturn(
 				isAsync);
 		Mockito.when(
-				operation.getSuccessStatus()).thenReturn(
-				successStatus);
+				operation.successStatusIs200()).thenReturn(
+				successStatusIs200);
 		Mockito.when(
 				operation.computeResults(Mockito.any())).thenReturn(
 				null);
@@ -86,12 +86,11 @@ public class GeoWaveOperationServiceWrapperTest
 			throws Exception {
 
 		// Rarely used Teapot Code to check.
-		Status expectedSuccessStatus = new Status(
-				418);
+		Boolean successStatusIs200 = true;
 
 		ServiceEnabledCommand operation = mockedOperation(
 				HttpMethod.GET,
-				expectedSuccessStatus);
+				successStatusIs200);
 
 		classUnderTest = new GeoWaveOperationServiceWrapper(
 				operation,
@@ -103,8 +102,9 @@ public class GeoWaveOperationServiceWrapperTest
 				"foo.bar"));
 		classUnderTest.restGet();
 		Assert.assertEquals(
-				expectedSuccessStatus,
-				classUnderTest.getResponse().getStatus());
+				successStatusIs200,
+				classUnderTest.getResponse().getStatus().equals(
+						Status.SUCCESS_OK));
 	}
 
 	@Test
@@ -112,12 +112,11 @@ public class GeoWaveOperationServiceWrapperTest
 			throws Exception {
 
 		// Rarely used Teapot Code to check.
-		Status expectedSuccessStatus = new Status(
-				418);
+		Boolean successStatusIs200 = false;
 
 		ServiceEnabledCommand operation = mockedOperation(
 				HttpMethod.POST,
-				expectedSuccessStatus);
+				successStatusIs200);
 
 		classUnderTest = new GeoWaveOperationServiceWrapper(
 				operation,
@@ -126,8 +125,9 @@ public class GeoWaveOperationServiceWrapperTest
 				null));
 		classUnderTest.restPost(mockedRequest(MediaType.APPLICATION_JSON));
 		Assert.assertEquals(
-				expectedSuccessStatus,
-				classUnderTest.getResponse().getStatus());
+				successStatusIs200,
+				classUnderTest.getResponse().getStatus().equals(
+						Status.SUCCESS_OK));
 	}
 
 	@Test
@@ -136,12 +136,11 @@ public class GeoWaveOperationServiceWrapperTest
 			throws Exception {
 
 		// Rarely used Teapot Code to check.
-		Status expectedSuccessStatus = new Status(
-				418);
+		Boolean successStatusIs200 = true;
 
 		ServiceEnabledCommand operation = mockedOperation(
 				HttpMethod.POST,
-				expectedSuccessStatus,
+				successStatusIs200,
 				true);
 
 		classUnderTest = new GeoWaveOperationServiceWrapper(
@@ -154,8 +153,9 @@ public class GeoWaveOperationServiceWrapperTest
 		// TODO: Returns 500. Error Caught at
 		// "final Context appContext = Application.getCurrent().getContext();"
 		Assert.assertEquals(
-				expectedSuccessStatus,
-				classUnderTest.getResponse().getStatus());
+				successStatusIs200,
+				classUnderTest.getResponse().getStatus().equals(
+						Status.SUCCESS_OK));
 	}
 
 }

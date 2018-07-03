@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -28,6 +29,8 @@ import org.restlet.resource.Put;
 import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
@@ -180,43 +183,50 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		for (final RestFieldValue f : fields) {
 
 			Object objValue = null;
+			Class<?> type = f.getType();
 
-			if (List.class.isAssignableFrom(f.getType())) {
+			if (List.class.isAssignableFrom(type)) {
 				objValue = requestParameters.getList(f.getName());
 			}
-			else if (f.getType().isArray()) {
+			else if (type.isArray()) {
 				objValue = requestParameters.getArray(f.getName());
+				if (objValue != null) {
+					objValue = Arrays.copyOf(
+							(Object[]) objValue,
+							((Object[]) objValue).length,
+							f.getType());
+				}
 			}
 			else {
 				final String strValue = (String) requestParameters.getString(f.getName());
 				if (strValue != null) {
-					if (Long.class.isAssignableFrom(f.getType()) || long.class.isAssignableFrom(f.getType())) {
+					if (Long.class.isAssignableFrom(type) || long.class.isAssignableFrom(type)) {
 						objValue = Long.valueOf(strValue);
 					}
-					else if (Integer.class.isAssignableFrom(f.getType()) || int.class.isAssignableFrom(f.getType())) {
+					else if (Integer.class.isAssignableFrom(type) || int.class.isAssignableFrom(type)) {
 						objValue = Integer.valueOf(strValue);
 					}
-					else if (Short.class.isAssignableFrom(f.getType()) || short.class.isAssignableFrom(f.getType())) {
+					else if (Short.class.isAssignableFrom(type) || short.class.isAssignableFrom(type)) {
 						objValue = Short.valueOf(strValue);
 					}
-					else if (Byte.class.isAssignableFrom(f.getType()) || byte.class.isAssignableFrom(f.getType())) {
+					else if (Byte.class.isAssignableFrom(type) || byte.class.isAssignableFrom(type)) {
 						objValue = Byte.valueOf(strValue);
 					}
-					else if (Double.class.isAssignableFrom(f.getType()) || double.class.isAssignableFrom(f.getType())) {
+					else if (Double.class.isAssignableFrom(type) || double.class.isAssignableFrom(type)) {
 						objValue = Double.valueOf(strValue);
 					}
-					else if (Float.class.isAssignableFrom(f.getType()) || float.class.isAssignableFrom(f.getType())) {
+					else if (Float.class.isAssignableFrom(type) || float.class.isAssignableFrom(type)) {
 						objValue = Float.valueOf(strValue);
 					}
-					else if (Boolean.class.isAssignableFrom(f.getType()) || boolean.class.isAssignableFrom(f.getType())) {
+					else if (Boolean.class.isAssignableFrom(type) || boolean.class.isAssignableFrom(type)) {
 						objValue = Boolean.valueOf(strValue);
 					}
-					else if (String.class.isAssignableFrom(f.getType())) {
+					else if (String.class.isAssignableFrom(type)) {
 						objValue = strValue;
 					}
-					else if (Enum.class.isAssignableFrom(f.getType())) {
+					else if (Enum.class.isAssignableFrom(type)) {
 						objValue = Enum.valueOf(
-								(Class<Enum>) f.getType(),
+								(Class<Enum>) type,
 								strValue);
 					}
 					else {
@@ -257,10 +267,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					operation);
 		}
 		catch (final Exception e) {
-			LOGGER.error("Entered an error handling a request.", e.getMessage());
+			LOGGER.error("Could not convert parameters", e);
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";
@@ -295,13 +305,18 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				rm.data = result;
 			}
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-			setStatus(operation.getSuccessStatus());
+			if(operation.successStatusIs200()){
+				setStatus(Status.SUCCESS_OK);
+			}
+			else{
+				setStatus(Status.SUCCESS_CREATED);
+			}
 			return rep;
 		}
 		catch (final NotAuthorizedException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -312,7 +327,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final ForbiddenException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -323,7 +338,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final TargetNotFoundException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -331,10 +346,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}
-		catch (final DuplicateEntryException e){
+		catch (final DuplicateEntryException | ParameterException e){
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = e.getMessage();
@@ -345,7 +360,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";

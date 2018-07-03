@@ -14,7 +14,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.restlet.data.Status;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +40,8 @@ public class ClearCommand extends
 	 * Return "200 OK" for all clear commands.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
@@ -72,11 +71,6 @@ public class ClearCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	@Override
 	public Void computeResults(
 			final OperationParams params ) {
@@ -90,6 +84,7 @@ public class ClearCommand extends
 		// Attempt to load store.
 		final File configFile = getGeoWaveConfigFile(params);
 
+		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {

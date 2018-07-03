@@ -98,11 +98,6 @@ public class NearestNeighborCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	@Override
 	public Void computeResults(
 			final OperationParams params )

@@ -28,7 +28,6 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
@@ -40,8 +39,8 @@ public class GeoServerSetLayerStyleCommand extends
 	 * Return "200 OK" for the set layer command.
 	 */
 	@Override
-	public org.restlet.data.Status getSuccessStatus() {
-		return org.restlet.data.Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	@Parameter(names = {

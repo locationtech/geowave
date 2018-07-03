@@ -42,6 +42,14 @@ public class RemoveAdapterCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
+	
+	/**
+	 * Return "200 OK" for all removal commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
 
 	@Override
 	public void execute(
@@ -63,11 +71,6 @@ public class RemoveAdapterCommand extends
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	@Override

@@ -36,6 +36,8 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
+import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
 
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
@@ -43,8 +45,11 @@ import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.opengis.geometry.BoundingBox;
 
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineString;
 
 /**
  * Consumes a GPX file. The consumer is an iterator, parsing the input stream
@@ -93,12 +98,12 @@ public class GPXConsumer implements
 	final String globalVisibility;
 	final Map<String, Map<String, String>> additionalData;
 	final boolean uniqueWayPoints;
+	final double maxLength;
 
 	final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
 	final Stack<GPXDataElement> currentElementStack = new Stack<GPXDataElement>();
-	final GPXDataElement top = new GPXDataElement(
-			"gpx");
+	GPXDataElement top = null;
 
 	static final NumberFormat LatLongFormat = new DecimalFormat(
 			"0000000000");
@@ -129,7 +134,8 @@ public class GPXConsumer implements
 			final String inputID,
 			final Map<String, Map<String, String>> additionalData,
 			final boolean uniqueWayPoints,
-			final String globalVisibility ) {
+			final String globalVisibility,
+			final double maxLength ) {
 		super();
 		this.fileStream = fileStream;
 		this.primaryIndexIds = primaryIndexIds;
@@ -137,6 +143,10 @@ public class GPXConsumer implements
 		this.uniqueWayPoints = uniqueWayPoints;
 		this.additionalData = additionalData;
 		this.globalVisibility = globalVisibility;
+		this.maxLength = maxLength;
+		this.top = new GPXDataElement(
+				"gpx",
+				this.maxLength);
 		pointBuilder = new SimpleFeatureBuilder(
 				pointType);
 		waypointBuilder = new SimpleFeatureBuilder(
@@ -237,7 +247,8 @@ public class GPXConsumer implements
 						node,
 						currentElement)) {
 					final GPXDataElement newElement = new GPXDataElement(
-							event.asStartElement().getName().getLocalPart());
+							event.asStartElement().getName().getLocalPart(),
+							this.maxLength);
 					currentElement.addChild(newElement);
 					currentElement = newElement;
 					currentElementStack.push(currentElement);
@@ -498,9 +509,18 @@ public class GPXConsumer implements
 		long id = 0;
 		int childIdCounter = 0;
 
+		double maxLineLength = Double.MAX_VALUE;
+
 		public GPXDataElement(
 				final String myElType ) {
 			elementType = myElType;
+		}
+
+		public GPXDataElement(
+				final String myElType,
+				final double maxLength ) {
+			elementType = myElType;
+			maxLineLength = maxLength;
 		}
 
 		@Override
@@ -754,25 +774,27 @@ public class GPXConsumer implements
 
 				final List<Coordinate> childSequence = buildCoordinates();
 
-				if (childSequence.size() == 0) {
+				int childCoordCount = childSequence.size();
+				if (childCoordCount <= 1) {
 					return false;
 				}
 
-				if (childSequence.size() > 1) {
-					builder.set(
-							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
-									.toArray(new Coordinate[childSequence.size()])));
+				LineString geom = GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
+						.toArray(new Coordinate[childSequence.size()]));
+
+				// Filter gpx track based on maxExtent
+				if (geom.isEmpty() || geom.getEnvelopeInternal().maxExtent() > this.maxLineLength) {
+					return false;
 				}
-				else {
-					builder.set(
-							"geometry",
-							GeometryUtils.GEOMETRY_FACTORY.createPoint(childSequence.get(0)));
-				}
+
+				builder.set(
+						"geometry",
+						geom);
+
 				setAttribute(
 						builder,
 						"NumberPoints",
-						Long.valueOf(childSequence.size()));
+						Long.valueOf(childCoordCount));
 
 				final Long minTime = getStartTime();
 				if (minTime != null) {

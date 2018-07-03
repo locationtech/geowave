@@ -10,11 +10,8 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 
@@ -36,9 +33,12 @@ public class PersistentDataset<T>
 	}
 
 	public PersistentDataset(
-			final PersistentValue<T> value ) {
+			ByteArrayId id,
+			T value ) {
 		this();
-		addValue(value);
+		addValue(
+				id,
+				value);
 	}
 
 	public PersistentDataset(
@@ -53,10 +53,19 @@ public class PersistentDataset<T>
 	 *            the field ID/value pair to add
 	 */
 	public void addValue(
-			final PersistentValue<T> value ) {
+			final ByteArrayId id,
+			final T value ) {
 		fieldIdToValueMap.put(
-				value.getId(),
-				value.getValue());
+				id,
+				value);
+	}
+
+	/**
+	 * Add several values to the data set.
+	 */
+	public void addValues(
+			final Map<ByteArrayId, T> values ) {
+		fieldIdToValueMap.putAll(values);
 	}
 
 	/**
@@ -77,14 +86,7 @@ public class PersistentDataset<T>
 	 * 
 	 * @return all of the value
 	 */
-	public List<PersistentValue<T>> getValues() {
-		final List<PersistentValue<T>> values = new ArrayList<PersistentValue<T>>(
-				fieldIdToValueMap.size());
-		for (final Entry<ByteArrayId, T> entry : fieldIdToValueMap.entrySet()) {
-			values.add(new PersistentValue<T>(
-					entry.getKey(),
-					entry.getValue()));
-		}
-		return values;
+	public Map<ByteArrayId, T> getValues() {
+		return fieldIdToValueMap;
 	}
 }

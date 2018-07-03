@@ -81,7 +81,6 @@ public class VectorLocalExportCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-
 		StoreLoader inputStoreLoader = new StoreLoader(
 				storeName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
@@ -220,11 +219,6 @@ public class VectorLocalExportCommand extends
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	public void setOptions(

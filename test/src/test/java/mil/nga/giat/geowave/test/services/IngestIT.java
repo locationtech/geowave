@@ -10,51 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.services;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.EntityBuilder;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.hadoop.hbase.shaded.org.junit.Assert;
+import org.apache.spark.SparkContext;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -65,18 +31,20 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.adapter.raster.util.ZipUtils;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.service.client.AnalyticServiceClient;
+import mil.nga.giat.geowave.service.client.BaseServiceClient;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
-import mil.nga.giat.geowave.service.client.GeoServerServiceClient;
 import mil.nga.giat.geowave.service.client.IngestServiceClient;
-import mil.nga.giat.geowave.service.client.RemoteServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
+import mil.nga.giat.geowave.test.ZookeeperTestEnvironment;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
+import mil.nga.giat.geowave.test.mapreduce.MapReduceTestEnvironment;
+import mil.nga.giat.geowave.test.spark.SparkTestEnvironment;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -85,19 +53,17 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class IngestIT
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(IngestIT.class);
-	private static final String WFS_URL_PREFIX = ServicesTestEnvironment.JETTY_BASE_URL + "/geoserver/wfs";
 
-	private static final String GEOSTUFF_LAYER_FILE = "src/test/resources/wfs-requests/geostuff_layer.xml";
-	private static final String INSERT_FILE = "src/test/resources/wfs-requests/insert.xml";
-	private static final String LOCK_FILE = "src/test/resources/wfs-requests/lock.xml";
-	private static final String QUERY_FILE = "src/test/resources/wfs-requests/query.xml";
-	private static final String UPDATE_FILE = "src/test/resources/wfs-requests/update.xml";
+	private static final String TEST_MAPREDUCE_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE + "mapreduce-testdata.zip";
+	protected static final String OSM_GPX_INPUT_DIR = TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/";
 
-	private IngestServiceClient ingestServiceClient;
+	private static IngestServiceClient ingestServiceClient;
+	private static ConfigServiceClient configServiceClient;
+	private static BaseServiceClient baseServiceClient;
 
-	private String storename;
-	private String file_or_directory;
-	private String index_group_list;
+	private String storeName = "existent-store";
+	private String spatialIndex = "spatial-index";
+	private static JSONParser parser;
 
 	private final static String testName = "IngestIT";
 
@@ -118,7 +84,29 @@ public class IngestIT
 		TestUtils.printStartOfTest(
 				LOGGER,
 				testName);
+		configServiceClient = new ConfigServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+		ingestServiceClient = new IngestServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+		baseServiceClient = new BaseServiceClient(
+				ServicesTestEnvironment.GEOWAVE_BASE_URL);
+		parser = new JSONParser();
+		
+		try{
+			extractTestFiles();
+		}
+		catch(final URISyntaxException e){
+			LOGGER.error(
+					"Error encountered extracting test files.",
+					e.getMessage());
+		}
+	}
 
+	public static void extractTestFiles()
+			throws URISyntaxException {
+				ZipUtils.unZipFile(
+						new File(MapReduceTestEnvironment.class.getClassLoader().getResource(TEST_MAPREDUCE_DATA_ZIP_RESOURCE_PATH).toURI()),
+						TestUtils.TEST_CASE_BASE);
 	}
 
 	@AfterClass
@@ -131,82 +119,306 @@ public class IngestIT
 
 	@Before
 	public void initialize() {
-		// Perform create store operations here, so there is data on which to
-		// run the ingest commands.
+		configServiceClient.addStore(
+				storeName,
+				dataStoreOptions.getType(),
+				null,
+				dataStoreOptions.getOptionsAsMap());
+		configServiceClient.addSpatialIndex(spatialIndex);
+		configServiceClient.configHDFS(MapReduceTestEnvironment.getInstance().getHdfs());
 	}
 
 	@After
 	public void cleanupWorkspace() {
-		// Remove everything created in the @Before method, so each test starts
-		// with a clean slate.
+		configServiceClient.removeStore(storeName);
+		configServiceClient.removeIndex(spatialIndex);
+	}
 
-		// If confident the initialization data does not change during the test,
-		// you may move the setup/tear down actions to the @BeforeClass and
-		// @AfterClass methods.
+	public static void assertFinalIngestStatus(
+			String msg,
+			String expectedStatus,
+			Response r,
+			int sleepTime /* in milliseconds */) {
+
+		JSONObject json = null;
+		String operationID = null;
+		String status = null;
+
+		try {
+			json = (JSONObject) parser.parse(r.readEntity(String.class));
+			status = (String) (json.get("status"));
+			if (!status.equals("STARTED")) {
+				Assert.assertTrue(
+						msg, 
+						status.equals(expectedStatus));
+				return;
+			}
+			operationID = (String) (json.get("data"));
+		}
+		catch (ParseException e) {
+			Assert.fail("Error occurred while parsing JSON response: '" + e.getMessage() + "'");
+		}
+
+		
+		if (operationID != null) {
+			try {
+				while (true) {
+					r = baseServiceClient.operation_status(operationID);
+					if (r.getStatus() != 200) {
+						Assert.fail("Entered an error handling a request.");
+					}
+					try {
+						json = (JSONObject) parser.parse(r.readEntity(String.class));
+						status = (String) (json.get("status"));
+					}
+					catch (final ParseException e) {
+						Assert.fail("Entered an error while parsing JSON response: '" + e.getMessage() + "'");
+					}
+					
+					if (!status.equals("RUNNING")) {
+						Assert.assertTrue(
+								msg,
+								status.equals(expectedStatus));
+						return;
+					}
+
+					Thread.sleep(sleepTime);
+				}
+			}
+			catch (final InterruptedException e) {
+				LOGGER.warn("Ingest interrupted.");
+			}
+		}
+	}
+
+	//Combined testing of localToKafka and kafkaToGW into one test as the latter requires the former to test
+	@Test
+	public void localToKafkaToGW() {
+		Response r = ingestServiceClient.localToKafka(
+				OSM_GPX_INPUT_DIR);
+		assertFinalIngestStatus(
+				"Should successfully complete ingest",
+				"COMPLETE",
+				r,
+				50);
+		
+		r = ingestServiceClient.kafkaToGW(
+				storeName, 
+				spatialIndex,
+				null,
+				null,
+				"testGroup",
+				ZookeeperTestEnvironment.getInstance().getZookeeper(),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should successfully ingest from kafka to geowave",
+				"COMPLETE",
+				r,
+				50);
+		
+		r = ingestServiceClient.localToKafka(
+				"/nonexistent-directory");
+		assertFinalIngestStatus(
+				"Should fail to complete ingest",
+				"ERROR",
+				r,
+				50);
+		
+		r = ingestServiceClient.kafkaToGW(
+				"nonexistent-store", 
+				spatialIndex,
+				null,
+				null,
+				"testGroup",
+				ZookeeperTestEnvironment.getInstance().getZookeeper(),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should fail to ingest for nonexistent store",
+				"ERROR",
+				r,
+				50);
 	}
 
 	@Test
-	@Ignore
-	public void example() {
-		// Tests should contain calls to the REST services methods, checking
-		// them for proper response and status codes.
-
-		// Use this method to check:
-
-		TestUtils.assertStatusCode(
-				"Should Successfully <Insert Objective Here>",
-				200,
-				ingestServiceClient.localToGW(
-						file_or_directory,
-						storename,
-						index_group_list));
-	}
-
-	@Test
-	@Ignore
-	public void kafkaToGW() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	@Ignore
 	public void listplugins() {
-		// TODO: Implement this test
+		//should always return 200
+		TestUtils.assertStatusCode(
+				"Should successfully list plugins",
+				200,
+				ingestServiceClient.listPlugins());
 	}
 
+	/**
+	 * Currently no matter what the input, a 201 is returned from localToGW.  
+	 * The only way to tell if failed or not based on input is through the
+	 * baseServiceClient.
+	 * 
+	 * I also think that all ingest commands (except for listplugins()) should
+	 * return a 202 status instead of a 201, especially since all errors are
+	 * discovered by the baseServiceClient and not the ingestServiceClient.
+	 * Nothing is created directly from the ingestClient call as it simply kicks
+	 * off another process.
+	 **/
 	@Test
-	@Ignore
 	public void localToGW() {
-		// TODO: Implement this test
+		Response r = ingestServiceClient.localToGW(
+				OSM_GPX_INPUT_DIR,
+				storeName,
+				spatialIndex);
+		assertFinalIngestStatus(
+				"Should successfully complete ingest",
+				"COMPLETE",
+				r,
+				50);
+
+		r = ingestServiceClient.localToGW(
+				OSM_GPX_INPUT_DIR,
+				"nonexistent-store",
+				spatialIndex);
+		assertFinalIngestStatus(
+				"Should fail to complete ingest for nonexistent store",
+				"ERROR",
+				r,
+				50);
 	}
 
 	@Test
-	@Ignore
-	public void localToHdfs() {
-		// TODO: Implement this test
+	public void localToHdfs() {	
+		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		
+		Response r = ingestServiceClient.localToHdfs(
+				OSM_GPX_INPUT_DIR,
+				hdfsBaseDirectory,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should successfully complete ingest",
+				"COMPLETE",
+				r,
+				50);
+		
+		r = ingestServiceClient.localToHdfs(
+				OSM_GPX_INPUT_DIR,
+				"/nonexistent-directory",
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should fail to ingest for nonexistent directory",
+				"ERROR",
+				r,
+				50);
+		
 	}
 
+	//combined testing of commands localToMrGW and mrToGW into one test as mrToGW requires data already ingested into MapReduce.  
 	@Test
-	@Ignore
-	public void localToKafka() {
-		// TODO: Implement this test
-	}
-
-	@Test
-	@Ignore
-	public void localToMrGW() { // <---- Should this be MrGeo?
-		// TODO: Implement this test
-	}
-
-	@Test
-	@Ignore
-	public void mrToGW() {
-		// TODO: Implement this test
+	public void localToMrToGW() {
+		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		String hdfsJobTracker = MapReduceTestEnvironment.getInstance().getJobtracker();
+		
+		Response r = ingestServiceClient.localToMrGW(
+				OSM_GPX_INPUT_DIR, 
+				hdfsBaseDirectory, 
+				storeName, 
+				spatialIndex,
+				null,
+				hdfsJobTracker,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should successfully complete ingest",
+				"COMPLETE",
+				r,
+				50);
+		
+		r = ingestServiceClient.mrToGW(
+				hdfsBaseDirectory, 
+				storeName, 
+				spatialIndex,
+				null,
+				hdfsJobTracker,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should successfully ingest from MapReduce to geowave",
+				"COMPLETE",
+				r,
+				50);	
+		
+		
+		r = ingestServiceClient.localToMrGW(
+				OSM_GPX_INPUT_DIR, 
+				hdfsBaseDirectory, 
+				storeName, 
+				"nonexistent-index",
+				null,
+				hdfsJobTracker,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should fail to ingest for nonexistent index",
+				"ERROR",
+				r,
+				50);
+		
+		r = ingestServiceClient.mrToGW(
+				hdfsBaseDirectory, 
+				"nonexistent-store", 
+				spatialIndex,
+				null,
+				hdfsJobTracker,
+				null,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should fail to ingest for nonexistent store",
+				"ERROR",
+				r,
+				50);
 	}
 
 	@Test
 	@Ignore
 	public void sparkToGW() {
-		// TODO: Implement this test
+		String hdfsBaseDirectory = MapReduceTestEnvironment.getInstance().getHdfsBaseDirectory();
+		
+		Response r = ingestServiceClient.localToHdfs(
+				OSM_GPX_INPUT_DIR,
+				hdfsBaseDirectory,
+				null,
+				"gpx");
+		assertFinalIngestStatus(
+				"Should successfully complete ingest",
+				"COMPLETE",
+				r,
+				50);
+		
+		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
+		
+		r = ingestServiceClient.sparkToGW(
+				hdfsBaseDirectory, 
+				storeName, 
+				spatialIndex);
+		assertFinalIngestStatus(
+				"Should successfully ingest from spark to geowave",
+				"COMPLETE",
+				r,
+				50);
+		
 	}
 }

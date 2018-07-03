@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
-import org.restlet.data.Status;
-
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
@@ -25,8 +23,8 @@ public class ConfigHDFSCommand extends
 	 * Return "200 OK" for the config HDFS command.
 	 */
 	@Override
-	public Status getSuccessStatus() {
-		return Status.SUCCESS_OK;
+	public Boolean successStatusIs200() {
+		return true;
 	}
 
 	private static final String HDFS_DEFAULTFS_PREFIX = "hdfs.defaultFS";
