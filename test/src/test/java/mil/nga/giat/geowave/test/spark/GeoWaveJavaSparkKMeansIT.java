@@ -65,7 +65,8 @@ public class GeoWaveJavaSparkKMeansIT
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.DYNAMODB,
+		// TODO: Dynamo test takes too long to finish on Travis (>5 minutes)
+		// GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions inputDataStore;
