@@ -238,42 +238,24 @@ public class SparkIngestDriver implements
 		// Ingest Plugins
 		final Map<String, LocalFileIngestPlugin<?>> ingestPlugins = pluginFormats.createLocalIngestPlugins();
 
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configProperties,
-					DataStorePluginOptions.getStoreNamespace(inputStoreName),
-					configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(
+				configProperties,
+				DataStorePluginOptions.getStoreNamespace(inputStoreName),
+				null)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(
-					configProperties,
-					DataStorePluginOptions.getStoreNamespace(inputStoreName),
-					null)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final IndexLoader indexLoader = new IndexLoader(
+				indexList);
+		if (!indexLoader.loadFromConfig(configProperties)) {
+			throw new ParameterException(
+					"Cannot find index(s) by name: " + indexList);
 		}
-		// Load the Indexes
-		if (indexOptions == null) {
-			final IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configProperties)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			indexOptions = indexLoader.getLoadedIndexes();
-		}
+		indexOptions = indexLoader.getLoadedIndexes();
 
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();

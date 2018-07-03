@@ -194,9 +194,9 @@ abstract public class AbstractDataAdapter<T> implements
 			}
 
 			final CommonIndexValue value = fieldHandler.toIndexValue(entry);
-			indexData.addValue(new PersistentValue<CommonIndexValue>(
+			indexData.addValue(
 					dimension.getFieldId(),
-					value));
+					value);
 			nativeFieldsInIndex.addAll(Arrays.asList(fieldHandler.getNativeFieldIds()));
 		}
 
@@ -209,9 +209,9 @@ abstract public class AbstractDataAdapter<T> implements
 				if (nativeFieldsInIndex.contains(fieldId)) {
 					continue;
 				}
-				extendedData.addValue(new PersistentValue<Object>(
+				extendedData.addValue(
 						fieldId,
-						fieldHandler.getFieldValue(entry)));
+						fieldHandler.getFieldValue(entry));
 			}
 		}
 
@@ -242,22 +242,23 @@ abstract public class AbstractDataAdapter<T> implements
 					}
 					continue;
 				}
+				ByteArrayId fieldId = dimension.getFieldId();
 				final CommonIndexValue value = data.getCommonData().getValue(
-						dimension.getFieldId());
+						fieldId);
 				if (value == null) {
 					continue;
 				}
 				final PersistentValue<Object>[] values = fieldHandler.toNativeValues(value);
 				if ((values != null) && (values.length > 0)) {
 					for (final PersistentValue<Object> v : values) {
-						builder.setField(v);
+						builder.setField(
+								v.getId(),
+								v.getValue());
 					}
 				}
 			}
 		}
-		for (final PersistentValue<Object> fieldValue : data.getAdapterExtendedData().getValues()) {
-			builder.setField(fieldValue);
-		}
+		builder.setFields(data.getAdapterExtendedData().getValues());
 		return builder.buildRow(data.getDataId());
 	}
 

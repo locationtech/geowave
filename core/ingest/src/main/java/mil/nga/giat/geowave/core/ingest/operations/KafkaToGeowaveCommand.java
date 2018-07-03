@@ -157,18 +157,8 @@ public class KafkaToGeowaveCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public List<IndexPluginOptions> getInputIndexOptions() {
 		return inputIndexOptions;
-	}
-
-	public void setInputIndexOptions(
-			final List<IndexPluginOptions> inputIndexOptions ) {
-		this.inputIndexOptions = inputIndexOptions;
 	}
 
 	@Override
@@ -181,27 +171,21 @@ public class KafkaToGeowaveCommand extends
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-		// Load the Indexes
-		if (inputIndexOptions == null) {
-			final IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			inputIndexOptions = indexLoader.getLoadedIndexes();
+		final IndexLoader indexLoader = new IndexLoader(
+				indexList);
+		if (!indexLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find index(s) by name: " + indexList);
 		}
+		inputIndexOptions = indexLoader.getLoadedIndexes();
 
 		// Ingest Plugins
 		final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = pluginFormats.createAvroPlugins();

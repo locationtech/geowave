@@ -27,6 +27,8 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "addcs", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Add a GeoServer coverage store")
@@ -67,8 +69,6 @@ public class GeoServerAddCoverageStoreCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String gwStore = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
@@ -77,24 +77,10 @@ public class GeoServerAddCoverageStoreCommand extends
 				computeResults(params));
 	}
 
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
-
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		if (parameters.size() != 1) {
 			throw new ParameterException(
 					"Requires argument: <GeoWave store name>");
@@ -116,21 +102,13 @@ public class GeoServerAddCoverageStoreCommand extends
 
 		if ((addStoreResponse.getStatus() == Status.OK.getStatusCode())
 				|| (addStoreResponse.getStatus() == Status.CREATED.getStatusCode())) {
-			setStatus(ServiceStatus.OK);
 			return "Add coverage store for '" + gwStore + "' to workspace '" + workspace + "' on GeoServer: OK";
 		}
-		switch (addStoreResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
-				+ "' on GeoServer; code = " + addStoreResponse.getStatus();
+		String errorMessage = "Error adding coverage store for '" + gwStore + "' to workspace '" + workspace
+				+ "' on GeoServer: " + addStoreResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ addStoreResponse.getStatus();
+		return handleError(
+				addStoreResponse,
+				errorMessage);
 	}
 }

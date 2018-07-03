@@ -35,7 +35,7 @@ public class BaseDataStoreOptions implements
 	@Parameter(names = "--enableBlockCache", hidden = true, arity = 1)
 	protected boolean enableBlockCache = true;
 
-	@Parameter(names = "--enableServerSideLibrary", hidden = true, arity = 1)
+	@Parameter(names = "--enableServerSideLibrary", arity = 1)
 	protected boolean enableServerSideLibrary = true;
 
 	@Override

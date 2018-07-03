@@ -28,6 +28,8 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexGroupPluginOptions;
@@ -43,22 +45,11 @@ public class AddIndexGroupCommand extends
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexGroupCommand.class);
 
-	ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
-			final OperationParams params ) {
-		addIndexGroup(params);
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
+		addIndexGroup(params);
 	}
 
 	/**
@@ -66,20 +57,14 @@ public class AddIndexGroupCommand extends
 	 * with keys 'key' and 'value' to set.
 	 *
 	 * @return none
+	 * @throws Exception
 	 */
 	@Override
 	public String computeResults(
-			final OperationParams params ) {
-		String ret = "";
-		try {
-			ret = addIndexGroup(params);
-		}
-		catch (WritePropertiesException | ParameterException e) {
-			setStatus(ServiceStatus.INTERNAL_ERROR);
-			LOGGER.error(e.toString());
-		}
+			final OperationParams params )
+			throws Exception {
 
-		return ret;
+		return addIndexGroup(params);
 	}
 
 	/**
@@ -89,9 +74,11 @@ public class AddIndexGroupCommand extends
 	 *
 	 * @parameters params
 	 * @return none
+	 * @throws Exception
 	 */
 	private String addIndexGroup(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws Exception {
 		final File propFile = getGeoWaveConfigFile(params);
 		final Properties existingProps = ConfigOptions.loadProperties(propFile);
 
@@ -110,8 +97,8 @@ public class AddIndexGroupCommand extends
 		if (groupOptions.load(
 				existingProps,
 				getNamespace())) {
-			setStatus(ServiceStatus.DUPLICATE);
-			return "That index group already exists: " + getPluginName();
+			throw new DuplicateEntryException(
+					"That index group already exists: " + getPluginName());
 		}
 
 		// Make sure all the indexes exist, and add them to the group options.
@@ -121,9 +108,8 @@ public class AddIndexGroupCommand extends
 			if (!options.load(
 					existingProps,
 					IndexPluginOptions.getIndexNamespace(indexes[i]))) {
-				setStatus(ServiceStatus.NOT_FOUND);
-
-				return "That index does not exist: " + indexes[i];
+				throw new TargetNotFoundException(
+						"That index does not exist: " + indexes[i]);
 			}
 			groupOptions.getDimensionalityPlugins().put(
 					indexes[i],
@@ -152,7 +138,6 @@ public class AddIndexGroupCommand extends
 				}
 			}
 		}
-		setStatus(ServiceStatus.OK);
 		return builder.toString();
 	}
 
@@ -174,15 +159,6 @@ public class AddIndexGroupCommand extends
 		parameters = new ArrayList<String>();
 		parameters.add(name);
 		parameters.add(commaSeparatedIndexes);
-	}
-
-	public ServiceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
 	}
 
 	private static class WritePropertiesException extends

@@ -1,7 +1,7 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
-
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -9,13 +9,14 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.htrace.fasterxml.jackson.databind.ObjectMapper;
+import javax.ws.rs.ForbiddenException;
+import javax.ws.rs.NotAuthorizedException;
+
 import org.restlet.Application;
 import org.restlet.Context;
 import org.restlet.data.Form;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.jackson.JacksonRepresentation;
 import org.restlet.representation.Representation;
@@ -31,10 +32,15 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand.HttpMethod;
+import mil.nga.giat.geowave.core.cli.exceptions.DuplicateEntryException;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.service.rest.exceptions.MissingArgumentException;
+import mil.nga.giat.geowave.service.rest.field.RequestParameters;
+import mil.nga.giat.geowave.service.rest.field.RequestParametersForm;
+import mil.nga.giat.geowave.service.rest.field.RequestParametersJson;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
@@ -57,8 +63,10 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	public Representation restGet()
 			throws Exception {
 		if (HttpMethod.GET.equals(operation.getMethod())) {
-			// TODO is this null correct?
-			return handleRequest(null);
+			// Still send query parameters for GETs to the RequestParameters
+			// class, but don't check for JSON or other Form payloads.
+			return handleRequest(new RequestParametersForm(
+					getQuery()));
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
@@ -66,66 +74,86 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	@Post("form:json")
+	@Post("form|json:json")
 	public Representation restPost(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.POST.equals(operation.getMethod())) {
-
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.POST,
+				request);
 	}
 
-	@Delete("form:json")
+	@Delete("form|json:json")
 	public Representation restDelete(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.DELETE.equals(operation.getMethod())) {
-
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.DELETE,
+				request);
 	}
 
-	@Patch("form:json")
+	@Patch("form|json:json")
 	public Representation restPatch(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.PATCH.equals(operation.getMethod())) {
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
-		}
-		else {
-			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
-			return null;
-		}
+		return handleRequestWithPayload(
+				HttpMethod.PATCH,
+				request);
 	}
 
-	@Put("form:json")
+	@Put("form|json:json")
 	public Representation restPut(
 			final Representation request )
 			throws Exception {
-		if (HttpMethod.PUT.equals(operation.getMethod())) {
-			final Form form = new Form(
-					request);
-			return handleRequest(form);
+		return handleRequestWithPayload(
+				HttpMethod.PUT,
+				request);
+	}
+
+	private Representation handleRequestWithPayload(
+			HttpMethod requiredMethod,
+			Representation request ) {
+		// First check that the request is the requiredMethod, return 405 if
+		// not.
+		if (requiredMethod.equals(operation.getMethod())) {
+			RequestParameters requestParameters;
+			// Then check which MediaType is the request, which determines the
+			// constructor used for RequestParameters.
+			if (checkMediaType(
+					MediaType.APPLICATION_JSON,
+					request)) {
+				try {
+					requestParameters = new RequestParametersJson(
+							request);
+				}
+				catch (IOException e) {
+					setStatus(Status.SERVER_ERROR_INTERNAL);
+					return null;
+				}
+			}
+			else if (checkMediaType(
+					MediaType.APPLICATION_WWW_FORM,
+					request)) {
+				requestParameters = new RequestParametersForm(
+						new Form(
+								request));
+			}
+			else {
+				// If MediaType is not set, then the parameters are likely to be
+				// found in the URL.
+
+				requestParameters = new RequestParametersForm(
+						getQuery());
+			}
+			// Finally, handle the request with the parameters, whose type
+			// should no longer matter.
+			return handleRequest(requestParameters);
 		}
 		else {
 			setStatus(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
 			return null;
 		}
+
 	}
 
 	/**
@@ -144,7 +172,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 	 * @throws InstantiationException
 	 */
 	private void injectParameters(
-			final Form form,
+			final RequestParameters requestParameters,
 			final Object instance )
 			throws MissingArgumentException,
 			InstantiationException,
@@ -155,25 +183,21 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			Object objValue = null;
 
 			if (List.class.isAssignableFrom(f.getType())) {
-				final String[] parameters = getFieldValues(
-						form,
-						f.getName());
-
-				objValue = Arrays.asList(parameters);
+				objValue = requestParameters.getList(f.getName());
 			}
 			else if (f.getType().isArray()) {
-				final String[] parameters = getFieldValues(
-						form,
-						f.getName());
-
-				objValue = parameters;
+				objValue = requestParameters.getArray(f.getName());
+				if (objValue != null) {
+					objValue = Arrays.copyOf(
+							(Object[]) objValue,
+							((Object[]) objValue).length,
+							f.getType());
+				}
 			}
 			else {
-				final String strValue = getFieldValue(
-						form,
-						f.getName());
+				final String strValue = (String) requestParameters.getString(f.getName());
 				if (strValue != null) {
-					if (Long.class.isAssignableFrom(f.getType())) {
+					if (Long.class.isAssignableFrom(f.getType()) || long.class.isAssignableFrom(f.getType())) {
 						objValue = Long.valueOf(strValue);
 					}
 					else if (Integer.class.isAssignableFrom(f.getType()) || int.class.isAssignableFrom(f.getType())) {
@@ -218,48 +242,12 @@ public class GeoWaveOperationServiceWrapper<T> extends
 		}
 	}
 
-	private String[] getFieldValues(
-			final Form form,
-			final String name ) {
-		String[] val = null;
-		if (form != null) {
-			val = form.getValuesArray(name);
-		}
-		if ((val == null) || (val.length == 0)) {
-			val = getQuery().getValuesArray(
-					name);
-		}
-		String str = getFieldValue(
-				form,
-				name);
-		if (str == null) {
-			return val;
-		}
-		else {
-
-			return str.split(",");
-		}
-	}
-
-	private String getFieldValue(
-			final Form form,
-			final String name ) {
-		String val = null;
-		if (form != null) {
-			val = form.getFirstValue(name);
-		}
-		if (val == null) {
-			val = getQueryValue(name);
-		}
-		return val;
-	}
-
 	private Representation handleRequest(
-			final Form form )
+			final RequestParameters parameters )
 			 {
 
-		final String configFileParameter = (form == null) ? getQueryValue("config_file") : form
-				.getFirstValue("config_file");
+		final String configFileParameter = (parameters == null) ? getQueryValue("config_file") : (String) parameters
+				.getValue("config_file");
 
 		final File configFile = (configFileParameter != null) ? new File(
 				configFileParameter) : (initContextConfigFile != null) ? new File(
@@ -272,11 +260,11 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			injectParameters(
-					form,
+					parameters,
 					operation);
 		}
 		catch (final Exception e) {
-			LOGGER.error("Entered an error handling a request.", e.getMessage());
+			LOGGER.error("Could not convert parameters", e);
 			setStatus(
 					Status.CLIENT_ERROR_BAD_REQUEST,
 					e.getMessage());
@@ -290,6 +278,7 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();	
 			
 			if(operation.runAsync()) {
 				final Context appContext = Application.getCurrent().getContext();
@@ -297,71 +286,105 @@ public class GeoWaveOperationServiceWrapper<T> extends
 				final ConcurrentHashMap<String, Future> opStatuses = (ConcurrentHashMap<String, Future>)appContext.getAttributes().get("asyncOperationStatuses");
 				
 				Callable <T> task = () -> {
-					Pair<ServiceStatus, T> res = operation.executeService(params);
-					return res.getRight();
+					T res = operation.computeResults(params);
+					return res;
 				};
 				final Future<T> futureResult = opPool.submit(task);
 				final UUID opId = UUID.randomUUID();
 				opStatuses.put(opId.toString(), futureResult);
-				setStatus(Status.SUCCESS_OK);
 				
-				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 				rm.status = RestOperationStatusMessage.StatusType.STARTED;
 				rm.message = "Async operation started with ID in data field. Check status at /operation_status?id=";
 				rm.data = opId.toString();
-				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-				return rep;
 			} else {
-				final Pair<ServiceStatus, T> result = operation.executeService(params);
-				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
-				
-				switch (result.getLeft()) {
-					case OK:
-						rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
-						setStatus(Status.SUCCESS_OK);
-						break;
-					case NOT_FOUND:
-						rm.status = RestOperationStatusMessage.StatusType.ERROR;
-						setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-						break;
-					case DUPLICATE:
-						setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
-						break;
-					case INTERNAL_ERROR:
-						rm.status = RestOperationStatusMessage.StatusType.ERROR;
-						setStatus(Status.SERVER_ERROR_INTERNAL);
-				}
-				
-				rm.data = result.getRight();
-				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
-				return rep;
+				final T result = operation.computeResults(params);		
+				rm.status = RestOperationStatusMessage.StatusType.COMPLETE;
+				rm.data = result;
 			}
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			if(operation.successStatusIs200()){
+				setStatus(Status.SUCCESS_OK);
+			}
+			else{
+				setStatus(Status.SUCCESS_CREATED);
+			}
+			return rep;
+		}
+		catch (final NotAuthorizedException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_UNAUTHORIZED);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final ForbiddenException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_FORBIDDEN);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final TargetNotFoundException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
+		}
+		catch (final DuplicateEntryException e){
+			LOGGER.error(
+					"Entered an error handling a request.",
+					e);
+			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+			rm.status = RestOperationStatusMessage.StatusType.ERROR;
+			rm.message = e.getMessage();
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+			return rep;
 		}
 		catch (final Exception e) {
 			LOGGER.error(
 					"Entered an error handling a request.",
-					e.getMessage());
+					e);
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();
 			rm.status = RestOperationStatusMessage.StatusType.ERROR;
 			rm.message = "exception occurred";
 			rm.data = e;
+			setStatus(Status.SERVER_ERROR_INTERNAL);
 			final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
 			return rep;
 		}
 	}
 
-	public static class MissingArgumentException extends
-			Exception
-	{
-		/**
-		 *
-		 */
-		private static final long serialVersionUID = 1L;
-
-		private MissingArgumentException(
-				final String argumentName ) {
-			super(
-					"Missing argument: " + argumentName);
+	/**
+	 * Checks that the desired MediaType is compatible with the one present in
+	 * the request.
+	 * 
+	 * @param expectedType
+	 *            The expected type.
+	 * @param request
+	 *            The request whose MediaType is being checked.
+	 * @return true, if the MediaTypes match. --- OR false, if the MediaTypes do
+	 *         not match, or the request is null.
+	 */
+	private boolean checkMediaType(
+			MediaType expectedType,
+			Representation request ) {
+		if (request == null) {
+			return false;
 		}
+		return expectedType.isCompatible(request.getMediaType());
 	}
 }

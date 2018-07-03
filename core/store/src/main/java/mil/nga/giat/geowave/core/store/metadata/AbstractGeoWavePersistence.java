@@ -2,12 +2,12 @@ package mil.nga.giat.geowave.core.store.metadata;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
@@ -50,18 +50,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	protected final DataStoreOptions options;
 	protected final MetadataType type;
 
-	protected final Map<ByteArrayId, T> cache = Collections.synchronizedMap(new LinkedHashMap<ByteArrayId, T>(
-			MAX_ENTRIES + 1,
-			.75F,
-			true) {
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public boolean removeEldestEntry(
-				final Map.Entry<ByteArrayId, T> eldest ) {
-			return size() > MAX_ENTRIES;
-		}
-	});
+	@SuppressWarnings("rawtypes")
+	protected Cache cache;
 
 	public AbstractGeoWavePersistence(
 			final DataStoreOperations operations,
@@ -70,6 +60,13 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		this.operations = operations;
 		this.options = options;
 		this.type = type;
+		buildCache();
+	}
+
+	protected void buildCache() {
+		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
+				MAX_ENTRIES);
+		this.cache = cacheBuilder.<ByteArrayId, T> build();
 	}
 
 	protected MetadataType getType() {
@@ -90,24 +87,30 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		deleteObject(
 				null,
 				null);
-		cache.clear();
+		cache.invalidateAll();
 	}
 
 	protected ByteArrayId getCombinedId(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId ) {
 		// the secondaryId is optional so check for null
+		StringBuilder sb = new StringBuilder(
+				primaryId.getString());
 		if (secondaryId != null) {
-			return new ByteArrayId(
-					primaryId.getString() + "_" + secondaryId.getString());
+			sb.append(
+					"_").append(
+					secondaryId.getString());
 		}
-		return primaryId;
+		return new ByteArrayId(
+				sb.toString());
 	}
 
+	@SuppressWarnings("unchecked")
 	protected void addObjectToCache(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
-			final T object ) {
+			final T object,
+			final String... authorizations ) {
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
@@ -118,11 +121,12 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 	protected Object getObjectFromCache(
 			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
+			final ByteArrayId secondaryId,
+			final String... authorizations ) {
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		return cache.get(combinedId);
+		return cache.getIfPresent(combinedId);
 	}
 
 	protected boolean deleteObjectFromCache(
@@ -131,7 +135,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		return (cache.remove(combinedId) != null);
+		boolean present = cache.getIfPresent(combinedId) != null;
+		if (present) {
+			cache.invalidate(combinedId);
+		}
+		return present;
 	}
 
 	public void remove(
@@ -238,10 +246,12 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final String... authorizations ) {
 		final Object cacheResult = getObjectFromCache(
 				primaryId,
-				secondaryId);
+				secondaryId,
+				authorizations);
 		if (cacheResult != null) {
 			return (T) cacheResult;
 		}
+
 		try {
 			if (!operations.metadataExists(getType())) {
 				if (warnIfNotExists) {
@@ -274,7 +284,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				return null;
 			}
 			final GeoWaveMetadata entry = it.next();
-			return entryToValue(entry);
+			return entryToValue(
+					entry,
+					authorizations);
 		}
 		catch (final IOException e) {
 			if (warnIfNotExists) {
@@ -323,7 +335,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final MetadataReader reader = operations.createMetadataReader(getType());
 		final CloseableIterator<GeoWaveMetadata> it = reader.query(query);
 		return new NativeIteratorWrapper(
-				it);
+				it,
+				query.getAuthorizations());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -333,7 +346,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected T entryToValue(
-			final GeoWaveMetadata entry ) {
+			final GeoWaveMetadata entry,
+			final String... authorizations ) {
 		final T result = fromValue(entry);
 		if (result != null) {
 			addObjectToCache(
@@ -341,7 +355,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 							entry.getPrimaryId()),
 					entry.getSecondaryId() == null ? null : new ByteArrayId(
 							entry.getSecondaryId()),
-					result);
+					result,
+					authorizations);
 		}
 		return result;
 	}
@@ -429,10 +444,13 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			CloseableIterator<T>
 	{
 		final private CloseableIterator<GeoWaveMetadata> it;
+		final private String[] authorizations;
 
 		private NativeIteratorWrapper(
-				final CloseableIterator<GeoWaveMetadata> it ) {
+				final CloseableIterator<GeoWaveMetadata> it,
+				String[] authorizations ) {
 			this.it = it;
+			this.authorizations = authorizations;
 		}
 
 		@Override
@@ -442,7 +460,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 		@Override
 		public T next() {
-			return entryToValue(it.next());
+			return entryToValue(
+					it.next(),
+					authorizations);
 		}
 
 		@Override

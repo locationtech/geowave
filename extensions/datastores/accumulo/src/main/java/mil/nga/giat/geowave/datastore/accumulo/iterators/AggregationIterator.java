@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.datastore.accumulo.iterators;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -42,7 +41,6 @@ import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -181,9 +179,7 @@ public class AggregationIterator extends
 				final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
 						.getAdapterExtendedData();
 				if (existingExtValues != null) {
-					for (final PersistentValue<Object> val : existingExtValues.getValues()) {
-						adapterExtendedValues.addValue(val);
-					}
+					adapterExtendedValues.addValues(existingExtValues.getValues());
 				}
 			}
 

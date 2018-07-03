@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -56,17 +56,6 @@ public class StatsCompositionTool<T> implements
 
 	public StatsCompositionTool(
 			final DataStoreStatisticsProvider<T> statisticsProvider,
-			final PrimaryIndex index,
-			final DataAdapter<T> adapter ) {
-		this.statisticsStore = null;
-		this.init(
-				index,
-				adapter,
-				statisticsProvider);
-	}
-
-	public StatsCompositionTool(
-			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
 			final PrimaryIndex index,
 			final DataAdapter<T> adapter ) {
@@ -98,7 +87,7 @@ public class StatsCompositionTool<T> implements
 		}
 		catch (final Exception ex) {
 			LOGGER.error(
-					"Unable to determine property AccumuloIndexWriter.skipFlush",
+					"Unable to determine property StatsCompositionTool.skipFlush",
 					ex);
 		}
 	}
@@ -155,7 +144,23 @@ public class StatsCompositionTool<T> implements
 			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
 				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
 				for (final DataStatistics<T> s : statistics) {
-					statisticsStore.incorporateStatistics(s);
+					// using a set and simply checking instanceof this is the
+					// simplest approach to enable per partition statistics
+					// within the current design
+
+					// at some point stats should be re-designed to be simpler,
+					// reducing the complexity of a stats builder wrapping a
+					// statistic, which is wrapped by the composition tool,
+					// which is used by the stats manager within a feature data
+					// adapter etc.
+					if (s instanceof DataStatisticsSet) {
+						for (final DataStatistics<T> statInSet : ((DataStatisticsSet) s).getStatisticsSet()) {
+							statisticsStore.incorporateStatistics(statInSet);
+						}
+					}
+					else {
+						statisticsStore.incorporateStatistics(s);
+					}
 				}
 				statistics.clear();
 			}
@@ -210,6 +215,7 @@ public class StatsCompositionTool<T> implements
 	private void checkStats() {
 		if (!skipFlush && (updateCount > FLUSH_STATS_THRESHOLD)) {
 			updateCount = 0;
+			flush();
 		}
 	}
 

@@ -111,7 +111,7 @@ abstract public class AbstractDataStatistics<T> implements
 	protected static String decomposeNameFromId(
 			final ByteArrayId id ) {
 		final String idString = id.getString();
-		final int pos = idString.lastIndexOf('#');
+		final int pos = idString.lastIndexOf(STATS_ID_SEPARATOR);
 		return idString.substring(pos + 1);
 	}
 

@@ -63,25 +63,21 @@ public class MergeDataCommand extends
 		final String inputStoreName = parameters.get(0);
 		final String indexList = parameters.get(1);
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
-		} // Load the Indexes
-		if (inputIndexOptions == null) {
-			final IndexLoader indexLoader = new IndexLoader(
-					indexList);
-			if (!indexLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find index(s) by name: " + indexList);
-			}
-			inputIndexOptions = indexLoader.getLoadedIndexes();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		// Load the Indexes
+		final IndexLoader indexLoader = new IndexLoader(
+				indexList);
+		if (!indexLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			throw new ParameterException(
+					"Cannot find index(s) by name: " + indexList);
+		}
+		inputIndexOptions = indexLoader.getLoadedIndexes();
 		final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();
 		final DataStoreOperations operations = inputStoreOptions.createDataStoreOperations();
@@ -117,10 +113,5 @@ public class MergeDataCommand extends
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 }

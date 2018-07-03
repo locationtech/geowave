@@ -10,11 +10,11 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter;
 
-import java.util.List;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -53,13 +53,13 @@ public class IndexedAdapterPersistenceEncoding extends
 	public void convertUnknownValues(
 			final DataAdapter<?> adapter,
 			final CommonIndexModel model ) {
-		final List<PersistentValue<byte[]>> unknownDataValues = getUnknownData().getValues();
-		for (final PersistentValue<byte[]> v : unknownDataValues) {
-			final FieldReader<Object> reader = adapter.getReader(v.getId());
+		final Set<Entry<ByteArrayId, byte[]>> unknownDataValues = getUnknownData().getValues().entrySet();
+		for (final Entry<ByteArrayId, byte[]> v : unknownDataValues) {
+			final FieldReader<Object> reader = adapter.getReader(v.getKey());
 			final Object value = reader.readField(v.getValue());
-			adapterExtendedData.addValue(new PersistentValue<Object>(
-					v.getId(),
-					value));
+			adapterExtendedData.addValue(
+					v.getKey(),
+					value);
 		}
 	}
 }

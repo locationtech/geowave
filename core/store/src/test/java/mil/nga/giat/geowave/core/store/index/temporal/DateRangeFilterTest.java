@@ -68,11 +68,10 @@ public class DateRangeFilterTest
 				null,
 				0,
 				new PersistentDataset<ByteArrayId>(
-						new PersistentValue<ByteArrayId>(
-								new ByteArrayId(
-										"myAttribute"),
-								new ByteArrayId(
-										TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01"))))),
+						new ByteArrayId(
+								"myAttribute"),
+						new ByteArrayId(
+								TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01")))),
 				null);
 
 		Assert.assertTrue(filter.accept(
@@ -87,12 +86,11 @@ public class DateRangeFilterTest
 				null,
 				0,
 				new PersistentDataset<ByteArrayId>(
-						new PersistentValue<ByteArrayId>(
-								new ByteArrayId(
-										"myAttribute"),
-								new ByteArrayId(
-										Lexicoders.LONG.toByteArray(format.parse(
-												"01-01-2015 11:01:01").getTime())))),
+						new ByteArrayId(
+								"myAttribute"),
+						new ByteArrayId(
+								Lexicoders.LONG.toByteArray(format.parse(
+										"01-01-2015 11:01:01").getTime()))),
 				null);
 
 		Assert.assertFalse(filter.accept(
@@ -107,12 +105,11 @@ public class DateRangeFilterTest
 				null,
 				0,
 				new PersistentDataset<ByteArrayId>(
-						new PersistentValue<ByteArrayId>(
-								new ByteArrayId(
-										"mismatch"),
-								new ByteArrayId(
-										Lexicoders.LONG.toByteArray(format.parse(
-												"06-01-2014 11:01:01").getTime())))),
+						new ByteArrayId(
+								"mismatch"),
+						new ByteArrayId(
+								Lexicoders.LONG.toByteArray(format.parse(
+										"06-01-2014 11:01:01").getTime()))),
 				null);
 
 		Assert.assertFalse(filter.accept(

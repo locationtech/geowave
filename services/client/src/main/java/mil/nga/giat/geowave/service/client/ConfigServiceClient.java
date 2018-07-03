@@ -264,6 +264,122 @@ public class ConfigServiceClient implements
 		return resp;
 	}
 
+	public Response addDynamoDBStore(
+			String name ) {
+		return addDynamoDBStore(
+				name,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+	}
+
+	@Override
+	public Response addDynamoDBStore(
+			String name,
+			Boolean makeDefault,
+			String endpoint,
+			String region,
+			Long writeCapacity,
+			Long readCapacity,
+			Integer maxConnections,
+			String protocol,
+			Boolean enableCacheResponseMetadata,
+			String geowaveNamespace,
+			Boolean persistAdapter,
+			Boolean persistIndex,
+			Boolean persistDataStatistics,
+			Boolean createTable,
+			Boolean useAltIndex,
+			Boolean enableBlockCache,
+			Boolean enableServerSideLibrary ) {
+
+		final Response resp = configService.addDynamoDBStore(
+				name,
+				makeDefault,
+				endpoint,
+				region,
+				writeCapacity,
+				readCapacity,
+				maxConnections,
+				protocol,
+				enableCacheResponseMetadata,
+				geowaveNamespace,
+				persistAdapter,
+				persistIndex,
+				persistDataStatistics,
+				createTable,
+				useAltIndex,
+				enableBlockCache,
+				enableServerSideLibrary);
+		return resp;
+	}
+
+	public Response addCassandraStore(
+			String name ) {
+		return addCassandraStore(
+				name,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null,
+				null);
+	}
+
+	@Override
+	public Response addCassandraStore(
+			String name,
+			Boolean makeDefault,
+			String contactPoint,
+			Integer batchWriteSize,
+			Boolean durableWrites,
+			Integer replicationFactor,
+			String geowaveNamespace,
+			Boolean persistAdapter,
+			Boolean persistIndex,
+			Boolean persistDataStatistics,
+			Boolean createTable,
+			Boolean useAltIndex,
+			Boolean enableBlockCache,
+			Boolean enableServerSideLibrary ) {
+		final Response resp = configService.addCassandraStore(
+				name,
+				makeDefault,
+				contactPoint,
+				batchWriteSize,
+				durableWrites,
+				replicationFactor,
+				geowaveNamespace,
+				persistAdapter,
+				persistIndex,
+				persistDataStatistics,
+				createTable,
+				useAltIndex,
+				enableBlockCache,
+				enableServerSideLibrary);
+		return resp;
+	}
+
 	public Response addSpatialIndex(
 			final String name ) {
 		return addSpatialIndex(
@@ -487,9 +603,17 @@ public class ConfigServiceClient implements
 					name);
 		}
 		for (Entry<String, String> e : additionalQueryParams.entrySet()) {
-			internalAddStoreTarget = internalAddStoreTarget.queryParam(
-					e.getKey(),
-					e.getValue());
+			if (e.getKey().equals(
+					"protocol")) {
+				internalAddStoreTarget = internalAddStoreTarget.queryParam(
+						e.getKey(),
+						e.getValue().toUpperCase());
+			}
+			else {
+				internalAddStoreTarget = internalAddStoreTarget.queryParam(
+						e.getKey(),
+						e.getValue());
+			}
 		}
 		return internalAddStoreTarget.request().accept(
 				MediaType.APPLICATION_JSON).method(
@@ -505,4 +629,5 @@ public class ConfigServiceClient implements
 				indexes);
 		return resp;
 	}
+
 }

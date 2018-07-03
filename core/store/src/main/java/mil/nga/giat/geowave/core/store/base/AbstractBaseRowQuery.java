@@ -13,7 +13,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderClosableWrapper;
-import mil.nga.giat.geowave.core.store.util.NativeEntryIteratorWrapper;
+import mil.nga.giat.geowave.core.store.util.NativeEntryTransformer;
 
 /**
  * Represents a query operation by an Accumulo row. This abstraction is
@@ -44,23 +44,23 @@ abstract class AbstractBaseRowQuery<T> extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final PersistentAdapterStore adapterStore,
 			final Integer limit ) {
-		Reader reader = getReader(
+		Reader<T> reader = getReader(
 				operations,
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				limit);
-		return new CloseableIteratorWrapper(
-				new ReaderClosableWrapper(
-						reader),
-				new NativeEntryIteratorWrapper(
+				limit,
+				new NativeEntryTransformer<T>(
 						adapterStore,
 						index,
-						reader,
 						getClientFilter(options),
 						scanCallback,
 						getFieldBitmask(),
 						maxResolutionSubsamplingPerDimension,
 						!isCommonIndexAggregation()));
+		return new CloseableIteratorWrapper<T>(
+				new ReaderClosableWrapper(
+						reader),
+				reader);
 	}
 }

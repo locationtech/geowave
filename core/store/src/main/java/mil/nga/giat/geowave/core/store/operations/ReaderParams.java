@@ -9,12 +9,13 @@ import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
-public class ReaderParams extends
-		BaseReaderParams
+public class ReaderParams<T> extends
+		BaseReaderParams<T>
 {
 	private final boolean isServersideAggregation;
 	private final boolean isClientsideRowMerging;
@@ -38,6 +39,7 @@ public class ReaderParams extends
 			final Integer limit,
 			final List<MultiDimensionalCoordinateRangesArray> coordinateRanges,
 			final List<MultiDimensionalNumericData> constraints,
+			final GeoWaveRowIteratorTransformer<T> rowTransformer,
 			final String... additionalAuthorizations ) {
 		super(
 				index,
@@ -48,6 +50,7 @@ public class ReaderParams extends
 				fieldSubsets,
 				isMixedVisibility,
 				limit,
+				rowTransformer,
 				additionalAuthorizations);
 		this.isServersideAggregation = isServersideAggregation;
 		this.isClientsideRowMerging = isClientsideRowMerging;

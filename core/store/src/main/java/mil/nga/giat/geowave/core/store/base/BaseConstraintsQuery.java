@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.QueryRanges;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -26,6 +27,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
@@ -152,6 +154,7 @@ public class BaseConstraintsQuery extends
 		this.queryFiltersEnabled = queryFiltersEnabled;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public CloseableIterator<Object> query(
 			final DataStoreOperations datastoreOperations,
@@ -162,7 +165,7 @@ public class BaseConstraintsQuery extends
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
 				// Aggregate client-side
-				final CloseableIterator<Object> it = super.query(
+				final CloseableIterator<Object> it = (CloseableIterator<Object>) super.query(
 						datastoreOperations,
 						options,
 						adapterStore,
@@ -170,17 +173,18 @@ public class BaseConstraintsQuery extends
 						limit);
 				return BaseDataStoreUtils.aggregate(
 						it,
-						aggregation.getValue());
+						(Aggregation<?, ?, Object>) aggregation.getValue());
 			}
 			else {
 				// the aggregation is run server-side use the reader to
 				// aggregate to a single value here
-				try (final Reader reader = getReader(
+				try (final Reader<GeoWaveRow> reader = getReader(
 						datastoreOperations,
 						options,
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
-						limit)) {
+						limit,
+						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)) {
 					Mergeable mergedAggregationResult = null;
 					if ((reader == null) || !reader.hasNext()) {
 						return new CloseableIterator.Empty();

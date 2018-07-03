@@ -37,6 +37,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.VisibilityOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -165,8 +166,8 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				dataStoreOptions);
 		final DataStore store = dataStoreOptions.createDataStore();
 		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
+		final PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
 		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-			final PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
 			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
 				// from a controlled client, intialize the writer within the
 				// context of the datastore before distributing ingest
@@ -180,6 +181,22 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 						job.getConfiguration(),
 						dataAdapter);
 			}
+		}
+		else {
+			// if the adapter is unknown by the ingest format, at least add the
+			// indices from the client
+			for (final PrimaryIndex index : indexesArray) {
+				if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistIndex()) {
+					dataStoreOptions.createIndexStore().addIndex(
+							index);
+				}
+			}
+		}
+		// this is done primarily to ensure stats merging is enabled before the
+		// distributed ingest
+		if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
+			dataStoreOptions.createDataStoreOperations().createMetadataWriter(
+					MetadataType.STATS).close();
 		}
 		job.setSpeculativeExecution(false);
 

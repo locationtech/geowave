@@ -13,10 +13,11 @@ package mil.nga.giat.geowave.adapter.vector.query.cql;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 
-import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
@@ -27,13 +28,9 @@ import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncodin
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class CQLQueryFilter implements
 		DistributableQueryFilter
@@ -70,9 +67,7 @@ public class CQLQueryFilter implements
 				final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
 						.getAdapterExtendedData();
 				if (existingExtValues != null) {
-					for (final PersistentValue<Object> val : existingExtValues.getValues()) {
-						adapterExtendedValues.addValue(val);
-					}
+					adapterExtendedValues.addValues(existingExtValues.getValues());
 				}
 			}
 			final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(

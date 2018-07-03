@@ -190,7 +190,6 @@ public class RasterDataAdapter implements
 	private RasterTileMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
 	private Interpolation interpolation;
-	private MathTransform transform;
 
 	public RasterDataAdapter() {}
 
@@ -1276,9 +1275,9 @@ public class RasterDataAdapter implements
 			final GridCoverage entry,
 			final CommonIndexModel indexModel ) {
 		final PersistentDataset<Object> adapterExtendedData = new PersistentDataset<Object>();
-		adapterExtendedData.addValue(new PersistentValue<Object>(
+		adapterExtendedData.addValue(
 				DATA_FIELD_ID,
-				getRasterTileFromCoverage(entry)));
+				getRasterTileFromCoverage(entry));
 		final AdapterPersistenceEncoding encoding;
 		if (entry instanceof FitToIndexGridCoverage) {
 			encoding = new FitToIndexPersistenceEncoding(

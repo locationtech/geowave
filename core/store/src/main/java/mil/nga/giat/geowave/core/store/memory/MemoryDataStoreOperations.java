@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowImpl;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
@@ -106,7 +107,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		return true;
@@ -143,8 +144,8 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final ReaderParams readerParams ) {
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> readerParams ) {
 		final SortedSet<MemoryStoreEntry> internalData = storeData.get(readerParams.getIndex().getId());
 		int counter = 0;
 		List<MemoryStoreEntry> retVal = new ArrayList<>();
@@ -257,7 +258,8 @@ public class MemoryDataStoreOperations implements
 								}
 								return true;
 							}
-						}));
+						}),
+				readerParams.getRowTransformer());
 	}
 
 	private boolean isAuthorized(
@@ -273,15 +275,16 @@ public class MemoryDataStoreOperations implements
 		return true;
 	}
 
-	private static class MyIndexReader implements
-			Reader
+	private static class MyIndexReader<T> implements
+			Reader<T>
 	{
-		private final Iterator<MemoryStoreEntry> it;
+		private final Iterator<T> it;
 
 		public MyIndexReader(
-				final Iterator<MemoryStoreEntry> it ) {
+				final Iterator<MemoryStoreEntry> it,
+				final GeoWaveRowIteratorTransformer<T> rowTransformer ) {
 			super();
-			this.it = it;
+			this.it = rowTransformer.apply(Iterators.transform(it, e -> e.row));
 		}
 
 		@Override
@@ -294,8 +297,8 @@ public class MemoryDataStoreOperations implements
 		}
 
 		@Override
-		public GeoWaveRow next() {
-			return it.next().row;
+		public T next() {
+			return it.next();
 		}
 	}
 

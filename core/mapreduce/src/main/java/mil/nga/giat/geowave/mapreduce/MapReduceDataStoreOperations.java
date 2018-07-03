@@ -7,7 +7,7 @@ import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 public interface MapReduceDataStoreOperations extends
 		DataStoreOperations
 {
-	public Reader createReader(
-			RecordReaderParams readerParams );
+	public <T> Reader<T> createReader(
+			RecordReaderParams<T> readerParams );
 
 }

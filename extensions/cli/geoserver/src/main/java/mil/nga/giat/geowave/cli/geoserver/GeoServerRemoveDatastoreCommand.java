@@ -27,11 +27,12 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "rmds", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Remove GeoServer DataStore")
 public class GeoServerRemoveDatastoreCommand extends
-		GeoServerCommand<String>
+		GeoServerRemoveCommand<String>
 {
 	@Parameter(names = {
 		"-ws",
@@ -43,29 +44,12 @@ public class GeoServerRemoveDatastoreCommand extends
 	private final List<String> parameters = new ArrayList<String>();
 	private String datastoreName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -88,21 +72,13 @@ public class GeoServerRemoveDatastoreCommand extends
 				datastoreName);
 
 		if (deleteStoreResponse.getStatus() == Status.OK.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			return "Delete store '" + datastoreName + "' from workspace '" + workspace + "' on GeoServer: OK";
 		}
-		switch (deleteStoreResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error deleting store '" + datastoreName + "' from workspace '" + workspace + "' on GeoServer; code = "
+		String errorMessage = "Error deleting store '" + datastoreName + "' from workspace '" + workspace
+				+ "' on GeoServer: " + deleteStoreResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ deleteStoreResponse.getStatus();
+		return handleError(
+				deleteStoreResponse,
+				errorMessage);
 	}
 }

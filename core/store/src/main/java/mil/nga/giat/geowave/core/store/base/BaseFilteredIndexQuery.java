@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.Nullable;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
 
@@ -23,9 +25,10 @@ import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
-import mil.nga.giat.geowave.core.store.flatten.BitmaskUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
@@ -60,28 +63,31 @@ abstract class BaseFilteredIndexQuery extends
 		return clientFilters;
 	}
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({
+		"unchecked",
+		"rawtypes"
+	})
 	public CloseableIterator<Object> query(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit ) {
-		final Reader reader = getReader(
+		final Reader<?> reader = getReader(
 				datastoreOperations,
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				limit);
+				limit,
+				getRowTransformer(
+						options,
+						adapterStore,
+						maxResolutionSubsamplingPerDimension,
+						!isCommonIndexAggregation()));
 		if (reader == null) {
-			return new CloseableIterator.Empty<Object>();
+			return new CloseableIterator.Empty();
 		}
-		Iterator it = initIterator(
-				options,
-				adapterStore,
-				reader,
-				maxResolutionSubsamplingPerDimension,
-				!isCommonIndexAggregation());
+		Iterator it = reader;
 		if ((limit != null) && (limit > 0)) {
 			it = Iterators.limit(
 					it,
@@ -94,12 +100,13 @@ abstract class BaseFilteredIndexQuery extends
 	}
 
 	@Override
-	protected Reader getReader(
+	protected <C> Reader<C> getReader(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
+			final Integer limit,
+			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
 		boolean exists = false;
 		try {
 			exists = datastoreOperations.indexExists(index.getId());
@@ -119,7 +126,8 @@ abstract class BaseFilteredIndexQuery extends
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				limit);
+				limit,
+				rowTransformer);
 	}
 
 	protected Map<Short, RowMergingDataAdapter> getMergingAdapters(
@@ -139,40 +147,59 @@ abstract class BaseFilteredIndexQuery extends
 		return mergingAdapters;
 	}
 
-	protected Iterator initIterator(
+	private <T> GeoWaveRowIteratorTransformer<T> getRowTransformer(
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
-			final Reader reader,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final boolean decodePersistenceEncoding ) {
-		// TODO GEOWAVE-1018: this will be a logical place to subsample (and
-		// field subset?) if it is not already happening on the server
-
-		// Determine client-side row merging
-		if (!options.isServerSideLibraryEnabled()) {
+		final @Nullable QueryFilter clientFilter = getClientFilter(options);
+		if (options == null || !options.isServerSideLibraryEnabled()) {
 			final Map<Short, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
 
 			if (!mergingAdapters.isEmpty()) {
-				return new MergingEntryIterator(
-						adapterStore,
-						index,
-						reader,
-						getClientFilter(options),
-						scanCallback,
-						mergingAdapters,
-						maxResolutionSubsamplingPerDimension);
+				return new GeoWaveRowIteratorTransformer<T>() {
+
+					@SuppressWarnings({
+						"rawtypes",
+						"unchecked"
+					})
+					@Override
+					public Iterator<T> apply(
+							Iterator<GeoWaveRow> input ) {
+						return new MergingEntryIterator(
+								adapterStore,
+								index,
+								input,
+								clientFilter,
+								scanCallback,
+								mergingAdapters,
+								maxResolutionSubsamplingPerDimension);
+					}
+				};
 			}
 		}
 
-		return new NativeEntryIteratorWrapper(
-				adapterStore,
-				index,
-				reader,
-				getClientFilter(options),
-				scanCallback,
-				getFieldBitmask(),
-				maxResolutionSubsamplingPerDimension,
-				decodePersistenceEncoding);
+		return new GeoWaveRowIteratorTransformer<T>() {
+
+			@SuppressWarnings({
+				"rawtypes",
+				"unchecked"
+			})
+			@Override
+			public Iterator<T> apply(
+					Iterator<GeoWaveRow> input ) {
+				return new NativeEntryIteratorWrapper(
+						adapterStore,
+						index,
+						input,
+						clientFilter,
+						scanCallback,
+						getFieldBitmask(),
+						maxResolutionSubsamplingPerDimension,
+						decodePersistenceEncoding);
+			}
+
+		};
 	}
 
 	@Override

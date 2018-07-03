@@ -12,7 +12,6 @@ package mil.nga.giat.geowave.datastore.accumulo.mapreduce;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -25,6 +24,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.TabletId;
 import org.apache.accumulo.core.data.impl.KeyExtent;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,7 +61,7 @@ public class AccumuloSplitsProvider extends
 			final DataStoreOperations operations,
 			final PrimaryIndex index,
 			final List<Short> adapters,
-			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -137,7 +137,7 @@ public class AccumuloSplitsProvider extends
 		}
 		// get the metadata information for these ranges
 		final HashMap<String, String> hostNameCache = getHostNameCache();
-		BackwardCompatibleTabletLocator locator = BackwardCompatibleTabletLocatorFactory.createTabletLocator(
+		final BackwardCompatibleTabletLocator locator = BackwardCompatibleTabletLocatorFactory.createTabletLocator(
 				accumuloOperations,
 				tableName,
 				ranges);
@@ -179,9 +179,10 @@ public class AccumuloSplitsProvider extends
 									adapterStore,
 									statsStore,
 									statsCache,
+									new ByteArrayId(
+											rowRange.getPartitionKey()),
 									authorizations),
-							rowRange,
-							indexStrategy.getPartitionKeyLength());
+							rowRange);
 					rangeList.add(new RangeLocationPair(
 							rowRange,
 							location,

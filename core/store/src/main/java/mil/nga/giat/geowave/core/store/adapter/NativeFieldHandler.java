@@ -10,8 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.adapter;
 
+import java.util.Map;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 
 /**
  * This is used by the AbstractDataAdapter to get individual field values from
@@ -55,7 +56,11 @@ public interface NativeFieldHandler<RowType, FieldType>
 		 *            the field ID/value pair
 		 */
 		public void setField(
-				PersistentValue<FieldType> fieldValue );
+				ByteArrayId id,
+				FieldType fieldValue );
+
+		public void setFields(
+				Map<ByteArrayId, FieldType> values );
 
 		/**
 		 * Create a row with the previously set fields

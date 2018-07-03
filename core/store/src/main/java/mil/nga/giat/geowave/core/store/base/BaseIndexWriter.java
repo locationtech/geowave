@@ -147,7 +147,7 @@ class BaseIndexWriter<T> implements
 		if (customFieldVisibilityWriter != DataStoreUtils.UNCONSTRAINED_VISIBILITY) {
 			for (final FieldInfo field : ingestInfo.getFieldInfo()) {
 				if ((field.getVisibility() != null) && (field.getVisibility().length > 0)) {
-					if (!operations.insureAuthorizations(
+					if (!operations.ensureAuthorizations(
 							null,
 							StringUtils.stringFromBinary(field.getVisibility()))) {
 						LOGGER.error("Unable to set authorizations for ingested visibility '"

@@ -209,8 +209,6 @@ public class StatsManager
 				// seems to work right now?
 				return ((AbstractDataStatistics<SimpleFeature>) statObj).duplicate();
 			}
-			// LOGGER.warn("Comparing ID '" + statisticsId.getString() + "' and
-			// '" + stat.getStatisticsId().getString() + "'");
 		}
 
 		if (statisticsId.getString().equals(

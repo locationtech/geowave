@@ -29,7 +29,7 @@ import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final Reader reader;
+	private final Reader<GeoWaveRow> reader;
 	private final QueryFilter queryFilter;
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
@@ -37,7 +37,7 @@ public class InputFormatIteratorWrapper<T> implements
 	private final PrimaryIndex index;
 
 	public InputFormatIteratorWrapper(
-			final Reader reader,
+			final Reader<GeoWaveRow> reader,
 			final QueryFilter queryFilter,
 			final TransientAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,

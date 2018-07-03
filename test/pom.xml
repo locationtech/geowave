@@ -178,7 +178,7 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-cli-theia</artifactId>
+			<artifactId>geowave-cli-sentinel2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -258,6 +258,10 @@
 				<exclusion>
 					<groupId>com.lmax</groupId>
 					<artifactId>disruptor</artifactId>
+				</exclusion>
+				<exclusion>
+					<artifactId>hibernate-validator</artifactId>
+					<groupId>org.hibernate</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -412,6 +416,8 @@
 								<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
 								<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
 								<BIGTABLE_EMULATOR_HOST>${bigtable.emulator.endpoint}</BIGTABLE_EMULATOR_HOST>
+								<GDAL_DIR>${gdal.dir}</GDAL_DIR>
+								<NCS_USER_PREFS></NCS_USER_PREFS>
 							</environmentVariables>
 							<systemPropertyVariables>
 								<zookeeperUrl>${zookeeperUrl}</zookeeperUrl>
@@ -517,7 +523,7 @@
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/landsat8/src/main/java</sourceDirectory>
-						<sourceDirectory>../extensions/cli/theia/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/cli/sentinel2/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/geoserver/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/osm/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/cli/debug/src/main/java</sourceDirectory>
@@ -534,7 +540,11 @@
 						<sourceDirectory>../analytics/api/src/main/java</sourceDirectory>
 						<sourceDirectory>../analytics/mapreduce/src/main/java</sourceDirectory>
 						<sourceDirectory>../analytics/spark/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/api/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/client/src/main/java</sourceDirectory>
 						<sourceDirectory>../services/rest/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/grpc/server/src/main/java</sourceDirectory>
+						<sourceDirectory>../services/grpc/protobuf-shaded/src/main/java</sourceDirectory>
 						<sourceDirectory>../deploy/src/main/java</sourceDirectory>
 						<sourceDirectory>../examples/java-api/src/main/java</sourceDirectory>
 						<sourceDirectory>../test/src/main/java</sourceDirectory>

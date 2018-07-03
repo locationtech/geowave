@@ -43,6 +43,7 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloOperations;
 class BackwardCompatibleTabletLocatorFactory
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BackwardCompatibleTabletLocatorFactory.class);
+
 	protected static interface BackwardCompatibleTabletLocator
 	{
 		public Map<TabletId, List<Range>> getLocationsGroupedByTablet();

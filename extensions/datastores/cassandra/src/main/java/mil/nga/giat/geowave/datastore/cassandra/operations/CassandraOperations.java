@@ -530,7 +530,7 @@ public class CassandraOperations implements
 	}
 
 	@Override
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			final String clientUser,
 			final String... authorizations ) {
 		return true;
@@ -627,9 +627,9 @@ public class CassandraOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final ReaderParams readerParams ) {
-		return new CassandraReader(
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> readerParams ) {
+		return new CassandraReader<T>(
 				readerParams,
 				this);
 	}
@@ -654,9 +654,9 @@ public class CassandraOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final RecordReaderParams recordReaderParams ) {
-		return new CassandraReader(
+	public <T> Reader<T> createReader(
+			final RecordReaderParams<T> recordReaderParams ) {
+		return new CassandraReader<T>(
 				recordReaderParams,
 				this);
 	}

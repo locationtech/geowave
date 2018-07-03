@@ -57,6 +57,27 @@ public class HBaseUtils
 		return tableNamespace + "_" + unqualifiedTableName;
 	}
 
+	public static String writeTableNameAsConfigSafe(
+			String tableName ) {
+		// '.' is a special separator character used by the coprocessor config,
+		// and ':' should be safe to use in the coprocessor config because it is
+		// a special HBase table character that cannot be used in a
+		// table namespace or qualifier (its meant to separate the table
+		// namespace and the qualifier)
+		return tableName.replaceAll(
+				"\\.",
+				":");
+	}
+
+	public static String readConfigSafeTableName(
+			String safeTableName ) {
+		// just reverse the replacement to ':' to return the table name to the
+		// original
+		return safeTableName.replaceAll(
+				":",
+				"\\.");
+	}
+
 	public static QueryRanges constraintsToByteArrayRanges(
 			final MultiDimensionalNumericData constraints,
 			final NumericIndexStrategy indexStrategy,

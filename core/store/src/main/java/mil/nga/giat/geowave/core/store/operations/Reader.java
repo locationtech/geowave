@@ -4,9 +4,9 @@ import java.util.Iterator;
 
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 
-public interface Reader extends
+public interface Reader<T> extends
 		AutoCloseable,
-		Iterator<GeoWaveRow>
+		Iterator<T>
 {
 
 }

@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
 import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
+import mil.nga.giat.geowave.test.javaspark.GeowaveSparkIngestIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
@@ -32,6 +33,9 @@ import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
+import mil.nga.giat.geowave.test.services.ConfigServicesIT;
+import mil.nga.giat.geowave.test.services.GeoServerIT;
+import mil.nga.giat.geowave.test.services.GeoServerIngestIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkSQLIT;
@@ -58,8 +62,11 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	DBScanIT.class,
 	GeoWaveJavaSparkIT.class,
 	GeoWaveJavaSparkKMeansIT.class,
-	GeoWaveSparkSpatialJoinIT.class,
 	GeoWaveJavaSparkSQLIT.class,
+	GeoWaveSparkSpatialJoinIT.class,
+	ConfigServicesIT.class,
+	GeoServerIngestIT.class,
+	GeoServerIT.class
 })
 public class GeoWaveITSuite
 {

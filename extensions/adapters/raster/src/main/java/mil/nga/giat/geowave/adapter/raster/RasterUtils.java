@@ -486,7 +486,7 @@ public class RasterUtils
 		}
 	}
 
-	public static GridCoverage2D mosaicGridCoverages(
+	public synchronized static GridCoverage2D mosaicGridCoverages(
 			final Iterator<GridCoverage> gridCoverages,
 			final Color backgroundColor,
 			final Color outputTransparentColor,

@@ -36,10 +36,12 @@ import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportCommand;
 import mil.nga.giat.geowave.adapter.vector.export.VectorLocalExportOptions;
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -105,7 +107,8 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 	}
 
 	@Test
-	public void testIngestAndQuerySpatialTemporalPointsAndLines() {
+	public void testIngestAndQuerySpatialTemporalPointsAndLines()
+			throws Exception {
 		// ingest both lines and points
 		TestUtils.testLocalIngest(
 				dataStore,
@@ -239,8 +242,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 
 	private void testSpatialTemporalLocalExportAndReingestWithCQL(
 			final URL filterURL )
-			throws CQLException,
-			IOException {
+			throws Exception {
 
 		final SimpleFeature savedFilter = TestUtils.resourceToFeature(filterURL);
 
@@ -273,7 +275,20 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		exportDir.delete();
 		exportDir.mkdirs();
 
-		exportCommand.setInputStoreOptions(dataStore);
+		exportCommand.setParameters("test");
+
+		File configFile = File.createTempFile(
+				"test_export",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
 		options.setBatchSize(10000);
 		final Envelope env = filterGeometry.getEnvelopeInternal();
 		final double east = env.getMaxX();
@@ -321,8 +336,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 							exportDir,
 							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
 					options.setCqlFilter(cqlPredicate);
-					exportCommand.setParameters(null);
-					exportCommand.execute(new ManualOperationParams());
+					exportCommand.execute(params);
 				}
 			}
 		}

@@ -27,6 +27,7 @@ cache:
   directories:
   - $HOME/.m2
   - test/landsat8
+  - test/sentinel2
   - test/target/temp/gdal
 install: 
   - .utility/pull-dev-resources.sh

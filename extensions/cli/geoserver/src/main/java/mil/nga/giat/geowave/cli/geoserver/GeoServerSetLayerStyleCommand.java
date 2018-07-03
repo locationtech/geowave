@@ -28,13 +28,21 @@ import com.beust.jcommander.Parameters;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 
 @GeowaveOperation(name = "setls", parentOperation = GeoServerSection.class)
 @Parameters(commandDescription = "Set GeoServer Layer Style")
 public class GeoServerSetLayerStyleCommand extends
 		GeoServerCommand<String>
 {
+	/**
+	 * Return "200 OK" for the set layer command.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	@Parameter(names = {
 		"-sn",
 		"--styleName"
@@ -45,29 +53,12 @@ public class GeoServerSetLayerStyleCommand extends
 	private List<String> parameters = new ArrayList<String>();
 	private String layerName = null;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -86,23 +77,15 @@ public class GeoServerSetLayerStyleCommand extends
 				styleName);
 
 		if (setLayerStyleResponse.getStatus() == Status.OK.getStatusCode()) {
-			setStatus(ServiceStatus.OK);
 			final String style = IOUtils.toString((InputStream) setLayerStyleResponse.getEntity());
 			return "Set style for GeoServer layer '" + layerName + ": OK" + style;
 
 		}
-		switch (setLayerStyleResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			case 400:
-				setStatus(ServiceStatus.DUPLICATE);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error setting style for GeoServer layer '" + layerName + "'; code = "
-				+ setLayerStyleResponse.getStatus() + " ; " + setLayerStyleResponse.getStatusInfo().toString();
+		String errorMessage = "Error setting style for GeoServer layer '" + layerName + "': "
+				+ setLayerStyleResponse.readEntity(String.class) + "\nGeoServer Response Code = "
+				+ setLayerStyleResponse.getStatus();
+		return handleError(
+				setLayerStyleResponse,
+				errorMessage);
 	}
 }

@@ -26,7 +26,6 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -87,24 +86,22 @@ public class AccumuloSecondaryIndexUtils
 					fieldId);
 			if (indexFieldReader != null) {
 				final CommonIndexValue indexValue = indexFieldReader.readField(fieldValueBytes);
-				final PersistentValue<CommonIndexValue> val = new PersistentValue<CommonIndexValue>(
+				commonData.addValue(
 						fieldId,
 						indexValue);
-				commonData.addValue(val);
 			}
 			else {
 				final FieldReader<?> fieldReader = adapter.getReader(fieldId);
 				if (fieldReader != null) {
 					final Object fieldValue = fieldReader.readField(fieldValueBytes);
-					final PersistentValue<Object> val = new PersistentValue<Object>(
+					extendedData.addValue(
 							fieldId,
 							fieldValue);
-					extendedData.addValue(val);
 				}
 				else {
-					unknownData.addValue(new PersistentValue<byte[]>(
+					unknownData.addValue(
 							fieldId,
-							fieldValueBytes));
+							fieldValueBytes);
 				}
 			}
 		}

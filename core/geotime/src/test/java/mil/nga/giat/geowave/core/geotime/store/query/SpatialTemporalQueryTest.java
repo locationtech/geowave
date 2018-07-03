@@ -81,17 +81,17 @@ public class SpatialTemporalQueryTest
 		final GeometryFactory factory = new GeometryFactory();
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
-		commonData.addValue(new PersistentValue<CommonIndexValue>(
+		commonData.addValue(
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID,
 				new GeometryWrapper(
-						factory.createLineString(coordinates))));
-		commonData.addValue(new PersistentValue<CommonIndexValue>(
+						factory.createLineString(coordinates)));
+		commonData.addValue(
 				new TimeField(
 						Unit.YEAR).getFieldId(),
 				new TimeRange(
 						start.getTime(),
 						end.getTime(),
-						new byte[0])));
+						new byte[0]));
 
 		return new CommonIndexedPersistenceEncoding(
 				(short) 1,

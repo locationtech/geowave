@@ -7,12 +7,13 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.BaseReaderParams;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 
-public class RecordReaderParams extends
-		BaseReaderParams
+public class RecordReaderParams<T> extends
+		BaseReaderParams<T>
 {
 	private final GeoWaveRowRange rowRange;
 
@@ -26,6 +27,7 @@ public class RecordReaderParams extends
 			final boolean isMixedVisibility,
 			final GeoWaveRowRange rowRange,
 			final Integer limit,
+			final GeoWaveRowIteratorTransformer<T> rowTransformer,
 			final String... additionalAuthorizations ) {
 		super(
 				index,
@@ -36,6 +38,7 @@ public class RecordReaderParams extends
 				fieldSubsets,
 				isMixedVisibility,
 				limit,
+				rowTransformer,
 				additionalAuthorizations);
 		this.rowRange = rowRange;
 	}

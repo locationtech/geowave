@@ -38,12 +38,19 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 public abstract class AbstractStatsCommand<T> extends
 		ServiceEnabledCommand<T>
 {
+
+	/**
+	 * Return "200 OK" for all stats commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
 
 	@ParametersDelegate
 	private StatsCommandLineOptions statsOptions = new StatsCommandLineOptions();
-
-	private DataStorePluginOptions inputStoreOptions = null;
 
 	public void run(
 			final OperationParams params,
@@ -57,15 +64,13 @@ public abstract class AbstractStatsCommand<T> extends
 
 		// Attempt to load input store if not already provided (test purposes).
 
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					storeName);
-			if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				storeName);
+		if (!inputStoreLoader.loadFromConfig(getGeoWaveConfigFile(params))) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		try {
 			// Various stores needed
@@ -149,11 +154,6 @@ public abstract class AbstractStatsCommand<T> extends
 			authsArray[i] = authsArray[i].trim();
 		}
 		return authsArray;
-	}
-
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 }

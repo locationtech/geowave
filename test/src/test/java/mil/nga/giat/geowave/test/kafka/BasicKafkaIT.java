@@ -72,7 +72,7 @@ public class BasicKafkaIT extends
 		EXPECTED_COUNT_PER_ADAPTER_ID.put(
 				new ByteArrayId(
 						"gpxtrack"),
-				5);
+				4);
 	}
 
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE

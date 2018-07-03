@@ -27,7 +27,7 @@ public interface DataStoreOperations
 			Short adapterId,
 			String... additionalAuthorizations );
 
-	public boolean insureAuthorizations(
+	public boolean ensureAuthorizations(
 			String clientUser,
 			String... authorizations );
 
@@ -63,8 +63,8 @@ public interface DataStoreOperations
 	public MetadataDeleter createMetadataDeleter(
 			MetadataType metadataType );
 
-	public Reader createReader(
-			ReaderParams readerParams );
+	public <T> Reader<T> createReader(
+			ReaderParams<T> readerParams );
 
 	public Deleter createDeleter(
 			ByteArrayId indexId,

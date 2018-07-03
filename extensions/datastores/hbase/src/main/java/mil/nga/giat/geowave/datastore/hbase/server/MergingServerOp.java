@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.hadoop.hbase.Cell;
+import org.apache.hadoop.hbase.CellComparator;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.KeyValue.Type;
@@ -159,6 +160,9 @@ public class MergingServerOp implements
 								rowCells.addAll(cells);
 							}
 						}
+						// these have to stay in order and they can get out of
+						// order when adding cells from 2 maps
+						rowCells.sort(new CellComparator());
 					}
 				}
 			}

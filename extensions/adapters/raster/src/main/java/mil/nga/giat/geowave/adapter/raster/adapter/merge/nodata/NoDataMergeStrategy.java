@@ -32,8 +32,7 @@ public class NoDataMergeStrategy implements
 	public NoDataMergeStrategy() {}
 
 	private static final long serialVersionUID = 38473874l;
-	private static final Logger LOGGER = LoggerFactory.getLogger(
-			NoDataMergeStrategy.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(NoDataMergeStrategy.class);
 
 	@Override
 	public void merge(
@@ -100,12 +99,11 @@ public class NoDataMergeStrategy implements
 				}
 			}
 			if (recalculateMetadata) {
-				thisTile.setMetadata(
-						NoDataMetadataFactory.mergeMetadata(
-								thisTileMetadata,
-								thisRaster,
-								nextTileMetadata,
-								nextRaster));
+				thisTile.setMetadata(NoDataMetadataFactory.mergeMetadata(
+						thisTileMetadata,
+						thisRaster,
+						nextTileMetadata,
+						nextRaster));
 			}
 		}
 	}

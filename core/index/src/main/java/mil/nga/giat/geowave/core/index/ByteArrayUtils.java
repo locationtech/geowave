@@ -255,4 +255,36 @@ public class ByteArrayUtils
 		r = (r << 8) | (bytes[0] & 0xFF);
 		return (short) r;
 	}
+
+	public static byte[] variableLengthEncode(
+			long n ) {
+		final int numRelevantBits = 64 - Long.numberOfLeadingZeros(n);
+		int numBytes = (numRelevantBits + 6) / 7;
+		if (numBytes == 0) {
+			numBytes = 1;
+		}
+		final byte[] output = new byte[numBytes];
+		for (int i = numBytes - 1; i >= 0; i--) {
+			int curByte = (int) (n & 0x7F);
+			if (i != (numBytes - 1)) {
+				curByte |= 0x80;
+			}
+			output[i] = (byte) curByte;
+			n >>>= 7;
+		}
+		return output;
+	}
+
+	public static long variableLengthDecode(
+			final byte[] b ) {
+		long n = 0;
+		for (int i = 0; i < b.length; i++) {
+			final int curByte = b[i] & 0xFF;
+			n = (n << 7) | (curByte & 0x7F);
+			if ((curByte & 0x80) == 0) {
+				break;
+			}
+		}
+		return n;
+	}
 }

@@ -73,9 +73,9 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 				}
 				final FieldReader<Object> reader = adapter.getReader(fieldId);
 				final Object value = reader.readField(field.getValue());
-				adapterExtendedData.addValue(new PersistentValue<Object>(
+				adapterExtendedData.addValue(
 						fieldId,
-						value));
+						value);
 			}
 		}
 	}

@@ -74,6 +74,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.ClearCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -423,14 +424,25 @@ public class KDEJobRunner extends
 				// requested tile size
 
 				final ResizeCommand resizeCommand = new ResizeCommand();
+				File configFile = File.createTempFile(
+						"temp-config",
+						null);
+				ManualOperationParams params = new ManualOperationParams();
 
+				params.getContext().put(
+						ConfigOptions.PROPERTIES_FILE_CONTEXT,
+						configFile);
+				AddStoreCommand addStore = new AddStoreCommand();
+				addStore.setParameters("temp-out");
+				addStore.setPluginOptions(outputDataStoreOptions);
+				addStore.execute(params);
+				addStore.setParameters("temp-raster-out");
+				addStore.setPluginOptions(rasterResizeOutputDataStoreOptions);
+				addStore.execute(params);
 				// We're going to override these anyway.
 				resizeCommand.setParameters(
-						null,
-						null);
-
-				resizeCommand.setInputStoreOptions(outputDataStoreOptions);
-				resizeCommand.setOutputStoreOptions(rasterResizeOutputDataStoreOptions);
+						"temp-out",
+						"temp-raster-out");
 
 				resizeCommand.getOptions().setInputCoverageName(
 						kdeCoverageName);
@@ -449,15 +461,14 @@ public class KDEJobRunner extends
 						kdeCommandLineOptions.getTileSize());
 
 				final int resizeStatus = ToolRunner.run(
-						resizeCommand.createRunner(new ManualOperationParams()),
+						resizeCommand.createRunner(params),
 						new String[] {});
 				if (resizeStatus == 0) {
 					// delegate to clear command to clean up with tmp namespace
 					// after successful resize
 					final ClearCommand clearCommand = new ClearCommand();
-					clearCommand.setParameters(null);
-					clearCommand.setInputStoreOptions(outputDataStoreOptions);
-					clearCommand.execute(new ManualOperationParams());
+					clearCommand.setParameters("temp-out");
+					clearCommand.execute(params);
 				}
 				else {
 					LOGGER.warn("Resize command error code '" + resizeStatus + "'.  Retaining temporary namespace '"

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -37,7 +38,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.PersistentValue;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import mil.nga.giat.geowave.core.store.data.visibility.UniformVisibilityWriter;
@@ -94,9 +94,9 @@ public class DataStoreUtils
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
 					fieldValue.setVisibility(value.getVisibility());
-					commonData.addValue(new PersistentValue<CommonIndexValue>(
+					commonData.addValue(
 							commonIndexFieldId,
-							fieldValue));
+							fieldValue);
 				}
 				else {
 					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
@@ -121,16 +121,19 @@ public class DataStoreUtils
 			final PrimaryIndex index,
 			final Map<ByteArrayId, DataStatistics<T>> stats,
 			final QueryRanges queryRanges ) {
-		final RowRangeHistogramStatistics rangeStats = (RowRangeHistogramStatistics) stats
-				.get(RowRangeHistogramStatistics.composeId(index.getId()));
-		if (rangeStats == null) {
-			return Long.MAX_VALUE - 1;
-		}
+
 		long count = 0;
 		for (final SinglePartitionQueryRanges partitionRange : queryRanges.getPartitionQueryRanges()) {
+			final RowRangeHistogramStatistics rangeStats = (RowRangeHistogramStatistics) stats
+					.get(RowRangeHistogramStatistics.composeId(
+							index.getId(),
+							partitionRange.getPartitionKey() != null ? partitionRange.getPartitionKey()
+									: new ByteArrayId()));
+			if (rangeStats == null) {
+				return Long.MAX_VALUE - 1;
+			}
 			for (final ByteArrayRange range : partitionRange.getSortKeyRanges()) {
 				count += rangeStats.cardinality(
-						partitionRange.getPartitionKey() != null ? partitionRange.getPartitionKey().getBytes() : null,
 						range.getStart().getBytes(),
 						range.getEnd().getBytes());
 			}
@@ -229,7 +232,7 @@ public class DataStoreUtils
 			final byte[] flattenedValue,
 			final byte[] commonVisibility,
 			final int maxFieldPosition ) {
-		final List<FlattenedFieldInfo> fieldInfoList = new ArrayList<FlattenedFieldInfo>();
+		final List<FlattenedFieldInfo> fieldInfoList = new LinkedList<FlattenedFieldInfo>();
 		final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(bitmask);
 
 		final boolean sharedVisibility = fieldPositions.size() > 1;

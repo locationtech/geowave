@@ -49,13 +49,13 @@ public class BasicQueryTest
 			final Date end ) {
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
-		commonData.addValue(new PersistentValue<CommonIndexValue>(
+		commonData.addValue(
 				new TimeField(
 						Unit.YEAR).getFieldId(),
 				new TimeRange(
 						start.getTime(),
 						end.getTime(),
-						new byte[0])));
+						new byte[0]));
 
 		return new CommonIndexedPersistenceEncoding(
 				(short) 1,

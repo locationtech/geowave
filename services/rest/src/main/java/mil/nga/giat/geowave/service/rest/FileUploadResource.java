@@ -1,11 +1,16 @@
 package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.ext.fileupload.RestletFileUpload;
@@ -20,6 +25,8 @@ import org.restlet.resource.ServerResource;
 public class FileUploadResource extends
 		ServerResource
 {
+	private static final String KEY_BATCH_UUID = "batchUUID";
+
 	private static class UploadedFile
 	{
 		private final String name;
@@ -46,9 +53,9 @@ public class FileUploadResource extends
 			final Representation entity )
 			throws Exception {
 		UploadedFile result;
-		if ((entity != null) && MediaType.MULTIPART_FORM_DATA.equals(
-				entity.getMediaType(),
-				true)) {
+		if (isMediaType(
+				entity,
+				MediaType.MULTIPART_FORM_DATA)) {
 			// 1/ Create a factory for disk-based file items
 			final DiskFileItemFactory factory = new DiskFileItemFactory();
 			factory.setSizeThreshold(1000240);
@@ -68,15 +75,17 @@ public class FileUploadResource extends
 			// 3/ Request is parsed by the handler which generates a
 			// list of FileItems
 			final String tempDir = System.getProperty("java.io.tmpdir");
+			final Path batchDir = Files.createDirectories(Paths.get(
+					tempDir,
+					createBatchDirname()));
+
 			// HP Fortify "Path Traversal" false positive
 			// A user would need to have OS-level access anyway
 			// to change the system properties
-			final File dir = new File(
-					tempDir);
-			final File filename = File.createTempFile(
-					"uploadedfile-",
-					"-" + item.getName(),
-					dir);
+			final File filename = Files.createTempFile(
+					batchDir,
+					"",
+					"." + item.getName()).toFile();
 			result = new UploadedFile(
 					filename.getAbsolutePath());
 			FileUtils.copyInputStreamToFile(
@@ -91,4 +100,38 @@ public class FileUploadResource extends
 		return result;
 	}
 
+	private boolean isMediaType(
+			Representation entity,
+			MediaType desiredType ) {
+		if (entity == null) {
+			return false;
+		}
+		return desiredType.equals(
+				entity.getMediaType(),
+				true);
+	}
+
+	private String createBatchDirname() {
+		final UUID uuid;
+		final String provided = StringUtils.trimToEmpty(getQueryValue(KEY_BATCH_UUID));
+		if (provided.isEmpty()) {
+			uuid = UUID.randomUUID();
+		}
+		else {
+			try {
+				uuid = UUID.fromString(provided);
+			}
+			catch (IllegalArgumentException e) {
+				throw new ResourceException(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						String.format(
+								"'%s' must be a valid UUID",
+								KEY_BATCH_UUID));
+			}
+		}
+
+		return String.format(
+				"upload-batch.%s",
+				uuid);
+	}
 }

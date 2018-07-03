@@ -16,8 +16,6 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,7 +27,6 @@ import mil.nga.giat.geowave.core.cli.Constants;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
-import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
 import mil.nga.giat.geowave.core.cli.converters.PasswordConverter;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
@@ -39,6 +36,14 @@ import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUt
 public class SetCommand extends
 		ServiceEnabledCommand<Object>
 {
+	/**
+	 * Return "200 OK" for the set command.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(SetCommand.class);
 
 	@Parameter(description = "<name> <value>")
@@ -50,8 +55,6 @@ public class SetCommand extends
 	private Boolean password = false;
 
 	private boolean isRestCall = true;
-
-	ServiceStatus status = ServiceStatus.OK;
 
 	@Override
 	public void execute(
@@ -67,27 +70,11 @@ public class SetCommand extends
 	 * @return string containing json with details of success or failure of the
 	 *         set
 	 */
-	@Override
-	public Pair<ServiceStatus, Object> executeService(
-			OperationParams params )
-			throws Exception {
-		Object ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
 
 	@Override
 	public Object computeResults(
 			final OperationParams params ) {
-		try {
-			return setKeyValue(params);
-		}
-		catch (WritePropertiesException | ParameterException e) {
-			setStatus(ServiceStatus.INTERNAL_ERROR);
-			LOGGER.error(e.toString());
-			return null;
-		}
+		return setKeyValue(params);
 	}
 
 	/**
@@ -170,7 +157,6 @@ public class SetCommand extends
 					"Write failure");
 		}
 		else {
-			status = ServiceStatus.OK;
 			return previousValue;
 		}
 	}
@@ -185,15 +171,6 @@ public class SetCommand extends
 		parameters = new ArrayList<String>();
 		parameters.add(key);
 		parameters.add(value);
-	}
-
-	public ServiceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
 	}
 
 	private static class WritePropertiesException extends

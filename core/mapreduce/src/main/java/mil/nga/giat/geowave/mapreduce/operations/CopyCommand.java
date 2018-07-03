@@ -73,27 +73,22 @@ public class CopyCommand extends
 			options.setHdfsHostPort(hdfsFSUrl);
 		}
 
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		// Attempt to load output store.
-		if (outputStoreOptions == null) {
-			StoreLoader outputStoreLoader = new StoreLoader(
-					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + outputStoreLoader.getStoreName());
-			}
-			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+		StoreLoader outputStoreLoader = new StoreLoader(
+				outputStoreName);
+		if (!outputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + outputStoreLoader.getStoreName());
 		}
+		outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
 		String jobName = "Copy " + inputStoreName + " to " + outputStoreName;
 
@@ -122,18 +117,8 @@ public class CopyCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputStoreOptions;
-	}
-
-	public void setOutputStoreOptions(
-			DataStorePluginOptions outputStoreOptions ) {
-		this.outputStoreOptions = outputStoreOptions;
 	}
 
 	public CopyCommandOptions getOptions() {

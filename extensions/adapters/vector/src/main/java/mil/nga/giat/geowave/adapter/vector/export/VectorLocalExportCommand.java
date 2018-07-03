@@ -84,17 +84,13 @@ public class VectorLocalExportCommand extends
 
 		// Config file
 		File configFile = getGeoWaveConfigFile(params);
-
-		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			StoreLoader inputStoreLoader = new StoreLoader(
-					storeName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		StoreLoader inputStoreLoader = new StoreLoader(
+				storeName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 		IndexStore indexStore = inputStoreOptions.createIndexStore();
@@ -228,11 +224,6 @@ public class VectorLocalExportCommand extends
 
 	public DataStorePluginOptions getInputStoreOptions() {
 		return inputStoreOptions;
-	}
-
-	public void setInputStoreOptions(
-			DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
 	}
 
 	public void setOptions(

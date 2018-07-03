@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
@@ -59,11 +60,10 @@ public class ListStatsCommand extends
 
 	private String retValue = "";
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws TargetNotFoundException {
 		computeResults(params);
 	}
 
@@ -153,18 +153,9 @@ public class ListStatsCommand extends
 	}
 
 	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
-	}
-
-	@Override
 	public String computeResults(
-			final OperationParams params ) {
+			final OperationParams params )
+			throws TargetNotFoundException {
 		// Ensure we have all the required arguments
 		if (parameters.size() < 1) {
 			throw new ParameterException(
@@ -177,21 +168,10 @@ public class ListStatsCommand extends
 				params,
 				parameters);
 		if (!retValue.equals("")) {
-			setStatus(ServiceStatus.OK);
 			return retValue;
 		}
 		else {
-			setStatus(ServiceStatus.NOT_FOUND);
 			return "No Data Found";
 		}
-	}
-
-	public ServiceStatus getStatus() {
-		return status;
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
 	}
 }

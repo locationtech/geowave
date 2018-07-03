@@ -213,11 +213,13 @@ public class BaseQueryOptions
 			return new InternalDataAdapter[] {};
 		}
 		final List<InternalDataAdapter<?>> list = new ArrayList<>();
-		if ((adapterStore != null) && (adapterStore.getAdapters() != null)) {
-			try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+		if (adapterStore != null) {
+			CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
+			if (it != null) {
 				while (it.hasNext()) {
 					list.add(it.next());
 				}
+				it.close();
 			}
 		}
 		return list.toArray(new InternalDataAdapter[list.size()]);

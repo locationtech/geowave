@@ -46,7 +46,8 @@ public class GeoWaveJavaSparkSQLIT extends
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.CASSANDRA
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStore;
 
@@ -75,7 +76,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	}
 
 	@Test
-	public void testCreateDataFrame() {
+	public void testCreateDataFrame()
+			throws Exception {
 		// Set up Spark
 		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
@@ -168,7 +170,9 @@ public class GeoWaveJavaSparkSQLIT extends
 	}
 
 	@Test
-	public void testSpatialJoin() {
+	public void testSpatialJoin()
+			throws Exception {
+
 		// Set up Spark
 		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
 

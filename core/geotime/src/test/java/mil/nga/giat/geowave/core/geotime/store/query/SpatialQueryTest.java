@@ -65,10 +65,10 @@ public class SpatialQueryTest
 			final Geometry geomData ) {
 		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
 
-		commonData.addValue(new PersistentValue<CommonIndexValue>(
+		commonData.addValue(
 				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID,
 				new GeometryWrapper(
-						geomData)));
+						geomData));
 
 		return new IndexedPersistenceEncoding(
 				(short) 1,

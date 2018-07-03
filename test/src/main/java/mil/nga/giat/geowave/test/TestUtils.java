@@ -29,6 +29,7 @@ import java.util.Set;
 
 import javax.ws.rs.core.Response;
 
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
@@ -44,6 +45,8 @@ import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOpt
 import mil.nga.giat.geowave.core.ingest.spark.SparkCommandLineOptions;
 import mil.nga.giat.geowave.core.ingest.spark.SparkIngestDriver;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.ListStatsCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -113,6 +116,7 @@ public class TestUtils
 	public static final String TEST_FILTER_START_TIME_ATTRIBUTE_NAME = "StartTime";
 	public static final String TEST_FILTER_END_TIME_ATTRIBUTE_NAME = "EndTime";
 	public static final String TEST_NAMESPACE = "mil_nga_giat_geowave_test";
+	public static final String TEST_NAMESPACE_BAD = "mil_nga_giat_geowave_test_BAD";
 	public static final String TEST_RESOURCE_PACKAGE = "mil/nga/giat/geowave/test/";
 	public static final String TEST_CASE_BASE = "data/";
 
@@ -122,6 +126,8 @@ public class TestUtils
 	public static String CUSTOM_CRSCODE = "EPSG:3857";
 
 	public static final CoordinateReferenceSystem CUSTOM_CRS;
+
+	public static final double DOUBLE_EPSILON = 1E-8d;
 
 	static {
 		try {
@@ -159,7 +165,8 @@ public class TestUtils
 			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath,
-			final int nthreads ) {
+			final int nthreads )
+			throws Exception {
 		testLocalIngest(
 				dataStore,
 				dimensionalityType,
@@ -172,7 +179,8 @@ public class TestUtils
 	public static void testLocalIngest(
 			final DataStorePluginOptions dataStore,
 			final DimensionalityType dimensionalityType,
-			final String ingestFilePath ) {
+			final String ingestFilePath )
+			throws Exception {
 		testLocalIngest(
 				dataStore,
 				dimensionalityType,
@@ -198,7 +206,8 @@ public class TestUtils
 			final DimensionalityType dimensionalityType,
 			final String ingestFilePath,
 			final String format,
-			final int nthreads ) {
+			final int nthreads )
+			throws Exception {
 		testLocalIngest(
 				dataStore,
 				dimensionalityType,
@@ -214,7 +223,8 @@ public class TestUtils
 			final String crsCode,
 			final String ingestFilePath,
 			final String format,
-			final int nthreads ) {
+			final int nthreads )
+			throws Exception {
 
 		// ingest a shapefile (geotools type) directly into GeoWave using the
 		// ingest framework's main method and pre-defined commandline arguments
@@ -236,19 +246,36 @@ public class TestUtils
 			}
 			indexOptions.add(indexOption);
 		}
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
 
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(params);
+			indexParam.append("test-index" + i + ",");
+		}
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
-		localIngester.execute(new ManualOperationParams());
 
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
+		localIngester.execute(params);
 		verifyStats(dataStore);
 
 	}
@@ -288,6 +315,15 @@ public class TestUtils
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(operationParams);
+			indexParam.append("test-index" + i + ",");
+		}
+
 		final ConfigAWSCommand configS3 = new ConfigAWSCommand();
 		configS3.setS3UrlParameter(s3Url);
 		configS3.execute(operationParams);
@@ -295,13 +331,16 @@ public class TestUtils
 		// Create the command and execute.
 		final LocalToGeowaveCommand localIngester = new LocalToGeowaveCommand();
 		localIngester.setPluginFormats(ingestFormatOptions);
-		localIngester.setInputIndexOptions(indexOptions);
-		localIngester.setInputStoreOptions(dataStore);
 		localIngester.setParameters(
 				ingestFilePath,
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		localIngester.setThreads(nthreads);
+
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
 		localIngester.execute(operationParams);
 
 		verifyStats(dataStore);
@@ -361,6 +400,11 @@ public class TestUtils
 		dataStore.save(
 				props,
 				DataStorePluginOptions.getStoreNamespace("test"));
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
+
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
 		for (String indexType : indexTypes) {
@@ -369,12 +413,17 @@ public class TestUtils
 			pluginOptions.save(
 					props,
 					IndexPluginOptions.getIndexNamespace(indexType));
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters(indexType);
+			addIndex.setPluginOptions(pluginOptions);
+			addIndex.execute(operationParams);
 		}
 		props.setProperty(
 				ConfigAWSCommand.AWS_S3_ENDPOINT_URL,
 				s3Url);
+
 		sparkIngester.runOperation(
-				null,
+				configFile,
 				localOptions,
 				"test",
 				indexes,
@@ -387,14 +436,27 @@ public class TestUtils
 	}
 
 	private static void verifyStats(
-			final DataStorePluginOptions dataStore ) {
+			final DataStorePluginOptions dataStore )
+			throws Exception {
 		final ListStatsCommand listStats = new ListStatsCommand();
-		listStats.setInputStoreOptions(dataStore);
 		listStats.setParameters(
-				null,
+				"test",
 				null);
+
+		File configFile = File.createTempFile(
+				"test_stats",
+				null);
+		ManualOperationParams params = new ManualOperationParams();
+
+		params.getContext().put(
+				ConfigOptions.PROPERTIES_FILE_CONTEXT,
+				configFile);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(params);
 		try {
-			listStats.execute(new ManualOperationParams());
+			listStats.execute(params);
 		}
 		catch (final ParameterException e) {
 			throw new RuntimeException(

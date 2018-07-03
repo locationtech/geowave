@@ -46,6 +46,15 @@ import mil.nga.giat.geowave.core.cli.prefix.TranslationEntry;
 public class ConfigGeoServerCommand extends
 		ServiceEnabledCommand<String>
 {
+
+	/**
+	 * Return "200 OK" for the config geoserver command.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	@Parameter(names = {
 		"-u",
 		"--username"

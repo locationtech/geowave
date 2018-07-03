@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,17 +65,10 @@ public class IntermediateSplitInfo implements
 
 			final byte[] start = rangeLocationPair.getRange().getStartSortKey();
 			final byte[] end = rangeLocationPair.getRange().getEndSortKey();
-			final byte[] partition = rangeLocationPair.getRange().getPartitionKey();
-			final double cdfStart = start == null ? 0.0 : stats.cdf(
-					partition,
-					start);
+			final double cdfStart = start == null ? 0.0 : stats.cdf(start);
 
-			final double cdfEnd = end == null ? 1.0 : stats.cdf(
-					partition,
-					end);
-			final double expectedEndValue = stats.quantile(
-					partition,
-					cdfStart + ((cdfEnd - cdfStart) * fraction));
+			final double cdfEnd = end == null ? 1.0 : stats.cdf(end);
+			final double expectedEndValue = stats.quantile(cdfStart + ((cdfEnd - cdfStart) * fraction));
 			final int maxCardinality = Math.max(
 					start != null ? start.length : 0,
 					end != null ? end.length : 0);
@@ -130,7 +124,6 @@ public class IntermediateSplitInfo implements
 									endKeyInclusive),
 							location,
 							stats.cardinality(
-									rangeLocationPair.getRange().getPartitionKey(),
 									rangeLocationPair.getRange().getStartSortKey(),
 									splitKey));
 					return null;
@@ -147,7 +140,6 @@ public class IntermediateSplitInfo implements
 								endKeyInclusive),
 						location,
 						stats.cardinality(
-								rangeLocationPair.getRange().getPartitionKey(),
 								rangeLocationPair.getRange().getStartSortKey(),
 								splitKey));
 
@@ -160,7 +152,6 @@ public class IntermediateSplitInfo implements
 								rangeLocationPair.getRange().isEndSortKeyInclusive()),
 						location,
 						stats.cardinality(
-								rangeLocationPair.getRange().getPartitionKey(),
 								splitKey,
 								rangeLocationPair.getRange().getEndSortKey()));
 
@@ -234,7 +225,7 @@ public class IntermediateSplitInfo implements
 	 * @return the new split.
 	 */
 	synchronized IntermediateSplitInfo split(
-			final Map<PrimaryIndex, RowRangeHistogramStatistics<?>> statsCache ) {
+			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache ) {
 		// generically you'd want the split to be as limiting to total
 		// locations as possible and then as limiting as possible to total
 		// indices, but in this case split() is only called when all ranges
@@ -269,7 +260,10 @@ public class IntermediateSplitInfo implements
 			double nextCardinality = currentCardinality + next.rangeLocationPair.getCardinality();
 			if (nextCardinality > targetCardinality) {
 				final IndexRangeLocation newSplit = next.split(
-						statsCache.get(next.index),
+						statsCache.get(Pair.of(
+								next.index,
+								new ByteArrayId(
+										next.rangeLocationPair.getRange().getPartitionKey()))),
 						currentCardinality,
 						targetCardinality);
 				double splitCardinality = next.rangeLocationPair.getCardinality();
@@ -364,7 +358,7 @@ public class IntermediateSplitInfo implements
 		final Set<String> locations = new HashSet<String>();
 		for (final Entry<ByteArrayId, SplitInfo> entry : splitInfo.entrySet()) {
 			for (final RangeLocationPair pair : entry.getValue().getRangeLocationPairs()) {
-				if (pair.getLocation() != null && !pair.getLocation().isEmpty()) {
+				if ((pair.getLocation() != null) && !pair.getLocation().isEmpty()) {
 					locations.add(pair.getLocation());
 				}
 			}

@@ -83,7 +83,7 @@ public class HBaseWriter implements
 			final GeoWaveRow row ) {
 		final byte[] partition = row.getPartitionKey();
 		if ((partition != null) && (partition.length > 0)) {
-			operations.insurePartition(
+			operations.ensurePartition(
 					new ByteArrayId(
 							partition),
 					tableName);

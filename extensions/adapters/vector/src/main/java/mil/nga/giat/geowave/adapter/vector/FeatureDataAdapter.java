@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
@@ -33,7 +34,6 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
@@ -862,15 +862,20 @@ public class FeatureDataAdapter extends
 				StringUtils.stringToBinary(entry.getID()));
 	}
 
-	private FeatureRowBuilder builder;
+	private ThreadLocal<FeatureRowBuilder> builder = null;
 
 	@Override
 	protected RowBuilder<SimpleFeature, Object> newBuilder() {
 		if (builder == null) {
-			builder = new FeatureRowBuilder(
-					reprojectedFeatureType);
+			builder = new ThreadLocal<FeatureRowBuilder>() {
+				@Override
+				protected FeatureRowBuilder initialValue() {
+					return new FeatureRowBuilder(
+							reprojectedFeatureType);
+				}
+			};
 		}
-		return builder;
+		return builder.get();
 	}
 
 	@Override
@@ -1001,9 +1006,10 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = Maps.synchronizedBiMap(HashBiMap.create());
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
 	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
-	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
+	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new ConcurrentHashMap<>();
+	private transient volatile boolean positionMapsInitialized = false;
 
 	@Override
 	public int getPositionOfOrderedField(
@@ -1014,8 +1020,10 @@ public class FeatureDataAdapter extends
 		if (dimensionFieldIds.contains(fieldId)) {
 			return dimensionFieldIds.indexOf(fieldId);
 		}
-		if (fieldToPositionMap.isEmpty()) {
-			initializePositionMaps();
+		if (!positionMapsInitialized) {
+			synchronized (this) {
+				initializePositionMaps();
+			}
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
@@ -1032,10 +1040,12 @@ public class FeatureDataAdapter extends
 			final int position ) {
 		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		if (position >= dimensionFieldIds.size()) {
-			if (fieldToPositionMap.isEmpty()) {
-				initializePositionMaps();
-			}
 			final int adjustedPosition = position - dimensionFieldIds.size();
+			if (!positionMapsInitialized) {
+				synchronized (this) {
+					initializePositionMaps();
+				}
+			}
 			// check other fields
 			return positionToFieldMap.get(adjustedPosition);
 		}
@@ -1044,6 +1054,9 @@ public class FeatureDataAdapter extends
 	}
 
 	private void initializePositionMaps() {
+		if (positionMapsInitialized) {
+			return;
+		}
 		try {
 			for (int i = 0; i < reprojectedFeatureType.getAttributeCount(); i++) {
 				final AttributeDescriptor ad = reprojectedFeatureType.getDescriptor(i);
@@ -1053,7 +1066,8 @@ public class FeatureDataAdapter extends
 						currFieldId,
 						i);
 			}
-			positionToFieldMap = Maps.synchronizedBiMap(fieldToPositionMap.inverse());
+			positionToFieldMap = fieldToPositionMap.inverse();
+			positionMapsInitialized = true;
 		}
 		catch (final Exception e) {
 			LOGGER.error(

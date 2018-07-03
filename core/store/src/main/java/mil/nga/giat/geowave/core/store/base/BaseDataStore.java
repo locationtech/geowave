@@ -117,6 +117,10 @@ public class BaseDataStore implements
 
 	}
 
+	public DataStatisticsStore getStatisticsStore() {
+		return this.statisticsStore;
+	}
+
 	@Override
 	public <T> IndexWriter<T> createWriter(
 			final WritableDataAdapter<T> adapter,

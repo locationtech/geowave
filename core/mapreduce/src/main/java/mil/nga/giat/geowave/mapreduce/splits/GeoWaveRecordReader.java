@@ -43,6 +43,7 @@ import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.BaseQueryOptions;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -246,6 +247,7 @@ public class GeoWaveRecordReader<T> extends
 				mixedVisibility,
 				range,
 				sanitizedQueryOptions.getLimit(),
+				GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 				sanitizedQueryOptions.getAuthorizations()));
 		return new CloseableIteratorWrapper(
 				new ReaderClosableWrapper(

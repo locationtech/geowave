@@ -70,26 +70,22 @@ public class ResizeCommand extends
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
 		// Attempt to load input store.
-		if (inputStoreOptions == null) {
-			final StoreLoader inputStoreLoader = new StoreLoader(
-					inputStoreName);
-			if (!inputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + inputStoreLoader.getStoreName());
-			}
-			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+		final StoreLoader inputStoreLoader = new StoreLoader(
+				inputStoreName);
+		if (!inputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
+		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
 		// Attempt to load output store.
-		if (outputStoreOptions == null) {
-			final StoreLoader outputStoreLoader = new StoreLoader(
-					outputStoreName);
-			if (!outputStoreLoader.loadFromConfig(configFile)) {
-				throw new ParameterException(
-						"Cannot find store name: " + outputStoreLoader.getStoreName());
-			}
-			outputStoreOptions = outputStoreLoader.getDataStorePlugin();
+		final StoreLoader outputStoreLoader = new StoreLoader(
+				outputStoreName);
+		if (!outputStoreLoader.loadFromConfig(configFile)) {
+			throw new ParameterException(
+					"Cannot find store name: " + outputStoreLoader.getStoreName());
 		}
+		outputStoreOptions = outputStoreLoader.getDataStorePlugin();
 
 		if (options.getHdfsHostPort() == null) {
 
@@ -130,17 +126,8 @@ public class ResizeCommand extends
 		return inputStoreOptions;
 	}
 
-	public void setInputStoreOptions(
-			final DataStorePluginOptions inputStoreOptions ) {
-		this.inputStoreOptions = inputStoreOptions;
-	}
-
 	public DataStorePluginOptions getOutputStoreOptions() {
 		return outputStoreOptions;
 	}
 
-	public void setOutputStoreOptions(
-			final DataStorePluginOptions outputStoreOptions ) {
-		this.outputStoreOptions = outputStoreOptions;
-	}
 }

@@ -19,6 +19,10 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
@@ -93,6 +97,29 @@ public class BitmaskUtils
 				Collections.singleton(fieldPosition)));
 	}
 
+	private static LoadingCache<ByteArrayId, List<Integer>> fieldPositionCache = CacheBuilder.newBuilder().maximumSize(
+			100).build(
+			new CacheLoader<ByteArrayId, List<Integer>>() {
+
+				@Override
+				public List<Integer> load(
+						ByteArrayId key )
+						throws Exception {
+					final List<Integer> fieldPositions = new ArrayList<>();
+					int currentByte = 0;
+					for (final byte singleByteBitMask : key.getBytes()) {
+						for (int bit = 0; bit < 8; ++bit) {
+							if (((singleByteBitMask >>> bit) & 0x1) == 1) {
+								fieldPositions.add((currentByte * 8) + bit);
+							}
+						}
+						currentByte++;
+					}
+					return fieldPositions;
+				}
+
+			});
+
 	/**
 	 * Iterates the set (true) bits within the given composite bitmask and
 	 * generates a list of field positions.
@@ -103,17 +130,8 @@ public class BitmaskUtils
 	 */
 	public static List<Integer> getFieldPositions(
 			final byte[] bitmask ) {
-		final List<Integer> fieldPositions = new ArrayList<>();
-		int currentByte = 0;
-		for (final byte singleByteBitMask : bitmask) {
-			for (int bit = 0; bit < 8; ++bit) {
-				if (((singleByteBitMask >>> bit) & 0x1) == 1) {
-					fieldPositions.add((currentByte * 8) + bit);
-				}
-			}
-			currentByte++;
-		}
-		return fieldPositions;
+		return fieldPositionCache.getUnchecked(new ByteArrayId(
+				bitmask));
 	}
 
 	/**

@@ -26,20 +26,27 @@ class IntermediaryWriteEntryInfo
 {
 	public static class FieldInfo<T>
 	{
-		private final PersistentValue<T> dataValue;
+		private ByteArrayId fieldId;
+		private T dataValue;
 		private final byte[] visibility;
 		private final byte[] writtenValue;
 
 		public FieldInfo(
-				final PersistentValue<T> dataValue,
+				final ByteArrayId fieldId,
+				final T dataValue,
 				final byte[] writtenValue,
 				final byte[] visibility ) {
+			this.fieldId = fieldId;
 			this.dataValue = dataValue;
 			this.writtenValue = writtenValue;
 			this.visibility = visibility;
 		}
 
-		public PersistentValue<T> getDataValue() {
+		public ByteArrayId getFieldId() {
+			return fieldId;
+		}
+
+		public T getDataValue() {
 			return dataValue;
 		}
 
@@ -53,7 +60,7 @@ class IntermediaryWriteEntryInfo
 
 		public GeoWaveValue getValue() {
 			return new GeoWaveValueImpl(
-					dataValue.getId().getBytes(),
+					fieldId.getBytes(),
 					visibility,
 					writtenValue);
 		}

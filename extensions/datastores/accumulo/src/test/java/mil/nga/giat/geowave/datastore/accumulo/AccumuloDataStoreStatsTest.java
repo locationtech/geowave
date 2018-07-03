@@ -18,6 +18,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -25,6 +26,7 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.mock.MockInstance;
 import org.apache.accumulo.core.client.security.tokens.PasswordToken;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -241,31 +243,40 @@ public class AccumuloDataStoreStatsTest
 					24,
 					33)
 		});
-
+		ByteArrayId partitionKey = null;
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
-			indexWriter.write(
+			partitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									25,
 									32)),
 							"test_pt"),
-					visWriterAAA);
-			indexWriter.write(
+					visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+			ByteArrayId testPartitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									26,
 									32)),
 							"test_pt_1"),
-					visWriterAAA);
-			indexWriter.write(
+					visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
+			// they should all be the same partition key, let's just make sure
+			Assert.assertEquals(
+					"test_pt_1 should have the same partition key as test_pt",
+					partitionKey,
+					testPartitionKey);
+			testPartitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									27,
 									32)),
 							"test_pt_2"),
-					visWriterBBB);
+					visWriterBBB).getPartitionKeys().iterator().next().getPartitionKey();
+			Assert.assertEquals(
+					"test_pt_2 should have the same partition key as test_pt",
+					partitionKey,
+					testPartitionKey);
 		}
 
 		final SpatialQuery query = new SpatialQuery(
@@ -558,7 +569,9 @@ public class AccumuloDataStoreStatsTest
 
 		RowRangeHistogramStatistics<?> histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
 				internalAdapterId,
-				RowRangeHistogramStatistics.composeId(index.getId()),
+				RowRangeHistogramStatistics.composeId(
+						index.getId(),
+						partitionKey),
 				"bbb");
 
 		assertTrue(histogramStats != null);
@@ -574,7 +587,9 @@ public class AccumuloDataStoreStatsTest
 
 		histogramStats = (RowRangeHistogramStatistics<?>) statsStore.getDataStatistics(
 				internalAdapterId,
-				RowRangeHistogramStatistics.composeId(index.getId()),
+				RowRangeHistogramStatistics.composeId(
+						index.getId(),
+						partitionKey),
 				"bbb");
 
 		assertNull(histogramStats);
@@ -736,24 +751,34 @@ public class AccumuloDataStoreStatsTest
 				private Geometry geom;
 
 				@Override
-				public void setField(
-						final PersistentValue<Object> fieldValue ) {
-					if (fieldValue.getId().equals(
-							GEOM)) {
-						geom = (Geometry) fieldValue.getValue();
-					}
-					else if (fieldValue.getId().equals(
-							ID)) {
-						id = (String) fieldValue.getValue();
-					}
-				}
-
-				@Override
 				public TestGeometry buildRow(
 						final ByteArrayId dataId ) {
 					return new TestGeometry(
 							geom,
 							id);
+				}
+
+				@Override
+				public void setField(
+						ByteArrayId id,
+						Object fieldValue ) {
+					if (id.equals(GEOM)) {
+						geom = (Geometry) fieldValue;
+					}
+					else if (id.equals(ID)) {
+						this.id = (String) fieldValue;
+					}
+				}
+
+				@Override
+				public void setFields(
+						Map<ByteArrayId, Object> values ) {
+					if (values.containsKey(GEOM)) {
+						geom = (Geometry) values.get(GEOM);
+					}
+					if (values.containsKey(ID)) {
+						this.id = (String) values.get(ID);
+					}
 				}
 			};
 		}

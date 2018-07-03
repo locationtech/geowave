@@ -25,6 +25,7 @@ import com.beust.jcommander.Parameters;
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceStatus;
+import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -39,29 +40,12 @@ public class GeoServerListCoverageStoresCommand extends
 	}, required = false, description = "workspace name")
 	private String workspace;
 
-	private ServiceStatus status = ServiceStatus.OK;
-
 	@Override
 	public void execute(
 			final OperationParams params )
 			throws Exception {
 		JCommander.getConsole().println(
 				computeResults(params));
-	}
-
-	public void setStatus(
-			ServiceStatus status ) {
-		this.status = status;
-	}
-
-	@Override
-	public Pair<ServiceStatus, String> executeService(
-			OperationParams params )
-			throws Exception {
-		String ret = computeResults(params);
-		return ImmutablePair.of(
-				status,
-				ret);
 	}
 
 	@Override
@@ -77,18 +61,13 @@ public class GeoServerListCoverageStoresCommand extends
 		if (listCvgStoresResponse.getStatus() == Status.OK.getStatusCode()) {
 			final JSONObject jsonResponse = JSONObject.fromObject(listCvgStoresResponse.getEntity());
 			final JSONArray cvgStores = jsonResponse.getJSONArray("coverageStores");
-			setStatus(ServiceStatus.OK);
 			return "\nGeoServer coverage stores list for '" + workspace + "': " + cvgStores.toString(2);
 		}
-		switch (listCvgStoresResponse.getStatus()) {
-			case 404:
-				setStatus(ServiceStatus.NOT_FOUND);
-				break;
-			default:
-				setStatus(ServiceStatus.INTERNAL_ERROR);
-				break;
-		}
-		return "Error getting GeoServer coverage stores list for '" + workspace + "'; code = "
+		String errorMessage = "Error getting GeoServer coverage stores list for '" + workspace + "': "
+				+ listCvgStoresResponse.readEntity(String.class) + "\nGeoServer Response Code = "
 				+ listCvgStoresResponse.getStatus();
+		return handleError(
+				listCvgStoresResponse,
+				errorMessage);
 	}
 }

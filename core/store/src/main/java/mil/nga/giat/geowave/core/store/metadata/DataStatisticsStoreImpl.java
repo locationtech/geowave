@@ -10,6 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.metadata;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
+import java.util.Arrays;
+import java.util.Map;
+
+import com.google.common.cache.CacheBuilder;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -38,6 +45,8 @@ public class DataStatisticsStoreImpl extends
 	public static final int STATS_COMBINER_PRIORITY = 10;
 	public static final String STATISTICS_COMBINER_NAME = "STATS_COMBINER";
 
+	private static final long STATISTICS_CACHE_TIMEOUT = 60 * 1000; // 1 Minute
+
 	public DataStatisticsStoreImpl(
 			final DataStoreOperations operations,
 			final DataStoreOptions options ) {
@@ -48,55 +57,78 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
+	protected void buildCache() {
+		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
+				MAX_ENTRIES).expireAfterWrite(
+				STATISTICS_CACHE_TIMEOUT,
+				TimeUnit.MILLISECONDS);
+		this.cache = cacheBuilder.<ByteArrayId, Map<String, DataStatistics<?>>> build();
+	}
+
+	private String getCombinedAuths(
+			String[] authorizations ) {
+		StringBuilder sb = new StringBuilder();
+		if (authorizations != null) {
+			Arrays.sort(authorizations);
+			for (int i = 0; i < authorizations.length; i++) {
+				sb.append(authorizations[i]);
+				if (i + 1 < authorizations.length) {
+					sb.append("&");
+				}
+			}
+		}
+		return sb.toString();
+	}
+
+	@Override
 	public void incorporateStatistics(
 			final DataStatistics<?> statistics ) {
 		// because we're using the combiner, we should simply be able to add the
 		// object
 		addObject(statistics);
-
-		// TODO if we do allow caching after we add a statistic to Accumulo we
-		// do need to make sure we update our cache, but for now we aren't using
-		// the cache at all
-
+		deleteObjectFromCache(
+				getPrimaryId(statistics),
+				getSecondaryId(statistics));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected void addObjectToCache(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
-			final DataStatistics<?> object ) {
-		// don't use the cache at all for now
+			final DataStatistics<?> object,
+			final String... authorizations ) {
+		final ByteArrayId combinedId = getCombinedId(
+				primaryId,
+				secondaryId);
 
-		// TODO consider adding a setting to use the cache for statistics, but
-		// because it could change with each new entry, it seems that there
-		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same Accumulo tables
+		Map<String, DataStatistics<?>> cached = (Map<String, DataStatistics<?>>) cache.getIfPresent(combinedId);
+		if (cached == null) {
+			cached = new ConcurrentHashMap<String, DataStatistics<?>>();
+			cache.put(
+					combinedId,
+					cached);
+		}
+		cached.put(
+				getCombinedAuths(authorizations),
+				object);
+
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getObjectFromCache(
 			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		// don't use the cache at all
-
-		// TODO consider adding a setting to use the cache for statistics, but
-		// because it could change with each new entry, it seems that there
-		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same Accumulo tables
+			final ByteArrayId secondaryId,
+			final String... authorizations ) {
+		final ByteArrayId combinedId = getCombinedId(
+				primaryId,
+				secondaryId);
+		Map<String, DataStatistics<?>> cached = (Map<String, DataStatistics<?>>) cache.getIfPresent(combinedId);
+		if (cached != null) {
+			return cached.get(getCombinedAuths(authorizations));
+		}
 		return null;
-	}
-
-	@Override
-	protected boolean deleteObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		// don't use the cache at all
-
-		// TODO consider adding a setting to use the cache for statistics, but
-		// because it could change with each new entry, it seems that there
-		// could be too much potential for invalid caching if multiple instances
-		// of GeoWave are able to connect to the same Accumulo tables
-		return true;
 	}
 
 	@Override
@@ -115,8 +147,11 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	protected DataStatistics<?> entryToValue(
-			final GeoWaveMetadata entry ) {
-		final DataStatistics<?> stats = super.entryToValue(entry);
+			final GeoWaveMetadata entry,
+			String... authorizations ) {
+		final DataStatistics<?> stats = super.entryToValue(
+				entry,
+				authorizations);
 		if (stats != null) {
 			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
 			stats.setStatisticsId(new ByteArrayId(

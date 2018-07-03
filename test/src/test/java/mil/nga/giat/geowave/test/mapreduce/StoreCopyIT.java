@@ -21,7 +21,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.operations.CopyCommand;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -116,13 +118,26 @@ public class StoreCopyIT extends
 			// Set up the copy command
 			final CopyCommand command = new CopyCommand();
 
-			// We're going to override these anyway.
-			command.setParameters(
-					null,
+			File configFile = File.createTempFile(
+					"test_stats",
 					null);
+			ManualOperationParams params = new ManualOperationParams();
 
-			command.setInputStoreOptions(inputDataStorePluginOptions);
-			command.setOutputStoreOptions(outputDataStorePluginOptions);
+			params.getContext().put(
+					ConfigOptions.PROPERTIES_FILE_CONTEXT,
+					configFile);
+
+			AddStoreCommand addStore = new AddStoreCommand();
+			addStore.setParameters("test-store-in");
+			addStore.setPluginOptions(inputDataStorePluginOptions);
+			addStore.execute(params);
+			addStore.setParameters("test-store-out");
+			addStore.setPluginOptions(outputDataStorePluginOptions);
+			addStore.execute(params);
+
+			command.setParameters(
+					"test-store-in",
+					"test-store-out");
 
 			command.getOptions().setHdfsHostPort(
 					env.getHdfs());
@@ -137,7 +152,7 @@ public class StoreCopyIT extends
 					8);
 
 			ToolRunner.run(
-					command.createRunner(new ManualOperationParams()),
+					command.createRunner(params),
 					new String[] {});
 		}
 		catch (final Exception e) {

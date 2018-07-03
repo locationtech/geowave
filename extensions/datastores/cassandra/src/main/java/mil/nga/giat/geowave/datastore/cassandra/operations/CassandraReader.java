@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.datastore.cassandra.operations;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
@@ -27,22 +29,23 @@ import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 
-public class CassandraReader implements
-		Reader
+public class CassandraReader<T> implements
+		Reader<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(CassandraReader.class);
 	private static final boolean ASYNC = false;
-	private final ReaderParams readerParams;
-	private final RecordReaderParams recordReaderParams;
+	private final ReaderParams<T> readerParams;
+	private final RecordReaderParams<T> recordReaderParams;
 	private final CassandraOperations operations;
 	private final boolean clientSideRowMerging;
+	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 
 	private final boolean wholeRowEncoding;
 	private final int partitionKeyLength;
-	private CloseableIterator<CassandraRow> iterator;
+	private CloseableIterator<T> iterator;
 
 	public CassandraReader(
-			final ReaderParams readerParams,
+			final ReaderParams<T> readerParams,
 			final CassandraOperations operations ) {
 		this.readerParams = readerParams;
 		recordReaderParams = null;
@@ -51,12 +54,13 @@ public class CassandraReader implements
 		partitionKeyLength = readerParams.getIndex().getIndexStrategy().getPartitionKeyLength();
 		wholeRowEncoding = readerParams.isMixedVisibility() && !readerParams.isServersideAggregation();
 		clientSideRowMerging = readerParams.isClientsideRowMerging();
+		this.rowTransformer = readerParams.getRowTransformer();
 
 		initScanner();
 	}
 
 	public CassandraReader(
-			final RecordReaderParams recordReaderParams,
+			final RecordReaderParams<T> recordReaderParams,
 			final CassandraOperations operations ) {
 		readerParams = null;
 		this.recordReaderParams = recordReaderParams;
@@ -65,20 +69,23 @@ public class CassandraReader implements
 		partitionKeyLength = recordReaderParams.getIndex().getIndexStrategy().getPartitionKeyLength();
 		wholeRowEncoding = recordReaderParams.isMixedVisibility() && !recordReaderParams.isServersideAggregation();
 		clientSideRowMerging = false;
+		this.rowTransformer = recordReaderParams.getRowTransformer();
 
 		initRecordScanner();
 	}
 
-	private CloseableIterator<CassandraRow> wrapResults(
+	@SuppressWarnings("unchecked")
+	private CloseableIterator<T> wrapResults(
 			final CloseableIterator<CassandraRow> results,
 			final Set<String> authorizations ) {
-		return new CloseableIteratorWrapper<CassandraRow>(
+		return new CloseableIteratorWrapper<T>(
 				results,
-				new GeoWaveRowMergingIterator<CassandraRow>(
-						Iterators.filter(
-								results,
-								new ClientVisibilityFilter(
-										authorizations))));
+				rowTransformer
+						.apply((Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<CassandraRow>(
+								Iterators.filter(
+										results,
+										new ClientVisibilityFilter(
+												authorizations)))));
 	}
 
 	protected void initScanner() {
@@ -161,7 +168,7 @@ public class CassandraReader implements
 	}
 
 	@Override
-	public GeoWaveRow next() {
+	public T next() {
 		return iterator.next();
 	}
 

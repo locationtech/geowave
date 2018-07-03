@@ -79,6 +79,47 @@ public interface ConfigService
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addstore/dynamodb")
+	public Response addDynamoDBStore(
+			@QueryParam("name") String name,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("endpoint") String endpoint,
+			@QueryParam("region") String region,
+			@QueryParam("writeCapacity") Long writeCapacity,
+			@QueryParam("readCapacity") Long readCapacity,
+			@QueryParam("maxConnections") Integer maxConnections,
+			@QueryParam("protocol") String protocol,
+			@QueryParam("enableCacheResponseMetadata") Boolean enableCacheResponseMetadata,
+			@QueryParam("geowaveNamespace") String geowaveNamespace,
+			@QueryParam("persistAdapter") Boolean persistAdapter,
+			@QueryParam("persistIndex") Boolean persistIndex,
+			@QueryParam("persistDataStatistics") Boolean persistDataStatistics,
+			@QueryParam("createTable") Boolean createTable,
+			@QueryParam("useAltIndex") Boolean useAltIndex,
+			@QueryParam("enableBlockCache") Boolean enableBlockCache,
+			@QueryParam("enableServerSideLibrary") Boolean enableServerSideLibrary );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addstore/cassandra")
+	public Response addCassandraStore(
+			@QueryParam("name") String name,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("contactPoint") String contactPoint,
+			@QueryParam("batchWriteSize") Integer batchWriteSize,
+			@QueryParam("durableWrites") Boolean durableWrites,
+			@QueryParam("replicationFactor") Integer replicationFactor,
+			@QueryParam("geowaveNamespace") String geowaveNamespace,
+			@QueryParam("persistAdapter") Boolean persistAdapter,
+			@QueryParam("persistIndex") Boolean persistIndex,
+			@QueryParam("persistDataStatistics") Boolean persistDataStatistics,
+			@QueryParam("createTable") Boolean createTable,
+			@QueryParam("useAltIndex") Boolean useAltIndex,
+			@QueryParam("enableBlockCache") Boolean enableBlockCache,
+			@QueryParam("enableServerSideLibrary") Boolean enableServerSideLibrary );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addstore/{type}")
 	public Response addStore(
 			@QueryParam("name") String name,
