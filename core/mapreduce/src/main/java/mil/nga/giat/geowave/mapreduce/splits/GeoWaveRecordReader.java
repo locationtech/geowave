@@ -240,7 +240,7 @@ public class GeoWaveRecordReader<T> extends
 				new AdapterStoreWrapper(
 						adapterStore,
 						internalAdapterStore),
-				sanitizedQueryOptions.getAdapterIds(),
+				sanitizedQueryOptions.getAdapterIds(internalAdapterStore),
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),

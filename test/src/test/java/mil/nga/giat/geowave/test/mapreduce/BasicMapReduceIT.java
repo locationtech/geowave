@@ -235,26 +235,13 @@ public class BasicMapReduceIT extends
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
 		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, ExpectedResults>();
 		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
-			if (adapter.getAdapterId().equals(
-					new ByteArrayId(
-							"gpxwaypoint"))) {
-				adapterIdToResultsMap.put(
-						adapter.getAdapterId(),
-						TestUtils.getExpectedResults(geowaveStore.query(
-								new QueryOptions(
-										adapter.getAdapterId(),
-										null),
-								new EverythingQuery())));
-			}
-			else {
-				adapterIdToResultsMap.put(
-						adapter.getAdapterId(),
-						TestUtils.getExpectedResults(geowaveStore.query(
-								new QueryOptions(
-										adapter.getAdapterId(),
-										null),
-								new EverythingQuery())));
-			}
+			adapterIdToResultsMap.put(
+					adapter.getAdapterId(),
+					TestUtils.getExpectedResults(geowaveStore.query(
+							new QueryOptions(
+									adapter.getAdapterId(),
+									null),
+							new EverythingQuery())));
 		}
 
 		final List<DataAdapter<?>> firstTwoAdapters = new ArrayList<DataAdapter<?>>();
@@ -284,7 +271,7 @@ public class BasicMapReduceIT extends
 			ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getAdapterId());
 
 			if (expResults.count > 0) {
-				LOGGER.debug("Running test for adapter " + adapter.getAdapterId().getString());
+				LOGGER.error("Running test for adapter " + adapter.getAdapterId().getString());
 				runTestJob(
 						expResults,
 						null,

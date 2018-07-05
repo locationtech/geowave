@@ -1,16 +1,20 @@
 package mil.nga.giat.geowave.core.store.metadata;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
+import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
@@ -145,6 +149,7 @@ public class InternalAdapterStoreImpl implements
 			if (warnIfNotExist) {
 				LOGGER.warn("Adapter '" + adapterId.getString() + "' not found. '"
 						+ AbstractGeoWavePersistence.METADATA_TABLE + "' table does not exist");
+				getReader(warnIfNotExist);
 
 			}
 			return null;
@@ -189,7 +194,7 @@ public class InternalAdapterStoreImpl implements
 	}
 
 	// ** this introduces a distributed race condition if multiple JVM processes
-	// are excuting this method simulatneously
+	// are excuting this method simultaneously
 	// care should be taken to either explicitly call this from a single client
 	// before running a distributed job, or use a distributed locking mechanism
 	// so that internal Adapter Ids are consistent without any race conditions
@@ -226,7 +231,6 @@ public class InternalAdapterStoreImpl implements
 				LOGGER.warn(
 						"Unable to close metadata writer",
 						e);
-				e.printStackTrace();
 			}
 			return internalAdapterId;
 		}
@@ -285,5 +289,52 @@ public class InternalAdapterStoreImpl implements
 		return delete(
 				adapterId,
 				internalAdapterId);
+	}
+
+	@Override
+	public CloseableIterator<ByteArrayId> getAdapterIds() {
+		final MetadataReader reader = getReader(false);
+		if (reader == null) {
+			return new CloseableIterator.Empty<>();
+		}
+		CloseableIterator<GeoWaveMetadata> results = reader.query(new MetadataQuery(
+				null,
+				INTERNAL_TO_EXTERNAL_ID));
+		return new CloseableIteratorWrapper<>(
+				results,
+				Iterators.transform(
+						results,
+						new Function<GeoWaveMetadata, ByteArrayId>() {
+
+							@Override
+							public ByteArrayId apply(
+									GeoWaveMetadata input ) {
+								return new ByteArrayId(
+										input.getValue());
+							}
+						}));
+	}
+
+	@Override
+	public CloseableIterator<Short> getInternalAdapterIds() {
+		final MetadataReader reader = getReader(false);
+		if (reader == null) {
+			return new CloseableIterator.Empty<>();
+		}
+		CloseableIterator<GeoWaveMetadata> results = reader.query(new MetadataQuery(
+				null,
+				EXTERNAL_TO_INTERNAL_ID));
+		return new CloseableIteratorWrapper<>(
+				results,
+				Iterators.transform(
+						results,
+						new Function<GeoWaveMetadata, Short>() {
+
+							@Override
+							public Short apply(
+									GeoWaveMetadata input ) {
+								return ByteArrayUtils.byteArrayToShort(input.getValue());
+							}
+						}));
 	}
 }

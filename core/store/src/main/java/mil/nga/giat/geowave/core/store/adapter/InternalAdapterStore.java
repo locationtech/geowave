@@ -1,6 +1,7 @@
 package mil.nga.giat.geowave.core.store.adapter;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * This is responsible for persisting adapter/Internal Adapter mappings (either
@@ -8,6 +9,10 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
  */
 public interface InternalAdapterStore
 {
+
+	public CloseableIterator<ByteArrayId> getAdapterIds();
+
+	public CloseableIterator<Short> getInternalAdapterIds();
 
 	public ByteArrayId getAdapterId(
 			short internalAdapterId );

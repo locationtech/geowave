@@ -36,9 +36,7 @@ import mil.nga.giat.geowave.core.store.operations.MetadataWriter;
  */
 public abstract class AbstractGeoWavePersistence<T extends Persistable>
 {
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(
-					AbstractGeoWavePersistence.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWavePersistence.class);
 
 	// TODO: should we concern ourselves with multiple distributed processes
 	// updating and looking up objects simultaneously that would require some
@@ -66,10 +64,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected void buildCache() {
-		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder
-				.newBuilder()
-				.maximumSize(
-						MAX_ENTRIES);
+		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
+				MAX_ENTRIES);
 		this.cache = cacheBuilder.<ByteArrayId, T> build();
 	}
 
@@ -114,10 +110,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		cache
-				.put(
-						combinedId,
-						object);
+		cache.put(
+				combinedId,
+				object);
 	}
 
 	protected Object getObjectFromCache(
@@ -127,9 +122,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		return cache
-				.getIfPresent(
-						combinedId);
+		return cache.getIfPresent(combinedId);
 	}
 
 	protected boolean deleteObjectFromCache(
@@ -139,13 +132,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				primaryId,
 				secondaryId);
 		if (combinedId != null) {
-			boolean present = cache
-					.getIfPresent(
-							combinedId) != null;
+			boolean present = cache.getIfPresent(combinedId) != null;
 			if (present) {
-				cache
-						.invalidate(
-								combinedId);
+				cache.invalidate(combinedId);
 			}
 			return present;
 		}
@@ -179,10 +168,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	protected void addObject(
 			final T object ) {
 		addObject(
-				getPrimaryId(
-						object),
-				getSecondaryId(
-						object),
+				getPrimaryId(object),
+				getSecondaryId(object),
 				object);
 	}
 
@@ -196,11 +183,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		if (s == null) {
 			return null;
 		}
-		return s
-				.getBytes(
-						Charset
-								.forName(
-										"UTF-8"));
+		return s.getBytes(Charset.forName("UTF-8"));
 	}
 
 	protected void addObject(
@@ -211,46 +194,36 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				id,
 				secondaryId,
 				object);
-		try (final MetadataWriter writer = operations
-				.createMetadataWriter(
-						getType())) {
+		try (final MetadataWriter writer = operations.createMetadataWriter(getType())) {
 			if (writer != null) {
 				final GeoWaveMetadata metadata = new GeoWaveMetadata(
 						id.getBytes(),
 						secondaryId != null ? secondaryId.getBytes() : null,
-						getVisibility(
-								object),
-						getValue(
-								object));
-				writer
-						.write(
-								metadata);
+						getVisibility(object),
+						getValue(object));
+				writer.write(metadata);
 			}
 		}
 		catch (final Exception e) {
-			LOGGER
-					.warn(
-							"Unable to close metadata writer",
-							e);
+			LOGGER.warn(
+					"Unable to close metadata writer",
+					e);
 			e.printStackTrace();
 		}
 	}
 
 	protected byte[] getValue(
 			final T object ) {
-		return PersistenceUtils
-				.toBinary(
-						object);
+		return PersistenceUtils.toBinary(object);
 	}
 
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
-		return internalGetObjects(
-				new MetadataQuery(
-						null,
-						secondaryId.getBytes(),
-						authorizations));
+		return internalGetObjects(new MetadataQuery(
+				null,
+				secondaryId.getBytes(),
+				authorizations));
 	}
 
 	protected T getObject(
@@ -279,45 +252,33 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		}
 
 		try {
-			if (!operations
-					.metadataExists(
-							getType())) {
+			if (!operations.metadataExists(getType())) {
 				if (warnIfNotExists) {
-					LOGGER
-							.warn(
-									"Object '" + getCombinedId(
-											primaryId,
-											secondaryId).getString() + "' not found. '" + METADATA_TABLE
-											+ "' table does not exist");
+					LOGGER.warn("Object '" + getCombinedId(
+							primaryId,
+							secondaryId).getString() + "' not found. '" + METADATA_TABLE + "' table does not exist");
 				}
 				return null;
 			}
 		}
 		catch (final IOException e1) {
 			if (warnIfNotExists) {
-				LOGGER
-						.error(
-								"Unable to check for existence of metadata to get object",
-								e1);
+				LOGGER.error(
+						"Unable to check for existence of metadata to get object",
+						e1);
 			}
 			return null;
 		}
-		final MetadataReader reader = operations
-				.createMetadataReader(
-						getType());
-		try (final CloseableIterator<GeoWaveMetadata> it = reader
-				.query(
-						new MetadataQuery(
-								primaryId.getBytes(),
-								secondaryId == null ? null : secondaryId.getBytes(),
-								authorizations))) {
+		final MetadataReader reader = operations.createMetadataReader(getType());
+		try (final CloseableIterator<GeoWaveMetadata> it = reader.query(new MetadataQuery(
+				primaryId.getBytes(),
+				secondaryId == null ? null : secondaryId.getBytes(),
+				authorizations))) {
 			if (!it.hasNext()) {
 				if (warnIfNotExists) {
-					LOGGER
-							.warn(
-									"Object '" + getCombinedId(
-											primaryId,
-											secondaryId).getString() + "' not found");
+					LOGGER.warn("Object '" + getCombinedId(
+							primaryId,
+							secondaryId).getString() + "' not found");
 				}
 				return null;
 			}
@@ -328,12 +289,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		}
 		catch (final IOException e) {
 			if (warnIfNotExists) {
-				LOGGER
-						.warn(
-								"Unable to find object '" + getCombinedId(
-										primaryId,
-										secondaryId).getString() + "'",
-								e);
+				LOGGER.warn(
+						"Unable to find object '" + getCombinedId(
+								primaryId,
+								secondaryId).getString() + "'",
+						e);
 			}
 		}
 		return null;
@@ -352,35 +312,27 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 	protected CloseableIterator<T> getObjects(
 			final String... authorizations ) {
-		return internalGetObjects(
-				new MetadataQuery(
-						null,
-						null,
-						authorizations));
+		return internalGetObjects(new MetadataQuery(
+				null,
+				null,
+				authorizations));
 	}
 
 	private CloseableIterator<T> internalGetObjects(
 			final MetadataQuery query ) {
 		try {
-			if (!operations
-					.metadataExists(
-							getType())) {
+			if (!operations.metadataExists(getType())) {
 				return new CloseableIterator.Empty<>();
 			}
 		}
 		catch (final IOException e1) {
-			LOGGER
-					.error(
-							"Unable to check for existence of metadata to get objects",
-							e1);
+			LOGGER.error(
+					"Unable to check for existence of metadata to get objects",
+					e1);
 			return new CloseableIterator.Empty<>();
 		}
-		final MetadataReader reader = operations
-				.createMetadataReader(
-						getType());
-		final CloseableIterator<GeoWaveMetadata> it = reader
-				.query(
-						query);
+		final MetadataReader reader = operations.createMetadataReader(getType());
+		final CloseableIterator<GeoWaveMetadata> it = reader.query(query);
 		return new NativeIteratorWrapper(
 				it,
 				query.getAuthorizations());
@@ -389,23 +341,19 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	@SuppressWarnings("unchecked")
 	protected T fromValue(
 			final GeoWaveMetadata entry ) {
-		return (T) PersistenceUtils
-				.fromBinary(
-						entry.getValue());
+		return (T) PersistenceUtils.fromBinary(entry.getValue());
 	}
 
 	protected T entryToValue(
 			final GeoWaveMetadata entry,
 			final String... authorizations ) {
-		final T result = fromValue(
-				entry);
+		final T result = fromValue(entry);
 		if (result != null) {
 			addObjectToCache(
 					new ByteArrayId(
 							entry.getPrimaryId()),
-					entry.getSecondaryId() == null ? null
-							: new ByteArrayId(
-									entry.getSecondaryId()),
+					entry.getSecondaryId() == null ? null : new ByteArrayId(
+							entry.getSecondaryId()),
 					result,
 					authorizations);
 		}
@@ -442,66 +390,51 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final AbstractGeoWavePersistence cacheDeleter,
 			final String... authorizations ) {
 		try {
-			if (!operations
-					.metadataExists(
-							type)) {
+			if (!operations.metadataExists(type)) {
 				return false;
 			}
 		}
 		catch (final IOException e1) {
-			LOGGER
-					.error(
-							"Unable to check for existence of metadata to delete objects",
-							e1);
+			LOGGER.error(
+					"Unable to check for existence of metadata to delete objects",
+					e1);
 			return false;
 		}
-		try (final MetadataDeleter deleter = operations
-				.createMetadataDeleter(
-						type)) {
+		try (final MetadataDeleter deleter = operations.createMetadataDeleter(type)) {
 			if (primaryId != null) {
-				return deleter
-						.delete(
-								new MetadataQuery(
-										primaryId.getBytes(),
-										secondaryId != null ? secondaryId.getBytes() : null,
-										authorizations));
+				return deleter.delete(new MetadataQuery(
+						primaryId.getBytes(),
+						secondaryId != null ? secondaryId.getBytes() : null,
+						authorizations));
 			}
 			boolean retVal = false;
-			final MetadataReader reader = operations
-					.createMetadataReader(
-							type);
-			try (final CloseableIterator<GeoWaveMetadata> it = reader
-					.query(
-							new MetadataQuery(
-									null,
-									secondaryId != null ? secondaryId.getBytes() : null,
-									authorizations))) {
+			final MetadataReader reader = operations.createMetadataReader(type);
+			try (final CloseableIterator<GeoWaveMetadata> it = reader.query(new MetadataQuery(
+					null,
+					secondaryId != null ? secondaryId.getBytes() : null,
+					authorizations))) {
 
 				while (it.hasNext()) {
 					retVal = true;
 					final GeoWaveMetadata entry = it.next();
 					if (cacheDeleter != null) {
-						cacheDeleter
-								.deleteObjectFromCache(
-										new ByteArrayId(
-												entry.getPrimaryId()),
-										secondaryId);
+						cacheDeleter.deleteObjectFromCache(
+								new ByteArrayId(
+										entry.getPrimaryId()),
+								secondaryId);
 					}
-					deleter
-							.delete(
-									new MetadataQuery(
-											entry.getPrimaryId(),
-											entry.getSecondaryId(),
-											authorizations));
+					deleter.delete(new MetadataQuery(
+							entry.getPrimaryId(),
+							entry.getSecondaryId(),
+							authorizations));
 				}
 			}
 			return retVal;
 		}
 		catch (final Exception e) {
-			LOGGER
-					.error(
-							"Unable to delete objects",
-							e);
+			LOGGER.error(
+					"Unable to delete objects",
+					e);
 		}
 		return false;
 	}

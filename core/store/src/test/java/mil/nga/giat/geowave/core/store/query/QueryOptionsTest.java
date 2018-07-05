@@ -145,6 +145,18 @@ public class QueryOptionsTest
 			public void removeAll() {
 
 			}
+
+			@Override
+			public CloseableIterator<ByteArrayId> getAdapterIds() {
+				return new CloseableIterator.Wrapper<>(
+						cache.inverse().values().iterator());
+			}
+
+			@Override
+			public CloseableIterator<Short> getInternalAdapterIds() {
+				return new CloseableIterator.Wrapper<>(
+						cache.values().iterator());
+			}
 		};
 
 		final PersistentAdapterStore adapterStore = new PersistentAdapterStore() {

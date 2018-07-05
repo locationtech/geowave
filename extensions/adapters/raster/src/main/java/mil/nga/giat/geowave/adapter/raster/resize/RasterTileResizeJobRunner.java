@@ -226,7 +226,6 @@ public class RasterTileResizeJobRunner extends
 			obj.next();
 			i++;
 		}
-		System.err.println("Raster Resize: there are '" + i + "' tiles");
 
 		return retVal ? 0 : 1;
 	}

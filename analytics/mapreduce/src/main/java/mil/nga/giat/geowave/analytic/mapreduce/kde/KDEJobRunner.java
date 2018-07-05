@@ -417,7 +417,6 @@ public class KDEJobRunner extends
 				obj.next();
 				i++;
 			}
-			System.err.println("there are '" + i + "' tiles");
 
 			if (rasterResizeOutputDataStoreOptions != null) {
 				// delegate to resize command to wrap it up with the correctly

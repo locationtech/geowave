@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -169,24 +170,6 @@ public class BaseQueryOptions
 				indexStore));
 	}
 
-	public CloseableIterator<InternalDataAdapter<?>> getAdapters(
-			final PersistentAdapterStore adapterStore ) {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			if ((adapters == null) || adapters.isEmpty()) {
-				adapters = new ArrayList<>();
-				for (final short id : adapterIds) {
-					final InternalDataAdapter adapter = adapterStore.getAdapter(id);
-					if (adapter != null) {
-						adapters.add(adapter);
-					}
-				}
-			}
-			return new CloseableIterator.Wrapper(
-					adapters.iterator());
-		}
-		return adapterStore.getAdapters();
-	}
-
 	public InternalDataAdapter<?>[] getAdaptersArray(
 			final PersistentAdapterStore adapterStore )
 			throws IOException {
@@ -214,7 +197,7 @@ public class BaseQueryOptions
 		}
 		final List<InternalDataAdapter<?>> list = new ArrayList<>();
 		if (adapterStore != null) {
-			CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
+			final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
 			if (it != null) {
 				while (it.hasNext()) {
 					list.add(it.next());
@@ -402,4 +385,46 @@ public class BaseQueryOptions
 		return fieldIdsAdapterPair;
 	}
 
+	public List<Short> getValidInternalAdapterIds(
+			final InternalAdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore )
+			throws IOException {
+		// Grab the list of adapter ids, either from the query (if included),
+		// Or the whole list from the adapter store...
+		final List<Short> adapterIds = getAdapterIds(adapterStore);
+
+		// Then for each adapter, verify that it exists in the index-adapter
+		// mapping
+		final Iterator<Short> adapterIdIterator = adapterIds.iterator();
+		while (adapterIdIterator.hasNext()) {
+			final AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterIdIterator
+					.next());
+			if (!mapping.contains(indexId)) {
+				adapterIdIterator.remove();
+			}
+		}
+
+		return adapterIds;
+	}
+
+	public List<Short> getAdapterIds(
+			final InternalAdapterStore adapterStore ) {
+		final List<Short> ids = new ArrayList<>();
+		if ((adapterIds == null) || adapterIds.isEmpty()) {
+			try (CloseableIterator<Short> it = adapterStore.getInternalAdapterIds()) {
+				while (it.hasNext()) {
+					ids.add(it.next());
+				}
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to get internal adapter IDs",
+						e);
+			}
+		}
+		else {
+			ids.addAll(adapterIds);
+		}
+		return ids;
+	}
 }

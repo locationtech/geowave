@@ -7,6 +7,7 @@ import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 
 public class JobContextInternalAdapterStore implements
@@ -130,6 +131,16 @@ public class JobContextInternalAdapterStore implements
 	public void removeAll() {
 		cache.clear();
 		persistentInternalAdapterStore.removeAll();
+	}
+
+	@Override
+	public CloseableIterator<ByteArrayId> getAdapterIds() {
+		return persistentInternalAdapterStore.getAdapterIds();
+	}
+
+	@Override
+	public CloseableIterator<Short> getInternalAdapterIds() {
+		return persistentInternalAdapterStore.getInternalAdapterIds();
 	}
 
 }
