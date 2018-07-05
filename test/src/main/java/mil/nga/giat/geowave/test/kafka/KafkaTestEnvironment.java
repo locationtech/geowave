@@ -51,10 +51,10 @@ public class KafkaTestEnvironment implements
 		}
 
 		final KafkaConfig config = KafkaTestUtils.getKafkaBrokerConfig();
-		if(kafkaServer == null) {
+		if (kafkaServer == null) {
 			kafkaServer = new KafkaServerStartable(
 					config);
-	
+
 			kafkaServer.startup();
 			Thread.sleep(3000);
 		}

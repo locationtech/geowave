@@ -16,15 +16,15 @@ import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.protobuf.ByteString;
 import com.vividsolutions.jts.geom.Coordinate;
 
-import io.grpcshaded.ManagedChannel;
-import io.grpcshaded.ManagedChannelBuilder;
-import io.grpcshaded.netty.NettyChannelBuilder;
-import io.grpcshaded.StatusRuntimeException;
-import io.grpcshaded.internal.DnsNameResolverProvider;
-import io.grpcshaded.stub.StreamObserver;
-import mil.nga.giat.geowave.service.grpc.protobuf.util.ByteStringContainer;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
+import io.grpc.netty.NettyChannelBuilder;
+import io.grpc.StatusRuntimeException;
+import io.grpc.internal.DnsNameResolverProvider;
+import io.grpc.stub.StreamObserver;
 import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.VersionCommandParameters;
@@ -196,8 +196,8 @@ public class GeoWaveGrpcTestClient
 		LOGGER.info("Performing Vector Ingest...");
 		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
+				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
 
 		final CountDownLatch finishLatch = new CountDownLatch(
 				1);
@@ -294,7 +294,7 @@ public class GeoWaveGrpcTestClient
 		LOGGER.info("Performing Vector Query...");
 		VectorQueryParameters request = VectorQueryParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setQuery(
+				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setQuery(
 				GeoWaveGrpcTestUtils.cqlSpatialQuery).build();
 
 		Iterator<Feature> features = vectorBlockingStub.vectorQuery(request);
@@ -308,13 +308,18 @@ public class GeoWaveGrpcTestClient
 		return feature_list;
 	}
 
+	private static ByteString copyFrom(
+			byte[] bytes ) {
+		return ByteString.copyFrom(bytes);
+	}
+
 	public ArrayList<Feature> cqlQuery()
 			throws UnsupportedEncodingException {
 		LOGGER.info("Performing CQL Query...");
 		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
+				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
 
 		CQLQueryParameters request = CQLQueryParameters.newBuilder().setBaseParams(
 				baseParams).setCql(
@@ -337,8 +342,8 @@ public class GeoWaveGrpcTestClient
 		LOGGER.info("Performing Spatial Query...");
 		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				ByteStringContainer.copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
+				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
 
 		final String queryPolygonDefinition = GeoWaveGrpcTestUtils.wktSpatialQuery;
 		SpatialQueryParameters request = SpatialQueryParameters.newBuilder().setBaseParams(

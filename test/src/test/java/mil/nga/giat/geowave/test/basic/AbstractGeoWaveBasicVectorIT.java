@@ -562,6 +562,23 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 						cachedValue.maxY,
 						bboxStat.getMaxY(),
 						MathUtils.EPSILON);
+				Assert.assertTrue(
+						"Unable to remove individual stat",
+						statsStore.removeStatistics(
+								adapter.getAdapterId(),
+								FeatureBoundingBoxStatistics.composeId(adapter
+										.getFeatureType()
+										.getGeometryDescriptor()
+										.getLocalName())));
+
+				Assert.assertNull(
+						"Individual stat was not successfully removed",
+						statsStore.getDataStatistics(
+								adapter.getAdapterId(),
+								FeatureBoundingBoxStatistics.composeId(adapter
+										.getFeatureType()
+										.getGeometryDescriptor()
+										.getLocalName())));
 			}
 		}
 		catch (final IOException e) {
