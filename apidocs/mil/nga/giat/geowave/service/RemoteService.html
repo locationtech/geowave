@@ -171,7 +171,7 @@ public interface <span class="typeNameLabel">RemoteService</span></pre>
 </tr>
 <tr id="i8" class="altColor">
 <td class="colFirst"><code>javax.ws.rs.core.Response</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/RemoteService.html#version-java.lang.String-">version</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/service/RemoteService.html#version-java.lang.String-">version</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storename)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -246,8 +246,8 @@ javax.ws.rs.core.Response&nbsp;listStats(@QueryParam(value="store_name")
  @Produces(value="application/json")
  @Consumes(value="multipart/form-data")
  @Path(value="/version")
-javax.ws.rs.core.Response&nbsp;version(@QueryParam(value="store_name")
-                                                                                                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;store_name)</pre>
+javax.ws.rs.core.Response&nbsp;version(@QueryParam(value="storename")
+                                                                                                                                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;storename)</pre>
 </li>
 </ul>
 <a name="calcStat-java.lang.String-java.lang.String-java.lang.String-java.lang.String-java.lang.Boolean-">

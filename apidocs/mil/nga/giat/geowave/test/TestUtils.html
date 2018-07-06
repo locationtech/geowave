@@ -264,13 +264,17 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#assertStatusCode-int-javax.ws.rs.core.Response-">assertStatusCode</a></span>(int&nbsp;expectedCode,
-                javax.ws.rs.core.Response&nbsp;response)</code>&nbsp;</td>
+                javax.ws.rs.core.Response&nbsp;response)</code>
+<div class="block">Asserts that the response has the expected Status Code.</div>
+</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/test/TestUtils.html#assertStatusCode-java.lang.String-int-javax.ws.rs.core.Response-">assertStatusCode</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;msg,
                 int&nbsp;expectedCode,
-                javax.ws.rs.core.Response&nbsp;response)</code>&nbsp;</td>
+                javax.ws.rs.core.Response&nbsp;response)</code>
+<div class="block">Asserts that the response has the expected Status Code.</div>
+</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a></code></td>
@@ -1032,6 +1036,14 @@ public static&nbsp;void&nbsp;assert404(<a href="http://docs.oracle.com/javase/7/
 <pre>public static&nbsp;void&nbsp;assertStatusCode(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;msg,
                                     int&nbsp;expectedCode,
                                     javax.ws.rs.core.Response&nbsp;response)</pre>
+<div class="block">Asserts that the response has the expected Status Code. The assertion
+ message is formatted to include the provided string.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>msg</code> - String message to include in the assertion message.</dd>
+<dd><code>expectedCode</code> - Integer HTTP Status code to expect from the response.</dd>
+<dd><code>response</code> - The Response object on which .getStatus() will be performed.</dd>
+</dl>
 </li>
 </ul>
 <a name="assertStatusCode-int-javax.ws.rs.core.Response-">
@@ -1042,6 +1054,13 @@ public static&nbsp;void&nbsp;assert404(<a href="http://docs.oracle.com/javase/7/
 <h4>assertStatusCode</h4>
 <pre>public static&nbsp;void&nbsp;assertStatusCode(int&nbsp;expectedCode,
                                     javax.ws.rs.core.Response&nbsp;response)</pre>
+<div class="block">Asserts that the response has the expected Status Code. The assertion
+ message automatically formatted.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>expectedCode</code> - Integer HTTP Status code to expect from the response.</dd>
+<dd><code>response</code> - The Response object on which .getStatus() will be performed.</dd>
+</dl>
 </li>
 </ul>
 </li>
