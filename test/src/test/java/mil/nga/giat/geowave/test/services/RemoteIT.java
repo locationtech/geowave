@@ -10,51 +10,10 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test.services;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URLEncoder;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.LinkedList;
+
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.tuple.ImmutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.http.Header;
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.AuthCache;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.EntityBuilder;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.auth.BasicScheme;
-import org.apache.http.impl.client.BasicAuthCache;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.After;
 import org.junit.AfterClass;
@@ -75,9 +34,7 @@ import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapt
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.examples.ingest.SimpleIngest;
-import mil.nga.giat.geowave.service.client.AnalyticServiceClient;
 import mil.nga.giat.geowave.service.client.ConfigServiceClient;
-import mil.nga.giat.geowave.service.client.GeoServerServiceClient;
 import mil.nga.giat.geowave.service.client.RemoteServiceClient;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
