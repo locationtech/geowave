@@ -12,12 +12,12 @@ package mil.nga.giat.geowave.cli.debug;
 
 import java.io.IOException;
 
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
-import com.google.common.base.Stopwatch;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -86,7 +86,7 @@ public class BBOXQuery extends
 			final ByteArrayId indexId,
 			final DataStore dataStore,
 			final boolean debug ) {
-		final Stopwatch stopWatch = new Stopwatch();
+		final StopWatch stopWatch = new StopWatch();
 
 		getBoxGeom();
 

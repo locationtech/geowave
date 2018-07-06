@@ -9,10 +9,10 @@ import java.util.Iterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grpcshaded.BindableService;
-import io.grpcshaded.Server;
-import io.grpcshaded.ServerBuilder;
-import io.grpcshaded.netty.NettyServerBuilder;
+import io.grpc.BindableService;
+import io.grpc.Server;
+import io.grpc.ServerBuilder;
+import io.grpc.netty.NettyServerBuilder;
 
 public class GeoWaveGrpcServer
 {

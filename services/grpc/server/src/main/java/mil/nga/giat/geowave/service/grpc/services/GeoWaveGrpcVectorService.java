@@ -25,8 +25,8 @@ import com.beust.jcommander.ParameterException;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 
-import io.grpcshaded.BindableService;
-import io.grpcshaded.stub.StreamObserver;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;

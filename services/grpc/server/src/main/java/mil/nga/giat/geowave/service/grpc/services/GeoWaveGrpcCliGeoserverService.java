@@ -7,9 +7,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grpcshaded.BindableService;
-import io.grpcshaded.stub.StreamObserver;
-import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 
 import mil.nga.giat.geowave.cli.geoserver.ConfigGeoServerCommand;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddCoverageCommand;

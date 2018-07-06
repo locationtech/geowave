@@ -10,7 +10,7 @@
  ******************************************************************************/
 syntax = "proto3";
 import "GeoWaveReturnTypes.proto";
-//import "google/protobuf/timestamp.proto";
+import "google/protobuf/timestamp.proto";
 option java_multiple_files = true;
 option java_package = "mil.nga.giat.geowave.service.grpc.protobuf";
 option java_outer_classname = "VectorService";
@@ -84,7 +84,7 @@ message FeatureAttribute {
 }
 
 message TemporalConstraints {
-	string startTime = 1; //ISO format e.g. 2005-05-17T19:32:56Z
-	string endTime = 2;
+	google.protobuf.Timestamp startTime = 1;
+	google.protobuf.Timestamp endTime = 2;
 }
 

@@ -461,14 +461,12 @@ public class SparkIngestDriver implements
 					e1);
 		}
 
-		S3FileSystem fs = (S3FileSystem) new S3FileSystemProvider().getFileSystem(
+		return (S3FileSystem) new S3FileSystemProvider().getFileSystem(
 				new URI(
 						s3EndpointUrl),
 				Collections.singletonMap(
 						S3FileSystemProvider.AMAZON_S3_FACTORY_CLASS,
 						GeoWaveAmazonS3Factory.class.getName()));
-
-		return fs;
 	}
 
 	public static void setHdfsURLStreamHandlerFactory()
@@ -476,7 +474,6 @@ public class SparkIngestDriver implements
 			SecurityException,
 			IllegalArgumentException,
 			IllegalAccessException {
-
 		Field factoryField = URL.class.getDeclaredField("factory");
 		factoryField.setAccessible(true);
 		// HP Fortify "Access Control" false positive
@@ -499,7 +496,9 @@ public class SparkIngestDriver implements
 						new FsUrlStreamHandlerFactory());
 			}
 			catch (IllegalAccessException e1) {
-				LOGGER.error("Could not access URLStreamHandler factory field on URL class: {}");
+				LOGGER.error(
+						"Could not access URLStreamHandler factory field on URL class: {}",
+						e1);
 				throw new RuntimeException(
 						"Could not access URLStreamHandler factory field on URL class: {}",
 						e1);

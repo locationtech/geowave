@@ -11,13 +11,7 @@ public class GeoWaveGrpcServiceOptions
 												// server resides at
 	public static int port = 8090; // the client and server connection port
 									// number
-	public static File geowaveConfigFile = ConfigOptions.getDefaultPropertyFile(); // the
-																					// config
-																					// file
-																					// that
-																					// the
-																					// service
-																					// implementations
-																					// will
-																					// use
+
+	// the config file that the service implementations will use
+	public static File geowaveConfigFile = ConfigOptions.getDefaultPropertyFile();
 }

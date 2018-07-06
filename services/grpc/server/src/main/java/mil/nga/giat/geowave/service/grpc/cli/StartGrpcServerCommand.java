@@ -12,8 +12,6 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.datastore.hbase.cli.HBaseMiniCluster;
-import mil.nga.giat.geowave.datastore.hbase.cli.HBaseSection;
 import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServer;
 
 @GeowaveOperation(name = "start", parentOperation = GrpcSection.class)

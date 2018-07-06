@@ -3,9 +3,9 @@ package mil.nga.giat.geowave.service.grpc.services;
 import java.io.File;
 import java.util.Map;
 
-import io.grpcshaded.BindableService;
-import io.grpcshaded.stub.StreamObserver;
-import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+import io.grpc.BindableService;
+import io.grpc.stub.StreamObserver;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
