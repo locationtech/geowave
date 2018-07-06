@@ -69,6 +69,7 @@ public class ResizeCommand extends
 
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
+
 		// Attempt to load input store.
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);

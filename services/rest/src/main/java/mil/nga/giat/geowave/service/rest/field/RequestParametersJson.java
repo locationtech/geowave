@@ -63,6 +63,10 @@ public class RequestParametersJson extends
 
 	private Object[] jsonArrayToArray(
 			JSONArray jsonArray ) {
+		if (jsonArray == null) {
+			return null;
+		}
+
 		// Initialize the output Array.
 		int jsonArrayLenth = jsonArray.length();
 		Object[] outArray = new Object[jsonArrayLenth];
@@ -75,6 +79,10 @@ public class RequestParametersJson extends
 
 	private List<Object> jsonArrayToList(
 			JSONArray jsonArray ) {
+		if (jsonArray == null) {
+			return null;
+		}
+
 		// Initialize the output List.
 		int jsonArrayLenth = jsonArray.length();
 		List<Object> outList = new ArrayList<Object>();

@@ -59,6 +59,7 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -638,5 +639,142 @@ public class GeoServerIT
 				run);
 		thread.start();
 		thread.join(waitTime);
+	}
+
+	// PLEASE NOTE: The below may not work with the above tests above, and may
+	// need to be in a separate class.
+	// OR incorporated into the longer test above.
+	// OR the longer test above needs to be refactored into smaller methods
+	// testing individual commands.
+	@Test
+	@Ignore
+	public void addcs() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void addcv() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void addfl() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void addlayer() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void addstyle() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void getcs() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void getcv() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void getfl() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void getstyle() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void getsa() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void listcs() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void listcv() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void listds() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void listfl() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void liststyles() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void listws() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void rmcs() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void rmcv() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void rmds() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void rmfl() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void rmstyle() {
+		// TODO: Implement this test
+	}
+
+	@Test
+	@Ignore
+	public void setls() {
+		// TODO: Implement this test
 	}
 }
