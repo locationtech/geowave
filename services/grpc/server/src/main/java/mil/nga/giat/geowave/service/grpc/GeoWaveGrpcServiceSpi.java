@@ -1,6 +1,6 @@
 package mil.nga.giat.geowave.service.grpc;
 
-import io.grpcshaded.BindableService;
+import io.grpc.BindableService;
 
 public interface GeoWaveGrpcServiceSpi
 {

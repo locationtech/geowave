@@ -7,6 +7,8 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.amazonaws.services.dynamodbv2.model.QueryRequest;
+import com.amazonaws.services.dynamodbv2.model.QueryResult;
 
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.MetadataDeleter;
@@ -39,21 +41,34 @@ public class DynamoDBMetadataDeleter implements
 		// the nature of metadata deleter is that primary ID is always
 		// well-defined and it is deleting a single entry at a time
 		final String tableName = operations.getMetadataTableName(metadataType);
+		final QueryRequest queryRequest = new QueryRequest(
+				tableName);
 
-		final Map<String, AttributeValue> key = new HashMap<>();
-		key.put(
-				DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
-				new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
-
-		if (metadata.getSecondaryId() != null) {
-			key.put(
-					DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
+		if (metadata.hasSecondaryId()) {
+			queryRequest.withFilterExpression(
+					DynamoDBOperations.METADATA_SECONDARY_ID_KEY + " = :secVal").addExpressionAttributeValuesEntry(
+					":secVal",
 					new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
 		}
+		queryRequest.withKeyConditionExpression(
+				DynamoDBOperations.METADATA_PRIMARY_ID_KEY + " = :priVal").addExpressionAttributeValuesEntry(
+				":priVal",
+				new AttributeValue().withB(ByteBuffer.wrap(metadata.getPrimaryId())));
 
-		operations.getClient().deleteItem(
-				tableName,
-				key);
+		final QueryResult queryResult = operations.getClient().query(
+				queryRequest);
+		for (Map<String, AttributeValue> entry : queryResult.getItems()) {
+			Map<String, AttributeValue> key = new HashMap<>();
+			key.put(
+					DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
+					entry.get(DynamoDBOperations.METADATA_PRIMARY_ID_KEY));
+			key.put(
+					DynamoDBOperations.METADATA_TIMESTAMP_KEY,
+					entry.get(DynamoDBOperations.METADATA_TIMESTAMP_KEY));
+			operations.getClient().deleteItem(
+					tableName,
+					key);
+		}
 
 		return true;
 	}

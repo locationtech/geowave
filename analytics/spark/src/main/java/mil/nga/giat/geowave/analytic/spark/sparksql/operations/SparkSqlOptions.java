@@ -8,7 +8,7 @@ public class SparkSqlOptions
 		"-n",
 		"--name"
 	}, description = "The spark application name")
-	private String appName = "Spatial Join Spark";
+	private String appName = "GeoWave Spark SQL";
 
 	@Parameter(names = {
 		"-ho",

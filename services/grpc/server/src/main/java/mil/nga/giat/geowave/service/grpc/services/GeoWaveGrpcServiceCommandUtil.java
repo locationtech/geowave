@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParametersDelegate;
-import com.googleshaded.protobuf.Descriptors.FieldDescriptor;
+import com.google.protobuf.Descriptors.FieldDescriptor;
 
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 

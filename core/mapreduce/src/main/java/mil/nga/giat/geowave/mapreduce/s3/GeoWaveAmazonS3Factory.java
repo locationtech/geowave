@@ -13,7 +13,6 @@ public class GeoWaveAmazonS3Factory extends
 	@Override
 	protected AWSCredentialsProvider getCredentialsProvider(
 			Properties props ) {
-		// TODO Auto-generated method stub
 		AWSCredentialsProvider credentialsProvider = super.getCredentialsProvider(props);
 		if (credentialsProvider instanceof DefaultAWSCredentialsProviderChain) {
 			return new DefaultGeoWaveAWSCredentialsProvider();
