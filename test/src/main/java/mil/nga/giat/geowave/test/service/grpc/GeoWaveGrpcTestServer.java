@@ -5,9 +5,8 @@ import java.io.IOException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.grpcshaded.netty.NettyServerBuilder;
-import io.grpcshaded.Server;
-import io.grpcshaded.ServerBuilder;
+import io.grpc.netty.NettyServerBuilder;
+import io.grpc.Server;
 
 import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcAnalyticMapreduceService;
 import mil.nga.giat.geowave.service.grpc.services.GeoWaveGrpcAnalyticSparkService;

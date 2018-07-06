@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.test.service.grpc;
 import java.io.UnsupportedEncodingException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.util.Timestamps;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import io.grpc.ManagedChannel;
@@ -362,19 +364,27 @@ public class GeoWaveGrpcTestClient
 		return feature_list;
 	}
 
-	public ArrayList<Feature> spatialTemporalQuery() {
+	public ArrayList<Feature> spatialTemporalQuery()
+			throws ParseException {
 		LOGGER.info("Performing Spatial Temporal Query...");
 		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).build();
 
+		TimeZone tz = TimeZone.getTimeZone("UTC");
+		DateFormat df = new SimpleDateFormat(
+				"yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC,
+											// no timezone offset
+		df.setTimeZone(tz);
 		final String queryPolygonDefinition = GeoWaveGrpcTestUtils.wktSpatialQuery;
 
 		SpatialQueryParameters spatialQuery = SpatialQueryParameters.newBuilder().setBaseParams(
 				baseParams).setGeometry(
 				queryPolygonDefinition).build();
 		TemporalConstraints t = TemporalConstraints.newBuilder().setStartTime(
-				GeoWaveGrpcTestUtils.temporalQueryStartTime).setEndTime(
-				GeoWaveGrpcTestUtils.temporalQueryEndTime).build();
+				Timestamps.fromMillis(df.parse(
+						GeoWaveGrpcTestUtils.temporalQueryStartTime).getTime())).setEndTime(
+				Timestamps.fromMillis(df.parse(
+						GeoWaveGrpcTestUtils.temporalQueryEndTime).getTime())).build();
 		SpatialTemporalQueryParameters request = SpatialTemporalQueryParameters.newBuilder().setSpatialParams(
 				spatialQuery).addTemporalConstraints(
 				0,

@@ -13,6 +13,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -130,7 +131,8 @@ public class GeoWaveGrpcIT extends
 	public void testGrpcServices(
 			final int nthreads )
 			throws InterruptedException,
-			UnsupportedEncodingException {
+			UnsupportedEncodingException,
+			ParseException {
 
 		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
 
