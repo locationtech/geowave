@@ -75,12 +75,7 @@ public class BaseDataStoreUtils
 	 * and HBase; Unification in progress
 	 *
 	 * Override this method if you can't pass in a GeoWaveRow!
-<<<<<<< HEAD
-	 * 
-	 * @throws AdapterException
-=======
 	 * @throws AdapterException 
->>>>>>> ee65ef8db355dff0f41060c1badd81a097b325bc
 	 */
 	public static <T> Object decodeRow(
 			final GeoWaveRow geowaveRow,
