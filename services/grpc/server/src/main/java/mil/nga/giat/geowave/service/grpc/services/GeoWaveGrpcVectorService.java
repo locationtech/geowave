@@ -1,15 +1,14 @@
 package mil.nga.giat.geowave.service.grpc.services;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.store.ContentFeatureCollection;
 import org.geotools.factory.FactoryRegistryException;
-import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQL;
@@ -22,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
+import com.google.protobuf.util.Timestamps;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.WKTReader;
 
@@ -33,9 +33,6 @@ import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginException;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
-import mil.nga.giat.geowave.adapter.vector.utils.DateUtilities;
-import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
-import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
@@ -46,11 +43,11 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.index.IndexStore;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServiceSpi;
@@ -61,8 +58,8 @@ import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringRespo
 import mil.nga.giat.geowave.service.grpc.protobuf.SpatialQueryParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.SpatialTemporalQueryParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.TemporalConstraints;
-import mil.nga.giat.geowave.service.grpc.protobuf.VectorIngestParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.VectorGrpc;
+import mil.nga.giat.geowave.service.grpc.protobuf.VectorIngestParameters;
 import mil.nga.giat.geowave.service.grpc.protobuf.VectorQueryParameters;
 
 public class GeoWaveGrpcVectorService extends
@@ -73,13 +70,13 @@ public class GeoWaveGrpcVectorService extends
 
 	@Override
 	public BindableService getBindableService() {
-		return (BindableService) this;
+		return this;
 	}
 
 	@Override
 	public void vectorQuery(
-			VectorQueryParameters request,
-			StreamObserver<Feature> responseObserver ) {
+			final VectorQueryParameters request,
+			final StreamObserver<Feature> responseObserver ) {
 		final String storeName = request.getStoreName();
 		final StoreLoader storeLoader = new StoreLoader(
 				storeName);
@@ -113,7 +110,7 @@ public class GeoWaveGrpcVectorService extends
 
 		ContentFeatureCollection featureCollection = null;
 		try {
-			ByteArrayId adapterId = new ByteArrayId(
+			final ByteArrayId adapterId = new ByteArrayId(
 					request.getAdapterId().toByteArray());
 			featureCollection = gtStore.getFeatureSource(
 					adapterId.getString()).getFeatures(
@@ -161,7 +158,7 @@ public class GeoWaveGrpcVectorService extends
 
 	@Override
 	public StreamObserver<VectorIngestParameters> vectorIngest(
-			StreamObserver<StringResponse> responseObserver ) {
+			final StreamObserver<StringResponse> responseObserver ) {
 		return new StreamObserver<VectorIngestParameters>() {
 			private boolean firstFeature = true;
 			private String storeName = null;
@@ -181,7 +178,7 @@ public class GeoWaveGrpcVectorService extends
 
 			@Override
 			public void onNext(
-					VectorIngestParameters f ) {
+					final VectorIngestParameters f ) {
 				if (firstFeature) {
 					firstFeature = false;
 
@@ -201,7 +198,7 @@ public class GeoWaveGrpcVectorService extends
 					if (typeBuilder == null) {
 						typeBuilder = new SimpleFeatureTypeBuilder();
 
-						for (Map.Entry<String, FeatureAttribute> mapEntry : f.getFeatureMap().entrySet()) {
+						for (final Map.Entry<String, FeatureAttribute> mapEntry : f.getFeatureMap().entrySet()) {
 							switch (mapEntry.getValue().getValueCase()) {
 								case VALSTRING: {
 									typeBuilder.add(
@@ -250,7 +247,7 @@ public class GeoWaveGrpcVectorService extends
 					// on the
 					// type
 					typeBuilder.setName(adapterId.getString());
-					SimpleFeatureType featureType = typeBuilder.buildFeatureType();
+					final SimpleFeatureType featureType = typeBuilder.buildFeatureType();
 					featureBuilder = new SimpleFeatureBuilder(
 							featureType);
 
@@ -300,10 +297,10 @@ public class GeoWaveGrpcVectorService extends
 								e);
 					}
 
-				}// end first-time initialization
+				} // end first-time initialization
 
 				// Set the values for all the attributes in the feature
-				for (Map.Entry<String, FeatureAttribute> attribute : f.getFeatureMap().entrySet()) {
+				for (final Map.Entry<String, FeatureAttribute> attribute : f.getFeatureMap().entrySet()) {
 					switch (attribute.getValue().getValueCase()) {
 						case VALSTRING: {
 							featureBuilder.set(
@@ -363,7 +360,7 @@ public class GeoWaveGrpcVectorService extends
 					;
 				}
 				final SimpleFeature sf = featureBuilder.buildFeature(String.valueOf(totalCount));
-				InsertionIds ids = writer.write(sf);
+				final InsertionIds ids = writer.write(sf);
 
 				// The writer is finally flushed and closed in the methods for
 				// onComplete and onError
@@ -372,14 +369,14 @@ public class GeoWaveGrpcVectorService extends
 					batchCount = 0;
 				}
 
-				StringResponse resp = StringResponse.newBuilder().setResponseValue(
+				final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 						String.valueOf(++totalCount)).build();
 				responseObserver.onNext(resp);
 			}
 
 			@Override
 			public void onError(
-					Throwable t ) {
+					final Throwable t ) {
 				LOGGER.error(
 						"Exception encountered during vectorIngest",
 						t);
@@ -387,13 +384,13 @@ public class GeoWaveGrpcVectorService extends
 					writer.flush();
 					writer.close();
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					LOGGER.error(
 							"Unable to close index writer",
 							e);
 				}
 
-				StringResponse resp = StringResponse.newBuilder().setResponseValue(
+				final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 						"Error during ingest: ").build();
 				responseObserver.onNext(resp);
 				responseObserver.onCompleted();
@@ -405,12 +402,12 @@ public class GeoWaveGrpcVectorService extends
 					writer.flush();
 					writer.close();
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					LOGGER.error(
 							"Unable to close index writer",
 							e);
 				}
-				StringResponse resp = StringResponse.newBuilder().setResponseValue(
+				final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 						"Ingest completed successfully").build();
 				responseObserver.onNext(resp);
 				responseObserver.onCompleted();
@@ -420,8 +417,8 @@ public class GeoWaveGrpcVectorService extends
 
 	@Override
 	public void cqlQuery(
-			CQLQueryParameters request,
-			StreamObserver<Feature> responseObserver ) {
+			final CQLQueryParameters request,
+			final StreamObserver<Feature> responseObserver ) {
 
 		final String cql = request.getCql();
 		final String storeName = request.getBaseParams().getStoreName();
@@ -434,9 +431,13 @@ public class GeoWaveGrpcVectorService extends
 				request.getBaseParams().getIndexId().toByteArray());
 
 		if (adapterId.getString().equalsIgnoreCase(
-				"")) adapterId = null;
+				"")) {
+			adapterId = null;
+		}
 		if (indexId.getString().equalsIgnoreCase(
-				"")) indexId = null;
+				"")) {
+			indexId = null;
+		}
 
 		// first check to make sure the data store exists
 		if (!storeLoader.loadFromConfig(GeoWaveGrpcServiceOptions.geowaveConfigFile)) {
@@ -502,9 +503,10 @@ public class GeoWaveGrpcVectorService extends
 
 	}
 
+	@Override
 	public void spatialQuery(
-			SpatialQueryParameters request,
-			StreamObserver<Feature> responseObserver ) {
+			final SpatialQueryParameters request,
+			final StreamObserver<Feature> responseObserver ) {
 
 		final String storeName = request.getBaseParams().getStoreName();
 		final StoreLoader storeLoader = new StoreLoader(
@@ -516,9 +518,13 @@ public class GeoWaveGrpcVectorService extends
 				request.getBaseParams().getIndexId().toByteArray());
 
 		if (adapterId.getString().equalsIgnoreCase(
-				"")) adapterId = null;
+				"")) {
+			adapterId = null;
+		}
 		if (indexId.getString().equalsIgnoreCase(
-				"")) indexId = null;
+				"")) {
+			indexId = null;
+		}
 
 		// first check to make sure the data store exists
 		if (!storeLoader.loadFromConfig(GeoWaveGrpcServiceOptions.geowaveConfigFile)) {
@@ -578,8 +584,8 @@ public class GeoWaveGrpcVectorService extends
 
 	@Override
 	public void spatialTemporalQuery(
-			SpatialTemporalQueryParameters request,
-			StreamObserver<Feature> responseObserver ) {
+			final SpatialTemporalQueryParameters request,
+			final StreamObserver<Feature> responseObserver ) {
 
 		final String storeName = request.getSpatialParams().getBaseParams().getStoreName();
 		final StoreLoader storeLoader = new StoreLoader(
@@ -599,25 +605,23 @@ public class GeoWaveGrpcVectorService extends
 				request.getSpatialParams().getBaseParams().getIndexId().toByteArray());
 
 		if (adapterId.getString().equalsIgnoreCase(
-				"")) adapterId = null;
+				"")) {
+			adapterId = null;
+		}
 		if (indexId.getString().equalsIgnoreCase(
-				"")) indexId = null;
+				"")) {
+			indexId = null;
+		}
 
 		final int constraintCount = request.getTemporalConstraintsCount();
-		final ArrayList<TemporalRange> temporalRanges = new ArrayList<TemporalRange>();
+		final ArrayList<TemporalRange> temporalRanges = new ArrayList<>();
 		for (int i = 0; i < constraintCount; i++) {
 			final TemporalConstraints t = request.getTemporalConstraints(i);
-
-			try {
-				temporalRanges.add(new TemporalRange(
-						DateUtilities.parseISO(t.getStartTime()),
-						DateUtilities.parseISO(t.getEndTime())));
-			}
-			catch (final ParseException e) {
-				LOGGER.error(
-						"Exception encountered parsing date",
-						e);
-			}
+			temporalRanges.add(new TemporalRange(
+					new Date(
+							Timestamps.toMillis(t.getStartTime())),
+					new Date(
+							Timestamps.toMillis(t.getEndTime()))));
 		}
 
 		final String geomDefinition = request.getSpatialParams().getGeometry();
@@ -651,9 +655,9 @@ public class GeoWaveGrpcVectorService extends
 				options,
 				spatialTemporalQuery)) {
 			while (iterator.hasNext()) {
-				SimpleFeature simpleFeature = iterator.next();
-				SimpleFeatureType type = simpleFeature.getType();
-				Feature.Builder b = Feature.newBuilder();
+				final SimpleFeature simpleFeature = iterator.next();
+				final SimpleFeatureType type = simpleFeature.getType();
+				final Feature.Builder b = Feature.newBuilder();
 				final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
 
 				for (int i = 0; i < type.getAttributeDescriptors().size(); i++) {
@@ -665,7 +669,7 @@ public class GeoWaveGrpcVectorService extends
 									i).getLocalName(),
 							attBuilder.build());
 				}
-				Feature f = b.build();
+				final Feature f = b.build();
 				responseObserver.onNext(f);
 			}
 			responseObserver.onCompleted();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
@@ -35,13 +36,14 @@
 	<properties>
 		<spark.version>2.3.0</spark.version>
 		<geotools.version>19.1</geotools.version>
-		<guava.version>19.0</guava.version>		
+		<guava.version>19.0</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.13.1</geoserver.version>
 		<accumulo.version>1.8.1</accumulo.version>
 		<accumulo.api>1.8</accumulo.api>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
+		<protobuf.version>3.5.1</protobuf.version>
 		<skipITs>true</skipITs>
 		<bigtable.version>1.2.0</bigtable.version>
 		<vfs2.version>2.1</vfs2.version>
@@ -101,12 +103,12 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-server</artifactId>
 				<version>${jetty.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-util</artifactId>
 				<version>${jetty.version}</version>
-			</dependency>		
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-webapp</artifactId>
@@ -131,7 +133,7 @@
 				<groupId>org.scala-lang</groupId>
 				<artifactId>scala-reflect</artifactId>
 				<version>${scala.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
@@ -534,7 +536,8 @@
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
 				<scope>compile</scope>
-			</dependency>			<dependency>
+			</dependency>
+			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-multipart</artifactId>
 				<version>${jersey.version}</version>
@@ -609,7 +612,18 @@
 				<artifactId>spring-security-core</artifactId>
 				<version>${spring-security.version}</version>
 				<scope>${geotools.scope}</scope>
-			</dependency><dependency>
+			</dependency>
+			<dependency>
+				<groupId>com.google.protobuf</groupId>
+				<artifactId>protobuf-java</artifactId>
+				<version>${protobuf.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.protobuf</groupId>
+				<artifactId>protobuf-java-util</artifactId>
+				<version>${protobuf.version}</version>
+			</dependency>
+			<dependency>
 				<groupId>io.grpc</groupId>
 				<artifactId>grpc-protobuf</artifactId>
 				<version>${grpc.version}</version>
