@@ -80,6 +80,8 @@ else
   CLASSPATH="$GEOWAVE_TOOLS_HOME/$GEOWAVE_TOOLS_JAR:$GEOWAVE_TOOLS_HOME/plugins/*:${CLASSPATH}"
 fi
 
+# Define log4j properties file in jar call, to reduce log spam.
+LOG_PROPERTIES="-Djava.util.logging.config.file=jul-geowave-cli.properties"
 
 # Using -cp and the classname instead of -jar because Java 7 and below fail to auto-launch jars with more than 65k files
-exec $JAVA $GEOWAVE_TOOL_JAVA_OPT -cp $CLASSPATH mil.nga.giat.geowave.core.cli.GeoWaveMain "$@"
+exec $JAVA $GEOWAVE_TOOL_JAVA_OPT $LOG_PROPERTIES -cp $CLASSPATH mil.nga.giat.geowave.core.cli.GeoWaveMain "$@"

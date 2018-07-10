@@ -467,7 +467,15 @@ public class KDEJobRunner extends
 		}
 		finally {
 			if (fs != null) {
-				fs.close();
+				try {
+					fs.close();
+				}
+				catch (IOException e) {
+					LOGGER.info(e.getMessage());
+					// Attempt to close, but don't throw an error if it is
+					// already closed.
+					// Log message, so find bugs does not complain.
+				}
 			}
 		}
 	}
