@@ -66,9 +66,40 @@ public class AddStoreCommand extends
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
+		
+		// Load SPI options for the given type into pluginOptions.
+		if (storeType != null) {
+			pluginOptions.selectPlugin(storeType);
+			requiredOptions = pluginOptions.getFactoryOptions();
+		}
+		else {	
+			Properties existingProps = getGeoWaveConfigProperties(params);
+			
+			// Try to load the 'default' options.
+			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
-		pluginOptions.selectPlugin(storeType);
-		requiredOptions = pluginOptions.getFactoryOptions();
+			// Load the default index.
+			if (defaultStore != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
+						// Set the required type option.
+						this.storeType = pluginOptions.getType();
+						requiredOptions = pluginOptions.getFactoryOptions();
+					}
+				}
+				catch (ParameterException pe) {
+					// HP Fortify "Improper Output Neutralization" false
+					// positive
+					// What Fortify considers "user input" comes only
+					// from users with OS-level access anyway
+					LOGGER.warn(
+							"Couldn't load default store: " + defaultStore,
+							pe);
+				}
+			}
+		}
 		
 		return true;
 	}

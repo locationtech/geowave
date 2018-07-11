@@ -67,11 +67,41 @@ public class AddIndexCommand extends
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
-	
-		pluginOptions.selectPlugin(type);
-		pluginOptions.setBasicIndexOptions(basicIndexOptions);
-		opts = pluginOptions.getDimensionalityOptions();
 		
+		// Load SPI options for the given type into pluginOptions.
+		if (type != null) {
+			pluginOptions.selectPlugin(type);
+			pluginOptions.setBasicIndexOptions(basicIndexOptions);
+			opts = pluginOptions.getDimensionalityOptions();
+		}
+		else {
+			Properties existingProps = getGeoWaveConfigProperties(params);
+
+			String defaultIndex = existingProps.getProperty(IndexPluginOptions.DEFAULT_PROPERTY_NAMESPACE);
+
+			// Load the default index.
+			if (defaultIndex != null) {
+				try {
+					if (pluginOptions.load(
+							existingProps,
+							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
+						// Set the required type option.
+						this.type = pluginOptions.getType();
+						opts = pluginOptions.getDimensionalityOptions();
+					}
+				}
+				catch (ParameterException pe) {
+					// HP Fortify "Improper Output Neutralization" false
+					// positive
+					// What Fortify considers "user input" comes only
+					// from users with OS-level access anyway
+					LOGGER.warn(
+							"Couldn't load default index: " + defaultIndex,
+							pe);
+				}
+			}
+		}
+	
 		return true;
 	}
 
