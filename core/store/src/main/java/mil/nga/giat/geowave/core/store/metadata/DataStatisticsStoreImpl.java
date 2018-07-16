@@ -130,7 +130,6 @@ public class DataStatisticsStoreImpl extends
 		return null;
 	}
 
-
 	@Override
 	public DataStatistics<?> getDataStatistics(
 			final ByteArrayId adapterId,

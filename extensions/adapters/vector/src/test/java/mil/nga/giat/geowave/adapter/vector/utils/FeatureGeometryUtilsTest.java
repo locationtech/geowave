@@ -48,7 +48,7 @@ public class FeatureGeometryUtilsTest
 			})
 		});
 		final Geometry result = FeatureGeometryUtils.adjustGeo(
-				GeometryUtils.DEFAULT_CRS,
+				GeometryUtils.getDefaultCRS(),
 				multiPolygon);
 
 		assertTrue(result.intersects(multiPolygon));
@@ -78,7 +78,7 @@ public class FeatureGeometryUtilsTest
 			})
 		});
 		final Geometry result = FeatureGeometryUtils.adjustGeo(
-				GeometryUtils.DEFAULT_CRS,
+				GeometryUtils.getDefaultCRS(),
 				singlePoly);
 
 		assertTrue(result.intersects(singlePoly));

@@ -42,7 +42,7 @@ public class RemoveAdapterCommand extends
 	private List<String> parameters = new ArrayList<String>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
-	
+
 	/**
 	 * Return "200 OK" for all removal commands.
 	 */

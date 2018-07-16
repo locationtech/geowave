@@ -472,7 +472,7 @@ public class FeatureDataAdapterTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.getDefaultCRS()); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
@@ -503,7 +503,7 @@ public class FeatureDataAdapterTest
 
 		assertEquals(
 				dataAdapterCopy.getFeatureType().getCoordinateReferenceSystem().getCoordinateSystem(),
-				GeometryUtils.DEFAULT_CRS.getCoordinateSystem());
+				GeometryUtils.getDefaultCRS().getCoordinateSystem());
 	}
 
 	@Test

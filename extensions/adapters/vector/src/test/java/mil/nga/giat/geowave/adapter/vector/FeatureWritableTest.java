@@ -45,7 +45,7 @@ public class FeatureWritableTest
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName("test");
-		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS); // <- Coordinate
+		typeBuilder.setCRS(GeometryUtils.getDefaultCRS()); // <- Coordinate
 		// reference
 		// add attributes in order
 		typeBuilder.add(
