@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,10 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.NoConverter;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
@@ -40,14 +44,13 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.exceptions.MissingArgumentException;
+import mil.nga.giat.geowave.service.rest.field.ParameterRestFieldValue;
 import mil.nga.giat.geowave.service.rest.field.RequestParameters;
 import mil.nga.giat.geowave.service.rest.field.RequestParametersForm;
 import mil.nga.giat.geowave.service.rest.field.RequestParametersJson;
 import mil.nga.giat.geowave.service.rest.field.RestFieldFactory;
 import mil.nga.giat.geowave.service.rest.field.RestFieldValue;
 import mil.nga.giat.geowave.service.rest.operations.RestOperationStatusMessage;
-import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
-import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 
 public class GeoWaveOperationServiceWrapper<T> extends
 		ServerResource
@@ -231,8 +234,14 @@ public class GeoWaveOperationServiceWrapper<T> extends
 								(Class<Enum>) type,
 								strValue.toUpperCase());
 					}
-					else if (CQLFilterOptionProvider.FilterParameter.class.isAssignableFrom(type)) {
-						objValue = new ConvertCQLStrToFilterConverter().convert(strValue);
+					else if (ParameterRestFieldValue.class.isAssignableFrom(f.getClass())) {
+						Field field = ((ParameterRestFieldValue) f).getField();		
+						if (field.isAnnotationPresent(Parameter.class)){
+							Class<? extends IStringConverter<?>> converter = field.getAnnotation(Parameter.class).converter();
+							if (converter != NoConverter.class) {
+								objValue = converter.newInstance().convert(strValue);
+							}
+						}
 					}
 					else {
 						throw new RuntimeException(

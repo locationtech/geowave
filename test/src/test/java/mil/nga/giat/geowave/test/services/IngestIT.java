@@ -262,11 +262,7 @@ public class IngestIT
 	}
 
 	/**
-	 * Currently no matter what the input, a 201 is returned from localToGW. The
-	 * only way to tell if failed or not based on input is through the
-	 * baseServiceClient.
-	 * 
-	 * I also think that all ingest commands (except for listplugins()) should
+	 * I think that all ingest commands (except for listplugins()) should
 	 * return a 202 status instead of a 201, especially since all errors are
 	 * discovered by the baseServiceClient and not the ingestServiceClient.
 	 * Nothing is created directly from the ingestClient call as it simply kicks
