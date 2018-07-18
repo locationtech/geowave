@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.service.rest.field;
 
+import java.lang.reflect.Field;
+
 public interface RestFieldValue<T> extends
 		RestField<T>
 {
@@ -7,4 +9,6 @@ public interface RestFieldValue<T> extends
 			T value )
 			throws IllegalArgumentException,
 			IllegalAccessException;
+	
+	public Field getField();
 }
