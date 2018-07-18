@@ -74,5 +74,9 @@ abstract public class AbstractMainParam<T> implements
 
 	abstract protected String valueToString(
 			T value );
+	
+	public Field getField() {
+		return this.listMainParamField;
+	}
 
 }

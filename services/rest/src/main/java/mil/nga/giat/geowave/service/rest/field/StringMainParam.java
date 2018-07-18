@@ -27,4 +27,7 @@ public class StringMainParam extends
 		return value;
 	}
 
+	public Field getField() {
+		return super.getField();
+	}
 }
