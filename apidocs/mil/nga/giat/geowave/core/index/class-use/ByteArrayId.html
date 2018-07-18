@@ -2244,7 +2244,8 @@
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,scala.Tuple2&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveIndexedRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD-double-">getIndexedGeometryRDD</a></span>(double&nbsp;bufferAmount)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">GeoWaveIndexedRDD.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD-double-boolean-">getIndexedGeometryRDD</a></span>(double&nbsp;bufferAmount,
+                     boolean&nbsp;recalculate)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -2962,6 +2963,12 @@
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#getRangeForId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-">getRangeForId</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;partitionKey,
              <a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;sortKey)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TieredSFCIndexStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/tiered/TieredSFCIndexStrategy.html#reprojectToTier-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Byte-java.math.BigInteger-">reprojectToTier</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;insertId,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Byte.html?is-external=true" title="class or interface in java.lang">Byte</a>&nbsp;reprojectTierId,
+               <a href="http://docs.oracle.com/javase/7/docs/api/java/math/BigInteger.html?is-external=true" title="class or interface in java.math">BigInteger</a>&nbsp;maxDuplicates)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

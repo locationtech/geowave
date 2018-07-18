@@ -174,7 +174,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,scala.Tuple2&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD-double-">getIndexedGeometryRDD</a></span>(double&nbsp;bufferAmount)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html#getIndexedGeometryRDD-double-boolean-">getIndexedGeometryRDD</a></span>(double&nbsp;bufferAmount,
+                     boolean&nbsp;recalculate)</code>&nbsp;</td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code>org.apache.spark.broadcast.Broadcast&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/NumericIndexStrategy.html" title="interface in mil.nga.giat.geowave.core.index">NumericIndexStrategy</a>&gt;</code></td>
@@ -273,13 +274,14 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializabl
 <pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,scala.Tuple2&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD()</pre>
 </li>
 </ul>
-<a name="getIndexedGeometryRDD-double-">
+<a name="getIndexedGeometryRDD-double-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndexedGeometryRDD</h4>
-<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,scala.Tuple2&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD(double&nbsp;bufferAmount)</pre>
+<pre>public&nbsp;org.apache.spark.api.java.JavaPairRDD&lt;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,scala.Tuple2&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,com.vividsolutions.jts.geom.Geometry&gt;&gt;&nbsp;getIndexedGeometryRDD(double&nbsp;bufferAmount,
+                                                                                                                                                   boolean&nbsp;recalculate)</pre>
 </li>
 </ul>
 <a name="getIndexStrategy--">
