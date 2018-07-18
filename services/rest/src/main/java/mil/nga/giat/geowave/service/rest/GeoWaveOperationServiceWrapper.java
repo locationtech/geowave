@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.service.rest;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -30,7 +31,10 @@ import org.restlet.resource.ServerResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.IStringConverter;
+import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.NoConverter;
 
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
@@ -40,6 +44,7 @@ import mil.nga.giat.geowave.core.cli.exceptions.TargetNotFoundException;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.service.rest.exceptions.MissingArgumentException;
+import mil.nga.giat.geowave.service.rest.field.ParameterRestFieldValue;
 import mil.nga.giat.geowave.service.rest.field.RequestParameters;
 import mil.nga.giat.geowave.service.rest.field.RequestParametersForm;
 import mil.nga.giat.geowave.service.rest.field.RequestParametersJson;
@@ -227,7 +232,16 @@ public class GeoWaveOperationServiceWrapper<T> extends
 					else if (Enum.class.isAssignableFrom(type)) {
 						objValue = Enum.valueOf(
 								(Class<Enum>) type,
-								strValue);
+								strValue.toUpperCase());
+					}
+					else if (ParameterRestFieldValue.class.isAssignableFrom(f.getClass())) {
+						Field field = ((ParameterRestFieldValue) f).getField();		
+						if (field.isAnnotationPresent(Parameter.class)){
+							Class<? extends IStringConverter<?>> converter = field.getAnnotation(Parameter.class).converter();
+							if (converter != NoConverter.class) {
+								objValue = converter.newInstance().convert(strValue);
+							}
+						}
 					}
 					else {
 						throw new RuntimeException(
@@ -281,6 +295,25 @@ public class GeoWaveOperationServiceWrapper<T> extends
 
 		try {
 			operation.prepare(params);
+			
+			try {
+				injectParameters(
+						parameters,
+						operation);
+			}
+			catch (final Exception e) {
+				LOGGER.error("Entered an error handling a request.", e.getMessage());
+				setStatus(
+						Status.CLIENT_ERROR_BAD_REQUEST,
+						e);
+				final RestOperationStatusMessage rm = new RestOperationStatusMessage();
+				rm.status = RestOperationStatusMessage.StatusType.ERROR;
+				rm.message = "exception occurred";
+				rm.data = e;
+				final JacksonRepresentation<RestOperationStatusMessage> rep = new JacksonRepresentation<RestOperationStatusMessage>(rm);
+				return rep;
+			}
+			
 			final RestOperationStatusMessage rm = new RestOperationStatusMessage();	
 			
 			if(operation.runAsync()) {

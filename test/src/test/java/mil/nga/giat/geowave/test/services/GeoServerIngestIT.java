@@ -128,7 +128,7 @@ public class GeoServerIngestIT
 				"Should Create 'testomatic' Workspace",
 				201,
 				geoServerServiceClient.addWorkspace("testomatic"));
-		configServiceClient.addStore(
+		configServiceClient.addStoreReRoute(
 				TestUtils.TEST_NAMESPACE,
 				dataStorePluginOptions.getType(),
 				TestUtils.TEST_NAMESPACE,

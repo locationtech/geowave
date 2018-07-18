@@ -91,11 +91,11 @@ public class ConfigServicesIT
 	}
 
 	@Test
-	public void testAddStore() {
+	public void testAddStoreReRoute() {
 		TestUtils.assertStatusCode(
 				"Should Create Store",
 				201,
-				configServiceClient.addStore(
+				configServiceClient.addStoreReRoute(
 						storeName,
 						dataStorePluginOptions.getType(),
 						null,
@@ -104,7 +104,7 @@ public class ConfigServicesIT
 		TestUtils.assertStatusCode(
 				"Should fail to create duplicate store",
 				400,
-				configServiceClient.addStore(
+				configServiceClient.addStoreReRoute(
 						storeName,
 						dataStorePluginOptions.getType(),
 						null,
@@ -146,6 +146,27 @@ public class ConfigServicesIT
 				"Should fail to create duplicate index",
 				400,
 				secondAdd);
+	}
+
+	@Test
+	public void testAddIndex() {
+		Response spatial = configServiceClient.addIndex(
+				spatialIndexName,
+				"spatial");
+
+		TestUtils.assertStatusCode(
+				"Should Create Spatial Index",
+				201,
+				spatial);
+
+		Response spatial_temporal = configServiceClient.addIndex(
+				spatialTemporalIndexName,
+				"spatial_temporal");
+
+		TestUtils.assertStatusCode(
+				"Should Create Spatial Index",
+				201,
+				spatial_temporal);
 	}
 
 	@Test
@@ -191,7 +212,7 @@ public class ConfigServicesIT
 
 	@Test
 	public void testRemoveStore() {
-		configServiceClient.addStore(
+		configServiceClient.addStoreReRoute(
 				"test_remove_store",
 				dataStorePluginOptions.getType(),
 				null,
@@ -324,11 +345,5 @@ public class ConfigServicesIT
 				"GeoServer was not set correctly",
 				"test-geoserver",
 				(String) values.get("geoserver.url"));
-	}
-
-	@Test
-	@Ignore
-	public void addSpatialTemporalIndex() {
-		// TODO: Implement this test
 	}
 }

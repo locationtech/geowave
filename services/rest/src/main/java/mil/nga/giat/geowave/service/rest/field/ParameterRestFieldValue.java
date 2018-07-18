@@ -33,5 +33,9 @@ public class ParameterRestFieldValue extends
 				instance,
 				value);
 	}
+	
+	public Field getField() {
+		return super.getField();
+	}
 
 }

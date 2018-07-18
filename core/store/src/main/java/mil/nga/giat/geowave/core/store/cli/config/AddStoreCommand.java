@@ -26,15 +26,16 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand extends
-		DefaultOperation implements
-		Command
+	ServiceEnabledCommand<String>
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
@@ -56,21 +57,24 @@ public class AddStoreCommand extends
 	}, required = true, description = "The type of store, such as accumulo, hbase, etc")
 	private String storeType;
 
-	@ParametersDelegate
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+	
+	@ParametersDelegate
+	private StoreFactoryOptions requiredOptions;
 
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
-
-		Properties existingProps = getGeoWaveConfigProperties(params);
-
+		
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
 			pluginOptions.selectPlugin(storeType);
+			requiredOptions = pluginOptions.getFactoryOptions();
 		}
-		else {
+		else {	
+			Properties existingProps = getGeoWaveConfigProperties(params);
+			
 			// Try to load the 'default' options.
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
@@ -82,6 +86,7 @@ public class AddStoreCommand extends
 							DataStorePluginOptions.getStoreNamespace(defaultStore))) {
 						// Set the required type option.
 						this.storeType = pluginOptions.getType();
+						requiredOptions = pluginOptions.getFactoryOptions();
 					}
 				}
 				catch (ParameterException pe) {
@@ -95,15 +100,18 @@ public class AddStoreCommand extends
 				}
 			}
 		}
-
-		// Successfully prepared.
+		
 		return true;
 	}
 
 	@Override
 	public void execute(
 			OperationParams params ) {
-
+		computeResults(params);
+	}
+	
+	@Override
+	public String computeResults(OperationParams params) {
 		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Ensure that a name is chosen.
@@ -144,6 +152,18 @@ public class AddStoreCommand extends
 				existingProps,
 				pluginOptions.getFactoryOptions().getClass(),
 				getNamespace() + "." + DataStorePluginOptions.OPTS);
+		
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			String[] split = key.toString().split(
+					"\\.");
+			if (split.length > 1) {
+				if (split[1].equals(parameters.get(0))) {
+					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+				}
+			}
+		}
+		return builder.toString();
 	}
 
 	public DataStorePluginOptions getPluginOptions() {

@@ -31,7 +31,11 @@ public class RequestParametersForm extends
 	@Override
 	public List<?> getList(
 			String parameter ) {
-		return Arrays.asList(splitStringParameter(parameter));
+		String[] str = splitStringParameter(parameter);
+		if (str == null) {
+			return null;
+		}
+		return Arrays.asList(str);
 	}
 
 	@Override
