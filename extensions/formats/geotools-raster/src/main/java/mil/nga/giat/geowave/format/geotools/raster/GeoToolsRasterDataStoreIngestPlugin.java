@@ -210,7 +210,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 										}),
 								optionProvider.getTileSize(),
 								optionProvider.isBuildPyramid(),
-								optionProvider.isBuildHistogream(),
+								optionProvider.isBuildHistogram(),
 								new double[][] {
 									nodata[b]
 								});
@@ -228,7 +228,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 							coverage,
 							optionProvider.getTileSize(),
 							optionProvider.isBuildPyramid(),
-							optionProvider.isBuildHistogream(),
+							optionProvider.isBuildHistogram(),
 							optionProvider.getNodata(coverage.getNumSampleDimensions()));
 					coverages.add(new GeoWaveData<GridCoverage>(
 							adapter,

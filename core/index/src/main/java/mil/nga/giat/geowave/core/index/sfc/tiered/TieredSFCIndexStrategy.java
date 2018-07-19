@@ -590,6 +590,36 @@ public class TieredSFCIndexStrategy implements
 		return rowIdOffset;
 	}
 
+	public InsertionIds reprojectToTier(
+			ByteArrayId insertId,
+			Byte reprojectTierId,
+			BigInteger maxDuplicates ) {
+		MultiDimensionalNumericData originalRange = this.getRangeForId(
+				insertId,
+				null);
+		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+				originalRange,
+				baseDefinitions);
+
+		int sfcIndex = orderedSfcIndexToTierId.inverse().get(
+				reprojectTierId);
+		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
+				ranges.length);
+		for (int iRange = 0; iRange < ranges.length; iRange++) {
+			BinnedNumericDataset reprojectRange = ranges[iRange];
+			SinglePartitionInsertionIds tierIds = TieredSFCIndexStrategy.getRowIdsAtTier(
+					reprojectRange,
+					reprojectTierId,
+					orderedSfcs[sfcIndex],
+					maxDuplicates,
+					sfcIndex);
+			retVal.add(tierIds);
+		}
+		return new InsertionIds(
+				retVal);
+
+	}
+
 	@Override
 	public List<IndexMetaData> createMetaData() {
 		return Collections.singletonList((IndexMetaData) new TierIndexMetaData(

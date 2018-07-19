@@ -119,7 +119,7 @@ public class RemoteIT
 				}
 			}
 		}
-		configServiceClient.addStore(
+		configServiceClient.addStoreReRoute(
 				store_name,
 				dataStoreOptions.getType(),
 				TestUtils.TEST_NAMESPACE,

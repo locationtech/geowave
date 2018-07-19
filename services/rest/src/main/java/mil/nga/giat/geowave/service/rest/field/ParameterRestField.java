@@ -36,4 +36,8 @@ public class ParameterRestField implements
 	public boolean isRequired() {
 		return parameter.required();
 	}
+	
+	public Field getField() {
+		return this.field;
+	}
 }

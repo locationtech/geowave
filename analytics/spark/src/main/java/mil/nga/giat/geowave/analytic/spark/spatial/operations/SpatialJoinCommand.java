@@ -30,8 +30,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 @GeowaveOperation(name = "spatialjoin", parentOperation = AnalyticSection.class)
 @Parameters(commandDescription = "Spatial Join using Spark ")
 public class SpatialJoinCommand extends
-		ServiceEnabledCommand<Void> implements
-		Command
+		ServiceEnabledCommand<Void>
 {
 	@Parameter(description = "<left storename> <right storename> <output storename>")
 	private List<String> parameters = new ArrayList<String>();

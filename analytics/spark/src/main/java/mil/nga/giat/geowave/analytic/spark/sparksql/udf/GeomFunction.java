@@ -1,9 +1,6 @@
 package mil.nga.giat.geowave.analytic.spark.sparksql.udf;
 
 import org.apache.spark.sql.api.java.UDF2;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 
