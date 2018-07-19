@@ -195,13 +195,15 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			if (field.isAnnotationPresent(Parameter.class)) {
 				Class<? extends IStringConverter<?>> converter = field.getAnnotation(
 						Parameter.class).converter();
-				if (converter != NoConverter.class && strValue != null) {
-					try {
-						objValue = converter.newInstance().convert(
-							strValue);
-					}
-					catch(InstantiationException e) {
-						LOGGER.warn("Cannot convert parameter since converter does not have zero argument constructor");	
+				if(converter != null) {
+					if (converter != NoConverter.class && strValue != null) {
+						try {
+							objValue = converter.newInstance().convert(
+								strValue);
+						}
+						catch(InstantiationException e) {
+							LOGGER.warn("Cannot convert parameter since converter does not have zero argument constructor");	
+						}
 					}
 				}
 			}

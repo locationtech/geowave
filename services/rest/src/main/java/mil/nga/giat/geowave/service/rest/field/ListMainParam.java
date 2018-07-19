@@ -30,9 +30,5 @@ public class ListMainParam extends
 				value,
 				',');
 	}
-	
-	public Field getField() {
-		return super.getField();
-	}
 
 }
