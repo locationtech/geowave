@@ -19,7 +19,6 @@ public interface FileUploadService
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/fileupload")
 	public Response uploadFile(
-			FormDataMultiPart multiPart);
-			
+			FormDataMultiPart multiPart );
 
 }

@@ -460,8 +460,10 @@ public class DistributedRenderOptions implements
 		bitSet.set(
 				14,
 				style != null);
-		final boolean storeCRS = !((envelope.getCoordinateReferenceSystem() == null) || GeometryUtils.DEFAULT_CRS
-				.equals(envelope.getCoordinateReferenceSystem()));
+		final boolean storeCRS = !((envelope.getCoordinateReferenceSystem() == null) || GeometryUtils
+				.getDefaultCRS()
+				.equals(
+						envelope.getCoordinateReferenceSystem()));
 		bitSet.set(
 				15,
 				storeCRS);
@@ -633,11 +635,11 @@ public class DistributedRenderOptions implements
 				LOGGER.warn(
 						"Unable to parse coordinate reference system",
 						e);
-				crs = GeometryUtils.DEFAULT_CRS;
+				crs = GeometryUtils.getDefaultCRS();
 			}
 		}
 		else {
-			crs = GeometryUtils.DEFAULT_CRS;
+			crs = GeometryUtils.getDefaultCRS();
 		}
 		envelope = new ReferencedEnvelope(
 				minX,

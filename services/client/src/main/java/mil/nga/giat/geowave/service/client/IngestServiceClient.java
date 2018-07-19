@@ -175,7 +175,7 @@ public class IngestServiceClient
 	}
 
 	public Response localToKafka(
-			final String file_or_directory) {
+			final String file_or_directory ) {
 
 		return localToKafka(
 				file_or_directory,

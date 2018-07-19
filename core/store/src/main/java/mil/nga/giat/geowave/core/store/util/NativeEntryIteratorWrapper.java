@@ -43,7 +43,7 @@ public class NativeEntryIteratorWrapper<T> extends
 
 		initializeBitPosition(maxResolutionSubsamplingPerDimension);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	protected T decodeRow(

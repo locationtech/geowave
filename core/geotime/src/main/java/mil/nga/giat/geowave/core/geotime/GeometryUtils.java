@@ -10,13 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.geotime;
 
+import java.net.MalformedURLException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.geotools.factory.GeoTools;
 import org.geotools.referencing.CRS;
-import org.opengis.referencing.FactoryException;
+import org.geotools.referencing.crs.DefaultGeographicCRS;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +35,6 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -43,6 +46,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
+import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
 
 /**
  * This class contains a set of Geometry utility methods that are generally
@@ -52,22 +56,49 @@ public class GeometryUtils
 {
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
+	private static final Object MUTEX = new Object();
+	private static final Object MUTEX_DEFAULT_CRS = new Object();
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 	public static final String DEFAULT_CRS_STR = "EPSG:4326";
-	public static final CoordinateReferenceSystem DEFAULT_CRS;
-	static {
-		try {
-			DEFAULT_CRS = CRS.decode(
-					DEFAULT_CRS_STR,
-					true);
+	private static CoordinateReferenceSystem defaultCrsSingleton;
+	private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
+
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
+	public static CoordinateReferenceSystem getDefaultCRS() {
+		if (defaultCrsSingleton == null) { // avoid sync penalty if we can
+			synchronized (MUTEX_DEFAULT_CRS) {
+				// have to do this inside the sync to avoid double init
+				if (defaultCrsSingleton == null) {
+					try {
+						initClassLoader();
+						defaultCrsSingleton = CRS.decode(
+								DEFAULT_CRS_STR,
+								true);
+					}
+					catch (final Exception e) {
+						LOGGER.error(
+								"Unable to decode " + DEFAULT_CRS_STR + " CRS",
+								e);
+						defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+					}
+				}
+			}
 		}
-		catch (final Exception e) {
-			LOGGER.error(
-					"Unable to decode " + DEFAULT_CRS_STR + " CRS",
-					e);
-			throw new RuntimeException(
-					"Unable to initialize " + DEFAULT_CRS_STR + " object",
-					e);
+		return defaultCrsSingleton;
+	}
+
+	public static void initClassLoader()
+			throws MalformedURLException {
+		synchronized (MUTEX) {
+			final ClassLoader myCl = GeometryUtils.class.getClassLoader();
+			if (initializedClassLoaders.contains(myCl)) {
+				return;
+			}
+			final ClassLoader classLoader = ClasspathUtils.transformClassLoader(myCl);
+			if (classLoader != null) {
+				GeoTools.addClassLoader(classLoader);
+			}
+			initializedClassLoaders.add(myCl);
 		}
 	}
 
@@ -230,7 +261,7 @@ public class GeometryUtils
 	}
 
 	public static MultiDimensionalNumericData getBoundsFromEnvelope(
-			Envelope envelope ) {
+			final Envelope envelope ) {
 		final NumericRange[] boundsPerDimension = new NumericRange[2];
 		boundsPerDimension[0] = new NumericRange(
 				envelope.getMinX(),
@@ -374,11 +405,11 @@ public class GeometryUtils
 	}
 
 	public static CoordinateReferenceSystem getIndexCrs(
-			PrimaryIndex[] indices ) {
+			final PrimaryIndex[] indices ) {
 
 		CoordinateReferenceSystem indexCrs = null;
 
-		for (PrimaryIndex primaryindx : indices) {
+		for (final PrimaryIndex primaryindx : indices) {
 
 			// for first iteration
 			if (indexCrs == null) {
@@ -393,7 +424,7 @@ public class GeometryUtils
 								"Multiple indices with different CRS is not supported");
 					}
 					else {
-						if (!indexCrs.equals(GeometryUtils.DEFAULT_CRS)) {
+						if (!indexCrs.equals(getDefaultCRS())) {
 							LOGGER.error("Multiple indices with different CRS is not supported");
 							throw new RuntimeException(
 									"Multiple indices with different CRS is not supported");
@@ -408,7 +439,7 @@ public class GeometryUtils
 	}
 
 	public static CoordinateReferenceSystem getIndexCrs(
-			PrimaryIndex index ) {
+			final PrimaryIndex index ) {
 
 		CoordinateReferenceSystem indexCrs = null;
 
@@ -416,13 +447,13 @@ public class GeometryUtils
 			indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();
 		}
 		else {
-			indexCrs = GeometryUtils.DEFAULT_CRS;
+			indexCrs = getDefaultCRS();
 		}
 		return indexCrs;
 	}
 
 	public static String getCrsCode(
-			CoordinateReferenceSystem crs ) {
+			final CoordinateReferenceSystem crs ) {
 
 		return (CRS.toSRS(crs));
 	}

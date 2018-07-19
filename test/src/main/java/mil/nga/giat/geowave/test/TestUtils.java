@@ -523,7 +523,7 @@ public class TestUtils
 		if (crs != null) {
 			try {
 				mathTransform = CRS.findMathTransform(
-						GeometryUtils.DEFAULT_CRS,
+						GeometryUtils.getDefaultCRS(),
 						crs,
 						true);
 			}
