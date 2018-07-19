@@ -57,29 +57,31 @@ public class GeometryUtils
 	public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeometryUtils.class);
 	private static final Object MUTEX = new Object();
+	private static final Object MUTEX_DEFAULT_CRS = new Object();
 	private static final int DEFAULT_DIMENSIONALITY = 2;
 	public static final String DEFAULT_CRS_STR = "EPSG:4326";
 	private static CoordinateReferenceSystem defaultCrsSingleton;
 	private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
 
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings()
 	public static CoordinateReferenceSystem getDefaultCRS() {
-		if (defaultCrsSingleton == null) {
-			// this "can" be decoded twice in the absence of a synchronized
-			// block
-			// but its not really a problem and should be slightly more
-			// efficient
-			// under most conditions
-			try {
-				initClassLoader();
-				defaultCrsSingleton = CRS.decode(
-						DEFAULT_CRS_STR,
-						true);
-			}
-			catch (final Exception e) {
-				LOGGER.error(
-						"Unable to decode " + DEFAULT_CRS_STR + " CRS",
-						e);
-				defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+		if (defaultCrsSingleton == null) { // avoid sync penalty if we can
+			synchronized (MUTEX_DEFAULT_CRS) {
+				// have to do this inside the sync to avoid double init
+				if (defaultCrsSingleton == null) {
+					try {
+						initClassLoader();
+						defaultCrsSingleton = CRS.decode(
+								DEFAULT_CRS_STR,
+								true);
+					}
+					catch (final Exception e) {
+						LOGGER.error(
+								"Unable to decode " + DEFAULT_CRS_STR + " CRS",
+								e);
+						defaultCrsSingleton = DefaultGeographicCRS.WGS84;
+					}
+				}
 			}
 		}
 		return defaultCrsSingleton;
