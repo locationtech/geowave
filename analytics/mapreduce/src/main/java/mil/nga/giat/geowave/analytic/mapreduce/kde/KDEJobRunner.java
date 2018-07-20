@@ -315,7 +315,7 @@ public class KDEJobRunner extends
 				final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 						.accept(
 								new ExtractGeometryFilterVisitor(
-										GeometryUtils.DEFAULT_CRS,
+										GeometryUtils.getDefaultCRS(),
 										geometryAttribute),
 								null);
 				bbox = geoAndCompareOpData.getGeometry();

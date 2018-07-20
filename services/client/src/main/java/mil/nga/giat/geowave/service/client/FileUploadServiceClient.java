@@ -40,16 +40,15 @@ public class FileUploadServiceClient
 			final String file_path ) {
 
 		final FileDataBodyPart filePart = new FileDataBodyPart(
-				"file", 
-				new File(file_path));
-		
-		final FormDataMultiPart multiPart = new FormDataMultiPart();
-		
-		multiPart.bodyPart(
-				filePart);
+				"file",
+				new File(
+						file_path));
 
-		final Response resp = fileUploadService.uploadFile(
-				multiPart);
+		final FormDataMultiPart multiPart = new FormDataMultiPart();
+
+		multiPart.bodyPart(filePart);
+
+		final Response resp = fileUploadService.uploadFile(multiPart);
 
 		return resp;
 	}

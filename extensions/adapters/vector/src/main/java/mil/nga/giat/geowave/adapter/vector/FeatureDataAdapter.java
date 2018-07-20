@@ -323,7 +323,7 @@ public class FeatureDataAdapter extends
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
 
 		if (persistedCRS == null) {
-			persistedCRS = GeometryUtils.DEFAULT_CRS;
+			persistedCRS = GeometryUtils.getDefaultCRS();
 		}
 
 		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
@@ -739,7 +739,7 @@ public class FeatureDataAdapter extends
 	protected Object defaultTypeDataFromBinary(
 			final byte[] bytes ) {
 		try {
-			FeatureDataUtils.initClassLoader();
+			GeometryUtils.initClassLoader();
 		}
 		catch (final MalformedURLException e) {
 			LOGGER.warn(

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
@@ -35,7 +36,8 @@
 	<properties>
 		<spark.version>2.2.0</spark.version>
 		<geotools.version>18.1</geotools.version>
-		<guava.version>14.0-rc1</guava.version>		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
+		<guava.version>14.0-rc1</guava.version>
+		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.12.1</geoserver.version>
 		<accumulo.version>1.8.1</accumulo.version>
 		<accumulo.api>1.8</accumulo.api>
@@ -98,12 +100,12 @@
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-server</artifactId>
 				<version>${jetty.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-util</artifactId>
 				<version>${jetty.version}</version>
-			</dependency>		
+			</dependency>
 			<dependency>
 				<groupId>org.eclipse.jetty</groupId>
 				<artifactId>jetty-webapp</artifactId>
@@ -128,7 +130,7 @@
 				<groupId>org.scala-lang</groupId>
 				<artifactId>scala-reflect</artifactId>
 				<version>${scala.version}</version>
-			</dependency>			
+			</dependency>
 			<dependency>
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
@@ -531,7 +533,8 @@
 				<artifactId>annotations</artifactId>
 				<version>${findbugs.version}</version>
 				<scope>compile</scope>
-			</dependency>			<dependency>
+			</dependency>
+			<dependency>
 				<groupId>org.glassfish.jersey.media</groupId>
 				<artifactId>jersey-media-multipart</artifactId>
 				<version>${jersey.version}</version>
@@ -606,6 +609,11 @@
 				<artifactId>spring-security-core</artifactId>
 				<version>${spring-security.version}</version>
 				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.jpountz.lz4</groupId>
+				<artifactId>lz4</artifactId>
+				<version>1.3.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

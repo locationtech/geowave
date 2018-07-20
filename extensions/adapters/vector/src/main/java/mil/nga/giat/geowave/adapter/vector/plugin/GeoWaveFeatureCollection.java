@@ -139,7 +139,7 @@ public class GeoWaveFeatureCollection extends
 						stats.getMaxX(),
 						stats.getMinY(),
 						stats.getMaxY(),
-						GeometryUtils.DEFAULT_CRS);
+						GeometryUtils.getDefaultCRS());
 			}
 			final Iterator<SimpleFeature> iterator = openIterator();
 			if (!iterator.hasNext()) {
@@ -172,14 +172,14 @@ public class GeoWaveFeatureCollection extends
 					180,
 					-90,
 					90,
-					GeometryUtils.DEFAULT_CRS);
+					GeometryUtils.getDefaultCRS());
 		}
 		return new ReferencedEnvelope(
 				minx,
 				maxx,
 				miny,
 				maxy,
-				GeometryUtils.DEFAULT_CRS);
+				GeometryUtils.getDefaultCRS());
 
 	}
 
@@ -337,7 +337,7 @@ public class GeoWaveFeatureCollection extends
 				SubsampleProcess.OUTPUT_BBOX)) {
 			return ((ReferencedEnvelope) query.getHints().get(
 					SubsampleProcess.OUTPUT_BBOX)).transform(
-					GeometryUtils.DEFAULT_CRS,
+					GeometryUtils.getDefaultCRS(),
 					true);
 		}
 		return null;
@@ -357,7 +357,7 @@ public class GeoWaveFeatureCollection extends
 				.getLocalName();
 		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
-				GeometryUtils.DEFAULT_CRS,
+				GeometryUtils.getDefaultCRS(),
 				geomAtrributeName);
 		if (geoAndCompareOp == null) {
 			return reader.clipIndexedBBOXConstraints(null);

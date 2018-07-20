@@ -463,6 +463,7 @@ public class RasterDataAdapter implements
 	private synchronized void staticInit() {
 		if (!classInit) {
 			try {
+				GeometryUtils.initClassLoader();
 				SourceThresholdFixMosaicDescriptor.register(false);
 				WarpRIF.register(false);
 				MapProjection.SKIP_SANITY_CHECKS = true;
@@ -528,7 +529,7 @@ public class RasterDataAdapter implements
 				}
 			}
 			final MultiDimensionalNumericData bounds;
-			if (indexCrs.equals(GeometryUtils.DEFAULT_CRS)) {
+			if (indexCrs.equals(GeometryUtils.getDefaultCRS())) {
 				bounds = GeometryUtils.basicConstraintSetFromEnvelope(
 						projectedReferenceEnvelope).getIndexConstraints(
 						indexStrategy);

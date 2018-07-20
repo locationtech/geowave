@@ -40,7 +40,7 @@ public class DynamoDBMetadataDeleter implements
 		// well-defined and it is deleting a single entry at a time
 
 		final String tableName = operations.getMetadataTableName(metadataType);
-		
+
 		final Map<String, AttributeValue> key = new HashMap<>();
 		key.put(
 				DynamoDBOperations.METADATA_PRIMARY_ID_KEY,
@@ -51,11 +51,11 @@ public class DynamoDBMetadataDeleter implements
 					DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
 					new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
 		}
-		
+
 		operations.getClient().deleteItem(
 				tableName,
 				key);
-		
+
 		return true;
 	}
 

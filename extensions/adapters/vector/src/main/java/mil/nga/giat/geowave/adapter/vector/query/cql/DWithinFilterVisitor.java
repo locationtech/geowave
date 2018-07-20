@@ -34,7 +34,7 @@ public class DWithinFilterVisitor extends
 				Pair<Geometry, Double> geometryAndDegrees;
 
 				geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils.buffer(
-						GeometryUtils.DEFAULT_CRS,
+						GeometryUtils.getDefaultCRS(),
 						filter.getExpression2().evaluate(
 								extraData,
 								Geometry.class),
@@ -50,7 +50,7 @@ public class DWithinFilterVisitor extends
 			else if ((filter.getExpression2() instanceof PropertyName) && (filter.getExpression1() instanceof Literal)) {
 				final Pair<Geometry, Double> geometryAndDegrees = mil.nga.giat.geowave.adapter.vector.utils.FeatureGeometryUtils
 						.buffer(
-								GeometryUtils.DEFAULT_CRS,
+								GeometryUtils.getDefaultCRS(),
 								filter.getExpression1().evaluate(
 										extraData,
 										Geometry.class),
