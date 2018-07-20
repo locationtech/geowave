@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.slf4j.Logger;
@@ -98,6 +99,9 @@ public class RasterTile<T extends Persistable> implements
 
 					@Override
 					public ByteString next() {
+						if (!hasNext()) {
+							throw new NoSuchElementException();
+						}
 						return ByteString
 								.copyFrom(
 										byteBank[index++]);
