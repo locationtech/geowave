@@ -8,6 +8,7 @@ mil.nga.giat.geowave.adapter.raster.operations
 mil.nga.giat.geowave.adapter.raster.operations.options
 mil.nga.giat.geowave.adapter.raster.plugin
 mil.nga.giat.geowave.adapter.raster.plugin.gdal
+mil.nga.giat.geowave.adapter.raster.protobuf
 mil.nga.giat.geowave.adapter.raster.resize
 mil.nga.giat.geowave.adapter.raster.stats
 mil.nga.giat.geowave.adapter.raster.util
