@@ -931,6 +931,11 @@ public class HBaseOperations implements
 		}
 	}
 
+	protected String getMetadataTableName(
+			MetadataType type ) {
+		return AbstractGeoWavePersistence.METADATA_TABLE;
+	}
+
 	@Override
 	public Writer createWriter(
 			final ByteArrayId indexId,
@@ -978,7 +983,7 @@ public class HBaseOperations implements
 	@Override
 	public MetadataWriter createMetadataWriter(
 			final MetadataType metadataType ) {
-		final TableName tableName = getTableName(AbstractGeoWavePersistence.METADATA_TABLE);
+		final TableName tableName = getTableName(getMetadataTableName(metadataType));
 		try {
 			if (options.isCreateTable()) {
 				createTable(
@@ -994,7 +999,7 @@ public class HBaseOperations implements
 						final BasicOptionProvider optionProvider = new BasicOptionProvider(
 								new HashMap<>());
 						ensureServerSideOperationsObserverAttached(new ByteArrayId(
-								AbstractGeoWavePersistence.METADATA_TABLE));
+								getMetadataTableName(metadataType)));
 						ServerOpHelper.addServerSideMerging(
 								this,
 								DataStatisticsStoreImpl.STATISTICS_COMBINER_NAME,
@@ -1002,7 +1007,7 @@ public class HBaseOperations implements
 								MergingServerOp.class.getName(),
 								MergingVisibilityServerOp.class.getName(),
 								optionProvider,
-								AbstractGeoWavePersistence.METADATA_TABLE);
+								getMetadataTableName(metadataType));
 					}
 				}
 			}
@@ -1012,7 +1017,7 @@ public class HBaseOperations implements
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"Error creating metadata table: " + AbstractGeoWavePersistence.METADATA_TABLE,
+					"Error creating metadata table: " + getMetadataTableName(metadataType),
 					e);
 		}
 
@@ -1604,7 +1609,7 @@ public class HBaseOperations implements
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				return admin.tableExists(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+				return admin.tableExists(getTableName(getMetadataTableName(type)));
 			}
 		}
 	}
@@ -1618,21 +1623,26 @@ public class HBaseOperations implements
 			return null;
 		}
 		try {
-			if (!indexExists(AbstractGeoWavePersistence.METADATA_INDEX_ID)) {
+			// use Index as the type to check for version (for hbase type
+			// doesn't matter anyways)
+			MetadataType type = MetadataType.INDEX;
+			String tableName = getMetadataTableName(type);
+			if (!indexExists(new ByteArrayId(
+					tableName))) {
 				createTable(
 						HBaseOperations.METADATA_CFS_VERSIONING,
 						StringColumnFamilyFactory.getSingletonInstance(),
-						getTableName(getQualifiedTableName(AbstractGeoWavePersistence.METADATA_TABLE)));
+						getTableName(getQualifiedTableName(tableName)));
 			}
 
 			// Use the row count coprocessor
 			if (options.isVerifyCoprocessors()) {
 				verifyCoprocessor(
-						AbstractGeoWavePersistence.METADATA_TABLE,
+						tableName,
 						VersionEndpoint.class.getName(),
 						options.getCoprocessorJar());
 			}
-			final Table table = getTable(AbstractGeoWavePersistence.METADATA_TABLE);
+			final Table table = getTable(tableName);
 			final Map<byte[], List<String>> versionInfoResponse = table.coprocessorService(
 					VersionProtos.VersionService.class,
 					null,

@@ -131,6 +131,17 @@ public class DataStatisticsStoreImpl extends
 		return null;
 	}
 
+	protected ByteArrayId shortToByteArrayId(
+			short internalAdapterId ) {
+		return new ByteArrayId(
+				ByteArrayUtils.shortToByteArray(internalAdapterId));
+	}
+
+	protected short byteArrayToShort(
+			byte[] bytes ) {
+		return ByteArrayUtils.byteArrayToShort(bytes);
+	}
+
 	@Override
 	public DataStatistics<?> getDataStatistics(
 			final short internalAdapterId,
@@ -138,8 +149,7 @@ public class DataStatisticsStoreImpl extends
 			final String... authorizations ) {
 		return internalGetObject(
 				statisticsId,
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(internalAdapterId)),
+				shortToByteArrayId(internalAdapterId),
 				// for data statistics we don't want to log if its not found
 				false,
 				authorizations);
@@ -153,7 +163,7 @@ public class DataStatisticsStoreImpl extends
 				entry,
 				authorizations);
 		if (stats != null) {
-			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
+			stats.setInternalDataAdapterId(byteArrayToShort(entry.getSecondaryId()));
 			stats.setStatisticsId(new ByteArrayId(
 					entry.getPrimaryId()));
 			final byte[] visibility = entry.getVisibility();
@@ -173,8 +183,7 @@ public class DataStatisticsStoreImpl extends
 	@Override
 	protected ByteArrayId getSecondaryId(
 			final DataStatistics<?> persistedObject ) {
-		return new ByteArrayId(
-				ByteArrayUtils.shortToByteArray(persistedObject.getInternalDataAdapterId()));
+		return shortToByteArrayId(persistedObject.getInternalDataAdapterId());
 	}
 
 	@Override
@@ -194,23 +203,21 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public boolean removeStatistics(
-			final short adapterId,
+			final short internalAdapterId,
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
 		return deleteObject(
 				statisticsId,
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(adapterId)),
+				shortToByteArrayId(internalAdapterId),
 				authorizations);
 	}
 
 	@Override
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			final short adapterId,
+			final short internalAdapterId,
 			final String... authorizations ) {
 		return getAllObjectsWithSecondaryId(
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(adapterId)),
+				shortToByteArrayId(internalAdapterId),
 				authorizations);
 	}
 
@@ -222,11 +229,10 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public void removeAllStatistics(
-			final short adapterId,
+			final short internalAdapterId,
 			final String... authorizations ) {
 		deleteObjects(
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(adapterId)),
+				shortToByteArrayId(internalAdapterId),
 				authorizations);
 	}
 }

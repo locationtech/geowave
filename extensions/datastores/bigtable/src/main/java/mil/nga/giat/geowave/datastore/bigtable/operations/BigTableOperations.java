@@ -23,6 +23,8 @@ import com.google.cloud.bigtable.hbase.BigtableRegionLocator;
 import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import mil.nga.giat.geowave.core.store.operations.MetadataType;
 import mil.nga.giat.geowave.datastore.bigtable.BigTableConnectionPool;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
@@ -59,6 +61,11 @@ public class BigTableOperations extends
 		}
 
 		return regionLocator;
+	}
+
+	protected String getMetadataTableName(
+			MetadataType type ) {
+		return AbstractGeoWavePersistence.METADATA_TABLE + "_" + type.name();
 	}
 
 	@Override

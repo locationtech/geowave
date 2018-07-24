@@ -14,10 +14,17 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryHelper;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.datastore.bigtable.operations.BigTableOperations;
 import mil.nga.giat.geowave.datastore.bigtable.operations.config.BigTableOptions;
 import mil.nga.giat.geowave.datastore.hbase.HBaseDataStore;
+import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
+import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class BigTableDataStoreFactory extends
 		DataStoreFactory
@@ -40,10 +47,28 @@ public class BigTableDataStoreFactory extends
 					"Expected " + BigTableOptions.class.getSimpleName());
 		}
 
-		final DataStoreOperations bigtableOperations = helper.createOperations(options);
+		final BigTableOperations bigtableOperations = (BigTableOperations) helper.createOperations(options);
 
+		HBaseOptions hbaseOptions = ((BigTableOptions) options).getHBaseOptions();
+		// make sure to explicitly use the constructor with
+		// BigTableDataStatisticsStore
 		return new HBaseDataStore(
-				(BigTableOperations) bigtableOperations,
-				((BigTableOptions) options).getHBaseOptions());
+				new IndexStoreImpl(
+						bigtableOperations,
+						hbaseOptions),
+				new AdapterStoreImpl(
+						bigtableOperations,
+						hbaseOptions),
+				new BigTableDataStatisticsStore(
+						bigtableOperations,
+						hbaseOptions),
+				new AdapterIndexMappingStoreImpl(
+						bigtableOperations,
+						hbaseOptions),
+				new SecondaryIndexStoreImpl(),
+				bigtableOperations,
+				hbaseOptions,
+				new InternalAdapterStoreImpl(
+						bigtableOperations));
 	}
 }

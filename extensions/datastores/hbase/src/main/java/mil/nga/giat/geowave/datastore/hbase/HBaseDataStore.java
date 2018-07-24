@@ -5,8 +5,6 @@ package mil.nga.giat.geowave.datastore.hbase;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -23,12 +21,10 @@ import mil.nga.giat.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import mil.nga.giat.geowave.core.store.server.ServerOpHelper;
 import mil.nga.giat.geowave.core.store.server.ServerSideOperations;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
-import mil.nga.giat.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import mil.nga.giat.geowave.datastore.hbase.operations.HBaseOperations;
 import mil.nga.giat.geowave.datastore.hbase.server.RowMergingServerOp;
 import mil.nga.giat.geowave.datastore.hbase.server.RowMergingVisibilityServerOp;
 import mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore;
-import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 
 public class HBaseDataStore extends
 		BaseMapReduceDataStore

@@ -44,8 +44,6 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	// notifications?
 	protected static final int MAX_ENTRIES = 100;
 	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
-	public final static ByteArrayId METADATA_INDEX_ID = new ByteArrayId(
-			METADATA_TABLE);
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;
 	protected final MetadataType type;
