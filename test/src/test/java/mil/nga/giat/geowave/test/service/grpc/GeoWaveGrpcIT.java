@@ -85,7 +85,6 @@ public class GeoWaveGrpcIT extends
 	protected DataStorePluginOptions dataStore;
 	public static ManualOperationParams operationParams = null;
 	private static long startMillis;
-	private static final boolean POINTS_ONLY = false;
 	private static final int NUM_THREADS = 1;
 
 	protected static final String TEST_DATA_ZIP_RESOURCE_PATH = TestUtils.TEST_RESOURCE_PACKAGE

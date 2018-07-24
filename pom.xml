@@ -36,11 +36,11 @@
 	<properties>
 		<spark.version>2.3.0</spark.version>
 		<geotools.version>19.1</geotools.version>
-		<guava.version>19.0</guava.version>
+		<guava.version>25.1-jre</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.13.1</geoserver.version>
-		<accumulo.version>1.8.1</accumulo.version>
-		<accumulo.api>1.8</accumulo.api>
+		<accumulo.version>1.9.2</accumulo.version>
+		<accumulo.api>1.9</accumulo.api>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<protobuf.version>3.5.1</protobuf.version>

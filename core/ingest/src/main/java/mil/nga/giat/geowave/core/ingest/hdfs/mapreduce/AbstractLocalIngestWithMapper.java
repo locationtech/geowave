@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Collections;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +75,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 					e);
 		}
 		return new CloseableIterator.Wrapper(
-				Iterators.emptyIterator());
+				Collections.emptyIterator());
 	}
 
 	abstract protected CloseableIterator<GeoWaveData<T>> toGeoWaveDataInternal(

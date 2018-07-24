@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.datastore.hbase.operations;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.NavigableMap;
 
@@ -120,7 +121,7 @@ public class HBaseMetadataReader implements
 					e);
 		}
 		return new CloseableIterator.Wrapper<>(
-				Iterators.emptyIterator());
+				Collections.emptyIterator());
 	}
 
 	private byte[] getMergedStats(
