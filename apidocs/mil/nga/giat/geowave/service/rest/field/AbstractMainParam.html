@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":6};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -199,22 +199,26 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/rest/field
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#getDescription--">getDescription</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Field.html?is-external=true" title="class or interface in java.lang.reflect">Field</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#getField--">getField</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#getName--">getName</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Class.html?is-external=true" title="class or interface in java.lang">Class</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html" title="type parameter in AbstractMainParam">T</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#getType--">getType</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#isRequired--">isRequired</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#setValue-T-">setValue</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html" title="type parameter in AbstractMainParam">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>protected abstract <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html#valueToString-T-">valueToString</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html" title="type parameter in AbstractMainParam">T</a>&nbsp;value)</code>&nbsp;</td>
 </tr>
@@ -391,10 +395,23 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/rest/field
 </a><a name="valueToString-T-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>valueToString</h4>
 <pre>protected abstract&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;valueToString(<a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html" title="type parameter in AbstractMainParam">T</a>&nbsp;value)</pre>
+</li>
+</ul>
+<a name="getField--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getField</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/reflect/Field.html?is-external=true" title="class or interface in java.lang.reflect">Field</a>&nbsp;getField()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/RestFieldValue.html#getField--">getField</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/RestFieldValue.html" title="interface in mil.nga.giat.geowave.service.rest.field">RestFieldValue</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/service/rest/field/AbstractMainParam.html" title="type parameter in AbstractMainParam">T</a>&gt;</code></dd>
+</dl>
 </li>
 </ul>
 </li>
