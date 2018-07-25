@@ -56,16 +56,16 @@ public class TDigestNumericHistogram implements
 	public void toBinary(
 			final ByteBuffer buffer ) {
 		tdigest.asSmallBytes(buffer);
-		final byte[] remaining = new byte[buffer.remaining()];
-		buffer.get(remaining);
-		count = ByteArrayUtils.variableLengthDecode(remaining);
+		buffer.put(ByteArrayUtils.variableLengthEncode(count));
 	}
 
 	@Override
 	public void fromBinary(
 			final ByteBuffer buffer ) {
 		tdigest = MergingDigest.fromBytes(buffer);
-		buffer.put(ByteArrayUtils.variableLengthEncode(count));
+		final byte[] remaining = new byte[buffer.remaining()];
+		buffer.get(remaining);
+		count = ByteArrayUtils.variableLengthDecode(remaining);
 	}
 
 	@Override
