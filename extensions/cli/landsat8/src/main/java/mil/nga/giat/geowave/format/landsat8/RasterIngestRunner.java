@@ -231,7 +231,7 @@ public class RasterIngestRunner extends
 				final ExtractGeometryFilterVisitorResult geometryAndCompareOp = ExtractGeometryFilterVisitor
 						.getConstraints(
 								filter,
-								GeometryUtils.DEFAULT_CRS,
+								GeometryUtils.getDefaultCRS(),
 								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME);
 				Geometry geometry = geometryAndCompareOp.getGeometry();
 				if (geometry != null) {

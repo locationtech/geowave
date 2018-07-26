@@ -283,7 +283,7 @@ public class SceneFeatureIterator implements
 		// initialize the feature type
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName(SCENES_TYPE_NAME);
-		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS);
+		typeBuilder.setCRS(GeometryUtils.getDefaultCRS());
 		typeBuilder.add(
 				SHAPE_ATTRIBUTE_NAME,
 				MultiPolygon.class);
