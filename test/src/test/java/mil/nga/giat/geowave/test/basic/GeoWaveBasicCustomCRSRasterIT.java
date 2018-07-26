@@ -59,10 +59,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 	private static final double DOUBLE_TOLERANCE = 1E-10d;
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
-	// GeoWaveStoreType.CASSANDRA,
-	// GeoWaveStoreType.DYNAMODB,
-	// GeoWaveStoreType.HBASE
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 

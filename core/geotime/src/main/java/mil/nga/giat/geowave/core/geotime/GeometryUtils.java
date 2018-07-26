@@ -122,36 +122,6 @@ public class GeometryUtils
 				set);
 	}
 
-	public static Constraints basicConstraintsFromGeometry(
-			final Geometry geometry,
-			String crsCode ) {
-
-		CoordinateReferenceSystem crs = null;
-		final List<ConstraintSet> set = new LinkedList<>();
-
-		try {
-			crs = CRS.decode(crsCode);
-		}
-		catch (Exception e) {
-			LOGGER.error("Could not decode CRSCode " + crsCode);
-			constructListOfConstraintSetsFromGeometry(
-					geometry,
-					set,
-					false);
-			return new Constraints(
-					set);
-		}
-
-		constructListOfConstraintSetsFromGeometry(
-				geometry,
-				set,
-				crs,
-				false);
-
-		return new Constraints(
-				set);
-	}
-
 	/**
 	 * This utility method will convert a JTS geometry to contraints that can be
 	 * used in a GeoWave query.
@@ -212,39 +182,6 @@ public class GeometryUtils
 		return retVal;
 	}
 
-	private static boolean constructListOfConstraintSetsFromGeometry(
-			final Geometry geometry,
-			final List<ConstraintSet> destinationListOfSets,
-			final CoordinateReferenceSystem crs,
-			final boolean checkTopoEquality ) {
-
-		// Get the envelope of the geometry being held
-		final int n = geometry.getNumGeometries();
-		boolean retVal = true;
-		if (n > 1) {
-			retVal = false;
-			for (int gi = 0; gi < n; gi++) {
-				constructListOfConstraintSetsFromGeometry(
-						geometry.getGeometryN(gi),
-						destinationListOfSets,
-						crs,
-						checkTopoEquality);
-			}
-		}
-		else {
-			final ReferencedEnvelope env = new ReferencedEnvelope(
-					geometry.getEnvelopeInternal(),
-					crs);
-			destinationListOfSets.add(basicConstraintSetFromEnvelope(env));
-			if (checkTopoEquality) {
-				retVal = new GeometryFactory().toGeometry(
-						env).equalsTopo(
-						geometry);
-			}
-		}
-		return retVal;
-	}
-
 	/**
 	 * This utility method will convert a JTS envelope to contraints that can be
 	 * used in a GeoWave query.
@@ -267,41 +204,25 @@ public class GeometryUtils
 		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
-		/*
-		 * constraintsPerDimension.put( LongitudeDefinition.class, new
-		 * ConstraintData( rangeLongitude, false)); constraintsPerDimension.put(
-		 * LatitudeDefinition.class, new ConstraintData( rangeLatitude, false));
-		 * return new ConstraintSet( constraintsPerDimension);
-		 */
 
-		if (env instanceof ReferencedEnvelope) {
-			ReferencedEnvelope re = (ReferencedEnvelope) env;
-			if (!re.getCoordinateReferenceSystem().equals(
-					GeometryUtils.getDefaultCRS())) {
-				constraintsPerDimension.put(
-						CustomCRSUnboundedSpatialDimensionX.class,
-						new ConstraintData(
-								rangeLongitude,
-								false));
-				constraintsPerDimension.put(
-						CustomCRSUnboundedSpatialDimensionY.class,
-						new ConstraintData(
-								rangeLatitude,
-								false));
-				return new ConstraintSet(
-						constraintsPerDimension);
-			}
-		}
+		ConstraintData xRange = new ConstraintData(
+				rangeLongitude,
+				false);
+		ConstraintData yRange = new ConstraintData(
+				rangeLatitude,
+				false);
+		constraintsPerDimension.put(
+				CustomCRSUnboundedSpatialDimensionX.class,
+				xRange);
+		constraintsPerDimension.put(
+				CustomCRSUnboundedSpatialDimensionY.class,
+				yRange);
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				new ConstraintData(
-						rangeLongitude,
-						false));
+				xRange);
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				new ConstraintData(
-						rangeLatitude,
-						false));
+				yRange);
 
 		return new ConstraintSet(
 				constraintsPerDimension);

@@ -111,9 +111,9 @@ public class LandsatIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
-	// GeoWaveStoreType.CASSANDRA,
-	// GeoWaveStoreType.HBASE
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";

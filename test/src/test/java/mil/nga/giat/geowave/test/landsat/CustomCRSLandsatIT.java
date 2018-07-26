@@ -113,9 +113,9 @@ public class CustomCRSLandsatIT extends
 
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
-	// GeoWaveStoreType.BIGTABLE,
-	// GeoWaveStoreType.CASSANDRA,
-	// GeoWaveStoreType.HBASE
+     	GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.CASSANDRA,
+		GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 	private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_custom.png";
@@ -127,10 +127,6 @@ public class CustomCRSLandsatIT extends
 	private static final double EAST = -1.4;
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
-	// private static final double WEST = -245440;
-	// private static final double EAST = -154680;
-	// private static final double NORTH = 3960810;
-	// private static final double SOUTH = 4063375;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(LandsatIT.class);
 	private static long startMillis;

@@ -125,9 +125,7 @@ public class SpatialQuery extends
 			final Geometry queryGeometry,
 			final String crsCode ) {
 		this(
-				GeometryUtils.basicConstraintsFromGeometry(
-						queryGeometry,
-						crsCode),
+				GeometryUtils.basicConstraintsFromGeometry(queryGeometry),
 				queryGeometry,
 				Collections.emptyMap(),
 				crsCode,
