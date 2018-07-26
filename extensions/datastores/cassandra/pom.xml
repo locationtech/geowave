@@ -30,16 +30,11 @@
 		<dependency>
 			<groupId>com.datastax.cassandra</groupId>
 			<artifactId>cassandra-driver-core</artifactId>
-			<version>3.1.2</version>
+			<version>3.5.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.aol.simplereact</groupId>
 			<artifactId>cyclops-react</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.spotify</groupId>
-			<artifactId>futures-extra</artifactId>
-			<version>2.6.2</version>
 		</dependency>
 	</dependencies>
 </project>
