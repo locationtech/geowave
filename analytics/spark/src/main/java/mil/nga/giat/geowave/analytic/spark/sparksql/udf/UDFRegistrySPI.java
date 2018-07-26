@@ -3,61 +3,40 @@ package mil.nga.giat.geowave.analytic.spark.sparksql.udf;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomContains;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCovers;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCrosses;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomDisjoint;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomEquals;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomFunction;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomIntersects;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomOverlaps;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomTouches;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomWithin;
-
 public class UDFRegistrySPI
 {
 	public static UDFNameAndConstructor[] getSupportedUDFs() {
 		return new UDFNameAndConstructor[] {
 			new UDFNameAndConstructor(
-					new String[] {"GeomContains", "WKTGeomContains"},
-					GeomContains::new,
-					WKTGeomContains::new),
+					new String[] {"GeomContains"},
+					GeomContains::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomCovers", "WKTGeomCovers"},
-					GeomCovers::new,
-					WKTGeomCovers::new),
+					new String[] {"GeomCovers"},
+					GeomCovers::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomCrosses", "WKTGeomCrosses"},
-					GeomCrosses::new,
-					WKTGeomCrosses::new),
+					new String[] {"GeomCrosses"},
+					GeomCrosses::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomDisjoint", "WKTGeomDisjoint"},
-					GeomDisjoint::new,
-					WKTGeomDisjoint::new),
+					new String[] {"GeomDisjoint"},
+					GeomDisjoint::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomEquals", "WKTGeomEquals"},
-					GeomEquals::new,
-					WKTGeomEquals::new),
+					new String[] {"GeomEquals"},
+					GeomEquals::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomIntersects", "WKTGeomIntersects"},
-					GeomIntersects::new,
-					WKTGeomIntersects::new),
+					new String[] {"GeomIntersects"},
+					GeomIntersects::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomOverlaps", "WKTGeomOverlaps"},
-					GeomOverlaps::new,
-					WKTGeomOverlaps::new),
+					new String[] {"GeomOverlaps" },
+					GeomOverlaps::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomTouches", "WKTGeomTouches"},
-					GeomTouches::new,
-					WKTGeomTouches::new),
+					new String[] {"GeomTouches"},
+					GeomTouches::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomWithin", "WKTGeomWithin"},
-					GeomWithin::new,
-					WKTGeomWithin::new),
+					new String[] {"GeomWithin"},
+					GeomWithin::new),
 			new UDFNameAndConstructor(
-					new String[] {"GeomWithinDistance", "GeomDistance", "WKTGeomDistance"},
-					GeomWithinDistance::new,
-					null)
+					new String[] {"GeomWithinDistance" },
+					GeomWithinDistance::new)
 		};
 	}
 
@@ -77,15 +56,12 @@ public class UDFRegistrySPI
 	{
 		private final String[] udfNames;
 		private final Supplier<GeomFunction> predicateConstructor;
-		private final Supplier<WKTGeomFunction> wktPredConstructor;
 
 		public UDFNameAndConstructor(
 				final String[] udfNames,
-				final Supplier<GeomFunction> predicateConstructor,
-				final Supplier<WKTGeomFunction> wktPredConstructor ) {
+				final Supplier<GeomFunction> predicateConstructor ) {
 			this.udfNames = udfNames;
 			this.predicateConstructor = predicateConstructor;
-			this.wktPredConstructor = wktPredConstructor;
 		}
 
 		public String[] getUDFNames() {
@@ -106,10 +82,6 @@ public class UDFRegistrySPI
 
 		public Supplier<GeomFunction> getPredicateConstructor() {
 			return predicateConstructor;
-		}
-
-		public Supplier<WKTGeomFunction> getWKTConstructor() {
-			return wktPredConstructor;
 		}
 	}
 

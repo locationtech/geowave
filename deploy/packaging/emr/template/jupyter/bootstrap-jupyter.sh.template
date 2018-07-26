@@ -34,19 +34,18 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave-notebooks/latest/notebooks/ $HOME/notebooks/
+aws s3 sync s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
+
+aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-$GEOWAVE_VERSION_URL_TOKEN.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
 
 source /tmp/install-conda.sh
 
 echo bootstrap_conda.sh completed. PATH now: $PATH
-
 echo Performing pixiedust and jupyter kernel setup.
-
-source /tmp/create-configure-kernel.sh $GEOWAVE_VER
 
 source /etc/profile.d/conda.sh
 
-conda install jupyter
+conda install jupyter ncurses
 
 jupyter nbextension enable --py --sys-prefix ipyleaflet
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
@@ -55,9 +54,10 @@ jupyter nbextension enable --py --sys-prefix vega
 # generate empty config for notebook server
 jupyter notebook --generate-config
 
+pip install /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
+
 # generate default password for server
 HASHED_PASSWORD=$(python -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))")
-
 printf "c.NotebookApp.password = u'$HASHED_PASSWORD'" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
 printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
@@ -65,7 +65,6 @@ printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jup
 printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
 
 #Adding Jupyter to Upstart so it can be run at bootstrap
-cd $HOME
 sudo cat << EOF > $HOME/jupyter.conf
 description "Jupyter"
 
@@ -78,6 +77,7 @@ respawn limit 0 10
 env HOME=$HOME
 script
     . $HOME/.bashrc
+    . /etc/profile.d/conda.sh
     exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
 end script
 EOF
@@ -90,3 +90,6 @@ sudo initctl reload-configuration
 # start jupyter daemon
 sudo initctl start jupyter
 
+if is_master; then
+    source /tmp/create-configure-kernel.sh ${GEOWAVE_VER}
+fi

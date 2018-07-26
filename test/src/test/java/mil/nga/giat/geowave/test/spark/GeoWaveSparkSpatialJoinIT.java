@@ -15,7 +15,6 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -32,7 +31,7 @@ import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry;
+import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
 
@@ -106,8 +105,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 				"tornado_tracks");
 		GeomWithinDistance distancePredicate = new GeomWithinDistance(
 				0.01);
-		String sqlHail = "select hail.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
-		String sqlTornado = "select tornado.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
+		String sqlHail = "select hail.* from hail, tornado where GeomDistance(hail.geom,tornado.geom) <= 0.01";
+		String sqlTornado = "select tornado.* from hail, tornado where GeomDistance(hail.geom,tornado.geom) <= 0.01";
 
 		SpatialJoinRunner runner = new SpatialJoinRunner(
 				session);
@@ -129,11 +128,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 		try {
 			runner.run();
 		}
-		catch (InterruptedException e) {
-			LOGGER.error("Async error in join");
-			e.printStackTrace();
-		}
-		catch (ExecutionException e) {
+		catch (InterruptedException | ExecutionException e) {
 			LOGGER.error("Async error in join");
 			e.printStackTrace();
 		}

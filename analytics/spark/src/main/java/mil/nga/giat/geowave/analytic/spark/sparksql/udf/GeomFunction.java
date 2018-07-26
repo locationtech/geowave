@@ -20,12 +20,6 @@ public abstract class GeomFunction implements
 		return 0.0;
 	}
 
-	public Geometry parseGeom(
-			String wktGeom )
-			throws ParseException {
-		return geomReader.read(wktGeom);
-	}
-
 	@Override
 	public Boolean call(
 			Geometry t1,

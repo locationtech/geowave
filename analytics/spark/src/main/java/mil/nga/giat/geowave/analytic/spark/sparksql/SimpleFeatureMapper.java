@@ -6,7 +6,7 @@ import java.util.Date;
 
 import org.apache.spark.api.java.function.Function;
 import org.apache.spark.sql.Row;
-import org.apache.spark.sql.RowFactory;
+import org.apache.spark.sql.catalyst.expressions.GenericRowWithSchema;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
 import org.apache.spark.sql.types.StructType;
@@ -14,10 +14,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.Geometry;
-
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter;
 
 @SuppressFBWarnings
 public class SimpleFeatureMapper implements
@@ -26,7 +23,6 @@ public class SimpleFeatureMapper implements
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureDataFrame.class);
 
 	private final StructType schema;
-	private final GeomWriter geomWriter = new GeomWriter();
 
 	public SimpleFeatureMapper(
 			StructType schema ) {
@@ -45,14 +41,14 @@ public class SimpleFeatureMapper implements
 				StructField structField = schema.apply(i);
 				if (structField.name().equals(
 						"geom")) {
-					fields[i] = geomWriter.write((Geometry) fieldObj);
+					fields[i] = fieldObj;
 				}
 				else if (structField.dataType() == DataTypes.TimestampType) {
-					fields[i] = ((Timestamp) new Timestamp(
-							((Date) fieldObj).getTime()));
+					fields[i] = new Timestamp(
+							((Date) fieldObj).getTime());
 				}
 				else if (structField.dataType() != null) {
-					fields[i] = (Serializable) fieldObj;
+					fields[i] = fieldObj;
 				}
 				else {
 					LOGGER.error("Unexpected attribute in field(" + structField.name() + "): " + fieldObj);
@@ -60,7 +56,9 @@ public class SimpleFeatureMapper implements
 			}
 		}
 
-		return RowFactory.create(fields);
+		return new GenericRowWithSchema(
+				fields,
+				schema);
 	}
 
 }

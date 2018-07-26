@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import mil.nga.giat.geowave.analytic.spark.sparksql.GeoWaveSpatialEncoders;
 import org.apache.spark.sql.types.DataType;
 import org.apache.spark.sql.types.DataTypes;
 import org.apache.spark.sql.types.StructField;
@@ -167,7 +168,7 @@ public class SchemaConverter
 
 		// Custom geometry types get WKB encoding
 		else if (Geometry.class.isAssignableFrom(attrDesc.getType().getBinding())) {
-			dataTypeOut = DataTypes.StringType;
+			dataTypeOut = GeoWaveSpatialEncoders.geometryUDT;
 			isGeom = true;
 		}
 

@@ -1,5 +1,6 @@
 package mil.nga.giat.geowave.test.spark;
 
+import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import org.apache.spark.SparkContext;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.sql.Dataset;
@@ -110,13 +111,13 @@ public class GeoWaveJavaSparkSQLIT extends
 
 			String bbox = "POLYGON ((-94 34, -93 34, -93 35, -94 35, -94 34))";
 
-			queryRunner.setSql("SELECT * FROM features WHERE GeomContains('" + bbox + "', geom)");
+			queryRunner.setSql("SELECT * FROM features WHERE GeomContains(GeomFromWKT('" + bbox + "'), geom)");
 
 			Dataset<Row> results = queryRunner.run();
 			long containsCount = results.count();
 			LOGGER.warn("Got " + containsCount + " for GeomContains test");
 
-			queryRunner.setSql("SELECT * FROM features WHERE GeomWithin(geom, '" + bbox + "')");
+			queryRunner.setSql("SELECT * FROM features WHERE GeomWithin(geom, GeomFromWKT('" + bbox + "'))");
 			results = queryRunner.run();
 			long withinCount = results.count();
 			LOGGER.warn("Got " + withinCount + " for GeomWithin test");
@@ -137,7 +138,7 @@ public class GeoWaveJavaSparkSQLIT extends
 			// Test other spatial UDFs
 			String line1 = "LINESTRING(0 0, 10 10)";
 			String line2 = "LINESTRING(0 10, 10 0)";
-			queryRunner.setSql("SELECT GeomIntersects('" + line1 + "', '" + line2 + "')");
+			queryRunner.setSql("SELECT GeomIntersects(GeomFromWKT('" + line1 + "'), GeomFromWKT('" + line2 + "'))");
 			Row result = queryRunner.run().head();
 
 			boolean intersect = result.getBoolean(0);
@@ -147,7 +148,7 @@ public class GeoWaveJavaSparkSQLIT extends
 					"Lines should intersect",
 					intersect);
 
-			queryRunner.setSql("SELECT GeomDisjoint('" + line1 + "', '" + line2 + "')");
+			queryRunner.setSql("SELECT GeomDisjoint(GeomFromWKT('" + line1 + "'), GeomFromWKT('" + line2 + "'))");
 			result = queryRunner.run().head();
 
 			boolean disjoint = result.getBoolean(0);
