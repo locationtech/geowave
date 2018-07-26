@@ -250,7 +250,7 @@ public class RasterIngestRunner extends
 								coverage);
 						try {
 							final MathTransform transform = CRS.findMathTransform(
-									GeometryUtils.DEFAULT_CRS,
+									GeometryUtils.getDefaultCRS(),
 									coverage.getCoordinateReferenceSystem(),
 									true);
 							params.parameter(

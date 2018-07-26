@@ -37,12 +37,15 @@ import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
 import mil.nga.giat.geowave.test.services.ConfigServicesIT;
+import mil.nga.giat.geowave.test.services.FileUploadIT;
 import mil.nga.giat.geowave.test.services.GeoServerIT;
 import mil.nga.giat.geowave.test.services.GeoServerIngestIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkSQLIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
+import mil.nga.giat.geowave.test.services.RemoteIT;
+import mil.nga.giat.geowave.test.services.IngestIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
@@ -53,10 +56,12 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
 	LandsatIT.class,
+	CustomCRSLandsatIT.class,
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,
 	KDERasterResizeIT.class,
+	CustomCRSKDERasterResizeIT.class,
 	BulkIngestInputGenerationIT.class,
 	GeoWaveNNIT.class,
 	AttributesSubsetQueryIT.class,
@@ -71,9 +76,9 @@ import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	ConfigServicesIT.class,
 	GeoServerIngestIT.class,
 	GeoServerIT.class,
-	CustomCRSKDERasterResizeIT.class,
-	CustomCRSLandsatIT.class,
-
+	RemoteIT.class,
+	IngestIT.class,
+	FileUploadIT.class,
 })
 public class GeoWaveITSuite
 {

@@ -68,8 +68,10 @@ public abstract class RequestParameters
 	 */
 	protected String[] splitStringParameter(
 			String parameter ) {
-		return getString(
-				parameter).split(
-				",");
+		String value = getString(parameter);
+		if (value == null) {
+			return null;
+		}
+		return value.split(",");
 	}
 }

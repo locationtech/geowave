@@ -150,7 +150,7 @@ public class FilterToCQLTool
 		private static CoordinateReferenceSystem getCRS(
 				final Expression e1,
 				final Expression e2 ) {
-			return GeometryUtils.DEFAULT_CRS;
+			return GeometryUtils.getDefaultCRS();
 		}
 
 		public FixedDWithinImpl(

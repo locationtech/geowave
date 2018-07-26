@@ -30,6 +30,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
@@ -74,6 +75,8 @@ public class BaseDataStoreUtils
 	 * and HBase; Unification in progress
 	 *
 	 * Override this method if you can't pass in a GeoWaveRow!
+	 * 
+	 * @throws AdapterException
 	 */
 	public static <T> Object decodeRow(
 			final GeoWaveRow geowaveRow,
@@ -83,13 +86,17 @@ public class BaseDataStoreUtils
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
-			final boolean decodeRow ) {
+			final boolean decodeRow )
+			throws AdapterException {
+
 		final ByteArrayId adapterId = new ByteArrayId(
 				geowaveRow.getAdapterId());
 
 		if ((adapter == null) && (adapterStore == null)) {
-			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
-			return null;
+			String msg = "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
+			LOGGER.error(msg);
+			throw new AdapterException(
+					msg);
 		}
 		final IntermediaryReadEntryInfo decodePackage = new IntermediaryReadEntryInfo(
 				index,
@@ -99,15 +106,19 @@ public class BaseDataStoreUtils
 				adapter,
 				adapterId,
 				adapterStore)) {
-			LOGGER.error("Could not retrieve adapter " + adapterId.getString() + " from adapter store.");
-			return null;
+			String msg = "Could not retrieve adapter " + adapterId.getString() + " from adapter store.";
+			LOGGER.error(msg);
+			throw new AdapterException(
+					msg);
 		}
 
 		// Verify the adapter matches the data
 		if (!decodePackage.isAdapterVerified()) {
 			if (!decodePackage.verifyAdapter(adapterId)) {
-				LOGGER.error("Adapter verify failed: adapter does not match data.");
-				return null;
+				String msg = "Adapter verify failed: adapter does not match data.";
+				LOGGER.error(msg);
+				throw new AdapterException(
+						msg);
 			}
 		}
 

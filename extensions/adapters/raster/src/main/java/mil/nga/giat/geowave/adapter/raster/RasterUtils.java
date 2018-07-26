@@ -24,11 +24,19 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
+import java.awt.image.DataBufferDouble;
+import java.awt.image.DataBufferFloat;
+import java.awt.image.DataBufferInt;
+import java.awt.image.DataBufferShort;
+import java.awt.image.DataBufferUShort;
 import java.awt.image.IndexColorModel;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -96,7 +104,6 @@ import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -948,7 +955,7 @@ public class RasterUtils
 					eastLon,
 					southLat,
 					northLat,
-					GeometryUtils.DEFAULT_CRS);
+					GeometryUtils.getDefaultCRS());
 		}
 		catch (final IllegalArgumentException e) {
 			LOGGER.warn(
@@ -1007,7 +1014,7 @@ public class RasterUtils
 
 		CoordinateReferenceSystem crs = null;
 		if (crsCode == null || crsCode.isEmpty() || crsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
-			crs = GeometryUtils.DEFAULT_CRS;
+			crs = GeometryUtils.getDefaultCRS();
 		}
 		else {
 			try {

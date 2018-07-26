@@ -321,7 +321,7 @@ public class KDERasterResizeIT
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.readFromConfigParams(str.toString()));
 
-		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.DEFAULT_CRS);
+		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.getDefaultCRS());
 		final Raster[] rasters = new Raster[numCoverages];
 		int coverageCount = 0;
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {

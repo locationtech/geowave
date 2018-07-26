@@ -236,7 +236,7 @@ public class LandsatIT extends
 					EAST,
 					NORTH
 				});
-		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.DEFAULT_CRS);
+		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.getDefaultCRS());
 
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.readFromConfigParams(str.toString()));

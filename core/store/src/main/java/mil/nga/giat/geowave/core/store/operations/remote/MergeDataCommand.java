@@ -69,6 +69,7 @@ public class MergeDataCommand extends
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
 		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
+
 		// Load the Indexes
 		final IndexLoader indexLoader = new IndexLoader(
 				indexList);
@@ -76,6 +77,7 @@ public class MergeDataCommand extends
 			throw new ParameterException(
 					"Cannot find index(s) by name: " + indexList);
 		}
+
 		inputIndexOptions = indexLoader.getLoadedIndexes();
 		final AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();

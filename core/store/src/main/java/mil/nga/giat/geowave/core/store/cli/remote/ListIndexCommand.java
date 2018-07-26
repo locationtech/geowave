@@ -74,7 +74,7 @@ public class ListIndexCommand extends
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStoreName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
-			throw new TargetNotFoundException(
+			throw new ParameterException(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
 		else {

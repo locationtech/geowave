@@ -58,16 +58,16 @@ public class RemoteServiceClient
 	}
 
 	public Response version(
-			final String store_name ) {
+			final String storename ) {
 
-		final Response resp = remoteService.version(store_name);
+		final Response resp = remoteService.version(storename);
 		return resp;
 	}
 
 	public Response listStats(
 			final String store_name ) {
 
-		return recalcStats(
+		return listStats(
 				store_name,
 				null,
 				null,

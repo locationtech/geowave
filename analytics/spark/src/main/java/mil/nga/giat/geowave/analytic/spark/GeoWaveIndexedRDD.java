@@ -9,19 +9,18 @@ import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.broadcast.Broadcast;
 import org.opengis.feature.simple.SimpleFeature;
-import org.opengis.geometry.BoundingBox;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
-
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
-import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import scala.Tuple2;
 
@@ -85,64 +84,45 @@ public class GeoWaveIndexedRDD implements
 
 									// Pull feature to index from tuple
 									SimpleFeature inputFeature = t._2;
-
+									// If we are dealing with null or empty
+									// geometry we can't properly compare this
+									// feature.
 									Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
 									if (geom == null) {
-										return result.iterator();
-									}
-									// Extract bounding box from input feature
-									BoundingBox bounds = inputFeature.getBounds();
-									NumericRange xRange = new NumericRange(
-											bounds.getMinX() - bufferAmount,
-											bounds.getMaxX() + bufferAmount);
-									NumericRange yRange = new NumericRange(
-											bounds.getMinY() - bufferAmount,
-											bounds.getMaxY() + bufferAmount);
-
-									if (bounds.isEmpty()) {
-										Envelope internalEnvelope = geom.getEnvelopeInternal();
-										xRange = new NumericRange(
-												internalEnvelope.getMinX() - bufferAmount,
-												internalEnvelope.getMaxX() + bufferAmount);
-										yRange = new NumericRange(
-												internalEnvelope.getMinY() - bufferAmount,
-												internalEnvelope.getMaxY() + bufferAmount);
-
+										return Iterators.emptyIterator();
 									}
 
-									NumericData[] boundsRange = {
-										xRange,
-										yRange
-									};
+									Envelope internalEnvelope = geom.getEnvelopeInternal();
+									if (internalEnvelope.isNull()) {
+										return Iterators.emptyIterator();
+									}
+									// If we have to buffer geometry for
+									// predicate expand bounds
+									internalEnvelope.expandBy(bufferAmount);
 
-									// Convert the data to how the api expects
-									// and index
-									// using strategy above
-									BasicNumericDataset convertedBounds = new BasicNumericDataset(
-											boundsRange);
-									InsertionIds insertIds = indexStrategy.value().getInsertionIds(
-											convertedBounds);
+									// Get data range from expanded envelope
+									MultiDimensionalNumericData boundsRange = GeometryUtils
+											.getBoundsFromEnvelope(internalEnvelope);
 
-									// Sometimes the result can span more than
-									// one row/cell
-									// of a tier
-									// When we span more than one row each
-									// individual get
-									// added as a separate output pair
-									// TODO should this use composite IDs or
-									// just the sort
-									// keys
+									NumericIndexStrategy index = indexStrategy.value();
+									InsertionIds insertIds = index.getInsertionIds(
+											boundsRange,
+											80);
+
+									// If we didnt expand the envelope for
+									// buffering we can trim the indexIds by the
+									// geometry
+									if (bufferAmount == 0.0) {
+										insertIds = RDDUtils.trimIndexIds(
+												insertIds,
+												geom,
+												index);
+									}
+
 									for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
 											.hasNext();) {
 										ByteArrayId id = iter.next();
-										// Id decomposes to byte array of Tier,
-										// Bin, SFC
-										// (Hilbert in this case) id)
-										// There may be value in decomposing the
-										// id and
-										// storing tier + sfcIndex as a tuple
-										// key of the new
-										// RDD
+
 										Tuple2<GeoWaveInputKey, SimpleFeature> valuePair = new Tuple2<>(
 												t._1,
 												inputFeature);
@@ -163,20 +143,24 @@ public class GeoWaveIndexedRDD implements
 	}
 
 	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD() {
-		return this.getIndexedGeometryRDD(0.0);
+		return this.getIndexedGeometryRDD(
+				0.0,
+				false);
 	}
 
 	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD(
-			double bufferAmount ) {
+			double bufferAmount,
+			boolean recalculate ) {
 		verifyParameters();
 
 		if (!geowaveRDD.isLoaded()) {
 			LOGGER.error("Must provide a loaded RDD.");
 			return null;
 		}
-		if (rawGeometryRDD == null) {
-			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexedData = geowaveRDD
+		if (rawGeometryRDD == null || recalculate) {
+			rawGeometryRDD = geowaveRDD
 					.getRawRDD()
+					.filter(t -> (t._2.getDefaultGeometry() != null && !((Geometry)t._2.getDefaultGeometry()).getEnvelopeInternal().isNull()))
 					.flatMapToPair(
 							new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
 								@Override
@@ -184,69 +168,45 @@ public class GeoWaveIndexedRDD implements
 										Tuple2<GeoWaveInputKey, SimpleFeature> t )
 										throws Exception {
 
-									// Flattened output array.
-									List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> result = new ArrayList<>();
-
 									// Pull feature to index from tuple
 									SimpleFeature inputFeature = t._2;
-
+									// If we are dealing with null or empty
+									// geometry we can't properly compare this
+									// feature.
 									Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
-									if (geom == null) {
-										return result.iterator();
+
+									Envelope internalEnvelope = geom.getEnvelopeInternal();
+									// If we have to buffer geometry for
+									// predicate expand bounds
+									internalEnvelope.expandBy(bufferAmount);
+
+									// Get data range from expanded envelope
+									MultiDimensionalNumericData boundsRange = GeometryUtils
+											.getBoundsFromEnvelope(internalEnvelope);
+
+									NumericIndexStrategy index = indexStrategy.value();
+									InsertionIds insertIds = index.getInsertionIds(
+											boundsRange,
+											80);
+
+									// If we didnt expand the envelope for
+									// buffering we can trim the indexIds by the
+									// geometry
+									if (bufferAmount == 0.0) {
+										insertIds = RDDUtils.trimIndexIds(
+												insertIds,
+												geom,
+												index);
 									}
-									// Extract bounding box from input feature
-									BoundingBox bounds = inputFeature.getBounds();
-									NumericRange xRange = new NumericRange(
-											bounds.getMinX() - bufferAmount,
-											bounds.getMaxX() + bufferAmount);
-									NumericRange yRange = new NumericRange(
-											bounds.getMinY() - bufferAmount,
-											bounds.getMaxY() + bufferAmount);
 
-									if (bounds.isEmpty()) {
-										Envelope internalEnvelope = geom.getEnvelopeInternal();
-										xRange = new NumericRange(
-												internalEnvelope.getMinX() - bufferAmount,
-												internalEnvelope.getMaxX() + bufferAmount);
-										yRange = new NumericRange(
-												internalEnvelope.getMinY() - bufferAmount,
-												internalEnvelope.getMaxY() + bufferAmount);
+									// Flattened output array.
+									List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> result = Lists
+											.newArrayListWithCapacity(insertIds.getSize());
 
-									}
-
-									NumericData[] boundsRange = {
-										xRange,
-										yRange
-									};
-
-									// Convert the data to how the api expects
-									// and index
-									// using strategy above
-									BasicNumericDataset convertedBounds = new BasicNumericDataset(
-											boundsRange);
-									InsertionIds insertIds = indexStrategy.value().getInsertionIds(
-											convertedBounds);
-
-									// Sometimes the result can span more than
-									// one row/cell
-									// of a tier
-									// When we span more than one row each
-									// individual get
-									// added as a separate output pair
-									// TODO should this use composite IDs or
-									// just the sort
-									// keys
 									for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
 											.hasNext();) {
 										ByteArrayId id = iter.next();
-										// Id decomposes to byte array of Tier,
-										// Bin, SFC
-										// (Hilbert in this case) id)
-										// There may be value in decomposing the
-										// id and
-										// storing tier + sfcIndex as a tuple
-										// key of the new
-										// RDD
+
 										Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(
 												t._1,
 												geom);
@@ -260,7 +220,6 @@ public class GeoWaveIndexedRDD implements
 								}
 
 							});
-			rawGeometryRDD = indexedData;
 		}
 
 		return rawGeometryRDD;

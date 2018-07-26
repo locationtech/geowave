@@ -79,6 +79,7 @@ public class KdeCommand extends
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
 		PrimaryIndex outputPrimaryIndex = null;
+
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStore);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {

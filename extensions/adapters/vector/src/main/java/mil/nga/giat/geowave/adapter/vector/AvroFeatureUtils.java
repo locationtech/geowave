@@ -203,7 +203,7 @@ public class AvroFeatureUtils
 			final FeatureDefinition featureDefinition )
 			throws ClassNotFoundException {
 		final SimpleFeatureTypeBuilder sftb = new SimpleFeatureTypeBuilder();
-		sftb.setCRS(GeometryUtils.DEFAULT_CRS);
+		sftb.setCRS(GeometryUtils.getDefaultCRS());
 		sftb.setName(featureDefinition.getFeatureTypeName());
 		final List<String> featureTypes = featureDefinition.getAttributeTypes();
 		final List<String> featureNames = featureDefinition.getAttributeNames();
