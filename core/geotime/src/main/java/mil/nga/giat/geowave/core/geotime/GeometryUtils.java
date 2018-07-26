@@ -18,6 +18,7 @@ import java.util.Map;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.referencing.CRS;
 import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,23 +74,6 @@ public class GeometryUtils
 					e);
 		}
 	}
-	public static final String CUSTOM_CRS_STR = "EPSG:3857";
-	public static final CoordinateReferenceSystem CUSTOM_CRS;
-	static {
-		try {
-			CUSTOM_CRS = CRS.decode(
-					CUSTOM_CRS_STR,
-					true);
-		}
-		catch (final Exception e) {
-			LOGGER.error(
-					"Unable to decode " + CUSTOM_CRS_STR + " CRS",
-					e);
-			throw new RuntimeException(
-					"Unable to initialize " + CUSTOM_CRS_STR + " object",
-					e);
-		}
-	}
 
 	public static Constraints basicConstraintsFromGeometry(
 			final Geometry geometry ) {
@@ -98,6 +82,36 @@ public class GeometryUtils
 		constructListOfConstraintSetsFromGeometry(
 				geometry,
 				set,
+				false);
+
+		return new Constraints(
+				set);
+	}
+
+	public static Constraints basicConstraintsFromGeometry(
+			final Geometry geometry,
+			String crsCode ) {
+
+		CoordinateReferenceSystem crs = null;
+		final List<ConstraintSet> set = new LinkedList<>();
+
+		try {
+			crs = CRS.decode(crsCode);
+		}
+		catch (Exception e) {
+			LOGGER.error("Could not decode CRSCode " + crsCode);
+			constructListOfConstraintSetsFromGeometry(
+					geometry,
+					set,
+					false);
+			return new Constraints(
+					set);
+		}
+
+		constructListOfConstraintSetsFromGeometry(
+				geometry,
+				set,
+				crs,
 				false);
 
 		return new Constraints(
@@ -164,6 +178,39 @@ public class GeometryUtils
 		return retVal;
 	}
 
+	private static boolean constructListOfConstraintSetsFromGeometry(
+			final Geometry geometry,
+			final List<ConstraintSet> destinationListOfSets,
+			final CoordinateReferenceSystem crs,
+			final boolean checkTopoEquality ) {
+
+		// Get the envelope of the geometry being held
+		final int n = geometry.getNumGeometries();
+		boolean retVal = true;
+		if (n > 1) {
+			retVal = false;
+			for (int gi = 0; gi < n; gi++) {
+				constructListOfConstraintSetsFromGeometry(
+						geometry.getGeometryN(gi),
+						destinationListOfSets,
+						crs,
+						checkTopoEquality);
+			}
+		}
+		else {
+			final ReferencedEnvelope env = new ReferencedEnvelope(
+					geometry.getEnvelopeInternal(),
+					crs);
+			destinationListOfSets.add(basicConstraintSetFromEnvelope(env));
+			if (checkTopoEquality) {
+				retVal = new GeometryFactory().toGeometry(
+						env).equalsTopo(
+						geometry);
+			}
+		}
+		return retVal;
+	}
+
 	/**
 	 * This utility method will convert a JTS envelope to contraints that can be
 	 * used in a GeoWave query.
@@ -192,30 +239,36 @@ public class GeometryUtils
 		 * LatitudeDefinition.class, new ConstraintData( rangeLatitude, false));
 		 * return new ConstraintSet( constraintsPerDimension);
 		 */
+
 		if (env instanceof ReferencedEnvelope) {
-			constraintsPerDimension.put(
-					LongitudeDefinition.class,
-					new ConstraintData(
-							rangeLongitude,
-							false));
-			constraintsPerDimension.put(
-					LatitudeDefinition.class,
-					new ConstraintData(
-							rangeLatitude,
-							false));
+			ReferencedEnvelope re = (ReferencedEnvelope) env;
+			if (!re.getCoordinateReferenceSystem().equals(
+					GeometryUtils.DEFAULT_CRS)) {
+				constraintsPerDimension.put(
+						CustomCRSUnboundedSpatialDimensionX.class,
+						new ConstraintData(
+								rangeLongitude,
+								false));
+				constraintsPerDimension.put(
+						CustomCRSUnboundedSpatialDimensionY.class,
+						new ConstraintData(
+								rangeLatitude,
+								false));
+				return new ConstraintSet(
+						constraintsPerDimension);
+			}
 		}
-		else {
-			constraintsPerDimension.put(
-					CustomCRSUnboundedSpatialDimensionX.class,
-					new ConstraintData(
-							rangeLongitude,
-							false));
-			constraintsPerDimension.put(
-					CustomCRSUnboundedSpatialDimensionY.class,
-					new ConstraintData(
-							rangeLatitude,
-							false));
-		}
+		constraintsPerDimension.put(
+				LongitudeDefinition.class,
+				new ConstraintData(
+						rangeLongitude,
+						false));
+		constraintsPerDimension.put(
+				LatitudeDefinition.class,
+				new ConstraintData(
+						rangeLatitude,
+						false));
+
 		return new ConstraintSet(
 				constraintsPerDimension);
 	}

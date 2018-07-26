@@ -23,6 +23,7 @@ import com.google.uzaygezen.core.BitVectorFactories;
 import com.google.uzaygezen.core.CompactHilbertCurve;
 import com.google.uzaygezen.core.FilteredIndexRange;
 import com.google.uzaygezen.core.LongContent;
+import com.google.uzaygezen.core.MathUtils;
 import com.google.uzaygezen.core.PlainFilterCombiner;
 import com.google.uzaygezen.core.QueryBuilder;
 import com.google.uzaygezen.core.RegionInspector;

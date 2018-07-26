@@ -50,6 +50,7 @@ import org.slf4j.LoggerFactory;
 import org.apache.commons.lang.SystemUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.projection.MapProjection;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -61,7 +62,7 @@ import freemarker.template.Template;
 import it.geosolutions.jaiext.JAIExt;
 
 @RunWith(GeoWaveITRunner.class)
-public class LandsatIT extends
+public class CustomCRSLandsatIT extends
 		AbstractGeoWaveIT
 {
 	private static class RasterIngestTester extends
@@ -98,7 +99,8 @@ public class LandsatIT extends
 			store = dataStoreOptions.createDataStore();
 			dataStorePluginOptions = dataStoreOptions;
 			indices = new PrimaryIndex[] {
-				new SpatialIndexBuilder().createIndex()
+				new SpatialIndexBuilder().setCrs(
+						"EPSG:3857").createIndex()
 			};
 			coverageNameTemplate = new Template(
 					"name",
@@ -116,7 +118,7 @@ public class LandsatIT extends
 	// GeoWaveStoreType.HBASE
 	})
 	protected DataStorePluginOptions dataStoreOptions;
-	private static final String REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected.png";
+	private static final String CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH = "src/test/resources/landsat/expected_custom.png";
 	private static final int MIN_PATH = 198;
 	private static final int MAX_PATH = 199;
 	private static final int MIN_ROW = 36;
@@ -125,6 +127,10 @@ public class LandsatIT extends
 	private static final double EAST = -1.4;
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
+	// private static final double WEST = -245440;
+	// private static final double EAST = -154680;
+	// private static final double NORTH = 3960810;
+	// private static final double SOUTH = 4063375;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(LandsatIT.class);
 	private static long startMillis;
@@ -134,7 +140,7 @@ public class LandsatIT extends
 		startMillis = System.currentTimeMillis();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*         RUNNING LandsatIT             *");
+		LOGGER.warn("*         RUNNING CustomCRSLandsatIT             *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 	}
@@ -143,7 +149,7 @@ public class LandsatIT extends
 	public static void reportTest() {
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
-		LOGGER.warn("*      FINISHED LandsatIT               *");
+		LOGGER.warn("*      FINISHED CustomCRSLandsatIT               *");
 		LOGGER
 				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
 						+ "s elapsed.                 *");
@@ -170,7 +176,7 @@ public class LandsatIT extends
 		analyzeOptions
 				.setCqlFilter(String
 						.format(
-								"BBOX(%s,%f,%f,%f,%f) AND %s='B4' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
+								"BBOX(%s,%f,%f,%f,%f) AND %s='B3' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
 								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
 								WEST,
 								SOUTH,
@@ -255,7 +261,7 @@ public class LandsatIT extends
 
 		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
-				REFERENCE_LANDSAT_IMAGE_PATH));
+				CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH));
 		TestUtils.testTileAgainstReference(
 				PlanarImage.wrapRenderedImage(
 						result).getAsBufferedImage(),

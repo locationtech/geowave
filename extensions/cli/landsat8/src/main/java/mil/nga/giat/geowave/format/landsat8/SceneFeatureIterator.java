@@ -55,6 +55,7 @@ import com.google.common.collect.MinMaxPriorityQueue;
 import com.google.common.io.LineReader;
 import com.vividsolutions.jts.geom.MultiPolygon;
 
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 
 public class SceneFeatureIterator implements
@@ -282,6 +283,7 @@ public class SceneFeatureIterator implements
 		// initialize the feature type
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
 		typeBuilder.setName(SCENES_TYPE_NAME);
+		typeBuilder.setCRS(GeometryUtils.DEFAULT_CRS);
 		typeBuilder.add(
 				SHAPE_ATTRIBUTE_NAME,
 				MultiPolygon.class);

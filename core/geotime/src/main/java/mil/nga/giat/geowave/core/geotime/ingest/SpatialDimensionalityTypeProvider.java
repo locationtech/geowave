@@ -50,8 +50,8 @@ public class SpatialDimensionalityTypeProvider implements
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialDimensionalityTypeProvider.class);
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
-	private static final int LONGITUDE_BITS = 31;
-	private static final int LATITUDE_BITS = 31;
+	public static final int LONGITUDE_BITS = 31;
+	public static final int LATITUDE_BITS = 31;
 	private static final double INTERVAL = 500000;
 
 	public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
