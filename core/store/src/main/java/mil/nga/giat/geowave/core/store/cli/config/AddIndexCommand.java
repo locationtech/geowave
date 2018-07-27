@@ -36,7 +36,7 @@ import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 @GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddIndexCommand extends
-	ServiceEnabledCommand<String>
+		ServiceEnabledCommand<String>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
@@ -56,18 +56,18 @@ public class AddIndexCommand extends
 	private String type;
 
 	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
-	
+
 	@ParametersDelegate
 	private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
-	
-	@ParametersDelegate 
+
+	@ParametersDelegate
 	DimensionalityTypeOptions opts;
 
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
-		
+
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
@@ -101,20 +101,20 @@ public class AddIndexCommand extends
 				}
 			}
 		}
-	
+
 		return true;
 	}
 
 	@Override
 	public void execute(
 			OperationParams params ) {
-		computeResults(params);	
+		computeResults(params);
 	}
-	
+
 	@Override
 	public String computeResults(
-			OperationParams params){
-		
+			OperationParams params ) {
+
 		// Ensure that a name is chosen.
 		if (parameters.size() != 1) {
 			throw new ParameterException(
@@ -148,7 +148,7 @@ public class AddIndexCommand extends
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(params),
 				existingProps);
-		
+
 		StringBuilder builder = new StringBuilder();
 		for (Object key : existingProps.keySet()) {
 			String[] split = key.toString().split(

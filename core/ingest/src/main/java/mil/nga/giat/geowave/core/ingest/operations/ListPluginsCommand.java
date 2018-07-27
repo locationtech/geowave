@@ -37,14 +37,15 @@ public class ListPluginsCommand extends
 	@Override
 	public void execute(
 			final OperationParams params ) {
-		JCommander.getConsole().println(computeResults(params));
+		JCommander.getConsole().println(
+				computeResults(params));
 	}
 
 	@Override
 	public String computeResults(
 			final OperationParams params ) {
 		StringBuilder builder = new StringBuilder();
-	
+
 		builder.append("Available index types currently registered as plugins:\n");
 		for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry
 				.getRegisteredDimensionalityTypes()
@@ -52,7 +53,7 @@ public class ListPluginsCommand extends
 			final DimensionalityTypeProviderSpi pluginProvider = pluginProviderEntry.getValue();
 			final String desc = pluginProvider.getDimensionalityTypeDescription() == null ? "no description"
 					: pluginProvider.getDimensionalityTypeDescription();
-			
+
 			builder.append(String.format(
 					"%n  %s:%n    %s%n",
 					pluginProviderEntry.getKey(),
@@ -71,7 +72,7 @@ public class ListPluginsCommand extends
 					pluginProviderEntry.getKey(),
 					desc));
 		}
-		
+
 		builder.append("\nAvailable datastores currently registered:\n");
 		final Map<String, StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder
 				.getRegisteredStoreFactoryFamilies();
@@ -84,7 +85,7 @@ public class ListPluginsCommand extends
 					dataStoreFactory.getType(),
 					desc));
 		}
-		
+
 		return builder.toString();
 	}
 }

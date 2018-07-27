@@ -35,7 +35,7 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 @GeowaveOperation(name = "addstore", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Create a store within Geowave")
 public class AddStoreCommand extends
-	ServiceEnabledCommand<String>
+		ServiceEnabledCommand<String>
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddStoreCommand.class);
@@ -58,7 +58,7 @@ public class AddStoreCommand extends
 	private String storeType;
 
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-	
+
 	@ParametersDelegate
 	private StoreFactoryOptions requiredOptions;
 
@@ -66,15 +66,15 @@ public class AddStoreCommand extends
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
-		
+
 		// Load SPI options for the given type into pluginOptions.
 		if (storeType != null) {
 			pluginOptions.selectPlugin(storeType);
 			requiredOptions = pluginOptions.getFactoryOptions();
 		}
-		else {	
+		else {
 			Properties existingProps = getGeoWaveConfigProperties(params);
-			
+
 			// Try to load the 'default' options.
 			String defaultStore = existingProps.getProperty(DataStorePluginOptions.DEFAULT_PROPERTY_NAMESPACE);
 
@@ -100,7 +100,7 @@ public class AddStoreCommand extends
 				}
 			}
 		}
-		
+
 		return true;
 	}
 
@@ -109,9 +109,10 @@ public class AddStoreCommand extends
 			OperationParams params ) {
 		computeResults(params);
 	}
-	
+
 	@Override
-	public String computeResults(OperationParams params) {
+	public String computeResults(
+			OperationParams params ) {
 		Properties existingProps = getGeoWaveConfigProperties(params);
 
 		// Ensure that a name is chosen.
@@ -152,7 +153,7 @@ public class AddStoreCommand extends
 				existingProps,
 				pluginOptions.getFactoryOptions().getClass(),
 				getNamespace() + "." + DataStorePluginOptions.OPTS);
-		
+
 		StringBuilder builder = new StringBuilder();
 		for (Object key : existingProps.keySet()) {
 			String[] split = key.toString().split(

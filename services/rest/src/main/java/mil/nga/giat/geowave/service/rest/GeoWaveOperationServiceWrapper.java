@@ -191,23 +191,24 @@ public class GeoWaveOperationServiceWrapper<T> extends
 			Class<?> type = f.getType();
 			Field field = f.getField();
 			final String strValue = (String) requestParameters.getString(f.getName());
-			
+
 			if (field.isAnnotationPresent(Parameter.class)) {
 				Class<? extends IStringConverter<?>> converter = field.getAnnotation(
 						Parameter.class).converter();
-				if(converter != null) {
+				if (converter != null) {
 					if (converter != NoConverter.class && strValue != null) {
 						try {
 							objValue = converter.newInstance().convert(
-								strValue);
+									strValue);
 						}
-						catch(InstantiationException e) {
-							LOGGER.warn("Cannot convert parameter since converter does not have zero argument constructor");	
+						catch (InstantiationException e) {
+							LOGGER
+									.warn("Cannot convert parameter since converter does not have zero argument constructor");
 						}
 					}
 				}
 			}
-			
+
 			if (objValue == null) {
 				if (List.class.isAssignableFrom(type)) {
 					objValue = requestParameters.getList(f.getName());

@@ -519,7 +519,7 @@ public class KDEJobRunner extends
 	}
 
 	protected Class<? extends Reducer<?, ?, ?, ?>> getJob2Reducer() {
-		return AccumuloKDEReducer.class;
+		return KDEReducer.class;
 	}
 
 	protected Class<? extends Partitioner<?, ?>> getJob2Partitioner() {
@@ -560,11 +560,11 @@ public class KDEJobRunner extends
 			throws Exception {
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
-				AccumuloKDEReducer.NUM_BANDS,
+				KDEReducer.NUM_BANDS,
 				TILE_SIZE,
-				AccumuloKDEReducer.MINS_PER_BAND,
-				AccumuloKDEReducer.MAXES_PER_BAND,
-				AccumuloKDEReducer.NAME_PER_BAND,
+				KDEReducer.MINS_PER_BAND,
+				KDEReducer.MAXES_PER_BAND,
+				KDEReducer.NAME_PER_BAND,
 				null);
 		setup(
 				statsReducer,

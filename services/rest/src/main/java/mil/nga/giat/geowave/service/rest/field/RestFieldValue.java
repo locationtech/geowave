@@ -9,6 +9,6 @@ public interface RestFieldValue<T> extends
 			T value )
 			throws IllegalArgumentException,
 			IllegalAccessException;
-	
+
 	public Field getField();
 }
