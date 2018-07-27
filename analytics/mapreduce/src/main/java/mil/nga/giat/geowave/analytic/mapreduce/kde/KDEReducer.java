@@ -102,6 +102,8 @@ public class KDEReducer extends
 		}
 	}
 
+	private static final double WEIGHT_EPSILON = 2.22E-14;
+
 	public static final int NUM_BANDS = 3;
 	protected static final String[] NAME_PER_BAND = new String[] {
 		"Weight",
@@ -163,7 +165,8 @@ public class KDEReducer extends
 			final double percentile;
 			if (FloatCompareUtils.checkDoublesEqual(
 					prevValue,
-					value)) {
+					value,
+					WEIGHT_EPSILON)) {
 				percentile = prevPct;
 			}
 			else {
