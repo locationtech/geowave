@@ -10,13 +10,15 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test;
 
+import java.io.IOException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HBaseTestingUtility;
-import org.apache.hadoop.hbase.HConstants;
 import org.junit.Assert;
+
+import com.github.sakserv.minicluster.config.ConfigVars;
+import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
+import com.github.sakserv.propertyparser.PropertyParser;
 
 public class ZookeeperTestEnvironment implements
 		TestEnvironment
@@ -31,54 +33,64 @@ public class ZookeeperTestEnvironment implements
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = LoggerFactory
-			.getLogger(
-					ZookeeperTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(ZookeeperTestEnvironment.class);
 	protected String zookeeper;
 
-	private HBaseTestingUtility zookeeperLocalCluster;
+	private ZookeeperLocalCluster zookeeperLocalCluster;
 
 	public static final String ZK_PROPERTY_NAME = "zookeeperUrl";
-	public static final String DEFAULT_ZK_TEMP_DIR = "./target/zk_temp";
 
 	private ZookeeperTestEnvironment() {}
 
 	@Override
 	public void setup()
 			throws Exception {
-		if (!TestUtils
-				.isSet(
-						zookeeper)) {
-			zookeeper = System
-					.getProperty(
-							ZK_PROPERTY_NAME);
+		if (!TestUtils.isSet(zookeeper)) {
+			zookeeper = System.getProperty(ZK_PROPERTY_NAME);
 
-			if (!TestUtils
-					.isSet(
-							zookeeper)) {
+			if (!TestUtils.isSet(zookeeper)) {
+
+				PropertyParser propertyParser = null;
 
 				try {
-					System
-							.setProperty(
-									HBaseTestingUtility.BASE_TEST_DIRECTORY_KEY,
-									HBaseConfiguration
-											.create()
-											.get(
-													"zookeeper.temp.dir",
-													DEFAULT_ZK_TEMP_DIR));
-					zookeeperLocalCluster = new HBaseTestingUtility();
-					zookeeperLocalCluster.getConfiguration().setInt("test.hbase.zookeeper.property.clientPort", 2181);
-					zookeeperLocalCluster.startMiniZKCluster();
+					propertyParser = new PropertyParser(
+							HBaseStoreTestEnvironment.HBASE_PROPS_FILE);
+					propertyParser.parsePropsFile();
+				}
+				catch (final IOException e) {
+					LOGGER.error(
+							"Unable to load property file: {}" + HBaseStoreTestEnvironment.HBASE_PROPS_FILE,
+							e);
+				}
+
+				if (System.getProperty(
+						"os.name").startsWith(
+						"Windows")) {
+					System.setProperty(
+							"HADOOP_HOME",
+							System.getenv().get(
+									"HADOOP_HOME"));
+				}
+
+				try {
+					zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
+							.setPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
+							.setTempDir(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY))
+							.setZookeeperConnectionString(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
+							.build();
+					zookeeperLocalCluster.start();
 				}
 				catch (final Exception e) {
-					LOGGER
-							.error(
-									"Exception starting zookeeperLocalCluster: " + e,
-									e);
+					LOGGER.error(
+							"Exception starting zookeeperLocalCluster: " + e,
+							e);
 					Assert.fail();
 				}
 
-				zookeeper = "127.0.0.1:" + zookeeperLocalCluster.getZkCluster().getClientPort();
+				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
 			}
 		}
 	}
@@ -87,18 +99,12 @@ public class ZookeeperTestEnvironment implements
 	public void tearDown()
 			throws Exception {
 		try {
-			zookeeperLocalCluster.shutdownMiniZKCluster();
-			if (!zookeeperLocalCluster.cleanupTestDir()) {
-				LOGGER
-						.warn(
-								"Unable to delete mini zookeeper temporary directory");
-			}
+			zookeeperLocalCluster.stop(true);
 		}
 		catch (final Exception e) {
-			LOGGER
-					.warn(
-							"Unable to delete or shutdown mini zookeeper temporary directory",
-							e);
+			LOGGER.warn(
+					"Unable to delete mini zookeeper temporary directory",
+					e);
 		}
 
 		zookeeper = null;

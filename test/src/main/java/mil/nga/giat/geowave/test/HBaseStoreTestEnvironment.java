@@ -14,9 +14,6 @@ import java.io.IOException;
 import java.security.PrivilegedExceptionAction;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HBaseTestingUtility;
-import org.apache.hadoop.hbase.HConstants;
 import org.apache.hadoop.hbase.client.Connection;
 import org.apache.hadoop.hbase.protobuf.generated.VisibilityLabelsProtos.VisibilityLabelsResponse;
 import org.apache.hadoop.hbase.security.User;
@@ -31,6 +28,10 @@ import org.junit.Assert;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.sakserv.minicluster.config.ConfigVars;
+import com.github.sakserv.minicluster.impl.HbaseLocalCluster;
+import com.github.sakserv.propertyparser.PropertyParser;
+
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -44,9 +45,6 @@ public class HBaseStoreTestEnvironment extends
 {
 	private static final GenericStoreFactory<DataStore> STORE_FACTORY = new HBaseStoreFactoryFamily()
 			.getDataStoreFactory();
-
-	private final static int NUM_REGION_SERVERS = 2;
-
 	private static HBaseStoreTestEnvironment singletonInstance = null;
 
 	private static boolean enableVisibility = true;
@@ -59,11 +57,10 @@ public class HBaseStoreTestEnvironment extends
 	}
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseStoreTestEnvironment.class);
-
-	public static final String DEFAULT_HBASE_TEMP_DIR = "./target/hbase_temp";
+	public static final String HBASE_PROPS_FILE = "hbase.properties";
 	protected String zookeeper;
 
-	private HBaseTestingUtility hbaseLocalCluster;
+	private HbaseLocalCluster hbaseLocalCluster;
 
 	private HBaseStoreTestEnvironment() {}
 
@@ -92,6 +89,18 @@ public class HBaseStoreTestEnvironment extends
 	@Override
 	public void setup() {
 		if (hbaseLocalCluster == null) {
+			PropertyParser propertyParser = null;
+
+			try {
+				propertyParser = new PropertyParser(
+						HBASE_PROPS_FILE);
+				propertyParser.parsePropsFile();
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Unable to load property file: {}" + HBASE_PROPS_FILE,
+						e);
+			}
 
 			if (!TestUtils.isSet(zookeeper)) {
 				zookeeper = System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME);
@@ -104,12 +113,7 @@ public class HBaseStoreTestEnvironment extends
 
 			if (!TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
 				try {
-					final Configuration conf = HBaseConfiguration.create();
-					System.setProperty(
-							HBaseTestingUtility.BASE_TEST_DIRECTORY_KEY,
-							HBaseConfiguration.create().get(
-									"hbase.root.dir",
-									DEFAULT_HBASE_TEMP_DIR));
+					final Configuration conf = new Configuration();
 					conf.set(
 							"hbase.online.schema.update.enable",
 							"true");
@@ -143,12 +147,31 @@ public class HBaseStoreTestEnvironment extends
 						// processor
 						VisibilityTestUtil.enableVisiblityLabels(conf);
 					}
+
 					// Start the cluster
-					hbaseLocalCluster = new HBaseTestingUtility(
-							conf);
-					hbaseLocalCluster.startMiniHBaseCluster(
-							1,
-							NUM_REGION_SERVERS);
+					hbaseLocalCluster = new HbaseLocalCluster.Builder()
+							.setHbaseMasterPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_PORT_KEY)))
+							.setHbaseMasterInfoPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.HBASE_MASTER_INFO_PORT_KEY)))
+							.setNumRegionServers(
+									Integer.parseInt(propertyParser
+											.getProperty(ConfigVars.HBASE_NUM_REGION_SERVERS_KEY)))
+							.setHbaseRootDir(
+									propertyParser.getProperty(ConfigVars.HBASE_ROOT_DIR_KEY))
+							.setZookeeperPort(
+									Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
+							.setZookeeperConnectionString(
+									propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
+							.setZookeeperZnodeParent(
+									propertyParser.getProperty(ConfigVars.HBASE_ZNODE_PARENT_KEY))
+							.setHbaseWalReplicationEnabled(
+									Boolean.parseBoolean(propertyParser
+											.getProperty(ConfigVars.HBASE_WAL_REPLICATION_ENABLED_KEY)))
+							.setHbaseConfiguration(
+									conf)
+							.build();
+					hbaseLocalCluster.start();
 
 					if (enableVisibility) {
 
@@ -226,15 +249,12 @@ public class HBaseStoreTestEnvironment extends
 	@Override
 	public void tearDown() {
 		try {
-			hbaseLocalCluster.shutdownMiniCluster();
-			if (!hbaseLocalCluster.cleanupTestDir()) {
-				LOGGER.warn("Unable to delete mini hbase temporary directory");
-			}
+			hbaseLocalCluster.stop(true);
 			hbaseLocalCluster = null;
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
-					"Unable to shutdown and delete mini hbase temporary directory",
+					"Unable to delete mini hbase temporary directory",
 					e);
 		}
 	}
