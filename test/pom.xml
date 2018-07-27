@@ -624,6 +624,7 @@
 			<properties>
 				<skipITs>false</skipITs>
 				<guava.version>14.0-rc1</guava.version>
+				<protobuf.version>2.5.0</protobuf.version>
 				<testStoreType>HBASE</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
 			</properties>

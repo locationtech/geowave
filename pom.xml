@@ -40,6 +40,7 @@
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.13.1</geoserver.version>
 		<accumulo.version>1.9.2</accumulo.version>
+		<thrift.version>0.9.3</thrift.version>
 		<accumulo.api>1.9</accumulo.api>
 		<bigtable.version>1.2.0</bigtable.version>
 		<cassandra.version>3.11.2</cassandra.version>
@@ -139,6 +140,11 @@
 				<groupId>org.apache.zookeeper</groupId>
 				<artifactId>zookeeper</artifactId>
 				<version>${zookeeper.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.thrift</groupId>
+				<artifactId>libthrift</artifactId>
+				<version>0.9.3</version>
 			</dependency>
 			<dependency>
 				<groupId>xerces</groupId>
@@ -622,7 +628,7 @@
 			<dependency>
 				<groupId>com.google.protobuf</groupId>
 				<artifactId>protobuf-java-util</artifactId>
-				<version>${protobuf.version}</version>
+				<version>3.5.1</version>
 			</dependency>
 			<dependency>
 				<groupId>io.grpc</groupId>

@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.test;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HBaseTestingUtility;
 import org.apache.hadoop.hbase.HConstants;
@@ -30,7 +31,9 @@ public class ZookeeperTestEnvironment implements
 		return singletonInstance;
 	}
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(ZookeeperTestEnvironment.class);
+	private final static Logger LOGGER = LoggerFactory
+			.getLogger(
+					ZookeeperTestEnvironment.class);
 	protected String zookeeper;
 
 	private HBaseTestingUtility zookeeperLocalCluster;
@@ -43,30 +46,39 @@ public class ZookeeperTestEnvironment implements
 	@Override
 	public void setup()
 			throws Exception {
-		if (!TestUtils.isSet(zookeeper)) {
-			zookeeper = System.getProperty(ZK_PROPERTY_NAME);
+		if (!TestUtils
+				.isSet(
+						zookeeper)) {
+			zookeeper = System
+					.getProperty(
+							ZK_PROPERTY_NAME);
 
-			if (!TestUtils.isSet(zookeeper)) {
+			if (!TestUtils
+					.isSet(
+							zookeeper)) {
 
 				try {
-					System.setProperty(
-							HBaseTestingUtility.BASE_TEST_DIRECTORY_KEY,
-							HBaseConfiguration.create().get(
-									"zookeeper.temp.dir",
-									DEFAULT_ZK_TEMP_DIR));
+					System
+							.setProperty(
+									HBaseTestingUtility.BASE_TEST_DIRECTORY_KEY,
+									HBaseConfiguration
+											.create()
+											.get(
+													"zookeeper.temp.dir",
+													DEFAULT_ZK_TEMP_DIR));
 					zookeeperLocalCluster = new HBaseTestingUtility();
+					zookeeperLocalCluster.getConfiguration().setInt("test.hbase.zookeeper.property.clientPort", 2181);
 					zookeeperLocalCluster.startMiniZKCluster();
 				}
 				catch (final Exception e) {
-					LOGGER.error(
-							"Exception starting zookeeperLocalCluster: " + e,
-							e);
+					LOGGER
+							.error(
+									"Exception starting zookeeperLocalCluster: " + e,
+									e);
 					Assert.fail();
 				}
 
-				zookeeper = "127.0.0.1:" + zookeeperLocalCluster.getConfiguration().get(
-						HConstants.ZOOKEEPER_CLIENT_PORT,
-						"2181");
+				zookeeper = "127.0.0.1:" + zookeeperLocalCluster.getZkCluster().getClientPort();
 			}
 		}
 	}
@@ -77,13 +89,16 @@ public class ZookeeperTestEnvironment implements
 		try {
 			zookeeperLocalCluster.shutdownMiniZKCluster();
 			if (!zookeeperLocalCluster.cleanupTestDir()) {
-
+				LOGGER
+						.warn(
+								"Unable to delete mini zookeeper temporary directory");
 			}
 		}
 		catch (final Exception e) {
-			LOGGER.warn(
-					"Unable to delete mini zookeeper temporary directory",
-					e);
+			LOGGER
+					.warn(
+							"Unable to delete or shutdown mini zookeeper temporary directory",
+							e);
 		}
 
 		zookeeper = null;
