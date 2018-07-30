@@ -7,7 +7,9 @@ import java.net.URLClassLoader;
 import java.net.URLStreamHandlerFactory;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.impl.VFSClassLoader;
@@ -17,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
 import mil.nga.giat.geowave.mapreduce.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.mapreduce.s3.S3URLStreamHandlerFactory;
 
@@ -24,7 +27,7 @@ public class URLClassloaderUtils
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(URLClassloaderUtils.class);
 	private static final Object MUTEX = new Object();
-	private static boolean classLoaderInitialized = false;
+	private static Set<ClassLoader> initializedClassLoaders = new HashSet<>();
 
 	public static enum URLTYPE {
 		S3,
@@ -96,50 +99,19 @@ public class URLClassloaderUtils
 	private static void initClassLoader()
 			throws MalformedURLException {
 		synchronized (MUTEX) {
-			if (classLoaderInitialized) {
+			ClassLoader myCl = URLClassloaderUtils.class.getClassLoader();
+			if (initializedClassLoaders.contains(myCl)) {
 				return;
 			}
-			final ClassLoader classLoader = URLClassloaderUtils.class.getClassLoader();
-			LOGGER.info("Generating patched classloader");
-			if (classLoader instanceof VFSClassLoader) {
-				final VFSClassLoader cl = (VFSClassLoader) classLoader;
-				final FileObject[] fileObjs = cl.getFileObjects();
-				final ArrayList<URL> fileList = new ArrayList();
-
-				for (int i = 0; i < fileObjs.length; i++) {
-					final String fileStr = fileObjs[i].toString();
-					if (verifyProtocol(fileStr)) {
-						fileList.add(new URL(
-								fileStr));
-					}
-					else {
-						LOGGER.error("Failed to register class loader from: " + fileStr);
-					}
-				}
-
-				final URL[] fileUrls = new URL[fileList.size()];
-				for (int i = 0; i < fileList.size(); i++) {
-					fileUrls[i] = fileList.get(i);
-				}
-
-				final ClassLoader urlCL = java.security.AccessController
-						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-							@Override
-							public URLClassLoader run() {
-								final URLClassLoader ucl = new URLClassLoader(
-										fileUrls,
-										cl);
-								return ucl;
-							}
-						});
-
-				SPIServiceRegistry.registerClassLoader(urlCL);
+			final ClassLoader classLoader = ClasspathUtils.transformClassLoader(myCl);
+			if (classLoader != null) {
+				SPIServiceRegistry.registerClassLoader(classLoader);
 			}
-			classLoaderInitialized = true;
+			initializedClassLoaders.add(myCl);
 		}
 	}
 
-	private static boolean verifyProtocol(
+	protected static boolean verifyProtocol(
 			final String fileStr ) {
 		if (fileStr.contains("s3://")) {
 			try {

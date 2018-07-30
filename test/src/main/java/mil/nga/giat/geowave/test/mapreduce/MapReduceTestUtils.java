@@ -22,6 +22,8 @@ import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 import mil.nga.giat.geowave.core.ingest.operations.LocalToMapReduceToGeowaveCommand;
 import mil.nga.giat.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
@@ -91,15 +93,26 @@ public class MapReduceTestUtils
 
 		final LocalToMapReduceToGeowaveCommand mrGw = new LocalToMapReduceToGeowaveCommand();
 
-		mrGw.setInputIndexOptions(indexOptions);
-		mrGw.setInputStoreOptions(dataStore);
+		AddStoreCommand addStore = new AddStoreCommand();
+		addStore.setParameters("test-store");
+		addStore.setPluginOptions(dataStore);
+		addStore.execute(operationParams);
+
+		StringBuilder indexParam = new StringBuilder();
+		for (int i = 0; i < indexOptions.size(); i++) {
+			AddIndexCommand addIndex = new AddIndexCommand();
+			addIndex.setParameters("test-index" + i);
+			addIndex.setPluginOptions(indexOptions.get(i));
+			addIndex.execute(operationParams);
+			indexParam.append("test-index" + i + ",");
+		}
 
 		mrGw.setPluginFormats(ingestFormatOptions);
 		mrGw.setParameters(
 				ingestFilePath,
 				env.getHdfsBaseDirectory(),
-				null,
-				null);
+				"test-store",
+				indexParam.toString());
 		mrGw.getMapReduceOptions().setJobTrackerHostPort(
 				env.getJobtracker());
 

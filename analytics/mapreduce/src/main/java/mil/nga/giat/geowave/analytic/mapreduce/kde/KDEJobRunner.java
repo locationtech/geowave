@@ -73,6 +73,7 @@ import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.ClearCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
@@ -314,7 +315,7 @@ public class KDEJobRunner extends
 				final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 						.accept(
 								new ExtractGeometryFilterVisitor(
-										GeometryUtils.DEFAULT_CRS,
+										GeometryUtils.getDefaultCRS(),
 										geometryAttribute),
 								null);
 				bbox = geoAndCompareOpData.getGeometry();
@@ -404,14 +405,25 @@ public class KDEJobRunner extends
 				// requested tile size
 
 				final ResizeCommand resizeCommand = new ResizeCommand();
+				File configFile = File.createTempFile(
+						"temp-config",
+						null);
+				ManualOperationParams params = new ManualOperationParams();
 
+				params.getContext().put(
+						ConfigOptions.PROPERTIES_FILE_CONTEXT,
+						configFile);
+				AddStoreCommand addStore = new AddStoreCommand();
+				addStore.setParameters("temp-out");
+				addStore.setPluginOptions(outputDataStoreOptions);
+				addStore.execute(params);
+				addStore.setParameters("temp-raster-out");
+				addStore.setPluginOptions(rasterResizeOutputDataStoreOptions);
+				addStore.execute(params);
 				// We're going to override these anyway.
 				resizeCommand.setParameters(
-						null,
-						null);
-
-				resizeCommand.setInputStoreOptions(outputDataStoreOptions);
-				resizeCommand.setOutputStoreOptions(rasterResizeOutputDataStoreOptions);
+						"temp-out",
+						"temp-raster-out");
 
 				resizeCommand.getOptions().setInputCoverageName(
 						kdeCoverageName);
@@ -430,15 +442,14 @@ public class KDEJobRunner extends
 						kdeCommandLineOptions.getTileSize());
 
 				final int resizeStatus = ToolRunner.run(
-						resizeCommand.createRunner(new ManualOperationParams()),
+						resizeCommand.createRunner(params),
 						new String[] {});
 				if (resizeStatus == 0) {
 					// delegate to clear command to clean up with tmp namespace
 					// after successful resize
 					final ClearCommand clearCommand = new ClearCommand();
-					clearCommand.setParameters(null);
-					clearCommand.setInputStoreOptions(outputDataStoreOptions);
-					clearCommand.execute(new ManualOperationParams());
+					clearCommand.setParameters("temp-out");
+					clearCommand.execute(params);
 				}
 				else {
 					LOGGER.warn("Resize command error code '" + resizeStatus + "'.  Retaining temporary namespace '"
@@ -456,7 +467,15 @@ public class KDEJobRunner extends
 		}
 		finally {
 			if (fs != null) {
-				fs.close();
+				try {
+					fs.close();
+				}
+				catch (IOException e) {
+					LOGGER.info(e.getMessage());
+					// Attempt to close, but don't throw an error if it is
+					// already closed.
+					// Log message, so find bugs does not complain.
+				}
 			}
 		}
 	}
@@ -500,7 +519,7 @@ public class KDEJobRunner extends
 	}
 
 	protected Class<? extends Reducer<?, ?, ?, ?>> getJob2Reducer() {
-		return AccumuloKDEReducer.class;
+		return KDEReducer.class;
 	}
 
 	protected Class<? extends Partitioner<?, ?>> getJob2Partitioner() {
@@ -541,11 +560,11 @@ public class KDEJobRunner extends
 			throws Exception {
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
-				AccumuloKDEReducer.NUM_BANDS,
+				KDEReducer.NUM_BANDS,
 				TILE_SIZE,
-				AccumuloKDEReducer.MINS_PER_BAND,
-				AccumuloKDEReducer.MAXES_PER_BAND,
-				AccumuloKDEReducer.NAME_PER_BAND,
+				KDEReducer.MINS_PER_BAND,
+				KDEReducer.MAXES_PER_BAND,
+				KDEReducer.NAME_PER_BAND,
 				null);
 		setup(
 				statsReducer,

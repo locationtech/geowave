@@ -29,6 +29,25 @@ public class FloatCompareUtils
 	public static boolean checkDoublesEqual(
 			double x,
 			double y ) {
+		return checkDoublesEqual(
+				x,
+				y,
+				COMP_EPSILON);
+	}
+
+	/**
+	 * The == operator is not reliable for doubles, so we are using this method
+	 * to check if two doubles are equal
+	 * 
+	 * @param x
+	 * @param y
+	 * @param epsilon
+	 * @return true if the double are equal, false if they are not
+	 */
+	public static boolean checkDoublesEqual(
+			double x,
+			double y,
+			double epsilon ) {
 		boolean xNeg = false;
 		boolean yNeg = false;
 		double diff = (Math.abs(x) - Math.abs(y));
@@ -39,7 +58,7 @@ public class FloatCompareUtils
 		if (y < 0.0) {
 			yNeg = true;
 		}
-		return (diff <= COMP_EPSILON && diff >= -COMP_EPSILON && xNeg == yNeg);
+		return (diff <= epsilon && diff >= -epsilon && xNeg == yNeg);
 	}
 
 }

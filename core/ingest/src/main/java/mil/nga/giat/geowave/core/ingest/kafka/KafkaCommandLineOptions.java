@@ -30,7 +30,7 @@ public class KafkaCommandLineOptions
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KafkaCommandLineOptions.class);
 
-	@Parameter(names = "--kafkaprops", required = true, description = "Properties file containing Kafka properties")
+	@Parameter(names = "--kafkaprops", required = false, description = "Properties file containing Kafka properties")
 	private String kafkaPropertyFile;
 
 	// After initProperties()

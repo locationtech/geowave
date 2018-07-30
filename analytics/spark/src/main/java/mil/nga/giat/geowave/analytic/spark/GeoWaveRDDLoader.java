@@ -11,6 +11,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
+
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
@@ -65,6 +67,7 @@ public class GeoWaveRDDLoader
 					sc,
 					indexStrategy);
 		}
+
 		GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
 				wrappedRDD,
 				broadcastStrategy);
@@ -86,6 +89,7 @@ public class GeoWaveRDDLoader
 					sc,
 					indexStrategy);
 		}
+
 		GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
 				inputRDD,
 				broadcastStrategy);

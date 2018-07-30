@@ -495,11 +495,13 @@ public class QueryOptions implements
 			return adapters.toArray(new DataAdapter[adapters.size()]);
 		}
 		final List<DataAdapter> list = new ArrayList<DataAdapter>();
-		if (adapterStore != null && adapterStore.getAdapters() != null) {
-			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+		if (adapterStore != null) {
+			CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+			if (it != null) {
 				while (it.hasNext()) {
 					list.add(it.next());
 				}
+				it.close();
 			}
 		}
 		return list.toArray(new DataAdapter[list.size()]);

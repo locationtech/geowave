@@ -53,6 +53,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
@@ -670,7 +671,9 @@ public class AccumuloUtils
 						null,
 						true);
 			}
-			catch (final IOException e) {
+			catch (final IOException | AdapterException e) {
+				// May need to address repeating adaptor log in this class, or
+				// calling class.
 				LOGGER.error(
 						"unable to decode row",
 						e);

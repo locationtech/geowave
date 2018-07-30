@@ -473,7 +473,7 @@ public class GeoWaveConfiguratorBase
 
 		// if this property is used, it hadoop does not support yarn
 		conf.set(
-				"mapred.job.tracker",
+				"mapreduce.jobtracker.address",
 				jobTrackerOrResourceManagerHostPort);
 		// the following 3 properties will only be used if the hadoop version
 		// does support yarn

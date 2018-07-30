@@ -121,7 +121,7 @@ public interface ConfigService
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Path("/addstore/{type}")
-	public Response addStore(
+	public Response addStoreReRoute(
 			@QueryParam("name") String name,
 			@PathParam("type") String type,
 			@QueryParam("geowaveNamespace") @DefaultValue("") String geowaveNamespace,
@@ -148,6 +148,22 @@ public interface ConfigService
 			@QueryParam("nameOverride") String nameOverride,
 			@QueryParam("numPartitions") Integer numPartitions,
 			@QueryParam("partitionStrategy") String partitionStrategy,
+			@QueryParam("periodicity") String periodicity,
+			@QueryParam("bias") String bias,
+			@QueryParam("maxDuplicates") Long maxDuplicates,
+			@QueryParam("crs") String crs );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Path("/addindex")
+	public Response addIndex(
+			@QueryParam("name") String name,
+			@QueryParam("type") String type,
+			@QueryParam("makeDefault") Boolean makeDefault,
+			@QueryParam("nameOverride") String nameOverride,
+			@QueryParam("numPartitions") Integer numPartitions,
+			@QueryParam("partitionStrategy") String partitionStrategy,
+			@QueryParam("storeTime") Boolean storeTime,
 			@QueryParam("periodicity") String periodicity,
 			@QueryParam("bias") String bias,
 			@QueryParam("maxDuplicates") Long maxDuplicates,

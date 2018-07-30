@@ -17,34 +17,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
-import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
-import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.ReferenceIdentifier;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
-import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.geotools.geometry.jts.JTS;
-import org.opengis.geometry.MismatchedDimensionException;
-import org.opengis.referencing.FactoryException;
 
-import com.vividsolutions.jts.geom.Geometry;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.google.common.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
-import mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
@@ -332,7 +323,7 @@ public class FeatureDataAdapter extends
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
 
 		if (persistedCRS == null) {
-			persistedCRS = GeometryUtils.DEFAULT_CRS;
+			persistedCRS = GeometryUtils.getDefaultCRS();
 		}
 
 		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
@@ -748,7 +739,7 @@ public class FeatureDataAdapter extends
 	protected Object defaultTypeDataFromBinary(
 			final byte[] bytes ) {
 		try {
-			FeatureDataUtils.initClassLoader();
+			GeometryUtils.initClassLoader();
 		}
 		catch (final MalformedURLException e) {
 			LOGGER.warn(
@@ -872,15 +863,20 @@ public class FeatureDataAdapter extends
 				StringUtils.stringToBinary(entry.getID()));
 	}
 
-	private FeatureRowBuilder builder;
+	private ThreadLocal<FeatureRowBuilder> builder = null;
 
 	@Override
 	protected RowBuilder<SimpleFeature, Object> newBuilder() {
 		if (builder == null) {
-			builder = new FeatureRowBuilder(
-					reprojectedFeatureType);
+			builder = new ThreadLocal<FeatureRowBuilder>() {
+				@Override
+				protected FeatureRowBuilder initialValue() {
+					return new FeatureRowBuilder(
+							reprojectedFeatureType);
+				}
+			};
 		}
-		return builder;
+		return builder.get();
 	}
 
 	@Override
@@ -1013,9 +1009,10 @@ public class FeatureDataAdapter extends
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = Maps.synchronizedBiMap(HashBiMap.create());
+	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
 	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
-	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new HashMap<>();
+	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new ConcurrentHashMap<>();
+	private transient volatile boolean positionMapsInitialized = false;
 
 	@Override
 	public int getPositionOfOrderedField(
@@ -1026,8 +1023,10 @@ public class FeatureDataAdapter extends
 		if (dimensionFieldIds.contains(fieldId)) {
 			return dimensionFieldIds.indexOf(fieldId);
 		}
-		if (fieldToPositionMap.isEmpty()) {
-			initializePositionMaps();
+		if (!positionMapsInitialized) {
+			synchronized (this) {
+				initializePositionMaps();
+			}
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
@@ -1044,10 +1043,12 @@ public class FeatureDataAdapter extends
 			final int position ) {
 		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
 		if (position >= dimensionFieldIds.size()) {
-			if (fieldToPositionMap.isEmpty()) {
-				initializePositionMaps();
-			}
 			final int adjustedPosition = position - dimensionFieldIds.size();
+			if (!positionMapsInitialized) {
+				synchronized (this) {
+					initializePositionMaps();
+				}
+			}
 			// check other fields
 			return positionToFieldMap.get(adjustedPosition);
 		}
@@ -1056,6 +1057,9 @@ public class FeatureDataAdapter extends
 	}
 
 	private void initializePositionMaps() {
+		if (positionMapsInitialized) {
+			return;
+		}
 		try {
 			for (int i = 0; i < reprojectedFeatureType.getAttributeCount(); i++) {
 				final AttributeDescriptor ad = reprojectedFeatureType.getDescriptor(i);
@@ -1065,7 +1069,8 @@ public class FeatureDataAdapter extends
 						currFieldId,
 						i);
 			}
-			positionToFieldMap = Maps.synchronizedBiMap(fieldToPositionMap.inverse());
+			positionToFieldMap = fieldToPositionMap.inverse();
+			positionMapsInitialized = true;
 		}
 		catch (final Exception e) {
 			LOGGER.error(

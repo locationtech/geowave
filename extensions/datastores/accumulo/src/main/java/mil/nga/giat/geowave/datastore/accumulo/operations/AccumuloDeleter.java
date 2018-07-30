@@ -40,7 +40,7 @@ public class AccumuloDeleter implements
 	}
 
 	@Override
-	public void delete(
+	public synchronized void delete(
 			final GeoWaveRow row,
 			final DataAdapter<?> adapter ) {
 		final List<Range> rowRanges = new ArrayList<Range>();

@@ -322,7 +322,7 @@ public class SpatialQuery extends
 			}
 			CoordinateReferenceSystem indexCrs;
 			if (isDefaultCrs(indexCrsStr)) {
-				indexCrs = GeometryUtils.DEFAULT_CRS;
+				indexCrs = GeometryUtils.getDefaultCRS();
 			}
 			else {
 				indexCrs = ((CustomCrsIndexModel) index.getIndexModel()).getCrs();

@@ -283,7 +283,7 @@ public class SplitsProvider
 			final GeoWaveRowRange range ) {
 		if (range == null) {
 			if (rangeStats != null) {
-				return rangeStats.totalSampleSize();
+				return rangeStats.getTotalCount();
 			}
 			else {
 				// with an infinite range and no histogram we have no info to

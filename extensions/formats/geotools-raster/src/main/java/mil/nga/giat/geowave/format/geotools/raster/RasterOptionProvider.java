@@ -41,7 +41,7 @@ public class RasterOptionProvider implements
 	private final String crs = null;
 
 	@Parameter(names = "--histogram", description = "Build a histogram of samples per band on ingest for performing band equalization")
-	private final boolean buildHistogream = false;
+	private final boolean buildHistogram = false;
 
 	@Parameter(names = "--tileSize", description = "Optional parameter to set the tile size stored (default is 256)")
 	private final int tileSize = RasterDataAdapter.DEFAULT_TILE_SIZE;
@@ -83,8 +83,8 @@ public class RasterOptionProvider implements
 		return coverageName;
 	}
 
-	public boolean isBuildHistogream() {
-		return buildHistogream;
+	public boolean isBuildHistogram() {
+		return buildHistogram;
 	}
 
 	public double[][] getNodata(

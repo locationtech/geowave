@@ -36,7 +36,7 @@ public class ExtractGeometryFilterVisitorTest
 {
 	final String geomAttributeName = "geom";
 	final ExtractGeometryFilterVisitor visitorWithDescriptor = new ExtractGeometryFilterVisitor(
-			GeometryUtils.DEFAULT_CRS,
+			GeometryUtils.getDefaultCRS(),
 			geomAttributeName);
 
 	@Test
@@ -68,7 +68,7 @@ public class ExtractGeometryFilterVisitorTest
 							new Coordinate(
 									-122.7668,
 									0.4979),
-							GeometryUtils.DEFAULT_CRS),
+							GeometryUtils.getDefaultCRS()),
 					2);
 		}
 	}
@@ -102,7 +102,7 @@ public class ExtractGeometryFilterVisitorTest
 							new Coordinate(
 									179.9999,
 									0.79),
-							GeometryUtils.DEFAULT_CRS),
+							GeometryUtils.getDefaultCRS()),
 					2000);
 		}
 	}

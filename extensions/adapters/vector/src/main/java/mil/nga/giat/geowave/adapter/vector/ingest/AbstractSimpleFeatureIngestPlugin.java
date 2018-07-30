@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
-import java.io.File;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -24,6 +23,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
+import com.vividsolutions.jts.geom.Geometry;
 
 import mil.nga.giat.geowave.adapter.vector.AvroFeatureDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
@@ -50,6 +50,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	protected CQLFilterOptionProvider filterOptionProvider = new CQLFilterOptionProvider();
 	protected FeatureSerializationOptionProvider serializationFormatOptionProvider = new FeatureSerializationOptionProvider();
 	protected TypeNameOptionProvider typeNameProvider = new TypeNameOptionProvider();
+	protected GeometrySimpOptionProvider simpOptionProvider = new GeometrySimpOptionProvider();
 
 	public void setFilterProvider(
 			final CQLFilterOptionProvider filterOptionProvider ) {
@@ -66,17 +67,28 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		this.typeNameProvider = typeNameProvider;
 	}
 
+	public void setGeometrySimpOptionProvider(
+			final GeometrySimpOptionProvider geometryProvider ) {
+		this.simpOptionProvider = geometryProvider;
+	}
+
 	@Override
 	public byte[] toBinary() {
 		final byte[] filterBinary = filterOptionProvider.toBinary();
 		final byte[] typeNameBinary = typeNameProvider.toBinary();
-		final ByteBuffer buf = ByteBuffer.allocate(filterBinary.length + typeNameBinary.length + 4);
+		final byte[] simpBinary = simpOptionProvider.toBinary();
+		final byte[] backingBuffer = new byte[filterBinary.length + typeNameBinary.length + simpBinary.length
+				+ (Integer.BYTES * 2)];
+		final ByteBuffer buf = ByteBuffer.wrap(backingBuffer);
 		buf.putInt(filterBinary.length);
 		buf.put(filterBinary);
+		buf.putInt(typeNameBinary.length);
 		buf.put(typeNameBinary);
+		buf.put(simpBinary);
+
 		return ArrayUtils.addAll(
 				serializationFormatOptionProvider.toBinary(),
-				buf.array());
+				backingBuffer);
 	}
 
 	@Override
@@ -95,9 +107,15 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		final ByteBuffer buf = ByteBuffer.wrap(otherBytes);
 		final int filterBinaryLength = buf.getInt();
 		final byte[] filterBinary = new byte[filterBinaryLength];
-		final byte[] typeNameBinary = new byte[otherBytes.length - filterBinaryLength - 4];
 		buf.get(filterBinary);
+
+		final int typeNameBinaryLength = buf.getInt();
+		final byte[] typeNameBinary = new byte[typeNameBinaryLength];
 		buf.get(typeNameBinary);
+
+		final byte[] geometrySimpBinary = new byte[otherBytes.length - filterBinary.length - typeNameBinary.length
+				- (Integer.BYTES * 2)];
+		buf.get(geometrySimpBinary);
 
 		serializationFormatOptionProvider = new FeatureSerializationOptionProvider();
 		serializationFormatOptionProvider.fromBinary(kryoBytes);
@@ -107,6 +125,9 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 
 		typeNameProvider = new TypeNameOptionProvider();
 		typeNameProvider.fromBinary(typeNameBinary);
+
+		simpOptionProvider = new GeometrySimpOptionProvider();
+		simpOptionProvider.fromBinary(geometrySimpBinary);
 	}
 
 	protected WritableDataAdapter<SimpleFeature> newAdapter(
@@ -176,6 +197,13 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		else {
 			internalTypeNameProvider = null;
 		}
+		final GeometrySimpOptionProvider internalSimpOptionProvider;
+		if ((simpOptionProvider != null)) {
+			internalSimpOptionProvider = simpOptionProvider;
+		}
+		else {
+			internalSimpOptionProvider = null;
+		}
 		if ((internalFilterProvider != null) || (internalTypeNameProvider != null)) {
 			final Iterator<GeoWaveData<SimpleFeature>> it = Iterators.filter(
 					geowaveData,
@@ -189,6 +217,16 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 							}
 							if ((internalFilterProvider != null) && !internalFilterProvider.evaluate(input.getValue())) {
 								return false;
+							}
+							if ((internalSimpOptionProvider != null)) {
+								Geometry simpGeom = internalSimpOptionProvider.simplifyGeometry((Geometry) input
+										.getValue()
+										.getDefaultGeometry());
+								if (!internalSimpOptionProvider.filterGeometry(simpGeom)) {
+									return false;
+								}
+								input.getValue().setDefaultGeometry(
+										simpGeom);
 							}
 							return true;
 						}

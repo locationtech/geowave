@@ -29,6 +29,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 		myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
 		myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
 		myInstance.setSerializationFormatProvider(myOptions.getSerializationFormatOptionProvider());
+		myInstance.setGeometrySimpOptionProvider(myOptions.getGeometrySimpOptionProvider());
 		return myInstance;
 	}
 

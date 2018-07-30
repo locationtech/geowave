@@ -26,6 +26,9 @@ public class GpxPersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 1201,
 					IngestGpxTrackFromHdfs::new),
+			new PersistableIdAndConstructor(
+					(short) 1202,
+					MaxExtentOptProvider::new)
 		};
 	}
 }

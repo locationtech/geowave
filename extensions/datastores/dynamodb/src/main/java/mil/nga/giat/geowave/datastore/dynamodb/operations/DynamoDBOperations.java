@@ -306,17 +306,17 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public Reader createReader(
-			final ReaderParams readerParams ) {
-		return new DynamoDBReader(
+	public <T> Reader<T> createReader(
+			final ReaderParams<T> readerParams ) {
+		return new DynamoDBReader<T>(
 				readerParams,
 				this);
 	}
 
 	@Override
-	public Reader createReader(
-			final RecordReaderParams recordReaderParams ) {
-		return new DynamoDBReader(
+	public <T> Reader<T> createReader(
+			final RecordReaderParams<T> recordReaderParams ) {
+		return new DynamoDBReader<T>(
 				recordReaderParams,
 				this);
 	}

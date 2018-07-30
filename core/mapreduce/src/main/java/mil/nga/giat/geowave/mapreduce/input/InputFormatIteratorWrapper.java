@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final Reader reader;
+	private final Reader<GeoWaveRow> reader;
 	private final QueryFilter queryFilter;
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
@@ -37,7 +38,7 @@ public class InputFormatIteratorWrapper<T> implements
 	private final PrimaryIndex index;
 
 	public InputFormatIteratorWrapper(
-			final Reader reader,
+			final Reader<GeoWaveRow> reader,
 			final QueryFilter queryFilter,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
@@ -74,15 +75,21 @@ public class InputFormatIteratorWrapper<T> implements
 			final QueryFilter clientFilter,
 			final DataAdapter<T> adapter,
 			final PrimaryIndex index ) {
-		final Object value = BaseDataStoreUtils.decodeRow(
-				row,
-				clientFilter,
-				adapter,
-				serializationTool.getAdapterStore(),
-				index,
-				null,
-				null,
-				true);
+		Object value = null;
+		try {
+			value = BaseDataStoreUtils.decodeRow(
+					row,
+					clientFilter,
+					adapter,
+					serializationTool.getAdapterStore(),
+					index,
+					null,
+					null,
+					true);
+		}
+		catch (AdapterException e) {
+			return null;
+		}
 		if (value == null) {
 			return null;
 		}
