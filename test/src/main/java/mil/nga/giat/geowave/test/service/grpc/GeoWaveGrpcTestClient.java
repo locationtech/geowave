@@ -1067,10 +1067,10 @@ public class GeoWaveGrpcTestClient
 		return true;
 	}
 
-	public List<String> ListPluginsCommand() {
+	public String ListPluginsCommand() {
 		ListPluginsCommandParameters request = ListPluginsCommandParameters.newBuilder().build();
 		return coreIngestBlockingStub.listPluginsCommand(
-				request).getResponseValueList();
+				request).getResponseValue();
 	}
 
 	public boolean LocalToKafkaCommand() {

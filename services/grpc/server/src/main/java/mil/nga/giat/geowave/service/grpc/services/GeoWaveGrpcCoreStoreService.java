@@ -354,7 +354,7 @@ public class GeoWaveGrpcCoreStoreService extends
 	@Override
 	public void versionCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.VersionCommandParameters request,
-			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
+			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		VersionCommand cmd = new VersionCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -373,7 +373,7 @@ public class GeoWaveGrpcCoreStoreService extends
 		LOGGER.info("Executing VersionCommand...");
 		try {
 			cmd.computeResults(params);
-			final VoidResponse resp = VoidResponse.newBuilder().build();
+			final StringResponse resp = StringResponse.newBuilder().build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
 

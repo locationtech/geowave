@@ -47,6 +47,7 @@
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<protobuf.version>3.5.1</protobuf.version>
+		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
 		<vfs2.version>2.1</vfs2.version>
 		<hbase.version>1.4.4</hbase.version>
@@ -218,6 +219,11 @@
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
 				<version>${guava.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.inject</groupId>
+				<artifactId>guice</artifactId>
+				<version>${guice.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.aol.simplereact</groupId>

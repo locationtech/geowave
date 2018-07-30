@@ -48,8 +48,8 @@ public class DownloadRunnerTest
 				new File(
 						Tests.WORKSPACE_DIR + "/scenes").isDirectory());
 		assertTrue(
-				"wrs2_asc_desc directory exists",
+				WRS2GeometryStore.WRS2_SHAPE_DIRECTORY + " directory exists",
 				new File(
-						Tests.WORKSPACE_DIR + "/wrs2_asc_desc").isDirectory());
+						Tests.WORKSPACE_DIR + "/" + WRS2GeometryStore.WRS2_SHAPE_DIRECTORY).isDirectory());
 	}
 }

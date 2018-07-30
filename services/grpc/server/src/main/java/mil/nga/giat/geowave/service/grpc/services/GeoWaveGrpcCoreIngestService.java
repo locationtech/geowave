@@ -26,6 +26,7 @@ import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServiceOptions;
 import mil.nga.giat.geowave.service.grpc.GeoWaveGrpcServiceSpi;
 import mil.nga.giat.geowave.service.grpc.protobuf.CoreIngestGrpc.CoreIngestImplBase;
 import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.RepeatedStringResponse;
+import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
 import mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
 
 public class GeoWaveGrpcCoreIngestService extends
@@ -148,7 +149,7 @@ public class GeoWaveGrpcCoreIngestService extends
 	@Override
 	public void listPluginsCommand(
 			mil.nga.giat.geowave.service.grpc.protobuf.ListPluginsCommandParameters request,
-			StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.RepeatedStringResponse> responseObserver ) {
+			io.grpc.stub.StreamObserver<mil.nga.giat.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
 		ListPluginsCommand cmd = new ListPluginsCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
@@ -166,8 +167,8 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LOGGER.info("Executing ListPluginsCommand...");
 		try {
-			final List<String> result = cmd.computeResults(params);
-			final RepeatedStringResponse resp = RepeatedStringResponse.newBuilder().addAllResponseValue(
+			String result = cmd.computeResults(params);
+			final StringResponse resp = StringResponse.newBuilder().setResponseValue(
 					result).build();
 			responseObserver.onNext(resp);
 			responseObserver.onCompleted();
