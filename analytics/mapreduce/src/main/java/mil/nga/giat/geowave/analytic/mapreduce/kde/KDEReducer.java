@@ -25,11 +25,12 @@ import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.FloatCompareUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
-public class AccumuloKDEReducer extends
+public class KDEReducer extends
 		Reducer<DoubleWritable, LongWritable, GeoWaveOutputKey, GridCoverage>
 {
 	private static final class TileInfo
@@ -101,6 +102,8 @@ public class AccumuloKDEReducer extends
 		}
 	}
 
+	private static final double WEIGHT_EPSILON = 2.22E-14;
+
 	public static final int NUM_BANDS = 3;
 	protected static final String[] NAME_PER_BAND = new String[] {
 		"Weight",
@@ -133,6 +136,8 @@ public class AccumuloKDEReducer extends
 	protected List<ByteArrayId> indexList;
 	protected ValueRange[] valueRangePerDimension;
 	protected String crsCode;
+	protected double prevValue = -1;
+	protected double prevPct = 0;
 
 	@Override
 	protected void reduce(
@@ -152,7 +157,24 @@ public class AccumuloKDEReducer extends
 			final double normalizedValue = value / max;
 			// for consistency give all cells with matching weight the same
 			// percentile
-			final double percentile = (currentKey + 1.0) / totalKeys;
+			// because we are using a DoubleWritable as the key, the ordering
+			// isn't always completely reproducible as Double equals does not
+			// take into account an epsilon, but we can make it reproducible by
+			// doing a comparison with the previous value using an appropriate
+			// epsilon
+			final double percentile;
+			if (FloatCompareUtils.checkDoublesEqual(
+					prevValue,
+					value,
+					WEIGHT_EPSILON)) {
+				percentile = prevPct;
+			}
+			else {
+				percentile = (currentKey + 1.0) / totalKeys;
+				prevPct = percentile;
+				prevValue = value;
+			}
+
 			// calculate weights for this key
 			for (final LongWritable v : values) {
 				final long cellIndex = v.get() / numLevels;
@@ -160,6 +182,7 @@ public class AccumuloKDEReducer extends
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						NUM_BANDS,
 						KDEJobRunner.TILE_SIZE);
+
 				raster.setSample(
 						tileInfo.x,
 						tileInfo.y,

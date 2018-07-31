@@ -81,11 +81,11 @@ public class WRS2GeometryStore
 		}
 	}
 
-	private static final String WRS2_TYPE_NAME = "wrs2_asc_desc";
-	private static final String WRS2_SHAPE_URL = "https://landsat.usgs.gov/sites/default/files/documents/wrs2_asc_desc.zip";
-	private static final String WRS2_SHAPE_NAME = "wrs2_asc_desc.shp";
-	private static final String WRS2_SHAPE_ZIP = "wrs2_asc_desc.zip";
-	private static final String WRS2_SHAPE_DIRECTORY = "wrs2_asc_desc";
+	private static final String WRS2_TYPE_NAME = "WRS2_descending";
+	private static final String WRS2_SHAPE_URL = "https://landsat.usgs.gov/sites/default/files/documents/WRS2_descending.zip";
+	private static final String WRS2_SHAPE_NAME = "WRS2_descending.shp";
+	private static final String WRS2_SHAPE_ZIP = "WRS2_descending.zip";
+	private static final String WRS2_SHAPE_DIRECTORY = "WRS2_descending";
 	private final File wrs2Shape;
 	private final File wrs2Directory;
 	private final Map<WRS2Key, MultiPolygon> featureCache = new HashMap<WRS2Key, MultiPolygon>();
@@ -120,9 +120,13 @@ public class WRS2GeometryStore
 			if (!wsDir.exists() && !wsDir.mkdirs()) {
 				LOGGER.warn("Unable to create directory '" + wsDir.getAbsolutePath() + "'");
 			}
+
+			if (!wrs2Directory.mkdirs()) {
+				LOGGER.warn("Unable to create directory '" + wrs2Directory.getAbsolutePath() + "'");
+			}
 			// download and unzip the shapefile
 			final File targetFile = new File(
-					wsDir,
+					wrs2Directory,
 					WRS2_SHAPE_ZIP);
 			if (targetFile.exists()) {
 				if (!targetFile.delete()) {
@@ -143,7 +147,7 @@ public class WRS2GeometryStore
 						FileUtils.copyInputStreamToFile(
 								zipFile.getInputStream(entry),
 								new File(
-										wsDir,
+										wrs2Directory,
 										entry.getName()));
 						// HP Fortify "Path Traversal" false positive
 						// What Fortify considers "user input" comes only

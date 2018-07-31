@@ -10,19 +10,13 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.util;
 
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.geotools.data.DataUtilities;
-import org.geotools.factory.GeoTools;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -56,41 +50,6 @@ import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions
 public class FeatureDataUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataUtils.class);
-	private static final Object MUTEX = new Object();
-	private static boolean classLoaderInitialized = false;
-
-	public static void initClassLoader()
-			throws MalformedURLException {
-		synchronized (MUTEX) {
-			if (classLoaderInitialized) {
-				return;
-			}
-			ClassLoader classLoader = FeatureDataUtils.class.getClassLoader();
-			if (classLoader instanceof VFSClassLoader) {
-				LOGGER.info("Generating patched classloader");
-				final VFSClassLoader cl = (VFSClassLoader) classLoader;
-				final FileObject[] fileObjs = cl.getFileObjects();
-				final URL[] fileUrls = new URL[fileObjs.length];
-				for (int i = 0; i < fileObjs.length; i++) {
-					fileUrls[i] = new URL(
-							fileObjs[i].toString());
-				}
-				classLoader = java.security.AccessController
-						.doPrivileged(new java.security.PrivilegedAction<URLClassLoader>() {
-							@Override
-							public URLClassLoader run() {
-								final URLClassLoader ucl = new URLClassLoader(
-										fileUrls,
-										cl);
-								return ucl;
-							}
-						});
-			}
-
-			GeoTools.addClassLoader(classLoader);
-			classLoaderInitialized = true;
-		}
-	}
 
 	public static SimpleFeature crsTransform(
 			final SimpleFeature entry,
@@ -135,7 +94,8 @@ public class FeatureDataUtils
 		final CoordinateReferenceSystem crs = entry.getFeatureType().getCoordinateReferenceSystem();
 		SimpleFeature defaultCRSEntry = entry;
 
-		if (!GeometryUtils.DEFAULT_CRS.equals(crs)) {
+		if (!GeometryUtils.getDefaultCRS().equals(
+				crs)) {
 			MathTransform featureTransform = null;
 			if ((persistedType.getCoordinateReferenceSystem() != null)
 					&& persistedType.getCoordinateReferenceSystem().equals(
@@ -150,7 +110,7 @@ public class FeatureDataUtils
 				try {
 					featureTransform = CRS.findMathTransform(
 							crs,
-							GeometryUtils.DEFAULT_CRS,
+							GeometryUtils.getDefaultCRS(),
 							true);
 				}
 				catch (final FactoryException e) {
@@ -294,7 +254,7 @@ public class FeatureDataUtils
 		// Build type using new name
 		SimpleFeatureTypeBuilder sftBuilder = new SimpleFeatureTypeBuilder();
 		sftBuilder.init(oldType);
-		sftBuilder.setName(newAdapterId.toString());
+		sftBuilder.setName(newAdapterId.getString());
 		SimpleFeatureType newType = sftBuilder.buildFeatureType();
 
 		// Create new adapter that will use new typename

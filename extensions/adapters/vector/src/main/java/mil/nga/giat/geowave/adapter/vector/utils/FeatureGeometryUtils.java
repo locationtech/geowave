@@ -189,7 +189,7 @@ public class FeatureGeometryUtils
 		final List<Polygon> polygons = new LinkedList<>();
 		final Geometry world = FeatureGeometryUtils.world(
 				geometry.getFactory(),
-				GeometryUtils.DEFAULT_CRS);
+				GeometryUtils.getDefaultCRS());
 
 		// First do the polygon unchanged world
 		final Geometry worldIntersections = world.intersection(geometry);

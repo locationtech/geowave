@@ -115,7 +115,7 @@ public class GridCoverageWritable implements
 			}
 		}
 		else {
-			crs = GeometryUtils.DEFAULT_CRS;
+			crs = GeometryUtils.getDefaultCRS();
 		}
 	}
 
@@ -130,7 +130,8 @@ public class GridCoverageWritable implements
 		output.writeDouble(maxX);
 		output.writeDouble(minY);
 		output.writeDouble(maxY);
-		String crsStr = crs == null || GeometryUtils.DEFAULT_CRS.equals(crs) ? "" : CRS.toSRS(crs);
+		String crsStr = crs == null || GeometryUtils.getDefaultCRS().equals(
+				crs) ? "" : CRS.toSRS(crs);
 		output.writeInt(crsStr.length());
 		output.write(StringUtils.stringToBinary(crsStr));
 	}

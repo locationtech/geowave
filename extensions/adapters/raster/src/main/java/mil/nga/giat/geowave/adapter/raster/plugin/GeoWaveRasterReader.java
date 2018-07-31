@@ -256,7 +256,7 @@ public class GeoWaveRasterReader extends
 		}
 		// if no data has been ingested yet with a CRS, this is the best guess
 		// we can make
-		return GeometryUtils.DEFAULT_CRS;
+		return GeometryUtils.getDefaultCRS();
 	}
 
 	protected CoordinateReferenceSystem getCrsForCoverage(

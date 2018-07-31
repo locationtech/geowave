@@ -120,7 +120,7 @@ public class GeoWaveFeatureSource extends
 				maxx,
 				miny,
 				maxy,
-				GeometryUtils.DEFAULT_CRS);
+				GeometryUtils.getDefaultCRS());
 	}
 
 	@SuppressWarnings("rawtypes")

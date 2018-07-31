@@ -9,6 +9,8 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
 import java.util.jar.Attributes;
 import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
@@ -18,10 +20,14 @@ import org.apache.commons.vfs2.impl.VFSClassLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
+import mil.nga.giat.geowave.core.store.spi.ClassLoaderTransformerSpi;
+
 public class ClasspathUtils
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClasspathUtils.class);
+	private static List<ClassLoaderTransformerSpi> transformerList = null;
 
 	public static String setupPathingJarClassPath(
 			final File dir,
@@ -103,7 +109,7 @@ public class ClasspathUtils
 			throws IOException {
 
 		try {
-			final ArrayList<ClassLoader> classloaders = new ArrayList<ClassLoader>();
+			final ArrayList<ClassLoader> classloaders = new ArrayList<>();
 
 			ClassLoader cl = context.getClassLoader();
 
@@ -197,5 +203,25 @@ public class ClasspathUtils
 			return (sitefile != null) && (sitefile.length > 0);
 		}
 		return false;
+	}
+
+	public static synchronized ClassLoader transformClassLoader(
+			final ClassLoader classLoader ) {
+		if (transformerList == null) {
+			final Iterator<ClassLoaderTransformerSpi> transformers = new SPIServiceRegistry(
+					ClassLoaderTransformerSpi.class).load(ClassLoaderTransformerSpi.class);
+			transformerList = new ArrayList<>();
+			while (transformers.hasNext()) {
+				transformerList.add(transformers.next());
+			}
+		}
+		for (final ClassLoaderTransformerSpi t : transformerList) {
+			final ClassLoader cl = t.transform(classLoader);
+			if (cl != null) {
+				return cl;
+			}
+		}
+		return null;
+
 	}
 }

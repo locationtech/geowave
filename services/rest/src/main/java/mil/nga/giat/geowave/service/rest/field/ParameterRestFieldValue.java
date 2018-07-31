@@ -38,4 +38,8 @@ public class ParameterRestFieldValue extends
 		return super.getField();
 	}
 
+	public Field getField() {
+		return super.getField();
+	}
+
 }
