@@ -59,6 +59,7 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import com.google.protobuf.ByteString;
+import com.google.protobuf.RpcChannel;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -103,6 +104,7 @@ import mil.nga.giat.geowave.datastore.hbase.coprocessors.AggregationEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObserver;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos.AggregationService;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionRequest;

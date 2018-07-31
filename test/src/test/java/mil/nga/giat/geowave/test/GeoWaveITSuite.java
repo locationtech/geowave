@@ -22,7 +22,6 @@ import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
 import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
-import mil.nga.giat.geowave.test.javaspark.GeowaveSparkIngestIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
@@ -48,33 +47,33 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
 	GeoWaveBasicSpatialVectorIT.class,
-	GeowaveCustomCRSSpatialVectorIT.class,
-	GeoWaveBasicSpatialTemporalVectorIT.class,
-	GeoWaveVectorSerializationIT.class,
-	BasicKafkaIT.class,
-	BasicMapReduceIT.class,
-	LandsatIT.class,
-	GeoWaveVisibilityIT.class,
-	GeoWaveBasicRasterIT.class,
-	KDERasterResizeIT.class,
-	BulkIngestInputGenerationIT.class,
-	GeoWaveNNIT.class,
-	AttributesSubsetQueryIT.class,
-	SpatialTemporalQueryIT.class,
-	PolygonDataIdQueryIT.class,
-	ConfigCacheIT.class,
-	DBScanIT.class,
-	GeoWaveJavaSparkIT.class,
-	GeoWaveJavaSparkKMeansIT.class,
-	GeoWaveJavaSparkSQLIT.class,
-	GeoWaveSparkSpatialJoinIT.class,
-	ConfigServicesIT.class,
-	GeoServerIngestIT.class,
-	GeoServerIT.class,
-	GeoWaveGrpcIT.class,
-	RemoteIT.class,
-	IngestIT.class,
-	FileUploadIT.class
+// GeowaveCustomCRSSpatialVectorIT.class,
+// GeoWaveBasicSpatialTemporalVectorIT.class,
+// GeoWaveVectorSerializationIT.class,
+// BasicKafkaIT.class,
+// BasicMapReduceIT.class,
+// LandsatIT.class,
+// GeoWaveVisibilityIT.class,
+// GeoWaveBasicRasterIT.class,
+// KDERasterResizeIT.class,
+// BulkIngestInputGenerationIT.class,
+// GeoWaveNNIT.class,
+// AttributesSubsetQueryIT.class,
+// SpatialTemporalQueryIT.class,
+// PolygonDataIdQueryIT.class,
+// ConfigCacheIT.class,
+// DBScanIT.class,
+// GeoWaveJavaSparkIT.class,
+// GeoWaveJavaSparkKMeansIT.class,
+// GeoWaveJavaSparkSQLIT.class,
+// GeoWaveSparkSpatialJoinIT.class,
+// ConfigServicesIT.class,
+// GeoServerIngestIT.class,
+// GeoServerIT.class,
+// GeoWaveGrpcIT.class,
+// RemoteIT.class,
+// IngestIT.class,
+// FileUploadIT.class
 })
 public class GeoWaveITSuite
 {

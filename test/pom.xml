@@ -154,6 +154,11 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
+			<artifactId>geowave-datastore-cassandra</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -173,13 +178,14 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-cassandra</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-shaded-client</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
@@ -257,35 +263,18 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.github.sakserv</groupId>
-			<artifactId>hadoop-mini-clusters-zookeeper</artifactId>
-			<version>0.1.3</version>
-		</dependency>
-		<dependency>
-			<groupId>com.github.sakserv</groupId>
-			<artifactId>hadoop-mini-clusters-hbase</artifactId>
-			<version>0.1.3</version>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-testing-util</artifactId>
 			<exclusions>
 				<exclusion>
-					<groupId>hsqldb</groupId>
-					<artifactId>hsqldb</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.apache.hadoop</groupId>
-					<artifactId>hadoop-core</artifactId>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.github.sakserv</groupId>
-			<artifactId>property-parser</artifactId>
-			<version>0.0.3</version>
-			<exclusions>
-				<exclusion>
-					<groupId>org.slf4j</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
+			<groupId>org.apache.hbase</groupId>
+			<artifactId>hbase-protocol</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.accumulo</groupId>
@@ -337,6 +326,21 @@
 				<exclusion>
 					<groupId>ch.qos.logback</groupId>
 					<artifactId>logback-classic</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.hadoop</groupId>
+			<artifactId>hadoop-minikdc</artifactId>
+			<version>${hadoop.version}</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-protocol-ldap</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.apache.directory.server</groupId>
+					<artifactId>apacheds-jdbm-partition</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -401,7 +405,36 @@
 							</artifactItems>
 						</configuration>
 					</execution>
-
+					<execution>
+						<id>setup-hbase</id>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<phase>pre-integration-test</phase>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<artifactId>guava</artifactId>
+									<groupId>com.google.guava</groupId>
+									<version>12.0.1</version>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>protobuf-java</artifactId>
+									<groupId>com.google.protobuf</groupId>
+									<version>2.5.0</version>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>hbase-client</artifactId>
+									<groupId>org.apache.hbase</groupId>
+								</artifactItem>
+								<artifactItem>
+									<artifactId>hbase-protocol</artifactId>
+									<groupId>org.apache.hbase</groupId>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${project.build.directory}/hbase/lib</outputDirectory>
+						</configuration>
+					</execution>
 					<execution>
 						<id>setup-wps</id>
 						<goals>
@@ -463,7 +496,6 @@
 				<executions>
 					<execution>
 						<id>copy-resources</id>
-						<!-- here the phase you need -->
 						<phase>pre-integration-test</phase>
 						<goals>
 							<goal>copy-resources</goal>
@@ -684,7 +716,6 @@
 			<id>hbase-it-server</id>
 			<properties>
 				<skipITs>false</skipITs>
-				<guava.version>14.0-rc1</guava.version>
 				<testStoreType>HBASE</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true</testStoreOptions>
 			</properties>
@@ -693,7 +724,6 @@
 			<id>hbase-it-client</id>
 			<properties>
 				<skipITs>false</skipITs>
-				<guava.version>14.0-rc1</guava.version>
 				<testStoreType>HBASE</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=false</testStoreOptions>
 			</properties>
@@ -702,7 +732,6 @@
 			<id>hbase-it-all</id>
 			<properties>
 				<skipITs>false</skipITs>
-				<guava.version>14.0-rc1</guava.version>
 				<testStoreType>HBASE</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false</testStoreOptions>
 			</properties>

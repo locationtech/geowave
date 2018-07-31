@@ -52,7 +52,8 @@ import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcTestClient;
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.CASSANDRA,
 	GeoWaveStoreType.DYNAMODB,
-	GeoWaveStoreType.HBASE
+// TODO HBase server-side components need to work with GRPC libraries
+// GeoWaveStoreType.HBASE
 })
 public class GeoWaveGrpcIT extends
 		AbstractGeoWaveBasicVectorIT
@@ -203,8 +204,8 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		//TODO figure out what's going on with sparktogeowave within grpc
-//		Assert.assertTrue(client.SparkToGeowaveCommand());
+		// TODO figure out what's going on with sparktogeowave within grpc
+		// Assert.assertTrue(client.SparkToGeowaveCommand());
 
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -237,7 +238,6 @@ public class GeoWaveGrpcIT extends
 				client.numFeaturesProcessed);
 
 		ArrayList<Feature> features = client.vectorQuery();
-
 
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -324,7 +324,6 @@ public class GeoWaveGrpcIT extends
 		Assert.assertTrue(client.nearestNeighborCommand());
 		Assert.assertTrue(client.kdeCommand());
 		Assert.assertTrue(client.dbScanCommand());
-
 
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
