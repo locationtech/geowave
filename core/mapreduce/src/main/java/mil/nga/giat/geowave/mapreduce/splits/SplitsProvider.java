@@ -258,7 +258,8 @@ public class SplitsProvider
 
 				rangeList.add(new RangeLocationPair(
 						gwRange,
-						cardinality < 1 ? 1.0 : cardinality));
+						cardinality < 1 && cardinality > 0 ? 1.0 : cardinality));
+
 			}
 		}
 
@@ -291,7 +292,8 @@ public class SplitsProvider
 				return 1;
 			}
 		}
-		return rangeStats == null ? getRangeLength(range) : rangeStats.cardinality(
+
+		return rangeStats == null ? 0.0 : rangeStats.cardinality(
 				range.getStartSortKey(),
 				range.getEndSortKey());
 	}
