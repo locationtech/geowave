@@ -25,6 +25,7 @@ abstract public class BaseReaderParams<T>
 	private final Pair<List<String>, DataAdapter<?>> fieldSubsets;
 	private final boolean isMixedVisibility;
 	private final Integer limit;
+	private final Integer maxRangeDecomposition;
 	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 	private final String[] additionalAuthorizations;
 
@@ -37,6 +38,7 @@ abstract public class BaseReaderParams<T>
 			final Pair<List<String>, DataAdapter<?>> fieldSubsets,
 			final boolean isMixedVisibility,
 			final Integer limit,
+			final Integer maxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
 			final String... additionalAuthorizations ) {
 		this.index = index;
@@ -47,6 +49,7 @@ abstract public class BaseReaderParams<T>
 		this.fieldSubsets = fieldSubsets;
 		this.isMixedVisibility = isMixedVisibility;
 		this.limit = limit;
+		this.maxRangeDecomposition = maxRangeDecomposition;
 		this.rowTransformer = rowTransformer;
 		this.additionalAuthorizations = additionalAuthorizations;
 	}
@@ -85,6 +88,10 @@ abstract public class BaseReaderParams<T>
 
 	public Integer getLimit() {
 		return limit;
+	}
+
+	public Integer getMaxRangeDecomposition() {
+		return maxRangeDecomposition;
 	}
 
 	public String[] getAdditionalAuthorizations() {

@@ -1174,10 +1174,12 @@ public class HBaseOperations implements
 					.getIndex()
 					.getIndexModel())));
 
+			int maxRangeDecomposition = readerParams.getMaxRangeDecomposition() == null ? options
+					.getAggregationMaxRangeDecomposition() : readerParams.getMaxRangeDecomposition();
 			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(DataStoreUtils.constraintsToQueryRanges(
 					readerParams.getConstraints(),
 					readerParams.getIndex().getIndexStrategy(),
-					BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION).getCompositeQueryRanges());
+					maxRangeDecomposition).getCompositeQueryRanges());
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
