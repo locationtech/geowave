@@ -64,7 +64,7 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
  * This class depends on an AdapterStore. Since an AdapterStore is not
  * Serializable, the dependency is transient requiring initialization after
  * serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
+ * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)}
  *
  *
  */
