@@ -152,7 +152,7 @@ public class XZHierarchicalIndexStrategy implements
 				maxEstimatedRangeDecomposition,
 				tieredHints);
 
-		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
 		final List<SinglePartitionQueryRanges> partitionedRanges = new ArrayList<>();
@@ -196,11 +196,11 @@ public class XZHierarchicalIndexStrategy implements
 	public InsertionIds getInsertionIds(
 			final MultiDimensionalNumericData indexedData ) {
 
-		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
 		final List<SinglePartitionInsertionIds> partitionIds = new ArrayList<>(
-				ranges.length);
+				ranges.size());
 
 		for (final BinnedNumericDataset range : ranges) {
 			final BigInteger pointIds = pointCurve.getEstimatedIdCount(range);

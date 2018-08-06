@@ -262,11 +262,11 @@ public class IngestIT
 	}
 
 	/**
-	 * I think that all ingest commands (except for listplugins()) should
-	 * return a 202 status instead of a 201, especially since all errors are
-	 * discovered by the baseServiceClient and not the ingestServiceClient.
-	 * Nothing is created directly from the ingestClient call as it simply kicks
-	 * off another process.
+	 * I think that all ingest commands (except for listplugins()) should return
+	 * a 202 status instead of a 201, especially since all errors are discovered
+	 * by the baseServiceClient and not the ingestServiceClient. Nothing is
+	 * created directly from the ingestClient call as it simply kicks off
+	 * another process.
 	 **/
 	@Test
 	public void localToGW() {

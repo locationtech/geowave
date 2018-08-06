@@ -32,13 +32,14 @@ public class GeoWaveOperationFinder extends
 			return new GeoWaveOperationServiceWrapper<>(
 					operation.getClass().newInstance(),
 					defaultConfigFile);
-		} catch (InstantiationException | IllegalAccessException e) {
+		}
+		catch (InstantiationException | IllegalAccessException e) {
 			getLogger().log(
 					Level.SEVERE,
 					"Unable to instantiate Service Resource",
 					e);
 			return null;
-			
+
 		}
 	}
 

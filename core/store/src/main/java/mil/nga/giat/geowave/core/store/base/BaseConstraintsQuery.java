@@ -115,14 +115,11 @@ public class BaseConstraintsQuery extends
 		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
 			clientDedupeFilter = null;
 		}
-		// add dedupe filters to the front of both lists so that the
-		// de-duplication is performed before any more complex filtering
-		// operations, use the supplied client dedupe filter if possible
+		distributableFilters = lists.distributableFilters;
 		if (clientDedupeFilter != null) {
 			clientFilters.add(clientDedupeFilter);
 		}
 		this.clientFilters = clientFilters;
-		distributableFilters = lists.distributableFilters;
 
 		queryFiltersEnabled = true;
 	}
@@ -162,7 +159,6 @@ public class BaseConstraintsQuery extends
 			final Integer limit ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
-				// || adapterStore instanceof MemoryAdapterStore) {
 				// Aggregate client-side
 				final CloseableIterator<Object> it = (CloseableIterator<Object>) super.query(
 						datastoreOperations,
@@ -177,6 +173,20 @@ public class BaseConstraintsQuery extends
 			else {
 				// the aggregation is run server-side use the reader to
 				// aggregate to a single value here
+
+				// should see if there is a client dedupe filter thats been
+				// added and run it serverside
+				// also if so and duplicates cross partitions, the dedupe filter
+				// still won't be effective and the aggregation will return
+				// incorrect results
+				if (!clientFilters.isEmpty()) {
+					QueryFilter f = clientFilters.get(clientFilters.size() - 1);
+					if (f instanceof DedupeFilter) {
+						distributableFilters.add((DedupeFilter) f);
+						LOGGER
+								.warn("Aggregating results when duplicates exist in the table may result in duplicate aggregation");
+					}
+				}
 				try (final Reader<GeoWaveRow> reader = getReader(
 						datastoreOperations,
 						options,

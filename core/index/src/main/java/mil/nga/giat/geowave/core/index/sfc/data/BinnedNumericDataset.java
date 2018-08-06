@@ -11,6 +11,10 @@
 package mil.nga.giat.geowave.core.index.sfc.data;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -27,7 +31,6 @@ public class BinnedNumericDataset implements
 {
 	private byte[] binId;
 	private MultiDimensionalNumericData indexRanges;
-	private boolean fullExtent;
 
 	public BinnedNumericDataset() {}
 
@@ -40,15 +43,9 @@ public class BinnedNumericDataset implements
 	 */
 	public BinnedNumericDataset(
 			final byte[] binId,
-			final MultiDimensionalNumericData indexRanges,
-			final boolean fullExtent ) {
+			final MultiDimensionalNumericData indexRanges ) {
 		this.binId = binId;
 		this.indexRanges = indexRanges;
-		this.fullExtent = fullExtent;
-	}
-
-	public boolean isFullExtent() {
-		return fullExtent;
 	}
 
 	/**
@@ -114,57 +111,73 @@ public class BinnedNumericDataset implements
 	 *            the definition for the dimensions
 	 * @return normalized indexes
 	 */
-	public static BinnedNumericDataset[] applyBins(
+	public static List<BinnedNumericDataset> applyBins(
 			final MultiDimensionalNumericData numericData,
 			final NumericDimensionDefinition[] dimensionDefinitions ) {
 		if (dimensionDefinitions.length == 0) {
-			return new BinnedNumericDataset[0];
+			return Collections.EMPTY_LIST;
 		}
 
 		final BinRange[][] binRangesPerDimension = getBinnedRangesPerDimension(
 				numericData,
 				dimensionDefinitions);
-		int numBinnedQueries = 1;
-		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			numBinnedQueries *= binRangesPerDimension[d].length;
-		}
 		// now we need to combine all permutations of bin ranges into
 		// BinnedQuery objects
-		final BinnedNumericDataset[] binnedQueries = new BinnedNumericDataset[numBinnedQueries];
-		for (int d = 0; d < dimensionDefinitions.length; d++) {
-			for (int b = 0; b < binRangesPerDimension[d].length; b++) {
-				for (int i = b; i < numBinnedQueries; i += binRangesPerDimension[d].length) {
-					final NumericData[] rangePerDimension;
-					if (binnedQueries[i] == null) {
-						rangePerDimension = new NumericRange[dimensionDefinitions.length];
-						binnedQueries[i] = new BinnedNumericDataset(
-								binRangesPerDimension[d][b].getBinId(),
-								new BasicNumericDataset(
-										rangePerDimension),
-								binRangesPerDimension[d][b].isFullExtent());
-					}
-					else {
-						// because binned queries were intended to be immutable,
-						// re-instantiate the object
-						rangePerDimension = binnedQueries[i].getDataPerDimension();
-
-						final byte[] combinedBinId = ByteArrayUtils.combineArrays(
-								binnedQueries[i].getBinId(),
-								binRangesPerDimension[d][b].getBinId());
-						binnedQueries[i] = new BinnedNumericDataset(
-								combinedBinId,
-								new BasicNumericDataset(
-										rangePerDimension),
-								binnedQueries[i].fullExtent |= binRangesPerDimension[d][b].isFullExtent());
-					}
-
-					rangePerDimension[d] = new NumericRange(
-							binRangesPerDimension[d][b].getNormalizedMin(),
-							binRangesPerDimension[d][b].getNormalizedMax());
-				}
-			}
-		}
+		final List<BinnedNumericDataset> binnedQueries = new ArrayList<>();
+		generatePermutations(
+				binRangesPerDimension,
+				binnedQueries,
+				0,
+				null);
 		return binnedQueries;
+	}
+
+	private static void generatePermutations(
+			BinRange[][] binRangesPerDimension,
+			List<BinnedNumericDataset> result,
+			int dimension,
+			BinnedNumericDataset current ) {
+		if (dimension == binRangesPerDimension.length) {
+			result.add(current);
+			return;
+		}
+
+		for (int i = 0; i < binRangesPerDimension[dimension].length; ++i) {
+			BinnedNumericDataset next;
+			final NumericData[] rangePerDimension;
+			if (current == null) {
+				rangePerDimension = new NumericRange[binRangesPerDimension.length];
+				next = new BinnedNumericDataset(
+						binRangesPerDimension[dimension][i].getBinId(),
+						new BasicNumericDataset(
+								rangePerDimension));
+
+			}
+			else {
+				// because binned queries were intended to be immutable,
+				// re-instantiate the object
+				rangePerDimension = new NumericRange[binRangesPerDimension.length];
+				for (int d = 0; d < dimension; d++) {
+					rangePerDimension[d] = current.getDataPerDimension()[d];
+				}
+				final byte[] combinedBinId = ByteArrayUtils.combineArrays(
+						current.getBinId(),
+						binRangesPerDimension[dimension][i].getBinId());
+				next = new BinnedNumericDataset(
+						combinedBinId,
+						new BasicNumericDataset(
+								rangePerDimension));
+			}
+
+			rangePerDimension[dimension] = new NumericRange(
+					binRangesPerDimension[dimension][i].getNormalizedMin(),
+					binRangesPerDimension[dimension][i].getNormalizedMax());
+			generatePermutations(
+					binRangesPerDimension,
+					result,
+					dimension + 1,
+					next);
+		}
 	}
 
 	public static BinRange[][] getBinnedRangesPerDimension(
@@ -189,8 +202,7 @@ public class BinnedNumericDataset implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] indexRangesBinary = PersistenceUtils.toBinary(indexRanges);
-		final ByteBuffer buf = ByteBuffer.allocate(5 + indexRangesBinary.length + binId.length);
-		buf.put((byte) (fullExtent ? 1 : 0));
+		final ByteBuffer buf = ByteBuffer.allocate(4 + indexRangesBinary.length + binId.length);
 		buf.putInt(binId.length);
 		buf.put(binId);
 		buf.put(indexRangesBinary);
@@ -201,7 +213,6 @@ public class BinnedNumericDataset implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		fullExtent = (buf.get() == 1);
 		binId = new byte[buf.getInt()];
 		buf.get(binId);
 
