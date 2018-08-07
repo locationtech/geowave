@@ -167,9 +167,6 @@ public class SplitsProvider
 			final DistributableQuery query,
 			final String[] authorizations )
 			throws IOException {
-		if ((query != null) && !query.isSupported(index)) {
-			return splits;
-		}
 
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 		final int partitionKeyLength = indexStrategy.getPartitionKeyLength();

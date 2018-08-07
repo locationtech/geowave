@@ -61,53 +61,6 @@ public class BasicQueryTest
 			"yyyy-MM-dd'T'HH:mm:ssz");
 
 	@Test
-	public void testIsSupported() {
-		final ConstraintSet cs1 = new ConstraintSet();
-		final PrimaryIndex index = new CustomIdIndex(
-				new ExampleNumericIndexStrategy(),
-				new BasicIndexModel(
-						new NumericDimensionField[] {
-							new ExampleDimensionOne(),
-							new ExampleDimensionTwo()
-						}),
-				new ByteArrayId(
-						"22"));
-		assertTrue(cs1.isSupported(index));
-		cs1.addConstraint(
-				ExampleDimensionOne.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						true));
-		cs1.addConstraint(
-				ExampleDimensionTwo.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						true));
-		assertTrue(cs1.isSupported(index));
-		cs1.addConstraint(
-				ExampleDimensionThree.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						true));
-		assertTrue(cs1.isSupported(index));
-		final ConstraintSet cs2 = new ConstraintSet();
-		cs2.addConstraint(
-				ExampleDimensionThree.class,
-				new ConstraintData(
-						new ConstrainedIndexValue(
-								0.3,
-								0.5),
-						false));
-		assertFalse(cs2.isSupported(index));
-	}
-
-	@Test
 	public void testIntersectCasesWithPersistence() {
 		final PrimaryIndex index = new CustomIdIndex(
 				new ExampleNumericIndexStrategy(),

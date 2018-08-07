@@ -51,12 +51,6 @@ public class DataIdQuery implements
 	}
 
 	@Override
-	public boolean isSupported(
-			final Index index ) {
-		return true;
-	}
-
-	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
 			final PrimaryIndex index ) {
 		return Collections.emptyList();

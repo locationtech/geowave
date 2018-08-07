@@ -287,15 +287,6 @@ public class CQLQuery implements
 	}
 
 	@Override
-	public boolean isSupported(
-			final Index<?, ?> index ) {
-		if (baseQuery != null) {
-			return baseQuery.isSupported(index);
-		}
-		return true;
-	}
-
-	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
 			final PrimaryIndex index ) {
 		if (baseQuery != null) {
