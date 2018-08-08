@@ -49,7 +49,8 @@ public class ChooseLocalityPreservingQueryStrategy implements
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final PrimaryIndex[] indices ) {
+			final PrimaryIndex[] indices,
+			final Map<QueryHint, Object> hints ) {
 		return new CloseableIterator<Index<?, ?>>() {
 			PrimaryIndex nextIdx = null;
 			boolean done = false;

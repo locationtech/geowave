@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.datastore.accumulo.cli.config;
 import com.beust.jcommander.Parameter;
 
 import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
+import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 /**
  * This class can be used to modify the behavior of the Accumulo Data Store.
@@ -31,5 +32,15 @@ public class AccumuloOptions extends
 	public void setUseLocalityGroups(
 			final boolean useLocalityGroups ) {
 		this.useLocalityGroups = useLocalityGroups;
+	}
+
+	@Override
+	protected int defaultMaxRangeDecomposition() {
+		return AccumuloUtils.ACCUMULO_DEFAULT_MAX_RANGE_DECOMPOSITION;
+	}
+
+	@Override
+	protected int defaultAggregationMaxRangeDecomposition() {
+		return AccumuloUtils.ACCUMULO_DEFAULT_AGGREGATION_MAX_RANGE_DECOMPOSITION;
 	}
 }

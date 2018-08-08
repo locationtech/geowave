@@ -309,7 +309,8 @@ public class SpatialTemporalQueryIT
 							public CloseableIterator<Index<?, ?>> getIndices(
 									final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 									final BasicQuery query,
-									final PrimaryIndex[] indices ) {
+									final PrimaryIndex[] indices,
+									final Map<QueryHint, Object> hints ) {
 								return new CloseableIteratorWrapper<Index<?, ?>>(
 										new Closeable() {
 											@Override

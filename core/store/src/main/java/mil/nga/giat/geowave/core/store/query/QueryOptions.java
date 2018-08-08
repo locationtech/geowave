@@ -96,6 +96,7 @@ public class QueryOptions implements
 	private ByteArrayId indexId = null;
 	private transient PrimaryIndex index = null;
 	private Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
+	private Integer maxRangeDecomposition = null;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
@@ -153,6 +154,7 @@ public class QueryOptions implements
 		indexId = options.indexId;
 		adapterIds = options.adapterIds;
 		adapters = options.adapters;
+		maxRangeDecomposition = options.maxRangeDecomposition;
 		limit = options.limit;
 		scanCallback = options.scanCallback;
 		authorizations = options.authorizations;
@@ -292,6 +294,24 @@ public class QueryOptions implements
 			this.indexId = null;
 			index = null;
 		}
+	}
+
+	/**
+	 *
+	 * @return the max range decomposition to use when computing query ranges
+	 */
+	public Integer getMaxRangeDecomposition() {
+		return maxRangeDecomposition;
+	}
+
+	/**
+	 * a value of null indicates to use the data store configured default
+	 * 
+	 * @param maxRangeDecomposition
+	 */
+	public void setMaxRangeDecomposition(
+			Integer maxRangeDecomposition ) {
+		this.maxRangeDecomposition = maxRangeDecomposition;
 	}
 
 	public PrimaryIndex getIndex() {

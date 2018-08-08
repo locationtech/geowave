@@ -42,13 +42,15 @@ abstract class AbstractBaseRowQuery<T> extends
 			final DataStoreOptions options,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final AdapterStore adapterStore,
-			final Integer limit ) {
+			final Integer limit,
+			final Integer queryMaxRangeDecomposition ) {
 		Reader<T> reader = getReader(
 				operations,
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
+				queryMaxRangeDecomposition,
 				new NativeEntryTransformer<T>(
 						adapterStore,
 						index,
