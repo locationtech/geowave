@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -160,7 +160,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDat
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreOptions</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#createTable">createTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#enableBlockCache">enableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistAdapter">persistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistIndex">persistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#useAltIndex">useAltIndex</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#configuredAggregationMaxRangeDecomposition">configuredAggregationMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#configuredMaxRangeDecomposition">configuredMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#createTable">createTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#enableBlockCache">enableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#enableServerSideLibrary">enableServerSideLibrary</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistAdapter">persistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistDataStatistics">persistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#persistIndex">persistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#useAltIndex">useAltIndex</a></code></li>
 </ul>
 </li>
 </ul>
@@ -194,34 +194,42 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDat
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#defaultAggregationMaxRangeDecomposition--">defaultAggregationMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected int</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#getCoprocessorJar--">getCoprocessorJar</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#getScanCacheSize--">getScanCacheSize</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#isBigTable--">isBigTable</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#isVerifyCoprocessors--">isVerifyCoprocessors</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#setBigTable-boolean-">setBigTable</a></span>(boolean&nbsp;bigTable)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#setCoprocessorJar-java.lang.String-">setCoprocessorJar</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorJar)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#setScanCacheSize-int-">setScanCacheSize</a></span>(int&nbsp;scanCacheSize)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/config/HBaseOptions.html#setVerifyCoprocessors-boolean-">setVerifyCoprocessors</a></span>(boolean&nbsp;verifyCoprocessors)</code>&nbsp;</td>
 </tr>
@@ -231,7 +239,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDat
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreOptions</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isCreateTable--">isCreateTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistAdapter--">isPersistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistIndex--">isPersistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isUseAltIndex--">isUseAltIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setCreateTable-boolean-">setCreateTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistAdapter-boolean-">setPersistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistIndex-boolean-">setPersistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setUseAltIndex-boolean-">setUseAltIndex</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#getAggregationMaxRangeDecomposition--">getAggregationMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#getMaxRangeDecomposition--">getMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isCreateTable--">isCreateTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isEnableBlockCache--">isEnableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistAdapter--">isPersistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistDataStatistics--">isPersistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isPersistIndex--">isPersistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isServerSideLibraryEnabled--">isServerSideLibraryEnabled</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#isUseAltIndex--">isUseAltIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setAggregationMaxRangeDecomposition-int-">setAggregationMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setCreateTable-boolean-">setCreateTable</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setEnableBlockCache-boolean-">setEnableBlockCache</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setMaxRangeDecomposition-int-">setMaxRangeDecomposition</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistAdapter-boolean-">setPersistAdapter</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistDataStatistics-boolean-">setPersistDataStatistics</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setPersistIndex-boolean-">setPersistIndex</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setServerSideLibraryEnabled-boolean-">setServerSideLibraryEnabled</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#setUseAltIndex-boolean-">setUseAltIndex</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -385,10 +393,36 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDat
 <a name="setCoprocessorJar-java.lang.String-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>setCoprocessorJar</h4>
 <pre>public&nbsp;void&nbsp;setCoprocessorJar(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorJar)</pre>
+</li>
+</ul>
+<a name="defaultMaxRangeDecomposition--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>defaultMaxRangeDecomposition</h4>
+<pre>protected&nbsp;int&nbsp;defaultMaxRangeDecomposition()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#defaultMaxRangeDecomposition--">defaultMaxRangeDecomposition</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreOptions</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="defaultAggregationMaxRangeDecomposition--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>defaultAggregationMaxRangeDecomposition</h4>
+<pre>protected&nbsp;int&nbsp;defaultAggregationMaxRangeDecomposition()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html#defaultAggregationMaxRangeDecomposition--">defaultAggregationMaxRangeDecomposition</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreOptions.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreOptions</a></code></dd>
+</dl>
 </li>
 </ul>
 </li>

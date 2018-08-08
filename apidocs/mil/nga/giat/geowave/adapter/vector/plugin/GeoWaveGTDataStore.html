@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -155,6 +155,10 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dataStore">dataStore</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#dataStoreOptions">dataStoreOptions</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#indexStore">indexStore</a></span></code>&nbsp;</td>
 </tr>
@@ -226,55 +230,59 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStore--">getDataStore</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i7" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getDataStoreOptions--">getDataStoreOptions</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource-org.opengis.feature.type.Name-">getFeatureSource</a></span>(org.opengis.feature.type.Name&nbsp;typeName)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource-org.opengis.feature.type.Name-org.geotools.data.Transaction-">getFeatureSource</a></span>(org.opengis.feature.type.Name&nbsp;typeName,
                 org.geotools.data.Transaction&nbsp;tx)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource-java.lang.String-">getFeatureSource</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>org.geotools.data.store.ContentFeatureSource</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getFeatureSource-java.lang.String-org.geotools.data.Transaction-">getFeatureSource</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName,
                 org.geotools.data.Transaction&nbsp;tx)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/IndexQueryStrategySPI.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">IndexQueryStrategySPI</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndexQueryStrategy--">getIndexQueryStrategy</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndexStore--">getIndexStore</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getIndicesForAdapter-mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter-">getIndicesForAdapter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>org.geotools.data.FeatureListenerManager</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getListenerManager--">getListenerManager</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/transaction/GeoWaveTransactionState.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.transaction">GeoWaveTransactionState</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getMyTransactionState-org.geotools.data.Transaction-mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveFeatureSource-">getMyTransactionState</a></span>(org.geotools.data.Transaction&nbsp;transaction,
                      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveFeatureSource.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin">GeoWaveFeatureSource</a>&nbsp;source)</code>
 <div class="block">Used to retrieve the TransactionStateDiff for this transaction.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#getPreferredIndices-mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter-">getPreferredIndices</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/GeotoolsFeatureDataAdapter.html" title="interface in mil.nga.giat.geowave.adapter.vector">GeotoolsFeatureDataAdapter</a>&nbsp;adapter)</code>&nbsp;</td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeSchema-org.opengis.feature.type.Name-">removeSchema</a></span>(org.opengis.feature.type.Name&nbsp;typeName)</code>&nbsp;</td>
 </tr>
-<tr id="i18" class="altColor">
+<tr id="i19" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/GeoWaveGTDataStore.html#removeSchema-java.lang.String-">removeSchema</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>&nbsp;</td>
 </tr>
@@ -341,6 +349,15 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <li class="blockList">
 <h4>dataStore</h4>
 <pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a> dataStore</pre>
+</li>
+</ul>
+<a name="dataStoreOptions">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>dataStoreOptions</h4>
+<pre>protected&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a> dataStoreOptions</pre>
 </li>
 </ul>
 <a name="adapterIndexMappingStore">
@@ -416,6 +433,15 @@ extends org.geotools.data.store.ContentDataStore</pre>
 <li class="blockList">
 <h4>getDataStore</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;getDataStore()</pre>
+</li>
+</ul>
+<a name="getDataStoreOptions--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDataStoreOptions</h4>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;getDataStoreOptions()</pre>
 </li>
 </ul>
 <a name="getAdapterStore--">
