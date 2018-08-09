@@ -52,6 +52,7 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
@@ -75,6 +76,7 @@ public class GeoWaveGTDataStore extends
 	protected IndexStore indexStore;
 	protected DataStatisticsStore dataStatisticsStore;
 	protected DataStore dataStore;
+	protected DataStoreOptions dataStoreOptions;
 	protected AdapterIndexMappingStore adapterIndexMappingStore;
 	private final Map<String, PrimaryIndex[]> preferredIndexes = new ConcurrentHashMap<String, PrimaryIndex[]>();
 
@@ -104,6 +106,7 @@ public class GeoWaveGTDataStore extends
 	private void init(
 			final GeoWavePluginConfig config ) {
 		dataStore = config.getDataStore();
+		dataStoreOptions = config.getDataStoreOptions();
 		dataStatisticsStore = config.getDataStatisticsStore();
 		indexStore = config.getIndexStore();
 		adapterStore = config.getAdapterStore();
@@ -124,6 +127,10 @@ public class GeoWaveGTDataStore extends
 
 	public DataStore getDataStore() {
 		return dataStore;
+	}
+
+	public DataStoreOptions getDataStoreOptions() {
+		return dataStoreOptions;
 	}
 
 	public AdapterStore getAdapterStore() {

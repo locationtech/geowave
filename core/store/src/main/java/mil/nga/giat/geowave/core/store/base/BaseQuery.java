@@ -72,7 +72,16 @@ abstract class BaseQuery
 			final AdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
+			final Integer queryMaxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
+		final int maxRangeDecomposition;
+		if (queryMaxRangeDecomposition != null) {
+			maxRangeDecomposition = queryMaxRangeDecomposition;
+		}
+		else {
+			maxRangeDecomposition = isAggregation() ? options.getAggregationMaxRangeDecomposition() : options
+					.getMaxRangeDecomposition();
+		}
 		return operations.createReader(new ReaderParams<C>(
 				index,
 				adapterStore,
@@ -83,9 +92,10 @@ abstract class BaseQuery
 				isMixedVisibilityRows(),
 				isServerSideAggregation(options),
 				isRowMerging(adapterStore),
-				getRanges(),
+				getRanges(maxRangeDecomposition),
 				getServerFilter(options),
 				limit,
+				maxRangeDecomposition,
 				getCoordinateRanges(),
 				getConstraints(),
 				rowTransformer,
@@ -136,7 +146,8 @@ abstract class BaseQuery
 		return null;
 	}
 
-	abstract protected QueryRanges getRanges();
+	abstract protected QueryRanges getRanges(
+			int maxRangeDecomposition );
 
 	protected Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return null;

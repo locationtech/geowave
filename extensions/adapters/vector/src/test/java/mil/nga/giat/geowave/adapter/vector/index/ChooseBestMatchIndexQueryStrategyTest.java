@@ -18,12 +18,13 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
+
+import com.beust.jcommander.internal.Maps;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
@@ -35,7 +36,6 @@ import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
-import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericValue;
@@ -219,7 +219,8 @@ public class ChooseBestMatchIndexQueryStrategyTest
 					new SpatialTemporalIndexBuilder().createIndex(),
 					new SpatialIndexBuilder().createIndex(),
 					IMAGE_CHIP_INDEX2
-				});
+				},
+				Maps.newHashMap());
 	}
 
 	public static class ConstrainedIndexValue extends

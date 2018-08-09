@@ -242,6 +242,7 @@ public class GeoWaveRecordReader<T> extends
 					mixedVisibility,
 					range,
 					queryOptions.getLimit(),
+					rangeQueryOptions.getMaxRangeDecomposition(),
 					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 					rangeQueryOptions.getAuthorizations()));
 			return new CloseableIteratorWrapper(
