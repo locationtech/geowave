@@ -3,15 +3,13 @@ package mil.nga.giat.geowave.mapreduce.splits;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.junit.Before;
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
@@ -19,12 +17,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import edu.emory.mathcs.backport.java.util.Arrays;
 import edu.emory.mathcs.backport.java.util.Collections;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
@@ -44,6 +40,7 @@ import mil.nga.giat.geowave.mapreduce.MapReduceMemoryDataStore;
 import mil.nga.giat.geowave.mapreduce.MapReduceMemoryOperations;
 import mil.nga.giat.geowave.service.rest.GeoWaveOperationServiceWrapper;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
+import mil.nga.giat.geowave.test.TestUtils;
 import mil.nga.giat.geowave.test.annotation.Environments;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.Environments.Environment;
@@ -68,6 +65,8 @@ public class SplitsProviderIT extends
 	protected DataStorePluginOptions dataStorePluginOptions;
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
+	private static long startMillis;
+	private final static String testName = "SplitsProviderIT";
 	
 	private static MapReduceMemoryOperations mapReduceMemoryOps;
 	private static DataStoreInfo uniformDataStore;
@@ -102,10 +101,23 @@ public class SplitsProviderIT extends
 	
 	@BeforeClass
 	public static void setup() {
+		startMillis = System.currentTimeMillis();
+		TestUtils.printStartOfTest(
+				LOGGER,
+				testName);
+		
 		mapReduceMemoryOps = new MapReduceMemoryOperations();
 		uniformDataStore = createDataStore(Distribution.UNIFORM);
 		bimodalDataStore = createDataStore(Distribution.BIMODAL);
 		skewedDataStore = createDataStore(Distribution.SKEWED);
+	}
+	
+	@AfterClass
+	public static void reportTest() {
+		TestUtils.printEndOfTest(
+				LOGGER,
+				testName,
+				startMillis);
 	}
 	
 	@Test
@@ -116,7 +128,7 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(uniformDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(uniformDataStore, query, 12, 12) < 0.1);
 	}
 	
 	@Test
@@ -127,7 +139,7 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
 		
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
@@ -135,7 +147,7 @@ public class SplitsProviderIT extends
 						-60,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
 		
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
@@ -143,7 +155,7 @@ public class SplitsProviderIT extends
 						20,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
 	}
 	
 	@Test
@@ -154,7 +166,7 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
 		
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
@@ -162,7 +174,7 @@ public class SplitsProviderIT extends
 						-140,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
 		
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
@@ -170,7 +182,7 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
 	}
 	
 	private static DataStoreInfo createDataStore(Distribution distr) {
@@ -179,9 +191,10 @@ public class SplitsProviderIT extends
 				mapReduceMemoryOps);
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
-		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
+		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(
+				sft);
 
-		try (IndexWriter<SimpleFeature> writer = dataStore.createWriter(
+		try (final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
 				fda,
 				idx)) {
 			
@@ -192,18 +205,24 @@ public class SplitsProviderIT extends
 								sft),
 						writer, 
 						100000);
+					break;
 				case BIMODAL:
 					createBimodalFeatures(
 						new SimpleFeatureBuilder(
 								sft),
 						writer,
 						400000);
+					break;
 				case SKEWED:
 					createSkewedFeatures(
 						new SimpleFeatureBuilder(
 								sft),
 						writer,
 						700000);
+					break;
+				default:
+					LOGGER.error("Invalid Distribution");
+					throw new Exception();
 			}
 		} 
 		catch (MismatchedIndexToAdapterMapping e) {
@@ -214,6 +233,10 @@ public class SplitsProviderIT extends
 		catch (IOException e) {
 			LOGGER.error(
 					"IOException thrown when creating data store writer", 
+					e);
+		} catch (Exception e) {
+			LOGGER.error(
+					"Exception thrown when creating data store writer", 
 					e);
 		}
 		
@@ -290,8 +313,7 @@ public class SplitsProviderIT extends
 							LOGGER.error(
 									"Exception thrown when calling createReader", 
 									e);
-						}
-						
+						}		
 					}
 				}
 			}
@@ -301,15 +323,11 @@ public class SplitsProviderIT extends
 		}
 
 		double expected = 1.0 / splits.size();
-		
-		for (int i = 0; i < observed.length; i++) {
-			observed[i] = observed[i] / totalCount;
-		}
-		
+
 		double sum = 0;
 		
 		for (int i = 0; i < observed.length; i++) {
-			sum += Math.pow(observed[i] - expected, 2);
+			sum += Math.pow((observed[i] / totalCount) - expected, 2);
 		}
 		
 		return sum / splits.size();
@@ -353,11 +371,11 @@ public class SplitsProviderIT extends
 			final int firstFeatureId) {
 
 		int featureId = firstFeatureId;
-		for (int longitude = -180; longitude <= 0; longitude += 1) {
+		for (double longitude = -180.0; longitude <= 0.0; longitude += 1.0) {
 			if (longitude == -90) {
 				continue;
 			}
-			for (int latitude = -180; latitude <= 0; latitude += (Math.abs(-90 - longitude) / 10)) {
+			for (double latitude = -180.0; latitude <= 0.0; latitude += (Math.abs(-90.0 - longitude) / 10.0)) {
 				pointBuilder.set(
 						"geometry",
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
@@ -381,11 +399,11 @@ public class SplitsProviderIT extends
 			}
 		}
 		
-		for (int longitude = 0; longitude <= 180; longitude += 1) {
+		for (double longitude = 0.0; longitude <= 180.0; longitude += 1.0) {
 			if (longitude == 90) {
 				continue;
 			}
-			for (int latitude = 0; latitude <= 180; latitude += (Math.abs(90 - longitude) / 10)) {
+			for (double latitude = 0.0; latitude <= 180.0; latitude += (Math.abs(90.0 - longitude) / 10.0)) {
 				pointBuilder.set(
 						"geometry",
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
@@ -416,8 +434,8 @@ public class SplitsProviderIT extends
 			final int firstFeatureId) {
 
 		int featureId = firstFeatureId;
-		for (int longitude = -179; longitude <= 180; longitude += 1) {
-			for (int latitude = -90; latitude <= 90; latitude += ((longitude + 180) / 10)) {
+		for (double longitude = -180.0; longitude <= 180.0; longitude += 1.0) {
+			for (double latitude = -90.0; latitude <= 90.0; latitude += ((longitude + 181.0) / 10.0)) {
 				pointBuilder.set(
 						"geometry",
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
