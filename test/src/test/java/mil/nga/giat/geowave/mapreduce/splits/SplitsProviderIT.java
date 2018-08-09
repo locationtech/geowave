@@ -60,10 +60,10 @@ public class SplitsProviderIT extends
 	
 	@GeoWaveTestStore(value = {
 			GeoWaveStoreType.ACCUMULO,
-//			GeoWaveStoreType.BIGTABLE,
-//			GeoWaveStoreType.HBASE,
-//			GeoWaveStoreType.DYNAMODB,
-//			GeoWaveStoreType.CASSANDRA
+			GeoWaveStoreType.BIGTABLE,
+			GeoWaveStoreType.HBASE,
+			GeoWaveStoreType.DYNAMODB,
+			GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 	
@@ -86,29 +86,26 @@ public class SplitsProviderIT extends
 	}
 	
 	private static class DataStoreInfo{
-		public MapReduceMemoryDataStore mapReduceMemoryDataStore;
-		public PrimaryIndex index;
-		public GeotoolsFeatureDataAdapter adapter;
-		public Distribution distribution;
+		final public MapReduceMemoryDataStore mapReduceMemoryDataStore;
+		final public PrimaryIndex index;
+		final public GeotoolsFeatureDataAdapter adapter;
 		
 		public DataStoreInfo(
 				MapReduceMemoryDataStore mapReduceMemoryDataStore, 
 				PrimaryIndex index,
-				GeotoolsFeatureDataAdapter adapter, 
-				Distribution distribution) {
+				GeotoolsFeatureDataAdapter adapter) {
 			this.mapReduceMemoryDataStore = mapReduceMemoryDataStore;
 			this.index = index;
 			this.adapter = adapter;
-			this.distribution = distribution;
 		}
 	}
 	
 	@BeforeClass
 	public static void setup() {
 		mapReduceMemoryOps = new MapReduceMemoryOperations();
-		uniformDataStore = create(Distribution.UNIFORM);
-		bimodalDataStore = create(Distribution.BIMODAL);
-		skewedDataStore = create(Distribution.SKEWED);
+		uniformDataStore = createDataStore(Distribution.UNIFORM);
+		bimodalDataStore = createDataStore(Distribution.BIMODAL);
+		skewedDataStore = createDataStore(Distribution.SKEWED);
 	}
 	
 	@Test
@@ -119,7 +116,7 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(helper(uniformDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(uniformDataStore, query, 10, 10) < 0.1);
 	}
 	
 	@Test
@@ -130,7 +127,23 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(helper(bimodalDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
+		
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-120,
+						-60,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
+		
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-20,
+						20,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(bimodalDataStore, query, 10, 10) < 0.1);
 	}
 	
 	@Test
@@ -141,12 +154,28 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(helper(skewedDataStore, query, 10, 10) < 0.1);
+		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
+		
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-180,
+						-140,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
+		
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						0,
+						180,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(skewedDataStore, query, 10, 10) < 0.1);
 	}
 	
-	private static DataStoreInfo create(Distribution distr) {
+	private static DataStoreInfo createDataStore(Distribution distr) {
 		
-		MapReduceMemoryDataStore dataStore = new MapReduceMemoryDataStore(
+		final MapReduceMemoryDataStore dataStore = new MapReduceMemoryDataStore(
 				mapReduceMemoryOps);
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
@@ -162,42 +191,39 @@ public class SplitsProviderIT extends
 						new SimpleFeatureBuilder(
 								sft),
 						writer, 
-						8675309);
+						100000);
 				case BIMODAL:
 					createBimodalFeatures(
 						new SimpleFeatureBuilder(
 								sft),
 						writer,
-						8675309);
+						400000);
 				case SKEWED:
 					createSkewedFeatures(
 						new SimpleFeatureBuilder(
 								sft),
 						writer,
-						8675309);
+						700000);
 			}
-			
-			
 		} 
 		catch (MismatchedIndexToAdapterMapping e) {
 			LOGGER.error(
-					"", 
+					"MismathcedIndexToAdapterMapping exception thrown when creating data store writer", 
 					e);
 		} 
 		catch (IOException e) {
 			LOGGER.error(
-					"", 
+					"IOException thrown when creating data store writer", 
 					e);
 		}
 		
 		return new DataStoreInfo(
 				dataStore, 
 				idx, 
-				fda,
-				distr);
+				fda);
 	}
 	
-	private double helper(DataStoreInfo dataStoreInfo, DistributableQuery query, int minSplits, int maxSplits) {
+	private double getSplitsMSE(DataStoreInfo dataStoreInfo, DistributableQuery query, int minSplits, int maxSplits) {
 
 		// get splits and create reader for each RangeLocationPair, then summing
 		// up the rows for each split
@@ -259,7 +285,6 @@ public class SplitsProviderIT extends
 								countPerSplit++;
 	
 							}
-							System.out.println("old = " + countPerSplit +", new = ");
 						} 
 						catch (Exception e) {
 							LOGGER.error(
@@ -275,19 +300,17 @@ public class SplitsProviderIT extends
 			currentSplit++;
 		}
 
-		System.out.println("case = " + dataStoreInfo.distribution);
-		System.out.println("total = " + totalCount);
 		double expected = 1.0 / splits.size();
 		
 		for (int i = 0; i < observed.length; i++) {
 			observed[i] = observed[i] / totalCount;
 		}
+		
 		double sum = 0;
+		
 		for (int i = 0; i < observed.length; i++) {
 			sum += Math.pow(observed[i] - expected, 2);
 		}
-		double mse = sum / splits.size();
-		System.out.println("mse = " + mse);
 		
 		return sum / splits.size();
 	}
@@ -357,6 +380,34 @@ public class SplitsProviderIT extends
 				featureId++;
 			}
 		}
+		
+		for (int longitude = 0; longitude <= 180; longitude += 1) {
+			if (longitude == 90) {
+				continue;
+			}
+			for (int latitude = 0; latitude <= 180; latitude += (Math.abs(90 - longitude) / 10)) {
+				pointBuilder.set(
+						"geometry",
+						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+								longitude,
+								latitude)));
+				pointBuilder.set(
+						"TimeStamp",
+						new Date());
+				pointBuilder.set(
+						"Latitude",
+						latitude);
+				pointBuilder.set(
+						"Longitude",
+						longitude);
+				// Note since trajectoryID and comment are marked as nillable we
+				// don't need to set them (they default ot null).
+
+				final SimpleFeature sft = pointBuilder.buildFeature(String.valueOf(featureId));
+				writer.write(sft);
+				featureId++;
+			}
+		}
 	}
 	
 	public static void createSkewedFeatures(
@@ -365,8 +416,8 @@ public class SplitsProviderIT extends
 			final int firstFeatureId) {
 
 		int featureId = firstFeatureId;
-		for (int longitude = -180; longitude <= 180; longitude += 1) {
-			for (int latitude = -90; latitude <= 90; latitude += 1) {
+		for (int longitude = -179; longitude <= 180; longitude += 1) {
+			for (int latitude = -90; latitude <= 90; latitude += ((longitude + 180) / 10)) {
 				pointBuilder.set(
 						"geometry",
 						GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
