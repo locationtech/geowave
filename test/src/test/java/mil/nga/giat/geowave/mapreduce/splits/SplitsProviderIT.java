@@ -307,7 +307,6 @@ public class SplitsProviderIT extends
 							while (reader.hasNext()) {
 								reader.next();
 								countPerSplit++;
-	
 							}
 						} 
 						catch (Exception e) {

@@ -60,6 +60,7 @@ public class MapReduceMemoryOperations extends MemoryDataStoreOperations impleme
 						new QueryRanges(Collections.singleton(new SinglePartitionQueryRanges(partitionKey, Collections.singleton(sortRange)))), 
 						readerParams.getFilter(),
 						readerParams.getLimit(), 
+						readerParams.getMaxRangeDecomposition(),
 						readerParams.getCoordinateRanges(), 
 						readerParams.getConstraints(),
 						readerParams.getRowTransformer(), 
