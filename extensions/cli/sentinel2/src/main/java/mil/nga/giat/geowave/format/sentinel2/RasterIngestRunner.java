@@ -271,7 +271,7 @@ public class RasterIngestRunner extends
 
 						try {
 							final MathTransform transform = CRS.findMathTransform(
-									GeometryUtils.DEFAULT_CRS,
+									GeometryUtils.getDefaultCRS(),
 									coverage.getCoordinateReferenceSystem(),
 									true);
 							params.parameter(

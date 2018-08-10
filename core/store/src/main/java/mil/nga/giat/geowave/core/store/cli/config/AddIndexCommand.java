@@ -26,15 +26,17 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.cli.api.ServiceEnabledCommand;
 import mil.nga.giat.geowave.core.cli.operations.config.ConfigSection;
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.core.store.operations.remote.options.BasicIndexOptions;
+import mil.nga.giat.geowave.core.store.spi.DimensionalityTypeOptions;
 
 @GeowaveOperation(name = "addindex", parentOperation = ConfigSection.class)
 @Parameters(commandDescription = "Configure an index for usage in GeoWave")
 public class AddIndexCommand extends
-		DefaultOperation implements
-		Command
+		ServiceEnabledCommand<String>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AddIndexCommand.class);
 
@@ -53,8 +55,13 @@ public class AddIndexCommand extends
 	}, required = true, description = "The type of index, such as spatial, or spatial_temporal")
 	private String type;
 
-	@ParametersDelegate
 	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
+
+	@ParametersDelegate
+	private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
+
+	@ParametersDelegate
+	DimensionalityTypeOptions opts;
 
 	@Override
 	public boolean prepare(
@@ -64,6 +71,8 @@ public class AddIndexCommand extends
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
+			pluginOptions.setBasicIndexOptions(basicIndexOptions);
+			opts = pluginOptions.getDimensionalityOptions();
 		}
 		else {
 			Properties existingProps = getGeoWaveConfigProperties(params);
@@ -78,6 +87,7 @@ public class AddIndexCommand extends
 							IndexPluginOptions.getIndexNamespace(defaultIndex))) {
 						// Set the required type option.
 						this.type = pluginOptions.getType();
+						opts = pluginOptions.getDimensionalityOptions();
 					}
 				}
 				catch (ParameterException pe) {
@@ -92,12 +102,17 @@ public class AddIndexCommand extends
 			}
 		}
 
-		// Successfully prepared.
 		return true;
 	}
 
 	@Override
 	public void execute(
+			OperationParams params ) {
+		computeResults(params);
+	}
+
+	@Override
+	public String computeResults(
 			OperationParams params ) {
 
 		// Ensure that a name is chosen.
@@ -133,6 +148,18 @@ public class AddIndexCommand extends
 		ConfigOptions.writeProperties(
 				getGeoWaveConfigFile(params),
 				existingProps);
+
+		StringBuilder builder = new StringBuilder();
+		for (Object key : existingProps.keySet()) {
+			String[] split = key.toString().split(
+					"\\.");
+			if (split.length > 1) {
+				if (split[1].equals(parameters.get(0))) {
+					builder.append(key.toString() + "=" + existingProps.getProperty(key.toString()) + "\n");
+				}
+			}
+		}
+		return builder.toString();
 	}
 
 	public IndexPluginOptions getPluginOptions() {

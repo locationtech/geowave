@@ -43,6 +43,14 @@ public class RemoveAdapterCommand extends
 
 	private DataStorePluginOptions inputStoreOptions = null;
 
+	/**
+	 * Return "200 OK" for all removal commands.
+	 */
+	@Override
+	public Boolean successStatusIs200() {
+		return true;
+	}
+
 	@Override
 	public void execute(
 			final OperationParams params ) {

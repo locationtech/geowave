@@ -321,7 +321,7 @@ public class KDEJobRunner extends
 				final ExtractGeometryFilterVisitorResult geoAndCompareOpData = (ExtractGeometryFilterVisitorResult) filter
 						.accept(
 								new ExtractGeometryFilterVisitor(
-										GeometryUtils.DEFAULT_CRS,
+										GeometryUtils.getDefaultCRS(),
 										geometryAttribute),
 								null);
 				bbox = geoAndCompareOpData.getGeometry();
@@ -485,7 +485,15 @@ public class KDEJobRunner extends
 		}
 		finally {
 			if (fs != null) {
-				fs.close();
+				try {
+					fs.close();
+				}
+				catch (IOException e) {
+					LOGGER.info(e.getMessage());
+					// Attempt to close, but don't throw an error if it is
+					// already closed.
+					// Log message, so find bugs does not complain.
+				}
 			}
 		}
 	}
@@ -529,7 +537,7 @@ public class KDEJobRunner extends
 	}
 
 	protected Class<? extends Reducer<?, ?, ?, ?>> getJob2Reducer() {
-		return AccumuloKDEReducer.class;
+		return KDEReducer.class;
 	}
 
 	protected Class<? extends Partitioner<?, ?>> getJob2Partitioner() {
@@ -570,11 +578,11 @@ public class KDEJobRunner extends
 			throws Exception {
 		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
-				AccumuloKDEReducer.NUM_BANDS,
+				KDEReducer.NUM_BANDS,
 				TILE_SIZE,
-				AccumuloKDEReducer.MINS_PER_BAND,
-				AccumuloKDEReducer.MAXES_PER_BAND,
-				AccumuloKDEReducer.NAME_PER_BAND,
+				KDEReducer.MINS_PER_BAND,
+				KDEReducer.MAXES_PER_BAND,
+				KDEReducer.NAME_PER_BAND,
 				null);
 		setup(
 				statsReducer,

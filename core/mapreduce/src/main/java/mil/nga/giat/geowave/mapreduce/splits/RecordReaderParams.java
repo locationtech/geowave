@@ -27,6 +27,7 @@ public class RecordReaderParams<T> extends
 			final boolean isMixedVisibility,
 			final GeoWaveRowRange rowRange,
 			final Integer limit,
+			final Integer maxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
 			final String... additionalAuthorizations ) {
 		super(
@@ -38,6 +39,7 @@ public class RecordReaderParams<T> extends
 				fieldSubsets,
 				isMixedVisibility,
 				limit,
+				maxRangeDecomposition,
 				rowTransformer,
 				additionalAuthorizations);
 		this.rowRange = rowRange;

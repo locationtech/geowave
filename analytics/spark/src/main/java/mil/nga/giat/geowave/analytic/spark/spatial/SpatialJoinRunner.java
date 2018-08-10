@@ -3,6 +3,8 @@ package mil.nga.giat.geowave.analytic.spark.spatial;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.spark.SparkConf;
@@ -111,38 +113,59 @@ public class SpatialJoinRunner implements
 		writeResultsToNewAdapter();
 	}
 
+	private PrimaryIndex[] getIndicesForAdapter(
+			DataStorePluginOptions storeOptions,
+			ByteArrayId adapterId,
+			InternalAdapterStore internalAdapterStore,
+			IndexStore indexStore ) {
+		return storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
+				internalAdapterStore.getInternalAdapterId(adapterId)).getIndices(
+				indexStore);
+	}
+
+	private FeatureDataAdapter createOutputAdapter(
+			DataStorePluginOptions originalOptions,
+			ByteArrayId originalId,
+			PrimaryIndex[] indices,
+			ByteArrayId outputAdapterId ) {
+
+		if (outputAdapterId == null) {
+			outputAdapterId = createDefaultAdapterName(
+					originalId,
+					originalOptions);
+		}
+		FeatureDataAdapter newAdapter = FeatureDataUtils.cloneFeatureDataAdapter(
+				originalOptions,
+				originalId,
+				outputAdapterId);
+		newAdapter.init(indices);
+		return newAdapter;
+	}
+
 	private void writeResultsToNewAdapter()
 			throws IOException {
 		if (outputStore != null) {
-			ByteArrayId leftJoinId = outLeftAdapterId;
-			if (leftJoinId == null) {
-				leftJoinId = createDefaultAdapterName(
-						leftAdapterId,
-						leftStore);
-			}
-			final FeatureDataAdapter newLeftAdapter = FeatureDataUtils.cloneFeatureDataAdapter(
+			final PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
 					leftStore,
 					leftAdapterId,
-					leftJoinId);
-			final PrimaryIndex[] leftIndices = leftStore.createAdapterIndexMappingStore().getIndicesForAdapter(
-					leftInternalAdapterStore.getInternalAdapterId(leftAdapterId)).getIndices(
+					leftInternalAdapterStore,
 					leftIndexStore);
-			newLeftAdapter.init(leftIndices);
+			final FeatureDataAdapter newLeftAdapter = this.createOutputAdapter(
+					leftStore,
+					leftAdapterId,
+					leftIndices,
+					outLeftAdapterId);
 
-			ByteArrayId rightJoinId = outRightAdapterId;
-			if (rightJoinId == null) {
-				rightJoinId = createDefaultAdapterName(
-						rightAdapterId,
-						rightStore);
-			}
-			final FeatureDataAdapter newRightAdapter = FeatureDataUtils.cloneFeatureDataAdapter(
+			final PrimaryIndex[] rightIndices = this.getIndicesForAdapter(
 					rightStore,
 					rightAdapterId,
-					rightJoinId);
-			final PrimaryIndex[] rightIndices = rightStore.createAdapterIndexMappingStore().getIndicesForAdapter(
-					rightInternalAdapterStore.getInternalAdapterId(rightAdapterId)).getIndices(
+					rightInternalAdapterStore,
 					rightIndexStore);
-			newRightAdapter.init(rightIndices);
+			final FeatureDataAdapter newRightAdapter = this.createOutputAdapter(
+					rightStore,
+					rightAdapterId,
+					rightIndices,
+					outRightAdapterId);
 			// Write each feature set to new adapter and store using original
 			// indexing methods.
 			RDDUtils.writeRDDToGeoWave(
@@ -199,14 +222,16 @@ public class SpatialJoinRunner implements
 						"Unable to set jar location in spark configuration",
 						e);
 			}
-			SparkConf addonOptions = new SparkConf();
+			SparkConf addonOptions = GeoWaveSparkConf.getDefaultConfig();
 			addonOptions = addonOptions.setAppName(
 					appName).setMaster(
 					master).set(
 					"spark.jars",
 					jar);
 
-			if (master != "yarn") {
+			if (!Objects.equals(
+					master,
+					"yarn")) {
 				addonOptions = addonOptions.set(
 						"spark.driver.host",
 						host);
@@ -224,101 +249,82 @@ public class SpatialJoinRunner implements
 		sc = session.sparkContext();
 	}
 
+	private GeoWaveIndexedRDD createRDDFromOptions(
+			DataStorePluginOptions storeOptions,
+			ByteArrayId adapterId,
+			InternalAdapterStore internalAdapterStore,
+			IndexStore indexStore )
+			throws IOException {
+		QueryOptions adapterOptions;
+
+		// If no adapterId provided by user grab first adapterId
+		// available.
+		if (adapterId == null) {
+			List<ByteArrayId> byteIds = FeatureDataUtils.getFeatureAdapterIds(storeOptions);
+			if (!byteIds.isEmpty()) {
+				adapterId = byteIds.get(0);
+			}
+			else {
+				LOGGER.error("No valid adapter found in store to perform join.");
+				return null;
+			}
+		}
+
+		adapterOptions = new QueryOptions(
+				storeOptions.createAdapterStore().getAdapter(
+						internalAdapterStore.getInternalAdapterId(adapterId)));
+
+		RDDOptions rddOpts = new RDDOptions();
+		rddOpts.setQueryOptions(adapterOptions);
+		rddOpts.setMinSplits(this.partCount);
+		rddOpts.setMaxSplits(this.partCount);
+
+		NumericIndexStrategy rddStrategy = null;
+		// Did the user provide a strategy for join?
+		if (this.indexStrategy == null) {
+			PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
+					storeOptions,
+					adapterId,
+					leftInternalAdapterStore,
+					indexStore);
+			if (leftIndices.length > 0) {
+				rddStrategy = leftIndices[0].getIndexStrategy();
+			}
+
+		}
+		else {
+			rddStrategy = this.indexStrategy;
+		}
+
+		return GeoWaveRDDLoader.loadIndexedRDD(
+				sc,
+				storeOptions,
+				rddOpts,
+				rddStrategy);
+	}
+
 	private void loadDatasets()
 			throws IOException {
 		if (leftStore != null) {
 			if (leftRDD == null) {
-				QueryOptions leftOptions = null;
-
-				// Load left Adapter
-				if (leftAdapterId == null) {
-					// If no adapterId provided by user grab first adapterId
-					// available.
-					leftAdapterId = FeatureDataUtils.getFeatureAdapterIds(
-							leftStore).get(
-							0);
-				}
-
-				leftOptions = new QueryOptions(
-						leftAdapterId,
-						null);
-
-				final RDDOptions leftOpts = new RDDOptions();
-				leftOpts.setQueryOptions(leftOptions);
-				leftOpts.setMinSplits(partCount);
-				leftOpts.setMaxSplits(partCount);
-
-				NumericIndexStrategy leftStrategy = null;
-				// Did the user provide a strategy for join?
-				if (indexStrategy == null) {
-					final PrimaryIndex[] leftIndices = leftStore.createAdapterIndexMappingStore().getIndicesForAdapter(
-							leftInternalAdapterStore.getInternalAdapterId(leftAdapterId)).getIndices(
-							leftIndexStore);
-					if (leftIndices.length > 0) {
-						leftStrategy = leftIndices[0].getIndexStrategy();
-					}
-
-				}
-				else {
-					leftStrategy = indexStrategy;
-				}
-
-				leftRDD = GeoWaveRDDLoader.loadIndexedRDD(
-						sc,
+				leftRDD = this.createRDDFromOptions(
 						leftStore,
-						leftOpts,
-						leftStrategy);
+						leftAdapterId,
+						leftInternalAdapterStore,
+						leftIndexStore);
 			}
-
 		}
 
 		if (rightStore != null) {
 			if (rightRDD == null) {
-				QueryOptions rightOptions = null;
-
-				if (rightAdapterId == null) {
-					// If no adapterId provided by user grab first adapterId
-					// available.
-					rightAdapterId = FeatureDataUtils.getFeatureAdapterIds(
-							rightStore).get(
-							0);
-				}
-
-				rightOptions = new QueryOptions(
-						rightAdapterId,
-						null);
-
-				final RDDOptions rightOpts = new RDDOptions();
-				rightOpts.setQueryOptions(rightOptions);
-				rightOpts.setMinSplits(partCount);
-				rightOpts.setMaxSplits(partCount);
-
-				NumericIndexStrategy rightStrategy = null;
-				if (indexStrategy == null) {
-					final PrimaryIndex[] rightIndices = rightStore
-							.createAdapterIndexMappingStore()
-							.getIndicesForAdapter(
-									rightInternalAdapterStore.getInternalAdapterId(rightAdapterId))
-							.getIndices(
-									rightIndexStore);
-					if (rightIndices.length > 0) {
-						rightStrategy = rightIndices[0].getIndexStrategy();
-					}
-				}
-				else {
-					rightStrategy = indexStrategy;
-				}
-
-				rightRDD = GeoWaveRDDLoader.loadIndexedRDD(
-						sc,
+				rightRDD = this.createRDDFromOptions(
 						rightStore,
-						rightOpts,
-						rightStrategy);
-
+						rightAdapterId,
+						rightInternalAdapterStore,
+						rightIndexStore);
 			}
 
 		}
-
 	}
 
 	private void verifyCRS() {

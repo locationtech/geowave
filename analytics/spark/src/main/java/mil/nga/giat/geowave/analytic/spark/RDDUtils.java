@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytic.spark;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.Iterator;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.Job;
@@ -10,17 +11,26 @@ import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.broadcast.Broadcast;
 import org.apache.spark.mllib.linalg.Vector;
 import org.apache.spark.mllib.linalg.Vectors;
+import org.geotools.geometry.jts.JTS;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.LineSegment;
+import com.vividsolutions.jts.geom.LineString;
 import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
+import com.vividsolutions.jts.operation.predicate.RectangleIntersects;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.store.query.ScaledTemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
+import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
+import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -168,6 +178,38 @@ public class RDDUtils
 				});
 
 		return vectorRDD;
+	}
+
+	public static InsertionIds trimIndexIds(
+			InsertionIds rawIds,
+			Geometry geom,
+			NumericIndexStrategy index ) {
+		for (final SinglePartitionInsertionIds insertionId : rawIds.getPartitionKeys()) {
+			final ByteArrayId partitionKey = insertionId.getPartitionKey();
+			final int size = insertionId.getSortKeys().size();
+			if (size > 3) {
+				final Iterator<ByteArrayId> it = insertionId.getSortKeys().iterator();
+				while (it.hasNext()) {
+					final ByteArrayId sortKey = it.next();
+					MultiDimensionalNumericData keyTile = index.getRangeForId(
+							partitionKey,
+							sortKey);
+					Envelope other = new Envelope();
+					other.init(
+							keyTile.getMinValuesPerDimension()[0],
+							keyTile.getMaxValuesPerDimension()[0],
+							keyTile.getMinValuesPerDimension()[1],
+							keyTile.getMaxValuesPerDimension()[1]);
+					Polygon rect = JTS.toGeometry(other);
+					if (!RectangleIntersects.intersects(
+							rect,
+							geom)) {
+						it.remove();
+					}
+				}
+			}
+		}
+		return rawIds;
 	}
 
 	/**

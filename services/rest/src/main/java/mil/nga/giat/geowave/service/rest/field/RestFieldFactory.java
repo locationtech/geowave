@@ -4,7 +4,9 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
@@ -134,24 +136,49 @@ public class RestFieldFactory
 				instanceType,
 				ParametersDelegate.class)) {
 			try {
-				final Class<?> delegateInstanceType = field.getType();
-				// here just assume if instance was null we don't need to waste
-				// time on reflection to make delegate instance
-				final Object delegateInstance = instance == null ? null : delegateInstanceType.newInstance();
+				final Class<?> delegateInstanceType;
+				Object delegateInstance;
 				if (instance != null) {
 					// HP Fortify "Access Control" false positive
 					// The need to change the accessibility here is
 					// necessary, has been review and judged to be safe
 					field.setAccessible(true);
+
+					delegateInstance = field.get(instance);
+					if (delegateInstance == null) {
+						delegateInstanceType = field.getType();
+						delegateInstance = delegateInstanceType.newInstance();
+					}
+					else {
+						delegateInstanceType = delegateInstance.getClass();
+						if (delegateInstance instanceof Map) {
+							for (Object mapValueInstance : ((Map) delegateInstance).values()) {
+								final Class<?> mapValueInstanceType = mapValueInstance.getClass();
+								retVal.addAll(internalCreateRestFields(
+										mapValueInstance,
+										mapValueInstanceType,
+										parameterInitializer,
+										mainParamInitializer));
+							}
+						}
+					}
 					field.set(
 							instance,
 							delegateInstance);
+				}
+				else {
+					delegateInstanceType = field.getType();
+					// here just assume if instance was null we don't need to
+					// waste
+					// time on reflection to make delegate instance
+					delegateInstance = null;
 				}
 				retVal.addAll(internalCreateRestFields(
 						delegateInstance,
 						delegateInstanceType,
 						parameterInitializer,
 						mainParamInitializer));
+
 			}
 			catch (InstantiationException | IllegalAccessException e) {
 				LOGGER.error(

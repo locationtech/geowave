@@ -40,13 +40,12 @@ public class IngestServiceClient
 
 	public Response kafkaToGW(
 			final String store_name,
-			final String index_group_list,
-			final String kafkaPropertyFile ) {
+			final String index_group_list ) {
 
 		return kafkaToGW(
 				store_name,
 				index_group_list,
-				kafkaPropertyFile,
+				null,
 				null,
 				null,
 				null,
@@ -176,12 +175,11 @@ public class IngestServiceClient
 	}
 
 	public Response localToKafka(
-			final String file_or_directory,
-			final String kafkaPropertyFile ) {
+			final String file_or_directory ) {
 
 		return localToKafka(
 				file_or_directory,
-				kafkaPropertyFile,
+				null,
 				null,
 				null,
 				null,

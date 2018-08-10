@@ -23,13 +23,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ServiceLoader;
 import java.util.stream.Collectors;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataAccessFactory.Param;
 import org.geotools.data.Parameter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -41,6 +40,7 @@ import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import mil.nga.giat.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
 import mil.nga.giat.geowave.core.index.SPIServiceRegistry;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -139,6 +139,7 @@ public class GeoWavePluginConfig
 	private final PersistentAdapterStore adapterStore;
 	private final InternalAdapterStore internalAdapterStore;
 	private final DataStore dataStore;
+	private final DataStoreOptions dataStoreOptions;
 	private final IndexStore indexStore;
 	private final DataStatisticsStore dataStatisticsStore;
 	private final String name;
@@ -257,6 +258,8 @@ public class GeoWavePluginConfig
 
 		dataStore = storeFactoryFamily.getDataStoreFactory().createStore(
 				options);
+		
+		dataStoreOptions = options.getStoreOptions();
 
 		dataStatisticsStore = storeFactoryFamily.getDataStatisticsStoreFactory().createStore(
 				options);
@@ -311,6 +314,10 @@ public class GeoWavePluginConfig
 	
 	public DataStore getDataStore() {
 		return dataStore;
+	}
+	
+	public DataStoreOptions getDataStoreOptions() {
+		return dataStoreOptions;
 	}
 
 	public AdapterIndexMappingStore getAdapterIndexMappingStore() {

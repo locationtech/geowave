@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -75,15 +76,21 @@ public class InputFormatIteratorWrapper<T> implements
 			final QueryFilter clientFilter,
 			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index ) {
-		final Object value = BaseDataStoreUtils.decodeRow(
-				row,
-				clientFilter,
-				adapter,
-				serializationTool.getAdapterStore(),
-				index,
-				null,
-				null,
-				true);
+		Object value = null;
+		try {
+			value = BaseDataStoreUtils.decodeRow(
+					row,
+					clientFilter,
+					adapter,
+					serializationTool.getAdapterStore(),
+					index,
+					null,
+					null,
+					true);
+		}
+		catch (AdapterException e) {
+			return null;
+		}
 		if (value == null) {
 			return null;
 		}

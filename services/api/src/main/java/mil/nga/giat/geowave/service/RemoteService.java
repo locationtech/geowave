@@ -45,7 +45,7 @@ public interface RemoteService
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/version")
 	public Response version(
-			@QueryParam("store_name") String store_name );
+			@QueryParam("storename") String storename );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)

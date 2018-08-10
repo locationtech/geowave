@@ -20,7 +20,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
@@ -130,7 +130,7 @@ public class CQLQueryFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		try {
-			FeatureDataUtils.initClassLoader();
+			GeometryUtils.initClassLoader();
 		}
 		catch (final MalformedURLException e) {
 			LOGGER.error(

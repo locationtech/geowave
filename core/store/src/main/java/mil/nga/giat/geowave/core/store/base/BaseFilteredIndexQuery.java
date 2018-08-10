@@ -72,13 +72,15 @@ abstract class BaseFilteredIndexQuery extends
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
+			final Integer limit,
+			final Integer queryMaxRangeDecomposition ) {
 		final Reader<?> reader = getReader(
 				datastoreOperations,
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
+				queryMaxRangeDecomposition,
 				getRowTransformer(
 						options,
 						adapterStore,
@@ -106,6 +108,7 @@ abstract class BaseFilteredIndexQuery extends
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
+			final Integer queryMaxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
 		boolean exists = false;
 		try {
@@ -127,6 +130,7 @@ abstract class BaseFilteredIndexQuery extends
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
+				queryMaxRangeDecomposition,
 				rowTransformer);
 	}
 

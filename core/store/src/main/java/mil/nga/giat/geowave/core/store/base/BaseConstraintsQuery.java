@@ -14,7 +14,6 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.QueryRanges;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -34,7 +33,6 @@ import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
@@ -161,7 +159,8 @@ public class BaseConstraintsQuery extends
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
+			final Integer limit,
+			final Integer queryMaxRangeDecomposition ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
 				// Aggregate client-side
@@ -170,7 +169,8 @@ public class BaseConstraintsQuery extends
 						options,
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
-						limit);
+						limit,
+						queryMaxRangeDecomposition);
 				return BaseDataStoreUtils.aggregate(
 						it,
 						(Aggregation<?, ?, Object>) aggregation.getValue());
@@ -184,6 +184,7 @@ public class BaseConstraintsQuery extends
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
 						limit,
+						queryMaxRangeDecomposition,
 						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)) {
 					Mergeable mergedAggregationResult = null;
 					if ((reader == null) || !reader.hasNext()) {
@@ -221,7 +222,8 @@ public class BaseConstraintsQuery extends
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				limit);
+				limit,
+				queryMaxRangeDecomposition);
 	}
 
 	@Override
@@ -292,26 +294,12 @@ public class BaseConstraintsQuery extends
 	}
 
 	@Override
-	protected QueryRanges getRanges() {
-		if (isAggregation()) {
-			final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
-					constraints,
-					index.getIndexStrategy(),
-					BaseDataStoreUtils.AGGREGATION_RANGE_DECOMPOSITION,
-					indexMetaData);
-
-			return ranges;
-		}
-		else {
-			return getAllRanges();
-		}
-	}
-
-	public QueryRanges getAllRanges() {
+	protected QueryRanges getRanges(
+			int maxRangeDecomposition ) {
 		return DataStoreUtils.constraintsToQueryRanges(
 				constraints,
 				index.getIndexStrategy(),
-				BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION,
+				maxRangeDecomposition,
 				indexMetaData);
 	}
 

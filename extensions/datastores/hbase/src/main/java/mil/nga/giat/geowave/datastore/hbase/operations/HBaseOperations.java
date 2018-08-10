@@ -136,7 +136,6 @@ public class HBaseOperations implements
 
 	private final String tableNamespace;
 	private final boolean schemaUpdateEnabled;
-	private final HashMap<ByteArrayId, Boolean> tableAvailableCache = new HashMap<>();
 	private final HashMap<String, List<String>> coprocessorCache = new HashMap<>();
 	private final Map<TableName, Set<ByteArrayId>> partitionCache = new HashMap<>();
 	private final HashMap<TableName, Set<GeoWaveColumnFamily>> cfCache = new HashMap<>();
@@ -797,26 +796,12 @@ public class HBaseOperations implements
 	public boolean indexExists(
 			final ByteArrayId indexId )
 			throws IOException {
-		Boolean tableAvailable = tableAvailableCache.get(indexId);
-		if (tableAvailable == null) {
-			synchronized (ADMIN_MUTEX) {
-				try (Admin admin = conn.getAdmin()) {
-					TableName tableName = getTableName(indexId.getString());
-					tableAvailable = admin.isTableAvailable(tableName);
-					if (!tableAvailable) {
-						waitForUpdate(
-								admin,
-								tableName,
-								SLEEP_INTERVAL);
-						tableAvailable = admin.isTableAvailable(tableName);
-					}
-				}
-				tableAvailableCache.put(
-						indexId,
-						tableAvailable);
+		synchronized (ADMIN_MUTEX) {
+			try (Admin admin = conn.getAdmin()) {
+				TableName tableName = getTableName(indexId.getString());
+				return admin.tableExists(tableName);
 			}
 		}
-		return tableAvailable;
 	}
 
 	@Override
@@ -1179,10 +1164,12 @@ public class HBaseOperations implements
 					.getIndex()
 					.getIndexModel())));
 
+			int maxRangeDecomposition = readerParams.getMaxRangeDecomposition() == null ? options
+					.getAggregationMaxRangeDecomposition() : readerParams.getMaxRangeDecomposition();
 			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(DataStoreUtils.constraintsToQueryRanges(
 					readerParams.getConstraints(),
 					readerParams.getIndex().getIndexStrategy(),
-					BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION).getCompositeQueryRanges());
+					maxRangeDecomposition).getCompositeQueryRanges());
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}

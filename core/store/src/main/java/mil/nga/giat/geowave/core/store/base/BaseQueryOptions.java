@@ -54,6 +54,7 @@ public class BaseQueryOptions
 	private transient PrimaryIndex index = null;
 	private Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer limit = -1;
+	private Integer maxRangeDecomposition = null;
 	private double[] maxResolutionSubsamplingPerDimension = null;
 	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
@@ -67,6 +68,7 @@ public class BaseQueryOptions
 		indexId = options.getIndexId();
 		index = options.getIndex();
 		limit = options.getLimit();
+		maxRangeDecomposition = options.getMaxRangeDecomposition();
 		maxResolutionSubsamplingPerDimension = options.getMaxResolutionSubsamplingPerDimension();
 		authorizations = options.getAuthorizations();
 
@@ -288,6 +290,24 @@ public class BaseQueryOptions
 	public void setScanCallback(
 			final ScanCallback<?, ?> scanCallback ) {
 		this.scanCallback = scanCallback;
+	}
+
+	/**
+	 *
+	 * @return the max range decomposition to use when computing query ranges
+	 */
+	public Integer getMaxRangeDecomposition() {
+		return maxRangeDecomposition;
+	}
+
+	/**
+	 * a value of null indicates to use the data store configured default
+	 * 
+	 * @param maxRangeDecomposition
+	 */
+	public void setMaxRangeDecomposition(
+			Integer maxRangeDecomposition ) {
+		this.maxRangeDecomposition = maxRangeDecomposition;
 	}
 
 	/**

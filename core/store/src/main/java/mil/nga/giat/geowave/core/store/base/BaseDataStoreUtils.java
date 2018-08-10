@@ -11,8 +11,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -29,11 +29,8 @@ import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
@@ -42,13 +39,12 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
-import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -64,8 +60,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
@@ -73,8 +67,6 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 public class BaseDataStoreUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
-	public static final int MAX_RANGE_DECOMPOSITION = 2000;
-	public static final int AGGREGATION_RANGE_DECOMPOSITION = 10;
 
 	public static <T> GeoWaveRow[] getGeoWaveRows(
 			final T entry,
@@ -93,6 +85,8 @@ public class BaseDataStoreUtils
 	 * and HBase; Unification in progress
 	 *
 	 * Override this method if you can't pass in a GeoWaveRow!
+	 * 
+	 * @throws AdapterException
 	 */
 	public static <T> Object decodeRow(
 			final GeoWaveRow geowaveRow,
@@ -102,12 +96,15 @@ public class BaseDataStoreUtils
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
-			final boolean decodeRow ) {
+			final boolean decodeRow )
+			throws AdapterException {
 		final short internalAdapterId = geowaveRow.getInternalAdapterId();
 
 		if ((adapter == null) && (adapterStore == null)) {
-			LOGGER.error("Could not decode row from iterator. Either adapter or adapter store must be non-null.");
-			return null;
+			String msg = "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
+			LOGGER.error(msg);
+			throw new AdapterException(
+					msg);
 		}
 		final IntermediaryReadEntryInfo decodePackage = new IntermediaryReadEntryInfo(
 				index,
@@ -117,15 +114,19 @@ public class BaseDataStoreUtils
 				adapter,
 				internalAdapterId,
 				adapterStore)) {
-			LOGGER.error("Could not retrieve adapter " + internalAdapterId + " from adapter store.");
-			return null;
+			String msg = "Could not retrieve adapter " + internalAdapterId + " from adapter store.";
+			LOGGER.error(msg);
+			throw new AdapterException(
+					msg);
 		}
 
 		// Verify the adapter matches the data
 		if (!decodePackage.isAdapterVerified()) {
 			if (!decodePackage.verifyAdapter(internalAdapterId)) {
-				LOGGER.error("Adapter verify failed: adapter does not match data.");
-				return null;
+				String msg = "Adapter verify failed: adapter does not match data.";
+				LOGGER.error(msg);
+				throw new AdapterException(
+						msg);
 			}
 		}
 

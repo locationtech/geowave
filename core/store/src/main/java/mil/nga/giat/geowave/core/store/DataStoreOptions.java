@@ -25,4 +25,8 @@ public interface DataStoreOptions
 	public boolean isEnableBlockCache();
 
 	public boolean isServerSideLibraryEnabled();
+
+	public int getMaxRangeDecomposition();
+
+	public int getAggregationMaxRangeDecomposition();
 }

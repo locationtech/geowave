@@ -1307,7 +1307,7 @@ public class GeoServerRestClient
 				interpolationOverride,
 				scaleTo8Bit);
 
-		System.out.println("Add coverage store - xml params:\n" + cvgStoreXml);
+		LOGGER.debug("Add coverage store - xml params:\n" + cvgStoreXml);
 
 		// create a new geoserver style
 		return getWebTarget().path(
