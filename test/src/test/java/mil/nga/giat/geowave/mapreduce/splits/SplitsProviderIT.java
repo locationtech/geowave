@@ -300,6 +300,7 @@ public class SplitsProviderIT extends
 								splitInfo.isMixedVisibility(),
 								p.getRange(),
 								null,
+								null,
 								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 								null);
 						try (Reader<?> reader = mapReduceMemoryOps.createReader(readerParams)) {
