@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.json.JSONException;
@@ -99,10 +100,19 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 			final GeoWaveRow... kvs ) {
 		for (final GeoWaveRow kv : kvs) {
 			if (entryHasDifferentVisibilities(kv)) {
-				entriesWithDifferingFieldVisibilities++;
+				if (ids.add(new ByteArrayId(
+						kvs[0].getDataId()))) {
+					entriesWithDifferingFieldVisibilities++;
+				}
 			}
 		}
 	}
+
+	/**
+	 * This is expensive, but necessary since there may be duplicates
+	 */
+	// TODO entryDeleted should only be called once with all duplicates
+	private transient HashSet<ByteArrayId> ids = new HashSet<ByteArrayId>();
 
 	@Override
 	public void entryDeleted(

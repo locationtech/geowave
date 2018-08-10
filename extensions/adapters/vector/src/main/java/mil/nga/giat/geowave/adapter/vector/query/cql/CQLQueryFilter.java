@@ -94,6 +94,9 @@ public class CQLQueryFilter implements
 				}
 				return filter.evaluate(feature);
 			}
+			else {
+				return false;
+			}
 		}
 		return true;
 	}

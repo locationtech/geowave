@@ -423,21 +423,24 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		// Retrieve the feature adapter for the CQL query generator
 		final AdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
 
-		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-		final GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next();
-		it.close();
+		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+			while (it.hasNext()) {
+				final GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next();
+				it.close();
 
-		// Create the CQL query
-		final Query query = CQLQuery.createOptimalQuery(
-				cqlStr,
-				adapter,
-				null,
-				null);
+				// Create the CQL query
+				final Query query = CQLQuery.createOptimalQuery(
+						cqlStr,
+						adapter,
+						null,
+						null);
 
-		deleteInternal(
-				geowaveStore,
-				index,
-				query);
+				deleteInternal(
+						geowaveStore,
+						index,
+						query);
+			}
+		}
 	}
 
 	protected void deleteInternal(
@@ -467,7 +470,6 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				new QueryOptions(
 						index),
 				query);
-
 		int expectedFeaturesToDelete = 0;
 		while (queryResults.hasNext()) {
 			final Object obj = queryResults.next();
