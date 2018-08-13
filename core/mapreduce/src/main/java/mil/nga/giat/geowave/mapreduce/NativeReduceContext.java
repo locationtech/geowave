@@ -51,14 +51,6 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 
 	public NativeReduceContext(
 			final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext,
-			final AdapterStore adapterStore ) {
-		this.writableContext = writableContext;
-		this.serializationTool = new HadoopWritableSerializationTool(
-				adapterStore);
-	}
-
-	public NativeReduceContext(
-			final ReduceContext<KEYIN, VALUEIN, GeoWaveInputKey, ObjectWritable> writableContext,
 			final HadoopWritableSerializationTool serializationTool ) {
 		this.writableContext = writableContext;
 		this.serializationTool = serializationTool;
@@ -75,7 +67,7 @@ public class NativeReduceContext<KEYIN, VALUEIN> implements
 		writableContext.write(
 				key,
 				serializationTool.toWritable(
-						key.getAdapterId(),
+						key.getInternalAdapterId(),
 						value));
 
 	}

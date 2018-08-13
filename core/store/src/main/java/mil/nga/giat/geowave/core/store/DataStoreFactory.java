@@ -5,6 +5,7 @@ import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 
@@ -41,6 +42,8 @@ public class DataStoreFactory extends
 						options),
 				new SecondaryIndexStoreImpl(),
 				operations,
-				options);
+				options,
+				new InternalAdapterStoreImpl(
+						operations));
 	}
 }

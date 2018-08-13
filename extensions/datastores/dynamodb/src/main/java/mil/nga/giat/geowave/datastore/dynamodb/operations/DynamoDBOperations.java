@@ -29,8 +29,10 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
@@ -45,6 +47,7 @@ import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBClientPool;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBOptions;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
+import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
@@ -104,8 +107,7 @@ public class DynamoDBOperations implements
 			final byte[] adapterId,
 			final String... additionalAuthorizations ) {
 		final String qName = getQualifiedTableName(tableName);
-		final ByteArrayId adapterIdObj = new ByteArrayId(
-				adapterId);
+		final Short adapterIdObj = ByteArrayUtils.byteArrayToShort(adapterId);
 		final Set<ByteArrayId> dataIdsSet = new HashSet<>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
@@ -130,8 +132,9 @@ public class DynamoDBOperations implements
 					public boolean apply(
 							final DynamoDBRow input ) {
 						return dataIdsSet.contains(new ByteArrayId(
-								input.getDataId())) && new ByteArrayId(
-								input.getAdapterId()).equals(adapterIdObj);
+								input.getDataId())) && Short.valueOf(
+								input.getInternalAdapterId()).equals(
+								adapterIdObj);
 					}
 				});
 	}
@@ -169,7 +172,7 @@ public class DynamoDBOperations implements
 	@Override
 	public boolean deleteAll(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId,
+			Short internalAdapterId,
 			final String... additionalAuthorizations ) {
 		// TODO Auto-generated method stub
 		return false;
@@ -185,7 +188,7 @@ public class DynamoDBOperations implements
 	@Override
 	public Writer createWriter(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId ) {
+			short internalAdapterId ) {
 		final String qName = getQualifiedTableName(indexId.getString());
 
 		final DynamoDBWriter writer = new DynamoDBWriter(
@@ -335,10 +338,15 @@ public class DynamoDBOperations implements
 	@Override
 	public boolean mergeData(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
+			PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public PersistentAdapterStore getAdapterStore() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override

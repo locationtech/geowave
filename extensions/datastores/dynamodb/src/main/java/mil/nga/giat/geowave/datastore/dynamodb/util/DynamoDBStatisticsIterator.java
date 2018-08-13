@@ -6,6 +6,7 @@ import java.util.Map;
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -42,8 +43,8 @@ public class DynamoDBStatisticsIterator implements
 			}
 			else {
 				if (statEntry.getStatisticsId().equals(
-						currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
-						currentStatistics.getDataAdapterId())) {
+						currentStatistics.getStatisticsId()) && statEntry.getInternalDataAdapterId().equals(
+						currentStatistics.getInternalDataAdapterId())) {
 					currentStatistics.merge(statEntry);
 				}
 				else {
@@ -66,8 +67,9 @@ public class DynamoDBStatisticsIterator implements
 		final DataStatistics<?> stats = (DataStatistics<?>) PersistenceUtils.fromBinary(DynamoDBUtils.getValue(entry));
 
 		if (stats != null) {
-			stats.setDataAdapterId(new ByteArrayId(
-					DynamoDBUtils.getSecondaryId(entry)));
+			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(DynamoDBUtils.getSecondaryId(entry)));
+			stats.setStatisticsId(new ByteArrayId(
+					DynamoDBUtils.getPrimaryId(entry)));
 		}
 
 		return stats;
@@ -77,7 +79,7 @@ public class DynamoDBStatisticsIterator implements
 			final DataStatistics<?> stats ) {
 		return new GeoWaveMetadata(
 				stats.getStatisticsId().getBytes(),
-				stats.getDataAdapterId().getBytes(),
+				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));
 	}

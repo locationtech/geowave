@@ -82,7 +82,6 @@ public class ImageChipDataAdapter implements
 				IMAGE_FIELD_ID,
 				entry.getImageBinary());
 		return new AdapterPersistenceEncoding(
-				getAdapterId(),
 				entry.getDataId(),
 				new PersistentDataset<CommonIndexValue>(),
 				new PersistentDataset<Object>(

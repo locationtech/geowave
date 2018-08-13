@@ -6,7 +6,7 @@ public interface GeoWaveKey
 {
 	public byte[] getDataId();
 
-	public byte[] getAdapterId();
+	public short getInternalAdapterId();
 
 	public byte[] getSortKey();
 	
@@ -16,21 +16,19 @@ public interface GeoWaveKey
 	
 	public static byte[] getCompositeId(GeoWaveKey key){
 		final ByteBuffer buffer = ByteBuffer.allocate(
-				key.getPartitionKey().length + key.getSortKey().length + key.getAdapterId().length + key.getDataId().length + 12);
+				key.getPartitionKey().length + key.getSortKey().length + key.getDataId().length + 6);
 		buffer.put(
 				key.getPartitionKey());
 		buffer.put(
 				key.getSortKey());
-		buffer.put(
-				key.getAdapterId());
+		buffer.putShort(
+				key.getInternalAdapterId());
 		buffer.put(
 				key.getDataId());
-		buffer.putInt(
-				key.getAdapterId().length);
-		buffer.putInt(
+		buffer.putShort((short)
 				key.getDataId().length);
-		buffer.putInt(
-				key.getNumberOfDuplicates());
+		buffer.putShort(
+				(short)key.getNumberOfDuplicates());
 		buffer.rewind();
 		return buffer.array();
 	}

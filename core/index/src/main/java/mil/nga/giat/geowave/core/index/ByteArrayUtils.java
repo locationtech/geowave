@@ -29,6 +29,7 @@ import com.google.common.io.BaseEncoding;
  */
 public class ByteArrayUtils
 {
+	private static BaseEncoding ENCODING = BaseEncoding.base64Url().omitPadding();
 
 	private static byte[] internalCombineArrays(
 			final byte[] beginning,
@@ -58,8 +59,7 @@ public class ByteArrayUtils
 	 */
 	public static String byteArrayToString(
 			final byte[] byteArray ) {
-		return BaseEncoding.base64Url().encode(
-				byteArray);
+		return ENCODING.encode(byteArray);
 	}
 
 	/**
@@ -71,8 +71,7 @@ public class ByteArrayUtils
 	 */
 	public static byte[] byteArrayFromString(
 			final String str ) {
-		return BaseEncoding.base64Url().decode(
-				str);
+		return ENCODING.decode(str);
 	}
 
 	/**
@@ -230,6 +229,31 @@ public class ByteArrayUtils
 		return Pair.of(
 				part1,
 				part2);
+	}
+
+	public static String shortToString(
+			final short input ) {
+		return byteArrayToString(shortToByteArray(input));
+	}
+
+	public static short shortFromString(
+			final String input ) {
+		return byteArrayToShort(byteArrayFromString(input));
+	}
+
+	public static byte[] shortToByteArray(
+			final short input ) {
+		return new byte[] {
+			(byte) (input & 0xFF),
+			(byte) ((input >> 8) & 0xFF)
+		};
+	}
+
+	public static short byteArrayToShort(
+			final byte[] bytes ) {
+		int r = bytes[1] & 0xFF;
+		r = (r << 8) | (bytes[0] & 0xFF);
+		return (short) r;
 	}
 
 	public static byte[] variableLengthEncode(

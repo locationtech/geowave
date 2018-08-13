@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -23,8 +23,11 @@ import org.apache.hadoop.mapreduce.JobContext;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 
 /**
  * This class implements an adapter store by first checking the job context for
@@ -33,18 +36,21 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
  * context.
  */
 public class JobContextAdapterStore implements
-		AdapterStore
+		TransientAdapterStore
 {
 	private static final Class<?> CLASS = JobContextAdapterStore.class;
 	private final JobContext context;
-	private final AdapterStore persistentAdapterStore;
+	private PersistentAdapterStore persistentAdapterStore = null;
+	private InternalAdapterStore internalAdapterStore = null;
 	private final Map<ByteArrayId, DataAdapter<?>> adapterCache = new HashMap<ByteArrayId, DataAdapter<?>>();
 
 	public JobContextAdapterStore(
 			final JobContext context,
-			final AdapterStore persistentAdapterStore ) {
+			final PersistentAdapterStore persistentAdapterStore,
+			final InternalAdapterStore internalAdapterStore ) {
 		this.context = context;
 		this.persistentAdapterStore = persistentAdapterStore;
+		this.internalAdapterStore = internalAdapterStore;
 
 	}
 
@@ -58,7 +64,7 @@ public class JobContextAdapterStore implements
 
 	@Override
 	public void removeAdapter(
-			ByteArrayId adapterId ) {
+			final ByteArrayId adapterId ) {
 		adapterCache.remove(adapterId);
 	}
 
@@ -89,8 +95,9 @@ public class JobContextAdapterStore implements
 				context,
 				adapterId);
 		if (adapter == null) {
+
 			// then try to get it from the persistent store
-			adapter = persistentAdapterStore.getAdapter(adapterId);
+			adapter = persistentAdapterStore.getAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
 		}
 
 		if (adapter != null) {
@@ -108,7 +115,7 @@ public class JobContextAdapterStore implements
 
 	@Override
 	public CloseableIterator<DataAdapter<?>> getAdapters() {
-		final CloseableIterator<DataAdapter<?>> it = persistentAdapterStore.getAdapters();
+		final CloseableIterator<InternalDataAdapter<?>> it = persistentAdapterStore.getAdapters();
 		// cache any results
 		return new CloseableIteratorWrapper<DataAdapter<?>>(
 				it,
@@ -185,7 +192,7 @@ public class JobContextAdapterStore implements
 
 	public static void removeAdapter(
 			final Configuration configuration,
-			ByteArrayId adapterId ) {
+			final ByteArrayId adapterId ) {
 		GeoWaveConfiguratorBase.removeDataAdapter(
 				CLASS,
 				configuration,

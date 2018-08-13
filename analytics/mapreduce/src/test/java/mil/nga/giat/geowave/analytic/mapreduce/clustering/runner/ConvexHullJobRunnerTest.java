@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -49,7 +49,8 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvide
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -126,12 +127,16 @@ public class ConvexHullJobRunnerTest
 									job,
 									ConvexHullMapReduce.class,
 									null);
-					final AdapterStore adapterStore = persistableAdapterStore
+					final PersistentAdapterStore adapterStore = persistableAdapterStore
 							.getDataStoreOptions()
 							.createAdapterStore();
 
-					Assert.assertTrue(adapterStore.adapterExists(new ByteArrayId(
-							"centroidtest")));
+					Assert.assertTrue(adapterStore.adapterExists(persistableAdapterStore
+							.getDataStoreOptions()
+							.createInternalAdapterStore()
+							.getInternalAdapterId(
+									new ByteArrayId(
+											"centroidtest"))));
 
 					final Projection<?> projection = configWrapper.getInstance(
 							HullParameters.Hull.PROJECTION_CLASS,
@@ -202,26 +207,29 @@ public class ConvexHullJobRunnerTest
 				HullParameters.Hull.INDEX_ID,
 				"spatial");
 
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
-		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		opts.setGeowaveNamespace(namespace);
-		PersistableStore store = new PersistableStore(
+		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 
 		runTimeProperties.store(
 				StoreParam.INPUT_STORE,
 				store);
-		FeatureDataAdapter adapter = new FeatureDataAdapter(
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		adapter.init(index);
 		pluginOptions.createAdapterStore().addAdapter(
-				adapter);
+				new InternalDataAdapterWrapper<>(
+						adapter,
+						pluginOptions.createInternalAdapterStore().addAdapterId(
+								adapter.getAdapterId())));
 	}
 
 	@Test

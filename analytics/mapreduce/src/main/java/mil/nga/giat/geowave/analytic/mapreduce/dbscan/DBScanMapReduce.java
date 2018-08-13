@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializer;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
@@ -326,7 +327,13 @@ public class DBScanMapReduce
 					// });
 					context.write(
 							new GeoWaveInputKey(
-									outputAdapter.getAdapterId(),
+									// TODO this is a bit of a hack, but the
+									// adapter is seemingly completely transient
+									// and never actually persisted - it seems
+									// unlikely that the value for internal
+									// adapter ID even matters, but if it does
+									// this is the best effort
+									InternalAdapterStoreImpl.getInitialInternalAdapterId(outputAdapter.getAdapterId()),
 									new ByteArrayId(
 											newPolygonFeature.getID())),
 							output);

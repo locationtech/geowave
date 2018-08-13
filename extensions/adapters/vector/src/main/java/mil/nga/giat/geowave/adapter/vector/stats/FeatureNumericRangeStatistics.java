@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,14 +10,15 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.stats;
 
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
-import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureNumericRangeStatistics extends
 		NumericRangeDataStatistics<SimpleFeature> implements
@@ -31,10 +32,17 @@ public class FeatureNumericRangeStatistics extends
 	}
 
 	public FeatureNumericRangeStatistics(
-			final ByteArrayId dataAdapterId,
+			final String fieldName ) {
+		this(
+				null,
+				fieldName);
+	}
+
+	public FeatureNumericRangeStatistics(
+			final Short internalDataAdapterId,
 			final String fieldName ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						fieldName));
@@ -57,7 +65,9 @@ public class FeatureNumericRangeStatistics extends
 			final SimpleFeature entry ) {
 
 		final Object o = entry.getAttribute(getFieldName());
-		if (o == null) return null;
+		if (o == null) {
+			return null;
+		}
 		final long num = ((Number) o).longValue();
 		return new NumericRange(
 				num,
@@ -67,15 +77,16 @@ public class FeatureNumericRangeStatistics extends
 	@Override
 	public DataStatistics<SimpleFeature> duplicate() {
 		return new FeatureNumericRangeStatistics(
-				dataAdapterId,
+				internalDataAdapterId,
 				getFieldName());
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"range[adapter=").append(
-				super.getDataAdapterId().getString());
+				"range[internalDataAdapterId=").append(
+				super.getInternalDataAdapterId());
 		buffer.append(
 				", field=").append(
 				getFieldName());
@@ -98,12 +109,17 @@ public class FeatureNumericRangeStatistics extends
 	 * Convert Feature Numeric Range statistics to a JSON object
 	 */
 
-	public JSONObject toJSONObject()
+	@Override
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"field_identifier",
 				getFieldName());
@@ -129,16 +145,16 @@ public class FeatureNumericRangeStatistics extends
 			StatsConfig<SimpleFeature>
 	{
 		/**
-		 * 
+		 *
 		 */
 		private static final long serialVersionUID = 6309383518148391565L;
 
 		@Override
 		public DataStatistics<SimpleFeature> create(
-				final ByteArrayId dataAdapterId,
+				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureNumericRangeStatistics(
-					dataAdapterId,
+					internalDataAdapterId,
 					fieldName);
 		}
 	}

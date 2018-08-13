@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,6 +21,9 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.analytic.PropertyManagement;
 import mil.nga.giat.geowave.analytic.SerializableAdapterStore;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
@@ -34,9 +37,17 @@ import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericData;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 
 /**
@@ -45,17 +56,17 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
  * {@link OrthodromicDistancePartitioner}, handling different types of data
  * entries, the assumption is that each object decode by the adapter provides
  * the fields required according to the supplied model.
- * 
+ *
  * The user provides the distances per dimension. It us up to the user to
  * convert geographic distance into distance in degrees per longitude and
  * latitude.
- * 
+ *
  * This class depends on an AdapterStore. Since an AdapterStore is not
  * Serializable, the dependency is transient requiring initialization after
  * serialization
- * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)
- * 
- * 
+ * {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)}
+ *
+ *
  */
 public class AdapterBasedPartitioner extends
 		AbstractPartitioner<AdapterDataEntry> implements
@@ -78,7 +89,7 @@ public class AdapterBasedPartitioner extends
 	public AdapterBasedPartitioner(
 			final CommonIndexModel indexModel,
 			final double[] distancesPerDimension,
-			final AdapterStore adapterStore ) {
+			final TransientAdapterStore adapterStore ) {
 		super(
 				indexModel,
 				distancesPerDimension);
@@ -148,10 +159,11 @@ public class AdapterBasedPartitioner extends
 				context,
 				scope);
 		adapterStore = new SerializableAdapterStore(
-				((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
-						context,
-						scope,
-						null)).getDataStoreOptions().createAdapterStore());
+				new PersistentAdapterStoreAsTransient(
+						((PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+								context,
+								scope,
+								null)).getDataStoreOptions()));
 
 		init();
 	}
@@ -268,4 +280,74 @@ public class AdapterBasedPartitioner extends
 
 	}
 
+	private static class PersistentAdapterStoreAsTransient implements
+			TransientAdapterStore
+	{
+		private final PersistentAdapterStore adapterStore;
+		private final InternalAdapterStore internalAdapterStore;
+
+		private PersistentAdapterStoreAsTransient(
+				final DataStorePluginOptions dataStoreOptions ) {
+			this(
+					dataStoreOptions.createAdapterStore(),
+					dataStoreOptions.createInternalAdapterStore());
+		}
+
+		private PersistentAdapterStoreAsTransient(
+				final PersistentAdapterStore adapterStore,
+				final InternalAdapterStore internalAdapterStore ) {
+			this.adapterStore = adapterStore;
+			this.internalAdapterStore = internalAdapterStore;
+		}
+
+		@Override
+		public void addAdapter(
+				final DataAdapter<?> adapter ) {
+			adapterStore.addAdapter(new InternalDataAdapterWrapper(
+					(WritableDataAdapter) adapter,
+					internalAdapterStore.addAdapterId(adapter.getAdapterId())));
+		}
+
+		@Override
+		public DataAdapter<?> getAdapter(
+				final ByteArrayId adapterId ) {
+			return adapterStore.getAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
+		}
+
+		@Override
+		public boolean adapterExists(
+				final ByteArrayId adapterId ) {
+			return adapterStore.adapterExists(internalAdapterStore.getInternalAdapterId(adapterId));
+		}
+
+		@Override
+		public CloseableIterator<DataAdapter<?>> getAdapters() {
+			final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
+			return new CloseableIteratorWrapper<DataAdapter<?>>(
+					it,
+					Iterators.transform(
+							it,
+							new Function<InternalDataAdapter<?>, DataAdapter<?>>() {
+
+								@Override
+								public DataAdapter<?> apply(
+										final InternalDataAdapter<?> input ) {
+									return input.getAdapter();
+								}
+							}));
+		}
+
+		@Override
+		public void removeAll() {
+			internalAdapterStore.removeAll();
+			adapterStore.removeAll();
+		}
+
+		@Override
+		public void removeAdapter(
+				final ByteArrayId adapterId ) {
+			adapterStore.removeAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
+			internalAdapterStore.remove(adapterId);
+		}
+	}
 }

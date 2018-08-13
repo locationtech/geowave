@@ -73,6 +73,6 @@ public abstract class GeoWaveWritableOutputMapper<KEYIN, VALUEIN> extends
 			throws IOException,
 			InterruptedException {
 		serializationTool = new HadoopWritableSerializationTool(
-				GeoWaveInputFormat.getJobContextAdapterStore(context));
+				context);
 	}
 }

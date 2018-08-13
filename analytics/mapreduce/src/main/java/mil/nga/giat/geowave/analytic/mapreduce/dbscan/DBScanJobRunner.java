@@ -30,7 +30,10 @@ import mil.nga.giat.geowave.analytic.param.HullParameters;
 import mil.nga.giat.geowave.analytic.param.HullParameters.Hull;
 import mil.nga.giat.geowave.analytic.param.ParameterEnum;
 import mil.nga.giat.geowave.analytic.param.PartitionParameters.Partition;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 import org.apache.hadoop.conf.Configurable;
@@ -166,6 +169,12 @@ public class DBScanJobRunner extends
 						new String[0],
 						namespaceURI,
 						ClusteringUtils.CLUSTERING_CRS));
+		ByteArrayId adapterByteId = new ByteArrayId(
+				adapterID);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				config,
+				adapterByteId,
+				InternalAdapterStoreImpl.getInitialInternalAdapterId(adapterByteId));
 
 		final Projection<?> projectionFunction = runTimeProperties.getClassInstance(
 				HullParameters.Hull.PROJECTION_CLASS,

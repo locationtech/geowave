@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -49,9 +49,13 @@ import mil.nga.giat.geowave.analytic.partitioner.Partitioner.PartitionData;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class NNMapReduceTest
@@ -60,11 +64,15 @@ public class NNMapReduceTest
 	MapDriver<GeoWaveInputKey, Object, PartitionDataWritable, AdapterWithObjectWritable> mapDriver;
 	ReduceDriver<PartitionDataWritable, AdapterWithObjectWritable, Text, Text> reduceDriver;
 	SimpleFeatureType ftype;
+	short internalAdapterId;
 	final GeometryFactory factory = new GeometryFactory();
 
 	@Before
 	public void setUp()
 			throws IOException {
+		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
+				"memory",
+				new MemoryStoreFactoryFamily());
 		final NNMapReduce.NNMapper<SimpleFeature> nnMapper = new NNMapReduce.NNMapper<SimpleFeature>();
 		final NNMapReduce.NNReducer<SimpleFeature, Text, Text, Boolean> nnReducer = new NNMapReduce.NNSimpleFeatureIDOutputReducer();
 
@@ -105,10 +113,18 @@ public class NNMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				adapter);
-
+		internalAdapterId = InternalAdapterStoreImpl.getInitialInternalAdapterId(adapter.getAdapterId());
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				adapter);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				mapDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				internalAdapterId);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				reduceDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				internalAdapterId);
 
 		serializations();
 	}
@@ -173,26 +189,22 @@ public class NNMapReduceTest
 				30.0000001));
 
 		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
-		inputKey1.setAdapterId(new ByteArrayId(
-				ftype.getTypeName()));
+		inputKey1.setInternalAdapterId(internalAdapterId);
 		inputKey1.setDataId(new ByteArrayId(
 				feature1.getID()));
 
 		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
-		inputKey2.setAdapterId(new ByteArrayId(
-				ftype.getTypeName()));
+		inputKey2.setInternalAdapterId(internalAdapterId);
 		inputKey2.setDataId(new ByteArrayId(
 				feature2.getID()));
 
 		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
-		inputKey3.setAdapterId(new ByteArrayId(
-				ftype.getTypeName()));
+		inputKey3.setInternalAdapterId(internalAdapterId);
 		inputKey3.setDataId(new ByteArrayId(
 				feature4.getID()));
 
 		final GeoWaveInputKey inputKey4 = new GeoWaveInputKey();
-		inputKey4.setAdapterId(new ByteArrayId(
-				ftype.getTypeName()));
+		inputKey4.setInternalAdapterId(internalAdapterId);
 		inputKey4.setDataId(new ByteArrayId(
 				feature4.getID()));
 
@@ -208,7 +220,6 @@ public class NNMapReduceTest
 		mapDriver.addInput(
 				inputKey4,
 				feature4);
-
 		final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults = mapDriver.run();
 		assertEquals(
 				10, // includes overlap

@@ -1,15 +1,16 @@
 package mil.nga.giat.geowave.core.store.operations;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
@@ -18,11 +19,11 @@ abstract public class BaseReaderParams<T>
 {
 
 	private final PrimaryIndex index;
-	private final AdapterStore adapterStore;
-	private final List<ByteArrayId> adapterIds;
+	private final PersistentAdapterStore adapterStore;
+	private final Collection<Short> adapterIds;
 	private final double[] maxResolutionSubsamplingPerDimension;
-	private final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
-	private final Pair<List<String>, DataAdapter<?>> fieldSubsets;
+	private final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
+	private final Pair<List<String>, InternalDataAdapter<?>> fieldSubsets;
 	private final boolean isMixedVisibility;
 	private final Integer limit;
 	private final Integer maxRangeDecomposition;
@@ -31,11 +32,11 @@ abstract public class BaseReaderParams<T>
 
 	public BaseReaderParams(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
-			final List<ByteArrayId> adapterIds,
+			final PersistentAdapterStore adapterStore,
+			final Collection<Short> adapterIds,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldSubsets,
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldSubsets,
 			final boolean isMixedVisibility,
 			final Integer limit,
 			final Integer maxRangeDecomposition,
@@ -58,11 +59,11 @@ abstract public class BaseReaderParams<T>
 		return index;
 	}
 
-	public AdapterStore getAdapterStore() {
+	public PersistentAdapterStore getAdapterStore() {
 		return adapterStore;
 	}
 
-	public List<ByteArrayId> getAdapterIds() {
+	public Collection<Short> getAdapterIds() {
 		return adapterIds;
 	}
 
@@ -70,11 +71,11 @@ abstract public class BaseReaderParams<T>
 		return maxResolutionSubsamplingPerDimension;
 	}
 
-	public Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
+	public Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return aggregation;
 	}
 
-	public Pair<List<String>, DataAdapter<?>> getFieldSubsets() {
+	public Pair<List<String>, InternalDataAdapter<?>> getFieldSubsets() {
 		return fieldSubsets;
 	}
 

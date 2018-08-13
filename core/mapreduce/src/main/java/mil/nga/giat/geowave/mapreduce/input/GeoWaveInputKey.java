@@ -18,9 +18,11 @@ import java.util.Arrays;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
 
@@ -29,44 +31,43 @@ import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
  * map-reduce GeoWave input format. The combination of the the adapter ID and
  * the data ID should be unique.
  */
-public class GeoWaveInputKey extends
-		GeoWaveKey
+public class GeoWaveInputKey implements
+		WritableComparable<GeoWaveInputKey>,
+		java.io.Serializable
 {
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	protected Short internalAdapterId;
 	private ByteArrayId dataId;
 	private transient mil.nga.giat.geowave.core.store.entities.GeoWaveKey key;
 
 	public GeoWaveInputKey() {
-		super();
+
 	}
 
 	public GeoWaveInputKey(
 			final mil.nga.giat.geowave.core.store.entities.GeoWaveKey key,
 			final ByteArrayId indexId ) {
 		this(
-				new ByteArrayId(
-						key.getAdapterId()),
+				key.getInternalAdapterId(),
 				key,
 				indexId);
 	}
 
 	public GeoWaveInputKey(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final ByteArrayId dataId ) {
-		super(
-				adapterId);
+		this.internalAdapterId = internalAdapterId;
 		this.dataId = dataId;
 	}
 
 	public GeoWaveInputKey(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final mil.nga.giat.geowave.core.store.entities.GeoWaveKey key,
 			final ByteArrayId indexId ) {
-		super(
-				adapterId);
+		this.internalAdapterId = internalAdapterId;
 		if (key.getNumberOfDuplicates() > 0) {
 			dataId = new ByteArrayId(
 					key.getDataId());
@@ -129,6 +130,15 @@ public class GeoWaveInputKey extends
 		this.key = key;
 	}
 
+	public short getInternalAdapterId() {
+		return internalAdapterId;
+	}
+
+	public void setInternalAdapterId(
+			final short internalAdapterId ) {
+		this.internalAdapterId = internalAdapterId;
+	}
+
 	public void setDataId(
 			final ByteArrayId dataId ) {
 		this.dataId = dataId;
@@ -140,53 +150,53 @@ public class GeoWaveInputKey extends
 
 	@Override
 	public int compareTo(
-			final GeoWaveKey o ) {
-		final int baseCompare = super.compareTo(o);
-		if (baseCompare != 0) {
-			return baseCompare;
+			final GeoWaveInputKey o ) {
+		byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(internalAdapterId);
+		final int adapterCompare = WritableComparator.compareBytes(
+				internalAdapterIdBytes,
+				0,
+				internalAdapterIdBytes.length,
+				ByteArrayUtils.shortToByteArray(o.internalAdapterId),
+				0,
+				ByteArrayUtils.shortToByteArray(o.internalAdapterId).length);
+
+		if (adapterCompare != 0) {
+			return adapterCompare;
 		}
-		if (o instanceof GeoWaveInputKey) {
-			final GeoWaveInputKey other = (GeoWaveInputKey) o;
-			return WritableComparator.compareBytes(
-					dataId.getBytes(),
-					0,
-					dataId.getBytes().length,
-					other.dataId.getBytes(),
-					0,
-					other.dataId.getBytes().length);
-		}
-		return 1;
+		final GeoWaveInputKey other = (GeoWaveInputKey) o;
+		return WritableComparator.compareBytes(
+				dataId.getBytes(),
+				0,
+				dataId.getBytes().length,
+				other.dataId.getBytes(),
+				0,
+				other.dataId.getBytes().length);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
-		result = (prime * result) + ((dataId == null) ? 0 : dataId.hashCode());
+		int result = 1;
+		result = prime * result + ((dataId == null) ? 0 : dataId.hashCode());
+		result = prime * result + ((internalAdapterId == null) ? 0 : internalAdapterId.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			final Object obj ) {
-		if (this == obj) {
-			return true;
-		}
-		if (!super.equals(obj)) {
-			return false;
-		}
-		if (getClass() != obj.getClass()) {
-			return false;
-		}
-		final GeoWaveInputKey other = (GeoWaveInputKey) obj;
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		GeoWaveInputKey other = (GeoWaveInputKey) obj;
 		if (dataId == null) {
-			if (other.dataId != null) {
-				return false;
-			}
+			if (other.dataId != null) return false;
 		}
-		else if (!dataId.equals(other.dataId)) {
-			return false;
+		else if (!dataId.equals(other.dataId)) return false;
+		if (internalAdapterId == null) {
+			if (other.internalAdapterId != null) return false;
 		}
+		else if (!internalAdapterId.equals(other.internalAdapterId)) return false;
 		return true;
 	}
 
@@ -194,7 +204,7 @@ public class GeoWaveInputKey extends
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		super.readFields(input);
+		internalAdapterId = input.readShort();
 		final int dataIdLength = input.readInt();
 		final byte[] dataIdBytes = new byte[dataIdLength];
 		input.readFully(dataIdBytes);
@@ -206,7 +216,7 @@ public class GeoWaveInputKey extends
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		super.write(output);
+		output.writeShort(internalAdapterId);
 		output.writeInt(dataId.getBytes().length);
 		output.write(dataId.getBytes());
 	}

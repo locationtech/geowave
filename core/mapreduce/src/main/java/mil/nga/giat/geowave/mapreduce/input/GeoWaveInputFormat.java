@@ -29,6 +29,8 @@ import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -87,7 +89,7 @@ public class GeoWaveInputFormat<T> extends
 				context);
 	}
 
-	public static AdapterStore getJobContextAdapterStore(
+	public static TransientAdapterStore getJobContextAdapterStore(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getJobContextAdapterStore(
 				CLASS,
@@ -102,6 +104,13 @@ public class GeoWaveInputFormat<T> extends
 		// stored in the job context rather than multiple processes needing to
 		// look it up, this doesn't seem to be happening for stats)
 		return GeoWaveConfiguratorBase.getDataStatisticsStore(
+				CLASS,
+				context);
+	}
+
+	public static InternalAdapterStore getJobContextInternalAdapterStore(
+			final JobContext context ) {
+		return GeoWaveConfiguratorBase.getJobContextInternalAdapterStore(
 				CLASS,
 				context);
 	}
@@ -161,17 +170,22 @@ public class GeoWaveInputFormat<T> extends
 					index);
 		}
 
+		// TODO figure out where to add internal adapter IDs to the job context
+		// and read it from the job context instead
 		try {
 			// THIS SHOULD GO AWAY, and assume the adapters in the Persistent
 			// Data Store
 			// instead. It will fail, due to the 'null', if the query options
 			// does not
 			// contain the adapters
-			for (final DataAdapter<?> adapter : queryOptions.getAdaptersArray(null)) {
-				// Also store for use the mapper and reducers
-				JobContextAdapterStore.addDataAdapter(
-						config,
-						adapter);
+			List<DataAdapter<Object>> adapters = queryOptions.getAdapters();
+			if (adapters != null && !adapters.isEmpty()) {
+				for (final DataAdapter<?> adapter : adapters) {
+					// Also store for use the mapper and reducers
+					JobContextAdapterStore.addDataAdapter(
+							config,
+							adapter);
+				}
 			}
 		}
 		catch (final Exception e) {
@@ -238,6 +252,7 @@ public class GeoWaveInputFormat<T> extends
 					getQuery(context),
 					getQueryOptions(context),
 					getJobContextAdapterStore(context),
+					getJobContextInternalAdapterStore(context),
 					getJobContextAdapterIndexMappingStore(context),
 					getJobContextDataStatisticsStore(context),
 					getJobContextIndexStore(context),
@@ -313,6 +328,7 @@ public class GeoWaveInputFormat<T> extends
 					getJobContextAdapterStore(context),
 					getJobContextAdapterIndexMappingStore(context),
 					getJobContextDataStatisticsStore(context),
+					getJobContextInternalAdapterStore(context),
 					getJobContextIndexStore(context),
 					getMinimumSplitCount(context),
 					getMaximumSplitCount(context));

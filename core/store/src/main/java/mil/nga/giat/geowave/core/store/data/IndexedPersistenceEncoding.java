@@ -29,7 +29,7 @@ public class IndexedPersistenceEncoding<T> extends
 	private final int duplicateCount;
 
 	public IndexedPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final Short internalAdapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId insertionPartitionKey,
 			final ByteArrayId insertionSortKey,
@@ -37,7 +37,7 @@ public class IndexedPersistenceEncoding<T> extends
 			final PersistentDataset<T> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
 		super(
-				adapterId,
+				internalAdapterId,
 				dataId,
 				commonData,
 				unknownData);

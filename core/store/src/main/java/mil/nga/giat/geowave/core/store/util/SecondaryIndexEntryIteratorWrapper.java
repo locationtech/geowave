@@ -15,6 +15,7 @@ import java.util.NoSuchElementException;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 
 public abstract class SecondaryIndexEntryIteratorWrapper<T, RowType> implements
 		Iterator<RowType>,
@@ -22,13 +23,13 @@ public abstract class SecondaryIndexEntryIteratorWrapper<T, RowType> implements
 {
 
 	private final Iterator<?> scanIterator;
-	protected final DataAdapter<T> adapter;
+	protected final InternalDataAdapter<T> adapter;
 
 	private RowType nextValue;
 
 	public SecondaryIndexEntryIteratorWrapper(
 			final Iterator<?> scanIterator,
-			final DataAdapter<T> adapter ) {
+			final InternalDataAdapter<T> adapter ) {
 		super();
 		this.scanIterator = scanIterator;
 		this.adapter = adapter;

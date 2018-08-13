@@ -23,6 +23,7 @@ public interface RowMergingDataAdapter<T, M extends Mergeable> extends
 	public RowTransform<M> getTransform();
 
 	public Map<String, String> getOptions(
+			short internalAdapterId,
 			Map<String, String> existingOptions );
 
 	public static interface RowTransform<M extends Mergeable> extends
@@ -33,7 +34,7 @@ public interface RowMergingDataAdapter<T, M extends Mergeable> extends
 				throws IOException;
 
 		public M getRowAsMergeableObject(
-				final ByteArrayId adapterId,
+				final short internalAdapterId,
 				final ByteArrayId fieldId,
 				final byte[] rowValueBinary );
 

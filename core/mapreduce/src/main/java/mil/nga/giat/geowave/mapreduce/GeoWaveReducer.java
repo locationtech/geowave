@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,9 +12,6 @@ package mil.nga.giat.geowave.mapreduce;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.ReduceContext;
@@ -24,6 +21,9 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterables;
+
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 /**
  * This abstract class can be extended by GeoWave analytics. It handles the
@@ -57,7 +57,7 @@ public abstract class GeoWaveReducer extends
 			throws IOException,
 			InterruptedException {
 		final HadoopWritableSerializer<?, Writable> serializer = serializationTool
-				.getHadoopWritableSerializerForAdapter(key.getAdapterId());
+				.getHadoopWritableSerializerForAdapter(key.getInternalAdapterId());
 		final Iterable<Object> transformedValues = Iterables.transform(
 				values,
 				new Function<ObjectWritable, Object>() {
@@ -89,6 +89,6 @@ public abstract class GeoWaveReducer extends
 			throws IOException,
 			InterruptedException {
 		serializationTool = new HadoopWritableSerializationTool(
-				GeoWaveInputFormat.getJobContextAdapterStore(context));
+				context);
 	}
 }

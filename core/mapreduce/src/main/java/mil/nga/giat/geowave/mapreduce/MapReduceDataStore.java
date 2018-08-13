@@ -16,6 +16,9 @@ import java.util.List;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
@@ -32,7 +35,8 @@ public interface MapReduceDataStore extends
 	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
 			DistributableQuery query,
 			QueryOptions queryOptions,
-			AdapterStore adapterStore,
+			TransientAdapterStore adapterStore,
+			InternalAdapterStore internalAdapterStore,
 			AdapterIndexMappingStore aimStore,
 			DataStatisticsStore statsStore,
 			IndexStore indexStore,
@@ -44,9 +48,10 @@ public interface MapReduceDataStore extends
 	public List<InputSplit> getSplits(
 			DistributableQuery query,
 			QueryOptions queryOptions,
-			AdapterStore adapterStore,
+			TransientAdapterStore adapterStore,
 			AdapterIndexMappingStore aimStore,
 			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore,
 			IndexStore indexStore,
 			Integer minSplits,
 			Integer maxSplits )

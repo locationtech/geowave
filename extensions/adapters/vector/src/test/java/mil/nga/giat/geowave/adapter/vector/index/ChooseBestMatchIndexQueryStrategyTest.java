@@ -69,12 +69,12 @@ public class ChooseBestMatchIndexQueryStrategyTest
 		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
 
 		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<>(
-				temporalindex.getId(),
+				null,
 				temporalindex.getId(),
 				null);
 
 		final RowRangeHistogramStatistics<SimpleFeature> rangeStats = new RowRangeHistogramStatistics<>(
-				spatialIndex.getId(),
+				null,
 				spatialIndex.getId(),
 				null);
 
@@ -150,9 +150,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 										new byte[] {
 											1
 										},
-										new byte[] {
-											1
-										},
+										(short) 1,
 										range.getPartitionKey().getBytes(),
 										range.getSortKeys().get(
 												0).getBytes(),
@@ -184,9 +182,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 										new byte[] {
 											1
 										},
-										new byte[] {
-											1
-										},
+										(short) 1,
 										range.getPartitionKey().getBytes(),
 										range.getSortKeys().get(
 												0).getBytes(),

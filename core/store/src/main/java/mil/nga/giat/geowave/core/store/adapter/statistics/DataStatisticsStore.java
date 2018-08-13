@@ -51,7 +51,7 @@ public interface DataStatisticsStore
 	 *         exist
 	 */
 	public CloseableIterator<DataStatistics<?>> getDataStatistics(
-			ByteArrayId adapterId,
+			short internalAdapterId,
 			String... authorizations );
 
 	/**
@@ -73,7 +73,7 @@ public interface DataStatisticsStore
 	 * @return the persisted statistics value
 	 */
 	public DataStatistics<?> getDataStatistics(
-			ByteArrayId adapterId,
+			short internalAdapterId,
 			ByteArrayId statisticsId,
 			String... authorizations );
 
@@ -86,7 +86,7 @@ public interface DataStatisticsStore
 	 *         IDs and was successfully deleted.
 	 */
 	public boolean removeStatistics(
-			ByteArrayId adapterId,
+			short internalAdapterId,
 			ByteArrayId statisticsId,
 			String... authorizations );
 
@@ -96,7 +96,7 @@ public interface DataStatisticsStore
 	 * @param adapterId
 	 */
 	public void removeAllStatistics(
-			ByteArrayId adapterId,
+			short internalAdapterId,
 			String... authorizations );
 
 	public void removeAll();

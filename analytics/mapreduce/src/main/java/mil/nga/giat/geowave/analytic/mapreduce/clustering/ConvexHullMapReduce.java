@@ -118,7 +118,7 @@ public class ConvexHullMapReduce
 
 			@SuppressWarnings("unchecked")
 			final AnalyticItemWrapper<T> wrapper = itemWrapperFactory.create((T) value);
-			outputKey.setAdapterId(key.getAdapterId());
+			outputKey.setInternalAdapterId(key.getInternalAdapterId());
 			outputKey.setDataId(new ByteArrayId(
 					StringUtils.stringToBinary(nestedGroupCentroidAssigner.getGroupForLevel(wrapper))));
 			outputKey.setGeoWaveKey(key.getGeoWaveKey());

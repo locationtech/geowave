@@ -27,7 +27,7 @@ public class MismatchedIndexToAdapterMapping extends
 	public MismatchedIndexToAdapterMapping(
 			final AdapterToIndexMapping adapterMapping ) {
 		super(
-				"Adapter " + adapterMapping.getAdapterId() + " already associated to indices " + Arrays.asList(
+				"Adapter " + adapterMapping.getInternalAdapterId() + " already associated to indices " + Arrays.asList(
 						adapterMapping.getIndexIds()).toString());
 	}
 

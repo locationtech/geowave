@@ -145,7 +145,7 @@ public class NNMapReduce
 
 			@SuppressWarnings("unchecked")
 			final T unwrappedValue = (T) ((value instanceof ObjectWritable) ? serializationTool.fromWritable(
-					key.getAdapterId(),
+					key.getInternalAdapterId(),
 					(ObjectWritable) value) : value);
 			try {
 				partitioner.partition(
@@ -156,13 +156,12 @@ public class NNMapReduce
 							public void partitionWith(
 									final PartitionData partitionData )
 									throws Exception {
-								outputValue.setAdapterId(key.getAdapterId());
+								outputValue.setInternalAdapterId(key.getInternalAdapterId());
 								AdapterWithObjectWritable.fillWritableWithAdapter(
 										serializationTool,
 										outputValue,
-										key.getAdapterId(),
+										key.getInternalAdapterId(),
 										key.getDataId(),
-										partitionData.isPrimary(),
 										unwrappedValue);
 								partitionDataWritable.setPartitionData(partitionData);
 								context.write(
@@ -194,7 +193,7 @@ public class NNMapReduce
 					NNMapReduce.class,
 					LOGGER);
 			serializationTool = new HadoopWritableSerializationTool(
-					GeoWaveInputFormat.getJobContextAdapterStore(context));
+					context);
 			try {
 				partitioner = config.getInstance(
 						PartitionParameters.Partition.PARTITIONER_CLASS,
@@ -373,7 +372,7 @@ public class NNMapReduce
 					NNMapReduce.LOGGER);
 
 			serializationTool = new HadoopWritableSerializationTool(
-					GeoWaveInputFormat.getJobContextAdapterStore(context));
+					context);
 
 			try {
 				distanceFn = config.getInstance(

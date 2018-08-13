@@ -10,24 +10,16 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.mapreduce;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections.IteratorUtils;
-import org.apache.commons.collections.Transformer;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.mapreduce.JobContext;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.JobContext;
 
 /**
  * This class implements an adapter index mapping store by first checking the
@@ -41,7 +33,7 @@ public class JobContextAdapterIndexMappingStore implements
 	private static final Class<?> CLASS = JobContextAdapterIndexMappingStore.class;
 	private final JobContext context;
 	private final AdapterIndexMappingStore persistentAdapterIndexMappingStore;
-	private final Map<ByteArrayId, AdapterToIndexMapping> adapterCache = new HashMap<ByteArrayId, AdapterToIndexMapping>();
+	private final Map<Short, AdapterToIndexMapping> adapterCache = new HashMap<Short, AdapterToIndexMapping>();
 
 	public JobContextAdapterIndexMappingStore(
 			final JobContext context,
@@ -52,19 +44,19 @@ public class JobContextAdapterIndexMappingStore implements
 	}
 
 	private AdapterToIndexMapping getIndicesForAdapterInternal(
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		// first try to get it from the job context
 		AdapterToIndexMapping adapter = getAdapterToIndexMapping(
 				context,
-				adapterId);
+				internalAdapterId);
 		if (adapter == null) {
 			// then try to get it from the persistent store
-			adapter = persistentAdapterIndexMappingStore.getIndicesForAdapter(adapterId);
+			adapter = persistentAdapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
 		}
 
 		if (adapter != null) {
 			adapterCache.put(
-					adapterId,
+					internalAdapterId,
 					adapter);
 		}
 		return adapter;
@@ -77,11 +69,11 @@ public class JobContextAdapterIndexMappingStore implements
 
 	protected static AdapterToIndexMapping getAdapterToIndexMapping(
 			final JobContext context,
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		return GeoWaveConfiguratorBase.getAdapterToIndexMapping(
 				CLASS,
 				context,
-				adapterId);
+				internalAdapterId);
 	}
 
 	public static void addAdapterToIndexMapping(
@@ -95,7 +87,7 @@ public class JobContextAdapterIndexMappingStore implements
 
 	@Override
 	public AdapterToIndexMapping getIndicesForAdapter(
-			ByteArrayId adapterId ) {
+			short adapterId ) {
 		AdapterToIndexMapping adapter = adapterCache.get(adapterId);
 		if (adapter == null) {
 			adapter = getIndicesForAdapterInternal(adapterId);
@@ -108,14 +100,14 @@ public class JobContextAdapterIndexMappingStore implements
 			AdapterToIndexMapping mapping )
 			throws MismatchedIndexToAdapterMapping {
 		adapterCache.put(
-				mapping.getAdapterId(),
+				mapping.getInternalAdapterId(),
 				mapping);
 	}
 
 	@Override
 	public void remove(
-			ByteArrayId adapterId ) {
-		adapterCache.remove(adapterId);
+			short internalAdapterId ) {
+		adapterCache.remove(internalAdapterId);
 	}
 
 }

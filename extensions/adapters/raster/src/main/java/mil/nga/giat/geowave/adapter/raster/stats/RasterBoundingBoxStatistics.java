@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -17,19 +17,19 @@ import com.vividsolutions.jts.geom.Envelope;
 
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 
 public class RasterBoundingBoxStatistics extends
 		BoundingBoxDataStatistics<GridCoverage>
 {
 	public RasterBoundingBoxStatistics() {
-		super();
+		this(
+				null);
 	}
 
 	public RasterBoundingBoxStatistics(
-			final ByteArrayId dataAdapterId ) {
+			final Short internalAdapterId ) {
 		super(
-				dataAdapterId);
+				internalAdapterId);
 	}
 
 	@Override
