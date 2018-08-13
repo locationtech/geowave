@@ -80,7 +80,7 @@ public abstract class AbstractStatsCommand<T> extends
 				final ByteArrayId adapterId = new ByteArrayId(
 						adapterIdName);
 				final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
-				final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+				final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 				InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterId);
 				if (adapter != null) {
 					performStatsCommand(
