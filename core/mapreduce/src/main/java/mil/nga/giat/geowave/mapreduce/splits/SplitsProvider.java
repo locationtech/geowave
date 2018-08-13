@@ -223,7 +223,7 @@ public class SplitsProvider
 							gwRange);
 					rangeList.add(new RangeLocationPair(
 							gwRange,
-							cardinality < 1 ? 1.0 : cardinality));
+							cardinality <= 0 ? 0 : cardinality < 1 ? 1.0 : cardinality));
 				}
 			}
 			else {
@@ -235,7 +235,7 @@ public class SplitsProvider
 								null,
 								true,
 								false),
-						1.0));
+						0.0));
 			}
 		}
 		else {
@@ -258,7 +258,8 @@ public class SplitsProvider
 
 				rangeList.add(new RangeLocationPair(
 						gwRange,
-						cardinality < 1 ? 1.0 : cardinality));
+						cardinality <= 0 ? 0 : cardinality < 1 ? 1.0 : cardinality));
+
 			}
 		}
 
@@ -288,10 +289,11 @@ public class SplitsProvider
 			else {
 				// with an infinite range and no histogram we have no info to
 				// base a cardinality on
-				return 1;
+				return 0;
 			}
 		}
-		return rangeStats == null ? getRangeLength(range) : rangeStats.cardinality(
+
+		return rangeStats == null ? 0.0 : rangeStats.cardinality(
 				range.getStartSortKey(),
 				range.getEndSortKey());
 	}
