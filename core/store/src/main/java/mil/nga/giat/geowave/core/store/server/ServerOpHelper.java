@@ -125,6 +125,7 @@ public class ServerOpHelper
 
 	public static void addServerSideRowMerging(
 			final RowMergingDataAdapter<?, ?> adapter,
+			final short internalAdapterId,
 			final ServerSideOperations operations,
 			final String serverOpClassName,
 			final String serverOpVisiblityClassName,
@@ -132,6 +133,7 @@ public class ServerOpHelper
 		final RowTransform rowTransform = adapter.getTransform();
 		if (rowTransform != null) {
 			final OptionProvider optionProvider = new RowMergingAdapterOptionProvider(
+					internalAdapterId,
 					adapter);
 			final ServerOpConfig rowMergingCombinerConfig = new ServerOpConfig(
 					EnumSet.allOf(ServerOpScope.class),

@@ -76,12 +76,12 @@ public class HBaseOptions extends
 			final String coprocessorJar ) {
 		this.coprocessorJar = coprocessorJar;
 	}
-	
+
 	@Override
 	protected int defaultMaxRangeDecomposition() {
 		return 2000;
 	}
-	
+
 	@Override
 	protected int defaultAggregationMaxRangeDecomposition() {
 		return 100;

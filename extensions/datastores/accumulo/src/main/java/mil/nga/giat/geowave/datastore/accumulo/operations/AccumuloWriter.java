@@ -8,6 +8,7 @@ import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
@@ -122,7 +123,7 @@ public class AccumuloWriter implements
 			if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
 				mutation.put(
 						new Text(
-								row.getAdapterId()),
+								ByteArrayUtils.shortToString(row.getInternalAdapterId())),
 						new Text(
 								value.getFieldMask()),
 						new ColumnVisibility(
@@ -133,7 +134,7 @@ public class AccumuloWriter implements
 			else {
 				mutation.put(
 						new Text(
-								row.getAdapterId()),
+								ByteArrayUtils.shortToString(row.getInternalAdapterId())),
 						new Text(
 								value.getFieldMask()),
 						new Value(

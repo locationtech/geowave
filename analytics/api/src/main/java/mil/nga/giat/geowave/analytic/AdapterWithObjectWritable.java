@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,19 +14,18 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
-
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.mapreduce.HadoopWritableSerializationTool;
 
 public class AdapterWithObjectWritable implements
 		Writable
 {
 	private ObjectWritable objectWritable;
-	private ByteArrayId adapterId;
+	private Short internalAdapterId = null;
 	private ByteArrayId dataId;
-	private boolean isPrimary;
 
 	public void setObject(
 			final ObjectWritable data ) {
@@ -42,13 +41,13 @@ public class AdapterWithObjectWritable implements
 		this.objectWritable = objectWritable;
 	}
 
-	public ByteArrayId getAdapterId() {
-		return adapterId;
+	public Short getInternalAdapterId() {
+		return internalAdapterId;
 	}
 
-	public void setAdapterId(
-			final ByteArrayId adapterId ) {
-		this.adapterId = adapterId;
+	public void setInternalAdapterId(
+			final short internalAdapterId ) {
+		this.internalAdapterId = internalAdapterId;
 	}
 
 	public ByteArrayId getDataId() {
@@ -60,26 +59,12 @@ public class AdapterWithObjectWritable implements
 		this.dataId = dataId;
 	}
 
-	public boolean isPrimary() {
-		return isPrimary;
-	}
-
-	public void setPrimary(
-			final boolean isPrimary ) {
-		this.isPrimary = isPrimary;
-	}
-
 	@Override
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final int adapterIdLength = input.readInt();
-		final byte[] adapterIdBinary = new byte[adapterIdLength];
-		input.readFully(adapterIdBinary);
-		adapterId = new ByteArrayId(
-				adapterIdBinary);
-
-		final int dataIdLength = input.readInt();
+		internalAdapterId = input.readShort();
+		final int dataIdLength = input.readUnsignedShort();
 		if (dataIdLength > 0) {
 			final byte[] dataIdBinary = new byte[dataIdLength];
 			input.readFully(dataIdBinary);
@@ -87,7 +72,6 @@ public class AdapterWithObjectWritable implements
 					dataIdBinary);
 		}
 
-		isPrimary = input.readBoolean();
 		if (objectWritable == null) {
 			objectWritable = new ObjectWritable();
 		}
@@ -98,20 +82,16 @@ public class AdapterWithObjectWritable implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		final byte[] adapterIdBinary = adapterId.getBytes();
-		output.writeInt(adapterIdBinary.length);
-		output.write(adapterIdBinary);
-
+		output.writeShort(internalAdapterId);
 		if (dataId != null) {
 			final byte[] dataIdBinary = dataId.getBytes();
-			output.writeInt(dataIdBinary.length);
+			output.writeShort((short) dataIdBinary.length);
 			output.write(dataIdBinary);
 		}
 		else {
-			output.writeInt(0);
+			output.writeShort(0);
 		}
 
-		output.writeBoolean(isPrimary);
 		objectWritable.write(output);
 
 	}
@@ -119,31 +99,29 @@ public class AdapterWithObjectWritable implements
 	public static void fillWritableWithAdapter(
 			final HadoopWritableSerializationTool serializationTool,
 			final AdapterWithObjectWritable writableToFill,
-			final ByteArrayId adapterID,
+			final short internalAdapterId,
 			final ByteArrayId dataId,
-			final boolean isPrimary,
 			final Object entry ) {
-		writableToFill.setAdapterId(adapterID);
-		writableToFill.setPrimary(isPrimary);
+		writableToFill.setInternalAdapterId(internalAdapterId);
 		writableToFill.setDataId(dataId);
 		writableToFill.setObject(serializationTool.toWritable(
-				adapterID,
+				internalAdapterId,
 				entry));
 	}
 
 	public static Object fromWritableWithAdapter(
 			final HadoopWritableSerializationTool serializationTool,
 			final AdapterWithObjectWritable writableToExtract ) {
-		final ByteArrayId adapterID = writableToExtract.getAdapterId();
+		final short internalAdapterId = writableToExtract.getInternalAdapterId();
 		final Object innerObj = writableToExtract.objectWritable.get();
 		return (innerObj instanceof Writable) ? serializationTool.getHadoopWritableSerializerForAdapter(
-				adapterID).fromWritable(
+				internalAdapterId).fromWritable(
 				(Writable) innerObj) : innerObj;
 	}
 
 	@Override
 	public String toString() {
-		return "AdapterWithObjectWritable [ adapterId=" + adapterId + ", dataId=" + dataId + ", isPrimary=" + isPrimary
+		return "AdapterWithObjectWritable [ internalAdapterId=" + internalAdapterId + ", dataId=" + dataId.getString()
 				+ "]";
 	}
 

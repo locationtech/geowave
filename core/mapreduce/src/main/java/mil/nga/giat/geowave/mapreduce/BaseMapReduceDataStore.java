@@ -8,7 +8,10 @@ import org.apache.hadoop.mapreduce.RecordReader;
 
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -27,12 +30,13 @@ public class BaseMapReduceDataStore extends
 
 	public BaseMapReduceDataStore(
 			final IndexStore indexStore,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final SecondaryIndexDataStore secondaryIndexDataStore,
 			final MapReduceDataStoreOperations operations,
-			final DataStoreOptions options ) {
+			final DataStoreOptions options,
+			final InternalAdapterStore adapterMappingStore ) {
 		super(
 				indexStore,
 				adapterStore,
@@ -40,7 +44,8 @@ public class BaseMapReduceDataStore extends
 				indexMappingStore,
 				secondaryIndexDataStore,
 				operations,
-				options);
+				options,
+				adapterMappingStore);
 		splitsProvider = createSplitsProvider();
 	}
 
@@ -48,7 +53,8 @@ public class BaseMapReduceDataStore extends
 	public RecordReader<GeoWaveInputKey, ?> createRecordReader(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore aimStore,
 			final DataStatisticsStore statsStore,
 			final IndexStore indexStore,
@@ -61,6 +67,7 @@ public class BaseMapReduceDataStore extends
 				queryOptions,
 				isOutputWritable,
 				adapterStore,
+				internalAdapterStore,
 				aimStore,
 				indexStore,
 				(MapReduceDataStoreOperations) baseOperations);
@@ -74,9 +81,10 @@ public class BaseMapReduceDataStore extends
 	public List<InputSplit> getSplits(
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
 			final AdapterIndexMappingStore aimStore,
 			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore,
 			final IndexStore indexStore,
 			final Integer minSplits,
 			final Integer maxSplits )
@@ -88,6 +96,7 @@ public class BaseMapReduceDataStore extends
 				queryOptions,
 				adapterStore,
 				statsStore,
+				internalAdapterStore,
 				indexStore,
 				indexMappingStore,
 				minSplits,

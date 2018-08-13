@@ -16,6 +16,9 @@ import java.util.Date;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalRange;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -60,7 +63,8 @@ public class DateUtilities
 			final ByteArrayId adapterId,
 			final String timeField ) {
 		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
-
+		final InternalAdapterStore internalAdapterStore = dataStorePlugin.createInternalAdapterStore();
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 		// if this is a ranged schema, we have to get complete bounds
 		if (timeField.contains("|")) {
 			int pipeIndex = timeField.indexOf("|");
@@ -75,7 +79,7 @@ public class DateUtilities
 			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(startField);
 
 			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
-					adapterId,
+					internalAdapterId,
 					timeStatsId,
 					null);
 			if (timeStat instanceof FeatureTimeRangeStatistics) {
@@ -86,7 +90,7 @@ public class DateUtilities
 			timeStatsId = FeatureTimeRangeStatistics.composeId(endField);
 
 			timeStat = statisticsStore.getDataStatistics(
-					adapterId,
+					internalAdapterId,
 					timeStatsId,
 					null);
 			if (timeStat instanceof FeatureTimeRangeStatistics) {
@@ -105,7 +109,7 @@ public class DateUtilities
 			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(timeField);
 
 			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
-					adapterId,
+					internalAdapterId,
 					timeStatsId,
 					null);
 			if (timeStat instanceof FeatureTimeRangeStatistics) {

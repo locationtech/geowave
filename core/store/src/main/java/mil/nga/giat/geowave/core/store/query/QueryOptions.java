@@ -77,13 +77,6 @@ public class QueryOptions implements
 	 */
 	private static final long serialVersionUID = 544085046847603371L;
 
-	private static ScanCallback<Object, GeoWaveRow> DEFAULT_CALLBACK = new ScanCallback<Object, GeoWaveRow>() {
-		@Override
-		public void entryScanned(
-				final Object entry,
-				final GeoWaveRow row ) {}
-	};
-
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings(value = {
 		"SE_TRANSIENT_FIELD_NOT_RESTORED"
 	})
@@ -99,7 +92,6 @@ public class QueryOptions implements
 	private Integer maxRangeDecomposition = null;
 	private Integer limit = -1;
 	private double[] maxResolutionSubsamplingPerDimension = null;
-	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
 	private Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
 
@@ -156,7 +148,6 @@ public class QueryOptions implements
 		adapters = options.adapters;
 		maxRangeDecomposition = options.maxRangeDecomposition;
 		limit = options.limit;
-		scanCallback = options.scanCallback;
 		authorizations = options.authorizations;
 		adapters = options.adapters;
 		index = options.index;
@@ -183,7 +174,6 @@ public class QueryOptions implements
 		setAdapter(adapter);
 		setIndex(index);
 		setLimit(limit);
-		this.scanCallback = scanCallback;
 		this.authorizations = authorizations;
 	}
 
@@ -203,6 +193,14 @@ public class QueryOptions implements
 	}
 
 	public QueryOptions() {}
+
+	public List<ByteArrayId> getAdapterIds() {
+		return adapterIds;
+	}
+
+	public List<DataAdapter<Object>> getAdapters() {
+		return adapters;
+	}
 
 	public void setAdapters(
 			final List<DataAdapter<?>> adapters ) {
@@ -264,6 +262,10 @@ public class QueryOptions implements
 
 	public double[] getMaxResolutionSubsamplingPerDimension() {
 		return maxResolutionSubsamplingPerDimension;
+	}
+
+	public ByteArrayId getIndexId() {
+		return indexId;
 	}
 
 	/**
@@ -343,20 +345,6 @@ public class QueryOptions implements
 		return ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
-	public ScanCallback<?, ?> getScanCallback() {
-		return scanCallback == null ? DEFAULT_CALLBACK : scanCallback;
-	}
-
-	/**
-	 * @param scanCallback
-	 *            a function called for each item discovered per the query
-	 *            constraints
-	 */
-	public void setScanCallback(
-			final ScanCallback<?, ?> scanCallback ) {
-		this.scanCallback = scanCallback;
-	}
-
 	/**
 	 *
 	 * @return authorizations to apply to the query in addition to the
@@ -369,200 +357,6 @@ public class QueryOptions implements
 	public void setAuthorizations(
 			final String[] authorizations ) {
 		this.authorizations = authorizations;
-	}
-
-	/**
-	 * Return the set of adapter/index associations. If the adapters are not
-	 * provided, then look up all of them. If the index is not provided, then
-	 * look up all of them.
-	 *
-	 * DataStores are responsible for selecting a single adapter/index per
-	 * query. For deletions, the Data Stores are interested in all the
-	 * associations.
-	 *
-	 * @param adapterStore
-	 * @param
-	 * @param indexStore
-	 * @return
-	 * @throws IOException
-	 */
-
-	public List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> getIndicesForAdapters(
-			final AdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final IndexStore indexStore )
-			throws IOException {
-		return combineByIndex(compileIndicesForAdapters(
-				adapterStore,
-				adapterIndexMappingStore,
-				indexStore));
-	}
-
-	/**
-	 * Return a set list adapter/index associations. If the adapters are not
-	 * provided, then look up all of them. If the index is not provided, then
-	 * look up all of them. The full set of adapter/index associations is
-	 * reduced so that a single index is queried per adapter and the number
-	 * indices queried is minimized.
-	 *
-	 * DataStores are responsible for selecting a single adapter/index per
-	 * query. For deletions, the Data Stores are interested in all the
-	 * associations.
-	 *
-	 * @param adapterStore
-	 * @param adapterIndexMappingStore
-	 * @param indexStore
-	 * @return
-	 * @throws IOException
-	 */
-	public List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> getAdaptersWithMinimalSetOfIndices(
-			final AdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final IndexStore indexStore )
-			throws IOException {
-		return reduceIndicesAndGroupByIndex(compileIndicesForAdapters(
-				adapterStore,
-				adapterIndexMappingStore,
-				indexStore));
-	}
-
-	private List<Pair<PrimaryIndex, DataAdapter<Object>>> compileIndicesForAdapters(
-			final AdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore,
-			final IndexStore indexStore )
-			throws IOException {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			if ((adapters == null) || adapters.isEmpty()) {
-				adapters = new ArrayList<DataAdapter<Object>>();
-				for (final ByteArrayId id : adapterIds) {
-					final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(id);
-					if (adapter != null) {
-						adapters.add(adapter);
-					}
-				}
-			}
-		}
-		else {
-			adapters = new ArrayList<DataAdapter<Object>>();
-			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
-				while (it.hasNext()) {
-					adapters.add((DataAdapter<Object>) it.next());
-				}
-			}
-		}
-		final List<Pair<PrimaryIndex, DataAdapter<Object>>> result = new ArrayList<Pair<PrimaryIndex, DataAdapter<Object>>>();
-		for (final DataAdapter<Object> adapter : adapters) {
-			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
-			if (index != null) {
-				result.add(Pair.of(
-						index,
-						adapter));
-			}
-			else if ((indexId != null) && indices.contains(indexId)) {
-				if (index == null) {
-					index = (PrimaryIndex) indexStore.getIndex(indexId);
-					result.add(Pair.of(
-							index,
-							adapter));
-				}
-			}
-			else if (indices.isNotEmpty()) {
-				for (final ByteArrayId id : indices.getIndexIds()) {
-					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
-					// this could happen if persistent was turned off
-					if (pIndex != null) {
-						result.add(Pair.of(
-								pIndex,
-								adapter));
-					}
-				}
-			}
-		}
-		return result;
-	}
-
-	public CloseableIterator<DataAdapter<?>> getAdapters(
-			final AdapterStore adapterStore ) {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			if ((adapters == null) || adapters.isEmpty()) {
-				adapters = new ArrayList<DataAdapter<Object>>();
-				for (final ByteArrayId id : adapterIds) {
-					final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(id);
-					if (adapter != null) {
-						adapters.add(adapter);
-					}
-				}
-			}
-			return new CloseableIterator.Wrapper(
-					adapters.iterator());
-		}
-		return adapterStore.getAdapters();
-	}
-
-	public DataAdapter[] getAdaptersArray(
-			final AdapterStore adapterStore )
-			throws IOException {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
-			if ((adapters == null) || adapters.isEmpty()) {
-				adapters = new ArrayList<DataAdapter<Object>>();
-				for (final ByteArrayId id : adapterIds) {
-					final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(id);
-					if (adapter != null) {
-						adapters.add(adapter);
-					}
-				}
-			}
-			return adapters.toArray(new DataAdapter[adapters.size()]);
-		}
-		final List<DataAdapter> list = new ArrayList<DataAdapter>();
-		if (adapterStore != null) {
-			CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-			if (it != null) {
-				while (it.hasNext()) {
-					list.add(it.next());
-				}
-				it.close();
-			}
-		}
-		return list.toArray(new DataAdapter[list.size()]);
-	}
-
-	public List<ByteArrayId> getAdapterIds(
-			final AdapterStore adapterStore )
-			throws IOException {
-		final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
-		if ((adapterIds == null) || adapterIds.isEmpty()) {
-			try (CloseableIterator<DataAdapter<?>> it = getAdapters(adapterStore)) {
-				while (it.hasNext()) {
-					ids.add(it.next().getAdapterId());
-				}
-			}
-		}
-		else {
-			ids.addAll(adapterIds);
-		}
-		return ids;
-	}
-
-	public List<ByteArrayId> getValidAdapterIds(
-			final AdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore )
-			throws IOException {
-		// Grab the list of adapter ids, either from the query (if included),
-		// Or the whole list from the adapter store...
-		final List<ByteArrayId> adapterIds = getAdapterIds(adapterStore);
-
-		// Then for each adapter, verify that it exists in the index-adapter
-		// mapping
-		Iterator<ByteArrayId> adapterIterator = adapterIds.iterator();
-		while (adapterIterator.hasNext()) {
-			AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterIterator.next());
-			if (!mapping.contains(indexId)) {
-				adapterIterator.remove();
-			}
-		}
-
-		return adapterIds;
 	}
 
 	/**
@@ -705,7 +499,6 @@ public class QueryOptions implements
 					idBytes));
 			count--;
 		}
-
 	}
 
 	public Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
@@ -786,62 +579,5 @@ public class QueryOptions implements
 			return false;
 		}
 		return true;
-	}
-
-	private void sortInPlace(
-			final List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
-		Collections.sort(
-				input,
-				new Comparator<Pair<PrimaryIndex, DataAdapter<Object>>>() {
-
-					@Override
-					public int compare(
-							final Pair<PrimaryIndex, DataAdapter<Object>> o1,
-							final Pair<PrimaryIndex, DataAdapter<Object>> o2 ) {
-
-						return o1.getKey().getId().compareTo(
-								o1.getKey().getId());
-					}
-				});
-	}
-
-	private List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> combineByIndex(
-			final List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
-		final List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> result = new ArrayList<Pair<PrimaryIndex, List<DataAdapter<Object>>>>();
-		sortInPlace(input);
-		List<DataAdapter<Object>> adapterSet = new ArrayList<DataAdapter<Object>>();
-		Pair<PrimaryIndex, DataAdapter<Object>> last = null;
-		for (final Pair<PrimaryIndex, DataAdapter<Object>> item : input) {
-			if ((last != null) && !last.getKey().getId().equals(
-					item.getKey().getId())) {
-				result.add(Pair.of(
-						last.getLeft(),
-						adapterSet));
-				adapterSet = new ArrayList<DataAdapter<Object>>();
-
-			}
-			adapterSet.add(item.getValue());
-			last = item;
-		}
-		if (last != null) {
-			result.add(Pair.of(
-					last.getLeft(),
-					adapterSet));
-		}
-		return result;
-	}
-
-	private List<Pair<PrimaryIndex, List<DataAdapter<Object>>>> reduceIndicesAndGroupByIndex(
-			final List<Pair<PrimaryIndex, DataAdapter<Object>>> input ) {
-		final List<Pair<PrimaryIndex, DataAdapter<Object>>> result = new ArrayList<Pair<PrimaryIndex, DataAdapter<Object>>>();
-		// sort by index to eliminate the amount of indices returned
-		sortInPlace(input);
-		final Set<DataAdapter<Object>> adapterSet = new HashSet<DataAdapter<Object>>();
-		for (final Pair<PrimaryIndex, DataAdapter<Object>> item : input) {
-			if (adapterSet.add(item.getRight())) {
-				result.add(item);
-			}
-		}
-		return combineByIndex(result);
 	}
 }

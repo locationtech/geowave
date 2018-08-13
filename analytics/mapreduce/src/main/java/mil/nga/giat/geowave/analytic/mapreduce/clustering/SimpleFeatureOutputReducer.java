@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.analytic.extract.EmptyDimensionExtractor;
 import mil.nga.giat.geowave.analytic.param.ExtractParameters;
 import mil.nga.giat.geowave.analytic.param.GlobalParameters;
 import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.GeoWaveReducer;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -88,7 +89,14 @@ public class SimpleFeatureOutputReducer extends
 			InterruptedException {
 		final Iterator<Object> valIt = values.iterator();
 		if (valIt.hasNext()) {
-			key.setAdapterId(outputAdapter.getAdapterId());
+			key.setInternalAdapterId(// TODO this is a bit of a hack, but the
+										// adapter is seemingly completely
+										// transient and never actually
+										// persisted - it seems unlikely that
+										// the value for internal adapter ID
+										// even matters, but if it does this is
+										// the best effort
+					InternalAdapterStoreImpl.getInitialInternalAdapterId(outputAdapter.getAdapterId()));
 			final SimpleFeature feature = getSimpleFeature(
 					key,
 					valIt.next());

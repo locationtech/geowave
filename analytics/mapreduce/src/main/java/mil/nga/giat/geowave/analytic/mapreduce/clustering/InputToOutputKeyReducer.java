@@ -17,8 +17,10 @@ import java.util.List;
 import mil.nga.giat.geowave.analytic.ScopedJobConfiguration;
 import mil.nga.giat.geowave.analytic.param.OutputParameters;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 import org.apache.hadoop.io.ObjectWritable;
@@ -37,6 +39,7 @@ public class InputToOutputKeyReducer extends
 	protected static final Logger LOGGER = LoggerFactory.getLogger(InputToOutputKeyReducer.class);
 
 	private GeoWaveOutputKey outputKey;
+	private InternalAdapterStore internalAdapterStore;
 
 	@Override
 	protected void reduceNativeValues(
@@ -45,7 +48,7 @@ public class InputToOutputKeyReducer extends
 			final Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, Object>.Context context )
 			throws IOException,
 			InterruptedException {
-		outputKey.setAdapterId(key.getAdapterId());
+		outputKey.setAdapterId(internalAdapterStore.getAdapterId(key.getInternalAdapterId()));
 		for (final Object value : values) {
 			context.write(
 					outputKey,
@@ -59,6 +62,7 @@ public class InputToOutputKeyReducer extends
 			throws IOException,
 			InterruptedException {
 		super.setup(context);
+		internalAdapterStore = GeoWaveOutputFormat.getJobContextInternalAdapterStore(context);
 		final ScopedJobConfiguration config = new ScopedJobConfiguration(
 				context.getConfiguration(),
 				InputToOutputKeyReducer.class,

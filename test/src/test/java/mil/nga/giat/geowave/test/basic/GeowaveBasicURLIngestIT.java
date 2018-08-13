@@ -37,6 +37,8 @@ import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatist
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -101,24 +103,25 @@ public class GeowaveBasicURLIngestIT extends
 				4);
 
 		final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
-		final AdapterStore adapterStore = dataStore.createAdapterStore();
+		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
 		int adapterCount = 0;
-		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
+		try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
-				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
+				final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
+				final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 
 				// query by the full bounding box, make sure there is more than
 				// 0 count and make sure the count matches the number of results
 				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore
 						.getDataStatistics(
-								adapter.getAdapterId(),
+								internalDataAdapter.getInternalAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
 										.getFeatureType()
 										.getGeometryDescriptor()
 										.getLocalName()));
 				final CountDataStatistics<?> countStat = (CountDataStatistics<SimpleFeature>) statsStore
 						.getDataStatistics(
-								adapter.getAdapterId(),
+								internalDataAdapter.getInternalAdapterId(),
 								CountDataStatistics.STATS_TYPE);
 				// then query it
 				final GeometryFactory factory = new GeometryFactory();

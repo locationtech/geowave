@@ -19,6 +19,7 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Mutation;
 
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -42,12 +43,12 @@ import mil.nga.giat.geowave.datastore.accumulo.operations.AccumuloWriter;
 public class AccumuloKeyValuePairGenerator<T>
 {
 
-	private final WritableDataAdapter<T> adapter;
+	private final InternalDataAdapter<T> adapter;
 	private final PrimaryIndex index;
 	private final VisibilityWriter<T> visibilityWriter;
 
 	public AccumuloKeyValuePairGenerator(
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final VisibilityWriter<T> visibilityWriter ) {
 		super();

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -49,21 +49,28 @@ public class FeatureFixedBinNumericStatistics extends
 	}
 
 	public FeatureFixedBinNumericStatistics(
-			final ByteArrayId dataAdapterId,
+			final String fieldName ) {
+		this(
+				null,
+				fieldName);
+	}
+
+	public FeatureFixedBinNumericStatistics(
+			final Short internalDataAdapterId,
 			final String fieldName ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						fieldName));
 	}
 
 	public FeatureFixedBinNumericStatistics(
-			final ByteArrayId dataAdapterId,
+			final Short internalDataAdapterId,
 			final String fieldName,
 			final int bins ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						fieldName),
@@ -71,13 +78,13 @@ public class FeatureFixedBinNumericStatistics extends
 	}
 
 	public FeatureFixedBinNumericStatistics(
-			final ByteArrayId dataAdapterId,
+			final Short internalDataAdapterId,
 			final String fieldName,
 			final int bins,
 			final double minValue,
 			final double maxValue ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						fieldName),
@@ -101,7 +108,7 @@ public class FeatureFixedBinNumericStatistics extends
 	@Override
 	public DataStatistics<SimpleFeature> duplicate() {
 		return new FeatureFixedBinNumericStatistics(
-				dataAdapterId,
+				internalDataAdapterId,
 				getFieldName());
 	}
 
@@ -184,10 +191,10 @@ public class FeatureFixedBinNumericStatistics extends
 
 		@Override
 		public DataStatistics<SimpleFeature> create(
-				final ByteArrayId dataAdapterId,
+				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureFixedBinNumericStatistics(
-					dataAdapterId,
+					internalDataAdapterId,
 					fieldName,
 					bins,
 					minValue,

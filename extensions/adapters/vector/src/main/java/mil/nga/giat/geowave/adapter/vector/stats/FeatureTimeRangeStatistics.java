@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,12 +14,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import org.opengis.feature.simple.SimpleFeature;
+
 import mil.nga.giat.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-
-import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureTimeRangeStatistics extends
 		TimeRangeDataStatistics<SimpleFeature> implements
@@ -31,10 +31,17 @@ public class FeatureTimeRangeStatistics extends
 	}
 
 	public FeatureTimeRangeStatistics(
-			final ByteArrayId dataAdapterId,
+			final String fieldName ) {
+		this(
+				null,
+				fieldName);
+	}
+
+	public FeatureTimeRangeStatistics(
+			final Short internalDataAdapterId,
 			final String fieldName ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				fieldName);
 	}
 
@@ -47,18 +54,18 @@ public class FeatureTimeRangeStatistics extends
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(this.getStatisticsId());
+		return decomposeNameFromId(getStatisticsId());
 	}
 
 	public Date getMaxTime() {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		c.setTimeInMillis((long) this.getMax());
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.setTimeInMillis((long) getMax());
 		return c.getTime();
 	}
 
 	public Date getMinTime() {
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		c.setTimeInMillis((long) this.getMin());
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		c.setTimeInMillis((long) getMin());
 		return c.getTime();
 	}
 
@@ -67,13 +74,15 @@ public class FeatureTimeRangeStatistics extends
 			final SimpleFeature entry ) {
 
 		final Object o = entry.getAttribute(getFieldName());
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
-		if (o == null) return null;
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		if (o == null) {
+			return null;
+		}
 		if (o instanceof Date) {
 			c.setTime((Date) o);
 		}
 		else if (o instanceof Calendar) {
-			c.setTime(((Calendar) c).getTime());
+			c.setTime(c.getTime());
 		}
 		else if (o instanceof Number) {
 			c.setTimeInMillis(((Number) o).longValue());
@@ -84,22 +93,24 @@ public class FeatureTimeRangeStatistics extends
 				time);
 	}
 
+	@Override
 	public DataStatistics<SimpleFeature> duplicate() {
 		return new FeatureTimeRangeStatistics(
-				this.dataAdapterId,
+				internalDataAdapterId,
 				getFieldName());
 	}
 
+	@Override
 	public String toString() {
-		StringBuffer buffer = new StringBuffer();
-		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
+		final StringBuffer buffer = new StringBuffer();
+		final Calendar c = Calendar.getInstance(TimeZone.getTimeZone("GMT"));
 		c.setTimeInMillis((long) getMin());
-		Date min = c.getTime();
+		final Date min = c.getTime();
 		c.setTimeInMillis((long) getMax());
-		Date max = c.getTime();
+		final Date max = c.getTime();
 		buffer.append(
-				"range[adapter=").append(
-				super.getDataAdapterId().getString());
+				"range[internalDataAdapterId=").append(
+				super.getInternalDataAdapterId());
 		buffer.append(
 				", field=").append(
 				getFieldName());

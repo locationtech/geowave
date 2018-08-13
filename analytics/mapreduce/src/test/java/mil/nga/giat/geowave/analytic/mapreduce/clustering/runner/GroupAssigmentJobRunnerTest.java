@@ -50,6 +50,7 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -216,7 +217,10 @@ public class GroupAssigmentJobRunnerTest
 		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 		adapter.init(index);
 		pluginOptions.createAdapterStore().addAdapter(
-				adapter);
+				new InternalDataAdapterWrapper<>(
+						adapter,
+						pluginOptions.createInternalAdapterStore().addAdapterId(
+								adapter.getAdapterId())));
 	}
 
 	@Test

@@ -47,7 +47,7 @@ public class CommonIndexedPersistenceEncoding extends
 {
 
 	public CommonIndexedPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId insertionPartitionKey,
 			final ByteArrayId insertionSortKey,
@@ -55,7 +55,7 @@ public class CommonIndexedPersistenceEncoding extends
 			final PersistentDataset<CommonIndexValue> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
 		super(
-				adapterId,
+				internalAdapterId,
 				dataId,
 				insertionPartitionKey,
 				insertionSortKey,

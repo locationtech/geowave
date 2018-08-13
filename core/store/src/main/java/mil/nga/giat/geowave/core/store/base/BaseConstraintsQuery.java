@@ -20,6 +20,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -50,7 +52,7 @@ public class BaseConstraintsQuery extends
 	private final static Logger LOGGER = Logger.getLogger(BaseConstraintsQuery.class);
 	private boolean queryFiltersEnabled;
 
-	public final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
+	public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 	public final List<MultiDimensionalNumericData> constraints;
 	public final List<DistributableQueryFilter> distributableFilters;
 
@@ -58,13 +60,13 @@ public class BaseConstraintsQuery extends
 	private final PrimaryIndex index;
 
 	public BaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
@@ -85,14 +87,14 @@ public class BaseConstraintsQuery extends
 	}
 
 	public BaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
@@ -155,13 +157,12 @@ public class BaseConstraintsQuery extends
 	public CloseableIterator<Object> query(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
-				// || adapterStore instanceof MemoryAdapterStore) {
 				// Aggregate client-side
 				final CloseableIterator<Object> it = (CloseableIterator<Object>) super.query(
 						datastoreOperations,
@@ -265,7 +266,7 @@ public class BaseConstraintsQuery extends
 	}
 
 	@Override
-	protected Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
+	protected Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return aggregation;
 	}
 

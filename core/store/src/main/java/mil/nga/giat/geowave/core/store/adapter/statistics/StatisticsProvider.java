@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -18,11 +18,11 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 /**
  * This interface defines the set of statistics to capture for a specific
  * adapter.
- * 
+ *
  * @param <T>
  *            The type for the data elements that are being adapted by the
  *            adapter
- * 
+ *
  */
 public interface StatisticsProvider<T>
 {

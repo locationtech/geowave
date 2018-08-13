@@ -37,11 +37,8 @@ public class CassandraReader<T> implements
 	private final ReaderParams<T> readerParams;
 	private final RecordReaderParams<T> recordReaderParams;
 	private final CassandraOperations operations;
-	private final boolean clientSideRowMerging;
 	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 
-	private final boolean wholeRowEncoding;
-	private final int partitionKeyLength;
 	private CloseableIterator<T> iterator;
 
 	public CassandraReader(
@@ -50,10 +47,6 @@ public class CassandraReader<T> implements
 		this.readerParams = readerParams;
 		recordReaderParams = null;
 		this.operations = operations;
-
-		partitionKeyLength = readerParams.getIndex().getIndexStrategy().getPartitionKeyLength();
-		wholeRowEncoding = readerParams.isMixedVisibility() && !readerParams.isServersideAggregation();
-		clientSideRowMerging = readerParams.isClientsideRowMerging();
 		this.rowTransformer = readerParams.getRowTransformer();
 
 		initScanner();
@@ -66,9 +59,6 @@ public class CassandraReader<T> implements
 		this.recordReaderParams = recordReaderParams;
 		this.operations = operations;
 
-		partitionKeyLength = recordReaderParams.getIndex().getIndexStrategy().getPartitionKeyLength();
-		wholeRowEncoding = recordReaderParams.isMixedVisibility() && !recordReaderParams.isServersideAggregation();
-		clientSideRowMerging = false;
 		this.rowTransformer = recordReaderParams.getRowTransformer();
 
 		initRecordScanner();
@@ -118,8 +108,7 @@ public class CassandraReader<T> implements
 									public boolean apply(
 											final CassandraRow input ) {
 										return readerParams.getAdapterIds().contains(
-												new ByteArrayId(
-														input.getAdapterId()));
+												input.getInternalAdapterId());
 									}
 								}));
 			}
@@ -131,7 +120,7 @@ public class CassandraReader<T> implements
 	}
 
 	protected void initRecordScanner() {
-		final List<ByteArrayId> adapterIds = recordReaderParams.getAdapterIds() != null ? recordReaderParams
+		final Collection<Short> adapterIds = recordReaderParams.getAdapterIds() != null ? recordReaderParams
 				.getAdapterIds() : Lists.newArrayList();
 
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();

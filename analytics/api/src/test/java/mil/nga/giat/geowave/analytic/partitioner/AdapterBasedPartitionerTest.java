@@ -47,6 +47,9 @@ import mil.nga.giat.geowave.analytic.store.PersistableStore;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -128,8 +131,12 @@ public class AdapterBasedPartitionerTest
 		FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				ftype);
 		dataAdapter.init();
+		InternalAdapterStore internalDataStore = pluginOptions.createInternalAdapterStore();
+		InternalDataAdapter<?> internalDataAdapter = new InternalDataAdapterWrapper(
+				dataAdapter,
+				internalDataStore.addAdapterId(dataAdapter.getAdapterId()));
 		store.getDataStoreOptions().createAdapterStore().addAdapter(
-				dataAdapter);
+				internalDataAdapter);
 		((ParameterEnum<PersistableStore>) StoreParam.INPUT_STORE).getHelper().setValue(
 				configuration,
 				scope,

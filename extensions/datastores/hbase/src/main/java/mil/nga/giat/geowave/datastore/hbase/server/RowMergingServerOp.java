@@ -14,6 +14,7 @@ import com.google.common.collect.Sets;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.server.RowMergingAdapterOptionProvider;
 import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
@@ -28,8 +29,7 @@ public class RowMergingServerOp extends
 			final Cell cell,
 			final byte[] bytes ) {
 		return rowTransform.getRowAsMergeableObject(
-				new ByteArrayId(
-						CellUtil.cloneFamily(cell)),
+				ByteArrayUtils.shortFromString(StringUtils.stringFromBinary(CellUtil.cloneFamily(cell))),
 				new ByteArrayId(
 						CellUtil.cloneQualifier(cell)),
 				bytes);
@@ -58,19 +58,21 @@ public class RowMergingServerOp extends
 			throw new IllegalArgumentException(
 					"The column must not be empty");
 		}
+
 		columnFamilyIds = Sets.newHashSet(Iterables.transform(
 				Splitter.on(
 						",").split(
 						columnStr),
-				new Function<String, ByteArrayId>() {
+				new Function<String, GeowaveColumnId>() {
 
 					@Override
-					public ByteArrayId apply(
+					public GeowaveColumnId apply(
 							final String input ) {
-						return new ByteArrayId(
-								input);
+						return new ShortColumnId(
+								ByteArrayUtils.shortFromString(input));
 					}
 				}));
+
 		final String rowTransformStr = options.get(RowMergingAdapterOptionProvider.ROW_TRANSFORM_KEY);
 		final byte[] rowTransformBytes = ByteArrayUtils.byteArrayFromString(rowTransformStr);
 		rowTransform = (RowTransform<Mergeable>) URLClassloaderUtils.fromBinary(rowTransformBytes);

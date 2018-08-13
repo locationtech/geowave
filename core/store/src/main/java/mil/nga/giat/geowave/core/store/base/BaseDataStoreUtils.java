@@ -3,12 +3,16 @@ package mil.nga.giat.geowave.core.store.base;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
@@ -17,24 +21,30 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.common.base.Function;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Collections2;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Lists;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIterator.Wrapper;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.AdapterException;
 import mil.nga.giat.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.DataWriter;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
 import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -48,7 +58,9 @@ import mil.nga.giat.geowave.core.store.flatten.BitmaskedPairComparator;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedFieldInfo;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 
@@ -58,7 +70,7 @@ public class BaseDataStoreUtils
 
 	public static <T> GeoWaveRow[] getGeoWaveRows(
 			final T entry,
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		return getWriteInfo(
@@ -79,16 +91,14 @@ public class BaseDataStoreUtils
 	public static <T> Object decodeRow(
 			final GeoWaveRow geowaveRow,
 			final QueryFilter clientFilter,
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final AdapterStore adapterStore,
 			final PrimaryIndex index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
 			final boolean decodeRow )
 			throws AdapterException {
-
-		final ByteArrayId adapterId = new ByteArrayId(
-				geowaveRow.getAdapterId());
+		final short internalAdapterId = geowaveRow.getInternalAdapterId();
 
 		if ((adapter == null) && (adapterStore == null)) {
 			String msg = "Could not decode row from iterator. Either adapter or adapter store must be non-null.";
@@ -102,9 +112,9 @@ public class BaseDataStoreUtils
 
 		if (!decodePackage.setOrRetrieveAdapter(
 				adapter,
-				adapterId,
+				internalAdapterId,
 				adapterStore)) {
-			String msg = "Could not retrieve adapter " + adapterId.getString() + " from adapter store.";
+			String msg = "Could not retrieve adapter " + internalAdapterId + " from adapter store.";
 			LOGGER.error(msg);
 			throw new AdapterException(
 					msg);
@@ -112,7 +122,7 @@ public class BaseDataStoreUtils
 
 		// Verify the adapter matches the data
 		if (!decodePackage.isAdapterVerified()) {
-			if (!decodePackage.verifyAdapter(adapterId)) {
+			if (!decodePackage.verifyAdapter(internalAdapterId)) {
 				String msg = "Adapter verify failed: adapter does not match data.";
 				LOGGER.error(msg);
 				throw new AdapterException(
@@ -191,7 +201,7 @@ public class BaseDataStoreUtils
 			final QueryFilter clientFilter,
 			final ScanCallback<T, GeoWaveRow> scanCallback ) {
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
-				decodePackage.getDataAdapter().getAdapterId(),
+				decodePackage.getDataAdapter().getInternalAdapterId(),
 				new ByteArrayId(
 						row.getDataId()),
 				new ByteArrayId(
@@ -275,7 +285,7 @@ public class BaseDataStoreUtils
 
 	protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
 			final T entry,
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final CommonIndexModel indexModel = index.getIndexModel();
@@ -289,7 +299,7 @@ public class BaseDataStoreUtils
 
 		final byte[] dataId = adapter.getDataId(
 				entry).getBytes();
-		final byte[] adapterId = adapter.getAdapterId().getBytes();
+		short internalAdapterId = adapter.getInternalAdapterId();
 		if (!insertionIds.isEmpty()) {
 			for (final Entry<ByteArrayId, CommonIndexValue> fieldValue : encodedData
 					.getCommonData()
@@ -346,7 +356,7 @@ public class BaseDataStoreUtils
 
 		return new IntermediaryWriteEntryInfo(
 				uniqueDataId,
-				adapterId,
+				internalAdapterId,
 				insertionIds,
 				fieldInfoList);
 	}
@@ -473,5 +483,142 @@ public class BaseDataStoreUtils
 			LOGGER.warn("Data writer of class " + dataWriter.getClass() + " does not support field for " + fieldValue);
 		}
 		return null;
+	}
+
+	private static <T> void sortInPlace(
+			final List<Pair<PrimaryIndex, T>> input ) {
+		Collections.sort(
+				input,
+				new Comparator<Pair<PrimaryIndex, T>>() {
+
+					@Override
+					public int compare(
+							final Pair<PrimaryIndex, T> o1,
+							final Pair<PrimaryIndex, T> o2 ) {
+
+						return o1.getKey().getId().compareTo(
+								o1.getKey().getId());
+					}
+				});
+	}
+
+	public static <T> List<Pair<PrimaryIndex, List<T>>> combineByIndex(
+			final List<Pair<PrimaryIndex, T>> input ) {
+		final List<Pair<PrimaryIndex, List<T>>> result = new ArrayList<Pair<PrimaryIndex, List<T>>>();
+		sortInPlace(input);
+		List<T> valueSet = new ArrayList<T>();
+		Pair<PrimaryIndex, T> last = null;
+		for (final Pair<PrimaryIndex, T> item : input) {
+			if ((last != null) && !last.getKey().getId().equals(
+					item.getKey().getId())) {
+				result.add(Pair.of(
+						last.getLeft(),
+						valueSet));
+				valueSet = new ArrayList<>();
+
+			}
+			valueSet.add(item.getValue());
+			last = item;
+		}
+		if (last != null) {
+			result.add(Pair.of(
+					last.getLeft(),
+					valueSet));
+		}
+		return result;
+	}
+
+	public static List<Pair<PrimaryIndex, List<Short>>> getAdaptersWithMinimalSetOfIndices(
+			QueryOptions options,
+			TransientAdapterStore adapterStore,
+			InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final IndexStore indexStore )
+			throws IOException {
+		return reduceIndicesAndGroupByIndex(compileIndicesForAdapters(
+				options,
+				adapterStore,
+				internalAdapterStore,
+				adapterIndexMappingStore,
+				indexStore));
+	}
+
+	private static List<Pair<PrimaryIndex, Short>> compileIndicesForAdapters(
+			QueryOptions options,
+			TransientAdapterStore adapterStore,
+			InternalAdapterStore internalAdapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final IndexStore indexStore )
+			throws IOException {
+		// TODO this probably doesn't have to use PrimaryIndex and should be
+		// sufficient to use index IDs
+		List<ByteArrayId> adapterIds = options.getAdapterIds();
+		if ((adapterIds == null) || adapterIds.isEmpty()) {
+			adapterIds = new ArrayList<ByteArrayId>();
+			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+				while (it.hasNext()) {
+					adapterIds.add(it.next().getAdapterId());
+				}
+			}
+		}
+		Collection<Short> internalAdapterIds = Collections2.filter(
+				Lists.transform(
+						adapterIds,
+						new Function<ByteArrayId, Short>() {
+
+							@Override
+							public Short apply(
+									ByteArrayId adapterId ) {
+								return internalAdapterStore.getInternalAdapterId(adapterId);
+							}
+						}),
+				new Predicate<Short>() {
+
+					@Override
+					public boolean apply(
+							Short input ) {
+						return input != null;
+					}
+				});
+		final List<Pair<PrimaryIndex, Short>> result = new ArrayList<>();
+		for (final Short internalAdapterId : internalAdapterIds) {
+			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
+			if (options.getIndex() != null) {
+				result.add(Pair.of(
+						options.getIndex(),
+						internalAdapterId));
+			}
+			else if ((options.getIndexId() != null) && indices.contains(options.getIndexId())) {
+				result.add(Pair.of(
+						(PrimaryIndex) indexStore.getIndex(options.getIndexId()),
+						internalAdapterId));
+			}
+			else if (indices.isNotEmpty()) {
+				for (final ByteArrayId id : indices.getIndexIds()) {
+					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
+					// this could happen if persistent was turned off
+					if (pIndex != null) {
+						result.add(Pair.of(
+								pIndex,
+								internalAdapterId));
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	protected static <T> List<Pair<PrimaryIndex, List<T>>> reduceIndicesAndGroupByIndex(
+			final List<Pair<PrimaryIndex, T>> input ) {
+		final List<Pair<PrimaryIndex, T>> result = new ArrayList<>();
+		// sort by index to eliminate the amount of indices returned
+		sortInPlace(input);
+		final Set<T> adapterSet = new HashSet<T>();
+		for (final Pair<PrimaryIndex, T> item : input) {
+			if (adapterSet.add(item.getRight())) {
+				result.add(item);
+			}
+		}
+		return combineByIndex(result);
 	}
 }

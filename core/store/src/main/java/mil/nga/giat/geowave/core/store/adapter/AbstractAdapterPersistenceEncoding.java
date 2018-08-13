@@ -26,7 +26,7 @@ public abstract class AbstractAdapterPersistenceEncoding extends
 	protected final PersistentDataset<Object> adapterExtendedData;
 
 	public AbstractAdapterPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKey,
@@ -35,7 +35,7 @@ public abstract class AbstractAdapterPersistenceEncoding extends
 			final PersistentDataset<byte[]> unknownData,
 			final PersistentDataset<Object> adapterExtendedData ) {
 		super(
-				adapterId,
+				internalAdapterId,
 				dataId,
 				partitionKey,
 				sortKey,

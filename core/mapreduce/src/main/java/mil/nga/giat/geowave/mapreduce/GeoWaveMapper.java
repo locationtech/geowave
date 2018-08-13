@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -12,14 +12,13 @@ package mil.nga.giat.geowave.mapreduce;
 
 import java.io.IOException;
 
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.MapContext;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 /**
  * This abstract class can be extended by GeoWave analytics. It handles the
@@ -55,7 +54,7 @@ public abstract class GeoWaveMapper extends
 		mapNativeValue(
 				key,
 				serializationTool.fromWritable(
-						key.getAdapterId(),
+						key.getInternalAdapterId(),
 						value),
 				new NativeMapContext<GeoWaveInputKey, ObjectWritable>(
 						context,
@@ -75,7 +74,7 @@ public abstract class GeoWaveMapper extends
 			throws IOException,
 			InterruptedException {
 		serializationTool = new HadoopWritableSerializationTool(
-				GeoWaveInputFormat.getJobContextAdapterStore(context));
+				context);
 	}
 
 }

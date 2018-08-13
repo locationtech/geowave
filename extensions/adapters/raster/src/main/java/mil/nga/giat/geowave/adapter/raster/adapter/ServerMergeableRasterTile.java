@@ -12,18 +12,17 @@ package mil.nga.giat.geowave.adapter.raster.adapter;
 
 import java.awt.image.DataBuffer;
 
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.ServerMergeStrategy;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 
-public class MergeableRasterTile<T extends Persistable> extends
+public class ServerMergeableRasterTile<T extends Persistable> extends
 		RasterTile<T>
 {
-	private RootMergeStrategy<T> mergeStrategy;
-	private ByteArrayId dataAdapterId;
+	private ServerMergeStrategy<T> mergeStrategy;
+	private short dataAdapterId;
 
-	public MergeableRasterTile() {
+	public ServerMergeableRasterTile() {
 		// this isn't really meant to be persisted, its instantiated using the
 		// other constructor for merging purposes only leveraging the
 		// RootMergeStrategy (also not persistable)
@@ -33,11 +32,11 @@ public class MergeableRasterTile<T extends Persistable> extends
 		// consistency
 	}
 
-	public MergeableRasterTile(
+	public ServerMergeableRasterTile(
 			final DataBuffer dataBuffer,
 			final T metadata,
-			final RootMergeStrategy<T> mergeStrategy,
-			final ByteArrayId dataAdapterId ) {
+			final ServerMergeStrategy<T> mergeStrategy,
+			final short dataAdapterId ) {
 		super(
 				dataBuffer,
 				metadata);
@@ -45,7 +44,7 @@ public class MergeableRasterTile<T extends Persistable> extends
 		this.dataAdapterId = dataAdapterId;
 	}
 
-	public ByteArrayId getDataAdapterId() {
+	public short getDataAdapterId() {
 		return dataAdapterId;
 	}
 

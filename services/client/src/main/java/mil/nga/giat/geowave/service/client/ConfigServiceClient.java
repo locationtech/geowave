@@ -65,7 +65,7 @@ public class ConfigServiceClient implements
 		try {
 			addStoreTarget = addPathFromAnnotation(
 					ConfigService.class.getMethod(
-							"addStore",
+							"addStoreReRoute",
 							String.class,
 							String.class,
 							String.class,

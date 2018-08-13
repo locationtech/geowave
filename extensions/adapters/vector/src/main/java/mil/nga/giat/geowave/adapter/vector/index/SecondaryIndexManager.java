@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.adapter.vector.index;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -25,7 +26,7 @@ import mil.nga.giat.geowave.adapter.vector.stats.StatsManager;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
@@ -43,7 +44,6 @@ public class SecondaryIndexManager implements
 		Persistable
 {
 	private final List<SecondaryIndex<SimpleFeature>> supportedSecondaryIndices = new ArrayList<>();
-	private transient DataAdapter<SimpleFeature> dataAdapter;
 	private transient SimpleFeatureType sft;
 	private transient StatsManager statsManager;
 
@@ -52,16 +52,14 @@ public class SecondaryIndexManager implements
 	/**
 	 * Create a SecondaryIndexManager for the given DataAdapter and
 	 * SimpleFeatureType, while providing
-	 * 
+	 *
 	 * @param dataAdapter
 	 * @param sft
 	 * @param statsManager
 	 */
 	public SecondaryIndexManager(
-			final DataAdapter<SimpleFeature> dataAdapter,
 			final SimpleFeatureType sft,
 			final StatsManager statsManager ) {
-		this.dataAdapter = dataAdapter;
 		this.statsManager = statsManager;
 		this.sft = sft;
 		initializeIndices();
@@ -130,7 +128,7 @@ public class SecondaryIndexManager implements
 
 	/**
 	 * Add an index-based secondary index key
-	 * 
+	 *
 	 * @param secondaryIndexKey
 	 * @param fieldId
 	 * @param secondaryIndexType
@@ -149,7 +147,6 @@ public class SecondaryIndexManager implements
 
 			case NumericSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureNumericHistogramStatistics(
-						dataAdapter.getAdapterId(),
 						fieldId.getString());
 				statistics.add(stat);
 				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
@@ -162,7 +159,6 @@ public class SecondaryIndexManager implements
 
 			case TextSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureHyperLogLogStatistics(
-						dataAdapter.getAdapterId(),
 						fieldId.getString(),
 						16);
 				statistics.add(stat);
@@ -176,7 +172,6 @@ public class SecondaryIndexManager implements
 
 			case TemporalSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureNumericHistogramStatistics(
-						dataAdapter.getAdapterId(),
 						fieldId.getString());
 				statistics.add(stat);
 				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
@@ -200,7 +195,7 @@ public class SecondaryIndexManager implements
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * This consists of converting supported secondary indices.
 	 */
 	@Override
@@ -214,7 +209,7 @@ public class SecondaryIndexManager implements
 
 	/**
 	 * {@inheritDoc}
-	 * 
+	 *
 	 * This extracts the supported secondary indices from the binary stream and
 	 * adds them in this object.
 	 */

@@ -10,9 +10,9 @@ import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.TabletId;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 /*if[accumulo.api=1.7]
  import org.apache.accumulo.core.util.UtilWaitThread;
  import org.apache.accumulo.core.client.mock.MockInstance;

@@ -40,6 +40,8 @@ import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.config.ConfigUtils;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -78,7 +80,8 @@ public class GeoWaveRasterConfig
 	private StoreFactoryFamilySpi factoryFamily;
 	private DataStore dataStore;
 	private IndexStore indexStore;
-	private AdapterStore adapterStore;
+	private PersistentAdapterStore adapterStore;
+	private InternalAdapterStore internalAdapterStore;
 	private DataStatisticsStore dataStatisticsStore;
 	private AdapterIndexMappingStore adapterIndexMappingStore;
 	private AuthorizationFactorySPI authorizationFactory;
@@ -313,7 +316,7 @@ public class GeoWaveRasterConfig
 		return dataStore;
 	}
 
-	public synchronized AdapterStore getAdapterStore() {
+	public synchronized PersistentAdapterStore getAdapterStore() {
 		if (adapterStore == null) {
 			adapterStore = factoryFamily.getAdapterStoreFactory().createStore(
 					ConfigUtils.populateOptionsFromList(
@@ -321,6 +324,16 @@ public class GeoWaveRasterConfig
 							storeConfigObj));
 		}
 		return adapterStore;
+	}
+
+	public synchronized InternalAdapterStore getInternalAdapterStore() {
+		if (internalAdapterStore == null) {
+			internalAdapterStore = factoryFamily.getInternalAdapterStoreFactory().createStore(
+					ConfigUtils.populateOptionsFromList(
+							factoryFamily.getInternalAdapterStoreFactory().createOptionsInstance(),
+							storeConfigObj));
+		}
+		return internalAdapterStore;
 	}
 
 	public synchronized IndexStore getIndexStore() {

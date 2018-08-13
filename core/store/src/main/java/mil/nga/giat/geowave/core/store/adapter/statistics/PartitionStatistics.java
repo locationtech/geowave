@@ -6,6 +6,7 @@ import java.util.Set;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONException;
@@ -30,10 +31,10 @@ public class PartitionStatistics<T> extends
 	}
 
 	public PartitionStatistics(
-			final ByteArrayId dataAdapterId,
+			final Short internalDataAdapterId,
 			final ByteArrayId indexId ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(indexId));
 	}
 
@@ -47,7 +48,7 @@ public class PartitionStatistics<T> extends
 	@Override
 	public DataStatistics<T> duplicate() {
 		return new PartitionStatistics<T>(
-				dataAdapterId,
+				internalDataAdapterId,
 				decomposeIndexIdFromId(statisticsId)); // indexId
 	}
 
@@ -171,7 +172,8 @@ public class PartitionStatistics<T> extends
 	 */
 
 	@Override
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
 		final JSONObject jo = new JSONObject();
 		jo.put(
