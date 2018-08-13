@@ -70,6 +70,7 @@ public class MapReduceMemoryDataStore extends
 				minSplits,
 				maxSplits);
 	}
+
 	public AdapterStore getAdapterStore() {
 		return this.adapterStore;
 	}

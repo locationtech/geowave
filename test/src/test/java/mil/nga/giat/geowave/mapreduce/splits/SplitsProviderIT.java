@@ -52,66 +52,67 @@ import mil.nga.giat.geowave.test.basic.AbstractGeoWaveIT;
 	Environment.MAP_REDUCE
 })
 public class SplitsProviderIT extends
-	AbstractGeoWaveIT
+		AbstractGeoWaveIT
 {
-	
+
 	@GeoWaveTestStore(value = {
-			GeoWaveStoreType.ACCUMULO,
-			GeoWaveStoreType.BIGTABLE,
-			GeoWaveStoreType.HBASE,
-			GeoWaveStoreType.DYNAMODB,
-			GeoWaveStoreType.CASSANDRA
+		GeoWaveStoreType.ACCUMULO,
+		GeoWaveStoreType.BIGTABLE,
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.CASSANDRA
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
-	
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOperationServiceWrapper.class);
 	private static long startMillis;
 	private final static String testName = "SplitsProviderIT";
-	
+
 	private static MapReduceMemoryOperations mapReduceMemoryOps;
 	private static DataStoreInfo uniformDataStore;
 	private static DataStoreInfo bimodalDataStore;
 	private static DataStoreInfo skewedDataStore;
-	
+
 	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStorePluginOptions;
 	}
-	
-	enum Distribution{
+
+	enum Distribution {
 		UNIFORM,
 		BIMODAL,
 		SKEWED
 	}
-	
-	private static class DataStoreInfo{
+
+	private static class DataStoreInfo
+	{
 		final public MapReduceMemoryDataStore mapReduceMemoryDataStore;
 		final public PrimaryIndex index;
 		final public GeotoolsFeatureDataAdapter adapter;
-		
+
 		public DataStoreInfo(
-				MapReduceMemoryDataStore mapReduceMemoryDataStore, 
+				MapReduceMemoryDataStore mapReduceMemoryDataStore,
 				PrimaryIndex index,
-				GeotoolsFeatureDataAdapter adapter) {
+				GeotoolsFeatureDataAdapter adapter ) {
 			this.mapReduceMemoryDataStore = mapReduceMemoryDataStore;
 			this.index = index;
 			this.adapter = adapter;
 		}
 	}
-	
+
 	@BeforeClass
 	public static void setup() {
 		startMillis = System.currentTimeMillis();
 		TestUtils.printStartOfTest(
 				LOGGER,
 				testName);
-		
+
 		mapReduceMemoryOps = new MapReduceMemoryOperations();
 		uniformDataStore = createDataStore(Distribution.UNIFORM);
 		bimodalDataStore = createDataStore(Distribution.BIMODAL);
 		skewedDataStore = createDataStore(Distribution.SKEWED);
 	}
-	
+
 	@AfterClass
 	public static void reportTest() {
 		TestUtils.printEndOfTest(
@@ -119,7 +120,7 @@ public class SplitsProviderIT extends
 				testName,
 				startMillis);
 	}
-	
+
 	@Test
 	public void testUniform() {
 		DistributableQuery query = new SpatialQuery(
@@ -128,9 +129,13 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(uniformDataStore, query, 12, 12) < 0.1);
+		assertTrue(getSplitsMSE(
+				uniformDataStore,
+				query,
+				12,
+				12) < 0.1);
 	}
-	
+
 	@Test
 	public void testBimodal() {
 		DistributableQuery query = new SpatialQuery(
@@ -139,25 +144,37 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
-		
+		assertTrue(getSplitsMSE(
+				bimodalDataStore,
+				query,
+				12,
+				12) < 0.1);
+
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
 						-120,
 						-60,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
-		
+		assertTrue(getSplitsMSE(
+				bimodalDataStore,
+				query,
+				12,
+				12) < 0.1);
+
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
 						-20,
 						20,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(bimodalDataStore, query, 12, 12) < 0.1);
+		assertTrue(getSplitsMSE(
+				bimodalDataStore,
+				query,
+				12,
+				12) < 0.1);
 	}
-	
+
 	@Test
 	public void testSkewed() {
 		DistributableQuery query = new SpatialQuery(
@@ -166,91 +183,108 @@ public class SplitsProviderIT extends
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
-		
+		assertTrue(getSplitsMSE(
+				skewedDataStore,
+				query,
+				12,
+				12) < 0.1);
+
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
 						-180,
 						-140,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
-		
+		assertTrue(getSplitsMSE(
+				skewedDataStore,
+				query,
+				12,
+				12) < 0.1);
+
 		query = new SpatialQuery(
 				new GeometryFactory().toGeometry(new Envelope(
 						0,
 						180,
 						-90,
 						90)));
-		assertTrue(getSplitsMSE(skewedDataStore, query, 12, 12) < 0.1);
+		assertTrue(getSplitsMSE(
+				skewedDataStore,
+				query,
+				12,
+				12) < 0.1);
 	}
-	
-	private static DataStoreInfo createDataStore(Distribution distr) {
-		
+
+	private static DataStoreInfo createDataStore(
+			Distribution distr ) {
+
 		final MapReduceMemoryDataStore dataStore = new MapReduceMemoryDataStore(
 				mapReduceMemoryOps);
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
 		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
-		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(
-				sft);
+		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
 		try (final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
 				fda,
 				idx)) {
-			
-			switch(distr) {
+
+			switch (distr) {
 				case UNIFORM:
 					createUniformFeatures(
-						new SimpleFeatureBuilder(
-								sft),
-						writer, 
-						100000);
+							new SimpleFeatureBuilder(
+									sft),
+							writer,
+							100000);
 					break;
 				case BIMODAL:
 					createBimodalFeatures(
-						new SimpleFeatureBuilder(
-								sft),
-						writer,
-						400000);
+							new SimpleFeatureBuilder(
+									sft),
+							writer,
+							400000);
 					break;
 				case SKEWED:
 					createSkewedFeatures(
-						new SimpleFeatureBuilder(
-								sft),
-						writer,
-						700000);
+							new SimpleFeatureBuilder(
+									sft),
+							writer,
+							700000);
 					break;
 				default:
 					LOGGER.error("Invalid Distribution");
 					throw new Exception();
 			}
-		} 
+		}
 		catch (MismatchedIndexToAdapterMapping e) {
 			LOGGER.error(
-					"MismathcedIndexToAdapterMapping exception thrown when creating data store writer", 
-					e);
-		} 
-		catch (IOException e) {
-			LOGGER.error(
-					"IOException thrown when creating data store writer", 
-					e);
-		} catch (Exception e) {
-			LOGGER.error(
-					"Exception thrown when creating data store writer", 
+					"MismathcedIndexToAdapterMapping exception thrown when creating data store writer",
 					e);
 		}
-		
+		catch (IOException e) {
+			LOGGER.error(
+					"IOException thrown when creating data store writer",
+					e);
+		}
+		catch (Exception e) {
+			LOGGER.error(
+					"Exception thrown when creating data store writer",
+					e);
+		}
+
 		return new DataStoreInfo(
-				dataStore, 
-				idx, 
+				dataStore,
+				idx,
 				fda);
 	}
-	
-	private double getSplitsMSE(DataStoreInfo dataStoreInfo, DistributableQuery query, int minSplits, int maxSplits) {
+
+	private double getSplitsMSE(
+			DataStoreInfo dataStoreInfo,
+			DistributableQuery query,
+			int minSplits,
+			int maxSplits ) {
 
 		// get splits and create reader for each RangeLocationPair, then summing
 		// up the rows for each split
-		
+
 		QueryOptions queryOptions = new QueryOptions(
 				dataStoreInfo.adapter.getAdapterId(),
 				dataStoreInfo.index.getId());
@@ -266,20 +300,20 @@ public class SplitsProviderIT extends
 					null,
 					minSplits,
 					maxSplits);
-		} 
+		}
 		catch (IOException e) {
 			LOGGER.error(
-					"IOException thrown when calling getSplits", 
+					"IOException thrown when calling getSplits",
 					e);
-		} 
+		}
 		catch (InterruptedException e) {
 			LOGGER.error(
-					"InterruptedException thrown when calling getSplits", 
+					"InterruptedException thrown when calling getSplits",
 					e);
 		}
 
 		double[] observed = new double[splits.size()];
-		
+
 		int totalCount = 0;
 		int currentSplit = 0;
 
@@ -308,12 +342,12 @@ public class SplitsProviderIT extends
 								reader.next();
 								countPerSplit++;
 							}
-						} 
+						}
 						catch (Exception e) {
 							LOGGER.error(
-									"Exception thrown when calling createReader", 
+									"Exception thrown when calling createReader",
 									e);
-						}		
+						}
 					}
 				}
 			}
@@ -325,18 +359,20 @@ public class SplitsProviderIT extends
 		double expected = 1.0 / splits.size();
 
 		double sum = 0;
-		
+
 		for (int i = 0; i < observed.length; i++) {
-			sum += Math.pow((observed[i] / totalCount) - expected, 2);
+			sum += Math.pow(
+					(observed[i] / totalCount) - expected,
+					2);
 		}
-		
+
 		return sum / splits.size();
 	}
 
 	public static void createUniformFeatures(
 			final SimpleFeatureBuilder pointBuilder,
 			final IndexWriter<SimpleFeature> writer,
-			final int firstFeatureId) {
+			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
 		for (int longitude = -180; longitude <= 180; longitude += 1) {
@@ -364,11 +400,11 @@ public class SplitsProviderIT extends
 			}
 		}
 	}
-	
+
 	public static void createBimodalFeatures(
 			final SimpleFeatureBuilder pointBuilder,
 			final IndexWriter<SimpleFeature> writer,
-			final int firstFeatureId) {
+			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
 		for (double longitude = -180.0; longitude <= 0.0; longitude += 1.0) {
@@ -398,7 +434,7 @@ public class SplitsProviderIT extends
 				featureId++;
 			}
 		}
-		
+
 		for (double longitude = 0.0; longitude <= 180.0; longitude += 1.0) {
 			if (longitude == 90) {
 				continue;
@@ -427,11 +463,11 @@ public class SplitsProviderIT extends
 			}
 		}
 	}
-	
+
 	public static void createSkewedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
 			final IndexWriter<SimpleFeature> writer,
-			final int firstFeatureId) {
+			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
 		for (double longitude = -180.0; longitude <= 180.0; longitude += 1.0) {
