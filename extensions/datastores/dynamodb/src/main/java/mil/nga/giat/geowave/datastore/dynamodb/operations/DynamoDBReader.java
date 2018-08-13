@@ -125,7 +125,7 @@ public class DynamoDBReader<T> implements
 		startRead(
 				requests,
 				tableName,
-				true);
+				readerParams.getMaxResolutionSubsamplingPerDimension() == null);
 	}
 
 	protected void initRecordScanner() {
