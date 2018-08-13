@@ -55,8 +55,6 @@ import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 public class BaseDataStoreUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseDataStoreUtils.class);
-	public static final int MAX_RANGE_DECOMPOSITION = 2000;
-	public static final int AGGREGATION_RANGE_DECOMPOSITION = 10;
 
 	public static <T> GeoWaveRow[] getGeoWaveRows(
 			final T entry,

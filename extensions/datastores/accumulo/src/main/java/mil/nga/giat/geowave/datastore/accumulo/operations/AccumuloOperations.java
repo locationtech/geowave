@@ -1087,25 +1087,6 @@ public class AccumuloOperations implements
 						AggregationIterator.PARAMETER_OPTION_NAME,
 						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
 			}
-			if ((params.getConstraints() != null) && !params.getConstraints().isEmpty()) {
-				iteratorSettings.addOption(
-						AggregationIterator.CONSTRAINTS_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(params.getConstraints()))));
-			}
-			iteratorSettings.addOption(
-					AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexStrategy())));
-			// the index model and partition key length must be provided for the
-			// aggregation iterator to deserialize each entry
-
-			iteratorSettings.addOption(
-					QueryFilterIterator.PARTITION_KEY_LENGTH,
-					Integer.toString(params.getIndex().getIndexStrategy().getPartitionKeyLength()));
-			iteratorSettings.addOption(
-					QueryFilterIterator.MODEL,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
-			// don't bother setting max decomposition because it is just the
-			// default anyways
 		}
 
 		boolean usingDistributableFilter = false;

@@ -578,7 +578,8 @@ public class BaseDataStore implements
 				baseOptions,
 				tempAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 	}
 
 	protected CloseableIterator<Object> queryRowPrefix(
@@ -606,7 +607,8 @@ public class BaseDataStore implements
 				baseOptions,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				tempAdapterStore,
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 
 	}
 
@@ -638,7 +640,8 @@ public class BaseDataStore implements
 				baseOptions,
 				tempAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 	}
 
 	protected <T> IndexWriter<T> createIndexWriter(

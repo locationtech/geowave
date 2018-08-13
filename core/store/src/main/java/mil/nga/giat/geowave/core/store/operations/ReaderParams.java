@@ -38,6 +38,7 @@ public class ReaderParams<T> extends
 			final QueryRanges queryRanges,
 			final DistributableQueryFilter filter,
 			final Integer limit,
+			final Integer maxRangeDecomposition,
 			final List<MultiDimensionalCoordinateRangesArray> coordinateRanges,
 			final List<MultiDimensionalNumericData> constraints,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
@@ -51,6 +52,7 @@ public class ReaderParams<T> extends
 				fieldSubsets,
 				isMixedVisibility,
 				limit,
+				maxRangeDecomposition,
 				rowTransformer,
 				additionalAuthorizations);
 		this.isServersideAggregation = isServersideAggregation;

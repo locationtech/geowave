@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 
 import org.opengis.feature.simple.SimpleFeature;
 
-import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.IndexUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -50,7 +49,8 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final PrimaryIndex[] indices ) {
+			final PrimaryIndex[] indices,
+			final Map<QueryHint, Object> hints ) {
 		return new CloseableIterator<Index<?, ?>>() {
 			PrimaryIndex nextIdx = null;
 			boolean done = false;

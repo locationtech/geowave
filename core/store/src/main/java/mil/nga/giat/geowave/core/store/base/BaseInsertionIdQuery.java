@@ -49,7 +49,8 @@ class BaseInsertionIdQuery<T> extends
 	}
 
 	@Override
-	protected QueryRanges getRanges() {
+	protected QueryRanges getRanges(
+			int maxRangeDecomposition ) {
 		return ranges;
 	}
 }

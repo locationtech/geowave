@@ -19,7 +19,7 @@
                     <div class="carousel-caption panel panel-default">
                         <div class="panel-body">
                             <h1>About GeoWave</h1>
-                            <p>Geospatial indexing and analysis of a sorted key-value datastore</p>
+                            <p>Geospatial indexing and analysis on sorted key-value datastores</p>
                         </div>
                     </div>
                 </div>

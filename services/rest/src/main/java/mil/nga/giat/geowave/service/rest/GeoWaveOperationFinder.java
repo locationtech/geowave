@@ -39,7 +39,6 @@ public class GeoWaveOperationFinder extends
 					"Unable to instantiate Service Resource",
 					e);
 			return null;
-
 		}
 	}
 

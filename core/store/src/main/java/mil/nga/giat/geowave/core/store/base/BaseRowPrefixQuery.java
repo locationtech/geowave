@@ -50,7 +50,8 @@ class BaseRowPrefixQuery<T> extends
 	}
 
 	@Override
-	protected QueryRanges getRanges() {
+	protected QueryRanges getRanges(
+			int maxRangeDecomposition ) {
 		return queryRanges;
 	}
 

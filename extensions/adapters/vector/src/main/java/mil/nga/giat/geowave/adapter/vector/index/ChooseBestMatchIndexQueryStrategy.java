@@ -26,7 +26,6 @@ import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
@@ -47,7 +46,8 @@ public class ChooseBestMatchIndexQueryStrategy implements
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final PrimaryIndex[] indices ) {
+			final PrimaryIndex[] indices,
+			final Map<QueryHint, Object> hints ) {
 		return new CloseableIterator<Index<?, ?>>() {
 			PrimaryIndex nextIdx = null;
 			boolean done = false;
@@ -89,10 +89,19 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						}
 					}
 					else {
+						final int maxRangeDecomposition;
+						if (hints.containsKey(QueryHint.MAX_RANGE_DECOMPOSITION)) {
+							maxRangeDecomposition = (Integer) hints.get(QueryHint.MAX_RANGE_DECOMPOSITION);
+						}
+						else {
+							LOGGER
+									.warn("No max range decomposition hint was provided, this should be provided from the data store options");
+							maxRangeDecomposition = 2000;
+						}
 						final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 								constraints,
 								nextIdx.getIndexStrategy(),
-								BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION);
+								maxRangeDecomposition);
 						final long temp = DataStoreUtils.cardinality(
 								nextIdx,
 								stats,

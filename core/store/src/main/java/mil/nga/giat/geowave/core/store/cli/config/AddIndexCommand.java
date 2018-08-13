@@ -101,7 +101,6 @@ public class AddIndexCommand extends
 				}
 			}
 		}
-
 		return true;
 	}
 

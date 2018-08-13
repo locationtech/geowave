@@ -15,6 +15,7 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
+import mil.nga.giat.geowave.mapreduce.splits.SplitsProviderIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
@@ -79,6 +80,7 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	RemoteIT.class,
 	IngestIT.class,
 	FileUploadIT.class,
+	SplitsProviderIT.class
 })
 public class GeoWaveITSuite
 {

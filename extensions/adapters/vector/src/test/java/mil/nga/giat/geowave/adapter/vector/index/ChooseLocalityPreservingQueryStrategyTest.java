@@ -24,6 +24,8 @@ import java.util.Map;
 import org.junit.Test;
 import org.opengis.feature.simple.SimpleFeature;
 
+import com.beust.jcommander.internal.Maps;
+
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
@@ -267,7 +269,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		return strategy.getIndices(
 				stats,
 				query,
-				indices.toArray(new PrimaryIndex[indices.size()]));
+				indices.toArray(new PrimaryIndex[indices.size()]),
+				Maps.newHashMap());
 	}
 
 	public static class ConstrainedIndexValue extends
