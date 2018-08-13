@@ -70,7 +70,7 @@ public class ListPluginsCommand extends
 					pluginProviderEntry.getKey(),
 					desc));
 		}
-		
+
 		builder.append("\nAvailable datastores currently registered:\n");
 		final Map<String, StoreFactoryFamilySpi> dataStoreFactories = GeoWaveStoreFinder
 				.getRegisteredStoreFactoryFamilies();
