@@ -11,15 +11,17 @@
 package mil.nga.giat.geowave.test.basic;
 
 import java.awt.image.Raster;
-import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 
 import org.apache.commons.math.util.MathUtils;
+import org.geotools.coverage.CoverageFactoryFinder;
+import org.geotools.coverage.grid.GridCoverage2D;
+import org.geotools.coverage.grid.GridCoverageFactory;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.coverage.grid.GridCoverage;
@@ -29,22 +31,16 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
-import org.junit.Assert;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
-import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
@@ -132,18 +128,18 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		final int noDataTileSize = 64;
 		final int summingTileSize = 32;
 		final int sumAndAveragingTileSize = 8;
-		final double westLon = 0;
-		final double eastLon = 244.140625;
-		final double southLat = 0;
-		final double northLat = 244.140625;
+		final double minX = 0;
+		final double maxX = 244.140625;
+		final double minY = 0;
+		final double maxY = 244.140625;
 
 		ingestGeneralPurpose(
 				summingCoverageName,
 				summingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
+				minX,
+				maxX,
+				minY,
+				maxY,
 				summingNumBands,
 				summingNumRasters,
 				new GeoWaveBasicRasterIT.SummingMergeStrategy());
@@ -151,10 +147,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		ingestGeneralPurpose(
 				sumAndAveragingCoverageName,
 				sumAndAveragingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
+				minX,
+				maxX,
+				minY,
+				maxY,
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
 				new GeoWaveBasicRasterIT.SumAndAveragingMergeStrategy());
@@ -162,18 +158,18 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		ingestNoDataMergeStrategy(
 				noDataCoverageName,
 				noDataTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat);
+				minX,
+				maxX,
+				minY,
+				maxY);
 
 		queryGeneralPurpose(
 				summingCoverageName,
 				summingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
+				minX,
+				maxX,
+				minY,
+				maxY,
 				summingNumBands,
 				summingNumRasters,
 				new GeoWaveBasicRasterIT.SummingExpectedValue());
@@ -185,10 +181,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		queryGeneralPurpose(
 				sumAndAveragingCoverageName,
 				sumAndAveragingTileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat,
+				minX,
+				maxX,
+				minY,
+				maxY,
 				sumAndAveragingNumBands,
 				sumAndAveragingNumRasters,
 				new GeoWaveBasicRasterIT.SumAndAveragingExpectedValue());
@@ -199,18 +195,18 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 	private void ingestAndQueryNoDataMergeStrategy(
 			final String coverageName,
 			final int tileSize,
-			final double westLon,
-			final double eastLon,
-			final double southLat,
-			final double northLat )
+			final double minX,
+			final double maxX,
+			final double minY,
+			final double maxY )
 			throws IOException {
 		ingestNoDataMergeStrategy(
 				coverageName,
 				tileSize,
-				westLon,
-				eastLon,
-				southLat,
-				northLat);
+				minX,
+				maxX,
+				minY,
+				maxY);
 		queryNoDataMergeStrategy(
 				coverageName,
 				tileSize);
@@ -322,10 +318,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 	private void ingestNoDataMergeStrategy(
 			final String coverageName,
 			final int tileSize,
-			final double westLon,
-			final double eastLon,
-			final double southLat,
-			final double northLat )
+			final double minX,
+			final double maxX,
+			final double minY,
+			final double maxY )
 			throws IOException {
 		final int numBands = 8;
 		final DataStore dataStore = dataStoreOptions.createDataStore();
@@ -348,22 +344,41 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		try (IndexWriter writer = dataStore.createWriter(
 				adapter,
 				TestUtils.createCustomCRSPrimaryIndex())) {
-			// TestUtils.DEFAULT_SPATIAL_INDEX)) {
-			writer.write(RasterUtils.createCoverageTypeDouble(
+			writer.write(createCoverageTypeDouble(
 					coverageName,
-					westLon,
-					eastLon,
-					southLat,
-					northLat,
+					minX,
+					maxX,
+					minY,
+					maxY,
 					raster1));
-			writer.write(RasterUtils.createCoverageTypeDouble(
+			writer.write(createCoverageTypeDouble(
 					coverageName,
-					westLon,
-					eastLon,
-					southLat,
-					northLat,
+					minX,
+					maxX,
+					minY,
+					maxY,
 					raster2));
 		}
+	}
+
+	private static GridCoverage2D createCoverageTypeDouble(
+			final String coverageName,
+			final double minX,
+			final double maxX,
+			final double minY,
+			final double maxY,
+			final WritableRaster raster ) {
+		final GridCoverageFactory gcf = CoverageFactoryFinder.getGridCoverageFactory(null);
+		final org.opengis.geometry.Envelope mapExtent = new ReferencedEnvelope(
+				minX,
+				maxX,
+				minY,
+				maxY,
+				TestUtils.CUSTOM_CRS);
+		return gcf.create(
+				coverageName,
+				raster,
+				mapExtent);
 	}
 
 	private void ingestGeneralPurpose(
@@ -416,7 +431,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 						}
 					}
 				}
-				writer.write(RasterUtils.createCoverageTypeDouble(
+				writer.write(createCoverageTypeDouble(
 						coverageName,
 						westLon,
 						eastLon,
@@ -450,7 +465,8 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 								westLon,
 								eastLon,
 								southLat,
-								northLat))))) {
+								northLat)),
+						TestUtils.CUSTOM_CRSCODE))) {
 			// the expected outcome is:
 			// band 1,2,3,4,5,6 has every value set correctly, band 0 has every
 			// even row set correctly and every odd row should be NaN, and band

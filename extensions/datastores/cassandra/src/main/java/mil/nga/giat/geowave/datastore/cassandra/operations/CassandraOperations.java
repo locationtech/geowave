@@ -649,7 +649,6 @@ public class CassandraOperations implements
 			final PrimaryIndex index,
 			final AdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

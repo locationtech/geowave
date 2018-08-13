@@ -426,8 +426,6 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
 				final GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next();
-				it.close();
-
 				// Create the CQL query
 				final Query query = CQLQuery.createOptimalQuery(
 						cqlStr,
