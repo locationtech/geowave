@@ -56,18 +56,18 @@ public class AddIndexCommand extends
 	private String type;
 
 	private IndexPluginOptions pluginOptions = new IndexPluginOptions();
-
+	
 	@ParametersDelegate
 	private final BasicIndexOptions basicIndexOptions = new BasicIndexOptions();
-
-	@ParametersDelegate
+	
+	@ParametersDelegate 
 	DimensionalityTypeOptions opts;
 
 	@Override
 	public boolean prepare(
 			OperationParams params ) {
 		super.prepare(params);
-
+		
 		// Load SPI options for the given type into pluginOptions.
 		if (type != null) {
 			pluginOptions.selectPlugin(type);
@@ -101,7 +101,6 @@ public class AddIndexCommand extends
 				}
 			}
 		}
-
 		return true;
 	}
 

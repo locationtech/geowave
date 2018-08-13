@@ -58,7 +58,7 @@ public class AddStoreCommand extends
 	private String storeType;
 
 	private DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
-
+	
 	@ParametersDelegate
 	private StoreFactoryOptions requiredOptions;
 
@@ -100,7 +100,6 @@ public class AddStoreCommand extends
 				}
 			}
 		}
-
 		return true;
 	}
 
