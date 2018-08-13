@@ -214,7 +214,7 @@ public class MemoryDataStoreOperations implements
 					else {
 						retVal.addAll(set);
 						counter += set.size();
-						if ((readerParams.getLimit() > 0) && (counter >= readerParams.getLimit())) {
+						if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0) && (counter >= readerParams.getLimit())) {
 							break;
 						}
 					}
