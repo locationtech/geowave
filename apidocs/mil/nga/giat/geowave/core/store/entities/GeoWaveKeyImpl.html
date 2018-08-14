@@ -136,11 +136,11 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#adapterId">adapterId</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#dataId">dataId</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code>protected byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#dataId">dataId</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>protected short</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#internalAdapterId">internalAdapterId</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected int</code></td>
@@ -175,29 +175,29 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#GeoWaveKeyImpl-byte:A-byte:A-byte:A-byte:A-int-">GeoWaveKeyImpl</a></span>(byte[]&nbsp;dataId,
-              byte[]&nbsp;adapterId,
-              byte[]&nbsp;partitionKey,
-              byte[]&nbsp;sortKey,
-              int&nbsp;numberOfDuplicates)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#GeoWaveKeyImpl-byte:A-int-">GeoWaveKeyImpl</a></span>(byte[]&nbsp;compositeInsertionId,
               int&nbsp;partitionKeyLength)</code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#GeoWaveKeyImpl-byte:A-int-int-">GeoWaveKeyImpl</a></span>(byte[]&nbsp;compositeInsertionId,
               int&nbsp;partitionKeyLength,
               int&nbsp;length)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#GeoWaveKeyImpl-byte:A-int-int-int-">GeoWaveKeyImpl</a></span>(byte[]&nbsp;compositeInsertionId,
               int&nbsp;partitionKeyLength,
               int&nbsp;offset,
               int&nbsp;length)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#GeoWaveKeyImpl-byte:A-short-byte:A-byte:A-int-">GeoWaveKeyImpl</a></span>(byte[]&nbsp;dataId,
+              short&nbsp;internalAdapterId,
+              byte[]&nbsp;partitionKey,
+              byte[]&nbsp;sortKey,
+              int&nbsp;numberOfDuplicates)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -216,21 +216,21 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#createKeys-mil.nga.giat.geowave.core.index.InsertionIds-byte:A-byte:A-">createKeys</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;insertionIds,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#createKeys-mil.nga.giat.geowave.core.index.InsertionIds-byte:A-short-">createKeys</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;insertionIds,
           byte[]&nbsp;dataId,
-          byte[]&nbsp;adapterId)</code>&nbsp;</td>
+          short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getAdapterId--">getAdapterId</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getCompositeInsertionId--">getCompositeInsertionId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getCompositeInsertionId--">getCompositeInsertionId</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getDataId--">getDataId</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKeyImpl.html#getInternalAdapterId--">getInternalAdapterId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -286,13 +286,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 <pre>protected&nbsp;byte[] dataId</pre>
 </li>
 </ul>
-<a name="adapterId">
+<a name="internalAdapterId">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>adapterId</h4>
-<pre>protected&nbsp;byte[] adapterId</pre>
+<h4>internalAdapterId</h4>
+<pre>protected&nbsp;short internalAdapterId</pre>
 </li>
 </ul>
 <a name="partitionKey">
@@ -372,14 +372,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
                       int&nbsp;length)</pre>
 </li>
 </ul>
-<a name="GeoWaveKeyImpl-byte:A-byte:A-byte:A-byte:A-int-">
+<a name="GeoWaveKeyImpl-byte:A-short-byte:A-byte:A-int-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>GeoWaveKeyImpl</h4>
 <pre>public&nbsp;GeoWaveKeyImpl(byte[]&nbsp;dataId,
-                      byte[]&nbsp;adapterId,
+                      short&nbsp;internalAdapterId,
                       byte[]&nbsp;partitionKey,
                       byte[]&nbsp;sortKey,
                       int&nbsp;numberOfDuplicates)</pre>
@@ -406,16 +406,16 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 </dl>
 </li>
 </ul>
-<a name="getAdapterId--">
+<a name="getInternalAdapterId--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterId</h4>
-<pre>public&nbsp;byte[]&nbsp;getAdapterId()</pre>
+<h4>getInternalAdapterId</h4>
+<pre>public&nbsp;short&nbsp;getInternalAdapterId()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html#getAdapterId--">getAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a></code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html#getInternalAdapterId--">getInternalAdapterId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -476,7 +476,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 <pre>public&nbsp;boolean&nbsp;isDeduplicationEnabled()</pre>
 </li>
 </ul>
-<a name="createKeys-mil.nga.giat.geowave.core.index.InsertionIds-byte:A-byte:A-">
+<a name="createKeys-mil.nga.giat.geowave.core.index.InsertionIds-byte:A-short-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -484,7 +484,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/entitie
 <h4>createKeys</h4>
 <pre>public static&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveKey.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveKey</a>[]&nbsp;createKeys(<a href="../../../../../../../mil/nga/giat/geowave/core/index/InsertionIds.html" title="class in mil.nga.giat.geowave.core.index">InsertionIds</a>&nbsp;insertionIds,
                                       byte[]&nbsp;dataId,
-                                      byte[]&nbsp;adapterId)</pre>
+                                      short&nbsp;internalAdapterId)</pre>
 </li>
 </ul>
 </li>

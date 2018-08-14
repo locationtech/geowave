@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store.BaseStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&gt;</li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">mil.nga.giat.geowave.core.store.BaseStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.core.store.metadata.AdapterStoreFactory</li>
@@ -114,12 +114,12 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&gt;</dd>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericFactory</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&gt;</dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">AdapterStoreFactory</span>
-extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">BaseStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&gt;</pre>
+extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreFactory.html" title="class in mil.nga.giat.geowave.core.store">BaseStoreFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&gt;</pre>
 </li>
 </ul>
 </div>
@@ -173,7 +173,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreF
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/metadata/AdapterStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">createStore</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</code>
 <div class="block">Create the store, w/the options instance that was returned and populated
  w/createOptionsInstance().</div>
@@ -233,7 +233,7 @@ extends <a href="../../../../../../../mil/nga/giat/geowave/core/store/BaseStoreF
 <ul class="blockListLast">
 <li class="blockList">
 <h4>createStore</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;createStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;createStore(<a href="../../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryOptions.html" title="class in mil.nga.giat.geowave.core.store">StoreFactoryOptions</a>&nbsp;options)</pre>
 <div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html#createStore-mil.nga.giat.geowave.core.store.StoreFactoryOptions-">GenericStoreFactory</a></code></span></div>
 <div class="block">Create the store, w/the options instance that was returned and populated
  w/createOptionsInstance().</div>

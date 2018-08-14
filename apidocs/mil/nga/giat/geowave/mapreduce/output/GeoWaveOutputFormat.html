@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":10,"i3":9,"i4":9,"i5":9,"i6":10,"i7":10,"i8":9,"i9":9,"i10":9,"i11":9};
+var methods = {"i0":9,"i1":9,"i2":10,"i3":9,"i4":9,"i5":9,"i6":9,"i7":10,"i8":10,"i9":9,"i10":9,"i11":9,"i12":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -221,27 +221,31 @@ extends org.apache.hadoop.mapreduce.OutputFormat&lt;<a href="../../../../../../m
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getJobContextIndexStore-org.apache.hadoop.mapreduce.JobContext-">getJobContextIndexStore</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getJobContextInternalAdapterStore-org.apache.hadoop.mapreduce.JobContext-">getJobContextInternalAdapterStore</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.mapreduce.OutputCommitter</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getOutputCommitter-org.apache.hadoop.mapreduce.TaskAttemptContext-">getOutputCommitter</a></span>(org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>org.apache.hadoop.mapreduce.RecordWriter&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">GeoWaveOutputKey</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getRecordWriter-org.apache.hadoop.mapreduce.TaskAttemptContext-">getRecordWriter</a></span>(org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getStoreOptions-org.apache.hadoop.mapreduce.JobContext-">getStoreOptions</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#getStoreOptionsMap-org.apache.hadoop.mapreduce.JobContext-">getStoreOptionsMap</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#setStoreOptions-org.apache.hadoop.conf.Configuration-mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions-">setStoreOptions</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
                <a href="../../../../../../mil/nga/giat/geowave/core/store/cli/remote/options/DataStorePluginOptions.html" title="class in mil.nga.giat.geowave.core.store.cli.remote.options">DataStorePluginOptions</a>&nbsp;storeOptions)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.html#setStoreOptionsMap-org.apache.hadoop.conf.Configuration-java.util.Map-">setStoreOptionsMap</a></span>(org.apache.hadoop.conf.Configuration&nbsp;config,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;storeConfigOptions)</code>&nbsp;</td>
@@ -385,6 +389,15 @@ extends org.apache.hadoop.mapreduce.OutputFormat&lt;<a href="../../../../../../m
 <li class="blockList">
 <h4>getJobContextAdapterIndexMappingStore</h4>
 <pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;getJobContextAdapterIndexMappingStore(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
+</li>
+</ul>
+<a name="getJobContextInternalAdapterStore-org.apache.hadoop.mapreduce.JobContext-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getJobContextInternalAdapterStore</h4>
+<pre>public static&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;getJobContextInternalAdapterStore(org.apache.hadoop.mapreduce.JobContext&nbsp;context)</pre>
 </li>
 </ul>
 <a name="getStoreOptions-org.apache.hadoop.mapreduce.JobContext-">

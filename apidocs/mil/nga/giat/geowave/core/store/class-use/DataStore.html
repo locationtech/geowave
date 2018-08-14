@@ -312,19 +312,15 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-java.lang.String-java.lang.String-int-">CentroidManagerGeoWave</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-short-java.lang.String-java.lang.String-int-">CentroidManagerGeoWave</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
                       <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                      <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                       <a href="../../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;&nbsp;centroidFactory,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
+                      short&nbsp;centroidInternalAdapterId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
                       int&nbsp;level)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/analytic/clustering/DistortionGroupManagement.html#DistortionGroupManagement-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">DistortionGroupManagement</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                         <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -899,10 +895,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.GeoWaveRecordWriter.html#GeoWaveRecordWriter-org.apache.hadoop.mapreduce.TaskAttemptContext-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">GeoWaveRecordWriter</a></span>(org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;context,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputFormat.GeoWaveRecordWriter.html#GeoWaveRecordWriter-org.apache.hadoop.mapreduce.TaskAttemptContext-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-">GeoWaveRecordWriter</a></span>(org.apache.hadoop.mapreduce.TaskAttemptContext&nbsp;context,
                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+                   <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

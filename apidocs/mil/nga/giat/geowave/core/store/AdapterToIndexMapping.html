@@ -49,7 +49,7 @@ var activeTableTab = "activeTableTab";
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterMapping.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
@@ -138,11 +138,11 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/persist/Pe
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#AdapterToIndexMapping--">AdapterToIndexMapping</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#AdapterToIndexMapping-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId:A-">AdapterToIndexMapping</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#AdapterToIndexMapping-short-mil.nga.giat.geowave.core.index.ByteArrayId:A-">AdapterToIndexMapping</a></span>(short&nbsp;internalAdapterId,
                      <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;indexIds)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#AdapterToIndexMapping-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex:A-">AdapterToIndexMapping</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#AdapterToIndexMapping-short-mil.nga.giat.geowave.core.store.index.PrimaryIndex:A-">AdapterToIndexMapping</a></span>(short&nbsp;internalAdapterId,
                      <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</code>&nbsp;</td>
 </tr>
 </table>
@@ -175,16 +175,16 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/persist/Pe
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#getAdapterId--">getAdapterId</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#getIndexIds--">getIndexIds</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#getIndices-mil.nga.giat.geowave.core.store.index.IndexStore-">getIndices</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>short</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html#getInternalAdapterId--">getInternalAdapterId</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code>int</code></td>
@@ -232,23 +232,23 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/persist/Pe
 <pre>public&nbsp;AdapterToIndexMapping()</pre>
 </li>
 </ul>
-<a name="AdapterToIndexMapping-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.index.PrimaryIndex:A-">
+<a name="AdapterToIndexMapping-short-mil.nga.giat.geowave.core.store.index.PrimaryIndex:A-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>AdapterToIndexMapping</h4>
-<pre>public&nbsp;AdapterToIndexMapping(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+<pre>public&nbsp;AdapterToIndexMapping(short&nbsp;internalAdapterId,
                              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>[]&nbsp;indices)</pre>
 </li>
 </ul>
-<a name="AdapterToIndexMapping-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId:A-">
+<a name="AdapterToIndexMapping-short-mil.nga.giat.geowave.core.index.ByteArrayId:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AdapterToIndexMapping</h4>
-<pre>public&nbsp;AdapterToIndexMapping(<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId,
+<pre>public&nbsp;AdapterToIndexMapping(short&nbsp;internalAdapterId,
                              <a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>[]&nbsp;indexIds)</pre>
 </li>
 </ul>
@@ -260,13 +260,13 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/persist/Pe
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="getAdapterId--">
+<a name="getInternalAdapterId--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getAdapterId</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getAdapterId()</pre>
+<h4>getInternalAdapterId</h4>
+<pre>public&nbsp;short&nbsp;getInternalAdapterId()</pre>
 </li>
 </ul>
 <a name="getIndexIds--">
@@ -393,7 +393,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/core/index/persist/Pe
 </div>
 <div class="subNav">
 <ul class="navList">
-<li>Prev&nbsp;Class</li>
+<li><a href="../../../../../../mil/nga/giat/geowave/core/store/AdapterMapping.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
 <li><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">

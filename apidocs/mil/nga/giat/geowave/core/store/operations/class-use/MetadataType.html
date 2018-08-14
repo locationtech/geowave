@@ -99,14 +99,18 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.cassandra.operations">mil.nga.giat.geowave.datastore.cassandra.operations</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.bigtable.operations">mil.nga.giat.geowave.datastore.bigtable.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.dynamodb.operations">mil.nga.giat.geowave.datastore.dynamodb.operations</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.cassandra.operations">mil.nga.giat.geowave.datastore.cassandra.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.dynamodb.operations">mil.nga.giat.geowave.datastore.dynamodb.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.operations">mil.nga.giat.geowave.datastore.hbase.operations</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
@@ -172,6 +176,24 @@
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a></code></td>
 <td class="colLast"><span class="typeNameLabel">AbstractGeoWavePersistence.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html#getType--">getType</a></span>()</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/package-summary.html">mil.nga.giat.geowave.core.store.metadata</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractGeoWavePersistence.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html#deleteObjects-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.operations.DataStoreOperations-mil.nga.giat.geowave.core.store.operations.MetadataType-mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence-java.lang.String...-">deleteObjects</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&nbsp;cacheDeleter,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -288,6 +310,24 @@ the order they are declared.</div>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloMetadataWriter.html#AccumuloMetadataWriter-org.apache.accumulo.core.client.BatchWriter-mil.nga.giat.geowave.core.store.operations.MetadataType-">AccumuloMetadataWriter</a></span>(org.apache.accumulo.core.client.BatchWriter&nbsp;writer,
                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.bigtable.operations">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/package-summary.html">mil.nga.giat.geowave.datastore.bigtable.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/package-summary.html">mil.nga.giat.geowave.datastore.bigtable.operations</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><span class="typeNameLabel">BigTableOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/operations/BigTableOperations.html#getMetadataTableName-mil.nga.giat.geowave.core.store.operations.MetadataType-">getMetadataTableName</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -417,6 +457,10 @@ the order they are declared.</div>
 <td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createMetadataWriter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#getMetadataTableName-mil.nga.giat.geowave.core.store.operations.MetadataType-">getMetadataTableName</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#metadataExists-mil.nga.giat.geowave.core.store.operations.MetadataType-">metadataExists</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>

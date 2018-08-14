@@ -156,11 +156,12 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-java.lang.String-java.lang.String-int-">CentroidManagerGeoWave</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html#CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-short-java.lang.String-java.lang.String-int-">CentroidManagerGeoWave</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
                       <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                      <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                      <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                       <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;&nbsp;centroidFactory,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
+                      short&nbsp;centroidInternalAdapterId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
                       int&nbsp;level)</code>&nbsp;</td>
@@ -296,7 +297,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-java.lang.String-java.lang.String-int-">
+<a name="CentroidManagerGeoWave-mil.nga.giat.geowave.core.store.DataStore-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory-java.lang.String-short-java.lang.String-java.lang.String-int-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -304,9 +305,10 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
 <h4>CentroidManagerGeoWave</h4>
 <pre>public&nbsp;CentroidManagerGeoWave(<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&nbsp;dataStore,
                               <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
-                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
                               <a href="../../../../../../mil/nga/giat/geowave/analytic/AnalyticItemWrapperFactory.html" title="interface in mil.nga.giat.geowave.analytic">AnalyticItemWrapperFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;&nbsp;centroidFactory,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;centroidDataTypeId,
+                              short&nbsp;centroidInternalAdapterId,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;indexId,
                               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;batchId,
                               int&nbsp;level)</pre>
@@ -568,19 +570,6 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
                                  <a href="../../../../../../mil/nga/giat/geowave/analytic/PropertyManagement.html" title="class in mil.nga.giat.geowave.analytic">PropertyManagement</a>&nbsp;runTimeProperties)</pre>
 </li>
 </ul>
-<a name="getDataTypeId--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDataTypeId</h4>
-<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getDataTypeId()</pre>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManager.html#getDataTypeId--">getDataTypeId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManager.html" title="interface in mil.nga.giat.geowave.analytic.clustering">CentroidManager</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;</code></dd>
-</dl>
-</li>
-</ul>
 <a name="getIndexId--">
 <!--   -->
 </a>
@@ -606,7 +595,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
 <a name="toShapeFile-java.lang.String-java.lang.Class-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>toShapeFile</h4>
 <pre>public&nbsp;void&nbsp;toShapeFile(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;parentDir,
@@ -615,6 +604,19 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/C
 <dl>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getDataTypeId--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getDataTypeId</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;getDataTypeId()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManager.html#getDataTypeId--">getDataTypeId</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManager.html" title="interface in mil.nga.giat.geowave.analytic.clustering">CentroidManager</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/analytic/clustering/CentroidManagerGeoWave.html" title="type parameter in CentroidManagerGeoWave">T</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

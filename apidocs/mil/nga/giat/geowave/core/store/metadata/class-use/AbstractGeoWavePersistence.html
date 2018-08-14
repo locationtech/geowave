@@ -86,6 +86,10 @@
 <td class="colFirst"><a href="#mil.nga.giat.geowave.core.store.metadata">mil.nga.giat.geowave.core.store.metadata</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.bigtable">mil.nga.giat.geowave.datastore.bigtable</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
 </tbody>
 </table>
 </li>
@@ -128,6 +132,45 @@
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/IndexStoreImpl.html" title="class in mil.nga.giat.geowave.core.store.metadata">IndexStoreImpl</a></span></code>
 <div class="block">This class will persist Index objects within an Accumulo table for GeoWave
  metadata.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
+<caption><span>Methods in <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/package-summary.html">mil.nga.giat.geowave.core.store.metadata</a> with parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeoWavePersistence</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected static boolean</code></td>
+<td class="colLast"><span class="typeNameLabel">AbstractGeoWavePersistence.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html#deleteObjects-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.index.ByteArrayId-mil.nga.giat.geowave.core.store.operations.DataStoreOperations-mil.nga.giat.geowave.core.store.operations.MetadataType-mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence-java.lang.String...-">deleteObjects</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;primaryId,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;secondaryId,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&nbsp;operations,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type,
+             <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeoWavePersistence</a>&nbsp;cacheDeleter,
+             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.datastore.bigtable">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeoWavePersistence</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/package-summary.html">mil.nga.giat.geowave.datastore.bigtable</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subclasses, and an explanation">
+<caption><span>Subclasses of <a href="../../../../../../../../mil/nga/giat/geowave/core/store/metadata/AbstractGeoWavePersistence.html" title="class in mil.nga.giat.geowave.core.store.metadata">AbstractGeoWavePersistence</a> in <a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/package-summary.html">mil.nga.giat.geowave.datastore.bigtable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/bigtable/BigTableDataStatisticsStore.html" title="class in mil.nga.giat.geowave.datastore.bigtable">BigTableDataStatisticsStore</a></span></code>
+<div class="block">Big Table needs to safe guard its column qualifiers against control
+ characters (rather than use the default byte array from shorts as the cq)</div>
 </td>
 </tr>
 </tbody>

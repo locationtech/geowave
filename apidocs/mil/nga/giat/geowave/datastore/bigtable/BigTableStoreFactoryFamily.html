@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -175,6 +175,10 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStore
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/BigTableStoreFactoryFamily.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/bigtable/BigTableStoreFactoryFamily.html#getDataStoreFactory--">getDataStoreFactory</a></span>()</code>&nbsp;</td>
 </tr>
@@ -184,7 +188,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStore
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.<a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterIndexMappingStoreFactory--">getAdapterIndexMappingStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterStoreFactory--">getAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDescription--">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getIndexStoreFactory--">getIndexStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getSecondaryIndexDataStore--">getSecondaryIndexDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getType--">getType</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterIndexMappingStoreFactory--">getAdapterIndexMappingStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getAdapterStoreFactory--">getAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreOperationsFactory--">getDataStoreOperationsFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDescription--">getDescription</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getIndexStoreFactory--">getIndexStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getInternalAdapterStoreFactory--">getInternalAdapterStoreFactory</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getSecondaryIndexDataStore--">getSecondaryIndexDataStore</a>, <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getType--">getType</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -248,7 +252,7 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStore
 <a name="getDataStoreFactory--">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getDataStoreFactory</h4>
 <pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/DataStore.html" title="interface in mil.nga.giat.geowave.core.store">DataStore</a>&gt;&nbsp;getDataStoreFactory()</pre>
@@ -257,6 +261,21 @@ extends <a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStore
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStoreFactory--">getDataStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStoreFactory--">getDataStoreFactory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getDataStatisticsStoreFactory--">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getDataStatisticsStoreFactory</h4>
+<pre>public&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/GenericStoreFactory.html" title="interface in mil.nga.giat.geowave.core.store">GenericStoreFactory</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&gt;&nbsp;getDataStatisticsStoreFactory()</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/StoreFactoryFamilySpi.html" title="interface in mil.nga.giat.geowave.core.store">StoreFactoryFamilySpi</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html#getDataStatisticsStoreFactory--">getDataStatisticsStoreFactory</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/core/store/BaseDataStoreFamily.html" title="class in mil.nga.giat.geowave.core.store">BaseDataStoreFamily</a></code></dd>
 </dl>
 </li>
 </ul>

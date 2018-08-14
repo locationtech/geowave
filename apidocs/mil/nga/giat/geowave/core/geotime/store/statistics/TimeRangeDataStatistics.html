@@ -157,7 +157,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <!--   -->
 </a>
 <h3>Fields inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.statistics.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#dataAdapterId">dataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_ID_SEPARATOR">STATS_ID_SEPARATOR</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_SEPARATOR">STATS_SEPARATOR</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#internalDataAdapterId">internalDataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#statisticsId">statisticsId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_ID_SEPARATOR">STATS_ID_SEPARATOR</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#STATS_SEPARATOR">STATS_SEPARATOR</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#visibility">visibility</a></code></li>
 </ul>
 </li>
 </ul>
@@ -179,7 +179,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#TimeRangeDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">TimeRangeDataStatistics</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#TimeRangeDataStatistics-java.lang.Short-java.lang.String-">TimeRangeDataStatistics</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
                        <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 </table>
@@ -203,7 +203,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>net.sf.json.JSONObject</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#toJSONObject--">toJSONObject</a></span>()</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html#toJSONObject-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;store)</code>
 <div class="block">Convert Time Range statistics to a JSON object</div>
 </td>
 </tr>
@@ -220,7 +220,7 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.core.store.adapter.statistics.<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">AbstractDataStatistics</a></h3>
-<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#composeId-java.lang.String-java.lang.String-">composeId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#decomposeNameFromId-mil.nga.giat.geowave.core.index.ByteArrayId-">decomposeNameFromId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getDataAdapterId--">getDataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setDataAdapterId-mil.nga.giat.geowave.core.index.ByteArrayId-">setDataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a></code></li>
+<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-byte:A-">binaryBuffer</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#binaryBuffer-int-">binaryBuffer</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#composeId-java.lang.String-java.lang.String-">composeId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#decomposeNameFromId-mil.nga.giat.geowave.core.index.ByteArrayId-">decomposeNameFromId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#duplicate--">duplicate</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getInternalDataAdapterId--">getInternalDataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getStatisticsId--">getStatisticsId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#getVisibility--">getVisibility</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setInternalDataAdapterId-short-">setInternalDataAdapterId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setStatisticsId-mil.nga.giat.geowave.core.index.ByteArrayId-">setStatisticsId</a>, <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/AbstractDataStatistics.html#setVisibility-byte:A-">setVisibility</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -269,13 +269,13 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>protected&nbsp;TimeRangeDataStatistics()</pre>
 </li>
 </ul>
-<a name="TimeRangeDataStatistics-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.String-">
+<a name="TimeRangeDataStatistics-java.lang.Short-java.lang.String-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>TimeRangeDataStatistics</h4>
-<pre>public&nbsp;TimeRangeDataStatistics(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId,
+<pre>public&nbsp;TimeRangeDataStatistics(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
                                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;fieldId)</pre>
 </li>
 </ul>
@@ -296,20 +296,20 @@ extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>public&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/query/TemporalRange.html" title="class in mil.nga.giat.geowave.core.geotime.store.query">TemporalRange</a>&nbsp;asTemporalRange()</pre>
 </li>
 </ul>
-<a name="toJSONObject--">
+<a name="toJSONObject-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>toJSONObject</h4>
-<pre>public&nbsp;net.sf.json.JSONObject&nbsp;toJSONObject()
+<pre>public&nbsp;net.sf.json.JSONObject&nbsp;toJSONObject(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;store)
                                     throws net.sf.json.JSONException</pre>
 <div class="block">Convert Time Range statistics to a JSON object</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject--">toJSONObject</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html#toJSONObject-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">T</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toJSONObject--">toJSONObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">T</a>&gt;</code></dd>
+<dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html#toJSONObject-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">toJSONObject</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/NumericRangeDataStatistics.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">NumericRangeDataStatistics</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/geotime/store/statistics/TimeRangeDataStatistics.html" title="type parameter in TimeRangeDataStatistics">T</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code>net.sf.json.JSONException</code></dd>
 </dl>

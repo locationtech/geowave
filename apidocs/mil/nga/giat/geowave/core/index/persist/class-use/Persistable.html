@@ -342,11 +342,15 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">MergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ServerMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ServerMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -359,15 +363,15 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/CompoundHierarchicalIndexStrategyWrapper.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">CompoundHierarchicalIndexStrategyWrapper</a></span></code>
 <div class="block">This class wraps the first occurrence of a hierarchical index within a
  compound index such that sub strategies within the hierarchy are replaced
  maintaining the rest of the structure of the compound index</div>
 </td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">MergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -376,6 +380,10 @@
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ServerMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ServerMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -388,27 +396,35 @@
 <caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/package-summary.html">mil.nga.giat.geowave.adapter.raster.adapter.merge</a> with type parameters of type <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Interface and Description</th>
+<th class="colLast" scope="col">Class and Description</th>
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/MultiAdapterServerMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">MultiAdapterServerMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileRowTransform</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>
 <div class="block">This class can be used by both the RasterTileCombiner and the
  RasterTileVisibilityCombiner to execute the merge strategy</div>
 </td>
 </tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html" title="interface in mil.nga.giat.geowave.adapter.raster.adapter.merge">ServerMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RootMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">SimpleAbstractMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">SimpleAbstractMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SingleAdapterServerMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">SingleAdapterServerMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -434,18 +450,22 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/MultiAdapterServerMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">MultiAdapterServerMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileRowTransform.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RasterTileRowTransform</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>
 <div class="block">This class can be used by both the RasterTileCombiner and the
  RasterTileVisibilityCombiner to execute the merge strategy</div>
 </td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">RootMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
-</tr>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">SimpleAbstractMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SingleAdapterServerMergeStrategy.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter.merge">SingleAdapterServerMergeStrategy</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -1726,6 +1746,10 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/AdapterMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterMapping</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a></span></code>
 <div class="block">Meta-data for retaining Adapter to Index association</div>
 </td>
@@ -1757,20 +1781,24 @@
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentIndexFieldHandler.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentIndexFieldHandler</a>&lt;RowType,IndexFieldType extends <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexValue.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexValue</a>,NativeFieldType&gt;</span></code>
 <div class="block">This is a persistable version of the IndexFieldHandler so that customized
  field handlers can be automatically persisted with the data adapter.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;T,M extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.RowTransform.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter.RowTransform</a>&lt;M extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&gt;</span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>interface&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/WritableDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">WritableDataAdapter</a>&lt;T&gt;</span></code>
 <div class="block">This extends the basic DataAdapter interface to be able to ingest data in
@@ -1794,6 +1822,10 @@
  Many of the details are handled by mapping IndexFieldHandler's based on
  either types or exact dimensions.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="class in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapterWrapper</a>&lt;T&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

@@ -144,9 +144,10 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-mil.nga.giat.geowave.core.store.operations.Reader-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/InputFormatIteratorWrapper.html#InputFormatIteratorWrapper-mil.nga.giat.geowave.core.store.operations.Reader-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-boolean-">InputFormatIteratorWrapper</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
                           <a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;queryFilter,
-                          <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                          <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+                          <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                           <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                           boolean&nbsp;isOutputWritable)</code>&nbsp;</td>
 </tr>
@@ -206,7 +207,7 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="InputFormatIteratorWrapper-mil.nga.giat.geowave.core.store.operations.Reader-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.adapter.AdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-boolean-">
+<a name="InputFormatIteratorWrapper-mil.nga.giat.geowave.core.store.operations.Reader-mil.nga.giat.geowave.core.store.filter.QueryFilter-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.PrimaryIndex-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -214,7 +215,8 @@ implements <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.
 <h4>InputFormatIteratorWrapper</h4>
 <pre>public&nbsp;InputFormatIteratorWrapper(<a href="../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/entities/GeoWaveRow.html" title="interface in mil.nga.giat.geowave.core.store.entities">GeoWaveRow</a>&gt;&nbsp;reader,
                                   <a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&nbsp;queryFilter,
-                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+                                  <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
                                   <a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                                   boolean&nbsp;isOutputWritable)</pre>
 </li>

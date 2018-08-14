@@ -170,16 +170,16 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 </tr>
 <tr id="i2" class="altColor">
 <td class="colFirst"><code>protected static <a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#getAdapterToIndexMapping-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.index.ByteArrayId-">getAdapterToIndexMapping</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
-                        <a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#getAdapterToIndexMapping-org.apache.hadoop.mapreduce.JobContext-short-">getAdapterToIndexMapping</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+                        short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#getIndicesForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getIndicesForAdapter</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#getIndicesForAdapter-short-">getIndicesForAdapter</a></span>(short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#remove-mil.nga.giat.geowave.core.index.ByteArrayId-">remove</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterIndexMappingStore.html#remove-short-">remove</a></span>(short&nbsp;internalAdapterId)</code>
 <div class="block">Adapter to index mappings are maintain without regard to visibility
  constraints.</div>
 </td>
@@ -241,14 +241,14 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 </dl>
 </li>
 </ul>
-<a name="getAdapterToIndexMapping-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="getAdapterToIndexMapping-org.apache.hadoop.mapreduce.JobContext-short-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterToIndexMapping</h4>
 <pre>protected static&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;getAdapterToIndexMapping(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
-                                                                <a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
+                                                                short&nbsp;internalAdapterId)</pre>
 </li>
 </ul>
 <a name="addAdapterToIndexMapping-org.apache.hadoop.conf.Configuration-mil.nga.giat.geowave.core.store.AdapterToIndexMapping-">
@@ -261,16 +261,16 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
                                             <a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;adapter)</pre>
 </li>
 </ul>
-<a name="getIndicesForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="getIndicesForAdapter-short-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndicesForAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;getIndicesForAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;getIndicesForAdapter(short&nbsp;adapterId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#getIndicesForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getIndicesForAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#getIndicesForAdapter-short-">getIndicesForAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
 </dl>
 </li>
 </ul>
@@ -295,19 +295,19 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 </dl>
 </li>
 </ul>
-<a name="remove-mil.nga.giat.geowave.core.index.ByteArrayId-">
+<a name="remove-short-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>remove</h4>
-<pre>public&nbsp;void&nbsp;remove(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-mil.nga.giat.geowave.core.index.ByteArrayId-">AdapterIndexMappingStore</a></code></span></div>
+<pre>public&nbsp;void&nbsp;remove(short&nbsp;internalAdapterId)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-">AdapterIndexMappingStore</a></code></span></div>
 <div class="block">Adapter to index mappings are maintain without regard to visibility
  constraints.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-mil.nga.giat.geowave.core.index.ByteArrayId-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html#remove-short-">remove</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a></code></dd>
 </dl>
 </li>
 </ul>

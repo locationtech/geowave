@@ -100,7 +100,7 @@ var activeTableTab = "activeTableTab";
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</li>
+<li>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</li>
 <li>
 <ul class="inheritance">
 <li>mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.IndexWriterFactory</li>
@@ -114,7 +114,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd>org.apache.commons.pool2.KeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</dd>
+<dd>org.apache.commons.pool2.KeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</dd>
 </dl>
 <dl>
 <dt>Enclosing class:</dt>
@@ -123,7 +123,7 @@ var activeTableTab = "activeTableTab";
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">LocalIngestRunData.IndexWriterFactory</span>
-extends org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</pre>
+extends org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</pre>
 <div class="block">A factory implementing the default Apache Commons Pool interface to
  return new instances of an index writer for a given primary index.</div>
 </li>
@@ -163,11 +163,11 @@ extends org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;?&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#create-mil.nga.giat.geowave.core.store.AdapterToIndexMapping-">create</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#create-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices-">create</a></span>(mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices&nbsp;adapterWithIndices)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#destroyObject-mil.nga.giat.geowave.core.store.AdapterToIndexMapping-org.apache.commons.pool2.PooledObject-">destroyObject</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;key,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/ingest/local/LocalIngestRunData.IndexWriterFactory.html#destroyObject-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices-org.apache.commons.pool2.PooledObject-">destroyObject</a></span>(mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices&nbsp;key,
              org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;&nbsp;p)</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
@@ -220,36 +220,36 @@ extends org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="create-mil.nga.giat.geowave.core.store.AdapterToIndexMapping-">
+<a name="create-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>create</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;?&gt;&nbsp;create(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;mapping)
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&lt;?&gt;&nbsp;create(mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices&nbsp;adapterWithIndices)
                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>create</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
+<dd><code>create</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="destroyObject-mil.nga.giat.geowave.core.store.AdapterToIndexMapping-org.apache.commons.pool2.PooledObject-">
+<a name="destroyObject-mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices-org.apache.commons.pool2.PooledObject-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>destroyObject</h4>
-<pre>public&nbsp;void&nbsp;destroyObject(<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>&nbsp;key,
+<pre>public&nbsp;void&nbsp;destroyObject(mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices&nbsp;key,
                           org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;&nbsp;p)
                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>destroyObject</code>&nbsp;in interface&nbsp;<code>org.apache.commons.pool2.KeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
+<dd><code>destroyObject</code>&nbsp;in interface&nbsp;<code>org.apache.commons.pool2.KeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
-<dd><code>destroyObject</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
+<dd><code>destroyObject</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
 <dt><span class="throwsLabel">Throws:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
@@ -264,7 +264,7 @@ extends org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../
 <pre>public&nbsp;org.apache.commons.pool2.PooledObject&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;&nbsp;wrap(<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&nbsp;writer)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code>wrap</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/AdapterToIndexMapping.html" title="class in mil.nga.giat.geowave.core.store">AdapterToIndexMapping</a>,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
+<dd><code>wrap</code>&nbsp;in class&nbsp;<code>org.apache.commons.pool2.BaseKeyedPooledObjectFactory&lt;mil.nga.giat.geowave.core.ingest.local.LocalIngestRunData.AdapterIdKeyWithIndices,<a href="../../../../../../../mil/nga/giat/geowave/core/store/IndexWriter.html" title="interface in mil.nga.giat.geowave.core.store">IndexWriter</a>&gt;</code></dd>
 </dl>
 </li>
 </ul>

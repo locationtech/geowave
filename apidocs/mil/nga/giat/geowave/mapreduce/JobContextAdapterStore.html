@@ -109,13 +109,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></dd>
+<dd><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;, <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a></dd>
 </dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">JobContextAdapterStore</span>
 extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></pre>
+implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a></pre>
 <div class="block">This class implements an adapter store by first checking the job context for
  an adapter and keeping a local cache of adapters that have been discovered.
  It will check the metadata store if it cannot find an adapter in the job
@@ -138,8 +138,9 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterStore.html#JobContextAdapterStore-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">JobContextAdapterStore</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
-                      <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;persistentAdapterStore)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/JobContextAdapterStore.html#JobContextAdapterStore-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">JobContextAdapterStore</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+                      <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;persistentAdapterStore,
+                      <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -233,14 +234,15 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="JobContextAdapterStore-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">
+<a name="JobContextAdapterStore-org.apache.hadoop.mapreduce.JobContext-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>JobContextAdapterStore</h4>
 <pre>public&nbsp;JobContextAdapterStore(org.apache.hadoop.mapreduce.JobContext&nbsp;context,
-                              <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;persistentAdapterStore)</pre>
+                              <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;persistentAdapterStore,
+                              <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
 </li>
 </ul>
 </li>
@@ -258,11 +260,11 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <li class="blockList">
 <h4>addAdapter</h4>
 <pre>public&nbsp;void&nbsp;addAdapter(<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#addAdapter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">AdapterStore</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#addAdapter-V-">AdapterStore</a></code></span></div>
 <div class="block">Add the adapter to the store</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#addAdapter-mil.nga.giat.geowave.core.store.adapter.DataAdapter-">addAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#addAdapter-V-">addAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapter</code> - the adapter</dd>
 </dl>
@@ -277,7 +279,7 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <pre>public&nbsp;void&nbsp;removeAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#removeAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">removeAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#removeAdapter-K-">removeAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>adapterId</code> - the adapter ID to remove</dd>
 </dl>
@@ -290,13 +292,11 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <li class="blockList">
 <h4>getAdapter</h4>
 <pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">AdapterStore</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">AdapterStore</a></code></span></div>
 <div class="block">Get an adapter from the store by its unique ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>adapterId</code> - the unique adapter ID</dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapter-K-">getAdapter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the adapter, null if it doesn't exist</dd>
 </dl>
@@ -309,13 +309,11 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <li class="blockList">
 <h4>adapterExists</h4>
 <pre>public&nbsp;boolean&nbsp;adapterExists(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#adapterExists-mil.nga.giat.geowave.core.index.ByteArrayId-">AdapterStore</a></code></span></div>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">AdapterStore</a></code></span></div>
 <div class="block">Check for the existence of the adapter with the given unique ID</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#adapterExists-mil.nga.giat.geowave.core.index.ByteArrayId-">adapterExists</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>adapterId</code> - the unique ID to look up</dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#adapterExists-K-">adapterExists</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>a boolean flag indicating whether the adapter exists</dd>
 </dl>
@@ -330,7 +328,7 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <pre>public&nbsp;void&nbsp;removeAll()</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#removeAll--">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#removeAll--">removeAll</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>
@@ -345,7 +343,7 @@ implements <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/Adapt
 <div class="block">Get the full set of adapters within this store</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapters--">getAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></dd>
+<dd><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html#getAdapters--">getAdapters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&lt;<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>,<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&gt;</code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>an iterator over all of the adapters in this store</dd>
 </dl>

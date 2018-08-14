@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -116,7 +116,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
  maintaining single set of Writable instances. By the nature of holding single
  instances of Writable instances by the serializers, this class and its
  contents may be only accessed by one 'worker' (at a time).
- 
+
  The helper methods assume all Writable instances are wrapped in an
  ObjectWritable. The reason for this approach, consistent with other support
  classes in this package, is to allow mappers and reducers to use the generic
@@ -141,7 +141,11 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#HadoopWritableSerializationTool-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">HadoopWritableSerializationTool</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#HadoopWritableSerializationTool-org.apache.hadoop.mapreduce.JobContext-">HadoopWritableSerializationTool</a></span>(org.apache.hadoop.mapreduce.JobContext&nbsp;jobContext)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#HadoopWritableSerializationTool-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">HadoopWritableSerializationTool</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+                               <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -164,20 +168,33 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
             org.apache.hadoop.io.ObjectWritable&nbsp;writable)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#fromWritable-short-org.apache.hadoop.io.ObjectWritable-">fromWritable</a></span>(short&nbsp;internalAdapterId,
+            org.apache.hadoop.io.ObjectWritable&nbsp;writable)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getAdapter</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a></code></td>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getAdapterStore--">getAdapterStore</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getHadoopWritableSerializerForAdapter</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterID)</code>&nbsp;</td>
-</tr>
 <tr id="i4" class="altColor">
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">getHadoopWritableSerializerForAdapter</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getHadoopWritableSerializerForAdapter-short-">getHadoopWritableSerializerForAdapter</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code><a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#getInternalAdapter-short-">getInternalAdapter</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>org.apache.hadoop.io.ObjectWritable</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#toWritable-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">toWritable</a></span>(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterID,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializationTool.html#toWritable-short-java.lang.Object-">toWritable</a></span>(short&nbsp;internalAdapterId,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</code>&nbsp;</td>
 </tr>
 </table>
@@ -202,13 +219,23 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HadoopWritableSerializationTool-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">
+<a name="HadoopWritableSerializationTool-org.apache.hadoop.mapreduce.JobContext-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>HadoopWritableSerializationTool</h4>
+<pre>public&nbsp;HadoopWritableSerializationTool(org.apache.hadoop.mapreduce.JobContext&nbsp;jobContext)</pre>
+</li>
+</ul>
+<a name="HadoopWritableSerializationTool-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HadoopWritableSerializationTool</h4>
-<pre>public&nbsp;HadoopWritableSerializationTool(<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
+<pre>public&nbsp;HadoopWritableSerializationTool(<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+                                       <a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
 </li>
 </ul>
 </li>
@@ -225,7 +252,16 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <ul class="blockList">
 <li class="blockList">
 <h4>getAdapterStore</h4>
-<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;getAdapterStore()</pre>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;getAdapterStore()</pre>
+</li>
+</ul>
+<a name="getInternalAdapter-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getInternalAdapter</h4>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&nbsp;getInternalAdapter(short&nbsp;internalAdapterId)</pre>
 </li>
 </ul>
 <a name="getAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
@@ -237,32 +273,51 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;getAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
 </li>
 </ul>
+<a name="getHadoopWritableSerializerForAdapter-short-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getHadoopWritableSerializerForAdapter</h4>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(short&nbsp;internalAdapterId)</pre>
+</li>
+</ul>
 <a name="getHadoopWritableSerializerForAdapter-mil.nga.giat.geowave.core.index.ByteArrayId-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getHadoopWritableSerializerForAdapter</h4>
-<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterID)</pre>
+<pre>public&nbsp;<a href="../../../../../mil/nga/giat/geowave/mapreduce/HadoopWritableSerializer.html" title="interface in mil.nga.giat.geowave.mapreduce">HadoopWritableSerializer</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>,org.apache.hadoop.io.Writable&gt;&nbsp;getHadoopWritableSerializerForAdapter(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterId)</pre>
 </li>
 </ul>
-<a name="toWritable-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Object-">
+<a name="toWritable-short-java.lang.Object-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>toWritable</h4>
-<pre>public&nbsp;org.apache.hadoop.io.ObjectWritable&nbsp;toWritable(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterID,
+<pre>public&nbsp;org.apache.hadoop.io.ObjectWritable&nbsp;toWritable(short&nbsp;internalAdapterId,
                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;entry)</pre>
 </li>
 </ul>
 <a name="fromWritable-mil.nga.giat.geowave.core.index.ByteArrayId-org.apache.hadoop.io.ObjectWritable-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>fromWritable</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(<a href="../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;adapterID,
+                           org.apache.hadoop.io.ObjectWritable&nbsp;writable)</pre>
+</li>
+</ul>
+<a name="fromWritable-short-org.apache.hadoop.io.ObjectWritable-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromWritable</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&nbsp;fromWritable(short&nbsp;internalAdapterId,
                            org.apache.hadoop.io.ObjectWritable&nbsp;writable)</pre>
 </li>
 </ul>

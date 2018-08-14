@@ -328,7 +328,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr id="i9" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getConfiguredOptions--">getConfiguredOptions</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getConfiguredOptions-short-">getConfiguredOptions</a></span>(short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 <tr id="i10" class="altColor">
 <td class="colFirst"><code>org.opengis.coverage.grid.GridCoverage</code></td>
@@ -368,7 +368,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getOptions-java.util.Map-">getOptions</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getOptions-short-java.util.Map-">getOptions</a></span>(short&nbsp;internalAdapterId,
+          <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
 <td class="colFirst"><code>int</code></td>
@@ -380,7 +381,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getRaster-org.opengis.coverage.grid.GridCoverage-">getRaster</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i21" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">MergeableRasterTile</a>&lt;?&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterDataAdapter.html#getRasterTileFromCoverage-org.opengis.coverage.grid.GridCoverage-">getRasterTileFromCoverage</a></span>(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</code>&nbsp;</td>
 </tr>
 <tr id="i22" class="altColor">
@@ -778,7 +779,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <ul class="blockList">
 <li class="blockList">
 <h4>getRasterTileFromCoverage</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">MergeableRasterTile</a>&lt;?&gt;&nbsp;getRasterTileFromCoverage(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;?&gt;&nbsp;getRasterTileFromCoverage(org.opengis.coverage.grid.GridCoverage&nbsp;entry)</pre>
 </li>
 </ul>
 <a name="getRaster-org.opengis.coverage.grid.GridCoverage-">
@@ -992,13 +993,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>public&nbsp;int&nbsp;getTileSize()</pre>
 </li>
 </ul>
-<a name="getConfiguredOptions--">
+<a name="getConfiguredOptions-short-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getConfiguredOptions</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getConfiguredOptions()</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getConfiguredOptions(short&nbsp;internalAdapterId)</pre>
 </li>
 </ul>
 <a name="createWritableSerializer--">
@@ -1032,16 +1033,17 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter
 <pre>public&nbsp;javax.media.jai.Interpolation&nbsp;getInterpolation()</pre>
 </li>
 </ul>
-<a name="getOptions-java.util.Map-">
+<a name="getOptions-short-java.util.Map-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getOptions</h4>
-<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getOptions(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</pre>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;getOptions(short&nbsp;internalAdapterId,
+                                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;&nbsp;existingOptions)</pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html#getOptions-java.util.Map-">getOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;?&gt;&gt;</code></dd>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html#getOptions-short-java.util.Map-">getOptions</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/RowMergingDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">RowMergingDataAdapter</a>&lt;org.opengis.coverage.grid.GridCoverage,<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;?&gt;&gt;</code></dd>
 </dl>
 </li>
 </ul>

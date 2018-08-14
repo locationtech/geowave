@@ -140,8 +140,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html#SecondaryIndexManager--">SecondaryIndexManager</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html#SecondaryIndexManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.adapter.vector.stats.StatsManager-">SecondaryIndexManager</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-                     org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html#SecondaryIndexManager-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.adapter.vector.stats.StatsManager-">SecondaryIndexManager</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
                      <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</code>
 <div class="block">Create a SecondaryIndexManager for the given DataAdapter and
  SimpleFeatureType, while providing</div>
@@ -214,14 +213,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist
 <pre>public&nbsp;SecondaryIndexManager()</pre>
 </li>
 </ul>
-<a name="SecondaryIndexManager-mil.nga.giat.geowave.core.store.adapter.DataAdapter-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.adapter.vector.stats.StatsManager-">
+<a name="SecondaryIndexManager-org.opengis.feature.simple.SimpleFeatureType-mil.nga.giat.geowave.adapter.vector.stats.StatsManager-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>SecondaryIndexManager</h4>
-<pre>public&nbsp;SecondaryIndexManager(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">DataAdapter</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&nbsp;dataAdapter,
-                             org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
+<pre>public&nbsp;SecondaryIndexManager(org.opengis.feature.simple.SimpleFeatureType&nbsp;sft,
                              <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsManager.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsManager</a>&nbsp;statsManager)</pre>
 <div class="block">Create a SecondaryIndexManager for the given DataAdapter and
  SimpleFeatureType, while providing</div>
@@ -259,7 +257,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist
 <pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
 <div class="block">Convert fields and data within an object to binary form for transmission
  or storage.
- 
+
  This consists of converting supported secondary indices.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
@@ -278,7 +276,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist
 <h4>fromBinary</h4>
 <pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
 <div class="block">Convert a stream of binary bytes to fields and data within an object.
- 
+
  This extracts the supported secondary indices from the binary stream and
  adds them in this object.</div>
 <dl>

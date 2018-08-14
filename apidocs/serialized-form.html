@@ -1854,6 +1854,10 @@
 <!--   -->
 </a>
 <h3>Class <a href="mil/nga/giat/geowave/analytic/spark/spatial/SpatialJoinRunner.html" title="class in mil.nga.giat.geowave.analytic.spark.spatial">mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>1L</dd>
+</dl>
 <ul class="blockList">
 <li class="blockList">
 <h3>Serialized Fields</h3>
@@ -1929,6 +1933,22 @@
 <li class="blockList">
 <h4>rightRDD</h4>
 <pre><a href="mil/nga/giat/geowave/analytic/spark/GeoWaveIndexedRDD.html" title="class in mil.nga.giat.geowave.analytic.spark">GeoWaveIndexedRDD</a> rightRDD</pre>
+</li>
+<li class="blockList">
+<h4>leftInternalAdapterStore</h4>
+<pre><a href="mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a> leftInternalAdapterStore</pre>
+</li>
+<li class="blockList">
+<h4>rightInternalAdapterStore</h4>
+<pre><a href="mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a> rightInternalAdapterStore</pre>
+</li>
+<li class="blockList">
+<h4>leftIndexStore</h4>
+<pre><a href="mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a> leftIndexStore</pre>
+</li>
+<li class="blockList">
+<h4>rightIndexStore</h4>
+<pre><a href="mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a> rightIndexStore</pre>
 </li>
 <li class="blockListLast">
 <h4>joinStrategy</h4>
@@ -2275,10 +2295,10 @@
 </li>
 </ul>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory.OldMemoryAdapterIndexMappingStore">
+<li class="blockList"><a name="mil.nga.giat.geowave.core.store.memory.MemoryPersistentAdapterStore">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/core/store/memory/OldMemoryAdapterIndexMappingStore.html" title="class in mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory.OldMemoryAdapterIndexMappingStore</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/core/store/memory/MemoryPersistentAdapterStore.html" title="class in mil.nga.giat.geowave.core.store.memory">mil.nga.giat.geowave.core.store.memory.MemoryPersistentAdapterStore</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -2313,8 +2333,8 @@
 <h3>Serialized Fields</h3>
 <ul class="blockList">
 <li class="blockListLast">
-<h4>toIndexMapping</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; toIndexMapping</pre>
+<h4>adapterMap</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">K</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">V</a>&gt; adapterMap</pre>
 </li>
 </ul>
 </li>
@@ -2437,8 +2457,8 @@
 <pre>com.google.protobuf.ByteString adapter_</pre>
 </li>
 <li class="blockList">
-<h4>adapterId_</h4>
-<pre>com.google.protobuf.ByteString adapterId_</pre>
+<h4>internalAdapterId_</h4>
+<pre>com.google.protobuf.ByteString internalAdapterId_</pre>
 </li>
 <li class="blockList">
 <h4>numericIndexStrategyFilter_</h4>
@@ -2819,7 +2839,7 @@
 <ul class="blockList">
 <li class="blockListLast">
 <h4>adapterId</h4>
-<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> adapterId</pre>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a> adapterId</pre>
 </li>
 </ul>
 </li>
@@ -2833,7 +2853,7 @@
 <li class="blockList"><a name="mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey</a> extends <a href="mil/nga/giat/geowave/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveKey</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -2842,6 +2862,10 @@
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
+<li class="blockList">
+<h4>internalAdapterId</h4>
+<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a> internalAdapterId</pre>
+</li>
 <li class="blockListLast">
 <h4>dataId</h4>
 <pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> dataId</pre>
@@ -2858,7 +2882,7 @@
 <li class="blockList"><a name="mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey</a> extends <a href="mil/nga/giat/geowave/mapreduce/GeoWaveKey.html" title="class in mil.nga.giat.geowave.mapreduce">GeoWaveKey</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/mapreduce/output/GeoWaveOutputKey.html" title="class in mil.nga.giat.geowave.mapreduce.output">mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 <dl class="nameValue">
 <dt>serialVersionUID:</dt>
 <dd>1L</dd>
@@ -2867,6 +2891,10 @@
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
+<li class="blockList">
+<h4>adapterId</h4>
+<pre><a href="mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a> adapterId</pre>
+</li>
 <li class="blockListLast">
 <h4>indexIds</h4>
 <pre><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">Collection</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Collection.html?is-external=true" title="class or interface in java.util">E</a>&gt; indexIds</pre>

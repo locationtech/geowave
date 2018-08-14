@@ -112,7 +112,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/MergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">MergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ClientMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ClientMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/ServerMergeableRasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">ServerMergeableRasterTile</a>&lt;T extends <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a>&gt;</span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -202,18 +206,6 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">RootMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="type parameter in RootMergeStrategy">T</a>&gt;&nbsp;thisTile,
-     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="type parameter in RootMergeStrategy">T</a>&gt;&nbsp;nextTile,
-     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId)</code>&nbsp;</td>
-</tr>
-<tr class="rowColor">
-<td class="colFirst"><code>void</code></td>
-<td class="colLast"><span class="typeNameLabel">RootMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.core.index.ByteArrayId-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="type parameter in RootMergeStrategy">T</a>&gt;&nbsp;thisTile,
-     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RootMergeStrategy.html" title="type parameter in RootMergeStrategy">T</a>&gt;&nbsp;nextTile,
-     <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;dataAdapterId)</code>&nbsp;</td>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>void</code></td>
 <td class="colLast"><span class="typeNameLabel">RasterTileMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-java.awt.image.SampleModel-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="type parameter in RasterTileMergeStrategy">T</a>&gt;&nbsp;thisTile,
      <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/RasterTileMergeStrategy.html" title="type parameter in RasterTileMergeStrategy">T</a>&gt;&nbsp;nextTile,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/SampleModel.html?is-external=true" title="class or interface in java.awt.image">SampleModel</a>&nbsp;sampleModel)</code>&nbsp;</td>
@@ -235,6 +227,42 @@
 <td class="colLast"><span class="typeNameLabel">SimpleAbstractMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-java.awt.image.SampleModel-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html" title="type parameter in SimpleAbstractMergeStrategy">T</a>&gt;&nbsp;thisTile,
      <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SimpleAbstractMergeStrategy.html" title="type parameter in SimpleAbstractMergeStrategy">T</a>&gt;&nbsp;nextTile,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/SampleModel.html?is-external=true" title="class or interface in java.awt.image">SampleModel</a>&nbsp;sampleModel)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html" title="type parameter in ServerMergeStrategy">T</a>&gt;&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html" title="type parameter in ServerMergeStrategy">T</a>&gt;&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">ServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html" title="type parameter in ServerMergeStrategy">T</a>&gt;&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/ServerMergeStrategy.html" title="type parameter in ServerMergeStrategy">T</a>&gt;&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">MultiAdapterServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/MultiAdapterServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">MultiAdapterServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/MultiAdapterServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SingleAdapterServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SingleAdapterServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">SingleAdapterServerMergeStrategy.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/merge/SingleAdapterServerMergeStrategy.html#merge-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-mil.nga.giat.geowave.adapter.raster.adapter.RasterTile-short-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;thisTile,
+     <a href="../../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="class in mil.nga.giat.geowave.adapter.raster.adapter">RasterTile</a>&nbsp;nextTile,
+     short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>protected void</code></td>

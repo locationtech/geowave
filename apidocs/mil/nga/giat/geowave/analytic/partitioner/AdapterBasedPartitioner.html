@@ -126,15 +126,15 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
  <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/OrthodromicDistancePartitioner.html" title="class in mil.nga.giat.geowave.analytic.partitioner"><code>OrthodromicDistancePartitioner</code></a>, handling different types of data
  entries, the assumption is that each object decode by the adapter provides
  the fields required according to the supplied model.
- 
+
  The user provides the distances per dimension. It us up to the user to
  convert geographic distance into distance in degrees per longitude and
  latitude.
- 
+
  This class depends on an AdapterStore. Since an AdapterStore is not
  Serializable, the dependency is transient requiring initialization after
  serialization
- {@link AdapterBasedPartitioner#initialize(ConfigurationWrapper)</div>
+ <code>AdapterBasedPartitioner#initialize(ConfigurationWrapper)</code></div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../serialized-form.html#mil.nga.giat.geowave.analytic.partitioner.AdapterBasedPartitioner">Serialized Form</a></dd>
@@ -193,9 +193,9 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#AdapterBasedPartitioner--">AdapterBasedPartitioner</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">AdapterBasedPartitioner</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-">AdapterBasedPartitioner</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
                        double[]&nbsp;distancesPerDimension,
-                       <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+                       <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -281,7 +281,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <pre>public&nbsp;AdapterBasedPartitioner()</pre>
 </li>
 </ul>
-<a name="AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">
+<a name="AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -289,7 +289,7 @@ implements <a href="../../../../../../mil/nga/giat/geowave/analytic/partitioner/
 <h4>AdapterBasedPartitioner</h4>
 <pre>public&nbsp;AdapterBasedPartitioner(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
                                double[]&nbsp;distancesPerDimension,
-                               <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</pre>
+                               <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore)</pre>
 </li>
 </ul>
 </li>

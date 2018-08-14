@@ -398,9 +398,9 @@
                    double[]&nbsp;distancePerDimension)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.AdapterStore-">AdapterBasedPartitioner</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/partitioner/AdapterBasedPartitioner.html#AdapterBasedPartitioner-mil.nga.giat.geowave.core.store.index.CommonIndexModel-double:A-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-">AdapterBasedPartitioner</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel,
                        double[]&nbsp;distancesPerDimension,
-                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/analytic/partitioner/BoundaryPartitioner.html#BoundaryPartitioner-org.opengis.referencing.crs.CoordinateReferenceSystem-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.analytic.extract.DimensionExtractor-double:A-javax.measure.unit.Unit-">BoundaryPartitioner</a></span>(org.opengis.referencing.crs.CoordinateReferenceSystem&nbsp;crs,
@@ -518,13 +518,28 @@
       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterPersistenceEncoding.html" title="class in mil.nga.giat.geowave.core.store.adapter">AdapterPersistenceEncoding</a></code></td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapterWrapper.html#encode-T-mil.nga.giat.geowave.core.store.index.CommonIndexModel-">encode</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapterWrapper.html" title="type parameter in InternalDataAdapterWrapper">T</a>&nbsp;entry,
+      <a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;indexModel)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
 <td class="colLast"><span class="typeNameLabel">DataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                     int&nbsp;position)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a></code></td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getFieldIdForPosition-mil.nga.giat.geowave.core.store.index.CommonIndexModel-int-">getFieldIdForPosition</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                      int&nbsp;position)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code>int</code></td>
 <td class="colLast"><span class="typeNameLabel">DataAdapter.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/DataAdapter.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
+                         <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>int</code></td>
+<td class="colLast"><span class="typeNameLabel">InternalDataAdapterWrapper.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapterWrapper.html#getPositionOfOrderedField-mil.nga.giat.geowave.core.store.index.CommonIndexModel-mil.nga.giat.geowave.core.index.ByteArrayId-">getPositionOfOrderedField</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/CommonIndexModel.html" title="interface in mil.nga.giat.geowave.core.store.index">CommonIndexModel</a>&nbsp;model,
                          <a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;fieldId)</code>&nbsp;</td>
 </tr>
 </tbody>
