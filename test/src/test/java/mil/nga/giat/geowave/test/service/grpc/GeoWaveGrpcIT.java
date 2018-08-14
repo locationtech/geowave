@@ -51,7 +51,7 @@ import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcTestClient;
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.CASSANDRA,
-	GeoWaveStoreType.DYNAMODB,
+    GeoWaveStoreType.DYNAMODB,
 // TODO HBase server-side components need to work with GRPC libraries
 // GeoWaveStoreType.HBASE
 })
@@ -131,6 +131,7 @@ public class GeoWaveGrpcIT extends
 				map.get("hdfs.defaultFS.url"));
 		org.apache.log4j.Logger.getRootLogger().setLevel(
 				Level.WARN);
+		
 		// Core Ingest Tests
 		Assert.assertTrue(client.LocalToHdfsCommand());
 		LOGGER.warn("-----------------------------------------");
@@ -141,8 +142,9 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		Assert.assertTrue(client.LocalToGeowaveCommand());
 
+
+		Assert.assertTrue(client.LocalToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED LocalToGeowaveCommand  *");
@@ -151,8 +153,9 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		Assert.assertTrue(client.LocalToKafkaCommand());
 
+
+		Assert.assertTrue(client.LocalToKafkaCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED LocalToKafkaCommand  *");
@@ -161,8 +164,9 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		Assert.assertTrue(client.KafkaToGeowaveCommand());
 
+
+		Assert.assertTrue(client.KafkaToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED KafkaToGeowaveCommand  *");
@@ -171,8 +175,9 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		Assert.assertTrue(client.MapReduceToGeowaveCommand());
 
+
+		Assert.assertTrue(client.MapReduceToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED MapReduceToGeowaveCommand  *");
@@ -181,8 +186,9 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		String plugins = client.ListPluginsCommand();
 
+
+		String plugins = client.ListPluginsCommand();
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED ListPluginsCommand  *");
@@ -191,11 +197,11 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+
 		Assert.assertTrue(
 				"several plugins expected",
 				countLines(plugins) > 10);
 		Assert.assertTrue(client.LocalToMapReduceToGeowaveCommand());
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED LocalToMapReduceToGeowaveCommand  *");
@@ -204,9 +210,8 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		// TODO figure out what's going on with sparktogeowave within grpc
-		// Assert.assertTrue(client.SparkToGeowaveCommand());
 
+		Assert.assertTrue(client.SparkToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED SparkToGeowaveCommand  *");
@@ -233,12 +238,12 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+		
 		Assert.assertNotEquals(
 				0,
 				client.numFeaturesProcessed);
 
 		ArrayList<Feature> features = client.vectorQuery();
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED vectorQuery  *");
@@ -247,13 +252,13 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+		
 		Assert.assertNotEquals(
 				0,
 				features.size());
 
 		features.clear();
 		features = client.cqlQuery();
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED cqlQuery  *");
@@ -262,13 +267,13 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+		
 		Assert.assertNotEquals(
 				0,
 				features.size());
 
 		features.clear();
 		features = client.spatialQuery();
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED spatialQuery  *");
@@ -277,6 +282,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+		
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -287,7 +293,6 @@ public class GeoWaveGrpcIT extends
 		// geometry borders will be discarded
 		features.clear();
 		features = client.spatialTemporalQuery();
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED spatialTemporalQuery  *");
@@ -296,6 +301,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+		
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -308,6 +314,14 @@ public class GeoWaveGrpcIT extends
 		Assert.assertEquals(
 				"TEST_VAL",
 				map.get("TEST_KEY"));
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED core cli tests  *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 
 		// clear out the stores and ingest a smaller sample
 		// set for the more demanding operations
@@ -324,7 +338,6 @@ public class GeoWaveGrpcIT extends
 		Assert.assertTrue(client.nearestNeighborCommand());
 		Assert.assertTrue(client.kdeCommand());
 		Assert.assertTrue(client.dbScanCommand());
-
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("* FINISHED analytic mapreduce tests  *");
@@ -333,6 +346,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+
 		// Analytic Spark Tests
 		Assert.assertTrue(client.KmeansSparkCommand());
 		LOGGER.warn("-----------------------------------------");
@@ -343,6 +357,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
+
 		Assert.assertTrue(client.SparkSqlCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -353,10 +368,15 @@ public class GeoWaveGrpcIT extends
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 
-		// TODO this command will currently fail (locally) due to the reliance
-		// on spark api
-		// which relies on actual hdfs protocol vs local hdfs.
-		// Assert.assertTrue(client.SpatialJoinCommand());
+		Assert.assertTrue(client.SpatialJoinCommand());
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED spatial join  *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
 
 		// Core store Tests
 		Assert.assertTrue(client.VersionCommand());
@@ -365,14 +385,14 @@ public class GeoWaveGrpcIT extends
 		Assert.assertTrue(result.contains(GeoWaveGrpcTestUtils.adapterId));
 
 		result = client.ListIndexCommand();
-		Assert.assertTrue(result.contains("SPATIAL_IDX_ROUND_ROBIN_32"));
+		Assert.assertTrue(result.contains("SPATIAL_IDX"));
 
 		result = client.ListStatsCommand();
 		Assert.assertTrue(!result.equalsIgnoreCase(""));
 
 		result = client.AddIndexGroupCommand();
 		Assert.assertTrue(result.contains("indexgroup." + GeoWaveGrpcTestUtils.indexId + "-group.opts."
-				+ GeoWaveGrpcTestUtils.indexId + ".numPartitions=32"));
+				+ GeoWaveGrpcTestUtils.indexId + ".numPartitions=1"));
 
 		Assert.assertTrue(client.CalculateStatCommand());
 		Assert.assertTrue(client.RecalculateStatsCommand());
@@ -397,7 +417,15 @@ public class GeoWaveGrpcIT extends
 		Assert.assertEquals(
 				"store." + GeoWaveGrpcTestUtils.storeName + " successfully removed",
 				result);
-
+		LOGGER.warn("-----------------------------------------");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("* FINISHED core store tests *");
+		LOGGER
+				.warn("*         " + ((System.currentTimeMillis() - startMillis) / 1000)
+						+ "s elapsed.                 *");
+		LOGGER.warn("*                                       *");
+		LOGGER.warn("-----------------------------------------");
+		
 		TestUtils.deleteAll(dataStore);
 	}
 

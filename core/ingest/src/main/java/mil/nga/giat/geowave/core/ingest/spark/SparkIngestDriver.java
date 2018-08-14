@@ -137,8 +137,10 @@ public class SparkIngestDriver implements
 		}
 		boolean isS3 = basePath.startsWith(
 				"s3://");
-		boolean isHDFS = !isS3 && basePath.startsWith(
-				"hdfs://");
+		boolean isHDFS = !isS3 && (basePath.startsWith(
+				"hdfs://") || basePath.startsWith(
+						"file:/"));
+		
 		// If input path is S3
 		if (isS3) {
 
@@ -155,7 +157,9 @@ public class SparkIngestDriver implements
 					configProperties);
 			inputPath = setUpHDFSFilesystem(
 					basePath,
-					hdfsFSUrl);
+					hdfsFSUrl,
+					basePath.startsWith(
+							"file:/"));
 		}
 		else {
 			LOGGER.warn(
@@ -259,10 +263,14 @@ public class SparkIngestDriver implements
 					});
 		}
 		else if (isHDFS) {
+			try {
+				setHdfsURLStreamHandlerFactory();
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			fileRDD.foreachPartition(
-					uri -> {
-
-						setHdfsURLStreamHandlerFactory();
+					uri -> {		
 						processInput(
 								configFile,
 								localInput,
@@ -417,7 +425,8 @@ public class SparkIngestDriver implements
 
 	public Path setUpHDFSFilesystem(
 			String basePath,
-			String hdfsFSUrl ) {
+			String hdfsFSUrl,
+			boolean isLocalPath) {
 
 		String hdfsInputPath = basePath.replaceFirst(
 				"hdfs://",
@@ -426,8 +435,14 @@ public class SparkIngestDriver implements
 		Path path = null;
 		try {
 
-			URI uri = new URI(
-					hdfsFSUrl + hdfsInputPath);
+			URI uri = null;
+			if(isLocalPath) {
+				uri = new URI(
+						hdfsInputPath);
+			} else {
+				uri = new URI(
+						hdfsFSUrl + hdfsInputPath);
+			}
 			path = Paths.get(uri);
 			// HP Fortify "Path Traversal" false positive
 			// What Fortify considers "user input" comes only

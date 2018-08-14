@@ -1,6 +1,8 @@
 package mil.nga.giat.geowave.test.service.grpc;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -1002,16 +1004,27 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SparkToGeowaveCommand() {
 		ArrayList<String> params = new ArrayList<String>();
-		params.add("s3://geowave-test/data/gdelt");
+		
+		final File tempDataDir= new File(
+				"./"+TestUtils.TEST_CASE_BASE);
+		String hdfsPath = "";
+		try {
+			hdfsPath = tempDataDir.toURI().toURL().toString();
+		} catch (MalformedURLException e) {
+			return false;
+		}
+		
+		//params.add("s3://geowave-test/data/gdelt");
+		params.add(hdfsPath + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.indexId);
 
 		ArrayList<String> extensions = new ArrayList<String>();
-
+		
 		SparkToGeowaveCommandParameters request = SparkToGeowaveCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
-				"gdelt").setAppName(
+				"gpx").setAppName(
 				"CoreGeoWaveSparkITs").setMaster(
 				"local").setHost(
 				"localhost").setNumExecutors(
