@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.test.service.grpc;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
+import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
@@ -454,6 +455,7 @@ public class GeoWaveGrpcIT extends
 		configFile = File.createTempFile(
 				"test_config",
 				null);
+		Files.write(configFile.toPath(), "geowave.encryption.enabled=false".getBytes());
 		GeoWaveGrpcServiceOptions.geowaveConfigFile = configFile;
 
 		operationParams = new ManualOperationParams();
