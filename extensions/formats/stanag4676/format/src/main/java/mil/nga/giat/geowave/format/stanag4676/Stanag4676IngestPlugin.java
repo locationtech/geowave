@@ -133,7 +133,8 @@ public class Stanag4676IngestPlugin extends
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
 		return ingestWithMapper().toGeoWaveData(
-				toAvroObjects(file)[0],
+				toAvroObjects(
+						file).next(),
 				primaryIndexIds,
 				globalVisibility);
 	}

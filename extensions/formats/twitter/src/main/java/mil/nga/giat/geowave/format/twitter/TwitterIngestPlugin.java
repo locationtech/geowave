@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.format.twitter;
 
+import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
@@ -105,7 +106,7 @@ public class TwitterIngestPlugin extends
 	}
 
 	@Override
-	public WholeFile[] toAvroObjects(
+	public CloseableIterator<WholeFile> toAvroObjects(
 			final URL input ) {
 		final WholeFile avroFile = new WholeFile();
 		avroFile.setOriginalFilePath(input.getPath());
@@ -116,12 +117,11 @@ public class TwitterIngestPlugin extends
 			LOGGER.warn(
 					"Unable to read Twitter file: " + input.getPath(),
 					e);
-			return new WholeFile[] {};
+			return new CloseableIterator.Empty<>();
 		}
 
-		return new WholeFile[] {
-			avroFile
-		};
+		return new CloseableIterator.Wrapper<>(
+				Iterators.singletonIterator(avroFile));
 	}
 
 	@Override

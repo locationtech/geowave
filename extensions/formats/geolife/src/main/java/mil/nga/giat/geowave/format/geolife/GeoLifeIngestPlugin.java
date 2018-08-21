@@ -56,6 +56,8 @@ import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
+import jersey.repackaged.com.google.common.collect.Iterators;
+
 /*
  */
 public class GeoLifeIngestPlugin extends
@@ -130,7 +132,7 @@ public class GeoLifeIngestPlugin extends
 	}
 
 	@Override
-	public WholeFile[] toAvroObjects(
+	public CloseableIterator<WholeFile> toAvroObjects(
 			final URL input ) {
 		final WholeFile avroFile = new WholeFile();
 		avroFile.setOriginalFilePath(input.getPath());
@@ -141,12 +143,11 @@ public class GeoLifeIngestPlugin extends
 			LOGGER.warn(
 					"Unable to read GeoLife file: " + input.getPath(),
 					e);
-			return new WholeFile[] {};
+			return new CloseableIterator.Empty<>();
 		}
 
-		return new WholeFile[] {
-			avroFile
-		};
+		return new CloseableIterator.Wrapper<>(
+				Iterators.singletonIterator(avroFile));
 	}
 
 	@Override
