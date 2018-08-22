@@ -124,7 +124,6 @@ public class StatsManager
 
 				addStats(
 						new FeatureTimeRangeStatistics(
-								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
 						new ByteArrayId(
 								descriptor.getLocalName()));
@@ -133,7 +132,6 @@ public class StatsManager
 			else if (Geometry.class.isAssignableFrom(descriptor.getType().getBinding())) {
 				addStats(
 						new FeatureBoundingBoxStatistics(
-								dataAdapter.getAdapterId(),
 								descriptor.getLocalName(),
 								reprojectedType,
 								transform),
@@ -159,7 +157,7 @@ public class StatsManager
 				for (final StatsConfig<SimpleFeature> statConfig : featureConfigs) {
 					addStats(
 							statConfig.create(
-									dataAdapter.getAdapterId(),
+									null,
 									descriptor.getLocalName()),
 							new ByteArrayId(
 									descriptor.getLocalName()));
@@ -173,14 +171,12 @@ public class StatsManager
 			else if (Number.class.isAssignableFrom(descriptor.getType().getBinding())) {
 				addStats(
 						new FeatureNumericRangeStatistics(
-								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
 						new ByteArrayId(
 								descriptor.getLocalName()));
 
 				addStats(
 						new FeatureFixedBinNumericStatistics(
-								dataAdapter.getAdapterId(),
 								descriptor.getLocalName()),
 						new ByteArrayId(
 								descriptor.getLocalName()));
@@ -203,7 +199,6 @@ public class StatsManager
 	 */
 
 	public DataStatistics<SimpleFeature> createDataStatistics(
-			final DataAdapter<SimpleFeature> dataAdapter,
 			final ByteArrayId statisticsId ) {
 		for (final DataStatistics<SimpleFeature> statObj : statsObjList) {
 			if (statObj.getStatisticsId().equals(
@@ -218,8 +213,7 @@ public class StatsManager
 
 		if (statisticsId.getString().equals(
 				CountDataStatistics.STATS_TYPE.getString())) {
-			return new CountDataStatistics<SimpleFeature>(
-					dataAdapter.getAdapterId());
+			return new CountDataStatistics<SimpleFeature>();
 		}
 
 		// HP Fortify "Log Forging" false positive
@@ -227,9 +221,7 @@ public class StatsManager
 		// from users with OS-level access anyway
 
 		LOGGER.warn("Unrecognized statistics ID " + statisticsId.getString() + ", using count statistic.");
-		return new CountDataStatistics<SimpleFeature>(
-				dataAdapter.getAdapterId(),
-				statisticsId);
+		return new CountDataStatistics<SimpleFeature>();
 	}
 
 	// -----------------------------------------------------------------------------------

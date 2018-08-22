@@ -54,7 +54,7 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 		mapNativeValue(
 				key,
 				serializationTool.fromWritable(
-						key.getAdapterId(),
+						key.getInternalAdapterId(),
 						value),
 				context);
 
@@ -72,7 +72,7 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 			final GeoWaveInputKey key,
 			final Object value ) {
 		return serializationTool.toWritable(
-				key.getAdapterId(),
+				key.getInternalAdapterId(),
 				value);
 	}
 
@@ -89,6 +89,6 @@ public abstract class GeoWaveWritableInputMapper<KEYOUT, VALUEOUT> extends
 			throws IOException,
 			InterruptedException {
 		serializationTool = new HadoopWritableSerializationTool(
-				GeoWaveInputFormat.getJobContextAdapterStore(context));
+				context);
 	}
 }

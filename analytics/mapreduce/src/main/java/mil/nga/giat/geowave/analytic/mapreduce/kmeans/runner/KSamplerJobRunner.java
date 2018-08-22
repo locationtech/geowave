@@ -29,6 +29,9 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -89,15 +92,20 @@ public class KSamplerJobRunner extends
 		job.setOutputValueClass(Object.class);
 	}
 
-	private DataAdapter<?> getAdapter(
+	private InternalDataAdapter<?> getAdapter(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		final AdapterStore adapterStore = super.getAdapterStore(runTimeProperties);
+		final PersistentAdapterStore adapterStore = super.getAdapterStore(runTimeProperties);
 
-		return adapterStore.getAdapter(new ByteArrayId(
+		final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
+		Short sampleInternalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 				runTimeProperties.getPropertyAsString(
 						SampleParameters.Sample.DATA_TYPE_ID,
 						"sample")));
+		if (sampleInternalAdapterId == null) {
+			return null;
+		}
+		return adapterStore.getAdapter(sampleInternalAdapterId);
 	}
 
 	private PrimaryIndex getIndex(

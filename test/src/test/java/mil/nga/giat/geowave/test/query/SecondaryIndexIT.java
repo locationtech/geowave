@@ -74,6 +74,9 @@ import mil.nga.giat.geowave.core.index.lexicoder.Lexicoders;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.FilterableConstraints;
@@ -116,6 +119,7 @@ public class SecondaryIndexIT
 	private PrimaryIndex index;
 	private DataStore dataStore;
 	private SecondaryIndexDataStore secondaryDataStore;
+	private InternalAdapterStore internalAdapterStore;
 	private List<ByteArrayId> allPrimaryIndexIds = new ArrayList<>();
 	private List<String> allDataIds = new ArrayList<>();
 	private int numAttributes;
@@ -219,13 +223,17 @@ public class SecondaryIndexIT
 
 		Assert.assertTrue(allSecondaryIndices.size() == 9);
 
+		InternalDataAdapter<SimpleFeature> internalDataAdapter = new InternalDataAdapterWrapper(
+				dataAdapter,
+				internalAdapterStore.getInternalAdapterId(dataAdapter.getAdapterId()));
+
 		for (final SecondaryIndex<SimpleFeature> secondaryIndex : allSecondaryIndices) {
 
 			final List<SimpleFeature> queryResults = new ArrayList<>();
 			try (final CloseableIterator<SimpleFeature> results = secondaryDataStore.query(
 					secondaryIndex,
 					secondaryIndex.getFieldId(),
-					dataAdapter,
+					internalDataAdapter,
 					index,
 					query,
 					DEFAULT_AUTHORIZATIONS)) {
@@ -269,7 +277,7 @@ public class SecondaryIndexIT
 			try (final CloseableIterator<SimpleFeature> results = secondaryDataStore.query(
 					secondaryIndex,
 					secondaryIndex.getFieldId(),
-					dataAdapter,
+					internalDataAdapter,
 					index,
 					query,
 					DEFAULT_AUTHORIZATIONS)) {
@@ -442,6 +450,7 @@ public class SecondaryIndexIT
 			}
 		}
 
+		internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
 		allSecondaryIndices = dataAdapter.getSupportedSecondaryIndices();
 
 		final Map<ByteArrayId, FilterableConstraints> additionalConstraints = new HashMap<>();

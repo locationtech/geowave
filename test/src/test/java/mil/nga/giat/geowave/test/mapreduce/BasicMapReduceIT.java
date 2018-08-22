@@ -271,8 +271,7 @@ public class BasicMapReduceIT extends
 			ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getAdapterId());
 
 			if (expResults.count > 0) {
-				LOGGER.debug("Running test for adapter " + adapter.getAdapterId());
-
+				LOGGER.error("Running test for adapter " + adapter.getAdapterId().getString());
 				runTestJob(
 						expResults,
 						null,

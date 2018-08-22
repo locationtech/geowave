@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -21,7 +21,7 @@ import org.opengis.coverage.grid.GridCoverage;
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKeyImpl;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableOutputMapper;
@@ -39,9 +39,11 @@ public class RasterTileResizeMapper extends
 			final MapContext<GeoWaveInputKey, GridCoverage, GeoWaveInputKey, Object> context )
 			throws IOException,
 			InterruptedException {
-		if (helper.isOriginalCoverage(key.getAdapterId())) {
-			final DataAdapter<?> adapter = super.serializationTool.getAdapter(key.getAdapterId());
-			if ((adapter != null) && (adapter instanceof RasterDataAdapter)) {
+		if (helper.isOriginalCoverage(key.getInternalAdapterId())) {
+			final InternalDataAdapter<?> adapter = super.serializationTool.getInternalAdapter(key
+					.getInternalAdapterId());
+			if ((adapter != null) && (adapter.getAdapter() != null)
+					&& (adapter.getAdapter() instanceof RasterDataAdapter)) {
 				final Iterator<GridCoverage> coverages = helper.getCoveragesForIndex(value);
 				if (coverages == null) {
 					LOGGER.error("Couldn't get coverages instance, getCoveragesForIndex returned null");
@@ -58,12 +60,12 @@ public class RasterTileResizeMapper extends
 						final GeoWaveKey geowaveKey = new GeoWaveKeyImpl(
 								helper.getNewDataId(
 										c).getBytes(),
-								key.getAdapterId().getBytes(),
+								key.getInternalAdapterId(),
 								partitionKey == null ? null : partitionKey.getBytes(),
 								sortKey == null ? null : sortKey.getBytes(),
 								0);
 						final GeoWaveInputKey inputKey = new GeoWaveInputKey(
-								helper.getNewCoverageId(),
+								helper.getNewInternalAdapterId(),
 								geowaveKey,
 								helper.getIndexId());
 						context.write(

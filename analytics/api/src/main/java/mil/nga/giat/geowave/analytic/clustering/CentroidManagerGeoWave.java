@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -70,8 +70,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.DataIdQuery;
@@ -134,42 +133,39 @@ public class CentroidManagerGeoWave<T> implements
 		CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 		CentroidParameters.Centroid.ZOOM_LEVEL
 	};
-	private String centroidDataTypeId;
 	private String batchId;
 	private int level = 0;
 
 	private AnalyticItemWrapperFactory<T> centroidFactory;
-	@SuppressWarnings("rawtypes")
 	private GeotoolsFeatureDataAdapter adapter;
+	private String centroidDataTypeId;
 
 	private DataStore dataStore;
 	private IndexStore indexStore;
-	private AdapterStore adapterStore;
 	private PrimaryIndex index;
 
 	public CentroidManagerGeoWave(
 			final DataStore dataStore,
 			final IndexStore indexStore,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final AnalyticItemWrapperFactory<T> centroidFactory,
 			final String centroidDataTypeId,
+			final short centroidInternalAdapterId,
 			final String indexId,
 			final String batchId,
 			final int level ) {
 		this.centroidFactory = centroidFactory;
-		this.centroidDataTypeId = centroidDataTypeId;
 		this.level = level;
 		this.batchId = batchId;
 		this.dataStore = dataStore;
 		this.indexStore = indexStore;
+		this.centroidDataTypeId = centroidDataTypeId;
 		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
 				indexId));
-		this.adapterStore = adapterStore;
-		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(new ByteArrayId(
-				centroidDataTypeId));
+		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+				centroidInternalAdapterId).getAdapter();
 	}
 
-	@SuppressWarnings("unchecked")
 	public CentroidManagerGeoWave(
 			final PropertyManagement properties )
 			throws IOException {
@@ -260,9 +256,11 @@ public class CentroidManagerGeoWave<T> implements
 		indexStore = store.getDataStoreOptions().createIndexStore();
 		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
 				indexId));
-		adapterStore = store.getDataStoreOptions().createAdapterStore();
-		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(new ByteArrayId(
-				centroidDataTypeId));
+		final PersistentAdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
+		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+				store.getDataStoreOptions().createInternalAdapterStore().getInternalAdapterId(
+						new ByteArrayId(
+								centroidDataTypeId))).getAdapter();
 	}
 
 	/**
@@ -510,22 +508,22 @@ public class CentroidManagerGeoWave<T> implements
 			final String fromBatchId,
 			final String groupID )
 			throws IOException {
-		final CloseableIterator<T> it = getRawCentroids(
-				fromBatchId,
-				groupID);
 		int count = 0;
-		try (final IndexWriter indexWriter = dataStore.createWriter(
-				adapter,
-				index)) {
-			while (it.hasNext()) {
-				final AnalyticItemWrapper<T> item = centroidFactory.create(it.next());
-				item.setBatchID(this.batchId);
-				count++;
+		try (final CloseableIterator<T> it = getRawCentroids(
+				fromBatchId,
+				groupID)) {
+			try (final IndexWriter indexWriter = dataStore.createWriter(
+					adapter,
+					index)) {
+				while (it.hasNext()) {
+					final AnalyticItemWrapper<T> item = centroidFactory.create(it.next());
+					item.setBatchID(this.batchId);
+					count++;
 
-				indexWriter.write(item.getWrappedItem());
+					indexWriter.write(item.getWrappedItem());
+				}
+				// indexWriter.close();
 			}
-			it.close();
-			// indexWriter.close();
 		}
 		LOGGER.info("Transfer " + count + " centroids");
 	}
@@ -570,12 +568,6 @@ public class CentroidManagerGeoWave<T> implements
 	}
 
 	@Override
-	public ByteArrayId getDataTypeId() {
-		return new ByteArrayId(
-				centroidDataTypeId);
-	}
-
-	@Override
 	public ByteArrayId getIndexId() {
 		return index.getId();
 	}
@@ -584,14 +576,9 @@ public class CentroidManagerGeoWave<T> implements
 		return this.batchId;
 	}
 
-	private DataAdapter<?> getAdapter() {
-		return adapterStore.getAdapter(getDataTypeId());
-	}
-
 	private ToSimpleFeatureConverter<T> getFeatureConverter(
 			final List<AnalyticItemWrapper<T>> items,
 			final Class<? extends Geometry> shapeClass ) {
-		final DataAdapter<?> adapter = getAdapter();
 		return (adapter instanceof FeatureDataAdapter) ? new SimpleFeatureConverter(
 				(FeatureDataAdapter) adapter,
 				shapeClass) : new NonSimpleFeatureConverter(
@@ -843,5 +830,11 @@ public class CentroidManagerGeoWave<T> implements
 			transaction.commit();
 			transaction.close();
 		}
+	}
+
+	@Override
+	public ByteArrayId getDataTypeId() {
+		return new ByteArrayId(
+				this.centroidDataTypeId);
 	}
 }

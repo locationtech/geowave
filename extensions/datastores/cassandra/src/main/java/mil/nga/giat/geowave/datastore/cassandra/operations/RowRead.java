@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
+import com.datastax.driver.core.TypeCodec;
 
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
@@ -18,32 +19,21 @@ public class RowRead
 	private final static Logger LOGGER = LoggerFactory.getLogger(RowRead.class);
 	private final CassandraOperations operations;
 	private final PreparedStatement preparedRead;
-	private byte[] adapterId;
+	private short internalAdapterId;
 	private byte[] partitionKey;
 	private byte[] sortKey;
-
-	protected RowRead(
-			final PreparedStatement preparedRead,
-			final CassandraOperations operations ) {
-		this(
-				preparedRead,
-				operations,
-				null,
-				null,
-				null);
-	}
 
 	protected RowRead(
 			final PreparedStatement preparedRead,
 			final CassandraOperations operations,
 			final byte[] partitionKey,
 			final byte[] sortKey,
-			final byte[] adapterId ) {
+			final Short internalAdapterId ) {
 		this.preparedRead = preparedRead;
 		this.operations = operations;
 		this.partitionKey = partitionKey;
 		this.sortKey = sortKey;
-		this.adapterId = adapterId;
+		this.internalAdapterId = internalAdapterId;
 	}
 
 	public CassandraRow result() {
@@ -56,8 +46,8 @@ public class RowRead
 					ByteBuffer.class);
 			boundRead.set(
 					CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-					ByteBuffer.wrap(adapterId),
-					ByteBuffer.class);
+					internalAdapterId,
+					TypeCodec.smallInt());
 			boundRead.set(
 					CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
 					ByteBuffer.wrap(partitionKey),

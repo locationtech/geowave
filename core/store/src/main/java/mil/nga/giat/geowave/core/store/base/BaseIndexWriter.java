@@ -22,12 +22,15 @@ import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Writer;
 import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
@@ -42,12 +45,12 @@ class BaseIndexWriter<T> implements
 	protected final IngestCallback<T> callback;
 	protected Writer writer;
 
-	protected final WritableDataAdapter<T> adapter;
-	protected final byte[] adapterId;
+	protected final InternalDataAdapter<T> adapter;
+	// protected final byte[] adapterId;
 	final Closeable closable;
 
 	public BaseIndexWriter(
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
@@ -58,7 +61,6 @@ class BaseIndexWriter<T> implements
 		this.index = index;
 		this.callback = callback;
 		this.adapter = adapter;
-		this.adapterId = adapter.getAdapterId().getBytes();
 		this.closable = closable;
 	}
 
@@ -176,7 +178,7 @@ class BaseIndexWriter<T> implements
 			try {
 				writer = operations.createWriter(
 						index.getId(),
-						adapter.getAdapterId());
+						adapter.getInternalAdapterId());
 			}
 			catch (final Exception e) {
 				LOGGER.error(

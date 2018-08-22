@@ -14,7 +14,7 @@ import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
@@ -31,34 +31,35 @@ public abstract class GeoWaveKey implements
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	protected ByteArrayId adapterId;
+	protected Short adapterId;
 
 	protected GeoWaveKey() {}
 
 	public GeoWaveKey(
-			final ByteArrayId adapterId ) {
+			final short adapterId ) {
 		this.adapterId = adapterId;
 	}
 
-	public ByteArrayId getAdapterId() {
+	public short getadapterId() {
 		return adapterId;
 	}
 
 	public void setAdapterId(
-			final ByteArrayId adapterId ) {
+			final short adapterId ) {
 		this.adapterId = adapterId;
 	}
 
 	@Override
 	public int compareTo(
 			final GeoWaveKey o ) {
+		byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(adapterId);
 		return WritableComparator.compareBytes(
-				adapterId.getBytes(),
+				internalAdapterIdBytes,
 				0,
-				adapterId.getBytes().length,
-				o.adapterId.getBytes(),
+				internalAdapterIdBytes.length,
+				ByteArrayUtils.shortToByteArray(o.adapterId),
 				0,
-				o.adapterId.getBytes().length);
+				ByteArrayUtils.shortToByteArray(o.adapterId).length);
 	}
 
 	@Override
@@ -87,20 +88,21 @@ public abstract class GeoWaveKey implements
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final int adapterIdLength = input.readInt();
-		final byte[] adapterIdBinary = new byte[adapterIdLength];
-		input.readFully(adapterIdBinary);
-		adapterId = new ByteArrayId(
-				adapterIdBinary);
+		// final int adapterIdLength = input.readInt();
+		// final byte[] adapterIdBinary = new byte[adapterIdLength];
+		// input.readFully(adapterIdBinary);
+		// adapterId = new ByteArrayId(adapterIdBinary);
+		adapterId = input.readShort();
 	}
 
 	@Override
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		final byte[] adapterIdBinary = adapterId.getBytes();
-		output.writeInt(adapterIdBinary.length);
-		output.write(adapterIdBinary);
+		// final byte[] adapterIdBinary = adapterId.getBytes();
+		// output.writeInt(adapterIdBinary.length);
+		// output.write(adapterIdBinary);
+		output.writeShort(adapterId);
 	}
 
 }

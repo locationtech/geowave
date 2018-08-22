@@ -14,6 +14,7 @@ import java.util.Collection;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -50,7 +51,7 @@ public class GeoWaveData<T>
 	}
 
 	public WritableDataAdapter<T> getAdapter(
-			final AdapterStore adapterCache ) {
+			final TransientAdapterStore adapterCache ) {
 		return outputKey.getAdapter(adapterCache);
 	}
 

@@ -36,6 +36,8 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
@@ -156,8 +158,12 @@ public class KMeansRunner
 		queryOptions.setAdapterIds(featureAdapterIds);
 
 		// This is required due to some funkiness in GeoWaveInputFormat
-		final AdapterStore adapterStore = inputDataStore.createAdapterStore();
-		queryOptions.getAdaptersArray(adapterStore);
+		final PersistentAdapterStore adapterStore = inputDataStore.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = inputDataStore.createInternalAdapterStore();
+
+		// TODO remove this, but in case there is trouble this is here for
+		// reference temporarily
+		// queryOptions.getAdaptersArray(adapterStore);
 
 		// Add a spatial filter if requested
 		DistributableQuery query = null;
@@ -173,7 +179,10 @@ public class KMeansRunner
 							adapterId);
 				}
 
-				final DataAdapter adapter = adapterStore.getAdapter(cqlAdapterId);
+				short internalAdpaterId = internalAdapterStore.getInternalAdapterId(cqlAdapterId);
+
+				final DataAdapter<?> adapter = adapterStore.getAdapter(
+						internalAdpaterId).getAdapter();
 
 				if (adapter instanceof FeatureDataAdapter) {
 					final String geometryAttribute = ((FeatureDataAdapter) adapter)

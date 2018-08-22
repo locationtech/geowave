@@ -243,8 +243,7 @@ public class BasicQueryTest
 				0).accept(
 				model,
 				new CommonIndexedPersistenceEncoding(
-						new ByteArrayId(
-								"adapter"),
+						(short) 1,
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
@@ -265,8 +264,7 @@ public class BasicQueryTest
 				0).accept(
 				model,
 				new CommonIndexedPersistenceEncoding(
-						new ByteArrayId(
-								"adapter"),
+						(short) 1,
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
@@ -294,8 +292,7 @@ public class BasicQueryTest
 				0).accept(
 				model,
 				new CommonIndexedPersistenceEncoding(
-						new ByteArrayId(
-								"adapter"),
+						(short) 1,
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(
@@ -320,8 +317,7 @@ public class BasicQueryTest
 				0).accept(
 				model,
 				new CommonIndexedPersistenceEncoding(
-						new ByteArrayId(
-								"adapter"),
+						(short) 1,
 						new ByteArrayId(
 								"data"),
 						new ByteArrayId(

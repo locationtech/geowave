@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.datastore.bigtable;
 import mil.nga.giat.geowave.core.store.BaseDataStoreFamily;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.GenericStoreFactory;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 
 public class BigTableStoreFactoryFamily extends
 		BaseDataStoreFamily
@@ -30,6 +31,14 @@ public class BigTableStoreFactoryFamily extends
 	@Override
 	public GenericStoreFactory<DataStore> getDataStoreFactory() {
 		return new BigTableDataStoreFactory(
+				TYPE,
+				DESCRIPTION,
+				new BigTableFactoryHelper());
+	}
+
+	@Override
+	public GenericStoreFactory<DataStatisticsStore> getDataStatisticsStoreFactory() {
+		return new BigTableDataStatisticsStoreFactory(
 				TYPE,
 				DESCRIPTION,
 				new BigTableFactoryHelper());

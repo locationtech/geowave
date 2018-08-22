@@ -41,6 +41,9 @@ import mil.nga.giat.geowave.core.cli.parser.OperationParser;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -91,7 +94,9 @@ public class VectorMRExportJobRunner extends
 				conf);
 		final QueryOptions options = new QueryOptions();
 		final List<String> adapterIds = mrOptions.getAdapterIds();
-		final AdapterStore adapterStore = storeOptions.createAdapterStore();
+		final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
+
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			options.setAdapters(Lists.transform(
 					adapterIds,
@@ -100,8 +105,9 @@ public class VectorMRExportJobRunner extends
 						@Override
 						public DataAdapter<?> apply(
 								final String input ) {
-							return adapterStore.getAdapter(new ByteArrayId(
+							Short internalAdpaterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 									input));
+							return adapterStore.getAdapter(internalAdpaterId);
 						}
 					}));
 		}
@@ -133,15 +139,17 @@ public class VectorMRExportJobRunner extends
 				return -1;
 			}
 			final String adapterId = adapterIds.get(0);
-			final DataAdapter<?> adapter = storeOptions.createAdapterStore().getAdapter(
-					new ByteArrayId(
-							adapterId));
+
+			Short internalAdpaterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
+					adapterId));
+			final InternalDataAdapter<?> adapter = storeOptions.createAdapterStore().getAdapter(
+					internalAdpaterId);
 			if (adapter == null) {
 				JCommander.getConsole().println(
 						"Type '" + adapterId + "' not found");
 				return -1;
 			}
-			if (!(adapter instanceof GeotoolsFeatureDataAdapter)) {
+			if (!(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
 				JCommander.getConsole().println(
 						"Type '" + adapterId + "' does not support vector export");
 

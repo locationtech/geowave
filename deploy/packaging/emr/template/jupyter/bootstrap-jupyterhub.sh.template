@@ -1,0 +1,97 @@
+#!/bin/bash
+
+# Variables for kernel creation
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+USER_PASS=${2:-geowave}
+
+is_master() {
+ if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
+  return 0
+ else
+  return 1
+ fi
+}
+
+# I've externalized commands into library functions for clarity, download and source
+if [ ! -f /tmp/create-configure-kernel.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+	sudo chmod +x /tmp/create-configure-kernel.sh
+fi
+
+if [ ! -f /tmp/install-conda.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/install-conda.sh /tmp/install-conda.sh
+	sudo chmod +x /tmp/install-conda.sh
+fi
+
+
+# The EMR customize hooks run _before_ everything else, so Spark is not yet ready
+THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+RUN_FLAG="${THIS_SCRIPT}.run"
+# On first boot skip past this script to allow EMR to set up the environment. Set a callback
+# which will poll for availability of Spark and then create the jupyter kernel
+if [ ! -f "$RUN_FLAG" ]; then
+	touch "$RUN_FLAG"
+	TIMEOUT= is_master && TIMEOUT=3 || TIMEOUT=4
+	echo "bash -x $(realpath "${BASH_SOURCE[0]}") > /tmp/bootstrap-jupyterhub.log" | at now + $TIMEOUT min
+	exit 0 # Bail and let EMR finish initializing
+fi
+
+# Download example notebooks from s3
+aws s3 sync s3://geowave-notebooks/latest/notebooks/ $HOME/notebooks/
+
+# Download hub configuration file
+sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/jupyterhub_config.py /etc/jupyterhub/"
+
+# Download latest conda (Python 3.6.1) to root install location
+sudo su root -c "source /tmp/install-conda.sh /opt/miniconda.sh /opt/conda/"
+
+# Install the necessary components for jupyter and pixiedust
+sudo su root -c "/opt/conda/bin/conda install jupyterhub jupyter ncurses"
+
+echo bootstrap_conda.sh completed. PATH now: $PATH
+echo Performing pixiedust and jupyter kernel setup.
+
+if is_master; then
+	sudo su root -c "source /tmp/create-configure-kernel.sh $GEOWAVE_VER /usr/local/pixiedust /opt/conda/bin /opt/conda/share/jupyter/kernels"
+fi
+
+# Allow pixiedust to be accessed by all users
+sudo chmod -R 777 /usr/local/pixiedust/
+
+# Add upstart service to run jupyterhub
+sudo cat << EOF > $HOME/jupyterhub.conf
+description "JupyterHub"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+respawn limit 0 10
+
+script
+   if [ -f /etc/jupyterhub/oauth_env.sh ]; then
+       . /etc/jupyterhub/oauth_env.sh
+   fi
+   . /etc/profile.d/conda.sh
+   exec start-stop-daemon --start --exec /opt/conda/bin/jupyterhub -- --config /etc/jupyterhub/jupyterhub_config.py > /var/log/jupyterhub.log 2>&1
+end script
+EOF
+sudo mv $HOME/jupyterhub.conf /etc/init/
+sudo chown root:root /etc/init/jupyterhub.conf
+
+sudo mkdir -p /srv/jupyterhub
+# Write default userlist that adds jupyterhub user as admin
+sudo cat << EOF > $HOME/userlist
+jupyterhub admin
+EOF
+sudo mv $HOME/userlist /srv/jupyterhub/
+sudo chown root:root /srv/jupyterhub/userlist
+
+# Add jupyterhub user
+sudo useradd -m -s /bin/bash -N jupyterhub
+sudo printf "jupyterhub:$USER_PASS" | sudo chpasswd
+
+# Start jupyterhub service
+# be sure that jupyter daemon is registered in initctl
+sudo initctl reload-configuration
+sudo initctl start jupyterhub

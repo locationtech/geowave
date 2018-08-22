@@ -5,34 +5,32 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import com.beust.jcommander.internal.Lists;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.TypeCodec;
-import com.google.common.collect.Lists;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
-import mil.nga.giat.geowave.datastore.cassandra.operations.CassandraOperations.ByteArrayIdToByteBuffer;
 
 public class BatchedRangeRead
 {
 	private final CassandraOperations operations;
 	private final PreparedStatement preparedRead;
 	private final Collection<SinglePartitionQueryRanges> ranges;
-	private final List<ByteArrayId> adapterIds;
+	private final Collection<Short> internalAdapterIds;
 
 	protected BatchedRangeRead(
 			final PreparedStatement preparedRead,
 			final CassandraOperations operations,
-			final List<ByteArrayId> adapterIds,
+			final Collection<Short> internalAdapterIds,
 			final Collection<SinglePartitionQueryRanges> ranges ) {
 		this.preparedRead = preparedRead;
 		this.operations = operations;
-		this.adapterIds = adapterIds;
+		this.internalAdapterIds = internalAdapterIds;
 		this.ranges = ranges;
 	}
 
@@ -42,8 +40,8 @@ public class BatchedRangeRead
 			for (final ByteArrayRange range : r.getSortKeyRanges()) {
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);
-				byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
-				byte[] end = range.getEnd() != null ? range.getEndAsNextPrefix().getBytes() : new byte[] {
+				final byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
+				final byte[] end = range.getEnd() != null ? range.getEndAsNextPrefix().getBytes() : new byte[] {
 					(byte) 0xFF,
 					(byte) 0xFF,
 					(byte) 0xFF,
@@ -68,11 +66,8 @@ public class BatchedRangeRead
 
 				boundRead.set(
 						CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-						Lists.transform(
-								adapterIds,
-								new ByteArrayIdToByteBuffer()),
-						TypeCodec.list(TypeCodec.blob()));
-
+						Lists.newArrayList(internalAdapterIds),
+						TypeCodec.list(TypeCodec.smallInt()));
 				statements.add(boundRead);
 			}
 

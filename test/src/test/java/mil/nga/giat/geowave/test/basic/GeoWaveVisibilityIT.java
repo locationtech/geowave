@@ -44,6 +44,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -784,10 +785,12 @@ public class GeoWaveVisibilityIT extends
 						getFeatureVisWriter());
 			}
 		}
+		final InternalAdapterStore internalDataStore = dataStoreOptions.createInternalAdapterStore();
+		short internalAdapterId = internalDataStore.getInternalAdapterId(adapter.getAdapterId());
 		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) dataStoreOptions
 				.createDataStatisticsStore()
 				.getDataStatistics(
-						adapter.getAdapterId(),
+						internalAdapterId,
 						DifferingFieldVisibilityEntryCount.composeId(TestUtils.DEFAULT_SPATIAL_INDEX.getId()));
 		Assert.assertEquals(
 				"Exactly half the entries should have differing visibility",

@@ -14,6 +14,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -35,9 +37,9 @@ abstract class BaseQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(BaseQuery.class);
 
-	protected List<ByteArrayId> adapterIds;
+	protected List<Short> adapterIds;
 	protected final PrimaryIndex index;
-	protected final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair;
+	protected final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair;
 	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
 	protected final String[] authorizations;
 
@@ -54,9 +56,9 @@ abstract class BaseQuery
 	}
 
 	public BaseQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
@@ -69,7 +71,7 @@ abstract class BaseQuery
 	protected <C> Reader<C> getReader(
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition,
@@ -103,18 +105,19 @@ abstract class BaseQuery
 	}
 
 	public boolean isRowMerging(
-			AdapterStore adapterStore ) {
+			PersistentAdapterStore adapterStore ) {
 		if (adapterIds != null) {
-			for (ByteArrayId adapterId : adapterIds) {
-				if (adapterStore.getAdapter(adapterId) instanceof RowMergingDataAdapter) {
+			for (short adapterId : adapterIds) {
+				if (adapterStore.getAdapter(
+						adapterId).getAdapter() instanceof RowMergingDataAdapter) {
 					return true;
 				}
 			}
 		}
 		else {
-			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+			try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
 				while (it.hasNext()) {
-					if (it.next() instanceof RowMergingDataAdapter) {
+					if (it.next().getAdapter() instanceof RowMergingDataAdapter) {
 						return true;
 					}
 				}
@@ -134,7 +137,7 @@ abstract class BaseQuery
 	}
 
 	public boolean isAggregation() {
-		final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation = getAggregation();
+		final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation = getAggregation();
 		return ((aggregation != null) && (aggregation.getRight() != null));
 	}
 
@@ -149,11 +152,11 @@ abstract class BaseQuery
 	abstract protected QueryRanges getRanges(
 			int maxRangeDecomposition );
 
-	protected Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
+	protected Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return null;
 	}
 
-	protected Pair<List<String>, DataAdapter<?>> getFieldSubsets() {
+	protected Pair<List<String>, InternalDataAdapter<?>> getFieldSubsets() {
 		return fieldIdsAdapterPair;
 	}
 

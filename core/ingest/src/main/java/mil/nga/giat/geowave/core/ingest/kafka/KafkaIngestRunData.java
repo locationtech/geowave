@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -35,7 +36,7 @@ public class KafkaIngestRunData implements
 		Closeable
 {
 	private final Map<ByteArrayId, IndexWriter> adapterIdToWriterCache = new HashMap<ByteArrayId, IndexWriter>();
-	private final AdapterStore adapterCache;
+	private final TransientAdapterStore adapterCache;
 	private final DataStore dataStore;
 
 	public KafkaIngestRunData(

@@ -37,6 +37,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.BaseSecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -204,7 +205,7 @@ public class AccumuloSecondaryIndexDataStore extends
 	public <T> CloseableIterator<T> query(
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations ) {

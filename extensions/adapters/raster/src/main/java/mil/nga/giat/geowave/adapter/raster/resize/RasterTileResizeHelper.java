@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -20,12 +20,13 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.opengis.coverage.grid.GridCoverage;
 
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -33,8 +34,9 @@ import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
 public class RasterTileResizeHelper
 {
-	private RasterDataAdapter oldAdapter;
 	private RasterDataAdapter newAdapter;
+	private final short oldInternalAdapterId;
+	private final short newInternalAdapterId;
 	private final PrimaryIndex index;
 	private final List<ByteArrayId> indexIds;
 
@@ -45,14 +47,16 @@ public class RasterTileResizeHelper
 		indexIds.add(index.getId());
 		final DataAdapter[] adapters = JobContextAdapterStore.getDataAdapters(context);
 		final Configuration conf = context.getConfiguration();
-		final String oldAdapterId = conf.get(RasterTileResizeJobRunner.OLD_ADAPTER_ID_KEY);
 		final String newAdapterId = conf.get(RasterTileResizeJobRunner.NEW_ADAPTER_ID_KEY);
+		oldInternalAdapterId = (short) conf.getInt(
+				RasterTileResizeJobRunner.OLD_INTERNAL_ADAPTER_ID_KEY,
+				-1);
+		newInternalAdapterId = (short) conf.getInt(
+				RasterTileResizeJobRunner.NEW_INTERNAL_ADAPTER_ID_KEY,
+				InternalAdapterStoreImpl.getInitialInternalAdapterId(new ByteArrayId(
+						newAdapterId)));
 		for (final DataAdapter adapter : adapters) {
 			if (adapter.getAdapterId().getString().equals(
-					oldAdapterId)) {
-				oldAdapter = (RasterDataAdapter) adapter;
-			}
-			else if (adapter.getAdapterId().getString().equals(
 					newAdapterId)) {
 				if (((RasterDataAdapter) adapter).getTransform() == null) {
 					// the new adapter doesn't have a merge strategy - resizing
@@ -88,7 +92,7 @@ public class RasterTileResizeHelper
 			throws IOException,
 			InterruptedException {
 		GridCoverage mergedCoverage = null;
-		MergeableRasterTile<?> mergedTile = null;
+		ClientMergeableRasterTile<?> mergedTile = null;
 		boolean needsMerge = false;
 		final Iterator it = values.iterator();
 		while (it.hasNext()) {
@@ -102,7 +106,8 @@ public class RasterTileResizeHelper
 						mergedTile = newAdapter.getRasterTileFromCoverage(mergedCoverage);
 						needsMerge = true;
 					}
-					final MergeableRasterTile thisTile = newAdapter.getRasterTileFromCoverage((GridCoverage) value);
+					final ClientMergeableRasterTile thisTile = newAdapter
+							.getRasterTileFromCoverage((GridCoverage) value);
 					if (mergedTile != null) {
 						mergedTile.merge(thisTile);
 					}
@@ -122,8 +127,8 @@ public class RasterTileResizeHelper
 		return mergedCoverage;
 	}
 
-	public ByteArrayId getNewCoverageId() {
-		return newAdapter.getAdapterId();
+	public short getNewInternalAdapterId() {
+		return newInternalAdapterId;
 	}
 
 	public ByteArrayId getNewDataId(
@@ -136,8 +141,7 @@ public class RasterTileResizeHelper
 	}
 
 	public boolean isOriginalCoverage(
-			final ByteArrayId adapterId ) {
-		return oldAdapter.getAdapterId().equals(
-				adapterId);
+			final short internalAdapterId ) {
+		return oldInternalAdapterId == internalAdapterId;
 	}
 }

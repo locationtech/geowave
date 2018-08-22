@@ -298,6 +298,7 @@ public class SplitsProviderIT extends
 					null,
 					null,
 					null,
+					null,
 					minSplits,
 					maxSplits);
 		}
@@ -327,7 +328,10 @@ public class SplitsProviderIT extends
 						RecordReaderParams<?> readerParams = new RecordReaderParams(
 								splitInfo.getIndex(),
 								dataStoreInfo.mapReduceMemoryDataStore.getAdapterStore(),
-								Collections.singletonList(dataStoreInfo.adapter.getAdapterId()),
+								Collections.singletonList(dataStorePluginOptions
+										.createInternalAdapterStore()
+										.getInternalAdapterId(
+												dataStoreInfo.adapter.getAdapterId())),
 								null,
 								null,
 								null,

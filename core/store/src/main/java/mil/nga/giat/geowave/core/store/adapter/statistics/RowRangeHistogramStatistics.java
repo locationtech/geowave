@@ -17,6 +17,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
@@ -44,11 +45,20 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	public RowRangeHistogramStatistics(
-			final ByteArrayId dataAdapterId,
+			final ByteArrayId indexId,
+			final ByteArrayId partitionKey ) {
+		this(
+				null,
+				indexId,
+				partitionKey);
+	}
+
+	public RowRangeHistogramStatistics(
+			final Short internalDataAdapterId,
 			final ByteArrayId indexId,
 			final ByteArrayId partitionKey ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						indexId,
 						partitionKey));
@@ -75,7 +85,7 @@ public class RowRangeHistogramStatistics<T> extends
 	public DataStatistics<T> duplicate() {
 		final Pair<ByteArrayId, ByteArrayId> pair = decomposeIndexAndPartitionFromId(statisticsId);
 		return new RowRangeHistogramStatistics<T>(
-				dataAdapterId,
+				internalDataAdapterId,
 				pair.getLeft(), // indexId
 				pair.getRight());
 	}
@@ -232,7 +242,8 @@ public class RowRangeHistogramStatistics<T> extends
 	 */
 
 	@Override
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
 		final JSONObject jo = new JSONObject();
 		jo.put(

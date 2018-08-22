@@ -161,7 +161,6 @@ public class QueryIndexHelperTest
 
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics whenStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"when");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("when"),
@@ -230,14 +229,12 @@ public class QueryIndexHelperTest
 
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"start");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("start"),
 				startStats);
 
 		final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"end");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("end"),
@@ -302,14 +299,12 @@ public class QueryIndexHelperTest
 
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"start");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("start"),
 				startStats);
 
 		final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"end");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("end"),
@@ -394,7 +389,6 @@ public class QueryIndexHelperTest
 	public void testComposeQueryWithOutTimeRange() {
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
-				dataAdapterId,
 				"geometry");
 		statsMap.put(
 				FeatureBoundingBoxStatistics.composeId("geometry"),
@@ -454,7 +448,6 @@ public class QueryIndexHelperTest
 	public void testGetBBOX() {
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
-				dataAdapterId,
 				"geometry");
 		statsMap.put(
 				FeatureBoundingBoxStatistics.composeId("geometry"),
@@ -520,7 +513,6 @@ public class QueryIndexHelperTest
 				transform);
 
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
-				dataAdapterId,
 				"geometry",
 				geoType,
 				transform);
@@ -614,14 +606,12 @@ public class QueryIndexHelperTest
 
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"start");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("start"),
 				startStats);
 
 		final FeatureTimeRangeStatistics endStats = new FeatureTimeRangeStatistics(
-				dataAdapterId,
 				"end");
 		statsMap.put(
 				FeatureTimeRangeStatistics.composeId("end"),
@@ -669,7 +659,6 @@ public class QueryIndexHelperTest
 		assertTrue(nd.isEmpty());
 
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
-				dataAdapterId,
 				"geometry");
 		statsMap.put(
 				FeatureBoundingBoxStatistics.composeId("geometry"),

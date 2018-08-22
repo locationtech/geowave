@@ -48,8 +48,11 @@ mkdir -p $TARGET_ROOT/quickstart
 cp $TEMPLATE_ROOT/bootstrap-geowave.sh.template $TEMPLATE_ROOT/bootstrap-geowave.sh
 cp $TEMPLATE_ROOT/geowave-install-lib.sh.template $TEMPLATE_ROOT/geowave-install-lib.sh
 cp $TEMPLATE_ROOT/quickstart/geowave-env.sh.template $TARGET_ROOT/quickstart/geowave-env.sh
-cp $TEMPLATE_ROOT/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
-cp $TEMPLATE_ROOT/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
+
+cp $TEMPLATE_ROOT/jupyter/bootstrap-jupyter.sh.template $TEMPLATE_ROOT/bootstrap-jupyter.sh
+cp $TEMPLATE_ROOT/jupyter/create-configure-kernel.sh.template $TEMPLATE_ROOT/create-configure-kernel.sh
+cp $TEMPLATE_ROOT/jupyter/bootstrap-jupyterhub.sh.template $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
+
 cp $TEMPLATE_ROOT/bootstrap-zeppelin.sh.template $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 cp $TEMPLATE_ROOT/configure-zeppelin.sh.template $TEMPLATE_ROOT/configure-zeppelin.sh
 
@@ -71,6 +74,9 @@ sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TARGET_ROOT/quickstart/
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyter.sh
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/create-configure-kernel.sh
+
+sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
+sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
 
 sed -i -e s/'$GEOWAVE_VERSION_TOKEN'/${ARGS[version]}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 sed -i -e s/'$GEOWAVE_VERSION_URL_TOKEN'/${GEOWAVE_VERSION_URL_TOKEN}/g $TEMPLATE_ROOT/bootstrap-zeppelin.sh
@@ -102,8 +108,14 @@ done
 # Copy jupyter additions to separate generated folder
 # This will put scripts into separate jupyter folder on s3 when published.
 mkdir -p $TARGET_ROOT/jupyter
+
+# copy permanent resources that don't need a template
+cp $TEMPLATE_ROOT/jupyter/install-conda.sh $TARGET_ROOT/jupyter/install-conda.sh
+cp $TEMPLATE_ROOT/jupyter/jupyterhub_config.py $TARGET_ROOT/jupyter/jupyterhub_config.py
+
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh
+cp $TEMPLATE_ROOT/bootstrap-jupyterhub.sh $TARGET_ROOT/jupyter/bootstrap-jupyterhub.sh
 
 # Copy zeppelin additions to separate generated folder
 # This will put scripts into separate zeppelin folder on s3 when published.
@@ -116,6 +128,7 @@ rm $TEMPLATE_ROOT/bootstrap-geowave.sh
 rm $TEMPLATE_ROOT/geowave-install-lib.sh
 rm $TEMPLATE_ROOT/bootstrap-jupyter.sh
 rm $TEMPLATE_ROOT/create-configure-kernel.sh
+rm $TEMPLATE_ROOT/bootstrap-jupyterhub.sh
 rm $TEMPLATE_ROOT/bootstrap-zeppelin.sh
 rm $TEMPLATE_ROOT/configure-zeppelin.sh
 

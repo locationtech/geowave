@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
+import com.beust.jcommander.internal.Lists;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 
@@ -60,7 +61,7 @@ public class MapReduceMemoryOperations extends
 		return createReader((ReaderParams) new ReaderParams(
 				readerParams.getIndex(),
 				readerParams.getAdapterStore(),
-				readerParams.getAdapterIds(),
+				Lists.newArrayList(readerParams.getAdapterIds()),
 				readerParams.getMaxResolutionSubsamplingPerDimension(),
 				readerParams.getAggregation(),
 				readerParams.getFieldSubsets(),

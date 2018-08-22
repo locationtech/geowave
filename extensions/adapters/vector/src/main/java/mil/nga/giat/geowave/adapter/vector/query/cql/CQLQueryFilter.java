@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
@@ -49,54 +50,53 @@ public class CQLQueryFilter implements
 		this.adapter = adapter;
 	}
 
+	public ByteArrayId getAdapterId() {
+		return adapter.getAdapterId();
+	}
+
 	@Override
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding persistenceEncoding ) {
 		if ((filter != null) && (indexModel != null) && (adapter != null)) {
-			if (adapter.getAdapterId().equals(
-					persistenceEncoding.getAdapterId())) {
-				final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
-				if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
-					((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
-							adapter,
-							indexModel);
-					final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
-							.getAdapterExtendedData();
-					if (existingExtValues != null) {
-						adapterExtendedValues.addValues(existingExtValues.getValues());
-					}
+			final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
+			if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
+				((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
+						adapter,
+						indexModel);
+				final PersistentDataset<Object> existingExtValues = ((AbstractAdapterPersistenceEncoding) persistenceEncoding)
+						.getAdapterExtendedData();
+				if (existingExtValues != null) {
+					adapterExtendedValues.addValues(existingExtValues.getValues());
 				}
-				final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
-						persistenceEncoding.getAdapterId(),
-						persistenceEncoding.getDataId(),
-						persistenceEncoding.getInsertionPartitionKey(),
-						persistenceEncoding.getInsertionSortKey(),
-						persistenceEncoding.getDuplicateCount(),
-						persistenceEncoding.getCommonData(),
-						new PersistentDataset<byte[]>(),
-						adapterExtendedValues);
-
-				final SimpleFeature feature = adapter.decode(
-						encoding,
-						new PrimaryIndex(
-								null, // because we know the feature data
-										// adapter doesn't use the numeric index
-										// strategy and only the common index
-										// model to decode the simple feature,
-										// we pass along a null strategy to
-										// eliminate the necessity to send a
-										// serialization of the strategy in the
-										// options of this iterator
-								indexModel));
-				if (feature == null) {
-					return false;
-				}
-				return filter.evaluate(feature);
 			}
-			else {
+			final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
+					persistenceEncoding.getInternalAdapterId(),
+					persistenceEncoding.getDataId(),
+					persistenceEncoding.getInsertionPartitionKey(),
+					persistenceEncoding.getInsertionSortKey(),
+					persistenceEncoding.getDuplicateCount(),
+					persistenceEncoding.getCommonData(),
+					new PersistentDataset<byte[]>(),
+					adapterExtendedValues);
+
+			final SimpleFeature feature = adapter.decode(
+					encoding,
+					new PrimaryIndex(
+							null, // because we know the feature data
+									// adapter doesn't use the numeric index
+									// strategy and only the common index
+									// model to decode the simple feature,
+									// we pass along a null strategy to
+									// eliminate the necessity to send a
+									// serialization of the strategy in the
+									// options of this iterator
+							indexModel));
+			if (feature == null) {
 				return false;
 			}
+			return filter.evaluate(feature);
+
 		}
 		return true;
 	}

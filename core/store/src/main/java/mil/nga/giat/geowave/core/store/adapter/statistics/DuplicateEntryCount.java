@@ -18,6 +18,7 @@ import org.apache.commons.lang3.ArrayUtils;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -45,20 +46,27 @@ public class DuplicateEntryCount<T> extends
 	}
 
 	private DuplicateEntryCount(
-			final ByteArrayId dataAdapterId,
+			final Short internalDataAdapterId,
 			final ByteArrayId statsId,
 			final long entriesWithDuplicates ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				statsId);
 		this.entriesWithDuplicates = entriesWithDuplicates;
 	}
 
 	public DuplicateEntryCount(
-			final ByteArrayId dataAdapterId,
+			final ByteArrayId indexId ) {
+		this(
+				null,
+				indexId);
+	}
+
+	public DuplicateEntryCount(
+			final Short internalDataAdapterId,
 			final ByteArrayId indexId ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(indexId));
 	}
 
@@ -75,7 +83,7 @@ public class DuplicateEntryCount<T> extends
 	@Override
 	public DataStatistics<T> duplicate() {
 		return new DuplicateEntryCount<>(
-				dataAdapterId,
+				internalDataAdapterId,
 				statisticsId,
 				entriesWithDuplicates);
 	}
@@ -140,11 +148,11 @@ public class DuplicateEntryCount<T> extends
 
 	public static DuplicateEntryCount getDuplicateCounts(
 			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIdsToQuery,
+			final List<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		DuplicateEntryCount combinedDuplicateCount = null;
-		for (final ByteArrayId adapterId : adapterIdsToQuery) {
+		for (final short adapterId : adapterIdsToQuery) {
 			final DuplicateEntryCount adapterVisibilityCount = (DuplicateEntryCount) statisticsStore.getDataStatistics(
 					adapterId,
 					DuplicateEntryCount.composeId(index.getId()),
@@ -164,7 +172,8 @@ public class DuplicateEntryCount<T> extends
 	 */
 
 	@Override
-	public JSONObject toJSONObject()
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
 		final JSONObject jo = new JSONObject();
 		jo.put(
@@ -174,7 +183,9 @@ public class DuplicateEntryCount<T> extends
 		jo.put(
 				"statisticsID",
 				statisticsId.getString());
-
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"count",
 				entriesWithDuplicates);

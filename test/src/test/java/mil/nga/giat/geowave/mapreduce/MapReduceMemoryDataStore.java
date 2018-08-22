@@ -8,6 +8,9 @@ import org.apache.hadoop.mapreduce.RecordReader;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
@@ -15,6 +18,7 @@ import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
@@ -45,16 +49,19 @@ public class MapReduceMemoryDataStore extends
 						new MemoryRequiredOptions().getStoreOptions()),
 				null,
 				operations,
-				new MemoryRequiredOptions().getStoreOptions());
+				new MemoryRequiredOptions().getStoreOptions(),
+				new InternalAdapterStoreImpl(
+						operations));
 	}
 
 	@Override
 	public List<InputSplit> getSplits(
 			DistributableQuery query,
 			QueryOptions queryOptions,
-			AdapterStore adapterStore,
+			TransientAdapterStore adapterStore,
 			AdapterIndexMappingStore aimStore,
 			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore,
 			IndexStore indexStore,
 			Integer minSplits,
 			Integer maxSplits )
@@ -63,15 +70,16 @@ public class MapReduceMemoryDataStore extends
 		return super.getSplits(
 				query,
 				queryOptions,
-				this.adapterStore,
+				adapterStore,
 				this.indexMappingStore,
 				this.statisticsStore,
+				this.internalAdapterStore,
 				this.indexStore,
 				minSplits,
 				maxSplits);
 	}
 
-	public AdapterStore getAdapterStore() {
+	public PersistentAdapterStore getAdapterStore() {
 		return this.adapterStore;
 	}
 }

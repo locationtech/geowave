@@ -25,13 +25,20 @@ import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
+import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 
 public class SpatialJoinRunner implements
 		Serializable
 {
+	/**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialJoinRunner.class);
 
 	// Options provided by user to run join
@@ -59,17 +66,23 @@ public class SpatialJoinRunner implements
 	private GeoWaveIndexedRDD leftRDD = null;
 	private GeoWaveIndexedRDD rightRDD = null;
 
+	private InternalAdapterStore leftInternalAdapterStore;
+	private InternalAdapterStore rightInternalAdapterStore;
+
+	private IndexStore leftIndexStore;
+	private IndexStore rightIndexStore;
+
 	// TODO: Join strategy could be supplied as variable or determined
 	// automatically from index store (would require associating index and join
 	// strategy)
 	// for now will just use TieredSpatialJoin as that is the only one we have
 	// implemented.
-	private JoinStrategy joinStrategy = new TieredSpatialJoin();
+	private final JoinStrategy joinStrategy = new TieredSpatialJoin();
 
 	public SpatialJoinRunner() {}
 
 	public SpatialJoinRunner(
-			SparkSession session ) {
+			final SparkSession session ) {
 		this.session = session;
 	}
 
@@ -77,6 +90,10 @@ public class SpatialJoinRunner implements
 			throws InterruptedException,
 			ExecutionException,
 			IOException {
+		leftInternalAdapterStore = leftStore.createInternalAdapterStore();
+		rightInternalAdapterStore = rightStore.createInternalAdapterStore();
+		leftIndexStore = leftStore.createIndexStore();
+		rightIndexStore = rightStore.createIndexStore();
 		// Init context
 		initContext();
 		// Load RDDs
@@ -98,10 +115,12 @@ public class SpatialJoinRunner implements
 
 	private PrimaryIndex[] getIndicesForAdapter(
 			DataStorePluginOptions storeOptions,
-			ByteArrayId adapterId ) {
+			ByteArrayId adapterId,
+			InternalAdapterStore internalAdapterStore,
+			IndexStore indexStore ) {
 		return storeOptions.createAdapterIndexMappingStore().getIndicesForAdapter(
-				adapterId).getIndices(
-				storeOptions.createIndexStore());
+				internalAdapterStore.getInternalAdapterId(adapterId)).getIndices(
+				indexStore);
 	}
 
 	private FeatureDataAdapter createOutputAdapter(
@@ -126,20 +145,23 @@ public class SpatialJoinRunner implements
 	private void writeResultsToNewAdapter()
 			throws IOException {
 		if (outputStore != null) {
-
-			PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
+			final PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
 					leftStore,
-					leftAdapterId);
-			FeatureDataAdapter newLeftAdapter = this.createOutputAdapter(
+					leftAdapterId,
+					leftInternalAdapterStore,
+					leftIndexStore);
+			final FeatureDataAdapter newLeftAdapter = this.createOutputAdapter(
 					leftStore,
 					leftAdapterId,
 					leftIndices,
 					outLeftAdapterId);
 
-			PrimaryIndex[] rightIndices = this.getIndicesForAdapter(
+			final PrimaryIndex[] rightIndices = this.getIndicesForAdapter(
 					rightStore,
-					rightAdapterId);
-			FeatureDataAdapter newRightAdapter = this.createOutputAdapter(
+					rightAdapterId,
+					rightInternalAdapterStore,
+					rightIndexStore);
+			final FeatureDataAdapter newRightAdapter = this.createOutputAdapter(
 					rightStore,
 					rightAdapterId,
 					rightIndices,
@@ -151,23 +173,23 @@ public class SpatialJoinRunner implements
 					leftIndices,
 					outputStore,
 					newLeftAdapter,
-					this.getLeftResults());
+					getLeftResults());
 			RDDUtils.writeRDDToGeoWave(
 					sc,
 					rightIndices,
 					outputStore,
 					newRightAdapter,
-					this.getRightResults());
+					getRightResults());
 		}
 	}
 
 	private ByteArrayId createDefaultAdapterName(
-			ByteArrayId adapterId,
-			DataStorePluginOptions storeOptions ) {
-		String defaultAdapterName = adapterId + "_joined";
+			final ByteArrayId adapterId,
+			final DataStorePluginOptions storeOptions ) {
+		final String defaultAdapterName = adapterId + "_joined";
 		ByteArrayId defaultAdapterId = new ByteArrayId(
 				defaultAdapterName);
-		AdapterStore adapterStore = storeOptions.createAdapterStore();
+		final AdapterStore adapterStore = storeOptions.createAdapterStore();
 		if (!adapterStore.adapterExists(defaultAdapterId)) {
 			return defaultAdapterId;
 		}
@@ -229,7 +251,9 @@ public class SpatialJoinRunner implements
 
 	private GeoWaveIndexedRDD createRDDFromOptions(
 			DataStorePluginOptions storeOptions,
-			ByteArrayId adapterId )
+			ByteArrayId adapterId,
+			InternalAdapterStore internalAdapterStore,
+			IndexStore indexStore )
 			throws IOException {
 		QueryOptions adapterOptions;
 
@@ -248,7 +272,7 @@ public class SpatialJoinRunner implements
 
 		adapterOptions = new QueryOptions(
 				storeOptions.createAdapterStore().getAdapter(
-						adapterId));
+						internalAdapterStore.getInternalAdapterId(adapterId)));
 
 		RDDOptions rddOpts = new RDDOptions();
 		rddOpts.setQueryOptions(adapterOptions);
@@ -260,7 +284,9 @@ public class SpatialJoinRunner implements
 		if (this.indexStrategy == null) {
 			PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
 					storeOptions,
-					adapterId);
+					adapterId,
+					leftInternalAdapterStore,
+					indexStore);
 			if (leftIndices.length > 0) {
 				rddStrategy = leftIndices[0].getIndexStrategy();
 			}
@@ -283,7 +309,9 @@ public class SpatialJoinRunner implements
 			if (leftRDD == null) {
 				leftRDD = this.createRDDFromOptions(
 						leftStore,
-						leftAdapterId);
+						leftAdapterId,
+						leftInternalAdapterStore,
+						leftIndexStore);
 			}
 		}
 
@@ -291,11 +319,12 @@ public class SpatialJoinRunner implements
 			if (rightRDD == null) {
 				rightRDD = this.createRDDFromOptions(
 						rightStore,
-						rightAdapterId);
+						rightAdapterId,
+						rightInternalAdapterStore,
+						rightIndexStore);
 			}
 
 		}
-
 	}
 
 	private void verifyCRS() {
@@ -305,11 +334,11 @@ public class SpatialJoinRunner implements
 
 	// Accessors and Mutators
 	public GeoWaveRDD getLeftResults() {
-		return this.joinStrategy.getLeftResults();
+		return joinStrategy.getLeftResults();
 	}
 
 	public GeoWaveRDD getRightResults() {
-		return this.joinStrategy.getRightResults();
+		return joinStrategy.getRightResults();
 	}
 
 	public DataStorePluginOptions getLeftStore() {
@@ -317,7 +346,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setLeftStore(
-			DataStorePluginOptions leftStore ) {
+			final DataStorePluginOptions leftStore ) {
 		this.leftStore = leftStore;
 	}
 
@@ -326,7 +355,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setLeftAdapterId(
-			ByteArrayId leftAdapterId ) {
+			final ByteArrayId leftAdapterId ) {
 		this.leftAdapterId = leftAdapterId;
 	}
 
@@ -335,7 +364,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setRightStore(
-			DataStorePluginOptions rightStore ) {
+			final DataStorePluginOptions rightStore ) {
 		this.rightStore = rightStore;
 	}
 
@@ -344,7 +373,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setRightAdapterId(
-			ByteArrayId rightAdapterId ) {
+			final ByteArrayId rightAdapterId ) {
 		this.rightAdapterId = rightAdapterId;
 	}
 
@@ -353,7 +382,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setOutputStore(
-			DataStorePluginOptions outputStore ) {
+			final DataStorePluginOptions outputStore ) {
 		this.outputStore = outputStore;
 	}
 
@@ -362,7 +391,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setPredicate(
-			GeomFunction predicate ) {
+			final GeomFunction predicate ) {
 		this.predicate = predicate;
 	}
 
@@ -371,7 +400,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setIndexStrategy(
-			NumericIndexStrategy indexStrategy ) {
+			final NumericIndexStrategy indexStrategy ) {
 		this.indexStrategy = indexStrategy;
 	}
 
@@ -380,7 +409,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setAppName(
-			String appName ) {
+			final String appName ) {
 		this.appName = appName;
 	}
 
@@ -389,7 +418,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setMaster(
-			String master ) {
+			final String master ) {
 		this.master = master;
 	}
 
@@ -398,7 +427,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setHost(
-			String host ) {
+			final String host ) {
 		this.host = host;
 	}
 
@@ -407,12 +436,12 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setPartCount(
-			Integer partCount ) {
+			final Integer partCount ) {
 		this.partCount = partCount;
 	}
 
 	public void setSession(
-			SparkSession session ) {
+			final SparkSession session ) {
 		this.session = session;
 	}
 
@@ -421,7 +450,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setOutputLeftAdapterId(
-			ByteArrayId outLeftAdapterId ) {
+			final ByteArrayId outLeftAdapterId ) {
 		this.outLeftAdapterId = outLeftAdapterId;
 	}
 
@@ -430,17 +459,17 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setOutputRightAdapterId(
-			ByteArrayId outRightAdapterId ) {
+			final ByteArrayId outRightAdapterId ) {
 		this.outRightAdapterId = outRightAdapterId;
 	}
 
 	public void setLeftRDD(
-			GeoWaveIndexedRDD leftRDD ) {
+			final GeoWaveIndexedRDD leftRDD ) {
 		this.leftRDD = leftRDD;
 	}
 
 	public void setRightRDD(
-			GeoWaveIndexedRDD rightRDD ) {
+			final GeoWaveIndexedRDD rightRDD ) {
 		this.rightRDD = rightRDD;
 	}
 
@@ -449,7 +478,7 @@ public class SpatialJoinRunner implements
 	}
 
 	public void setNegativeTest(
-			boolean negativeTest ) {
+			final boolean negativeTest ) {
 		this.negativeTest = negativeTest;
 	}
 

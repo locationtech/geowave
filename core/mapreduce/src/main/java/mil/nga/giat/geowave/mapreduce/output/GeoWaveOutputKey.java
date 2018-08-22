@@ -19,6 +19,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,8 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
 
@@ -34,14 +37,16 @@ import mil.nga.giat.geowave.mapreduce.GeoWaveKey;
  * using a map-reduce GeoWave output format. The record writer must have bother
  * the adapter and the index for the data element to ingest.
  */
-public class GeoWaveOutputKey<T> extends
-		GeoWaveKey
+public class GeoWaveOutputKey<T> implements
+		WritableComparable<GeoWaveOutputKey>,
+		java.io.Serializable
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveOutputKey.class);
 	/**
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
+	protected ByteArrayId adapterId;
 	private Collection<ByteArrayId> indexIds;
 	transient private WritableDataAdapter<T> adapter;
 
@@ -52,28 +57,32 @@ public class GeoWaveOutputKey<T> extends
 	public GeoWaveOutputKey(
 			final ByteArrayId adapterId,
 			final ByteArrayId indexId ) {
-		super(
-				adapterId);
+		this.adapterId = adapterId;
 		indexIds = Arrays.asList(indexId);
 	}
 
 	public GeoWaveOutputKey(
 			final ByteArrayId adapterId,
 			final Collection<ByteArrayId> indexIds ) {
-		super(
-				adapterId);
+		this.adapterId = adapterId;
 		this.indexIds = indexIds;
 	}
 
 	public GeoWaveOutputKey(
 			final WritableDataAdapter<T> adapter,
 			final Collection<ByteArrayId> indexIds ) {
-		super(
-				adapter.getAdapterId());
 		this.adapter = adapter;
 		this.indexIds = indexIds;
-
 		adapterId = adapter.getAdapterId();
+	}
+
+	public ByteArrayId getAdapterId() {
+		return adapterId;
+	}
+
+	public void setAdapterId(
+			final ByteArrayId adapterId ) {
+		this.adapterId = adapterId;
 	}
 
 	public Collection<ByteArrayId> getIndexIds() {
@@ -81,7 +90,7 @@ public class GeoWaveOutputKey<T> extends
 	}
 
 	public WritableDataAdapter<T> getAdapter(
-			final AdapterStore adapterCache ) {
+			final TransientAdapterStore adapterCache ) {
 		if (adapter != null) {
 			return adapter;
 		}
@@ -95,24 +104,27 @@ public class GeoWaveOutputKey<T> extends
 
 	@Override
 	public int compareTo(
-			final GeoWaveKey o ) {
-		final int baseCompare = super.compareTo(o);
-		if (baseCompare != 0) {
-			return baseCompare;
+			final GeoWaveOutputKey o ) {
+		final int adapterCompare = WritableComparator.compareBytes(
+				adapterId.getBytes(),
+				0,
+				adapterId.getBytes().length,
+				o.adapterId.getBytes(),
+				0,
+				o.adapterId.getBytes().length);
+		if (adapterCompare != 0) {
+			return adapterCompare;
 		}
-		if (o instanceof GeoWaveOutputKey) {
-			final GeoWaveOutputKey other = (GeoWaveOutputKey) o;
-			final byte[] thisIndex = getConcatenatedIndexId();
-			final byte[] otherIndex = other.getConcatenatedIndexId();
-			return WritableComparator.compareBytes(
-					thisIndex,
-					0,
-					thisIndex.length,
-					otherIndex,
-					0,
-					otherIndex.length);
-		}
-		return 1;
+		final GeoWaveOutputKey other = (GeoWaveOutputKey) o;
+		final byte[] thisIndex = getConcatenatedIndexId();
+		final byte[] otherIndex = other.getConcatenatedIndexId();
+		return WritableComparator.compareBytes(
+				thisIndex,
+				0,
+				thisIndex.length,
+				otherIndex,
+				0,
+				otherIndex.length);
 	}
 
 	private byte[] getConcatenatedIndexId() {
@@ -131,7 +143,8 @@ public class GeoWaveOutputKey<T> extends
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = super.hashCode();
+		int result = 1;
+		result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
 		result = (prime * result) + ((indexIds == null) ? 0 : indexIds.hashCode());
 		return result;
 	}
@@ -149,6 +162,10 @@ public class GeoWaveOutputKey<T> extends
 			return false;
 		}
 		final GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
+		if (adapterId == null) {
+			if (other.adapterId != null) return false;
+		}
+		else if (!adapterId.equals(other.adapterId)) return false;
 		if (indexIds == null) {
 			if (other.indexIds != null) {
 				return false;
@@ -164,7 +181,11 @@ public class GeoWaveOutputKey<T> extends
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		super.readFields(input);
+		final int adapterIdLength = input.readInt();
+		final byte[] adapterIdBinary = new byte[adapterIdLength];
+		input.readFully(adapterIdBinary);
+		adapterId = new ByteArrayId(
+				adapterIdBinary);
 		final byte indexIdCount = input.readByte();
 		indexIds = new ArrayList<ByteArrayId>();
 		for (int i = 0; i < indexIdCount; i++) {
@@ -180,7 +201,9 @@ public class GeoWaveOutputKey<T> extends
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		super.write(output);
+		final byte[] adapterIdBinary = adapterId.getBytes();
+		output.writeInt(adapterIdBinary.length);
+		output.write(adapterIdBinary);
 		output.writeByte(indexIds.size());
 		for (final ByteArrayId indexId : indexIds) {
 			output.writeInt(indexId.getBytes().length);

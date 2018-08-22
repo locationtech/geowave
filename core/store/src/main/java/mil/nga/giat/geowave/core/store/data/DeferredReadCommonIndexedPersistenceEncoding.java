@@ -36,11 +36,10 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 	private final FlattenedUnreadData unreadData;
 
 	public DeferredReadCommonIndexedPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final short adapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKey,
-
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
@@ -64,9 +63,14 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 		if (unreadData != null) {
 			final List<FlattenedFieldInfo> fields = unreadData.finishRead();
 			for (final FlattenedFieldInfo field : fields) {
-				final ByteArrayId fieldId = adapter.getFieldIdForPosition(
+				ByteArrayId fieldId = adapter.getFieldIdForPosition(
 						model,
 						field.getFieldPosition());
+				if (fieldId == null) {
+					fieldId = adapter.getFieldIdForPosition(
+							model,
+							field.getFieldPosition());
+				}
 				final FieldReader<Object> reader = adapter.getReader(fieldId);
 				final Object value = reader.readField(field.getValue());
 				adapterExtendedData.addValue(

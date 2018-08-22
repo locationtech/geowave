@@ -30,7 +30,7 @@ public class IndexedAdapterPersistenceEncoding extends
 		AbstractAdapterPersistenceEncoding
 {
 	public IndexedAdapterPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final short adapterId,
 			final ByteArrayId dataId,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKey,

@@ -1,18 +1,16 @@
 #!/bin/bash
 
+
 GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
-MASTER_ARG=${2:-yarn}
+PIXIEDUST_HOME=${2:-$HOME/pixiedust/}
+CONDA_INSTALL=${3:-$HOME/conda/bin}
+KERNEL_OUT=${4:-$HOME/.local/share/jupyter/kernels/}
+SPARK_HOME=${5:-/usr/lib/spark}
+MASTER_ARG=${6:-yarn}
+
 INTIAL_POLLING_INTERVAL=15 # This gets doubled for each attempt up to max_attempts
 
-# Parses a configuration file put in place by EMR to determine the role of this node
-
-is_master() {
-  if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
-    return 0
-  else
-    return 1
-  fi
-}
+KERNEL_DIR=$HOME/.local/share/jupyter/kernels/
 
 # Avoid race conditions and actually poll for availability of component dependencies
 # Credit: http://stackoverflow.com/questions/8350942/how-to-re-run-the-curl-command-automatically-when-the-error-occurs/8351489#8351489
@@ -61,14 +59,17 @@ wait_until_spark_is_available() {
 	fi
 }
 
-install_kernel() {
+#Install the Kernel
 wait_until_spark_is_available
 
 # Create the jupyter kernel
-jupyter pixiedust install <<END
-y
+mkdir -p  $PIXIEDUST_HOME
+
+${CONDA_INSTALL}/jupyter pixiedust install <<END
 n
-/usr/lib/spark
+$PIXIEDUST_HOME
+n
+$SPARK_HOME
 y
 y
 y
@@ -76,9 +77,8 @@ END
 
 #Use jq to remove unnecessary keys
 GEOWAVE_INSTALL=/usr/local/geowave/tools/geowave-tools-${GEOWAVE_VER}-apache.jar
-#Grab all pixiedust kernels installed (should only be one by default), and use for master kernel changes.
-KERNEL_DIR=$HOME/.local/share/jupyter/kernels/
-PIXIEDUST_KERNELS="$(find $KERNEL_DIR -type d -name 'pythonwithpixiedustspark*')"
+PIXIEDUST_KERNELS=$(find $KERNEL_DIR -type d -name pythonwithpixiedustspark*)
+echo $PIXIEDUST_KERNELS
 KERNEL_JSON=$PIXIEDUST_KERNELS/kernel.json
 jq 'del(.env["SPARK_LOCAL_IP"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
 jq 'del(.env["SPARK_DRIVER_MEMORY"])' $KERNEL_JSON > tmp.$$.json && mv tmp.$$.json $KERNEL_JSON
@@ -128,31 +128,5 @@ jq --arg submit_args "${submit_string}" '.env["PYSPARK_SUBMIT_ARGS"]= $submit_ar
 
 echo "Modified Kernel to use yarn by default"
 
-#Adding Jupyter to Upstart so it can be run at bootstrap
-cd $HOME
-sudo cat << EOF > $HOME/jupyter.conf
-description "Jupyter"
-
-start on runlevel [2345]
-stop on runlevel [016]
-
-respawn
-respawn limit 0 10
-
-env HOME=$HOME
-script
-    . $HOME/.bashrc
-    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
-end script
-EOF
-sudo mv $HOME/jupyter.conf /etc/init/
-sudo chown root:root /etc/init/jupyter.conf
-
-# be sure that jupyter daemon is registered in initctl
-sudo initctl reload-configuration
-
-# start jupyter daemon
-sudo initctl start jupyter
-
-return 0
-}
+# Copy final modified kernel to output install location
+cp -R $PIXIEDUST_KERNELS $KERNEL_OUT

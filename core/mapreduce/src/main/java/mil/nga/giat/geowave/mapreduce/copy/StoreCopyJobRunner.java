@@ -28,11 +28,13 @@ import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterIndexMappingStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputFormat;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.operations.CopyCommand;
@@ -114,9 +116,9 @@ public class StoreCopyJobRunner extends
 				outputStoreOptions);
 
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();
-		try (CloseableIterator<DataAdapter<?>> adapterIt = inputStoreOptions.createAdapterStore().getAdapters()) {
+		try (CloseableIterator<InternalDataAdapter<?>> adapterIt = inputStoreOptions.createAdapterStore().getAdapters()) {
 			while (adapterIt.hasNext()) {
-				DataAdapter<?> dataAdapter = adapterIt.next();
+				InternalDataAdapter<?> dataAdapter = adapterIt.next();
 
 				LOGGER.debug("Adding adapter to output config: "
 						+ StringUtils.stringFromBinary(dataAdapter.getAdapterId().getBytes()));
@@ -126,11 +128,15 @@ public class StoreCopyJobRunner extends
 						dataAdapter);
 
 				final AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(dataAdapter
-						.getAdapterId());
+						.getInternalAdapterId());
 
 				JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(
 						job.getConfiguration(),
 						mapping);
+				JobContextInternalAdapterStore.addInternalDataAdapter(
+						job.getConfiguration(),
+						dataAdapter.getAdapterId(),
+						dataAdapter.getInternalAdapterId());
 			}
 		}
 

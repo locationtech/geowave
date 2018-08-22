@@ -266,7 +266,7 @@ public class FeatureDataAdapter extends
 	// -----------------------------------------------------------------------------------
 	// Simplify for call from pyspark/jupyter
 	public void init(
-			PrimaryIndex index ) {
+			final PrimaryIndex index ) {
 		this.init(new PrimaryIndex[] {
 			index
 		});
@@ -274,13 +274,13 @@ public class FeatureDataAdapter extends
 
 	@Override
 	public void init(
-			PrimaryIndex... indices )
+			final PrimaryIndex... indices )
 			throws RuntimeException {
 		// TODO get projection here, make sure if multiple indices are given
 		// that they match
 
 		String indexCrsCode = null;
-		for (PrimaryIndex primaryindx : indices) {
+		for (final PrimaryIndex primaryindx : indices) {
 
 			// for first iteration
 			if (indexCrsCode == null) {
@@ -316,7 +316,7 @@ public class FeatureDataAdapter extends
 
 	private void initCRS(
 			String indexCrsCode ) {
-		if (indexCrsCode == null || indexCrsCode.isEmpty()) {
+		if ((indexCrsCode == null) || indexCrsCode.isEmpty()) {
 			// TODO make sure we handle null/empty to make it default
 			indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
 		}
@@ -326,7 +326,7 @@ public class FeatureDataAdapter extends
 			persistedCRS = GeometryUtils.getDefaultCRS();
 		}
 
-		CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
+		final CoordinateReferenceSystem indexCRS = decodeCRS(indexCrsCode);
 		if (indexCRS.equals(persistedCRS)) {
 			reprojectedFeatureType = SimpleFeatureTypeBuilder.retype(
 					persistedFeatureType,
@@ -356,7 +356,6 @@ public class FeatureDataAdapter extends
 				reprojectedFeatureType,
 				transform);
 		secondaryIndexManager = new SecondaryIndexManager(
-				this,
 				persistedFeatureType,
 				statsManager);
 	}
@@ -696,7 +695,7 @@ public class FeatureDataAdapter extends
 			namespaceBytes = new byte[0];
 		}
 		final byte[] encodedTypeBytes = StringUtils.stringToBinary(encodedType);
-		CoordinateReferenceSystem crs = reprojectedFeatureType.getCoordinateReferenceSystem();
+		final CoordinateReferenceSystem crs = reprojectedFeatureType.getCoordinateReferenceSystem();
 		final byte[] indexCrsBytes;
 		if (crs != null) {
 			indexCrsBytes = StringUtils.stringToBinary(CRS.toSRS(crs));
@@ -914,9 +913,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public DataStatistics<SimpleFeature> createDataStatistics(
 			final ByteArrayId statisticsId ) {
-		return statsManager.createDataStatistics(
-				this,
-				statisticsId);
+		return statsManager.createDataStatistics(statisticsId);
 	}
 
 	@Override
@@ -1093,7 +1090,7 @@ public class FeatureDataAdapter extends
 	}
 
 	public static CoordinateReferenceSystem decodeCRS(
-			String crsCode ) {
+			final String crsCode ) {
 
 		CoordinateReferenceSystem crs = null;
 		try {
@@ -1113,5 +1110,4 @@ public class FeatureDataAdapter extends
 		return crs;
 
 	}
-
 }

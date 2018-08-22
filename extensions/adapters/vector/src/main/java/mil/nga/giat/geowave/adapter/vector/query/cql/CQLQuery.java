@@ -43,6 +43,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraints;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
+import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -52,13 +53,15 @@ import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.Index;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndex;
+import mil.nga.giat.geowave.core.store.query.AdapterQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.Constraints;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 
 public class CQLQuery implements
-		DistributableQuery
+		DistributableQuery,
+		AdapterQuery
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(CQLQuery.class);
 	private Query baseQuery;
@@ -409,5 +412,10 @@ public class CQLQuery implements
 			}
 		}
 		return false;
+	}
+
+	@Override
+	public ByteArrayId getAdapterId() {
+		return filter.getAdapterId();
 	}
 }

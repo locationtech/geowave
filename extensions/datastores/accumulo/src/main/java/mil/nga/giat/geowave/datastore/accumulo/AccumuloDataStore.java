@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
@@ -27,6 +30,7 @@ import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.server.ServerOpHelper;
 import mil.nga.giat.geowave.core.store.server.ServerSideOperations;
 import mil.nga.giat.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -72,16 +76,19 @@ public class AccumuloDataStore extends
 						accumuloOperations,
 						accumuloOptions),
 				accumuloOperations,
-				accumuloOptions);
+				accumuloOptions,
+				new InternalAdapterStoreImpl(
+						accumuloOperations));
 	}
 
 	public AccumuloDataStore(
 			final IndexStore indexStore,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
-			final AccumuloOperations accumuloOperations ) {
+			final AccumuloOperations accumuloOperations,
+			final InternalAdapterStore adapterMappingStore ) {
 		this(
 				indexStore,
 				adapterStore,
@@ -89,17 +96,19 @@ public class AccumuloDataStore extends
 				secondaryIndexDataStore,
 				indexMappingStore,
 				accumuloOperations,
-				new AccumuloOptions());
+				new AccumuloOptions(),
+				adapterMappingStore);
 	}
 
 	public AccumuloDataStore(
 			final IndexStore indexStore,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final AccumuloOperations accumuloOperations,
-			final AccumuloOptions accumuloOptions ) {
+			final AccumuloOptions accumuloOptions,
+			final InternalAdapterStore adapterMappingStore ) {
 		super(
 				indexStore,
 				adapterStore,
@@ -107,7 +116,8 @@ public class AccumuloDataStore extends
 				indexMappingStore,
 				secondaryIndexDataStore,
 				accumuloOperations,
-				accumuloOptions);
+				accumuloOptions,
+				adapterMappingStore);
 
 		secondaryIndexDataStore.setDataStore(this);
 	}
@@ -119,15 +129,15 @@ public class AccumuloDataStore extends
 
 	@Override
 	protected void initOnIndexWriterCreate(
-			final DataAdapter adapter,
+			final InternalDataAdapter adapter,
 			final PrimaryIndex index ) {
 
 		final String indexName = index.getId().getString();
 
 		try {
-			if (adapter instanceof RowMergingDataAdapter) {
+			if (adapter.getAdapter() instanceof RowMergingDataAdapter) {
 				if (!((AccumuloOperations) baseOperations).isRowMergingEnabled(
-						adapter.getAdapterId(),
+						adapter.getInternalAdapterId(),
 						indexName)) {
 					if (baseOptions.isCreateTable()) {
 						if (!((AccumuloOperations) baseOperations).createTable(
@@ -146,7 +156,8 @@ public class AccumuloDataStore extends
 					}
 					if (baseOptions.isServerSideLibraryEnabled()) {
 						ServerOpHelper.addServerSideRowMerging(
-								((RowMergingDataAdapter<?, ?>) adapter),
+								((RowMergingDataAdapter<?, ?>) adapter.getAdapter()),
+								adapter.getInternalAdapterId(),
 								(ServerSideOperations) baseOperations,
 								RowMergingCombiner.class.getName(),
 								RowMergingVisibilityCombiner.class.getName(),

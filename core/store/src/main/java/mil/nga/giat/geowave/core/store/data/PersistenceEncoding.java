@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 public class PersistenceEncoding<T>
 {
-	private final ByteArrayId adapterId;
+	private Short internalAdapterId;
 	private final ByteArrayId dataId;
 	protected final PersistentDataset<T> commonData;
 	private final PersistentDataset<byte[]> unknownData;
@@ -34,14 +34,23 @@ public class PersistenceEncoding<T>
 	protected final static double DOUBLE_TOLERANCE = 1E-12d;
 
 	public PersistenceEncoding(
-			final ByteArrayId adapterId,
+			final Short internalAdapterId,
 			final ByteArrayId dataId,
 			final PersistentDataset<T> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
-		this.adapterId = adapterId;
+		this.internalAdapterId = internalAdapterId;
 		this.dataId = dataId;
 		this.commonData = commonData;
 		this.unknownData = unknownData;
+	}
+
+	public short getInternalAdapterId() {
+		return internalAdapterId;
+	}
+
+	public void setInternalAdapterId(
+			short internalAdapterId ) {
+		this.internalAdapterId = internalAdapterId;
 	}
 
 	/**
@@ -61,15 +70,6 @@ public class PersistenceEncoding<T>
 	 */
 	public PersistentDataset<T> getCommonData() {
 		return commonData;
-	}
-
-	/**
-	 * Return the data adapter ID
-	 * 
-	 * @return the adapter ID
-	 */
-	public ByteArrayId getAdapterId() {
-		return adapterId;
 	}
 
 	/**
