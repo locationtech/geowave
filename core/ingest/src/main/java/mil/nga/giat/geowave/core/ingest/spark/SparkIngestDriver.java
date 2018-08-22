@@ -317,7 +317,7 @@ public class SparkIngestDriver implements
 		if (!inputStoreLoader.loadFromConfig(
 				configProperties,
 				DataStorePluginOptions.getStoreNamespace(inputStoreName),
-				null)) {
+				configFile)) {
 			throw new ParameterException(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
@@ -426,7 +426,7 @@ public class SparkIngestDriver implements
 	public Path setUpHDFSFilesystem(
 			String basePath,
 			String hdfsFSUrl,
-			boolean isLocalPath) {
+			boolean isLocalPath ) {
 
 		String hdfsInputPath = basePath.replaceFirst(
 				"hdfs://",
@@ -436,10 +436,11 @@ public class SparkIngestDriver implements
 		try {
 
 			URI uri = null;
-			if(isLocalPath) {
+			if (isLocalPath) {
 				uri = new URI(
 						hdfsInputPath);
-			} else {
+			}
+			else {
 				uri = new URI(
 						hdfsFSUrl + hdfsInputPath);
 			}

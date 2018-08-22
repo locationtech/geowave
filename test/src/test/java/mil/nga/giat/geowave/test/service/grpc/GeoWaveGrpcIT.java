@@ -51,7 +51,7 @@ import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcTestClient;
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.CASSANDRA,
-    GeoWaveStoreType.DYNAMODB,
+	GeoWaveStoreType.DYNAMODB,
 // TODO HBase server-side components need to work with GRPC libraries
 // GeoWaveStoreType.HBASE
 })
@@ -131,7 +131,7 @@ public class GeoWaveGrpcIT extends
 				map.get("hdfs.defaultFS.url"));
 		org.apache.log4j.Logger.getRootLogger().setLevel(
 				Level.WARN);
-		
+
 		// Core Ingest Tests
 		Assert.assertTrue(client.LocalToHdfsCommand());
 		LOGGER.warn("-----------------------------------------");
@@ -143,7 +143,6 @@ public class GeoWaveGrpcIT extends
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 
-
 		Assert.assertTrue(client.LocalToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -153,7 +152,6 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-
 
 		Assert.assertTrue(client.LocalToKafkaCommand());
 		LOGGER.warn("-----------------------------------------");
@@ -165,7 +163,6 @@ public class GeoWaveGrpcIT extends
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 
-
 		Assert.assertTrue(client.KafkaToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -176,7 +173,6 @@ public class GeoWaveGrpcIT extends
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
 
-
 		Assert.assertTrue(client.MapReduceToGeowaveCommand());
 		LOGGER.warn("-----------------------------------------");
 		LOGGER.warn("*                                       *");
@@ -186,7 +182,6 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-
 
 		String plugins = client.ListPluginsCommand();
 		LOGGER.warn("-----------------------------------------");
@@ -238,7 +233,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		Assert.assertNotEquals(
 				0,
 				client.numFeaturesProcessed);
@@ -252,7 +247,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -267,7 +262,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -282,7 +277,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -301,7 +296,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		Assert.assertNotEquals(
 				0,
 				features.size());
@@ -425,7 +420,7 @@ public class GeoWaveGrpcIT extends
 						+ "s elapsed.                 *");
 		LOGGER.warn("*                                       *");
 		LOGGER.warn("-----------------------------------------");
-		
+
 		TestUtils.deleteAll(dataStore);
 	}
 

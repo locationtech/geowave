@@ -1004,23 +1004,25 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SparkToGeowaveCommand() {
 		ArrayList<String> params = new ArrayList<String>();
-		
-		final File tempDataDir= new File(
-				"./"+TestUtils.TEST_CASE_BASE);
+
+		final File tempDataDir = new File(
+				"./" + TestUtils.TEST_CASE_BASE);
 		String hdfsPath = "";
 		try {
 			hdfsPath = tempDataDir.toURI().toURL().toString();
-		} catch (MalformedURLException e) {
+		} 
+		catch (MalformedURLException e) {
 			return false;
 		}
-		
-		//params.add("s3://geowave-test/data/gdelt");
+
+		//uncomment this line and comment-out the following to test s3 vs hdfs
+		// params.add("s3://geowave-test/data/gdelt");
 		params.add(hdfsPath + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.indexId);
 
 		ArrayList<String> extensions = new ArrayList<String>();
-		
+
 		SparkToGeowaveCommandParameters request = SparkToGeowaveCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
