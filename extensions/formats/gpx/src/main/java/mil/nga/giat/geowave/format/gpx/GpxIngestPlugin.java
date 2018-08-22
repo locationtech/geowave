@@ -49,6 +49,8 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.xml.sax.SAXException;
 
+import jersey.repackaged.com.google.common.collect.Iterators;
+
 /**
  * This plugin is used for ingesting any GPX formatted data from a local file
  * system into GeoWave as GeoTools' SimpleFeatures. It supports the default
@@ -161,7 +163,7 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public GpxTrack[] toAvroObjects(
+	public CloseableIterator<GpxTrack> toAvroObjects(
 			final URL input ) {
 		GpxTrack track = null;
 		if (metadata != null) {
@@ -187,9 +189,8 @@ public class GpxIngestPlugin extends
 					e);
 		}
 
-		return new GpxTrack[] {
-			track
-		};
+		return new CloseableIterator.Wrapper<>(
+				Iterators.singletonIterator(track));
 	}
 
 	@Override

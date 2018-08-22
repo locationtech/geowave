@@ -50,6 +50,7 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
 
@@ -125,7 +126,7 @@ public class GDELTIngestPlugin extends
 	}
 
 	@Override
-	public WholeFile[] toAvroObjects(
+	public CloseableIterator<WholeFile> toAvroObjects(
 			final URL input ) {
 		final WholeFile avroFile = new WholeFile();
 		avroFile.setOriginalFilePath(input.getPath());
@@ -136,12 +137,11 @@ public class GDELTIngestPlugin extends
 			LOGGER.warn(
 					"Unable to read GDELT file: " + input.getPath(),
 					e);
-			return new WholeFile[] {};
+			return new CloseableIterator.Empty<>();
 		}
 
-		return new WholeFile[] {
-			avroFile
-		};
+		return new CloseableIterator.Wrapper<WholeFile>(
+				Iterators.singletonIterator(avroFile));
 	}
 
 	@Override

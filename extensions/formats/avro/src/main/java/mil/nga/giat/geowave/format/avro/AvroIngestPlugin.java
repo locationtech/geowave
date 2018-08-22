@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.format.avro;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -18,13 +17,12 @@ import java.util.Collection;
 import java.util.List;
 
 import org.apache.avro.Schema;
-import org.apache.avro.file.DataFileReader;
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.AvroFeatureUtils;
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
@@ -111,23 +109,39 @@ public class AvroIngestPlugin extends
 	}
 
 	@Override
-	public AvroSimpleFeatureCollection[] toAvroObjects(
+	public CloseableIterator<AvroSimpleFeatureCollection> toAvroObjects(
 			final URL input ) {
-		final List<AvroSimpleFeatureCollection> retVal = new ArrayList<AvroSimpleFeatureCollection>();
-		try (DataFileStream<AvroSimpleFeatureCollection> reader = new DataFileStream<AvroSimpleFeatureCollection>(
-				input.openStream(),
-				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
-			while (reader.hasNext()) {
-				final AvroSimpleFeatureCollection simpleFeatureCollection = reader.next();
-				retVal.add(simpleFeatureCollection);
-			}
+		try {
+			final DataFileStream<AvroSimpleFeatureCollection> reader = new DataFileStream<AvroSimpleFeatureCollection>(
+					input.openStream(),
+					new SpecificDatumReader<AvroSimpleFeatureCollection>());
+
+			return new CloseableIterator<AvroSimpleFeatureCollection>() {
+
+				@Override
+				public boolean hasNext() {
+					return reader.hasNext();
+				}
+
+				@Override
+				public AvroSimpleFeatureCollection next() {
+					return reader.next();
+				}
+
+				@Override
+				public void close()
+						throws IOException {
+					reader.close();
+				}
+
+			};
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to read file '" + input.getPath() + "' as AVRO SimpleFeatureCollection",
 					e);
 		}
-		return retVal.toArray(new AvroSimpleFeatureCollection[] {});
+		return new CloseableIterator.Empty<AvroSimpleFeatureCollection>();
 	}
 
 	@Override

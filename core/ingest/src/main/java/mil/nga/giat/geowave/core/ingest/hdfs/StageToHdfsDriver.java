@@ -21,10 +21,12 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spark_project.guava.base.Throwables;
 
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * This class actually executes the staging of data to HDFS based on the
@@ -60,16 +62,21 @@ public class StageToHdfsDriver extends
 				typeName,
 				plugin);
 		if (writer != null) {
-			final Object[] objs = plugin.toAvroObjects(file);
-			for (final Object obj : objs) {
-				try {
-					writer.append(obj);
+			try (final CloseableIterator<?> objs = plugin.toAvroObjects(file)) {
+				while (objs.hasNext()) {
+					final Object obj = objs.next();
+					try {
+						writer.append(obj);
+					}
+					catch (final IOException e) {
+						LOGGER.error(
+								"Cannot append data to sequence file",
+								e);
+					}
 				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Cannot append data to sequence file",
-							e);
-				}
+			}
+			catch (IOException e1) {
+				Throwables.propagate(e1);
 			}
 		}
 	}

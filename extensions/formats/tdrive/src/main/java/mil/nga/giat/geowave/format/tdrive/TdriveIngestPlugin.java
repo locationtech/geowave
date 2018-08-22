@@ -106,64 +106,83 @@ public class TdriveIngestPlugin extends
 	}
 
 	@Override
-	public TdrivePoint[] toAvroObjects(
+	public CloseableIterator<TdrivePoint> toAvroObjects(
 			final URL input ) {
-		BufferedReader fr = null;
-		BufferedReader br = null;
-		InputStream fis = null;
-		long pointInstance = 0l;
-		final List<TdrivePoint> pts = new ArrayList<TdrivePoint>();
 		try {
-			fis = input.openStream();
-			fr = new BufferedReader(
+			final InputStream fis = input.openStream();
+			final BufferedReader fr = new BufferedReader(
 					new InputStreamReader(
 							fis,
 							StringUtils.GEOWAVE_CHAR_SET));
-			br = new BufferedReader(
+			final BufferedReader br = new BufferedReader(
 					fr);
-			String line;
-			try {
-				while ((line = br.readLine()) != null) {
+			return new CloseableIterator<TdrivePoint>() {
+				TdrivePoint next = null;
+				long pointInstance = 0l;
 
-					final String[] vals = line.split(",");
-					final TdrivePoint td = new TdrivePoint();
-					td.setTaxiid(Integer.parseInt(vals[0]));
-					try {
-						td.setTimestamp(TdriveUtils.parseDate(
-								vals[1]).getTime());
+				private void computeNext() {
+					if (next == null) {
+						String line;
+						try {
+							if ((line = br.readLine()) != null) {
+								final String[] vals = line.split(",");
+								next = new TdrivePoint();
+								next.setTaxiid(Integer.parseInt(vals[0]));
+								try {
+									next.setTimestamp(TdriveUtils.parseDate(
+											vals[1]).getTime());
+								}
+								catch (final ParseException e) {
+									next.setTimestamp(0l);
+									LOGGER.warn(
+											"Couldn't parse time format: " + vals[1],
+											e);
+								}
+								next.setLongitude(Double.parseDouble(vals[2]));
+								next.setLatitude(Double.parseDouble(vals[3]));
+								next.setPointinstance(pointInstance);
+								pointInstance++;
+							}
+						}
+						catch (Exception e) {
+							Log.warn(
+									"Error parsing tdrive file: " + input.getPath(),
+									e);
+						}
 					}
-					catch (final ParseException e) {
-						td.setTimestamp(0l);
-						LOGGER.warn(
-								"Couldn't parse time format: " + vals[1],
-								e);
-					}
-					td.setLongitude(Double.parseDouble(vals[2]));
-					td.setLatitude(Double.parseDouble(vals[3]));
-					td.setPointinstance(pointInstance);
-					pts.add(td);
-					pointInstance++;
 				}
-			}
-			catch (final IOException e) {
-				Log.warn(
-						"Error reading line from file: " + input.getPath(),
-						e);
-			}
+
+				@Override
+				public boolean hasNext() {
+					computeNext();
+					return next != null;
+				}
+
+				@Override
+				public TdrivePoint next() {
+					computeNext();
+					TdrivePoint retVal = next;
+					next = null;
+					return retVal;
+				}
+
+				@Override
+				public void close()
+						throws IOException {
+					br.close();
+					fr.close();
+					fis.close();
+
+				}
+
+			};
 		}
 		catch (final IOException e) {
 			Log.warn(
 					"Error parsing tdrive file: " + input.getPath(),
 					e);
 		}
-		finally {
-			// HP Fortify "Unreleased Resource" false positive
-			// These streams are closed in this "finally" block
-			IOUtils.closeQuietly(br);
-			IOUtils.closeQuietly(fr);
-			IOUtils.closeQuietly(fis);
-		}
-		return pts.toArray(new TdrivePoint[pts.size()]);
+		return new CloseableIterator.Empty<>();
 	}
 
 	@Override

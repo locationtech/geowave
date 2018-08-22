@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.ingest;
 
+import java.io.IOException;
 import java.net.URL;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.google.common.base.Predicate;
+import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -165,18 +167,68 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 			final URL input,
 			final Collection<ByteArrayId> primaryIndexIds,
 			final String globalVisibility ) {
-		final I[] hdfsObjects = toAvroObjects(input);
-		final List<CloseableIterator<GeoWaveData<SimpleFeature>>> allData = new ArrayList<CloseableIterator<GeoWaveData<SimpleFeature>>>();
+		final CloseableIterator<I> hdfsObjects = toAvroObjects(input);
+		return new CloseableIterator<GeoWaveData<SimpleFeature>>() {
 
-		for (final I hdfsObject : hdfsObjects) {
-			final CloseableIterator<GeoWaveData<SimpleFeature>> geowaveData = toGeoWaveDataInternal(
-					hdfsObject,
-					primaryIndexIds,
-					globalVisibility);
-			allData.add(wrapIteratorWithFilters(geowaveData));
-		}
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
-				Iterators.concat(allData.iterator()));
+			CloseableIterator<GeoWaveData<SimpleFeature>> currentIterator = null;
+			GeoWaveData<SimpleFeature> next = null;
+
+			private void computeNext() {
+				try {
+					if (next == null) {
+						if (currentIterator != null) {
+							if (currentIterator.hasNext()) {
+								next = currentIterator.next();
+								return;
+							}
+							else {
+								currentIterator.close();
+								currentIterator = null;
+							}
+						}
+						while (hdfsObjects.hasNext()) {
+							final I hdfsObject = hdfsObjects.next();
+							currentIterator = toGeoWaveDataInternal(
+									hdfsObject,
+									primaryIndexIds,
+									globalVisibility);
+							if (currentIterator.hasNext()) {
+								next = currentIterator.next();
+								return;
+							}
+							else {
+								currentIterator.close();
+								currentIterator = null;
+							}
+						}
+					}
+				}
+				catch (IOException e) {
+					Throwables.propagate(e);
+				}
+			}
+
+			@Override
+			public boolean hasNext() {
+				computeNext();
+				return next != null;
+			}
+
+			@Override
+			public GeoWaveData<SimpleFeature> next() {
+				computeNext();
+				GeoWaveData<SimpleFeature> retVal = next;
+				next = null;
+				return retVal;
+			}
+
+			@Override
+			public void close()
+					throws IOException {
+				hdfsObjects.close();
+			}
+
+		};
 	}
 
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> wrapIteratorWithFilters(

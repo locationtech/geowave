@@ -10,8 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.avro;
 
-import java.io.File;
 import java.net.URL;
+
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * All plugins based off of staged intermediate data (either reading or writing)
@@ -29,7 +30,7 @@ public interface AvroPluginBase<T> extends
 	 *            The file to convert to Avro
 	 * @return The Avro encoded Java object
 	 */
-	public T[] toAvroObjects(
+	public CloseableIterator<T> toAvroObjects(
 			URL file );
 
 }
