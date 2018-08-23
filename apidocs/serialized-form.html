@@ -1597,13 +1597,9 @@
 <li class="blockList">
 <h3>Serialized Fields</h3>
 <ul class="blockList">
-<li class="blockList">
+<li class="blockListLast">
 <h4>schema</h4>
 <pre>org.apache.spark.sql.types.StructType schema</pre>
-</li>
-<li class="blockListLast">
-<h4>geomWriter</h4>
-<pre><a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomWriter.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">GeomWriter</a> geomWriter</pre>
 </li>
 </ul>
 </li>
@@ -1634,10 +1630,20 @@
 </a>
 <h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomDisjoint.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomDisjoint</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a> implements Serializable</h3>
 </li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomDistance">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomDistance.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomDistance</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomEquals">
 <!--   -->
 </a>
 <h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomEquals</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a> implements Serializable</h3>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFromWKT">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFromWKT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFromWKT</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunction">
 <!--   -->
@@ -1654,6 +1660,15 @@
 </ul>
 </li>
 </ul>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry">
+<!--   -->
+</a>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunctionRegistry.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
+<dl class="nameValue">
+<dt>serialVersionUID:</dt>
+<dd>-1729498500215830962L</dd>
+</dl>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomIntersects">
 <!--   -->
@@ -1694,97 +1709,47 @@
 </ul>
 </li>
 <li class="blockList">
-<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt</h2>
+<h2 title="Package">Package&nbsp;mil.nga.giat.geowave.analytic.spark.sparksql.udt</h2>
 <ul class="blockList">
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.AbstractGeometryUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/GeomFunctionRegistry.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<dl class="nameValue">
-<dt>serialVersionUID:</dt>
-<dd>-1729498500215830962L</dd>
-</dl>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.AbstractGeometryUDT</a> extends org.apache.spark.sql.types.UserDefinedType&lt;<a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="type parameter in AbstractGeometryUDT">T</a> extends com.vividsolutions.jts.geom.Geometry&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomContains">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.GeometryUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomContains.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomContains</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/GeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.GeometryUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Geometry&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCovers">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.LineStringUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomCovers.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCovers</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/LineStringUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.LineStringUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.LineString&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCrosses">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomCrosses.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomCrosses</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/MultiLineStringUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiLineStringUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiLineString&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomDisjoint">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiPointUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomDisjoint.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomDisjoint</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/MultiPointUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiPointUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiPoint&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomDistance">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomDistance.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomDistance</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockListLast">
-<h4>reader</h4>
-<pre><a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">GeomReader</a> reader</pre>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/MultiPolygonUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.MultiPolygonUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.MultiPolygon&gt; implements Serializable</h3>
 </li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomEquals">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.PointUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomEquals.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomEquals</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/PointUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.PointUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Point&gt; implements Serializable</h3>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomFunction">
+<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udt.PolygonUDT">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomFunction</a> extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a> implements Serializable</h3>
-<ul class="blockList">
-<li class="blockList">
-<h3>Serialized Fields</h3>
-<ul class="blockList">
-<li class="blockList">
-<h4>geomReader</h4>
-<pre><a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">GeomReader</a> geomReader</pre>
-</li>
-<li class="blockListLast">
-<h4>function</h4>
-<pre><a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/GeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf">GeomFunction</a> function</pre>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomIntersects">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomIntersects.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomIntersects</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomOverlaps">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomOverlaps.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomOverlaps</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomTouches">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomTouches.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomTouches</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
-</li>
-<li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomWithin">
-<!--   -->
-</a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomWithin.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.WKTGeomWithin</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udf/wkt/WKTGeomFunction.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt">WKTGeomFunction</a> implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/PolygonUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">mil.nga.giat.geowave.analytic.spark.sparksql.udt.PolygonUDT</a> extends <a href="mil/nga/giat/geowave/analytic/spark/sparksql/udt/AbstractGeometryUDT.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.udt">AbstractGeometryUDT</a>&lt;com.vividsolutions.jts.geom.Polygon&gt; implements Serializable</h3>
 </li>
 </ul>
 </li>
@@ -1794,12 +1759,12 @@
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader</a> extends com.vividsolutions.jts.io.WKTReader implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomReader.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader</a> extends com.vividsolutions.jts.io.WKBReader implements Serializable</h3>
 </li>
 <li class="blockList"><a name="mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter">
 <!--   -->
 </a>
-<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomWriter.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter</a> extends com.vividsolutions.jts.io.WKTWriter implements Serializable</h3>
+<h3>Class <a href="mil/nga/giat/geowave/analytic/spark/sparksql/util/GeomWriter.html" title="class in mil.nga.giat.geowave.analytic.spark.sparksql.util">mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomWriter</a> extends com.vividsolutions.jts.io.WKBWriter implements Serializable</h3>
 </li>
 </ul>
 </li>
