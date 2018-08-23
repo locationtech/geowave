@@ -18,10 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.io.ParseException;
 
 import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
-import mil.nga.giat.geowave.analytic.spark.sparksql.util.GeomReader;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.SchemaConverter;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
@@ -73,8 +71,6 @@ public class SqlResultsWriter
 		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider()
 				.createPrimaryIndex(new SpatialOptions());
 
-		GeomReader geomReader = new GeomReader();
-
 		try (IndexWriter writer = featureStore.createWriter(
 				featureAdapter,
 				featureIndex)) {
@@ -90,16 +86,11 @@ public class SqlResultsWriter
 					if (rowObj != null) {
 						if (field.name().equals(
 								"geom")) {
-							try {
-								Geometry geom = geomReader.read((String) rowObj);
+							Geometry geom = (Geometry) rowObj;
 
-								sfBuilder.set(
-										"geom",
-										geom);
-							}
-							catch (ParseException e) {
-								LOGGER.error(e.getMessage());
-							}
+							sfBuilder.set(
+									"geom",
+									geom);
 						}
 						else if (field.dataType() == DataTypes.TimestampType) {
 							long millis = ((Timestamp) rowObj).getTime();

@@ -15,4 +15,12 @@
 		<module>spark</module>
 		<module>mapreduce</module>
 	</modules>
+	<profiles>
+		<profile>
+			<id>pyspark</id>
+			<modules>
+				<module>pyspark</module>
+			</modules>
+		</profile>
+	</profiles>
 </project>
