@@ -47,14 +47,7 @@ public class BasicBinningStrategy implements
 	public double getBinMax() {
 		return halfInterval;
 	}
-
-	public static void main(
-			String[] args ) {
-		// for (double i = -5; i <= 5; i += 1){
-		// System.out.println(Math.floor(i % 2));
-		// }
-	}
-
+	
 	@Override
 	public BinValue getBinnedValue(
 			double value ) {
