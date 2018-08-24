@@ -14,6 +14,7 @@ import java.awt.Rectangle;
 import java.awt.image.Raster;
 import java.awt.image.RenderedImage;
 import java.io.File;
+import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Collections;
 import java.util.Map;
@@ -27,6 +28,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.CRS;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -45,6 +47,7 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
+import mil.nga.giat.geowave.core.store.cli.config.AddIndexCommand;
 import mil.nga.giat.geowave.core.store.cli.config.AddStoreCommand;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -119,6 +122,13 @@ public class CustomCRSKDERasterResizeIT
 		LOGGER.warn("------------------------------------------------");
 	}
 
+	@After
+	public void clean()
+			throws IOException {
+		TestUtils.deleteAll(inputDataStorePluginOptions);
+		TestUtils.deleteAll(outputDataStorePluginOptions);
+	}
+
 	@Test
 	public void testKDEAndRasterResize()
 			throws Exception {
@@ -143,7 +153,7 @@ public class CustomCRSKDERasterResizeIT
 		addStore.setParameters("test-in");
 		addStore.setPluginOptions(inputDataStorePluginOptions);
 		addStore.execute(params);
-		addStore.setParameters("test-out");
+		addStore.setParameters("raster-spatial");
 		addStore.setPluginOptions(outputDataStorePluginOptions);
 		addStore.execute(params);
 
@@ -152,6 +162,10 @@ public class CustomCRSKDERasterResizeIT
 		outputIndexOptions.selectPlugin("spatial");
 		((SpatialOptions) outputIndexOptions.getDimensionalityOptions()).setCrs("EPSG:4240");
 
+		AddIndexCommand addIndex = new AddIndexCommand();
+		addIndex.setParameters("raster-spatial");
+		addIndex.setPluginOptions(outputIndexOptions);
+		addIndex.execute(params);
 		// use the min level to define the request boundary because it is the
 		// most coarse grain
 		final double decimalDegreesPerCellMinLevel = 180.0 / Math.pow(
@@ -183,7 +197,7 @@ public class CustomCRSKDERasterResizeIT
 			// We're going to override these anyway.
 			command.setParameters(
 					"test-in",
-					"test-out");
+					"raster-spatial");
 
 			command.getKdeOptions().setOutputIndex(
 					outputIndex);
@@ -239,8 +253,8 @@ public class CustomCRSKDERasterResizeIT
 
 			// We're going to override these anyway.
 			command.setParameters(
-					"test-out",
-					"test-out");
+					"raster-spatial",
+					"raster-spatial");
 
 			command.getOptions().setInputCoverageName(
 					originalTileSizeCoverageName);
@@ -325,7 +339,9 @@ public class CustomCRSKDERasterResizeIT
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.readFromConfigParams(str.toString()));
 
-		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.getDefaultCRS());
+		queryEnvelope.setCoordinateReferenceSystem(CRS.decode(
+				"EPSG:4166",
+				true));
 		final Raster[] rasters = new Raster[numCoverages];
 		int coverageCount = 0;
 		for (int i = MIN_TILE_SIZE_POWER_OF_2; i <= MAX_TILE_SIZE_POWER_OF_2; i += INCREMENT) {

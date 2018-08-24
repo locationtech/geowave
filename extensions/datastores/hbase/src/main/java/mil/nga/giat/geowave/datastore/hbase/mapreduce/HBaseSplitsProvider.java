@@ -79,10 +79,6 @@ public class HBaseSplitsProvider extends
 			return splits;
 		}
 
-		if ((query != null) && !query.isSupported(index)) {
-			return splits;
-		}
-
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 		final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
 

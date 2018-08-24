@@ -204,28 +204,6 @@ public class BasicQuery implements
 					dataPerDimension);
 		}
 
-		public boolean isSupported(
-				final PrimaryIndex index ) {
-			final NumericDimensionField<? extends CommonIndexValue>[] fields = index.getIndexModel().getDimensions();
-			final Set<Class<? extends NumericDimensionDefinition>> fieldTypeSet = new HashSet<>();
-			// first create a set of the field's base definition types that are
-			// within the index model
-			for (final NumericDimensionField<? extends CommonIndexValue> field : fields) {
-				fieldTypeSet.add(field.getBaseDefinition().getClass());
-			}
-			// then ensure each of the definition types that is required by
-			// these
-			// constraints are in the index model
-			for (final Map.Entry<Class<? extends NumericDimensionDefinition>, ConstraintData> entry : constraintsPerTypeOfDimensionDefinition
-					.entrySet()) {
-				// ** defaults are not mandatory **
-				if (!fieldTypeSet.contains(entry.getKey()) && !entry.getValue().isDefault) {
-					return false;
-				}
-			}
-			return true;
-		}
-
 		protected DistributableQueryFilter createFilter(
 				final PrimaryIndex index,
 				final BasicQuery basicQuery ) {
@@ -593,22 +571,6 @@ public class BasicQuery implements
 			return setRanges;
 		}
 
-		/**
-		 *
-		 * @param index
-		 * @return true if all constrain sets match the index
-		 *
-		 *         TODO: Should we allow each constraint target each index?
-		 */
-		public boolean isSupported(
-				final PrimaryIndex index ) {
-			for (final ConstraintSet set : constraintsSets) {
-				if (!set.isSupported(index)) {
-					return false;
-				}
-			}
-			return true;
-		}
 	}
 
 	private Constraints constraints;
@@ -683,13 +645,6 @@ public class BasicQuery implements
 				constraints,
 				orderedConstrainedDimensionFields,
 				compareOp);
-	}
-
-	@Override
-	public boolean isSupported(
-			final Index<?, ?> index ) {
-		return (index instanceof PrimaryIndex) ? constraints.isSupported((PrimaryIndex) index)
-				: secondaryIndexSupports((SecondaryIndex) index);
 	}
 
 	public boolean secondaryIndexSupports(

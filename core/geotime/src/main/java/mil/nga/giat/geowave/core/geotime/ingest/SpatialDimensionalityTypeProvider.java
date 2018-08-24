@@ -22,8 +22,11 @@ import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
@@ -49,6 +52,7 @@ public class SpatialDimensionalityTypeProvider implements
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	public static final int LONGITUDE_BITS = 31;
 	public static final int LATITUDE_BITS = 31;
+	private static final double INTERVAL = 500000;
 
 	public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
@@ -109,7 +113,6 @@ public class SpatialDimensionalityTypeProvider implements
 		String crsCode = null;
 		NumericDimensionField<?>[] fields = null;
 		NumericDimensionField<?>[] fields_temporal = null;
-		CoordinateReferenceSystem crs = null;
 
 		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_DIMENSIONS;
@@ -118,8 +121,9 @@ public class SpatialDimensionalityTypeProvider implements
 			crsCode = "EPSG:4326";
 		}
 		else {
-			crs = decodeCRS(options.crs);
-			CoordinateSystem cs = crs.getCoordinateSystem();
+			decodeCRS(options.crs);
+			CoordinateSystem cs = decodeCRS(
+					options.crs).getCoordinateSystem();
 			isDefaultCRS = false;
 			crsCode = options.crs;
 			dimensions = new NumericDimensionDefinition[cs.getDimension()];
@@ -127,12 +131,21 @@ public class SpatialDimensionalityTypeProvider implements
 				fields_temporal = new NumericDimensionField[dimensions.length + 1];
 				for (int d = 0; d < dimensions.length; d++) {
 					CoordinateSystemAxis csa = cs.getAxis(d);
-					dimensions[d] = new CustomCRSSpatialDimension(
-							(byte) d,
-							csa.getMinimumValue(),
-							csa.getMaximumValue());
-					fields_temporal[d] = new CustomCRSSpatialField(
-							(CustomCRSSpatialDimension) dimensions[d]);
+					if (!isUnbounded(csa)) {
+						dimensions[d] = new CustomCRSBoundedSpatialDimension(
+								(byte) d,
+								csa.getMinimumValue(),
+								csa.getMaximumValue());
+						fields_temporal[d] = new CustomCRSSpatialField(
+								(CustomCRSBoundedSpatialDimension) dimensions[d]);
+					}
+					else {
+						dimensions[d] = new CustomCRSUnboundedSpatialDimension(
+								INTERVAL,
+								(byte) d);
+						fields_temporal[d] = new CustomCRSSpatialField(
+								(CustomCRSUnboundedSpatialDimension) dimensions[d]);
+					}
 				}
 				fields_temporal[dimensions.length] = new TimeField(
 						Unit.YEAR);
@@ -141,12 +154,30 @@ public class SpatialDimensionalityTypeProvider implements
 				fields = new NumericDimensionField[dimensions.length];
 				for (int d = 0; d < dimensions.length; d++) {
 					CoordinateSystemAxis csa = cs.getAxis(d);
-					dimensions[d] = new CustomCRSSpatialDimension(
-							(byte) d,
-							csa.getMinimumValue(),
-							csa.getMaximumValue());
-					fields[d] = new CustomCRSSpatialField(
-							(CustomCRSSpatialDimension) dimensions[d]);
+					if (!isUnbounded(csa)) {
+						dimensions[d] = new CustomCRSBoundedSpatialDimension(
+								(byte) d,
+								csa.getMinimumValue(),
+								csa.getMaximumValue());
+						fields[d] = new CustomCRSSpatialField(
+								(CustomCRSBoundedSpatialDimension) dimensions[d]);
+					}
+					else {
+						if (d == 0) {
+							dimensions[d] = new CustomCRSUnboundedSpatialDimensionX(
+									INTERVAL,
+									(byte) d);
+							fields[d] = new CustomCRSSpatialField(
+									(CustomCRSUnboundedSpatialDimensionX) dimensions[d]);
+						}
+						if (d == 1) {
+							dimensions[d] = new CustomCRSUnboundedSpatialDimensionY(
+									INTERVAL,
+									(byte) d);
+							fields[d] = new CustomCRSSpatialField(
+									(CustomCRSUnboundedSpatialDimensionY) dimensions[d]);
+						}
+					}
 				}
 			}
 
@@ -181,6 +212,17 @@ public class SpatialDimensionalityTypeProvider implements
 						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
 								: (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) + "_"
 										+ crsCode.substring(crsCode.indexOf(":") + 1)));
+	}
+
+	private static boolean isUnbounded(
+			CoordinateSystemAxis csa ) {
+		double min = csa.getMinimumValue();
+		double max = csa.getMaximumValue();
+
+		if (!Double.isFinite(max) || !Double.isFinite(min)) {
+			return true;
+		}
+		return false;
 	}
 
 	public static CoordinateReferenceSystem decodeCRS(
@@ -260,10 +302,11 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 		boolean hasLat = false, hasLon = false;
 		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof LatitudeDefinition) {
+			if (definition instanceof LatitudeDefinition || definition instanceof CustomCRSUnboundedSpatialDimensionY) {
 				hasLat = true;
 			}
-			else if (definition instanceof LongitudeDefinition) {
+			else if (definition instanceof LongitudeDefinition
+					|| definition instanceof CustomCRSUnboundedSpatialDimensionX) {
 				hasLon = true;
 			}
 		}

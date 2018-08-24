@@ -340,7 +340,6 @@ public class DynamoDBOperations implements
 			final PrimaryIndex index,
 			PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

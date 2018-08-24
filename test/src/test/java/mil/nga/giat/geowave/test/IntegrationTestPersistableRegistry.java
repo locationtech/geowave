@@ -11,6 +11,8 @@
 package mil.nga.giat.geowave.test;
 
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT.DuplicateCount;
+import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT.DuplicateCountAggregation;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT.MergeCounter;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT.SumAndAveragingMergeStrategy;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT.SummingMergeStrategy;
@@ -31,6 +33,12 @@ public class IntegrationTestPersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 10777,
 					MergeCounter::new),
+			new PersistableIdAndConstructor(
+					(short) 10778,
+					DuplicateCountAggregation::new),
+			new PersistableIdAndConstructor(
+					(short) 10779,
+					DuplicateCount::new),
 		};
 	}
 }

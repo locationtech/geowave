@@ -45,6 +45,7 @@ public class ListPluginsCommand extends
 	public String computeResults(
 			final OperationParams params ) {
 		StringBuilder builder = new StringBuilder();
+
 		builder.append("Available index types currently registered as plugins:\n");
 		for (final Entry<String, DimensionalityTypeProviderSpi> pluginProviderEntry : DimensionalityTypeRegistry
 				.getRegisteredDimensionalityTypes()
@@ -52,6 +53,7 @@ public class ListPluginsCommand extends
 			final DimensionalityTypeProviderSpi pluginProvider = pluginProviderEntry.getValue();
 			final String desc = pluginProvider.getDimensionalityTypeDescription() == null ? "no description"
 					: pluginProvider.getDimensionalityTypeDescription();
+
 			builder.append(String.format(
 					"%n  %s:%n    %s%n",
 					pluginProviderEntry.getKey(),

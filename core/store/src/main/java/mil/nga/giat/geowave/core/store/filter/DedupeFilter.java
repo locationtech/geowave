@@ -54,18 +54,20 @@ public class DedupeFilter implements
 		}
 		final short adapterId = persistenceEncoding.getInternalAdapterId();
 		final ByteArrayId dataId = persistenceEncoding.getDataId();
-		Set<ByteArrayId> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
-		if (visitedDataIds == null) {
-			visitedDataIds = new HashSet<ByteArrayId>();
-			adapterIdToVisitedDataIdMap.put(
-					adapterId,
-					visitedDataIds);
+		synchronized (adapterIdToVisitedDataIdMap) {
+			Set<ByteArrayId> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
+			if (visitedDataIds == null) {
+				visitedDataIds = new HashSet<ByteArrayId>();
+				adapterIdToVisitedDataIdMap.put(
+						adapterId,
+						visitedDataIds);
+			}
+			else if (visitedDataIds.contains(dataId)) {
+				return false;
+			}
+			visitedDataIds.add(dataId);
+			return true;
 		}
-		else if (visitedDataIds.contains(dataId)) {
-			return false;
-		}
-		visitedDataIds.add(dataId);
-		return true;
 	}
 
 	public void setDedupAcrossIndices(

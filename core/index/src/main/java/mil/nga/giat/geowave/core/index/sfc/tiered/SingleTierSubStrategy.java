@@ -79,7 +79,7 @@ public class SingleTierSubStrategy implements
 			final MultiDimensionalNumericData indexedRange,
 			final int maxRangeDecomposition,
 			final IndexMetaData... hints ) {
-		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
 		return new QueryRanges(
@@ -140,11 +140,11 @@ public class SingleTierSubStrategy implements
 			final int maxDuplicateInsertionIds ) {
 		// we need to duplicate per bin so we can't adhere to max duplication
 		// anyways
-		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
 		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
-				ranges.length);
+				ranges.size());
 		for (final BinnedNumericDataset range : ranges) {
 			final SinglePartitionInsertionIds binRowIds = TieredSFCIndexStrategy.getRowIdsAtTier(
 					range,

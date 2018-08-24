@@ -43,6 +43,7 @@ import org.geotools.coverage.grid.io.OverviewPolicy;
 import org.geotools.data.DataSourceException;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
+import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
@@ -804,14 +805,27 @@ public class GeoWaveRasterReader extends
 			final double levelResY,
 			final RasterDataAdapter adapter )
 			throws IOException {
+		final Query query;
+		if (requestEnvelope.getCoordinateReferenceSystem() != null) {
+			query = new IndexOnlySpatialQuery(
+					new GeometryFactory().toGeometry(new Envelope(
+							requestEnvelope.getMinimum(0),
+							requestEnvelope.getMaximum(0),
+							requestEnvelope.getMinimum(1),
+							requestEnvelope.getMaximum(1))),
+					GeometryUtils.getCrsCode(requestEnvelope.getCoordinateReferenceSystem()));
+		}
+		else {
+			query = new IndexOnlySpatialQuery(
+					new GeometryFactory().toGeometry(new Envelope(
+							requestEnvelope.getMinimum(0),
+							requestEnvelope.getMaximum(0),
+							requestEnvelope.getMinimum(1),
+							requestEnvelope.getMaximum(1))));
+		}
 		return queryForTiles(
 				adapter,
-				new IndexOnlySpatialQuery(
-						new GeometryFactory().toGeometry(new Envelope(
-								requestEnvelope.getMinimum(0),
-								requestEnvelope.getMaximum(0),
-								requestEnvelope.getMinimum(1),
-								requestEnvelope.getMaximum(1)))),
+				query,
 				new double[] {
 					levelResX * adapter.getTileSize(),
 					levelResY * adapter.getTileSize()

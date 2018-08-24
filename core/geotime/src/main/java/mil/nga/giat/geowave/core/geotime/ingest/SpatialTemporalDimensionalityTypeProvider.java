@@ -17,7 +17,7 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
@@ -129,12 +129,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 
 			for (int d = 0; d < dimensions.length - 1; d++) {
 				CoordinateSystemAxis csa = cs.getAxis(d);
-				dimensions[d] = new CustomCRSSpatialDimension(
+				dimensions[d] = new CustomCRSBoundedSpatialDimension(
 						(byte) d,
 						csa.getMinimumValue(),
 						csa.getMaximumValue());
 				fields[d] = new CustomCRSSpatialField(
-						(CustomCRSSpatialDimension) dimensions[d]);
+						(CustomCRSBoundedSpatialDimension) dimensions[d]);
 			}
 
 			dimensions[dimensions.length - 1] = new TimeDefinition(

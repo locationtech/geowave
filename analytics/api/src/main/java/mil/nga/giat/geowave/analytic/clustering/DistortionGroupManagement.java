@@ -158,12 +158,6 @@ public class DistortionGroupManagement
 		}
 
 		@Override
-		public boolean isSupported(
-				final Index<?, ?> index ) {
-			return index instanceof NullIndex;
-		}
-
-		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
 				final PrimaryIndex index ) {
 			return Collections.emptyList();

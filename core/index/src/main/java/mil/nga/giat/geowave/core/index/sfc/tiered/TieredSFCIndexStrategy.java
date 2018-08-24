@@ -128,7 +128,7 @@ public class TieredSFCIndexStrategy implements
 		// binning into account to limit the number of ranges correctly
 
 		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
-		final BinnedNumericDataset[] binnedQueries = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> binnedQueries = BinnedNumericDataset.applyBins(
 				indexedRange,
 				baseDefinitions);
 		final TierIndexMetaData metaData = ((hints.length > 0) && (hints[0] != null) && (hints[0] instanceof TierIndexMetaData)) ? (TierIndexMetaData) hints[0]
@@ -211,16 +211,16 @@ public class TieredSFCIndexStrategy implements
 	private InsertionIds internalGetInsertionIds(
 			final MultiDimensionalNumericData indexedData,
 			final BigInteger maxDuplicateInsertionIds ) {
-		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> ranges = BinnedNumericDataset.applyBins(
 				indexedData,
 				baseDefinitions);
 		// place each of these indices into a single row ID at a tier that will
 		// fit its min and max
 		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
-				ranges.length);
-		for (int i = 0; i < ranges.length; i++) {
+				ranges.size());
+		for (BinnedNumericDataset range : ranges) {
 			retVal.add(getRowIds(
-					ranges[i],
+					range,
 					maxDuplicateInsertionIds));
 		}
 		return new InsertionIds(
@@ -597,16 +597,15 @@ public class TieredSFCIndexStrategy implements
 		MultiDimensionalNumericData originalRange = this.getRangeForId(
 				insertId,
 				null);
-		final BinnedNumericDataset[] ranges = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> ranges = BinnedNumericDataset.applyBins(
 				originalRange,
 				baseDefinitions);
 
 		int sfcIndex = orderedSfcIndexToTierId.inverse().get(
 				reprojectTierId);
 		final Set<SinglePartitionInsertionIds> retVal = new HashSet<SinglePartitionInsertionIds>(
-				ranges.length);
-		for (int iRange = 0; iRange < ranges.length; iRange++) {
-			BinnedNumericDataset reprojectRange = ranges[iRange];
+				ranges.size());
+		for (BinnedNumericDataset reprojectRange : ranges) {
 			SinglePartitionInsertionIds tierIds = TieredSFCIndexStrategy.getRowIdsAtTier(
 					reprojectRange,
 					reprojectTierId,

@@ -517,12 +517,6 @@ public class MemoryDataStoreTest
 		}
 
 		@Override
-		public boolean isSupported(
-				final Index<?, ?> index ) {
-			return ((PrimaryIndex) index).getIndexModel() instanceof TestIndexModel;
-		}
-
-		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
 				final PrimaryIndex index ) {
 			return Collections.<MultiDimensionalNumericData> singletonList(new BasicNumericDataset(
