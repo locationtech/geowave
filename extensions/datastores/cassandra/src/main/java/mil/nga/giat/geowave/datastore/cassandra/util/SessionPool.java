@@ -33,29 +33,21 @@ public class SessionPool
 
 	public synchronized Pair<Cluster, Session> getPair(
 			final String contactPoints ) {
-		Pair<Cluster, Session> sessionClusterPair = sessionCache
-				.get(
-						contactPoints);
+		Pair<Cluster, Session> sessionClusterPair = sessionCache.get(contactPoints);
 		if (sessionClusterPair == null) {
-			Cluster cluster = Cluster
-					.builder()
-					.addContactPoints(
-							contactPoints
-									.split(
-											","))
-					.build();
+			Cluster cluster = Cluster.builder().addContactPoints(
+					contactPoints.split(",")).build();
 			Session session = cluster.connect();
-			sessionClusterPair = ImmutablePair
-					.of(
-							cluster,
-							session);
-			sessionCache
-					.put(
-							contactPoints,
-							sessionClusterPair);
+			sessionClusterPair = ImmutablePair.of(
+					cluster,
+					session);
+			sessionCache.put(
+					contactPoints,
+					sessionClusterPair);
 		}
 		return sessionClusterPair;
 	}
+
 	public Cluster getCluster(
 			final String contactPoints ) {
 		return getPair(
