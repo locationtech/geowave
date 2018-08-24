@@ -270,6 +270,10 @@
 					<groupId>org.apache.hbase</groupId>
 					<artifactId>hbase-client</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-client</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -318,14 +322,6 @@
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>log4j-over-slf4j</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-core</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>ch.qos.logback</groupId>
-					<artifactId>logback-classic</artifactId>
 				</exclusion>
 			</exclusions>
 		</dependency>
@@ -735,6 +731,38 @@
 				<testStoreType>HBASE</testStoreType>
 				<testStoreOptions>enableServerSideLibrary=true!enableServerSideLibrary=false</testStoreOptions>
 			</properties>
+		</profile>
+		<profile>
+			<!-- rather than repeat this long xml block for each hbase profile, the 
+				hbase ITs just must activate this in addition to the hbase-it* profile -->
+			<id>hbase-safe-compile</id>
+			<properties>
+				<guava.version>14.0-rc1</guava.version>
+				<protobuf.version>2.5.0</protobuf.version>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.apache.hbase</groupId>
+					<artifactId>hbase-protocol-shaded</artifactId>
+					<version>${hbase.version}</version>
+				</dependency>
+			</dependencies>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<excludes>
+								<exclude>**/mil/nga/giat/geowave/test/service/grpc/*.java</exclude>
+							</excludes>
+							<testExcludes>
+								<exclude>**/mil/nga/giat/geowave/test/service/grpc/*.java</exclude>
+							</testExcludes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 		<profile>
 			<id>cassandra-it</id>
