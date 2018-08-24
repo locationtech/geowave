@@ -46,9 +46,9 @@ sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/j
 sudo su root -c "source /tmp/install-conda.sh /opt/miniconda.sh /opt/conda/"
 
 # Install the necessary components for jupyter and pixiedust
-sudo su root -c "/opt/conda/bin/conda install jupyterhub jupyter ncurses"
+sudo su root -c "/opt/conda/bin/conda install jupyterhub=0.9.1 jupyter ncurses"
 
-sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-$GEOWAVE_VERSION_URL_TOKEN.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
+sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 
 sudo su root -c "/opt/conda/bin/pip install /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz"
 

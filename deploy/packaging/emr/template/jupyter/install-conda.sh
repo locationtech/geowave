@@ -33,6 +33,6 @@ ${CONDA_INSTALL_LOC}/bin/conda config --system -f --add channels conda-forge
 ${CONDA_INSTALL_LOC}/bin/conda install matplotlib numpy pandas pyyaml requests shapely folium owslib nbconvert
 
 # Install pip dependencies
-${CONDA_INSTALL_LOC}/bin/pip install pixiedust oauthenticator ipywidgets ipyleaflet geomet pandas shapely folium owslib
+${CONDA_INSTALL_LOC}/bin/pip install pixiedust oauthenticator==0.7.3 ipywidgets ipyleaflet geomet pandas shapely folium owslib
 
 rm -f ${CONDA_DL_LOC}
