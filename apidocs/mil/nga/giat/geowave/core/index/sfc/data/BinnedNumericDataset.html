@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -139,9 +139,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#BinnedNumericDataset--">BinnedNumericDataset</a></span>()</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#BinnedNumericDataset-byte:A-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-">BinnedNumericDataset</a></span>(byte[]&nbsp;binId,
-                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges,
-                    boolean&nbsp;fullExtent)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#BinnedNumericDataset-byte:A-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-">BinnedNumericDataset</a></span>(byte[]&nbsp;binId,
+                    <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -159,7 +158,7 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>[]</code></td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#applyBins-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition:A-">applyBins</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;numericData,
          <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</code>
 <div class="block">This method is responsible for translating a query into appropriate
@@ -209,10 +208,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#isFullExtent--">isFullExtent</a></span>()</code>&nbsp;</td>
-</tr>
-<tr id="i11" class="rowColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
@@ -250,15 +245,14 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <pre>public&nbsp;BinnedNumericDataset()</pre>
 </li>
 </ul>
-<a name="BinnedNumericDataset-byte:A-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-boolean-">
+<a name="BinnedNumericDataset-byte:A-mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>BinnedNumericDataset</h4>
 <pre>public&nbsp;BinnedNumericDataset(byte[]&nbsp;binId,
-                            <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges,
-                            boolean&nbsp;fullExtent)</pre>
+                            <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;indexRanges)</pre>
 <dl>
 <dt><span class="paramLabel">Parameters:</span></dt>
 <dd><code>binId</code> - a unique ID associated with the BinnedQuery object</dd>
@@ -274,15 +268,6 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <!--   -->
 </a>
 <h3>Method Detail</h3>
-<a name="isFullExtent--">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isFullExtent</h4>
-<pre>public&nbsp;boolean&nbsp;isFullExtent()</pre>
-</li>
-</ul>
 <a name="getDataPerDimension--">
 <!--   -->
 </a>
@@ -377,8 +362,8 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/
 <ul class="blockList">
 <li class="blockList">
 <h4>applyBins</h4>
-<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>[]&nbsp;applyBins(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;numericData,
-                                               <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/BinnedNumericDataset.html" title="class in mil.nga.giat.geowave.core.index.sfc.data">BinnedNumericDataset</a>&gt;&nbsp;applyBins(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&nbsp;numericData,
+                                                   <a href="../../../../../../../../mil/nga/giat/geowave/core/index/dimension/NumericDimensionDefinition.html" title="interface in mil.nga.giat.geowave.core.index.dimension">NumericDimensionDefinition</a>[]&nbsp;dimensionDefinitions)</pre>
 <div class="block">This method is responsible for translating a query into appropriate
  normalized and binned (if necessary) queries that can be used by the
  underlying index implementation. For example, for unbounded dimensions

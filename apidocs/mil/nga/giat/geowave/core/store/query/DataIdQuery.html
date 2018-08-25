@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -172,12 +172,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
  indexing strategy used.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/DataIdQuery.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</code>
-<div class="block">This is useful to determine what indices this query supports.</div>
-</td>
-</tr>
 </table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -254,27 +248,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Q
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#createFilters-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createFilters</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A list of the query filters</dd>
-</dl>
-</li>
-</ul>
-<a name="isSupported-mil.nga.giat.geowave.core.store.index.Index-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isSupported</h4>
-<pre>public&nbsp;boolean&nbsp;isSupported(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&nbsp;index)</pre>
-<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">Query</a></code></span></div>
-<div class="block">This is useful to determine what indices this query supports. If an index
- is not supported the query will not be run on it and no data will be
- returned from that index.</div>
-<dl>
-<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a></code></dd>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - The index to check if the query will support.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A flag indicating if this query supports the index</dd>
 </dl>
 </li>
 </ul>

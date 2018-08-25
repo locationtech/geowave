@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6};
+var methods = {"i0":6,"i1":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -143,12 +143,6 @@ var activeTableTab = "activeTableTab";
  indexing strategy used.</div>
 </td>
 </tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html#isSupported-mil.nga.giat.geowave.core.store.index.Index-">isSupported</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</code>
-<div class="block">This is useful to determine what indices this query supports.</div>
-</td>
-</tr>
 </table>
 </li>
 </ul>
@@ -183,24 +177,6 @@ var activeTableTab = "activeTableTab";
             in the index</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A list of the query filters</dd>
-</dl>
-</li>
-</ul>
-<a name="isSupported-mil.nga.giat.geowave.core.store.index.Index-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>isSupported</h4>
-<pre>boolean&nbsp;isSupported(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/Index.html" title="interface in mil.nga.giat.geowave.core.store.index">Index</a>&lt;?,?&gt;&nbsp;index)</pre>
-<div class="block">This is useful to determine what indices this query supports. If an index
- is not supported the query will not be run on it and no data will be
- returned from that index.</div>
-<dl>
-<dt><span class="paramLabel">Parameters:</span></dt>
-<dd><code>index</code> - The index to check if the query will support.</dd>
-<dt><span class="returnLabel">Returns:</span></dt>
-<dd>A flag indicating if this query supports the index</dd>
 </dl>
 </li>
 </ul>
