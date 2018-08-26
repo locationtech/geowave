@@ -92,7 +92,6 @@ public class WebMercatorRasterTest
 			bounds = 250000;
 		}
 		bounds /= 32.0;
-		System.err.println(bounds);
 		for (double xTile = 0; xTile < xTiles; xTile++) {
 			for (double yTile = 0; yTile < yTiles; yTile++) {
 				try (IndexWriter<GridCoverage> writer = dataStore.createWriter(
@@ -140,7 +139,6 @@ public class WebMercatorRasterTest
 			obj.next();
 			i++;
 		}
-		System.err.println("there are '" + i + "' tiles");
 		int grid[][] = new int[8][8];
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.createConfig(
@@ -234,15 +232,6 @@ public class WebMercatorRasterTest
 								expectedValue = expectedMinXMinYValue;
 							}
 							expectedValue += b;
-							System.err.println(String.format(
-									"Value=%d at x=%d;y=%d;b=%d",
-									img.getSample(
-											x,
-											y,
-											b),
-									x,
-									y,
-									b));
 
 							Assert.assertEquals(
 									String.format(
@@ -262,38 +251,5 @@ public class WebMercatorRasterTest
 
 			}
 		}
-		for (int t = 7; t >= 0; t--) {
-			for (int s = 0; s < 8; s++) {
-				System.out.print(grid[s][t] + " ");
-			}
-			System.out.print('\n');
-		}
-		try (CloseableIterator it = dataStore.query(
-				new QueryOptions(),
-				new EverythingQuery())) {
-			int count = 0;
-			while (it.hasNext()) {
-				count++;
-				it.next();
-			}
-			System.err.println(count);
-		}
-		try (CloseableIterator it = dataStore.query(
-				new QueryOptions(),
-				new IndexOnlySpatialQuery(
-						new GeometryFactory().toGeometry(new Envelope(
-								-5000,
-								5000,
-								-5000,
-								5000)),
-						CRS_STR))) {
-			int count = 0;
-			while (it.hasNext()) {
-				count++;
-				it.next();
-			}
-			System.err.println(count);
-		}
-
 	}
 }
