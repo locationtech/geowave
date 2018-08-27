@@ -9,6 +9,10 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <properties>
+            <python.executable>python</python.executable>
+    </properties>
+
     <name>GeoWave pyspark</name>
     <artifactId>geowave-analytic-pyspark</artifactId>
     <packaging>pom</packaging>
@@ -43,7 +47,7 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <configuration>
-                    <executable>python</executable>
+                    <executable>${python.executable}</executable>
                 </configuration>
                 <executions>
                     <execution>
