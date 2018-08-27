@@ -43,7 +43,7 @@
 		<thrift.version>0.9.3</thrift.version>
 		<accumulo.api>1.9</accumulo.api>
 		<bigtable.version>1.2.0</bigtable.version>
-		<cassandra.version>3.11.2</cassandra.version>
+		<cassandra.version>3.11.3</cassandra.version>
 		<grpc.version>1.13.1</grpc.version>
 		<netty.version>4.1.25.Final</netty.version>
 		<protobuf.version>3.5.1</protobuf.version>
@@ -679,11 +679,6 @@
 			<dependency>
 				<groupId>io.netty</groupId>
 				<artifactId>netty-common</artifactId>
-				<version>${netty.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>io.netty</groupId>
-				<artifactId>netty-codec-http2</artifactId>
 				<version>${netty.version}</version>
 			</dependency>
 			<dependency>
