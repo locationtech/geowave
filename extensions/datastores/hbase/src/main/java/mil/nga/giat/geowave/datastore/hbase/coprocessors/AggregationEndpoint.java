@@ -42,13 +42,13 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosServer;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
 
 public class AggregationEndpoint extends
-		AggregationProtos.AggregationService implements
+		AggregationProtosServer.AggregationService implements
 		Coprocessor,
 		CoprocessorService
 {
@@ -84,12 +84,12 @@ public class AggregationEndpoint extends
 	@Override
 	public void aggregate(
 			final RpcController controller,
-			final AggregationProtos.AggregationRequest request,
-			final RpcCallback<AggregationProtos.AggregationResponse> done ) {
+			final AggregationProtosServer.AggregationRequest request,
+			final RpcCallback<AggregationProtosServer.AggregationResponse> done ) {
 		FilterList filterList = null;
 		DataAdapter dataAdapter = null;
 		ByteArrayId adapterId = null;
-		AggregationProtos.AggregationResponse response = null;
+		AggregationProtosServer.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
 
 		// Get the aggregation type
@@ -236,9 +236,9 @@ public class AggregationEndpoint extends
 						"Error during aggregation.",
 						ioe);
 
-				ResponseConverter.setControllerException(
-						controller,
-						ioe);
+				/*
+				 * ResponseConverter.setControllerException( controller, ioe);
+				 */
 			}
 			catch (final Exception e) {
 				LOGGER.error(
@@ -247,7 +247,7 @@ public class AggregationEndpoint extends
 			}
 		}
 
-		response = AggregationProtos.AggregationResponse.newBuilder().setValue(
+		response = AggregationProtosServer.AggregationResponse.newBuilder().setValue(
 				value).build();
 
 		done.run(response);

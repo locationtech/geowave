@@ -36,10 +36,16 @@
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.hbase</groupId>
-			<artifactId>hbase-server</artifactId>
-			<scope>provided</scope>
-		</dependency>
+            <groupId>org.apache.hbase</groupId>
+            <artifactId>hbase-server</artifactId>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.hbase</groupId>
+                    <artifactId>hbase-client</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
 			<artifactId>hadoop-client</artifactId>
@@ -88,6 +94,59 @@
 	<build>
 		<plugins>
 			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.7</version>
+				<executions>
+					<execution>
+						<id>generate-protobuf</id>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<copy toDir="target/protobuf">
+									<fileset dir="src/main/protobuf">
+										<include name="**/*.proto" />
+									</fileset>
+									<mapper>
+										<mapper type="regexp" from="(.*)\.proto(.*)" to="\1Server\.proto\2" />
+									</mapper>
+								</copy>
+								<copy toDir="target/protobuf">
+									<fileset dir="src/main/protobuf">
+										<include name="**/*.proto" />
+									</fileset>
+									<mapper>
+										<mapper type="regexp" from="(.*)\.proto(.*)" to="\1Client.proto\2" />
+									</mapper>
+								</copy>
+								<replace token="Protos" value="ProtosServer" dir="target/protobuf">
+									<include name="**/*Server.proto" />
+								</replace>
+								<replace token="Protos" value="ProtosClient" dir="target/protobuf">
+									<include name="**/*Client.proto" />
+								</replace>
+							</target>
+						</configuration>
+					</execution>
+					<execution>
+						<id>shade-protobuf</id>
+						<phase>process-sources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<replace token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." dir="src/main/java">
+									<include name="**/*ProtosClient.java" />
+								</replace>
+							</target>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
 				<groupId>com.github.os72</groupId>
 				<artifactId>protoc-jar-maven-plugin</artifactId>
 				<version>3.1.0.1</version>
@@ -101,7 +160,7 @@
 							<protocVersion>2.5.0</protocVersion>
 							<outputDirectory>src/main/java</outputDirectory>
 							<inputDirectories>
-								<include>src/main/protobuf</include>
+								<include>target/protobuf</include>
 							</inputDirectories>
 						</configuration>
 					</execution>

@@ -58,8 +58,8 @@ import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
-import com.google.protobuf.ByteString;
-import com.google.protobuf.RpcChannel;
+import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
+import org.apache.hadoop.hbase.shaded.com.google.protobuf.RpcChannel;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -103,11 +103,10 @@ import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.AggregationEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObserver;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtos.AggregationService;
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionRequest;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient.VersionRequest;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingServerOp;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingVisibilityServerOp;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
@@ -1137,7 +1136,7 @@ public class HBaseOperations implements
 
 			final Aggregation aggregation = readerParams.getAggregation().getRight();
 
-			final AggregationProtos.AggregationType.Builder aggregationBuilder = AggregationProtos.AggregationType
+			final AggregationProtosClient.AggregationType.Builder aggregationBuilder = AggregationProtosClient.AggregationType
 					.newBuilder();
 			aggregationBuilder.setClassId(ByteString.copyFrom(URLClassloaderUtils.toClassId(aggregation)));
 
@@ -1146,7 +1145,7 @@ public class HBaseOperations implements
 				aggregationBuilder.setParams(ByteString.copyFrom(paramBytes));
 			}
 
-			final AggregationProtos.AggregationRequest.Builder requestBuilder = AggregationProtos.AggregationRequest
+			final AggregationProtosClient.AggregationRequest.Builder requestBuilder = AggregationProtosClient.AggregationRequest
 					.newBuilder();
 			requestBuilder.setAggregation(aggregationBuilder.build());
 			if (readerParams.getFilter() != null) {
@@ -1210,7 +1209,7 @@ public class HBaseOperations implements
 
 			requestBuilder.setPartitionKeyLength(readerParams.getIndex().getIndexStrategy().getPartitionKeyLength());
 
-			final AggregationProtos.AggregationRequest request = requestBuilder.build();
+			final AggregationProtosClient.AggregationRequest request = requestBuilder.build();
 
 			byte[] startRow = null;
 			byte[] endRow = null;
@@ -1230,20 +1229,20 @@ public class HBaseOperations implements
 
 				try (final Table table = getTable(tableName)) {
 					results = table.coprocessorService(
-							AggregationProtos.AggregationService.class,
+							AggregationProtosClient.AggregationService.class,
 							startRow,
 							endRow,
-							new Batch.Call<AggregationProtos.AggregationService, ByteString>() {
+							new Batch.Call<AggregationProtosClient.AggregationService, ByteString>() {
 								@Override
 								public ByteString call(
-										final AggregationProtos.AggregationService counter )
+										final AggregationProtosClient.AggregationService counter )
 										throws IOException {
-									final BlockingRpcCallback<AggregationProtos.AggregationResponse> rpcCallback = new BlockingRpcCallback<AggregationProtos.AggregationResponse>();
+									final BlockingRpcCallback<AggregationProtosClient.AggregationResponse> rpcCallback = new BlockingRpcCallback<AggregationProtosClient.AggregationResponse>();
 									counter.aggregate(
 											null,
 											request,
 											rpcCallback);
-									AggregationProtos.AggregationResponse response = rpcCallback.get();
+									AggregationProtosClient.AggregationResponse response = rpcCallback.get();
 									if (response == null) {
 										// Region returned no response
 										throw new RegionException();
@@ -1638,20 +1637,20 @@ public class HBaseOperations implements
 			}
 			final Table table = getTable(AbstractGeoWavePersistence.METADATA_TABLE);
 			final Map<byte[], List<String>> versionInfoResponse = table.coprocessorService(
-					VersionProtos.VersionService.class,
+					VersionProtosClient.VersionService.class,
 					null,
 					null,
-					new Batch.Call<VersionProtos.VersionService, List<String>>() {
+					new Batch.Call<VersionProtosClient.VersionService, List<String>>() {
 						@Override
 						public List<String> call(
-								final VersionProtos.VersionService versionService )
+								final VersionProtosClient.VersionService versionService )
 								throws IOException {
-							final BlockingRpcCallback<VersionProtos.VersionResponse> rpcCallback = new BlockingRpcCallback<VersionProtos.VersionResponse>();
+							final BlockingRpcCallback<VersionProtosClient.VersionResponse> rpcCallback = new BlockingRpcCallback<VersionProtosClient.VersionResponse>();
 							versionService.version(
 									null,
 									VersionRequest.getDefaultInstance(),
 									rpcCallback);
-							final VersionProtos.VersionResponse response = rpcCallback.get();
+							final VersionProtosClient.VersionResponse response = rpcCallback.get();
 							return response.getVersionInfoList();
 						}
 					});
