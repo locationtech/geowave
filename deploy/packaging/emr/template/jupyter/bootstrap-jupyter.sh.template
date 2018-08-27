@@ -34,7 +34,7 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
 
 aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
 
