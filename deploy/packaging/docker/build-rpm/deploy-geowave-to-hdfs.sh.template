@@ -152,7 +152,7 @@ if [ $? -ne 0 ]; then
 fi
 
 #Find hbase conf path
-if [[ -x "$(command -v hbase)" ]]
+if [[ -x "$(command -v hbase)" ]]; then
     PATHS=$(hbase classpath)
     IFS=':' read -ra CLASSPATHS <<< "$PATHS"
 
