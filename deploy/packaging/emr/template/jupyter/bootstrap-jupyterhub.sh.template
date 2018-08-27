@@ -37,7 +37,7 @@ if [ ! -f "$RUN_FLAG" ]; then
 fi
 
 # Download example notebooks from s3
-aws s3 sync s3://geowave/latest/notebooks/jupyter $HOME/notebooks/
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
 
 # Download hub configuration file
 sudo su root -c "aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/jupyterhub_config.py /etc/jupyterhub/"
