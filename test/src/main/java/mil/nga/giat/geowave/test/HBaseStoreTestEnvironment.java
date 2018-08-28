@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.IOException;
+import java.net.URLClassLoader;
 import java.security.PrivilegedExceptionAction;
 
 import org.apache.hadoop.conf.Configuration;
@@ -98,9 +99,16 @@ public class HBaseStoreTestEnvironment extends
 					LOGGER.debug("Using local zookeeper URL: " + zookeeper);
 				}
 			}
-			ClassLoader hbaseMiniClusterCl = new HBaseMiniClusterClassLoader(
-					Thread.currentThread().getContextClassLoader());
+
 			ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+			ClassLoader hbaseMiniClusterCl = java.security.AccessController
+					.doPrivileged(new java.security.PrivilegedAction<ClassLoader>() {
+						@Override
+						public ClassLoader run() {
+							return new HBaseMiniClusterClassLoader(
+									prevCl);
+						}
+					});
 			Thread.currentThread().setContextClassLoader(
 					hbaseMiniClusterCl);
 			if (!TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
