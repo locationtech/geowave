@@ -188,10 +188,10 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 						}
 						while (hdfsObjects.hasNext()) {
 							final I hdfsObject = hdfsObjects.next();
-							currentIterator = toGeoWaveDataInternal(
+							currentIterator = wrapIteratorWithFilters(toGeoWaveDataInternal(
 									hdfsObject,
 									primaryIndexIds,
-									globalVisibility);
+									globalVisibility));
 							if (currentIterator.hasNext()) {
 								next = currentIterator.next();
 								return;
