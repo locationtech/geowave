@@ -1,22 +1,8 @@
 package mil.nga.giat.geowave.adapter.raster.adapter.merge;
 
 import java.awt.image.SampleModel;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
-
-import javax.media.jai.remote.SerializableState;
-import javax.media.jai.remote.SerializerFactory;
 
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
@@ -25,8 +11,7 @@ import org.slf4j.LoggerFactory;
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.adapter.raster.util.SampleModelPersistenceUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
@@ -57,26 +42,11 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 	}, justification = "Incorrect warning, sampleModelBinary used")
 	@Override
 	public byte[] toBinary() {
-
-		final SerializableState serializableSampleModel = SerializerFactory.getState(sampleModel);
-		byte[] sampleModelBinary = new byte[0];
-		try {
-			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			final ObjectOutputStream oos = new ObjectOutputStream(
-					baos);
-			oos.writeObject(serializableSampleModel);
-			oos.close();
-			sampleModelBinary = baos.toByteArray();
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to serialize sample model",
-					e);
-		}
+		final byte[] sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
 
 		final byte[] mergeStrategyBinary = PersistenceUtils.toBinary(mergeStrategy);
 
-		int byteCount = sampleModelBinary.length + 4 + 2 + mergeStrategyBinary.length + 4;
+		final int byteCount = sampleModelBinary.length + 4 + 2 + mergeStrategyBinary.length + 4;
 		final ByteBuffer buf = ByteBuffer.allocate(byteCount);
 		buf.putInt(sampleModelBinary.length);
 		buf.put(sampleModelBinary);
@@ -95,16 +65,7 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 		if (sampleModelBinary.length > 0) {
 			try {
 				buf.get(sampleModelBinary);
-				final ByteArrayInputStream bais = new ByteArrayInputStream(
-						sampleModelBinary);
-				final ObjectInputStream ois = new ObjectInputStream(
-						bais);
-				final Object o = ois.readObject();
-				ois.close();
-				if ((o instanceof SerializableState) && (((SerializableState) o).getObject() instanceof SampleModel)) {
-					sampleModel = (SampleModel) ((SerializableState) o).getObject();
-
-				}
+				sampleModel = SampleModelPersistenceUtils.getSampleModel(sampleModelBinary);
 			}
 			catch (final Exception e) {
 				LOGGER.warn(
@@ -139,9 +100,9 @@ public class SingleAdapterServerMergeStrategy<T extends Persistable> implements
 
 	@Override
 	public void merge(
-			RasterTile thisTile,
-			RasterTile nextTile,
-			short internalAdapterId ) {
+			final RasterTile thisTile,
+			final RasterTile nextTile,
+			final short internalAdapterId ) {
 		if (mergeStrategy != null) {
 			mergeStrategy.merge(
 					thisTile,
