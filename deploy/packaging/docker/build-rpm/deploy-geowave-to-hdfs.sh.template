@@ -181,8 +181,11 @@ if [[ -x "$(command -v aws)" ]] && [ ! -z "$CONFPATH" ] && [[ -e "$CONFPATH/hbas
 
     if [[ $GOTELEM -eq 1 ]] && [[ $CONTENT = "s3://"* ]]; then
       CONTENT=${CONTENT%/}
-      echo -e "s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar"
-      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-tools-$VENDOR_VERSION-apache.jar
+      echo -e "s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar"
+      # Upload library to s3
+      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar $CONTENT/lib/geowave-$DATASTORE_TOKEN-$VENDOR_VERSION.jar
+      # Also upload the build metadata file for ease of inspection
+      aws s3 cp $GEOWAVE_DATASTORE_HOME/geowave-$DATASTORE_TOKEN-build.properties $CONTENT/lib/geowave-$DATASTORE_TOKEN-build.properties
     fi
 
     if [ $GOTELEM -eq 1 ]; then
