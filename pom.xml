@@ -1246,6 +1246,9 @@
 				<hadoop.version>2.6.0-cdh5.14.0</hadoop.version>
 				<spark.version>2.2.0.cloudera2</spark.version>
 				<accumulo.api>1.7</accumulo.api>
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+					which was removed in guava 22.0 -->
+				<guava.version>21.0</guava.version>
 			</properties>
 			<repositories>
 				<repository>
@@ -1284,6 +1287,9 @@
 				<hadoop.version>2.7.3.2.6.5.2-10</hadoop.version>
 				<spark.version>2.3.0.2.6.5.2-10</spark.version>
 				<accumulo.api>1.7</accumulo.api>
+				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
+					which was removed in guava 22.0 -->
+				<guava.version>21.0</guava.version>
 			</properties>
 			<repositories>
 				<repository>
