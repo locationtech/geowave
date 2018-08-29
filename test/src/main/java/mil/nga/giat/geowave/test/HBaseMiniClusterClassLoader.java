@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.regex.Pattern;
 
 import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
 
@@ -38,6 +37,7 @@ public class HBaseMiniClusterClassLoader extends
 		"org.apache.hadoop.conf",
 		"org.apache.hadoop.fs",
 		"org.apache.hadoop.util",
+		"org.apache.hadoop.io"
 	};
 
 	/**

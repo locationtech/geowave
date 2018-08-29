@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-extension-parent</artifactId>
@@ -7,6 +9,8 @@
 		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-service-4676</artifactId>
+	<name>STANAG4676 Imagery Services</name>
+	<description>GeoWave service support for image chips and video clips from STANAG4676 which can be embedded in WMS getFeatureInfo responses</description>
 	<packaging>war</packaging>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -23,11 +27,11 @@
 			<version>0.1.9</version>
 		</dependency>
 		<dependency>
-		    <groupId>org.jcodec</groupId>
-		    <artifactId>jcodec</artifactId>
-		  	<version>0.1.9</version>
+			<groupId>org.jcodec</groupId>
+			<artifactId>jcodec</artifactId>
+			<version>0.1.9</version>
 		</dependency>
- 		<dependency>
+		<dependency>
 			<groupId>javax.servlet</groupId>
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
@@ -141,7 +145,7 @@
 			<id>xuggle repo</id>
 			<url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
 		</repository>
-	
+
 	</repositories>
 	<build>
 		<plugins>

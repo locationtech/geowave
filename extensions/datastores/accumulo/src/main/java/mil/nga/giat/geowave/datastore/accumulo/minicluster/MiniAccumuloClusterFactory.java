@@ -12,6 +12,7 @@ package mil.nga.giat.geowave.datastore.accumulo.minicluster;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Map;
 
 import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
@@ -40,12 +41,14 @@ public class MiniAccumuloClusterFactory
 
 	public static MiniAccumuloClusterImpl newAccumuloCluster(
 			final MiniAccumuloConfigImpl config,
-			final Class context )
+			final Class context,
+			final URL... additionalClasspathUrls )
 			throws IOException {
 
 		final String jarPath = ClasspathUtils.setupPathingJarClassPath(
 				config.getDir(),
-				context);
+				context,
+				additionalClasspathUrls);
 
 		if (jarPath == null) {
 			// Jar was not successfully created

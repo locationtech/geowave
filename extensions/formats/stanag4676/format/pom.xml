@@ -9,6 +9,8 @@
 		<version>0.9.8-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-format-4676</artifactId>
+	<name>GeoWave STANAG4676 Format</name>
+	<description>GeoWave ingest support for the STANAG4676 track specification</description>
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
