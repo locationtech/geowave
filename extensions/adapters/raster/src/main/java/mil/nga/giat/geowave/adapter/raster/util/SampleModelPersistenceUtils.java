@@ -19,6 +19,7 @@ import javax.media.jai.ComponentSampleModelJAI;
 import com.google.common.primitives.Ints;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.protobuf.SampleModelProtos;
 
@@ -392,8 +393,8 @@ public class SampleModelPersistenceUtils
 
 			long size = 0;
 			if (maxBandOff >= 0) size += maxBandOff + 1;
-			if (pixelStride > 0) size += pixelStride * (width - 1);
-			if (scanlineStride > 0) size += scanlineStride * (height - 1);
+			if (pixelStride > 0) size += (long) pixelStride * (width - 1);
+			if (scanlineStride > 0) size += (long) scanlineStride * (height - 1);
 			return size;
 		}
 
@@ -1563,6 +1564,7 @@ public class SampleModelPersistenceUtils
 		 * Returns a <code>String</code> containing the values of all valid
 		 * fields.
 		 */
+		@SuppressFBWarnings
 		public String toString() {
 			String ret = "ComponentSampleModelJAI: " + "  dataType=" + this.getDataType() + "  numBands="
 					+ this.getNumBands() + "  width=" + this.getWidth() + "  height=" + this.getHeight()

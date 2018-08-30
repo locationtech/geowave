@@ -90,6 +90,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.PrecisionModel;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import mil.nga.giat.geowave.adapter.raster.FitToIndexGridCoverage;
 import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.Resolution;
@@ -454,6 +455,7 @@ public class RasterDataAdapter implements
 		init();
 	}
 
+	@SuppressFBWarnings
 	private static void staticInit() {
 		// check outside of synchronized block to optimize performance
 		if (!classInit) {
