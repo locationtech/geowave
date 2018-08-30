@@ -1282,10 +1282,10 @@
 		<profile>
 			<id>hortonworks</id>
 			<properties>
-				<accumulo.version>1.7.0.2.6.5.2-10</accumulo.version>
-				<hbase.version>1.1.2.2.6.5.2-10</hbase.version>
-				<hadoop.version>2.7.3.2.6.5.2-10</hadoop.version>
-				<spark.version>2.3.0.2.6.5.2-10</spark.version>
+				<accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
+				<hbase.version>1.1.2.2.6.5.35-1</hbase.version>
+				<hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
+				<spark.version>2.3.0.2.6.5.35-1</spark.version>
 				<accumulo.api>1.7</accumulo.api>
 				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
 					which was removed in guava 22.0 -->

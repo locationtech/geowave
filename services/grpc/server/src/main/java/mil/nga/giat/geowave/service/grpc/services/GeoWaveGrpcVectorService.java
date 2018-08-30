@@ -262,7 +262,6 @@ public class GeoWaveGrpcVectorService extends
 					dataStore = storeLoader.createDataStore();
 					final PersistentAdapterStore adapterStore = storeLoader.createAdapterStore();
 					final InternalAdapterStore internalAdapterStore = storeLoader.createInternalAdapterStore();
-					final IndexStore indexStore = storeLoader.createIndexStore();
 					Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 					if (internalAdapterId != null) {
 						adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(internalAdapterId);
