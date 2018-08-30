@@ -96,6 +96,12 @@
 			<artifactId>spark-sql_2.11</artifactId>
 			<version>${spark.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>io.findify</groupId>
+			<artifactId>s3mock_2.11</artifactId>
+			<version>0.2.5</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

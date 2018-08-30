@@ -27,12 +27,12 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import com.google.common.base.Stopwatch;
 
 abstract public class AbstractGeoWaveQuery extends
 		DefaultOperation implements
@@ -56,7 +56,7 @@ abstract public class AbstractGeoWaveQuery extends
 	public void execute(
 			OperationParams params )
 			throws ParseException {
-		final Stopwatch stopWatch = new Stopwatch();
+		final StopWatch stopWatch = new StopWatch();
 
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1) {

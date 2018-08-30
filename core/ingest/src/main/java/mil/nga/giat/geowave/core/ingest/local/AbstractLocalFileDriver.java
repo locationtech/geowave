@@ -25,19 +25,25 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.upplication.s3fs.S3Path;
 
 import mil.nga.giat.geowave.core.cli.operations.config.options.ConfigOptions;
+import mil.nga.giat.geowave.core.ingest.DataAdapterProvider;
+import mil.nga.giat.geowave.core.ingest.IngestUtils;
+import mil.nga.giat.geowave.core.ingest.IngestUtils.URLTYPE;
 import mil.nga.giat.geowave.core.ingest.operations.ConfigAWSCommand;
-import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils;
-import mil.nga.giat.geowave.mapreduce.URLClassloaderUtils.URLTYPE;
+import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import mil.nga.giat.geowave.mapreduce.hdfs.HdfsUrlStreamHandlerFactory;
 import mil.nga.giat.geowave.mapreduce.operations.ConfigHDFSCommand;
+import mil.nga.giat.geowave.mapreduce.s3.S3URLStreamHandlerFactory;
 
 /**
  * This class can be sub-classed to handle recursing over a local directory
@@ -82,7 +88,7 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 		// If input path is S3
 		if (inputPath.startsWith("s3://")) {
 			try {
-				URLClassloaderUtils.setURLStreamHandlerFactory(URLTYPE.S3);
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.S3);
 			}
 			catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
 				LOGGER.error(
@@ -106,53 +112,15 @@ abstract public class AbstractLocalFileDriver<P extends LocalPluginBase, R>
 				s3EndpointUrl = "s3://" + s3EndpointUrl;
 			}
 
-			FileSystem fs;
-			try {
-				// HP Fortify "Path Traversal" false positive
-				// What Fortify considers "user input" comes only
-				// from users with OS-level access anyway
-				fs = FileSystems.newFileSystem(
-						new URI(
-								s3EndpointUrl + "/"),
-						new HashMap<String, Object>(),
-						Thread.currentThread().getContextClassLoader());
-			}
-			catch (URISyntaxException e) {
-				LOGGER.error("Unable to ingest data, Inavlid S3 path");
-				return;
-			}
-			catch (FileSystemAlreadyExistsException e) {
-				LOGGER.info("File system " + s3EndpointUrl + "already exists");
-				try {
-					fs = FileSystems.getFileSystem(new URI(
-							s3EndpointUrl + "/"));
-				}
-				catch (URISyntaxException e1) {
-					LOGGER.error("Unable to ingest data, Inavlid S3 path");
-					return;
-				}
-			}
-
-			String s3InputPath = inputPath.replaceFirst(
-					"s3://",
-					"/");
-			try {
-				path = (S3Path) fs.getPath(s3InputPath);
-			}
-			catch (InvalidPathException e) {
-				LOGGER.error("Input valid input path " + inputPath);
-				return;
-			}
-			if (!path.isAbsolute()) {
-				LOGGER.error("Input path " + inputPath + " does not exist");
-				return;
-			}
+			path = IngestUtils.setupS3FileSystem(
+					inputPath,
+					s3EndpointUrl);
 
 		}
 		// If input path is HDFS
 		else if (inputPath.startsWith("hdfs://")) {
 			try {
-				URLClassloaderUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
+				IngestUtils.setURLStreamHandlerFactory(URLTYPE.HDFS);
 			}
 			catch (final Error | NoSuchFieldException | SecurityException | IllegalArgumentException
 					| IllegalAccessException e) {

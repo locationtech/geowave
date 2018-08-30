@@ -49,9 +49,9 @@ public class CassandraMetadataDeleter implements
 		// directly supported by cassandra, we'd have top query first to get
 		// primary ID(s) and then delete, but this is not a use case necessary
 		// at the moment
-		final ResultSet rs = operations.getSession().execute(
+		operations.getSession().execute(
 				delete);
-		return !rs.isExhausted();
+		return true;
 	}
 
 	@Override
