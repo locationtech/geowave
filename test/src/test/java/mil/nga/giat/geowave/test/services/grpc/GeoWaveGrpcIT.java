@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test.service.grpc;
+package mil.nga.giat.geowave.test.services.grpc;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -39,7 +39,8 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import mil.nga.giat.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
-import mil.nga.giat.geowave.test.service.grpc.GeoWaveGrpcTestClient;
+import mil.nga.giat.geowave.test.services.grpc.GeoWaveGrpcTestClient;
+import mil.nga.giat.geowave.test.services.grpc.GeoWaveGrpcTestUtils;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({

@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.test;
 
 import java.io.IOException;
-import java.net.URLClassLoader;
 import java.security.PrivilegedExceptionAction;
 
 import org.apache.hadoop.conf.Configuration;
@@ -101,32 +100,25 @@ public class HBaseStoreTestEnvironment extends
 			}
 
 			ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
-			ClassLoader hbaseMiniClusterCl = java.security.AccessController
-					.doPrivileged(new java.security.PrivilegedAction<ClassLoader>() {
-						@Override
-						public ClassLoader run() {
-							return new HBaseMiniClusterClassLoader(
-									prevCl);
-						}
-					});
+			ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
 			Thread.currentThread().setContextClassLoader(
 					hbaseMiniClusterCl);
 			if (!TestUtils.isSet(System.getProperty(ZookeeperTestEnvironment.ZK_PROPERTY_NAME))) {
 				try {
-					// HBaseTestingUtility must be loaded dynamically by the
-					// minicluster class loader
-					hbaseLocalCluster = Class.forName(
-							"org.apache.hadoop.hbase.HBaseTestingUtility",
+					final Configuration conf = (Configuration) Class.forName(
+							"org.apache.hadoop.hbase.HBaseConfiguration",
 							true,
-							hbaseMiniClusterCl).newInstance();
-					final Configuration conf = (Configuration) hbaseLocalCluster.getClass().getMethod(
-							"getConfiguration").invoke(
-							hbaseLocalCluster);
+							hbaseMiniClusterCl).getMethod(
+							"create").invoke(
+							null);
 					System.setProperty(
 							"test.build.data.basedirectory",
 							DEFAULT_HBASE_TEMP_DIR);
 					conf.setBoolean(
 							"hbase.online.schema.update.enable",
+							true);
+					conf.setBoolean(
+							"hbase.defaults.for.version.skip",
 							true);
 
 					if (enableVisibility) {
@@ -158,9 +150,17 @@ public class HBaseStoreTestEnvironment extends
 						// processor
 						VisibilityTestUtil.enableVisiblityLabels((Configuration) conf);
 					}
+
+					// HBaseTestingUtility must be loaded dynamically by the
+					// minicluster class loader
+					hbaseLocalCluster = Class.forName(
+							"org.apache.hadoop.hbase.HBaseTestingUtility",
+							true,
+							hbaseMiniClusterCl).getConstructor(
+							Configuration.class).newInstance(
+							conf);
+
 					// Start the cluster
-					// hbaseLocalCluster = new HBaseTestingUtility(
-					// conf);
 					hbaseLocalCluster.getClass().getMethod(
 							"startMiniHBaseCluster",
 							Integer.TYPE,

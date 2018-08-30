@@ -40,6 +40,23 @@ public class HBaseMiniClusterClassLoader extends
 		"org.apache.hadoop.io"
 	};
 
+	private static ClassLoader hbaseMiniClusterCl;
+
+	public static synchronized ClassLoader getInstance(
+			final ClassLoader parentCl ) {
+		if (hbaseMiniClusterCl == null) {
+			hbaseMiniClusterCl = java.security.AccessController
+					.doPrivileged(new java.security.PrivilegedAction<ClassLoader>() {
+						@Override
+						public ClassLoader run() {
+							return new HBaseMiniClusterClassLoader(
+									parentCl);
+						}
+					});
+		}
+		return hbaseMiniClusterCl;
+	}
+
 	/**
 	 * Creates a JarClassLoader that loads classes from the given paths.
 	 */

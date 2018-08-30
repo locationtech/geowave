@@ -1,4 +1,4 @@
-package mil.nga.giat.geowave.test.service.grpc;
+package mil.nga.giat.geowave.test.services.grpc;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
