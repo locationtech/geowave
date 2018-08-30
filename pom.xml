@@ -91,7 +91,8 @@
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
-		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g -Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
+		<test.args>-XX:CompressedClassSpaceSize=512m -XX:+UseSerialGC -Xms1g
+			-Xmx2g -XX:MaxMetaspaceSize=512m</test.args>
 		<findbugs.version>3.0.1</findbugs.version>
 		<findbugs.omitVisitors>MutableStaticFields,FindReturnRef</findbugs.omitVisitors>
 		<findbugs.effort>Max</findbugs.effort>
@@ -1283,7 +1284,10 @@
 			<id>hortonworks</id>
 			<properties>
 				<accumulo.version>1.7.0.2.6.5.35-1</accumulo.version>
-				<hbase.version>1.1.2.2.6.5.35-1</hbase.version>
+				<!-- this is used in place of 1.1.2.2.6.5.35-1 because the hbase-shaded-client 
+					from hortonworks doesn't shade third party libraries like the apache one 
+					does -->
+				<hbase.version>1.1.2</hbase.version>
 				<hadoop.version>2.7.3.2.6.5.35-1</hadoop.version>
 				<spark.version>2.3.0.2.6.5.35-1</spark.version>
 				<accumulo.api>1.7</accumulo.api>
