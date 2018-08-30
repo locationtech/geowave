@@ -43,6 +43,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -258,10 +260,16 @@ public class GeoWaveGrpcVectorService extends
 					}
 
 					dataStore = storeLoader.createDataStore();
-					final AdapterStore adapterStore = storeLoader.createAdapterStore();
+					final PersistentAdapterStore adapterStore = storeLoader.createAdapterStore();
+					final InternalAdapterStore internalAdapterStore = storeLoader.createInternalAdapterStore();
 					final IndexStore indexStore = storeLoader.createIndexStore();
-
-					adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(adapterId);
+					Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+					if (internalAdapterId != null) {
+						adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(internalAdapterId);
+					}
+					else {
+						adapter = null;
+					}
 					if (adapter == null) {
 						adapter = new FeatureDataAdapter(
 								featureType);
@@ -447,14 +455,17 @@ public class GeoWaveGrpcVectorService extends
 
 		// get a handle to the relevant stores
 		final DataStore dataStore = storeLoader.createDataStore();
-		final AdapterStore adapterStore = storeLoader.createAdapterStore();
+		final PersistentAdapterStore adapterStore = storeLoader.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = storeLoader.createInternalAdapterStore();
 		final IndexStore indexStore = storeLoader.createIndexStore();
 
 		GeotoolsFeatureDataAdapter adapter = null;
 		PrimaryIndex pIndex = null;
-
 		if (adapterId != null) {
-			adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(adapterId);
+			Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+			if (internalAdapterId != null) {
+				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(internalAdapterId);
+			}
 		}
 
 		if (indexId != null) {
