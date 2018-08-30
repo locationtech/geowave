@@ -44,7 +44,10 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexLoader;
 import mil.nga.giat.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -169,7 +172,7 @@ public class GeoWaveGrpcVectorService extends
 			private ByteArrayId indexId = null;
 			private IndexWriter<SimpleFeature> writer = null;
 
-			private GeotoolsFeatureDataAdapter adapter = null;
+			private WritableDataAdapter adapter = null;
 			private PrimaryIndex pIndex = null;
 			private SimpleFeatureTypeBuilder typeBuilder = null;
 			private SimpleFeatureBuilder featureBuilder = null;
@@ -264,7 +267,7 @@ public class GeoWaveGrpcVectorService extends
 					final InternalAdapterStore internalAdapterStore = storeLoader.createInternalAdapterStore();
 					Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 					if (internalAdapterId != null) {
-						adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(internalAdapterId);
+						adapter = adapterStore.getAdapter(internalAdapterId);
 					}
 					else {
 						adapter = null;
@@ -463,7 +466,14 @@ public class GeoWaveGrpcVectorService extends
 		if (adapterId != null) {
 			Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 			if (internalAdapterId != null) {
-				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(internalAdapterId);
+				WritableDataAdapter genericAdapter = adapterStore.getAdapter(internalAdapterId);
+				if (genericAdapter instanceof GeotoolsFeatureDataAdapter) {
+					adapter = (GeotoolsFeatureDataAdapter) genericAdapter;
+				}
+				else if ((genericAdapter instanceof InternalDataAdapter && ((InternalDataAdapter) genericAdapter)
+						.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
+					adapter = (GeotoolsFeatureDataAdapter) ((InternalDataAdapter) genericAdapter).getAdapter();
+				}
 			}
 		}
 
