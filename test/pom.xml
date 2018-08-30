@@ -270,6 +270,10 @@
 					<groupId>org.apache.hbase</groupId>
 					<artifactId>hbase-client</artifactId>
 				</exclusion>
+				<exclusion>
+					<groupId>hsqldb</groupId>
+					<artifactId>hsqldb</artifactId>
+				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
@@ -404,7 +408,7 @@
 									<type>war</type>
 									<overWrite>true</overWrite>
 									<outputDirectory>${project.build.directory}/geoserver</outputDirectory>
-									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar</excludes>
+									<excludes>**/commons-dbcp-1.4.jar,**/*-SNAPSHOT.jar,**/*20140915*.jar,**/slf4j*.jar,**/guava*.jar</excludes>
 								</artifactItem>
 							</artifactItems>
 						</configuration>
