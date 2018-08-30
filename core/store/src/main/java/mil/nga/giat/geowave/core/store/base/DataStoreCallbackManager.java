@@ -19,6 +19,9 @@ import java.util.Map;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.DataStoreStatisticsProvider;
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
@@ -42,8 +45,8 @@ public class DataStoreCallbackManager
 
 	final private boolean captureAdapterStats;
 
-	final Map<ByteArrayId, IngestCallback<?>> icache = new HashMap<ByteArrayId, IngestCallback<?>>();
-	final Map<ByteArrayId, DeleteCallback<?, GeoWaveRow>> dcache = new HashMap<ByteArrayId, DeleteCallback<?, GeoWaveRow>>();
+	final Map<Short, IngestCallback<?>> icache = new HashMap<Short, IngestCallback<?>>();
+	final Map<Short, DeleteCallback<?, GeoWaveRow>> dcache = new HashMap<Short, DeleteCallback<?, GeoWaveRow>>();
 
 	public DataStoreCallbackManager(
 			final DataStatisticsStore statsStore,
@@ -55,33 +58,33 @@ public class DataStoreCallbackManager
 	}
 
 	public <T> IngestCallback<T> getIngestCallback(
-			final WritableDataAdapter<T> writableAdapter,
+			final InternalDataAdapter<T> writableAdapter,
 			final PrimaryIndex index ) {
-		if (!icache.containsKey(writableAdapter.getAdapterId())) {
+		if (!icache.containsKey(writableAdapter.getInternalAdapterId())) {
 			final DataStoreStatisticsProvider<T> statsProvider = new DataStoreStatisticsProvider<T>(
 					writableAdapter,
 					index,
 					captureAdapterStats);
 			final List<IngestCallback<T>> callbackList = new ArrayList<IngestCallback<T>>();
-			if ((writableAdapter instanceof StatisticsProvider) && persistStats) {
+			if ((writableAdapter.getAdapter() instanceof StatisticsProvider) && persistStats) {
 				callbackList.add(new StatsCompositionTool<T>(
 						statsProvider,
 						statsStore,
 						index,
-						writableAdapter));
+						(DataAdapter<T>) writableAdapter.getAdapter()));
 			}
-			if (captureAdapterStats && writableAdapter instanceof SecondaryIndexDataAdapter<?>) {
+			if (captureAdapterStats && writableAdapter.getAdapter() instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(
 						secondaryIndexStore,
-						(SecondaryIndexDataAdapter<T>) writableAdapter,
+						(SecondaryIndexDataAdapter<T>) writableAdapter.getAdapter(),
 						index));
 			}
 			icache.put(
-					writableAdapter.getAdapterId(),
+					writableAdapter.getInternalAdapterId(),
 					new IngestCallbackList<T>(
 							callbackList));
 		}
-		return (IngestCallback<T>) icache.get(writableAdapter.getAdapterId());
+		return (IngestCallback<T>) icache.get(writableAdapter.getInternalAdapterId());
 
 	}
 
@@ -91,33 +94,33 @@ public class DataStoreCallbackManager
 	}
 
 	public <T> DeleteCallback<T, GeoWaveRow> getDeleteCallback(
-			final WritableDataAdapter<T> writableAdapter,
+			final InternalDataAdapter<T> writableAdapter,
 			final PrimaryIndex index ) {
-		if (!dcache.containsKey(writableAdapter.getAdapterId())) {
+		if (!dcache.containsKey(writableAdapter.getInternalAdapterId())) {
 			final DataStoreStatisticsProvider<T> statsProvider = new DataStoreStatisticsProvider<T>(
 					writableAdapter,
 					index,
 					captureAdapterStats);
 			final List<DeleteCallback<T, GeoWaveRow>> callbackList = new ArrayList<DeleteCallback<T, GeoWaveRow>>();
-			if ((writableAdapter instanceof StatisticsProvider) && persistStats) {
+			if ((writableAdapter.getAdapter() instanceof StatisticsProvider) && persistStats) {
 				callbackList.add(new StatsCompositionTool<T>(
 						statsProvider,
 						statsStore,
 						index,
-						writableAdapter));
+						(DataAdapter<T>) writableAdapter.getAdapter()));
 			}
-			if (captureAdapterStats && writableAdapter instanceof SecondaryIndexDataAdapter<?>) {
+			if (captureAdapterStats && writableAdapter.getAdapter() instanceof SecondaryIndexDataAdapter<?>) {
 				callbackList.add(new SecondaryIndexDataManager<T>(
 						secondaryIndexStore,
-						(SecondaryIndexDataAdapter<T>) writableAdapter,
+						(SecondaryIndexDataAdapter<T>) writableAdapter.getAdapter(),
 						index));
 			}
 			dcache.put(
-					writableAdapter.getAdapterId(),
+					writableAdapter.getInternalAdapterId(),
 					new DeleteCallbackList<T, GeoWaveRow>(
 							callbackList));
 		}
-		return (DeleteCallback<T, GeoWaveRow>) dcache.get(writableAdapter.getAdapterId());
+		return (DeleteCallback<T, GeoWaveRow>) dcache.get(writableAdapter.getInternalAdapterId());
 
 	}
 

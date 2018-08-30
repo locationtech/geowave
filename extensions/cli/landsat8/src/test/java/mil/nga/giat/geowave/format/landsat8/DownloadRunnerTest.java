@@ -14,6 +14,7 @@ import static org.junit.Assert.*;
 
 import java.io.File;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import it.geosolutions.jaiext.JAIExt;
@@ -22,6 +23,7 @@ import mil.nga.giat.geowave.core.cli.parser.ManualOperationParams;
 public class DownloadRunnerTest
 {
 	@Test
+	@Ignore
 	public void testExecute()
 			throws Exception {
 		JAIExt.initJAIEXT();

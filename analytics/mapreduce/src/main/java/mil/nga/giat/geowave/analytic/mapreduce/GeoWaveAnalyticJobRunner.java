@@ -26,6 +26,7 @@ import org.geotools.feature.type.BasicFeatureTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mil.nga.giat.geowave.adapter.vector.FeatureDataAdapter;
 import mil.nga.giat.geowave.analytic.AnalyticFeature;
 import mil.nga.giat.geowave.analytic.IndependentJobRunner;
 import mil.nga.giat.geowave.analytic.PropertyManagement;
@@ -44,11 +45,16 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.CustomIdIndex;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 
 /**
  * This class managers the input and output formats for a map reduce job. It
@@ -117,12 +123,20 @@ public abstract class GeoWaveAnalyticJobRunner extends
 		return this.getClass();
 	}
 
-	public AdapterStore getAdapterStore(
+	public PersistentAdapterStore getAdapterStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createAdapterStore();
+	}
+
+	public InternalAdapterStore getInternalAdapterStore(
+			final PropertyManagement runTimeProperties )
+			throws Exception {
+		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+				runTimeProperties);
+		return store.getDataStoreOptions().createInternalAdapterStore();
 	}
 
 	public IndexStore getIndexStore(
@@ -192,10 +206,14 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 	public static void addDataAdapter(
 			final Configuration config,
-			final DataAdapter<?> adapter ) {
+			final InternalDataAdapter<?> adapter ) {
 		JobContextAdapterStore.addDataAdapter(
 				config,
 				adapter);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				config,
+				adapter.getAdapterId(),
+				adapter.getInternalAdapterId());
 	}
 
 	public static void addIndex(
@@ -286,7 +304,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 				runTimeProperties);
 	}
 
-	protected DataAdapter<?> getAdapter(
+	protected InternalDataAdapter<?> getAdapter(
 			final PropertyManagement runTimeProperties,
 			final ParameterEnum dataTypeEnum,
 			final ParameterEnum dataNameSpaceEnum )
@@ -296,24 +314,27 @@ public abstract class GeoWaveAnalyticJobRunner extends
 				dataTypeEnum,
 				"convex_hull").toString();
 
-		final AdapterStore adapterStore = getAdapterStore(runTimeProperties);
-
-		DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+		final PersistentAdapterStore adapterStore = getAdapterStore(runTimeProperties);
+		final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
+		Short convexHullInternalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 				projectionDataTypeId));
-
-		if (adapter == null) {
+		if (convexHullInternalAdapterId == null) {
 			final String namespaceURI = runTimeProperties.storeIfEmpty(
 					dataNameSpaceEnum,
 					BasicFeatureTypes.DEFAULT_NAMESPACE).toString();
-			adapter = AnalyticFeature.createGeometryFeatureAdapter(
+			FeatureDataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
 					projectionDataTypeId,
 					new String[0],
 					namespaceURI,
 					ClusteringUtils.CLUSTERING_CRS);
-
-			adapterStore.addAdapter(adapter);
+			short internalAdapterId = internalAdapterStore.addAdapterId(adapter.getAdapterId());
+			InternalDataAdapter<?> internalAdapter = new InternalDataAdapterWrapper<>(
+					adapter,
+					internalAdapterId);
+			adapterStore.addAdapter(internalAdapter);
+			return internalAdapter;
 		}
-		return adapter;
+		return adapterStore.getAdapter(convexHullInternalAdapterId);
 	}
 
 	protected String checkIndex(

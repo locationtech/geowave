@@ -39,6 +39,8 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -107,9 +109,10 @@ public class CentroidManagerTest
 				opts);
 		final IndexStore indexStore = storeFamily.getIndexStoreFactory().createStore(
 				opts);
-		final AdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
+		final PersistentAdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
 				opts);
-
+		final InternalAdapterStore internalAdapterStore = storeFamily.getInternalAdapterStoreFactory().createStore(
+				opts);
 		ingest(
 				dataStore,
 
@@ -224,6 +227,7 @@ public class CentroidManagerTest
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
+				internalAdapterStore.getInternalAdapterId(adapter.getAdapterId()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
 				"b1",
 				1);
@@ -260,6 +264,7 @@ public class CentroidManagerTest
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
+				internalAdapterStore.getInternalAdapterId(adapter.getAdapterId()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
 				"b1",
 				1);

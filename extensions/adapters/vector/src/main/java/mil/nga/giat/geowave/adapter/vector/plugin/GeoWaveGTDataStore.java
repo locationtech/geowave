@@ -52,9 +52,12 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
+import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
 import mil.nga.giat.geowave.core.store.dimension.NumericDimensionField;
@@ -71,10 +74,12 @@ public class GeoWaveGTDataStore extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGTDataStore.class);
 
 	private FeatureListenerManager listenerManager = null;
-	protected AdapterStore adapterStore;
+	protected PersistentAdapterStore adapterStore;
+	protected InternalAdapterStore internalAdapterStore;
 	protected IndexStore indexStore;
 	protected DataStatisticsStore dataStatisticsStore;
 	protected DataStore dataStore;
+	protected DataStoreOptions dataStoreOptions;
 	protected AdapterIndexMappingStore adapterIndexMappingStore;
 	private final Map<String, PrimaryIndex[]> preferredIndexes = new ConcurrentHashMap<String, PrimaryIndex[]>();
 
@@ -104,10 +109,12 @@ public class GeoWaveGTDataStore extends
 	private void init(
 			final GeoWavePluginConfig config ) {
 		dataStore = config.getDataStore();
+		dataStoreOptions = config.getDataStoreOptions();
 		dataStatisticsStore = config.getDataStatisticsStore();
 		indexStore = config.getIndexStore();
 		adapterStore = config.getAdapterStore();
 		adapterIndexMappingStore = config.getAdapterIndexMappingStore();
+		internalAdapterStore = config.getInternalAdapterStore();
 	}
 
 	public AuthorizationSPI getAuthorizationSPI() {
@@ -126,8 +133,16 @@ public class GeoWaveGTDataStore extends
 		return dataStore;
 	}
 
-	public AdapterStore getAdapterStore() {
+	public DataStoreOptions getDataStoreOptions() {
+		return dataStoreOptions;
+	}
+
+	public PersistentAdapterStore getAdapterStore() {
 		return adapterStore;
+	}
+
+	public InternalAdapterStore getInternalAdapterStore() {
+		return internalAdapterStore;
 	}
 
 	public IndexStore getIndexStore() {
@@ -144,8 +159,11 @@ public class GeoWaveGTDataStore extends
 		if (currentSelections != null) {
 			return currentSelections;
 		}
-		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore.getIndicesForAdapter(adapter
-				.getAdapterId());
+
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
+
+		final AdapterToIndexMapping adapterIndexMapping = adapterIndexMappingStore
+				.getIndicesForAdapter(internalAdapterId);
 		if ((adapterIndexMapping != null) && adapterIndexMapping.isNotEmpty()) {
 			currentSelections = adapterIndexMapping.getIndices(indexStore);
 		}
@@ -168,8 +186,8 @@ public class GeoWaveGTDataStore extends
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureType,
 				visibilityManagement);
-
-		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+		short internalAdapterId = internalAdapterStore.addAdapterId(adapter.getAdapterId());
+		if (!adapterStore.adapterExists(internalAdapterId)) {
 			// it is questionable whether createSchema *should* write the
 			// adapter to the store, it is missing the proper index information
 			// at this stage
@@ -177,21 +195,25 @@ public class GeoWaveGTDataStore extends
 			if (featureNameSpaceURI != null) {
 				adapter.setNamespace(featureNameSpaceURI.toString());
 			}
-			adapterStore.addAdapter(adapter);
+			InternalDataAdapter<?> internalAdapter = new InternalDataAdapterWrapper(
+					adapter,
+					internalAdapterId);
+			adapterStore.addAdapter(internalAdapter);
 		}
 	}
 
 	private GeotoolsFeatureDataAdapter getAdapter(
 			final String typeName ) {
 		final GeotoolsFeatureDataAdapter featureAdapter;
-		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
-		if ((adapter == null) || !(adapter instanceof GeotoolsFeatureDataAdapter)) {
+		final InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterId);
+		if ((adapter == null) || !(adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
 			return null;
 		}
-		featureAdapter = (GeotoolsFeatureDataAdapter) adapter;
+		featureAdapter = (GeotoolsFeatureDataAdapter) adapter.getAdapter();
 		if (featureNameSpaceURI != null) {
-			if (adapter instanceof FeatureDataAdapter) {
+			if (adapter.getAdapter() instanceof FeatureDataAdapter) {
 				((FeatureDataAdapter) featureAdapter).setNamespace(featureNameSpaceURI.toString());
 			}
 		}
@@ -202,11 +224,11 @@ public class GeoWaveGTDataStore extends
 	protected List<Name> createTypeNames()
 			throws IOException {
 		final List<Name> names = new ArrayList<>();
-		final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
+		final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
 		while (adapters.hasNext()) {
-			final DataAdapter<?> adapter = adapters.next();
-			if (adapter instanceof GeotoolsFeatureDataAdapter) {
-				names.add(((GeotoolsFeatureDataAdapter) adapter).getFeatureType().getName());
+			final InternalDataAdapter<?> adapter = adapters.next();
+			if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
+				names.add(((GeotoolsFeatureDataAdapter) adapter.getAdapter()).getFeatureType().getName());
 			}
 		}
 		adapters.close();
@@ -276,8 +298,9 @@ public class GeoWaveGTDataStore extends
 	public void removeSchema(
 			final String typeName )
 			throws IOException {
-		final DataAdapter<?> adapter = adapterStore.getAdapter(new ByteArrayId(
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 				StringUtils.stringToBinary(typeName)));
+		final InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterId);
 		if (adapter != null) {
 			final String[] authorizations = getAuthorizationSPI().getAuthorizations();
 			dataStore.delete(

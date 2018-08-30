@@ -24,6 +24,7 @@ import kafka.producer.KeyedMessage;
 import mil.nga.giat.geowave.core.ingest.avro.AvroFormatPlugin;
 import mil.nga.giat.geowave.core.ingest.local.AbstractLocalFileDriver;
 import mil.nga.giat.geowave.core.ingest.local.LocalInputCommandLineOptions;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * This class actually executes the staging of data to a Kafka topic based on
@@ -58,12 +59,14 @@ public class StageToKafkaDriver<T extends SpecificRecordBase> extends
 			final Producer<String, Object> producer = (Producer<String, Object>) runData.getProducer(
 					typeName,
 					plugin);
-			final Object[] avroRecords = plugin.toAvroObjects(file);
-			for (final Object avroRecord : avroRecords) {
-				final KeyedMessage<String, Object> data = new KeyedMessage<String, Object>(
-						typeName,
-						avroRecord);
-				producer.send(data);
+			try (final CloseableIterator<?> avroRecords = plugin.toAvroObjects(file)) {
+				while (avroRecords.hasNext()) {
+					final Object avroRecord = avroRecords.next();
+					final KeyedMessage<String, Object> data = new KeyedMessage<String, Object>(
+							typeName,
+							avroRecord);
+					producer.send(data);
+				}
 			}
 		}
 		catch (final Exception e) {

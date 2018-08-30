@@ -39,15 +39,15 @@ public class BinnedSFCUtils
 {
 
 	public static List<SinglePartitionQueryRanges> getQueryRanges(
-			final BinnedNumericDataset[] binnedQueries,
+			final List<BinnedNumericDataset> binnedQueries,
 			final SpaceFillingCurve sfc,
 			final int maxRanges,
 			final byte tier ) {
 		final List<SinglePartitionQueryRanges> queryRanges = new ArrayList<SinglePartitionQueryRanges>();
 
 		int maxRangeDecompositionPerBin = maxRanges;
-		if ((maxRanges > 1) && (binnedQueries.length > 1)) {
-			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.length);
+		if ((maxRanges > 1) && (binnedQueries.size() > 1)) {
+			maxRangeDecompositionPerBin = (int) Math.ceil((double) maxRanges / (double) binnedQueries.size());
 		}
 		for (final BinnedNumericDataset binnedQuery : binnedQueries) {
 			final RangeDecomposition rangeDecomp = sfc.decomposeRange(

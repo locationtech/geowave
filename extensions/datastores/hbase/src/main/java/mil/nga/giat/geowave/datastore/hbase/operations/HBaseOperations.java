@@ -72,6 +72,7 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -105,6 +106,11 @@ import mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObs
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
+import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.ByteArrayColumnFamily;
+import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.ByteArrayColumnFamilyFactory;
+import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.GeoWaveColumnFamilyFactory;
+import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.StringColumnFamily;
+import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.StringColumnFamilyFactory;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient.VersionRequest;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingServerOp;
@@ -133,23 +139,31 @@ public class HBaseOperations implements
 	private final boolean schemaUpdateEnabled;
 	private final HashMap<String, List<String>> coprocessorCache = new HashMap<>();
 	private final Map<TableName, Set<ByteArrayId>> partitionCache = new HashMap<>();
-	private final HashMap<TableName, Set<String>> cfCache = new HashMap<>();
+	private final HashMap<TableName, Set<GeoWaveColumnFamily>> cfCache = new HashMap<>();
 
 	private final HBaseOptions options;
 
-	public static final Pair<String, Boolean>[] METADATA_CFS_VERSIONING = new Pair[] {
+	public static final Pair<GeoWaveColumnFamily, Boolean>[] METADATA_CFS_VERSIONING = new Pair[] {
 		ImmutablePair.of(
-				MetadataType.AIM.name(),
+				new StringColumnFamily(
+						MetadataType.AIM.name()),
 				true),
 		ImmutablePair.of(
-				MetadataType.ADAPTER.name(),
+				new StringColumnFamily(
+						MetadataType.ADAPTER.name()),
 				true),
 		ImmutablePair.of(
-				MetadataType.STATS.name(),
+				new StringColumnFamily(
+						MetadataType.STATS.name()),
 				false),
 		ImmutablePair.of(
-				MetadataType.INDEX.name(),
-				true)
+				new StringColumnFamily(
+						MetadataType.INDEX.name()),
+				true),
+		ImmutablePair.of(
+				new StringColumnFamily(
+						MetadataType.INTERNAL_ADAPTER.name()),
+				true),
 	};
 
 	public static final int MERGING_MAX_VERSIONS = HConstants.ALL_VERSIONS;
@@ -235,47 +249,9 @@ public class HBaseOperations implements
 		return TableName.valueOf(getQualifiedTableName(tableName));
 	}
 
-	public HBaseWriter createWriter(
-			final String sTableName,
-			final String[] columnFamilies,
-			final boolean createTable )
-			throws IOException {
-		return createWriter(
-				sTableName,
-				columnFamilies,
-				createTable,
-				null);
-	}
-
-	public HBaseWriter createWriter(
-			final String sTableName,
-			final String[] columnFamilies,
-			final boolean createTable,
-			final Set<ByteArrayId> splits )
-			throws IOException {
-		final TableName tableName = getTableName(sTableName);
-
-		if (createTable) {
-			createTable(
-					columnFamilies,
-					true,
-					tableName);
-		}
-
-		verifyColumnFamilies(
-				columnFamilies,
-				true,
-				tableName,
-				true);
-
-		return new HBaseWriter(
-				getBufferedMutator(tableName),
-				this,
-				sTableName);
-	}
-
 	protected void createTable(
-			final Pair<String, Boolean>[] columnFamiliesAndVersioningPairs,
+			final Pair<GeoWaveColumnFamily, Boolean>[] columnFamiliesAndVersioningPairs,
+			GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final TableName tableName )
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
@@ -284,11 +260,10 @@ public class HBaseOperations implements
 					final HTableDescriptor desc = new HTableDescriptor(
 							tableName);
 
-					final HashSet<String> cfSet = new HashSet<>();
+					final HashSet<GeoWaveColumnFamily> cfSet = new HashSet<>();
 
-					for (final Pair<String, Boolean> columnFamilyAndVersioning : columnFamiliesAndVersioningPairs) {
-						final HColumnDescriptor column = new HColumnDescriptor(
-								columnFamilyAndVersioning.getLeft());
+					for (final Pair<GeoWaveColumnFamily, Boolean> columnFamilyAndVersioning : columnFamiliesAndVersioningPairs) {
+						final HColumnDescriptor column = columnFamilyAndVersioning.getLeft().toColumnDescriptor();
 						if (!columnFamilyAndVersioning.getRight()) {
 							column.setMaxVersions(Integer.MAX_VALUE);
 						}
@@ -316,7 +291,8 @@ public class HBaseOperations implements
 	}
 
 	protected void createTable(
-			final String[] columnFamilies,
+			final GeoWaveColumnFamily[] columnFamilies,
+			final GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final boolean enableVersioning,
 			final TableName tableName )
 			throws IOException {
@@ -330,22 +306,25 @@ public class HBaseOperations implements
 										enableVersioning))
 						.toArray(
 								Pair[]::new),
+						columnFamilyFactory,
 				tableName);
 	}
 
 	public boolean verifyColumnFamily(
-			final String columnFamily,
+			final short columnFamily,
 			final boolean enableVersioning,
 			final String tableNameStr,
 			final boolean addIfNotExist ) {
 		final TableName tableName = getTableName(tableNameStr);
 
-		final String[] columnFamilies = new String[1];
-		columnFamilies[0] = columnFamily;
+		final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
+		columnFamilies[0] = new StringColumnFamily(
+				ByteArrayUtils.shortToString(columnFamily));
 
 		try {
 			return verifyColumnFamilies(
 					columnFamilies,
+					StringColumnFamilyFactory.getSingletonInstance(),
 					enableVersioning,
 					tableName,
 					addIfNotExist);
@@ -360,13 +339,14 @@ public class HBaseOperations implements
 	}
 
 	protected boolean verifyColumnFamilies(
-			final String[] columnFamilies,
+			final GeoWaveColumnFamily[] columnFamilies,
+			final GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final boolean enableVersioning,
 			final TableName tableName,
 			final boolean addIfNotExist )
 			throws IOException {
 		// Check the cache first and create the update list
-		Set<String> cfCacheSet = cfCache.get(tableName);
+		Set<GeoWaveColumnFamily> cfCacheSet = cfCache.get(tableName);
 
 		if (cfCacheSet == null) {
 			cfCacheSet = new HashSet<>();
@@ -375,8 +355,8 @@ public class HBaseOperations implements
 					cfCacheSet);
 		}
 
-		final HashSet<String> newCFs = new HashSet<>();
-		for (final String columnFamily : columnFamilies) {
+		final HashSet<GeoWaveColumnFamily> newCFs = new HashSet<>();
+		for (final GeoWaveColumnFamily columnFamily : columnFamilies) {
 			if (!cfCacheSet.contains(columnFamily)) {
 				newCFs.add(columnFamily);
 			}
@@ -386,17 +366,17 @@ public class HBaseOperations implements
 			return true;
 		}
 
-		final List<String> existingColumnFamilies = new ArrayList<>();
-		final List<String> newColumnFamilies = new ArrayList<>();
+		final List<GeoWaveColumnFamily> existingColumnFamilies = new ArrayList<>();
+		final List<GeoWaveColumnFamily> newColumnFamilies = new ArrayList<>();
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
 				if (admin.tableExists(tableName)) {
 					final HTableDescriptor existingTableDescriptor = admin.getTableDescriptor(tableName);
 					final HColumnDescriptor[] existingColumnDescriptors = existingTableDescriptor.getColumnFamilies();
 					for (final HColumnDescriptor hColumnDescriptor : existingColumnDescriptors) {
-						existingColumnFamilies.add(hColumnDescriptor.getNameAsString());
+						existingColumnFamilies.add(columnFamilyFactory.fromColumnDescriptor(hColumnDescriptor));
 					}
-					for (final String columnFamily : newCFs) {
+					for (final GeoWaveColumnFamily columnFamily : newCFs) {
 						if (!existingColumnFamilies.contains(columnFamily)) {
 							newColumnFamilies.add(columnFamily);
 						}
@@ -409,9 +389,8 @@ public class HBaseOperations implements
 						disableTable(
 								admin,
 								tableName);
-						for (final String newColumnFamily : newColumnFamilies) {
-							final HColumnDescriptor column = new HColumnDescriptor(
-									newColumnFamily);
+						for (final GeoWaveColumnFamily newColumnFamily : newColumnFamilies) {
+							final HColumnDescriptor column = newColumnFamily.toColumnDescriptor();
 							if (!enableVersioning) {
 								column.setMaxVersions(Integer.MAX_VALUE);
 							}
@@ -535,20 +514,20 @@ public class HBaseOperations implements
 	}
 
 	public boolean isRowMergingEnabled(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final String indexId ) {
 		return DataAdapterAndIndexCache.getInstance(
 				RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID,
 				tableNamespace,
 				HBaseStoreFactoryFamily.TYPE).add(
-				adapterId,
+				internalAdapterId,
 				indexId);
 	}
 
 	@Override
 	public boolean deleteAll(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId,
+			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		Deleter deleter = null;
 		Iterable<Result> scanner = null;
@@ -561,7 +540,7 @@ public class HBaseOperations implements
 			try (final CloseableIterator<GeoWaveMetadata> it = createMetadataReader(
 					MetadataType.ADAPTER).query(
 					new MetadataQuery(
-							adapterId.getBytes(),
+							ByteArrayUtils.shortToByteArray(adapterId),
 							null,
 							additionalAuthorizations))) {
 				if (!it.hasNext()) {
@@ -585,7 +564,7 @@ public class HBaseOperations implements
 				index = (PrimaryIndex) URLClassloaderUtils.fromBinary(indexMd.getValue());
 			}
 			final Scan scan = new Scan();
-			scan.addFamily(adapterId.getBytes());
+			scan.addFamily(ByteArrayUtils.shortToByteArray(adapterId));
 			scanner = getScannedResults(
 					scan,
 					indexId.getString());
@@ -829,7 +808,7 @@ public class HBaseOperations implements
 	@Override
 	public boolean mergeData(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// simply compact the table,
 		// NOTE: this is an asynchronous operations and this does not block and
@@ -918,14 +897,16 @@ public class HBaseOperations implements
 	public void createTable(
 			final ByteArrayId indexId,
 			final boolean enableVersioning,
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		final TableName tableName = getTableName(indexId.getString());
 
-		final String[] columnFamilies = new String[1];
-		columnFamilies[0] = adapterId.getString();
+		final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
+		columnFamilies[0] = new StringColumnFamily(
+				ByteArrayUtils.shortToString(internalAdapterId));
 		try {
 			createTable(
 					columnFamilies,
+					StringColumnFamilyFactory.getSingletonInstance(),
 					enableVersioning,
 					tableName);
 		}
@@ -936,24 +917,32 @@ public class HBaseOperations implements
 		}
 	}
 
+	protected String getMetadataTableName(
+			MetadataType type ) {
+		return AbstractGeoWavePersistence.METADATA_TABLE;
+	}
+
 	@Override
 	public Writer createWriter(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		final TableName tableName = getTableName(indexId.getString());
 		try {
-			final String[] columnFamilies = new String[1];
-			columnFamilies[0] = adapterId.getString();
+			final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
+			columnFamilies[0] = new StringColumnFamily(
+					ByteArrayUtils.shortToString(internalAdapterId));
 
 			if (options.isCreateTable()) {
 				createTable(
 						columnFamilies,
+						StringColumnFamilyFactory.getSingletonInstance(),
 						options.isServerSideLibraryEnabled(),
 						tableName);
 			}
 
 			verifyColumnFamilies(
 					columnFamilies,
+					StringColumnFamilyFactory.getSingletonInstance(),
 					true,
 					tableName,
 					true);
@@ -980,11 +969,12 @@ public class HBaseOperations implements
 	@Override
 	public MetadataWriter createMetadataWriter(
 			final MetadataType metadataType ) {
-		final TableName tableName = getTableName(AbstractGeoWavePersistence.METADATA_TABLE);
+		final TableName tableName = getTableName(getMetadataTableName(metadataType));
 		try {
 			if (options.isCreateTable()) {
 				createTable(
 						METADATA_CFS_VERSIONING,
+						StringColumnFamilyFactory.getSingletonInstance(),
 						tableName);
 			}
 			if (MetadataType.STATS.equals(metadataType) && options.isServerSideLibraryEnabled()) {
@@ -995,7 +985,7 @@ public class HBaseOperations implements
 						final BasicOptionProvider optionProvider = new BasicOptionProvider(
 								new HashMap<>());
 						ensureServerSideOperationsObserverAttached(new ByteArrayId(
-								AbstractGeoWavePersistence.METADATA_TABLE));
+								getMetadataTableName(metadataType)));
 						ServerOpHelper.addServerSideMerging(
 								this,
 								DataStatisticsStoreImpl.STATISTICS_COMBINER_NAME,
@@ -1003,7 +993,7 @@ public class HBaseOperations implements
 								MergingServerOp.class.getName(),
 								MergingVisibilityServerOp.class.getName(),
 								optionProvider,
-								AbstractGeoWavePersistence.METADATA_TABLE);
+								getMetadataTableName(metadataType));
 					}
 				}
 			}
@@ -1013,7 +1003,7 @@ public class HBaseOperations implements
 		}
 		catch (final IOException e) {
 			LOGGER.error(
-					"Error creating metadata table: " + AbstractGeoWavePersistence.METADATA_TABLE,
+					"Error creating metadata table: " + getMetadataTableName(metadataType),
 					e);
 		}
 
@@ -1175,20 +1165,19 @@ public class HBaseOperations implements
 					.getIndex()
 					.getIndexModel())));
 
+			int maxRangeDecomposition = readerParams.getMaxRangeDecomposition() == null ? options
+					.getAggregationMaxRangeDecomposition() : readerParams.getMaxRangeDecomposition();
 			final MultiRowRangeFilter multiFilter = getMultiRowRangeFilter(DataStoreUtils.constraintsToQueryRanges(
 					readerParams.getConstraints(),
 					readerParams.getIndex().getIndexStrategy(),
-					BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION).getCompositeQueryRanges());
+					maxRangeDecomposition).getCompositeQueryRanges());
 			if (multiFilter != null) {
 				requestBuilder.setRangeFilter(ByteString.copyFrom(multiFilter.toByteArray()));
 			}
 			if (readerParams.getAggregation().getLeft() != null) {
 				if (readerParams.getAggregation().getRight() instanceof CommonIndexAggregation) {
-					requestBuilder.setAdapterId(ByteString.copyFrom(readerParams
-							.getAggregation()
-							.getLeft()
-							.getAdapterId()
-							.getBytes()));
+					requestBuilder.setInternalAdapterId(ByteString.copyFrom(ByteArrayUtils
+							.shortToByteArray(readerParams.getAggregation().getLeft().getInternalAdapterId())));
 				}
 				else {
 					requestBuilder.setAdapter(ByteString.copyFrom(URLClassloaderUtils.toBinary(readerParams
@@ -1608,7 +1597,7 @@ public class HBaseOperations implements
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				return admin.tableExists(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+				return admin.tableExists(getTableName(getMetadataTableName(type)));
 			}
 		}
 	}
@@ -1622,20 +1611,26 @@ public class HBaseOperations implements
 			return null;
 		}
 		try {
-			if (!indexExists(AbstractGeoWavePersistence.METADATA_INDEX_ID)) {
+			// use Index as the type to check for version (for hbase type
+			// doesn't matter anyways)
+			MetadataType type = MetadataType.INDEX;
+			String tableName = getMetadataTableName(type);
+			if (!indexExists(new ByteArrayId(
+					tableName))) {
 				createTable(
 						HBaseOperations.METADATA_CFS_VERSIONING,
-						getTableName(getQualifiedTableName(AbstractGeoWavePersistence.METADATA_TABLE)));
+						StringColumnFamilyFactory.getSingletonInstance(),
+						getTableName(getQualifiedTableName(tableName)));
 			}
 
 			// Use the row count coprocessor
 			if (options.isVerifyCoprocessors()) {
 				verifyCoprocessor(
-						AbstractGeoWavePersistence.METADATA_TABLE,
+						tableName,
 						VersionEndpoint.class.getName(),
 						options.getCoprocessorJar());
 			}
-			final Table table = getTable(AbstractGeoWavePersistence.METADATA_TABLE);
+			final Table table = getTable(tableName);
 			final Map<byte[], List<String>> versionInfoResponse = table.coprocessorService(
 					VersionProtosClient.VersionService.class,
 					null,

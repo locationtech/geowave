@@ -18,6 +18,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import org.geotools.referencing.CRS;
+import org.opengis.referencing.FactoryException;
+import org.opengis.referencing.NoSuchAuthorityCodeException;
 import org.geotools.factory.GeoTools;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -35,6 +39,9 @@ import com.vividsolutions.jts.io.WKBWriter;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -197,16 +204,26 @@ public class GeometryUtils
 		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
+
+		ConstraintData xRange = new ConstraintData(
+				rangeLongitude,
+				false);
+		ConstraintData yRange = new ConstraintData(
+				rangeLatitude,
+				false);
+		constraintsPerDimension.put(
+				CustomCRSUnboundedSpatialDimensionX.class,
+				xRange);
+		constraintsPerDimension.put(
+				CustomCRSUnboundedSpatialDimensionY.class,
+				yRange);
 		constraintsPerDimension.put(
 				LongitudeDefinition.class,
-				new ConstraintData(
-						rangeLongitude,
-						false));
+				xRange);
 		constraintsPerDimension.put(
 				LatitudeDefinition.class,
-				new ConstraintData(
-						rangeLatitude,
-						false));
+				yRange);
+
 		return new ConstraintSet(
 				constraintsPerDimension);
 	}

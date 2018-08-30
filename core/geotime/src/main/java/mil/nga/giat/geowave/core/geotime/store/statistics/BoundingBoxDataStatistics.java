@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,9 +14,6 @@ import java.nio.ByteBuffer;
 import java.util.HashMap;
 import java.util.Map;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 import com.vividsolutions.jts.geom.Envelope;
 
 import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
@@ -25,10 +22,13 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.sfc.data.NumericRange;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintData;
 import mil.nga.giat.geowave.core.store.query.BasicQuery.ConstraintSet;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 abstract public class BoundingBoxDataStatistics<T> extends
 		AbstractDataStatistics<T>
@@ -41,23 +41,24 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	protected double maxX = -Double.MAX_VALUE;
 	protected double maxY = -Double.MAX_VALUE;
 
-	protected BoundingBoxDataStatistics() {
-		super();
+	public BoundingBoxDataStatistics() {
+		this(
+				null);
 	}
 
 	public BoundingBoxDataStatistics(
-			final ByteArrayId dataAdapterId ) {
+			final Short internalAdapterId ) {
 		super(
-				dataAdapterId,
+				internalAdapterId,
 				STATS_TYPE);
 	}
 
 	public BoundingBoxDataStatistics(
-			final ByteArrayId dataAdapterId,
-			final ByteArrayId staticticsId ) {
+			final Short internalAdapterId,
+			final ByteArrayId statisticsId ) {
 		super(
-				dataAdapterId,
-				staticticsId);
+				internalAdapterId,
+				statisticsId);
 	}
 
 	public boolean isSet() {
@@ -190,8 +191,8 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"bbox[adapter=").append(
-				super.getDataAdapterId().getString());
+				"bbox[internalAdapter=").append(
+				Short.toString(super.getInternalDataAdapterId()));
 		if (isSet()) {
 			buffer.append(
 					", minX=").append(
@@ -217,12 +218,18 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	 * Convert Fixed Bin Numeric statistics to a JSON object
 	 */
 
-	public JSONObject toJSONObject()
+	@Override
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
+
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsId",
 				statisticsId.getString());

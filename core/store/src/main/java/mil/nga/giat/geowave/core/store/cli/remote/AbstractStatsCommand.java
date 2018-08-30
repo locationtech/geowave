@@ -25,6 +25,9 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -71,12 +74,14 @@ public abstract class AbstractStatsCommand<T> extends
 
 		try {
 			// Various stores needed
-			final AdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+			final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 
 			if (adapterIdName != null) {
 				final ByteArrayId adapterId = new ByteArrayId(
 						adapterIdName);
-				DataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+				final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
+				final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+				InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterId);
 				if (adapter != null) {
 					performStatsCommand(
 							inputStoreOptions,
@@ -87,7 +92,7 @@ public abstract class AbstractStatsCommand<T> extends
 					// If this adapter is not known, provide list of available
 					// adapters
 					LOGGER.error("Unknown adapter " + adapterId);
-					final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+					final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
 					final StringBuffer buffer = new StringBuffer();
 					while (it.hasNext()) {
 						adapter = it.next();
@@ -101,9 +106,9 @@ public abstract class AbstractStatsCommand<T> extends
 			}
 			else {
 				// Repeat the Command for every adapter found
-				try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+				try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 					while (adapterIt.hasNext()) {
-						final DataAdapter<?> adapter = adapterIt.next();
+						final InternalDataAdapter<?> adapter = adapterIt.next();
 						if (!performStatsCommand(
 								inputStoreOptions,
 								adapter,
@@ -128,7 +133,7 @@ public abstract class AbstractStatsCommand<T> extends
 
 	abstract protected boolean performStatsCommand(
 			final DataStorePluginOptions options,
-			final DataAdapter<?> adapter,
+			final InternalDataAdapter<?> adapter,
 			final StatsCommandLineOptions statsOptions )
 			throws IOException;
 

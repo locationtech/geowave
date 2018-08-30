@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -11,19 +11,20 @@
 package mil.nga.giat.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
+import java.util.HashSet;
 import java.util.List;
-
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 public class DifferingFieldVisibilityEntryCount<T> extends
 		AbstractDataStatistics<T> implements
@@ -47,20 +48,20 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	}
 
 	private DifferingFieldVisibilityEntryCount(
-			final ByteArrayId dataAdapterId,
+			final short internalDataAdapterId,
 			final ByteArrayId statisticsId,
 			final long entriesWithDifferingFieldVisibilities ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(statisticsId));
 		this.entriesWithDifferingFieldVisibilities = entriesWithDifferingFieldVisibilities;
 	}
 
 	public DifferingFieldVisibilityEntryCount(
-			final ByteArrayId dataAdapterId,
+			final short internalDataAdapterId,
 			final ByteArrayId statisticsId ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(statisticsId));
 	}
 
@@ -74,7 +75,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	@Override
 	public DataStatistics<T> duplicate() {
 		return new DifferingFieldVisibilityEntryCount<>(
-				dataAdapterId,
+				internalDataAdapterId,
 				statisticsId,
 				entriesWithDifferingFieldVisibilities);
 	}
@@ -99,10 +100,19 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 			final GeoWaveRow... kvs ) {
 		for (final GeoWaveRow kv : kvs) {
 			if (entryHasDifferentVisibilities(kv)) {
-				entriesWithDifferingFieldVisibilities++;
+				if (ids.add(new ByteArrayId(
+						kvs[0].getDataId()))) {
+					entriesWithDifferingFieldVisibilities++;
+				}
 			}
 		}
 	}
+
+	/**
+	 * This is expensive, but necessary since there may be duplicates
+	 */
+	// TODO entryDeleted should only be called once with all duplicates
+	private transient HashSet<ByteArrayId> ids = new HashSet<ByteArrayId>();
 
 	@Override
 	public void entryDeleted(
@@ -135,11 +145,11 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	public static DifferingFieldVisibilityEntryCount getVisibilityCounts(
 			final PrimaryIndex index,
-			final List<ByteArrayId> adapterIdsToQuery,
+			final List<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		DifferingFieldVisibilityEntryCount combinedVisibilityCount = null;
-		for (final ByteArrayId adapterId : adapterIdsToQuery) {
+		for (final short adapterId : adapterIdsToQuery) {
 			final DifferingFieldVisibilityEntryCount adapterVisibilityCount = (DifferingFieldVisibilityEntryCount) statisticsStore
 					.getDataStatistics(
 							adapterId,
@@ -159,12 +169,17 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	 * Convert Differing Visibility statistics to a JSON object
 	 */
 
-	public JSONObject toJSONObject()
+	@Override
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsID",
 				statisticsId.getString());

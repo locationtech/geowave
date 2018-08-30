@@ -30,7 +30,7 @@ public class CustomCRSSpatialField extends
 	public NumericData getNumericData(
 			final GeometryWrapper geometry ) {
 		// TODO if this can be generalized to n-dimensional that would be better
-		if (((CustomCRSSpatialDimension) baseDefinition).axis == 0) {
+		if (((CustomCRSSpatialDimension) baseDefinition).getAxis() == 0) {
 			return GeometryUtils.xRangeFromGeometry(geometry.getGeometry());
 		}
 		return GeometryUtils.yRangeFromGeometry(geometry.getGeometry());

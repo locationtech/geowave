@@ -14,6 +14,7 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 
@@ -85,7 +86,7 @@ public interface SecondaryIndexDataStore
 	public <T> CloseableIterator<T> query(
 			final SecondaryIndex<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations );

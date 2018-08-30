@@ -66,9 +66,9 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -424,7 +424,7 @@ public class AccumuloOperations implements
 			final String tableName,
 			final ByteArrayId rowId,
 			final String columnFamily,
-			final String columnQualifier,
+			final byte[] columnQualifier,
 			final String... additionalAuthorizations ) {
 		return this.delete(
 				tableName,
@@ -467,7 +467,7 @@ public class AccumuloOperations implements
 			final String tableName,
 			final List<ByteArrayId> rowIds,
 			final String columnFamily,
-			final String columnQualifier,
+			final byte[] columnQualifier,
 			final String... authorizations ) {
 
 		boolean success = true;
@@ -477,7 +477,7 @@ public class AccumuloOperations implements
 					tableName,
 					authorizations);
 			if ((columnFamily != null) && !columnFamily.isEmpty()) {
-				if ((columnQualifier != null) && !columnQualifier.isEmpty()) {
+				if ((columnQualifier != null) && columnQualifier.length != 0) {
 					deleter.fetchColumn(
 							new Text(
 									columnFamily),
@@ -942,7 +942,7 @@ public class AccumuloOperations implements
 	@Override
 	public boolean deleteAll(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId,
+			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		BatchDeleter deleter = null;
 		try {
@@ -952,7 +952,7 @@ public class AccumuloOperations implements
 
 			deleter.setRanges(Arrays.asList(new Range()));
 			deleter.fetchColumnFamily(new Text(
-					adapterId.getString()));
+					ByteArrayUtils.shortToString(adapterId)));
 			deleter.delete();
 			return true;
 		}
@@ -1043,9 +1043,9 @@ public class AccumuloOperations implements
 			return null;
 		}
 		if ((params.getAdapterIds() != null) && !params.getAdapterIds().isEmpty()) {
-			for (final ByteArrayId adapterId : params.getAdapterIds()) {
+			for (final short adapterId : params.getAdapterIds()) {
 				scanner.fetchColumnFamily(new Text(
-						adapterId.getBytes()));
+						ByteArrayUtils.shortToString(adapterId)));
 			}
 		}
 		return scanner;
@@ -1076,9 +1076,11 @@ public class AccumuloOperations implements
 					&& (params.getAggregation().getLeft() != null)) {
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getAggregation().getLeft())));
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary((DataAdapter<?>) params
+								.getAggregation()
+								.getLeft())));
 			}
-			final Aggregation aggr = params.getAggregation().getRight();
+			final Aggregation aggr = (Aggregation) params.getAggregation().getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toClassId(aggr)));
@@ -1087,25 +1089,6 @@ public class AccumuloOperations implements
 						AggregationIterator.PARAMETER_OPTION_NAME,
 						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(aggr.getParameters()))));
 			}
-			if ((params.getConstraints() != null) && !params.getConstraints().isEmpty()) {
-				iteratorSettings.addOption(
-						AggregationIterator.CONSTRAINTS_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString((PersistenceUtils.toBinary(params.getConstraints()))));
-			}
-			iteratorSettings.addOption(
-					AggregationIterator.INDEX_STRATEGY_OPTION_NAME,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexStrategy())));
-			// the index model and partition key length must be provided for the
-			// aggregation iterator to deserialize each entry
-
-			iteratorSettings.addOption(
-					QueryFilterIterator.PARTITION_KEY_LENGTH,
-					Integer.toString(params.getIndex().getIndexStrategy().getPartitionKeyLength()));
-			iteratorSettings.addOption(
-					QueryFilterIterator.MODEL,
-					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getIndex().getIndexModel())));
-			// don't bother setting max decomposition because it is just the
-			// default anyways
 		}
 
 		boolean usingDistributableFilter = false;
@@ -1186,8 +1169,8 @@ public class AccumuloOperations implements
 			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
-			final List<String> fieldIds = params.getFieldSubsets().getLeft();
-			final DataAdapter<?> associatedAdapter = params.getFieldSubsets().getRight();
+			final List<String> fieldIds = (List<String>) params.getFieldSubsets().getLeft();
+			final DataAdapter<?> associatedAdapter = (DataAdapter<?>) params.getFieldSubsets().getRight();
 			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
 				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
 
@@ -1298,9 +1281,9 @@ public class AccumuloOperations implements
 			return null;
 		}
 		if ((params.getAdapterIds() != null) && !params.getAdapterIds().isEmpty()) {
-			for (final ByteArrayId adapterId : params.getAdapterIds()) {
+			for (final Short adapterId : params.getAdapterIds()) {
 				scanner.fetchColumnFamily(new Text(
-						adapterId.getBytes()));
+						ByteArrayUtils.shortToString(adapterId)));
 			}
 		}
 		return scanner;
@@ -1342,7 +1325,7 @@ public class AccumuloOperations implements
 	@Override
 	public Writer createWriter(
 			final ByteArrayId indexId,
-			final ByteArrayId adapterId ) {
+			final short internalAdapterId ) {
 		final String tableName = indexId.getString();
 		if (options.isCreateTable()) {
 			createTable(
@@ -1444,7 +1427,7 @@ public class AccumuloOperations implements
 	@Override
 	public boolean mergeData(
 			final PrimaryIndex index,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		return compactTable(index.getId().getString());
 	}
@@ -1692,13 +1675,13 @@ public class AccumuloOperations implements
 	}
 
 	public boolean isRowMergingEnabled(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final String indexId ) {
 		return DataAdapterAndIndexCache.getInstance(
 				RowMergingAdapterOptionProvider.ROW_MERGING_ADAPTER_CACHE_ID,
 				tableNamespace,
 				AccumuloStoreFactoryFamily.TYPE).add(
-				adapterId,
+				internalAdapterId,
 				indexId);
 	}
 

@@ -100,7 +100,6 @@ public class AddStoreCommand extends
 				}
 			}
 		}
-
 		return true;
 	}
 

@@ -38,6 +38,12 @@ public class BaseDataStoreOptions implements
 	@Parameter(names = "--enableServerSideLibrary", arity = 1)
 	protected boolean enableServerSideLibrary = true;
 
+	@Parameter(names = "--maxRangeDecomposition", arity = 1)
+	protected int configuredMaxRangeDecomposition = Integer.MIN_VALUE;
+
+	@Parameter(names = "--aggregationMaxRangeDecomposition", arity = 1)
+	protected int configuredAggregationMaxRangeDecomposition = Integer.MIN_VALUE;
+
 	@Override
 	public boolean isPersistDataStatistics() {
 		return persistDataStatistics;
@@ -106,5 +112,35 @@ public class BaseDataStoreOptions implements
 	public void setServerSideLibraryEnabled(
 			final boolean enableServerSideLibrary ) {
 		this.enableServerSideLibrary = enableServerSideLibrary;
+	}
+
+	@Override
+	public int getMaxRangeDecomposition() {
+		return configuredMaxRangeDecomposition == Integer.MIN_VALUE ? defaultMaxRangeDecomposition()
+				: configuredMaxRangeDecomposition;
+	}
+
+	protected int defaultMaxRangeDecomposition() {
+		return 2000;
+	}
+
+	public void setMaxRangeDecomposition(
+			final int maxRangeDecomposition ) {
+		this.configuredMaxRangeDecomposition = maxRangeDecomposition;
+	}
+
+	@Override
+	public int getAggregationMaxRangeDecomposition() {
+		return configuredAggregationMaxRangeDecomposition == Integer.MIN_VALUE ? defaultAggregationMaxRangeDecomposition()
+				: configuredAggregationMaxRangeDecomposition;
+	}
+
+	protected int defaultAggregationMaxRangeDecomposition() {
+		return 10;
+	}
+
+	public void setAggregationMaxRangeDecomposition(
+			final int aggregationMaxRangeDecomposition ) {
+		this.configuredAggregationMaxRangeDecomposition = aggregationMaxRangeDecomposition;
 	}
 }

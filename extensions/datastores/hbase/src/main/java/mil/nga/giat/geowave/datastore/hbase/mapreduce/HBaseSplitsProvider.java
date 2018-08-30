@@ -36,6 +36,7 @@ import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.PartitionStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
@@ -60,9 +61,9 @@ public class HBaseSplitsProvider extends
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
 			final PrimaryIndex index,
-			final List<DataAdapter<Object>> adapters,
+			final List<Short> adapterIds,
 			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
 			final DistributableQuery query,
@@ -75,10 +76,6 @@ public class HBaseSplitsProvider extends
 		}
 		else {
 			LOGGER.error("HBaseSplitsProvider requires BasicHBaseOperations object.");
-			return splits;
-		}
-
-		if ((query != null) && !query.isSupported(index)) {
 			return splits;
 		}
 
@@ -115,8 +112,7 @@ public class HBaseSplitsProvider extends
 
 		final PartitionStatistics<?> statistics = getPartitionStats(
 				index,
-				adapters,
-				adapterStore,
+				adapterIds,
 				statsStore,
 				authorizations);
 
@@ -179,7 +175,7 @@ public class HBaseSplitsProvider extends
 					final double cardinality = getCardinality(
 							getHistStats(
 									index,
-									adapters,
+									adapterIds,
 									adapterStore,
 									statsStore,
 									statsCache,

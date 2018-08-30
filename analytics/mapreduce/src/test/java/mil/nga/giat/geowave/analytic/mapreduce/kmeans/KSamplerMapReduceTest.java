@@ -49,11 +49,14 @@ import mil.nga.giat.geowave.core.geotime.ingest.SpatialOptions;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryRequiredOptions;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
+import mil.nga.giat.geowave.mapreduce.JobContextInternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -61,7 +64,9 @@ public class KSamplerMapReduceTest
 {
 	MapDriver<GeoWaveInputKey, ObjectWritable, GeoWaveInputKey, ObjectWritable> mapDriver;
 	ReduceDriver<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, TestObject> reduceDriver;
-	final TestObjectDataAdapter testObjectAapter = new TestObjectDataAdapter();
+	short internalAdapterId;
+	short other;
+	final TestObjectDataAdapter testObjectAdapter = new TestObjectDataAdapter();
 	@Rule
 	public TestName name = new TestName();
 
@@ -115,7 +120,7 @@ public class KSamplerMapReduceTest
 		final KSamplerMapReduce.SampleReducer<TestObject> reducer = new KSamplerMapReduce.SampleReducer<TestObject>();
 		mapDriver = MapDriver.newMapDriver(mapper);
 		reduceDriver = ReduceDriver.newReduceDriver(reducer);
-		final DataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
+		final WritableDataAdapter<?> adapter = AnalyticFeature.createGeometryFeatureAdapter(
 				"altoids",
 				new String[] {},
 				"http://geowave.test.net",
@@ -166,6 +171,12 @@ public class KSamplerMapReduceTest
 				mapDriver.getConfiguration(),
 				KSamplerMapReduce.class,
 				propManagement);
+		// TODO it seems the centroid adapter is required to have been written,
+		// should this initialization be handled by the runner class rather than
+		// externally such as in the test?
+		store.getDataStoreOptions().createDataStore().createWriter(
+				adapter,
+				new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions())).close();
 
 		mapDriver.getConfiguration().setClass(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -173,10 +184,22 @@ public class KSamplerMapReduceTest
 						SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
 				TestSamplingMidRankFunction.class,
 				SamplingRankFunction.class);
-
+		internalAdapterId = InternalAdapterStoreImpl.getInitialInternalAdapterId(testObjectAdapter.getAdapterId());
+		other = InternalAdapterStoreImpl.getInitialInternalAdapterId(adapter.getAdapterId());
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
-				testObjectAapter);
+				testObjectAdapter);
+		JobContextAdapterStore.addDataAdapter(
+				mapDriver.getConfiguration(),
+				adapter);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				mapDriver.getConfiguration(),
+				testObjectAdapter.getAdapterId(),
+				internalAdapterId);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				mapDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				other);
 
 		mapDriver.getConfiguration().setInt(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -195,7 +218,15 @@ public class KSamplerMapReduceTest
 				adapter);
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
-				testObjectAapter);
+				testObjectAdapter);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				reduceDriver.getConfiguration(),
+				adapter.getAdapterId(),
+				other);
+		JobContextInternalAdapterStore.addInternalDataAdapter(
+				reduceDriver.getConfiguration(),
+				testObjectAdapter.getAdapterId(),
+				internalAdapterId);
 
 		reduceDriver.getConfiguration().set(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -257,7 +288,7 @@ public class KSamplerMapReduceTest
 				SamplingRankFunction.class);
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey.setInternalAdapterId(internalAdapterId);
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
 
@@ -270,7 +301,7 @@ public class KSamplerMapReduceTest
 						"abc")));
 
 		final GeoWaveInputKey outputKey = new GeoWaveInputKey();
-		outputKey.setAdapterId(testObjectAapter.getAdapterId());
+		outputKey.setInternalAdapterId(internalAdapterId);
 
 		final ByteBuffer keyBuf = ByteBuffer.allocate(64);
 		keyBuf.putDouble(0.5);
@@ -319,7 +350,7 @@ public class KSamplerMapReduceTest
 				SamplingRankFunction.class);
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey.setInternalAdapterId(internalAdapterId);
 		inputKey.setDataId(new ByteArrayId(
 				"abc".getBytes()));
 
@@ -332,7 +363,7 @@ public class KSamplerMapReduceTest
 						"abc")));
 
 		final GeoWaveInputKey outputKey = new GeoWaveInputKey();
-		outputKey.setAdapterId(testObjectAapter.getAdapterId());
+		outputKey.setInternalAdapterId(internalAdapterId);
 
 		final ByteBuffer keyBuf = ByteBuffer.allocate(64);
 		keyBuf.putDouble(0.0);
@@ -390,7 +421,7 @@ public class KSamplerMapReduceTest
 						"ghi")));
 
 		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
-		inputKey1.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey1.setInternalAdapterId(internalAdapterId);
 
 		ByteBuffer keyBuf = ByteBuffer.allocate(64);
 		keyBuf.putDouble(0.5);
@@ -401,7 +432,7 @@ public class KSamplerMapReduceTest
 
 		keyBuf = ByteBuffer.allocate(64);
 		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
-		inputKey2.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey2.setInternalAdapterId(internalAdapterId);
 		keyBuf.putDouble(0.6);
 		keyBuf.putInt(3);
 		keyBuf.put("111".getBytes());
@@ -410,7 +441,7 @@ public class KSamplerMapReduceTest
 
 		keyBuf = ByteBuffer.allocate(64);
 		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
-		inputKey3.setAdapterId(testObjectAapter.getAdapterId());
+		inputKey3.setInternalAdapterId(internalAdapterId);
 		keyBuf.putDouble(0.7);
 		keyBuf.putInt(3);
 		keyBuf.put("111".getBytes());

@@ -42,11 +42,6 @@
 		</dependency>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-datastore-hbase</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
 		</dependency>

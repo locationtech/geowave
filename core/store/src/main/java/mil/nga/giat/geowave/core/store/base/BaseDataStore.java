@@ -34,9 +34,12 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexDependentDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -53,9 +56,10 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import mil.nga.giat.geowave.core.store.index.writer.IndexCompositeWriter;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
+import mil.nga.giat.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Deleter;
+import mil.nga.giat.geowave.core.store.query.AdapterQuery;
 import mil.nga.giat.geowave.core.store.query.EverythingQuery;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
 import mil.nga.giat.geowave.core.store.query.PrefixIdQuery;
@@ -70,26 +74,29 @@ public class BaseDataStore implements
 	protected static final String ALT_INDEX_TABLE = "_GEOWAVE_ALT_INDEX";
 
 	protected final IndexStore indexStore;
-	protected final AdapterStore adapterStore;
+	protected final PersistentAdapterStore adapterStore;
 	protected final DataStatisticsStore statisticsStore;
 	protected final SecondaryIndexDataStore secondaryIndexDataStore;
 	protected final AdapterIndexMappingStore indexMappingStore;
 	protected final DataStoreOperations baseOperations;
 	protected final DataStoreOptions baseOptions;
+	protected final InternalAdapterStore internalAdapterStore;
 
 	public BaseDataStore(
 			final IndexStore indexStore,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final DataStatisticsStore statisticsStore,
 			final AdapterIndexMappingStore indexMappingStore,
 			final SecondaryIndexDataStore secondaryIndexDataStore,
 			final DataStoreOperations operations,
-			final DataStoreOptions options ) {
+			final DataStoreOptions options,
+			final InternalAdapterStore internalAdapterStore ) {
 		this.indexStore = indexStore;
 		this.adapterStore = adapterStore;
 		this.statisticsStore = statisticsStore;
 		this.indexMappingStore = indexMappingStore;
 		this.secondaryIndexDataStore = secondaryIndexDataStore;
+		this.internalAdapterStore = internalAdapterStore;
 
 		baseOperations = operations;
 		baseOptions = options;
@@ -103,10 +110,11 @@ public class BaseDataStore implements
 	}
 
 	protected synchronized void store(
-			final DataAdapter<?> adapter ) {
-		if (baseOptions.isPersistAdapter() && !adapterStore.adapterExists(adapter.getAdapterId())) {
-			adapterStore.addAdapter(adapter);
+			final InternalDataAdapter<?> internalAdapter ) {
+		if (baseOptions.isPersistAdapter() && !adapterStore.adapterExists(internalAdapter.getInternalAdapterId())) {
+			adapterStore.addAdapter(internalAdapter);
 		}
+
 	}
 
 	public DataStatisticsStore getStatisticsStore() {
@@ -119,10 +127,13 @@ public class BaseDataStore implements
 			final PrimaryIndex... indices )
 			throws MismatchedIndexToAdapterMapping {
 		adapter.init(indices);
-		store(adapter);
-
+		// add internal adapter
+		final InternalDataAdapter<T> internalAdapter = new InternalDataAdapterWrapper<T>(
+				adapter,
+				internalAdapterStore.addAdapterId(adapter.getAdapterId()));
+		store(internalAdapter);
 		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
-				adapter.getAdapterId(),
+				internalAdapter.getInternalAdapterId(),
 				indices));
 
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
@@ -150,17 +161,17 @@ public class BaseDataStore implements
 						index.getId());
 			}
 			callbacks.add(callbackManager.getIngestCallback(
-					adapter,
+					internalAdapter,
 					index));
 
 			initOnIndexWriterCreate(
-					adapter,
+					internalAdapter,
 					index);
 
 			final IngestCallbackList<T> callbacksList = new IngestCallbackList<T>(
 					callbacks);
 			writers[i] = createIndexWriter(
-					adapter,
+					internalAdapter,
 					index,
 					baseOperations,
 					baseOptions,
@@ -209,36 +220,64 @@ public class BaseDataStore implements
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
 		// indices
-		final QueryOptions sanitizedQueryOptions = (queryOptions == null) ? new QueryOptions() : queryOptions;
+		final BaseQueryOptions sanitizedQueryOptions = new BaseQueryOptions(
+				(queryOptions == null) ? new QueryOptions() : queryOptions,
+				internalAdapterStore);
+
+		// If CQL filter is set
+		if (query instanceof AdapterQuery) {
+			final ByteArrayId CQlAdapterId = ((AdapterQuery) query).getAdapterId();
+
+			if ((sanitizedQueryOptions.getAdapterIds() == null) || (sanitizedQueryOptions.getAdapterIds().isEmpty())) {
+				sanitizedQueryOptions.setInternalAdapterId(internalAdapterStore.getInternalAdapterId(CQlAdapterId));
+			}
+			else if (sanitizedQueryOptions.getAdapterIds().size() == 1) {
+				if (!sanitizedQueryOptions.getAdapterIds().iterator().next().equals(
+						internalAdapterStore.getInternalAdapterId(CQlAdapterId))) {
+					LOGGER.error("CQL Query AdapterID does not match Query Options AdapterId");
+					throw new RuntimeException(
+							"CQL Query AdapterID does not match Query Options AdapterId");
+				}
+			}
+			else {
+				// Throw exception when QueryOptions has more than one adapter
+				// and CQL Adapter is set.
+				LOGGER.error("CQL Query AdapterID does not match Query Options AdapterId");
+				throw new RuntimeException(
+						"CQL Query AdapterID does not match Query Options AdapterId");
+			}
+
+		}
+
 		final Query sanitizedQuery = (query == null) ? new EverythingQuery() : query;
 
 		final DedupeFilter filter = new DedupeFilter();
-		MemoryAdapterStore tempAdapterStore;
+		MemoryPersistentAdapterStore tempAdapterStore;
 		final List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
 
 		try {
-			tempAdapterStore = new MemoryAdapterStore(
+			tempAdapterStore = new MemoryPersistentAdapterStore(
 					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 			// keep a list of adapters that have been queried, to only load an
 			// adapter to be queried once
-			final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : sanitizedQueryOptions
+			final Set<Short> queriedAdapters = new HashSet<Short>();
+			for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getAdaptersWithMinimalSetOfIndices(
 							tempAdapterStore,
 							indexMappingStore,
 							indexStore)) {
-				final List<ByteArrayId> adapterIdsToQuery = new ArrayList<>();
-				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+				final List<Short> adapterIdsToQuery = new ArrayList<>();
+				for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
 					if (delete) {
 						final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
 								statisticsStore,
 								secondaryIndexDataStore,
-								queriedAdapters.add(adapter.getAdapterId()));
+								queriedAdapters.add(adapter.getInternalAdapterId()));
 						deleteCallbacks.add(callbackCache);
-						final ScanCallback callback = queryOptions.getScanCallback();
+						final ScanCallback callback = sanitizedQueryOptions.getScanCallback();
 
 						final PrimaryIndex index = indexAdapterPair.getLeft();
-						queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
+						sanitizedQueryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
 
 							@Override
 							public void entryScanned(
@@ -250,7 +289,7 @@ public class BaseDataStore implements
 											row);
 								}
 								callbackCache.getDeleteCallback(
-										(WritableDataAdapter<Object>) adapter,
+										adapter,
 										index).entryDeleted(
 										entry,
 										row);
@@ -281,7 +320,7 @@ public class BaseDataStore implements
 								delete));
 						continue;
 					}
-					adapterIdsToQuery.add(adapter.getAdapterId());
+					adapterIdsToQuery.add(adapter.getInternalAdapterId());
 				}
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
@@ -328,16 +367,45 @@ public class BaseDataStore implements
 			return deleteEverything();
 		}
 
+		final BaseQueryOptions sanitizedQueryOptions = new BaseQueryOptions(
+				queryOptions,
+				internalAdapterStore);
 		final AtomicBoolean aOk = new AtomicBoolean(
 				true);
+
+		// If CQL filter is set
+		if (query instanceof AdapterQuery) {
+			final ByteArrayId CQlAdapterId = ((AdapterQuery) query).getAdapterId();
+
+			if ((sanitizedQueryOptions.getAdapterIds() == null) || (sanitizedQueryOptions.getAdapterIds().isEmpty())) {
+				sanitizedQueryOptions.setInternalAdapterId(internalAdapterStore.getInternalAdapterId(CQlAdapterId));
+			}
+			else if (sanitizedQueryOptions.getAdapterIds().size() == 1) {
+				if (!sanitizedQueryOptions.getAdapterIds().iterator().next().equals(
+						internalAdapterStore.getInternalAdapterId(CQlAdapterId))) {
+					LOGGER.error("CQL Query AdapterID does not match Query Options AdapterId");
+					throw new RuntimeException(
+							"CQL Query AdapterID does not match Query Options AdapterId");
+				}
+			}
+			else {
+				// Throw exception when QueryOptions has more than one adapter
+				// and CQL Adapter
+				// is set.
+				LOGGER.error("CQL Query AdapterID does not match Query Options AdapterIds");
+				throw new RuntimeException(
+						"CQL Query AdapterID does not match Query Options AdapterIds");
+			}
+
+		}
 
 		// keep a list of adapters that have been queried, to only low an
 		// adapter to be queried
 		// once
-		final Set<ByteArrayId> queriedAdapters = new HashSet<ByteArrayId>();
+		final Set<Short> queriedAdapters = new HashSet<Short>();
 		Deleter idxDeleter = null, altIdxDeleter = null;
 		try {
-			for (final Pair<PrimaryIndex, List<DataAdapter<Object>>> indexAdapterPair : queryOptions
+			for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getIndicesForAdapters(
 							adapterStore,
 							indexMappingStore,
@@ -359,12 +427,12 @@ public class BaseDataStore implements
 								altIdxTableName),
 						queryOptions.getAuthorizations()) : null;
 
-				for (final DataAdapter<Object> adapter : indexAdapterPair.getRight()) {
+				for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
 
 					final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
 							statisticsStore,
 							secondaryIndexDataStore,
-							queriedAdapters.add(adapter.getAdapterId()));
+							queriedAdapters.add(adapter.getInternalAdapterId()));
 
 					callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
 
@@ -383,7 +451,7 @@ public class BaseDataStore implements
 								final Object entry,
 								final GeoWaveRow row ) {
 							callbackCache.getDeleteCallback(
-									(WritableDataAdapter<Object>) adapter,
+									adapter,
 									index).entryDeleted(
 									entry,
 									row);
@@ -407,8 +475,8 @@ public class BaseDataStore implements
 					};
 
 					CloseableIterator<?> dataIt = null;
-					queryOptions.setScanCallback(callback);
-					final List<ByteArrayId> adapterIds = Collections.singletonList(adapter.getAdapterId());
+					sanitizedQueryOptions.setScanCallback(callback);
+					final List<Short> adapterIds = Collections.singletonList(adapter.getInternalAdapterId());
 					if (query instanceof InsertionIdQuery) {
 						queryOptions.setLimit(-1);
 						dataIt = queryInsertionId(
@@ -416,7 +484,7 @@ public class BaseDataStore implements
 								index,
 								(InsertionIdQuery) query,
 								null,
-								queryOptions,
+								sanitizedQueryOptions,
 								adapterStore,
 								true);
 					}
@@ -425,7 +493,7 @@ public class BaseDataStore implements
 								index,
 								((PrefixIdQuery) query).getPartitionKey(),
 								((PrefixIdQuery) query).getSortKeyPrefix(),
-								queryOptions,
+								sanitizedQueryOptions,
 								adapterStore,
 								adapterIds,
 								true);
@@ -436,7 +504,7 @@ public class BaseDataStore implements
 								index,
 								query,
 								null,
-								queryOptions,
+								sanitizedQueryOptions,
 								adapterStore,
 								true);
 					}
@@ -486,6 +554,7 @@ public class BaseDataStore implements
 			indexStore.removeAll();
 			adapterStore.removeAll();
 			statisticsStore.removeAll();
+			internalAdapterStore.removeAll();
 			secondaryIndexDataStore.removeAll();
 			indexMappingStore.removeAll();
 
@@ -502,14 +571,14 @@ public class BaseDataStore implements
 	}
 
 	private <T> void deleteEntries(
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final String... additionalAuthorizations )
 			throws IOException {
 		final String altIdxTableName = index.getId().getString() + ALT_INDEX_TABLE;
 
 		statisticsStore.removeAllStatistics(
-				adapter.getAdapterId(),
+				adapter.getInternalAdapterId(),
 				additionalAuthorizations);
 
 		// cannot delete because authorizations are not used
@@ -517,14 +586,14 @@ public class BaseDataStore implements
 
 		baseOperations.deleteAll(
 				index.getId(),
-				adapter.getAdapterId(),
+				adapter.getInternalAdapterId(),
 				additionalAuthorizations);
 		if (baseOptions.isUseAltIndex() && baseOperations.indexExists(new ByteArrayId(
 				altIdxTableName))) {
 			baseOperations.deleteAll(
 					new ByteArrayId(
 							altIdxTableName),
-					adapter.getAdapterId(),
+					adapter.getInternalAdapterId(),
 					additionalAuthorizations);
 		}
 	}
@@ -541,13 +610,13 @@ public class BaseDataStore implements
 	}
 
 	protected CloseableIterator<Object> queryConstraints(
-			final List<ByteArrayId> adapterIdsToQuery,
+			final List<Short> adapterIdsToQuery,
 			final PrimaryIndex index,
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
-			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final BaseQueryOptions sanitizedQueryOptions,
+			final PersistentAdapterStore tempAdapterStore,
+			final boolean delete ) {
 		final BaseConstraintsQuery constraintsQuery = new BaseConstraintsQuery(
 				adapterIdsToQuery,
 				index,
@@ -578,17 +647,18 @@ public class BaseDataStore implements
 				baseOptions,
 				tempAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 	}
 
 	protected CloseableIterator<Object> queryRowPrefix(
 			final PrimaryIndex index,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortPrefix,
-			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore,
-			final List<ByteArrayId> adapterIdsToQuery,
-			boolean delete ) {
+			final BaseQueryOptions sanitizedQueryOptions,
+			final PersistentAdapterStore tempAdapterStore,
+			final List<Short> adapterIdsToQuery,
+			final boolean delete ) {
 		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<Object>(
 				index,
 				partitionKey,
@@ -606,22 +676,23 @@ public class BaseDataStore implements
 				baseOptions,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				tempAdapterStore,
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 
 	}
 
 	protected CloseableIterator<Object> queryInsertionId(
-			final DataAdapter<Object> adapter,
+			final InternalDataAdapter<?> adapter,
 			final PrimaryIndex index,
 			final InsertionIdQuery query,
 			final DedupeFilter filter,
-			final QueryOptions sanitizedQueryOptions,
-			final AdapterStore tempAdapterStore,
-			boolean delete ) {
+			final BaseQueryOptions sanitizedQueryOptions,
+			final PersistentAdapterStore tempAdapterStore,
+			final boolean delete ) {
 		final DifferingFieldVisibilityEntryCount visibilityCounts = DifferingFieldVisibilityEntryCount
 				.getVisibilityCounts(
 						index,
-						Collections.singletonList(adapter.getAdapterId()),
+						Collections.singletonList(adapter.getInternalAdapterId()),
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations());
 
@@ -638,11 +709,12 @@ public class BaseDataStore implements
 				baseOptions,
 				tempAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				sanitizedQueryOptions.getLimit());
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition());
 	}
 
 	protected <T> IndexWriter<T> createIndexWriter(
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final DataStoreOperations baseOperations,
 			final DataStoreOptions baseOptions,
@@ -658,7 +730,7 @@ public class BaseDataStore implements
 	}
 
 	protected <T> void initOnIndexWriterCreate(
-			final DataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index ) {}
 
 	protected <T> void addAltIndexCallback(

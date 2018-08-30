@@ -20,6 +20,8 @@ import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -42,10 +44,10 @@ abstract class BaseFilteredIndexQuery extends
 	protected final ScanCallback<?, ?> scanCallback;
 
 	public BaseFilteredIndexQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final ScanCallback<?, ?> scanCallback,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
 			final String... authorizations ) {
 		super(
@@ -68,15 +70,17 @@ abstract class BaseFilteredIndexQuery extends
 	public CloseableIterator<Object> query(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
+			final Integer limit,
+			final Integer queryMaxRangeDecomposition ) {
 		final Reader<?> reader = getReader(
 				datastoreOperations,
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
+				queryMaxRangeDecomposition,
 				getRowTransformer(
 						options,
 						adapterStore,
@@ -101,9 +105,10 @@ abstract class BaseFilteredIndexQuery extends
 	protected <C> Reader<C> getReader(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
+			final Integer queryMaxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
 		boolean exists = false;
 		try {
@@ -125,14 +130,16 @@ abstract class BaseFilteredIndexQuery extends
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
+				queryMaxRangeDecomposition,
 				rowTransformer);
 	}
 
-	protected Map<ByteArrayId, RowMergingDataAdapter> getMergingAdapters(
-			final AdapterStore adapterStore ) {
-		final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters = new HashMap<ByteArrayId, RowMergingDataAdapter>();
-		for (final ByteArrayId adapterId : adapterIds) {
-			final DataAdapter adapter = adapterStore.getAdapter(adapterId);
+	protected Map<Short, RowMergingDataAdapter> getMergingAdapters(
+			final PersistentAdapterStore adapterStore ) {
+		final Map<Short, RowMergingDataAdapter> mergingAdapters = new HashMap<Short, RowMergingDataAdapter>();
+		for (final Short adapterId : adapterIds) {
+			final DataAdapter<?> adapter = adapterStore.getAdapter(
+					adapterId).getAdapter();
 			if ((adapter instanceof RowMergingDataAdapter)
 					&& (((RowMergingDataAdapter) adapter).getTransform() != null)) {
 				mergingAdapters.put(
@@ -146,12 +153,12 @@ abstract class BaseFilteredIndexQuery extends
 
 	private <T> GeoWaveRowIteratorTransformer<T> getRowTransformer(
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final boolean decodePersistenceEncoding ) {
 		final @Nullable QueryFilter clientFilter = getClientFilter(options);
 		if (options == null || !options.isServerSideLibraryEnabled()) {
-			final Map<ByteArrayId, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
+			final Map<Short, RowMergingDataAdapter> mergingAdapters = getMergingAdapters(adapterStore);
 
 			if (!mergingAdapters.isEmpty()) {
 				return new GeoWaveRowIteratorTransformer<T>() {

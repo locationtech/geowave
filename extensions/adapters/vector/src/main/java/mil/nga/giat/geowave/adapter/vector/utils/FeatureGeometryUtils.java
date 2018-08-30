@@ -44,6 +44,7 @@ import com.vividsolutions.jts.geom.Polygon;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -483,9 +484,10 @@ public class FeatureGeometryUtils
 			final String geomField ) {
 		final DataStatisticsStore statisticsStore = dataStorePlugin.createDataStatisticsStore();
 		final ByteArrayId geoStatId = FeatureBoundingBoxStatistics.composeId(geomField);
-
+		final InternalAdapterStore internalAdapterStore = dataStorePlugin.createInternalAdapterStore();
+		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 		final DataStatistics<?> geoStat = statisticsStore.getDataStatistics(
-				adapterId,
+				internalAdapterId,
 				geoStatId,
 				null);
 

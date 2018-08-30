@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
@@ -46,7 +47,7 @@ public class RemoveStatCommand extends
 	@Override
 	protected boolean performStatsCommand(
 			final DataStorePluginOptions storeOptions,
-			final DataAdapter<?> adapter,
+			final InternalDataAdapter<?> adapter,
 			final StatsCommandLineOptions statsOptions )
 			throws IOException {
 
@@ -55,7 +56,7 @@ public class RemoveStatCommand extends
 		final String[] authorizations = getAuthorizations(statsOptions.getAuthorizations());
 
 		if (!statStore.removeStatistics(
-				adapter.getAdapterId(),
+				adapter.getInternalAdapterId(),
 				new ByteArrayId(
 						statId),
 				authorizations)) {

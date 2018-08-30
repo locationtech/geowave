@@ -44,8 +44,6 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	// notifications?
 	protected static final int MAX_ENTRIES = 100;
 	public final static String METADATA_TABLE = "GEOWAVE_METADATA";
-	public final static ByteArrayId METADATA_INDEX_ID = new ByteArrayId(
-			METADATA_TABLE);
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;
 	protected final MetadataType type;
@@ -84,6 +82,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final T persistedObject );
 
 	public void removeAll() {
+		deleteObject(
+				null,
+				null);
 		cache.invalidateAll();
 	}
 
@@ -91,15 +92,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId ) {
 		// the secondaryId is optional so check for null
-		StringBuilder sb = new StringBuilder(
-				primaryId.getString());
 		if (secondaryId != null) {
-			sb.append(
-					"_").append(
-					secondaryId.getString());
+			return new ByteArrayId(
+					primaryId.getString() + "_" + secondaryId.getString());
 		}
-		return new ByteArrayId(
-				sb.toString());
+		return primaryId;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,11 +129,14 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		boolean present = cache.getIfPresent(combinedId) != null;
-		if (present) {
-			cache.invalidate(combinedId);
+		if (combinedId != null) {
+			boolean present = cache.getIfPresent(combinedId) != null;
+			if (present) {
+				cache.invalidate(combinedId);
+			}
+			return present;
 		}
-		return present;
+		return false;
 	}
 
 	public void remove(
@@ -192,14 +192,13 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				id,
 				secondaryId,
 				object);
-
 		try (final MetadataWriter writer = operations.createMetadataWriter(getType())) {
 			if (writer != null) {
 				final GeoWaveMetadata metadata = new GeoWaveMetadata(
 						id.getBytes(),
 						secondaryId != null ? secondaryId.getBytes() : null,
 						getVisibility(object),
-						PersistenceUtils.toBinary(object));
+						getValue(object));
 				writer.write(metadata);
 			}
 		}
@@ -209,6 +208,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 					e);
 			e.printStackTrace();
 		}
+	}
+
+	protected byte[] getValue(
+			final T object ) {
+		return PersistenceUtils.toBinary(object);
 	}
 
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
@@ -333,10 +337,15 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	@SuppressWarnings("unchecked")
+	protected T fromValue(
+			final GeoWaveMetadata entry ) {
+		return (T) PersistenceUtils.fromBinary(entry.getValue());
+	}
+
 	protected T entryToValue(
 			final GeoWaveMetadata entry,
 			final String... authorizations ) {
-		final T result = (T) PersistenceUtils.fromBinary(entry.getValue());
+		final T result = fromValue(entry);
 		if (result != null) {
 			addObjectToCache(
 					new ByteArrayId(
@@ -362,8 +371,24 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
 			final String... authorizations ) {
+		return deleteObjects(
+				primaryId,
+				secondaryId,
+				operations,
+				getType(),
+				this,
+				authorizations);
+	}
+
+	protected static boolean deleteObjects(
+			final ByteArrayId primaryId,
+			final ByteArrayId secondaryId,
+			final DataStoreOperations operations,
+			final MetadataType type,
+			final AbstractGeoWavePersistence cacheDeleter,
+			final String... authorizations ) {
 		try {
-			if (!operations.metadataExists(getType())) {
+			if (!operations.metadataExists(type)) {
 				return false;
 			}
 		}
@@ -373,7 +398,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 					e1);
 			return false;
 		}
-		try (final MetadataDeleter deleter = operations.createMetadataDeleter(getType())) {
+		try (final MetadataDeleter deleter = operations.createMetadataDeleter(type)) {
 			if (primaryId != null) {
 				return deleter.delete(new MetadataQuery(
 						primaryId.getBytes(),
@@ -381,7 +406,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 						authorizations));
 			}
 			boolean retVal = false;
-			final MetadataReader reader = operations.createMetadataReader(getType());
+			final MetadataReader reader = operations.createMetadataReader(type);
 			try (final CloseableIterator<GeoWaveMetadata> it = reader.query(new MetadataQuery(
 					null,
 					secondaryId != null ? secondaryId.getBytes() : null,
@@ -390,10 +415,12 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				while (it.hasNext()) {
 					retVal = true;
 					final GeoWaveMetadata entry = it.next();
-					deleteObjectFromCache(
-							new ByteArrayId(
-									entry.getPrimaryId()),
-							secondaryId);
+					if (cacheDeleter != null) {
+						cacheDeleter.deleteObjectFromCache(
+								new ByteArrayId(
+										entry.getPrimaryId()),
+								secondaryId);
+					}
 					deleter.delete(new MetadataQuery(
 							entry.getPrimaryId(),
 							entry.getSecondaryId(),
@@ -408,7 +435,6 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 					e);
 		}
 		return false;
-
 	}
 
 	private class NativeIteratorWrapper implements

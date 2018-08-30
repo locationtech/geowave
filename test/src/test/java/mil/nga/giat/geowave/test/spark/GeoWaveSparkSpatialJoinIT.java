@@ -15,7 +15,7 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.test.GeoWaveITRunner;
 import mil.nga.giat.geowave.test.TestUtils;
@@ -31,7 +31,7 @@ import mil.nga.giat.geowave.analytic.spark.RDDOptions;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry;
+import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.analytic.spark.spatial.SpatialJoinRunner;
 
@@ -105,8 +105,8 @@ public class GeoWaveSparkSpatialJoinIT extends
 				"tornado_tracks");
 		GeomWithinDistance distancePredicate = new GeomWithinDistance(
 				0.01);
-		String sqlHail = "select hail.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
-		String sqlTornado = "select tornado.* from hail, tornado where geomDistance(hail.geom,tornado.geom) <= 0.01";
+		String sqlHail = "select hail.* from hail, tornado where GeomDistance(hail.geom,tornado.geom) <= 0.01";
+		String sqlTornado = "select tornado.* from hail, tornado where GeomDistance(hail.geom,tornado.geom) <= 0.01";
 
 		SpatialJoinRunner runner = new SpatialJoinRunner(
 				session);
@@ -128,11 +128,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 		try {
 			runner.run();
 		}
-		catch (InterruptedException e) {
-			LOGGER.error("Async error in join");
-			e.printStackTrace();
-		}
-		catch (ExecutionException e) {
+		catch (InterruptedException | ExecutionException e) {
 			LOGGER.error("Async error in join");
 			e.printStackTrace();
 		}
@@ -217,14 +213,20 @@ public class GeoWaveSparkSpatialJoinIT extends
 	private void loadRDDs(
 			ByteArrayId hail_adapter,
 			ByteArrayId tornado_adapter ) {
-		DataAdapter<?> hailAdapter = dataStore.createAdapterStore().getAdapter(
+
+		short hailInternalAdapterId = dataStore.createInternalAdapterStore().getInternalAdapterId(
 				hail_adapter);
-		DataAdapter<?> tornadoAdapter = dataStore.createAdapterStore().getAdapter(
+		// Write out the hull features
+		InternalDataAdapter<?> hailAdapter = dataStore.createAdapterStore().getAdapter(
+				hailInternalAdapterId);
+		short tornadoInternalAdapterId = dataStore.createInternalAdapterStore().getInternalAdapterId(
 				tornado_adapter);
+		InternalDataAdapter<?> tornadoAdapter = dataStore.createAdapterStore().getAdapter(
+				tornadoInternalAdapterId);
 		try {
 			RDDOptions hailOpts = new RDDOptions();
 			hailOpts.setQueryOptions(new QueryOptions(
-					hailAdapter));
+					hailAdapter.getAdapter()));
 			hailRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
@@ -232,7 +234,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 
 			RDDOptions tornadoOpts = new RDDOptions();
 			tornadoOpts.setQueryOptions(new QueryOptions(
-					tornadoAdapter));
+					tornadoAdapter.getAdapter()));
 			tornadoRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,

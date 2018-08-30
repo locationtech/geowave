@@ -5,4 +5,5 @@ public enum MetadataType {
 	AIM,
 	INDEX,
 	STATS,
+	INTERNAL_ADAPTER
 }

@@ -16,8 +16,10 @@ import java.util.Map;
 import java.util.Set;
 
 import org.opengis.feature.simple.SimpleFeature;
+import org.spark_project.guava.collect.Maps;
 
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.index.IndexQueryStrategySPI.QueryHint;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import mil.nga.giat.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -25,6 +27,8 @@ import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -69,7 +73,12 @@ public class GeoWaveDataStoreComponents
 		// indicies and writing it to the adapterStore, in cases where the
 		// featuredataadapter was created from geotools datastore's createSchema
 		adapter.init(adapterIndices);
-		gtStore.adapterStore.addAdapter(adapter);
+		short internalAdapterId = gtStore.getInternalAdapterStore().getInternalAdapterId(
+				adapter.getAdapterId());
+		InternalDataAdapter<?> internalDataAdapter = new InternalDataAdapterWrapper(
+				adapter,
+				internalAdapterId);
+		gtStore.adapterStore.addAdapter(internalDataAdapter);
 	}
 
 	public IndexStore getIndexStore() {
@@ -99,10 +108,16 @@ public class GeoWaveDataStoreComponents
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query ) {
-		return getGTstore().getIndexQueryStrategy().getIndices(
+		GeoWaveGTDataStore gtStore = getGTstore();
+		Map<QueryHint, Object> queryHints = Maps.newHashMap();
+		queryHints.put(
+				QueryHint.MAX_RANGE_DECOMPOSITION,
+				gtStore.getDataStoreOptions().getMaxRangeDecomposition());
+		return gtStore.getIndexQueryStrategy().getIndices(
 				stats,
 				query,
-				gtStore.getIndicesForAdapter(adapter));
+				gtStore.getIndicesForAdapter(adapter),
+				queryHints);
 	}
 
 	public void remove(

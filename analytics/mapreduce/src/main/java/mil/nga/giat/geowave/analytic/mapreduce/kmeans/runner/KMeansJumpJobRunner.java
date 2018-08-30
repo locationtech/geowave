@@ -158,9 +158,7 @@ public class KMeansJumpJobRunner extends
 					.getProperty(StoreParam.INPUT_STORE)).getDataStoreOptions();
 
 			final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
-					dataStoreOptions.createDataStore(),
-					dataStoreOptions.createIndexStore(),
-					dataStoreOptions.createAdapterStore());
+					dataStoreOptions);
 
 			for (int k = (int) Math.max(
 					2,

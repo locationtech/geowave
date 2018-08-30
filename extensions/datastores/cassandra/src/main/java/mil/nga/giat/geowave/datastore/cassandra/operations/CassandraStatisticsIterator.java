@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.datastore.cassandra.operations;
 import java.io.IOException;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -39,8 +40,8 @@ public class CassandraStatisticsIterator implements
 			}
 			else {
 				if (statEntry.getStatisticsId().equals(
-						currentStatistics.getStatisticsId()) && statEntry.getDataAdapterId().equals(
-						currentStatistics.getDataAdapterId())) {
+						currentStatistics.getStatisticsId()) && statEntry.getInternalDataAdapterId().equals(
+						currentStatistics.getInternalDataAdapterId())) {
 					currentStatistics.merge(statEntry);
 				}
 				else {
@@ -58,8 +59,9 @@ public class CassandraStatisticsIterator implements
 		final DataStatistics<?> stats = (DataStatistics<?>) PersistenceUtils.fromBinary(entry.getValue());
 
 		if (stats != null) {
-			stats.setDataAdapterId(new ByteArrayId(
-					entry.getSecondaryId()));
+			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
+			stats.setStatisticsId(new ByteArrayId(
+					entry.getPrimaryId()));
 		}
 
 		return stats;
@@ -69,7 +71,7 @@ public class CassandraStatisticsIterator implements
 			final DataStatistics<?> stats ) {
 		return new GeoWaveMetadata(
 				stats.getStatisticsId().getBytes(),
-				stats.getDataAdapterId().getBytes(),
+				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));
 	}

@@ -17,6 +17,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
 
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.data.VisibilityWriter;
@@ -32,12 +33,12 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
  */
 public class HBaseCellGenerator<T>
 {
-	private final WritableDataAdapter<T> adapter;
+	private final InternalDataAdapter<T> adapter;
 	private final PrimaryIndex index;
 	private final VisibilityWriter<T> visibilityWriter;
 
 	public HBaseCellGenerator(
-			final WritableDataAdapter<T> adapter,
+			final InternalDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final VisibilityWriter<T> visibilityWriter ) {
 		super();

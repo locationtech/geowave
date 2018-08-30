@@ -35,8 +35,7 @@ public class AccumuloMetadataDeleter implements
 				new ByteArrayId(
 						query.getPrimaryId()),
 				metadataTypeName,
-				query.getSecondaryId() != null ? new ByteArrayId(
-						query.getSecondaryId()).getString() : null,
+				query.getSecondaryId() != null ? query.getSecondaryId() : null,
 				query.getAuthorizations());
 	}
 

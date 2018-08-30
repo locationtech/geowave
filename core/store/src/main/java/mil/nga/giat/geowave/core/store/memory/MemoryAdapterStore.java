@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 
 /**
  * This is a simple HashMap based in-memory implementation of the AdapterStore
@@ -29,7 +30,7 @@ import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
  * another storage mechanism such as an Accumulo table.
  */
 public class MemoryAdapterStore implements
-		AdapterStore,
+		TransientAdapterStore,
 		Serializable
 {
 	/**

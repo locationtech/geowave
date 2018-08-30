@@ -11,6 +11,7 @@ import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
@@ -135,7 +136,7 @@ public class HBaseWriter implements
 					rowBytes);
 
 			put.addColumn(
-					row.getAdapterId(),
+					StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getInternalAdapterId())),
 					value.getFieldMask(),
 					value.getValue());
 

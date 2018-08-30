@@ -207,7 +207,7 @@ public class BasicQueryFilter implements
 
 		binnedConstraints = new HashMap<ByteArrayId, List<MultiDimensionalNumericData>>();
 		this.constraints = constraints;
-		final BinnedNumericDataset[] queries = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> queries = BinnedNumericDataset.applyBins(
 				constraints,
 				dimensionFields);
 		for (final BinnedNumericDataset q : queries) {
@@ -247,7 +247,7 @@ public class BasicQueryFilter implements
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
 		if (!(persistenceEncoding instanceof CommonIndexedPersistenceEncoding)) return false;
-		final BinnedNumericDataset[] dataRanges = BinnedNumericDataset.applyBins(
+		final List<BinnedNumericDataset> dataRanges = BinnedNumericDataset.applyBins(
 				((CommonIndexedPersistenceEncoding) persistenceEncoding).getNumericData(dimensionFields),
 				dimensionFields);
 		// check that at least one data range overlaps at least one query range

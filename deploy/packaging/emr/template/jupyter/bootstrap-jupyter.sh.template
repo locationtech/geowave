@@ -1,0 +1,95 @@
+#!/bin/bash
+
+GEOWAVE_VER=${1:-$GEOWAVE_VERSION_TOKEN}
+JUPYTER_PASSWORD=${2-geowave}
+
+is_master() {
+  if [ $(jq '.isMaster' /mnt/var/lib/info/instance.json) = 'true' ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# I've externalized commands into library functions for clarity, download and source
+if [ ! -f /tmp/create-configure-kernel.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/create-configure-kernel.sh /tmp/create-configure-kernel.sh
+fi
+
+if [ ! -f /tmp/install-conda.sh ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/install-conda.sh /tmp/install-conda.sh
+	sudo chmod +x /tmp/install-conda.sh
+fi
+
+# The EMR customize hooks run _before_ everything else, so Spark is not yet ready
+THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
+RUN_FLAG="${THIS_SCRIPT}.run"
+# On first boot skip past this script to allow EMR to set up the environment. Set a callback
+# which will poll for availability of Spark and then create the jupyter kernel
+if [ ! -f "$RUN_FLAG" ]; then
+	touch "$RUN_FLAG"
+	TIMEOUT= is_master && TIMEOUT=3 || TIMEOUT=4
+	echo "bash -x $(realpath "${BASH_SOURCE[0]}") > /tmp/bootstrap-jupyter.log" | at now + $TIMEOUT min
+	exit 0 # Bail and let EMR finish initializing
+fi
+
+# Download example notebooks from s3
+aws s3 sync s3://geowave-notebooks/$GEOWAVE_VERSION_URL_TOKEN/notebooks/jupyter/ $HOME/notebooks/
+
+aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/lib/geowave_pyspark-${GEOWAVE_VER}.tar.gz /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
+
+source /tmp/install-conda.sh
+
+echo bootstrap_conda.sh completed. PATH now: $PATH
+echo Performing pixiedust and jupyter kernel setup.
+
+source /etc/profile.d/conda.sh
+
+conda install jupyter ncurses
+
+jupyter nbextension enable --py --sys-prefix ipyleaflet
+jupyter nbextension enable --py --sys-prefix widgetsnbextension
+jupyter nbextension enable --py --sys-prefix vega
+
+# generate empty config for notebook server
+jupyter notebook --generate-config
+
+pip install /tmp/geowave_pyspark-${GEOWAVE_VER}.tar.gz
+
+# generate default password for server
+HASHED_PASSWORD=$(python -c "from notebook.auth import passwd; print(passwd('$JUPYTER_PASSWORD'))")
+printf "c.NotebookApp.password = u'$HASHED_PASSWORD'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.open_browser = False" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.ip = '*'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.notebook_dir = '$HOME/notebooks/'" >> $HOME/.jupyter/jupyter_notebook_config.py
+printf "\nc.NotebookApp.port = 9000" >> $HOME/.jupyter/jupyter_notebook_config.py
+
+#Adding Jupyter to Upstart so it can be run at bootstrap
+sudo cat << EOF > $HOME/jupyter.conf
+description "Jupyter"
+
+start on runlevel [2345]
+stop on runlevel [016]
+
+respawn
+respawn limit 0 10
+
+env HOME=$HOME
+script
+    . $HOME/.bashrc
+    . /etc/profile.d/conda.sh
+    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
+end script
+EOF
+sudo mv $HOME/jupyter.conf /etc/init/
+sudo chown root:root /etc/init/jupyter.conf
+
+# be sure that jupyter daemon is registered in initctl
+sudo initctl reload-configuration
+
+# start jupyter daemon
+sudo initctl start jupyter
+
+if is_master; then
+    source /tmp/create-configure-kernel.sh ${GEOWAVE_VER}
+fi

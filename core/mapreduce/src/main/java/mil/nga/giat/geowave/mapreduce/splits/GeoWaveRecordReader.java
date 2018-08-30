@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -38,8 +38,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.AdapterStoreWrapper;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStore;
+import mil.nga.giat.geowave.core.store.base.BaseQueryOptions;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
@@ -92,9 +95,10 @@ public class GeoWaveRecordReader<T> extends
 	protected T currentValue = null;
 	protected GeoWaveInputSplit split;
 	protected DistributableQuery query;
-	protected QueryOptions queryOptions;
+	protected BaseQueryOptions sanitizedQueryOptions;
 	protected boolean isOutputWritable;
-	protected AdapterStore adapterStore;
+	protected TransientAdapterStore adapterStore;
+	protected InternalAdapterStore internalAdapterStore;
 	protected AdapterIndexMappingStore aimStore;
 	protected IndexStore indexStore;
 	protected BaseDataStore dataStore;
@@ -104,14 +108,21 @@ public class GeoWaveRecordReader<T> extends
 			final DistributableQuery query,
 			final QueryOptions queryOptions,
 			final boolean isOutputWritable,
-			final AdapterStore adapterStore,
+			final TransientAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore aimStore,
 			final IndexStore indexStore,
 			final MapReduceDataStoreOperations operations ) {
 		this.query = query;
-		this.queryOptions = queryOptions;
+		// all queries will use the same instance of the dedupe filter for
+		// client side filtering because the filter needs to be applied across
+		// indices
+		sanitizedQueryOptions = new BaseQueryOptions(
+				(queryOptions == null) ? new QueryOptions() : queryOptions,
+				internalAdapterStore);
 		this.isOutputWritable = isOutputWritable;
 		this.adapterStore = adapterStore;
+		this.internalAdapterStore = internalAdapterStore;
 		this.aimStore = aimStore;
 		this.indexStore = indexStore;
 		this.operations = operations;
@@ -144,16 +155,12 @@ public class GeoWaveRecordReader<T> extends
 				queryFilters = query.createFilters(splitInfo.getIndex());
 			}
 			for (final RangeLocationPair r : splitInfo.getRangeLocationPairs()) {
-				final QueryOptions rangeQueryOptions = new QueryOptions(
-						queryOptions);
-				rangeQueryOptions.setIndex(splitInfo.getIndex());
 				iteratorsPerRange.put(
 						r,
 						queryRange(
 								splitInfo.getIndex(),
 								r.getRange(),
 								queryFilters,
-								rangeQueryOptions,
 								splitInfo.isMixedVisibility()));
 				incrementalRangeSums.put(
 						r,
@@ -224,43 +231,36 @@ public class GeoWaveRecordReader<T> extends
 			final PrimaryIndex index,
 			final GeoWaveRowRange range,
 			final List<QueryFilter> queryFilters,
-			final QueryOptions rangeQueryOptions,
 			final boolean mixedVisibility ) {
 
 		final QueryFilter singleFilter = ((queryFilters == null) || queryFilters.isEmpty()) ? null : queryFilters
 				.size() == 1 ? queryFilters.get(0) : new FilterList<QueryFilter>(
 				queryFilters);
-		try {
-			final Reader reader = operations.createReader(new RecordReaderParams(
-					index,
-					adapterStore,
-					rangeQueryOptions.getValidAdapterIds(
-							adapterStore,
-							aimStore),
-					rangeQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-					rangeQueryOptions.getAggregation(),
-					rangeQueryOptions.getFieldIdsAdapterPair(),
-					mixedVisibility,
-					range,
-					queryOptions.getLimit(),
-					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
-					rangeQueryOptions.getAuthorizations()));
-			return new CloseableIteratorWrapper(
-					new ReaderClosableWrapper(
-							reader),
-					new InputFormatIteratorWrapper<>(
-							reader,
-							singleFilter,
-							adapterStore,
-							index,
-							isOutputWritable));
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to get adapter IDs",
-					e);
-		}
-		return new CloseableIterator.Empty();
+		final Reader reader = operations.createReader(new RecordReaderParams(
+				index,
+				new AdapterStoreWrapper(
+						adapterStore,
+						internalAdapterStore),
+				sanitizedQueryOptions.getAdapterIds(internalAdapterStore),
+				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getAggregation(),
+				sanitizedQueryOptions.getFieldIdsAdapterPair(),
+				mixedVisibility,
+				range,
+				sanitizedQueryOptions.getLimit(),
+				sanitizedQueryOptions.getMaxRangeDecomposition(),
+				GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+				sanitizedQueryOptions.getAuthorizations()));
+		return new CloseableIteratorWrapper(
+				new ReaderClosableWrapper(
+						reader),
+				new InputFormatIteratorWrapper<>(
+						reader,
+						singleFilter,
+						adapterStore,
+						internalAdapterStore,
+						index,
+						isOutputWritable));
 	}
 
 	@Override

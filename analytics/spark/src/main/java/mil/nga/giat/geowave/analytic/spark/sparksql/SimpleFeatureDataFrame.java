@@ -1,23 +1,20 @@
 package mil.nga.giat.geowave.analytic.spark.sparksql;
 
-import org.apache.spark.api.java.JavaPairRDD;
+import mil.nga.giat.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.types.StructType;
-import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.analytic.spark.GeoWaveRDD;
-import mil.nga.giat.geowave.analytic.spark.sparksql.udf.wkt.GeomFunctionRegistry;
 import mil.nga.giat.geowave.analytic.spark.sparksql.util.SchemaConverter;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 
 public class SimpleFeatureDataFrame
 {

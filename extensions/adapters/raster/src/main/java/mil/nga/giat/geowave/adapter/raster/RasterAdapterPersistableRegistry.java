@@ -10,12 +10,15 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.raster;
 
+import mil.nga.giat.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStrategyWrapper;
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.MultiAdapterServerMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileRowTransform;
-import mil.nga.giat.geowave.adapter.raster.adapter.merge.RootMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.ServerMergeStrategy;
+import mil.nga.giat.geowave.adapter.raster.adapter.merge.SingleAdapterServerMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataByFilter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataBySampleIndex;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
@@ -50,7 +53,7 @@ public class RasterAdapterPersistableRegistry implements
 					RasterTileRowTransform::new),
 			new PersistableIdAndConstructor(
 					(short) 605,
-					RootMergeStrategy::new),
+					MultiAdapterServerMergeStrategy::new),
 			new PersistableIdAndConstructor(
 					(short) 606,
 					NoDataByFilter::new),
@@ -77,7 +80,13 @@ public class RasterAdapterPersistableRegistry implements
 					RasterFootprintStatistics::new),
 			new PersistableIdAndConstructor(
 					(short) 614,
-					MergeableRasterTile::new),
+					ServerMergeableRasterTile::new),
+			new PersistableIdAndConstructor(
+					(short) 615,
+					SingleAdapterServerMergeStrategy::new),
+			new PersistableIdAndConstructor(
+					(short) 616,
+					ClientMergeableRasterTile::new),
 		};
 	}
 }

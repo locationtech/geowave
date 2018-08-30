@@ -14,7 +14,7 @@ import java.awt.image.Raster;
 import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 
-import mil.nga.giat.geowave.adapter.raster.adapter.MergeableRasterTile;
+import mil.nga.giat.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
@@ -39,7 +39,7 @@ abstract public class SimpleAbstractMergeStrategy<T extends Persistable> impleme
 		// with data values, but where there
 		// is no data in the latest and there is data in the earlier tile, it
 		// fills the data from the earlier tile
-		if ((nextTile != null) && (nextTile instanceof MergeableRasterTile)) {
+		if ((nextTile != null) && (nextTile instanceof ServerMergeableRasterTile)) {
 			final WritableRaster nextRaster = Raster.createWritableRaster(
 					sampleModel,
 					nextTile.getDataBuffer(),

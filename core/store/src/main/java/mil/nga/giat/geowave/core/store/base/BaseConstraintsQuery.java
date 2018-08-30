@@ -14,13 +14,14 @@ import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.QueryRanges;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -32,7 +33,6 @@ import mil.nga.giat.geowave.core.store.filter.DistributableFilterList;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
-import mil.nga.giat.geowave.core.store.memory.MemoryAdapterStore;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.query.CoordinateRangeQueryFilter;
@@ -52,7 +52,7 @@ public class BaseConstraintsQuery extends
 	private final static Logger LOGGER = Logger.getLogger(BaseConstraintsQuery.class);
 	private boolean queryFiltersEnabled;
 
-	public final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
+	public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 	public final List<MultiDimensionalNumericData> constraints;
 	public final List<DistributableQueryFilter> distributableFilters;
 
@@ -60,13 +60,13 @@ public class BaseConstraintsQuery extends
 	private final PrimaryIndex index;
 
 	public BaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
@@ -87,14 +87,14 @@ public class BaseConstraintsQuery extends
 	}
 
 	public BaseConstraintsQuery(
-			final List<ByteArrayId> adapterIds,
+			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
-			final Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, DataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
+			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount visibilityCounts,
@@ -115,14 +115,11 @@ public class BaseConstraintsQuery extends
 		if ((duplicateCounts != null) && !duplicateCounts.isAnyEntryHaveDuplicates()) {
 			clientDedupeFilter = null;
 		}
-		// add dedupe filters to the front of both lists so that the
-		// de-duplication is performed before any more complex filtering
-		// operations, use the supplied client dedupe filter if possible
+		distributableFilters = lists.distributableFilters;
 		if (clientDedupeFilter != null) {
 			clientFilters.add(clientDedupeFilter);
 		}
 		this.clientFilters = clientFilters;
-		distributableFilters = lists.distributableFilters;
 
 		queryFiltersEnabled = true;
 	}
@@ -157,19 +154,20 @@ public class BaseConstraintsQuery extends
 	public CloseableIterator<Object> query(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
-			final Integer limit ) {
+			final Integer limit,
+			final Integer queryMaxRangeDecomposition ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
-				// || adapterStore instanceof MemoryAdapterStore) {
 				// Aggregate client-side
 				final CloseableIterator<Object> it = (CloseableIterator<Object>) super.query(
 						datastoreOperations,
 						options,
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
-						limit);
+						limit,
+						queryMaxRangeDecomposition);
 				return BaseDataStoreUtils.aggregate(
 						it,
 						(Aggregation<?, ?, Object>) aggregation.getValue());
@@ -177,12 +175,27 @@ public class BaseConstraintsQuery extends
 			else {
 				// the aggregation is run server-side use the reader to
 				// aggregate to a single value here
+
+				// should see if there is a client dedupe filter thats been
+				// added and run it serverside
+				// also if so and duplicates cross partitions, the dedupe filter
+				// still won't be effective and the aggregation will return
+				// incorrect results
+				if (!clientFilters.isEmpty()) {
+					QueryFilter f = clientFilters.get(clientFilters.size() - 1);
+					if (f instanceof DedupeFilter) {
+						distributableFilters.add((DedupeFilter) f);
+						LOGGER
+								.warn("Aggregating results when duplicates exist in the table may result in duplicate aggregation");
+					}
+				}
 				try (final Reader<GeoWaveRow> reader = getReader(
 						datastoreOperations,
 						options,
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
 						limit,
+						queryMaxRangeDecomposition,
 						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)) {
 					Mergeable mergedAggregationResult = null;
 					if ((reader == null) || !reader.hasNext()) {
@@ -220,7 +233,8 @@ public class BaseConstraintsQuery extends
 				options,
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
-				limit);
+				limit,
+				queryMaxRangeDecomposition);
 	}
 
 	@Override
@@ -263,7 +277,7 @@ public class BaseConstraintsQuery extends
 	}
 
 	@Override
-	protected Pair<DataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
+	protected Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return aggregation;
 	}
 
@@ -291,26 +305,12 @@ public class BaseConstraintsQuery extends
 	}
 
 	@Override
-	protected QueryRanges getRanges() {
-		if (isAggregation()) {
-			final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
-					constraints,
-					index.getIndexStrategy(),
-					BaseDataStoreUtils.AGGREGATION_RANGE_DECOMPOSITION,
-					indexMetaData);
-
-			return ranges;
-		}
-		else {
-			return getAllRanges();
-		}
-	}
-
-	public QueryRanges getAllRanges() {
+	protected QueryRanges getRanges(
+			int maxRangeDecomposition ) {
 		return DataStoreUtils.constraintsToQueryRanges(
 				constraints,
 				index.getIndexStrategy(),
-				BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION,
+				maxRangeDecomposition,
 				indexMetaData);
 	}
 

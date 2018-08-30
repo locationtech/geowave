@@ -1792,7 +1792,7 @@ public class GeoServerRestClient
 
 	private DataAdapterInfo getAdapterInfo(
 			final String adapterId,
-			final DataAdapter adapter ) {
+			final DataAdapter<?> adapter ) {
 		LOGGER.debug("getAdapterInfo for id = " + adapterId);
 
 		final DataAdapterInfo info = new DataAdapterInfo();

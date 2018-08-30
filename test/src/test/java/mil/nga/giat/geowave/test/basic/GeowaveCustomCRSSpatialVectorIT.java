@@ -122,7 +122,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 					},
 					TestUtils.createCustomCRSPrimaryIndex(),
 					"bounding box constraint only",
-					crs);
+					crs,
+					true);
 
 			dur = (System.currentTimeMillis() - mark);
 			LOGGER.debug("BBOX query duration = " + dur + " ms.");
@@ -139,7 +140,8 @@ public class GeowaveCustomCRSSpatialVectorIT extends
 					},
 					TestUtils.createCustomCRSPrimaryIndex(),
 					"polygon constraint only",
-					crs);
+					crs,
+					true);
 
 			dur = (System.currentTimeMillis() - mark);
 			LOGGER.debug("POLY query duration = " + dur + " ms.");

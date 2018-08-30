@@ -27,6 +27,7 @@ import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
+import mil.nga.giat.geowave.core.geotime.GeometryUtils;
 import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import mil.nga.giat.geowave.core.store.GeoWaveStoreFinder;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
@@ -235,7 +236,7 @@ public class LandsatIT extends
 					EAST,
 					NORTH
 				});
-		queryEnvelope.setCoordinateReferenceSystem(GeoWaveGTRasterFormat.DEFAULT_CRS);
+		queryEnvelope.setCoordinateReferenceSystem(GeometryUtils.getDefaultCRS());
 
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.readFromConfigParams(str.toString()));

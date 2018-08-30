@@ -15,6 +15,8 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 
+import mil.nga.giat.geowave.mapreduce.splits.SplitsProviderIT;
+import mil.nga.giat.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialVectorIT;
@@ -23,9 +25,11 @@ import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
+import mil.nga.giat.geowave.test.landsat.CustomCRSLandsatIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
 import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
+import mil.nga.giat.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
 import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
@@ -53,9 +57,12 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
 	LandsatIT.class,
+	CustomCRSLandsatIT.class,
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
+	GeoWaveBasicCustomCRSRasterIT.class,
 	KDERasterResizeIT.class,
+	CustomCRSKDERasterResizeIT.class,
 	BulkIngestInputGenerationIT.class,
 	GeoWaveNNIT.class,
 	AttributesSubsetQueryIT.class,
@@ -73,7 +80,8 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveGrpcIT.class,
 	RemoteIT.class,
 	IngestIT.class,
-	FileUploadIT.class
+	FileUploadIT.class,
+	SplitsProviderIT.class
 })
 public class GeoWaveITSuite
 {

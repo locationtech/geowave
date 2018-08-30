@@ -50,19 +50,20 @@ public class CassandraUtils
 					ByteBuffer.class);
 			retVal[i].set(
 					CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-					ByteBuffer.wrap(row.getAdapterId()),
-					ByteBuffer.class);
+					row.getInternalAdapterId(),
+					Short.class);
 			retVal[i].set(
 					CassandraField.GW_VALUE_KEY.getBindMarkerName(),
 					ByteBuffer.wrap(value.getValue()),
 					ByteBuffer.class);
 			retVal[i].set(
 					CassandraField.GW_NUM_DUPLICATES_KEY.getBindMarkerName(),
-					ByteBuffer.wrap(new byte[] {
-						(byte) row.getNumberOfDuplicates()
-					}),
-					ByteBuffer.class);
+					(byte) row.getNumberOfDuplicates(),
+					byte.class);
+			// ByteBuffer.wrap(new byte[] {
+			// (byte) row.getNumberOfDuplicates()
 			i++;
+			// ByteBuffer.class);
 		}
 		return retVal;
 	}

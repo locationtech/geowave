@@ -45,16 +45,16 @@ public class DataAdapterAndIndexCache
 	// as multiple different datastores (perhaps simply different gwNamespaces)
 	// could use the same adapter and index
 	public synchronized boolean add(
-			final ByteArrayId adapterId,
+			final short internalAdapterId,
 			final String indexId ) {
 		if (cache.contains(new DataAdapterAndIndex(
-				adapterId,
+				internalAdapterId,
 				indexId))) {
 			return true;
 		}
 		else {
 			cache.add(new DataAdapterAndIndex(
-					adapterId,
+					internalAdapterId,
 					indexId));
 			return false;
 		}
@@ -76,13 +76,13 @@ public class DataAdapterAndIndexCache
 
 	private static class DataAdapterAndIndex
 	{
-		private final ByteArrayId adapterId;
+		private final short internalAdapterId;
 		private final String indexId;
 
 		public DataAdapterAndIndex(
-				final ByteArrayId adapterId,
+				final short internalAdapterId,
 				final String indexId ) {
-			this.adapterId = adapterId;
+			this.internalAdapterId = internalAdapterId;
 			this.indexId = indexId;
 		}
 
@@ -90,40 +90,23 @@ public class DataAdapterAndIndexCache
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = (prime * result) + ((adapterId == null) ? 0 : adapterId.hashCode());
-			result = (prime * result) + ((indexId == null) ? 0 : indexId.hashCode());
+			result = prime * result + ((indexId == null) ? 0 : indexId.hashCode());
+			result = prime * result + internalAdapterId;
 			return result;
 		}
 
 		@Override
 		public boolean equals(
-				final Object obj ) {
-			if (this == obj) {
-				return true;
-			}
-			if (obj == null) {
-				return false;
-			}
-			if (getClass() != obj.getClass()) {
-				return false;
-			}
-			final DataAdapterAndIndex other = (DataAdapterAndIndex) obj;
-			if (adapterId == null) {
-				if (other.adapterId != null) {
-					return false;
-				}
-			}
-			else if (!adapterId.equals(other.adapterId)) {
-				return false;
-			}
+				Object obj ) {
+			if (this == obj) return true;
+			if (obj == null) return false;
+			if (getClass() != obj.getClass()) return false;
+			DataAdapterAndIndex other = (DataAdapterAndIndex) obj;
 			if (indexId == null) {
-				if (other.indexId != null) {
-					return false;
-				}
+				if (other.indexId != null) return false;
 			}
-			else if (!indexId.equals(other.indexId)) {
-				return false;
-			}
+			else if (!indexId.equals(other.indexId)) return false;
+			if (internalAdapterId != other.internalAdapterId) return false;
 			return true;
 		}
 	}

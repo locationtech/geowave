@@ -3,6 +3,7 @@ package mil.nga.giat.geowave.core.store.base;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -15,7 +16,7 @@ class IntermediaryReadEntryInfo<T>
 	private final boolean decodeRow;
 	private final PrimaryIndex index;
 
-	private DataAdapter<T> dataAdapter;
+	private InternalDataAdapter<T> dataAdapter;
 	private boolean adapterVerified;
 
 	public IntermediaryReadEntryInfo(
@@ -36,7 +37,7 @@ class IntermediaryReadEntryInfo<T>
 	// Adapter is set either by the user or from the data
 	// If null, expect it from data, so no verify needed
 	public boolean setDataAdapter(
-			final DataAdapter<T> dataAdapter,
+			final InternalDataAdapter<T> dataAdapter,
 			final boolean fromData ) {
 		this.dataAdapter = dataAdapter;
 		this.adapterVerified = fromData ? true : (dataAdapter == null);
@@ -44,19 +45,19 @@ class IntermediaryReadEntryInfo<T>
 	}
 
 	public boolean verifyAdapter(
-			final ByteArrayId adapterId ) {
-		if ((this.dataAdapter == null) || (adapterId == null)) {
+			final short internalAdapterId ) {
+		if ((this.dataAdapter == null) || (internalAdapterId == 0)) {
 			return false;
 		}
 
-		this.adapterVerified = adapterId.equals(dataAdapter.getAdapterId());
+		this.adapterVerified = (internalAdapterId == dataAdapter.getInternalAdapterId()) ? true : false;
 
 		return this.adapterVerified;
 	}
 
 	public boolean setOrRetrieveAdapter(
-			final DataAdapter<T> adapter,
-			final ByteArrayId adapterId,
+			final InternalDataAdapter<T> adapter,
+			final short internalAdapterId,
 			final AdapterStore adapterStore ) {
 		// Verify the current data adapter
 		if (setDataAdapter(
@@ -72,7 +73,7 @@ class IntermediaryReadEntryInfo<T>
 
 		// Try to retrieve the adapter from the store
 		if (setDataAdapter(
-				(DataAdapter<T>) adapterStore.getAdapter(adapterId),
+				(InternalDataAdapter<T>) adapterStore.getAdapter(internalAdapterId),
 				true)) {
 			return true;
 		}
@@ -89,7 +90,7 @@ class IntermediaryReadEntryInfo<T>
 		return this.dataAdapter != null;
 	}
 
-	public DataAdapter<T> getDataAdapter() {
+	public InternalDataAdapter<T> getDataAdapter() {
 		return dataAdapter;
 	}
 

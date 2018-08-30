@@ -25,12 +25,23 @@ public class AdapterPersistenceEncoding extends
 		AbstractAdapterPersistenceEncoding
 {
 	public AdapterPersistenceEncoding(
-			final ByteArrayId adapterId,
+			final ByteArrayId dataId,
+			final PersistentDataset<CommonIndexValue> commonData,
+			final PersistentDataset<Object> adapterExtendedData ) {
+		this(
+				(short) -1,
+				dataId,
+				commonData,
+				adapterExtendedData);
+	}
+
+	public AdapterPersistenceEncoding(
+			final short internalAdapterId,
 			final ByteArrayId dataId,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final PersistentDataset<Object> adapterExtendedData ) {
 		super(
-				adapterId,
+				internalAdapterId,
 				dataId,
 				null,
 				null,

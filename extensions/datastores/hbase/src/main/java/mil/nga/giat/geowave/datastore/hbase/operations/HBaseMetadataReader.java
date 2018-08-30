@@ -78,7 +78,7 @@ public class HBaseMetadataReader implements
 			}
 			final Iterable<Result> rS = operations.getScannedResults(
 					scanner,
-					AbstractGeoWavePersistence.METADATA_TABLE);
+					operations.getMetadataTableName(metadataType));
 			final Iterator<Result> it = rS.iterator();
 			final Iterator<GeoWaveMetadata> transformedIt = Iterators.transform(
 					it,

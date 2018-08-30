@@ -11,6 +11,7 @@
 package mil.nga.giat.geowave.adapter.vector;
 
 import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 

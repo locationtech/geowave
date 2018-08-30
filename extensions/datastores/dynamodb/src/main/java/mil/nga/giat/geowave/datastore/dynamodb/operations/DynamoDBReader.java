@@ -28,11 +28,11 @@ import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
 import mil.nga.giat.geowave.core.store.operations.ParallelDecoder;
 import mil.nga.giat.geowave.core.store.operations.Reader;
@@ -125,15 +125,15 @@ public class DynamoDBReader<T> implements
 		startRead(
 				requests,
 				tableName,
-				true);
+				readerParams.getMaxResolutionSubsamplingPerDimension() == null);
 	}
 
 	protected void initRecordScanner() {
 		final String tableName = operations.getQualifiedTableName(recordReaderParams.getIndex().getId().getString());
 
-		final ArrayList<ByteArrayId> adapterIds = Lists.newArrayList();
+		final ArrayList<Short> adapterIds = Lists.newArrayList();
 		if ((recordReaderParams.getAdapterIds() != null) && !recordReaderParams.getAdapterIds().isEmpty()) {
-			for (final ByteArrayId adapterId : recordReaderParams.getAdapterIds()) {
+			for (final Short adapterId : recordReaderParams.getAdapterIds()) {
 				adapterIds.add(adapterId);
 			}
 		}
@@ -141,7 +141,7 @@ public class DynamoDBReader<T> implements
 		final List<QueryRequest> requests = new ArrayList<>();
 
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();
-		for (final ByteArrayId adapterId : adapterIds) {
+		for (final Short adapterId : adapterIds) {
 			final ByteArrayId startKey = range.isInfiniteStartSortKey() ? null : new ByteArrayId(
 					range.getStartSortKey());
 			final ByteArrayId stopKey = range.isInfiniteStopSortKey() ? null : new ByteArrayId(
@@ -167,19 +167,19 @@ public class DynamoDBReader<T> implements
 		Iterator<Map<String, AttributeValue>> rawIterator;
 		Predicate<DynamoDBRow> adapterIdFilter = null;
 
-		Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> rawToDynamoDBRow = new Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> () {
+		final Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> rawToDynamoDBRow = new Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> () {
 
 			@Override
 			public Iterator<DynamoDBRow> apply(
-					Iterator<Map<String, AttributeValue>> input ) {
-				return new GeoWaveRowMergingIterator<DynamoDBRow>(
+					final Iterator<Map<String, AttributeValue>> input ) {
+				return new GeoWaveRowMergingIterator<>(
 						Iterators.filter(
 								Iterators.transform(
 										input,
 										new DynamoDBRow.GuavaRowTranslationHelper()),
 								visibilityFilter));
 			}
-			
+
 		};
 
 		if (!requests.isEmpty()) {
@@ -218,15 +218,14 @@ public class DynamoDBReader<T> implements
 				// filtering by adapter ID
 				if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
 					adapterIdFilter = new Predicate<DynamoDBRow>() {
-	
+
 						@Override
 						public boolean apply(
 								final DynamoDBRow input ) {
 							return readerParams.getAdapterIds().contains(
-									new ByteArrayId(
-											input.getAdapterId()));
+											input.getInternalAdapterId());
 						}
-	
+
 					};
 				}
 			}
@@ -239,11 +238,11 @@ public class DynamoDBReader<T> implements
 					adapterIdFilter);
 		}
 		if (parallelDecode) {
-			ParallelDecoder<T> decoder = new SimpleParallelDecoder<T>(rowTransformer, Iterators.transform(rowIter, r -> (GeoWaveRow) r));
+			final ParallelDecoder<T> decoder = new SimpleParallelDecoder<>(rowTransformer, Iterators.transform(rowIter, r -> (GeoWaveRow) r));
 			try {
 				decoder.startDecode();
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				Throwables.propagate(e);
 			}
 			iterator = decoder;
@@ -275,15 +274,16 @@ public class DynamoDBReader<T> implements
 
 	private List<QueryRequest> getAdapterOnlyQueryRequests(
 			final String tableName,
-			final List<ByteArrayId> adapterIds ) {
+			final ArrayList<Short> internalAdapterIds ) {
 		final List<QueryRequest> allQueries = new ArrayList<>();
 
-		for (final ByteArrayId adapterId : adapterIds) {
+		for (final short internalAdapterId : internalAdapterIds) {
 			final QueryRequest singleAdapterQuery = new QueryRequest(
 					tableName);
 
-			final byte[] start = adapterId.getBytes();
-			final byte[] end = adapterId.getNextPrefix();
+			final byte[] start = ByteArrayUtils.shortToByteArray(internalAdapterId);
+			final byte[] end = new ByteArrayId(
+					start).getNextPrefix();
 			singleAdapterQuery.addKeyConditionsEntry(
 					DynamoDBRow.GW_RANGE_KEY,
 					new Condition().withComparisonOperator(
@@ -301,7 +301,7 @@ public class DynamoDBReader<T> implements
 			final String tableName,
 			final byte[] partitionId,
 			final ByteArrayRange sortRange,
-			final ByteArrayId adapterID ) {
+			final short internalAdapterId ) {
 		final byte[] start;
 		final byte[] end;
 		final QueryRequest query = new QueryRequest(
@@ -311,32 +311,34 @@ public class DynamoDBReader<T> implements
 						ComparisonOperator.EQ).withAttributeValueList(
 						new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
 		if (sortRange == null) {
-			start = adapterID.getBytes();
-			end = adapterID.getNextPrefix();
+			start = ByteArrayUtils.shortToByteArray(internalAdapterId);
+			end = new ByteArrayId(
+					start).getNextPrefix();
 		}
 		else if (sortRange.isSingleValue()) {
 			start = ByteArrayUtils.combineArrays(
-					adapterID.getBytes(),
+					ByteArrayUtils.shortToByteArray(internalAdapterId),
 					DynamoDBUtils.encodeSortableBase64(sortRange.getStart().getBytes()));
 			end = ByteArrayUtils.combineArrays(
-					adapterID.getBytes(),
+					ByteArrayUtils.shortToByteArray(internalAdapterId),
 					DynamoDBUtils.encodeSortableBase64(sortRange.getStart().getNextPrefix()));
 		}
 		else {
 			if (sortRange.getStart() == null) {
-				start = adapterID.getBytes();
+				start = ByteArrayUtils.shortToByteArray(internalAdapterId);
 			}
 			else {
 				start = ByteArrayUtils.combineArrays(
-						adapterID.getBytes(),
+						ByteArrayUtils.shortToByteArray(internalAdapterId),
 						DynamoDBUtils.encodeSortableBase64(sortRange.getStart().getBytes()));
 			}
 			if (sortRange.getEnd() == null) {
-				end = adapterID.getNextPrefix();
+				end = new ByteArrayId(
+						ByteArrayUtils.shortToByteArray(internalAdapterId)).getNextPrefix();
 			}
 			else {
 				end = ByteArrayUtils.combineArrays(
-						adapterID.getBytes(),
+						ByteArrayUtils.shortToByteArray(internalAdapterId),
 						DynamoDBUtils.encodeSortableBase64(sortRange.getEndAsNextPrefix().getBytes()));
 			}
 		}
@@ -352,33 +354,30 @@ public class DynamoDBReader<T> implements
 	private List<QueryRequest> addQueryRanges(
 			final String tableName,
 			final SinglePartitionQueryRanges r,
-			List<ByteArrayId> adapterIds,
-			final AdapterStore adapterStore ) {
+			Collection<Short> internalAdapterIds,
+			final PersistentAdapterStore adapterStore ) {
 		final List<QueryRequest> retVal = new ArrayList<>();
 		final ByteArrayId partitionKey = r.getPartitionKey();
 		final byte[] partitionId = ((partitionKey == null) || (partitionKey.getBytes().length == 0))
 				? DynamoDBWriter.EMPTY_PARTITION_KEY : partitionKey.getBytes();
-		if (adapterIds == null) {
-			adapterIds = Lists.newArrayList();
-		}
-		if (adapterIds.isEmpty() && (adapterStore != null)) {
-			final CloseableIterator<DataAdapter<?>> adapters = adapterStore.getAdapters();
-
-			final List<ByteArrayId> adapterIDList = Lists.newArrayList();
+		if (((internalAdapterIds == null) || internalAdapterIds.isEmpty()) && (adapterStore != null)) {
+			final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
+			internalAdapterIds = new ArrayList<>();
+			final List<Short> adapterIDList = new ArrayList<>();
 			adapters.forEachRemaining(
-					new Consumer<DataAdapter<?>>() {
+					new Consumer<InternalDataAdapter<?>>() {
 						@Override
 						public void accept(
-								final DataAdapter<?> t ) {
+								final InternalDataAdapter<?> t ) {
 							adapterIDList.add(
-									t.getAdapterId());
+									t.getInternalAdapterId());
 						}
 					});
-			adapterIds.addAll(
+			internalAdapterIds.addAll(
 					adapterIDList);
 		}
 
-		for (final ByteArrayId adapterId : adapterIds) {
+		for (final Short internalAdapterId : internalAdapterIds) {
 			final Collection<ByteArrayRange> sortKeyRanges = r.getSortKeyRanges();
 			if ((sortKeyRanges != null) && !sortKeyRanges.isEmpty()) {
 				sortKeyRanges.forEach(
@@ -387,7 +386,7 @@ public class DynamoDBReader<T> implements
 										tableName,
 										partitionId,
 										sortKeyRange,
-										adapterId))));
+										internalAdapterId))));
 			}
 			else {
 				retVal.add(
@@ -395,7 +394,7 @@ public class DynamoDBReader<T> implements
 								tableName,
 								partitionId,
 								null,
-								adapterId));
+								internalAdapterId));
 			}
 		}
 		return retVal;

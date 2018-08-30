@@ -36,7 +36,7 @@ import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
@@ -88,7 +88,7 @@ public class AggregationEndpoint extends
 			final RpcCallback<AggregationProtosServer.AggregationResponse> done ) {
 		FilterList filterList = null;
 		DataAdapter dataAdapter = null;
-		ByteArrayId adapterId = null;
+		Short internalAdapterId = null;
 		AggregationProtosServer.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
 
@@ -196,12 +196,10 @@ public class AggregationEndpoint extends
 			if (request.hasAdapter()) {
 				final byte[] adapterBytes = request.getAdapter().toByteArray();
 				dataAdapter = (DataAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
-				adapterId = dataAdapter.getAdapterId();
 			}
-			else if (request.hasAdapterId()) {
-				final byte[] adapterIdBytes = request.getAdapterId().toByteArray();
-				adapterId = new ByteArrayId(
-						adapterIdBytes);
+			else if (request.hasInternalAdapterId()) {
+				final byte[] adapterIdBytes = request.getInternalAdapterId().toByteArray();
+				internalAdapterId = ByteArrayUtils.byteArrayToShort(adapterIdBytes);
 			}
 			final String[] authorizations;
 			if (request.hasVisLabels()) {
@@ -222,7 +220,7 @@ public class AggregationEndpoint extends
 						aggregation,
 						filterList,
 						dataAdapter,
-						adapterId,
+						internalAdapterId,
 						hdFilter,
 						request.getBlockCaching(),
 						request.getCacheSize(),
@@ -257,7 +255,7 @@ public class AggregationEndpoint extends
 			final Aggregation aggregation,
 			final Filter filter,
 			final DataAdapter dataAdapter,
-			final ByteArrayId adapterId,
+			final Short internalAdapterId,
 			final HBaseDistributableFilter hdFilter,
 			final boolean blockCaching,
 			final int scanCacheSize,
@@ -275,8 +273,8 @@ public class AggregationEndpoint extends
 			scan.setFilter(filter);
 		}
 
-		if (adapterId != null) {
-			scan.addFamily(adapterId.getBytes());
+		if (internalAdapterId != null) {
+			scan.addFamily(StringUtils.stringToBinary(ByteArrayUtils.shortToString(internalAdapterId)));
 		}
 
 		if (authorizations != null) {

@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytic.spark;
 
 import java.io.Serializable;
 
+import mil.nga.giat.geowave.analytic.spark.sparksql.GeoWaveSpatialEncoders;
 import org.apache.spark.SparkConf;
 import org.apache.spark.sql.SparkSession;
 import org.apache.spark.sql.SparkSession.Builder;
@@ -46,7 +47,9 @@ public class GeoWaveSparkConf implements
 	// Create a default SparkSession with GeoWave settings applied to config.
 	public static SparkSession createDefaultSession() {
 		SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
-		return createDefaultSession(defaultConfig);
+		return GeoWaveSparkConf.internalCreateSession(
+				defaultConfig,
+				null);
 	}
 
 	// Create a SparkSession with GeoWave settings and then user configuration
@@ -54,9 +57,9 @@ public class GeoWaveSparkConf implements
 	public static SparkSession createDefaultSession(
 			final SparkConf addonOptions ) {
 		SparkConf defaultConfig = GeoWaveSparkConf.getDefaultConfig();
-		return SparkSession.builder().config(
-				defaultConfig).config(
-				addonOptions).getOrCreate();
+		return GeoWaveSparkConf.internalCreateSession(
+				defaultConfig,
+				addonOptions);
 	}
 
 	// Create a SparkSession from default config with additional options, if
@@ -73,20 +76,16 @@ public class GeoWaveSparkConf implements
 			master = "yarn";
 		}
 
-		// Create initial SessionBuilder from default Configuration.
-		Builder builder = SparkSession.builder().config(
-				defaultConfig);
-
 		// Apply user options if set, correctly handling host for yarn.
 		if (appName != null) {
-			builder = builder.appName(appName);
+			defaultConfig = defaultConfig.setAppName(appName);
 		}
 		if (master != null) {
-			builder = builder.master(master);
+			defaultConfig = defaultConfig.setMaster(master);
 		}
 		if (host != null) {
 			if (master != null && master != "yarn") {
-				builder = builder.config(
+				defaultConfig = defaultConfig.set(
 						"spark.driver.host",
 						host);
 			}
@@ -97,12 +96,33 @@ public class GeoWaveSparkConf implements
 		}
 
 		if (jars != null) {
-			builder = builder.config(
+			defaultConfig = defaultConfig.set(
 					"spark.jars",
 					jars);
 		}
 
 		// Finally return the session from builder
+		return GeoWaveSparkConf.internalCreateSession(
+				defaultConfig,
+				null);
+	}
+
+	private static SparkSession internalCreateSession(
+			SparkConf conf,
+			SparkConf addonOptions ) {
+
+		// Create initial SessionBuilder from default Configuration.
+		Builder builder = SparkSession.builder().config(
+				conf);
+
+		// Ensure SpatialEncoders and UDTs are registered at each session
+		// creation.
+		GeoWaveSpatialEncoders.registerUDTs();
+
+		if (addonOptions != null) {
+			builder = builder.config(addonOptions);
+		}
+
 		return builder.getOrCreate();
 	}
 

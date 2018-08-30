@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -28,16 +28,16 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.analytic.AnalyticItemWrapperFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.StringUtils;
-import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.data.IndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -59,15 +59,15 @@ import mil.nga.giat.geowave.core.store.query.QueryOptions;
 /**
  * Find the max change in distortion between some k and k-1, picking the value k
  * associated with that change.
- * 
+ *
  * In a multi-group setting, each group may have a different optimal k. Thus,
  * the optimal batch may be different for each group. Each batch is associated
  * with a different value k.
- * 
+ *
  * Choose the appropriate batch for each group. Then change the batch identifier
  * for group centroids to a final provided single batch identifier ( parent
  * batch ).
- * 
+ *
  */
 public class DistortionGroupManagement
 {
@@ -80,17 +80,25 @@ public class DistortionGroupManagement
 
 	final DataStore dataStore;
 	final IndexStore indexStore;
-	final AdapterStore adapterStore;
+	final PersistentAdapterStore adapterStore;
+	final InternalAdapterStore internalAdapterStore;
 
 	public DistortionGroupManagement(
-			final DataStore dataStore,
-			final IndexStore indexStore,
-			final AdapterStore adapterStore ) {
-		this.dataStore = dataStore;
-		this.indexStore = indexStore;
-		this.adapterStore = adapterStore;
-		indexStore.addIndex(DISTORTIONS_INDEX);
-		adapterStore.addAdapter(new DistortionDataAdapter());
+			final DataStorePluginOptions dataStoreOptions ) {
+		dataStore = dataStoreOptions.createDataStore();
+		indexStore = dataStoreOptions.createIndexStore();
+		adapterStore = dataStoreOptions.createAdapterStore();
+		internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
+		try {
+			dataStore.createWriter(
+					new DistortionDataAdapter(),
+					DISTORTIONS_INDEX).close();
+		}
+		catch (final IOException e) {
+			LOGGER.warn(
+					"Unalbe to write adapter and index.",
+					e);
+		}
 	}
 
 	public static class BatchIdFilter implements
@@ -150,12 +158,6 @@ public class DistortionGroupManagement
 		}
 
 		@Override
-		public boolean isSupported(
-				final Index<?, ?> index ) {
-			return index instanceof NullIndex;
-		}
-
-		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
 				final PrimaryIndex index ) {
 			return Collections.emptyList();
@@ -164,7 +166,7 @@ public class DistortionGroupManagement
 	}
 
 	/**
-	 * 
+	 *
 	 * @param ops
 	 * @param distortationTableName
 	 *            the name of the table holding the distortions
@@ -216,6 +218,8 @@ public class DistortionGroupManagement
 					adapterStore,
 					itemWrapperFactory,
 					dataTypeId,
+					internalAdapterStore.getInternalAdapterId(new ByteArrayId(
+							dataTypeId)),
 					indexId,
 					batchId,
 					level);
@@ -415,7 +419,6 @@ public class DistortionGroupManagement
 					DISTORTION_FIELD_ID,
 					entry.getDistortionValue());
 			return new AdapterPersistenceEncoding(
-					getAdapterId(),
 					entry.getDataId(),
 					new PersistentDataset<CommonIndexValue>(),
 					new PersistentDataset<Object>(
@@ -497,7 +500,7 @@ public class DistortionGroupManagement
 
 		@Override
 		public void init(
-				PrimaryIndex... indices ) {
+				final PrimaryIndex... indices ) {
 			// TODO Auto-generated method stub
 
 		}

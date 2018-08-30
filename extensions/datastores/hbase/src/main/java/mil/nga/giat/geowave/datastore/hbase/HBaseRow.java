@@ -60,8 +60,8 @@ public class HBaseRow implements
 	}
 
 	@Override
-	public byte[] getAdapterId() {
-		return key.getAdapterId();
+	public short getInternalAdapterId() {
+		return key.getInternalAdapterId();
 	}
 
 	@Override

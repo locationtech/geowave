@@ -39,18 +39,6 @@ public interface Query
 			PrimaryIndex index );
 
 	/**
-	 * This is useful to determine what indices this query supports. If an index
-	 * is not supported the query will not be run on it and no data will be
-	 * returned from that index.
-	 *
-	 * @param index
-	 *            The index to check if the query will support.
-	 * @return A flag indicating if this query supports the index
-	 */
-	public boolean isSupported(
-			Index<?, ?> index );
-
-	/**
 	 * Return a set of constraints to apply to the primary index based on the
 	 * indexing strategy used. The ordering of dimensions within the index
 	 * stategy must match the order of dimensions in the numeric data returned

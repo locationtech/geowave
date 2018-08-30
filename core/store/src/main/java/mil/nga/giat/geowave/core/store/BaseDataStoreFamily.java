@@ -1,11 +1,14 @@
 package mil.nga.giat.geowave.core.store;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.metadata.AdapterIndexMappingStoreFactory;
+import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.AdapterStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreFactory;
 import mil.nga.giat.geowave.core.store.metadata.IndexStoreFactory;
@@ -65,7 +68,7 @@ public class BaseDataStoreFamily implements
 	}
 
 	@Override
-	public GenericStoreFactory<AdapterStore> getAdapterStoreFactory() {
+	public GenericStoreFactory<PersistentAdapterStore> getAdapterStoreFactory() {
 		return new AdapterStoreFactory(
 				typeName,
 				description,
@@ -91,6 +94,14 @@ public class BaseDataStoreFamily implements
 	@Override
 	public GenericStoreFactory<DataStoreOperations> getDataStoreOperationsFactory() {
 		return new DataStoreOperationsFactory(
+				typeName,
+				description,
+				helper);
+	}
+
+	@Override
+	public GenericStoreFactory<InternalAdapterStore> getInternalAdapterStoreFactory() {
+		return new InternalAdapterStoreFactory(
 				typeName,
 				description,
 				helper);

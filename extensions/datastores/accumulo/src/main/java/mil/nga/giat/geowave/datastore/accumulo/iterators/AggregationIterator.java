@@ -11,12 +11,9 @@
 package mil.nga.giat.geowave.datastore.accumulo.iterators;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
-import java.util.TreeSet;
 
 import org.apache.accumulo.core.data.ByteSequence;
 import org.apache.accumulo.core.data.Key;
@@ -31,13 +28,11 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.index.NumericIndexStrategy;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
@@ -45,8 +40,6 @@ import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.aggregate.Aggregation;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
-import mil.nga.giat.geowave.datastore.accumulo.util.AccumuloUtils;
 
 public class AggregationIterator extends
 		Filter
@@ -62,7 +55,7 @@ public class AggregationIterator extends
 	public static final int AGGREGATION_QUERY_ITERATOR_PRIORITY = 25;
 	protected QueryFilterIterator queryFilterIterator;
 	private Aggregation aggregationFunction;
-	private DataAdapter adapter;
+	private InternalDataAdapter adapter;
 	private boolean aggregationReturned = false;
 	private Text startRowOfAggregation = null;
 	private final Text currentRow = new Text();
@@ -119,7 +112,6 @@ public class AggregationIterator extends
 			return AggregationIterator.super.deepCopy(env);
 		}
 	};
-	private TreeSet<Range> ranges;
 
 	@Override
 	public boolean accept(
@@ -168,8 +160,8 @@ public class AggregationIterator extends
 				startRowOfAggregation = currentRow;
 			}
 		}
-		else if (persistenceEncoding.getAdapterId().getString().equals(
-				adapter.getAdapterId().getString())) {
+		else if (((Short) (persistenceEncoding.getInternalAdapterId()))
+				.equals((Short) (adapter.getInternalAdapterId()))) {
 			final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
 			if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 				((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -183,7 +175,7 @@ public class AggregationIterator extends
 			}
 
 			final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
-					persistenceEncoding.getAdapterId(),
+					persistenceEncoding.getInternalAdapterId(),
 					persistenceEncoding.getDataId(),
 					persistenceEncoding.getInsertionPartitionKey(),
 					persistenceEncoding.getInsertionSortKey(),
@@ -227,42 +219,8 @@ public class AggregationIterator extends
 			if (options.containsKey(ADAPTER_OPTION_NAME)) {
 				final String adapterStr = options.get(ADAPTER_OPTION_NAME);
 				final byte[] adapterBytes = ByteArrayUtils.byteArrayFromString(adapterStr);
-				adapter = (DataAdapter) PersistenceUtils.fromBinary(adapterBytes);
+				adapter = (InternalDataAdapter) PersistenceUtils.fromBinary(adapterBytes);
 			}
-
-			// now go from index strategy, constraints, and max decomp to a set
-			// of accumulo ranges
-
-			final String indexStrategyStr = options.get(INDEX_STRATEGY_OPTION_NAME);
-			final byte[] indexStrategyBytes = ByteArrayUtils.byteArrayFromString(indexStrategyStr);
-			final NumericIndexStrategy strategy = (NumericIndexStrategy) PersistenceUtils
-					.fromBinary(indexStrategyBytes);
-
-			final String contraintsStr = options.get(CONSTRAINTS_OPTION_NAME);
-			final List constraints;
-			if (contraintsStr == null) {
-				constraints = null;
-			}
-			else {
-				final byte[] constraintsBytes = ByteArrayUtils.byteArrayFromString(contraintsStr);
-				constraints = PersistenceUtils.fromBinaryAsList(constraintsBytes);
-			}
-			final String maxDecomp = options.get(MAX_DECOMPOSITION_OPTION_NAME);
-			Integer maxDecompInt = BaseDataStoreUtils.MAX_RANGE_DECOMPOSITION;
-			if (maxDecomp != null) {
-				try {
-					maxDecompInt = Integer.parseInt(maxDecomp);
-				}
-				catch (final Exception e) {
-					LOGGER.warn(
-							"Unable to parse '" + MAX_DECOMPOSITION_OPTION_NAME + "' as integer",
-							e);
-				}
-			}
-			ranges = AccumuloUtils.byteArrayRangesToAccumuloRanges(DataStoreUtils.constraintsToQueryRanges(
-					constraints,
-					strategy,
-					maxDecompInt).getCompositeQueryRanges());
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(
@@ -456,45 +414,9 @@ public class AggregationIterator extends
 		aggregationReturned = false;
 		aggregationFunction.clearResult();
 		startRowOfAggregation = null;
-		Collection<Range> internalRanges = new ArrayList<Range>();
-		if (seekRange.isInfiniteStartKey()) {
-			if (seekRange.isInfiniteStopKey()) {
-				internalRanges = ranges;
-			}
-			else {
-				findEnd(
-						ranges.iterator(),
-						internalRanges,
-						seekRange);
-			}
-		}
-		else if (seekRange.isInfiniteStopKey()) {
-			final Iterator<Range> rangeIt = ranges.iterator();
-			findStart(
-					rangeIt,
-					internalRanges,
-					seekRange);
-			while (rangeIt.hasNext()) {
-				internalRanges.add(rangeIt.next());
-			}
-		}
-		else {
-			final Iterator<Range> rangeIt = ranges.iterator();
-			findStart(
-					rangeIt,
-					internalRanges,
-					seekRange);
-			findEnd(
-					rangeIt,
-					internalRanges,
-					seekRange);
-		}
-		final Iterator<Range> rangeIt = internalRanges.iterator();
-		while (rangeIt.hasNext()) {
-			parent.seek(
-					rangeIt.next(),
-					columnFamilies,
-					inclusive);
-		}
+		parent.seek(
+				seekRange,
+				columnFamilies,
+				inclusive);
 	}
 }

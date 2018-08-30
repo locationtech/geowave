@@ -19,7 +19,6 @@ import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.opengis.feature.simple.SimpleFeature;
@@ -63,7 +62,7 @@ public class RemoteIT
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB
-	})
+	}, namespace = TestUtils.TEST_NAMESPACE)
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private static long startMillis;
@@ -129,6 +128,7 @@ public class RemoteIT
 	@After
 	public void cleanupWorkspace() {
 		configServiceClient.removeStore(store_name);
+		TestUtils.deleteAll(dataStoreOptions);
 	}
 
 	@Test

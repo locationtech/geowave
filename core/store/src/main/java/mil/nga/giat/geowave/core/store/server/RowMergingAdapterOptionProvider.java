@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -27,18 +27,23 @@ public class RowMergingAdapterOptionProvider implements
 	public static final String ADAPTER_IDS_OPTION = "adapters";
 
 	private final RowMergingDataAdapter<?, ?> adapter;
+	private final short internalAdapterId;
 
 	public RowMergingAdapterOptionProvider(
+			final short internalAdapterId,
 			final RowMergingDataAdapter<?, ?> adapter ) {
+		this.internalAdapterId = internalAdapterId;
 		this.adapter = adapter;
 	}
 
 	@Override
 	public Map<String, String> getOptions(
 			final Map<String, String> existingOptions ) {
-		final Map<String, String> newOptions = adapter.getOptions(existingOptions);
+		final Map<String, String> newOptions = adapter.getOptions(
+				internalAdapterId,
+				existingOptions);
 
-		String nextAdapterIdsValue = adapter.getAdapterId().getString();
+		String nextAdapterIdsValue = ByteArrayUtils.shortToString(internalAdapterId);
 
 		if ((existingOptions != null) && existingOptions.containsKey(ADAPTER_IDS_OPTION)) {
 			final String existingAdapterIds = existingOptions.get(ADAPTER_IDS_OPTION);

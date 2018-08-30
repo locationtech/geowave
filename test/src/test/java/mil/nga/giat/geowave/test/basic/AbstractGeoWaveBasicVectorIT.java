@@ -14,11 +14,14 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.commons.math.util.MathUtils;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -42,11 +45,17 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.util.FeatureDataUtils;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.statistics.CountDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
@@ -56,6 +65,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.PartitionStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
+import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
@@ -65,6 +75,7 @@ import mil.nga.giat.geowave.core.store.query.DataIdQuery;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.Query;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
+import mil.nga.giat.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountAggregation;
 import mil.nga.giat.geowave.core.store.query.aggregate.CountResult;
 import mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestPlugin;
@@ -118,7 +129,8 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				expectedResultsResources,
 				index,
 				queryDescription,
-				null);
+				null,
+				false);
 	}
 
 	protected void testQuery(
@@ -126,7 +138,8 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 			final URL[] expectedResultsResources,
 			final PrimaryIndex index,
 			final String queryDescription,
-			final CoordinateReferenceSystem crs )
+			final CoordinateReferenceSystem crs,
+			final boolean countDuplicates )
 			throws Exception {
 		LOGGER.info("querying " + queryDescription);
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
@@ -143,7 +156,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 					expectedResultsResources,
 					crs);
 			int totalResults = 0;
-			final List<Long> actualCentroids = new ArrayList<Long>();
+			final List<Long> actualCentroids = new ArrayList<>();
 			while (actualResults.hasNext()) {
 				final Object obj = actualResults.next();
 				if (obj instanceof SimpleFeature) {
@@ -173,17 +186,32 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 					expectedResults.count,
 					totalResults);
 
-			final AdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
+			final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
 			long statisticsResult = 0;
-			try (CloseableIterator<DataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
+			int duplicates = 0;
+			try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 				while (adapterIt.hasNext()) {
 					final QueryOptions queryOptions = (index == null) ? new QueryOptions() : new QueryOptions(
 							index);
-					final DataAdapter<?> adapter = adapterIt.next();
+					final InternalDataAdapter<?> internalDataAdapter = adapterIt.next();
+					if (countDuplicates) {
+						queryOptions.setAggregation(
+								new DuplicateCountAggregation(),
+								internalDataAdapter);
+						queryOptions.setAdapter(internalDataAdapter);
+						try (final CloseableIterator<?> countResult = geowaveStore.query(
+								queryOptions,
+								query)) {
+							if (countResult.hasNext()) {
+								final Object result = countResult.next();
+								duplicates += ((CountResult) result).getCount();
+							}
+						}
+					}
 					queryOptions.setAggregation(
 							new CountAggregation(),
-							adapter);
-					queryOptions.setAdapter(adapter);
+							internalDataAdapter.getAdapter());
+					queryOptions.setAdapter(internalDataAdapter.getAdapter());
 					try (final CloseableIterator<?> countResult = geowaveStore.query(
 							queryOptions,
 							query)) {
@@ -197,11 +225,124 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 					}
 				}
 			}
-
 			Assert.assertEquals(
 					expectedResults.count,
-					statisticsResult);
+					statisticsResult - duplicates);
 		}
+	}
+
+	public static class DuplicateCountAggregation extends
+			CountAggregation
+	{
+		private final Set<ByteArrayId> visitedDataIds = new HashSet<>();
+
+		@Override
+		public void aggregate(
+				final CommonIndexedPersistenceEncoding entry ) {
+			if (!entry.isDuplicated()) {
+				return;
+			}
+			if (visitedDataIds.contains(entry.getDataId())) {
+				// only aggregate when you find a duplicate entry
+				super.aggregate(entry);
+			}
+			visitedDataIds.add(entry.getDataId());
+		}
+
+		@Override
+		public void clearResult() {
+			super.clearResult();
+			visitedDataIds.clear();
+		}
+
+		@Override
+		public CountResult getResult() {
+			CountResult res = super.getResult();
+			if (res == null) {
+				// return non-null because the visited Data IDs may generate
+				// duplicates on merge
+				return new DuplicateCount(
+						0,
+						visitedDataIds);
+			}
+
+			return new DuplicateCount(
+					res.getCount(),
+					visitedDataIds);
+		}
+
+	}
+
+	public static class DuplicateCount extends
+			CountResult
+	{
+		private Set<ByteArrayId> visitedDataIds = new HashSet<>();
+
+		public DuplicateCount() {
+			super();
+		}
+
+		public DuplicateCount(
+				final long value,
+				final Set<ByteArrayId> visitedDataIds ) {
+			super(
+					value);
+			this.visitedDataIds = visitedDataIds;
+		}
+
+		@Override
+		public byte[] toBinary() {
+			int bufferSize = 12;
+			for (final ByteArrayId visited : visitedDataIds) {
+				bufferSize += 4;
+				bufferSize += visited.getBytes().length;
+			}
+			final ByteBuffer buffer = ByteBuffer.allocate(bufferSize);
+			buffer.putLong(count);
+			buffer.putInt(visitedDataIds.size());
+
+			for (final ByteArrayId visited : visitedDataIds) {
+				buffer.putInt(visited.getBytes().length);
+				buffer.put(visited.getBytes());
+			}
+			return buffer.array();
+		}
+
+		@Override
+		public void fromBinary(
+				final byte[] bytes ) {
+			final ByteBuffer buffer = ByteBuffer.wrap(bytes);
+			count = buffer.getLong();
+			final int size = buffer.getInt();
+			visitedDataIds = new HashSet<>(
+					size);
+			for (int i = 0; i < size; i++) {
+				final byte[] dataId = new byte[buffer.getInt()];
+				buffer.get(dataId);
+				visitedDataIds.add(new ByteArrayId(
+						dataId));
+			}
+		}
+
+		@Override
+		public void merge(
+				final Mergeable result ) {
+			if (result instanceof DuplicateCount) {
+				int dupes = 0;
+				for (final ByteArrayId d : visitedDataIds) {
+					if (((DuplicateCount) result).visitedDataIds.contains(d)) {
+						dupes++;
+					}
+				}
+				visitedDataIds.addAll(((DuplicateCount) result).visitedDataIds);
+				count += ((DuplicateCount) result).count;
+				// this is very important, it covers counting duplicates across
+				// regions, which is the inadequacy of the aggregation in the
+				// first place when there are duplicates
+				count += dupes;
+			}
+		}
+
 	}
 
 	protected void testDeleteDataId(
@@ -284,23 +425,25 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		final mil.nga.giat.geowave.core.store.DataStore geowaveStore = getDataStorePluginOptions().createDataStore();
 
 		// Retrieve the feature adapter for the CQL query generator
-		final AdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
+		PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
 
-		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-		final GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next();
-		it.close();
+		try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+			while (it.hasNext()) {
+				GeotoolsFeatureDataAdapter adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
 
-		// Create the CQL query
-		final Query query = CQLQuery.createOptimalQuery(
-				cqlStr,
-				adapter,
-				null,
-				null);
+				// Create the CQL query
+				final Query query = CQLQuery.createOptimalQuery(
+						cqlStr,
+						adapter,
+						null,
+						null);
 
-		deleteInternal(
-				geowaveStore,
-				index,
-				query);
+				deleteInternal(
+						geowaveStore,
+						index,
+						query);
+			}
+		}
 	}
 
 	protected void deleteInternal(
@@ -330,7 +473,6 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				new QueryOptions(
 						index),
 				query);
-
 		int expectedFeaturesToDelete = 0;
 		while (queryResults.hasNext()) {
 			final Object obj = queryResults.next();
@@ -429,9 +571,10 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		// ingested/ in a different order and will not match.
 		final LocalFileIngestPlugin<SimpleFeature> localFileIngest = new GeoToolsVectorDataStoreIngestPlugin(
 				Filter.INCLUDE);
-		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<ByteArrayId, StatisticsCache>();
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
+		final Map<ByteArrayId, StatisticsCache> statsCache = new HashMap<>();
+		final Collection<ByteArrayId> indexIds = new ArrayList<>();
 		indexIds.add(index.getId());
+		InternalAdapterStore internalAdapterStore = getDataStorePluginOptions().createInternalAdapterStore();
 		final MathTransform mathTransform = TestUtils.transformFromCrs(crs);
 		for (final URL inputFile : inputFiles) {
 			LOGGER.warn("Calculating stats from file '" + inputFile.getPath() + "' - this may take several minutes...");
@@ -439,7 +582,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 					inputFile,
 					indexIds,
 					null)) {
-				final AdapterStore adapterCache = new MemoryAdapterStore(
+				final TransientAdapterStore adapterCache = new MemoryAdapterStore(
 						localFileIngest.getDataAdapters(null));
 				while (dataIterator.hasNext()) {
 					final GeoWaveData<SimpleFeature> data = dataIterator.next();
@@ -454,7 +597,8 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 						StatisticsCache cachedValues = statsCache.get(adapter.getAdapterId());
 						if (cachedValues == null) {
 							cachedValues = new StatisticsCache(
-									(StatisticsProvider<SimpleFeature>) adapter);
+									(StatisticsProvider<SimpleFeature>) adapter,
+									internalAdapterStore.getInternalAdapterId(adapter.getAdapterId()));
 							statsCache.put(
 									adapter.getAdapterId(),
 									cachedValues);
@@ -476,15 +620,16 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 			}
 		}
 		final DataStatisticsStore statsStore = getDataStorePluginOptions().createDataStatisticsStore();
-		final AdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
-		try (CloseableIterator<DataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
+		final PersistentAdapterStore adapterStore = getDataStorePluginOptions().createAdapterStore();
+		try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
-				final FeatureDataAdapter adapter = (FeatureDataAdapter) adapterIterator.next();
+				final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
+				final FeatureDataAdapter adapter = (FeatureDataAdapter) internalDataAdapter.getAdapter();
 				final StatisticsCache cachedValue = statsCache.get(adapter.getAdapterId());
 				Assert.assertNotNull(cachedValue);
 				final Collection<DataStatistics<SimpleFeature>> expectedStats = cachedValue.statsCache.values();
-				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore.getDataStatistics(adapter
-						.getAdapterId())) {
+				try (CloseableIterator<DataStatistics<?>> statsIterator = statsStore
+						.getDataStatistics(internalDataAdapter.getInternalAdapterId())) {
 					int statsCount = 0;
 					while (statsIterator.hasNext()) {
 						final DataStatistics<?> nextStats = statsIterator.next();
@@ -505,7 +650,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				}
 				for (final DataStatistics<SimpleFeature> expectedStat : expectedStats) {
 					final DataStatistics<?> actualStats = statsStore.getDataStatistics(
-							expectedStat.getDataAdapterId(),
+							internalDataAdapter.getInternalAdapterId(),
 							expectedStat.getStatisticsId());
 
 					// Only test RANGE and COUNT in the multithreaded case. None
@@ -535,7 +680,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				// the bounding box
 				final BoundingBoxDataStatistics<?> bboxStat = (BoundingBoxDataStatistics<SimpleFeature>) statsStore
 						.getDataStatistics(
-								adapter.getAdapterId(),
+								internalDataAdapter.getInternalAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
 										.getFeatureType()
 										.getGeometryDescriptor()
@@ -565,7 +710,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				Assert.assertTrue(
 						"Unable to remove individual stat",
 						statsStore.removeStatistics(
-								adapter.getAdapterId(),
+								internalDataAdapter.getInternalAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
 										.getFeatureType()
 										.getGeometryDescriptor()
@@ -574,7 +719,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				Assert.assertNull(
 						"Individual stat was not successfully removed",
 						statsStore.getDataStatistics(
-								adapter.getAdapterId(),
+								internalDataAdapter.getInternalAdapterId(),
 								FeatureBoundingBoxStatistics.composeId(adapter
 										.getFeatureType()
 										.getGeometryDescriptor()
@@ -599,15 +744,17 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		private double minY = Double.MAX_VALUE;;
 		private double maxX = -Double.MAX_VALUE;;
 		private double maxY = -Double.MAX_VALUE;;
-		protected final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+		protected final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = new HashMap<>();
 
 		// otherwise use the statistics interface to calculate every statistic
 		// and compare results to what is available in the statistics data store
 		private StatisticsCache(
-				final StatisticsProvider<SimpleFeature> dataAdapter ) {
+				final StatisticsProvider<SimpleFeature> dataAdapter,
+				short internalAdapterId ) {
 			final ByteArrayId[] statsIds = dataAdapter.getSupportedStatisticsTypes();
 			for (final ByteArrayId statsId : statsIds) {
 				final DataStatistics<SimpleFeature> stats = dataAdapter.createDataStatistics(statsId);
+				stats.setInternalDataAdapterId(internalAdapterId);
 				statsCache.put(
 						statsId,
 						stats);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -13,21 +13,21 @@ package mil.nga.giat.geowave.adapter.vector.stats;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
+import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.opengis.feature.simple.SimpleFeature;
 
 import com.clearspring.analytics.stream.cardinality.CardinalityMergeException;
 import com.clearspring.analytics.stream.cardinality.HyperLogLogPlus;
 
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.Mergeable;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import net.sf.json.JSONException;
+import net.sf.json.JSONObject;
 
 /**
  * Hyperloglog provides an estimated cardinality of the number of unique values
@@ -50,6 +50,15 @@ public class FeatureHyperLogLogStatistics extends
 		super();
 	}
 
+	public FeatureHyperLogLogStatistics(
+			final String statisticsId,
+			final int precision ) {
+		this(
+				null,
+				statisticsId,
+				precision);
+	}
+
 	/**
 	 *
 	 * @param dataAdapterId
@@ -59,11 +68,11 @@ public class FeatureHyperLogLogStatistics extends
 	 *            value per distinct value. 1 <= p <= 32
 	 */
 	public FeatureHyperLogLogStatistics(
-			final ByteArrayId dataAdapterId,
+			final Short internalDataAdapterId,
 			final String statisticsId,
 			final int precision ) {
 		super(
-				dataAdapterId,
+				internalDataAdapterId,
 				composeId(
 						STATS_TYPE.getString(),
 						statisticsId));
@@ -87,7 +96,7 @@ public class FeatureHyperLogLogStatistics extends
 	@Override
 	public DataStatistics<SimpleFeature> duplicate() {
 		return new FeatureHyperLogLogStatistics(
-				dataAdapterId,
+				internalDataAdapterId,
 				getFieldName(),
 				precision);
 	}
@@ -162,8 +171,8 @@ public class FeatureHyperLogLogStatistics extends
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"hyperloglog[adapter=").append(
-				super.getDataAdapterId().getString());
+				"hyperloglog[internalDataAdapterId=").append(
+				super.getInternalDataAdapterId());
 		buffer.append(
 				", field=").append(
 				getFieldName());
@@ -178,12 +187,17 @@ public class FeatureHyperLogLogStatistics extends
 	 * Convert FeatureCountMinSketch statistics to a JSON object
 	 */
 
-	public JSONObject toJSONObject()
+	@Override
+	public JSONObject toJSONObject(
+			final InternalAdapterStore store )
 			throws JSONException {
-		JSONObject jo = new JSONObject();
+		final JSONObject jo = new JSONObject();
 		jo.put(
 				"type",
 				STATS_TYPE.getString());
+		jo.put(
+				"dataAdapterID",
+				store.getAdapterId(internalDataAdapterId));
 
 		jo.put(
 				"statisticsID",
@@ -234,10 +248,10 @@ public class FeatureHyperLogLogStatistics extends
 
 		@Override
 		public DataStatistics<SimpleFeature> create(
-				final ByteArrayId dataAdapterId,
+				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureHyperLogLogStatistics(
-					dataAdapterId,
+					internalDataAdapterId,
 					fieldName,
 					precision);
 		}

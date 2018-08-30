@@ -19,6 +19,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 
 import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.mapreduce.GeoWaveWritableInputReducer;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
 import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -31,6 +32,7 @@ public class StoreCopyReducer extends
 		GeoWaveWritableInputReducer<GeoWaveOutputKey, Object>
 {
 	private AdapterIndexMappingStore store;
+	private InternalAdapterStore internalAdapterStore;
 
 	@Override
 	protected void setup(
@@ -39,6 +41,7 @@ public class StoreCopyReducer extends
 			InterruptedException {
 		super.setup(context);
 		store = GeoWaveOutputFormat.getJobContextAdapterIndexMappingStore(context);
+		internalAdapterStore = GeoWaveOutputFormat.getJobContextInternalAdapterStore(context);
 	}
 
 	@Override
@@ -50,10 +53,10 @@ public class StoreCopyReducer extends
 			InterruptedException {
 		final Iterator<Object> objects = values.iterator();
 		while (objects.hasNext()) {
-			final AdapterToIndexMapping mapping = store.getIndicesForAdapter(key.getAdapterId());
+			final AdapterToIndexMapping mapping = store.getIndicesForAdapter(key.getInternalAdapterId());
 			context.write(
 					new GeoWaveOutputKey<>(
-							mapping.getAdapterId(),
+							internalAdapterStore.getAdapterId(mapping.getInternalAdapterId()),
 							Arrays.asList(mapping.getIndexIds())),
 					objects.next());
 		}

@@ -19,14 +19,14 @@ public class HBaseMetadataDeleter implements
 	private final static Logger LOGGER = Logger.getLogger(HBaseMetadataDeleter.class);
 
 	private final HBaseOperations operations;
-	private final String metadataTypeName;
+	private final MetadataType metadataType;
 
 	public HBaseMetadataDeleter(
 			final HBaseOperations operations,
 			final MetadataType metadataType ) {
 		super();
 		this.operations = operations;
-		metadataTypeName = metadataType.name();
+		this.metadataType = metadataType;
 	}
 
 	@Override
@@ -38,7 +38,7 @@ public class HBaseMetadataDeleter implements
 			final MetadataQuery query ) {
 		// the nature of metadata deleter is that primary ID is always
 		// well-defined and it is deleting a single entry at a time
-		TableName tableName = operations.getTableName(AbstractGeoWavePersistence.METADATA_TABLE);
+		TableName tableName = operations.getTableName(operations.getMetadataTableName(metadataType));
 
 		try {
 			BufferedMutator deleter = operations.getBufferedMutator(tableName);
@@ -46,7 +46,7 @@ public class HBaseMetadataDeleter implements
 			Delete delete = new Delete(
 					query.getPrimaryId());
 			delete.addColumns(
-					StringUtils.stringToBinary(metadataTypeName),
+					StringUtils.stringToBinary(metadataType.name()),
 					query.getSecondaryId());
 
 			deleter.mutate(delete);

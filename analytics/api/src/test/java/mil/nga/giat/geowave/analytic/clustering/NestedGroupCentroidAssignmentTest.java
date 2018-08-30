@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -39,7 +39,9 @@ import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -105,11 +107,13 @@ public class NestedGroupCentroidAssignmentTest
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 		final StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace(namespace);
+		final DataStorePluginOptions storePluginOptions = new DataStorePluginOptions(
+				opts);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
 				opts);
 		final IndexStore indexStore = storeFamily.getIndexStoreFactory().createStore(
 				opts);
-		final AdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
+		final PersistentAdapterStore adapterStore = storeFamily.getAdapterStoreFactory().createStore(
 				opts);
 
 		ingest(
@@ -226,6 +230,8 @@ public class NestedGroupCentroidAssignmentTest
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
+				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
+						adapter.getAdapterId()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
 				"b1",
 				1);
@@ -300,6 +306,8 @@ public class NestedGroupCentroidAssignmentTest
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
+				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
+						adapter.getAdapterId()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
 				"b2",
 				2);

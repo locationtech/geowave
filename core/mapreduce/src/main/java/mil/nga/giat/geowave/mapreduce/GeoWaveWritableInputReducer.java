@@ -56,7 +56,7 @@ public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 			throws IOException,
 			InterruptedException {
 		final HadoopWritableSerializer<?, Writable> serializer = serializationTool
-				.getHadoopWritableSerializerForAdapter(key.getAdapterId());
+				.getHadoopWritableSerializerForAdapter(key.getInternalAdapterId());
 		final Iterable<Object> transformedValues = Iterables.transform(
 				values,
 				new Function<ObjectWritable, Object>() {
@@ -88,6 +88,6 @@ public abstract class GeoWaveWritableInputReducer<KEYOUT, VALUEOUT> extends
 			throws IOException,
 			InterruptedException {
 		serializationTool = new HadoopWritableSerializationTool(
-				GeoWaveInputFormat.getJobContextAdapterStore(context));
+				context);
 	}
 }

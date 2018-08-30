@@ -22,6 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexUtils;
 import mil.nga.giat.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 
@@ -36,7 +37,7 @@ public class AccumuloSecondaryIndexJoinEntryIteratorWrapper<T> extends
 
 	public AccumuloSecondaryIndexJoinEntryIteratorWrapper(
 			final Scanner scanner,
-			final DataAdapter<T> adapter ) {
+			final InternalDataAdapter<T> adapter ) {
 		super(
 				scanner.iterator(),
 				adapter);

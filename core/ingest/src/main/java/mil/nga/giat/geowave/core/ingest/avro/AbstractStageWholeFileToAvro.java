@@ -10,19 +10,18 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.ingest.avro;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
-import java.net.URLConnection;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Iterators;
+
+import mil.nga.giat.geowave.core.store.CloseableIterator;
 
 /**
  * This class can be sub-classed as a general-purpose recipe for parallelizing
@@ -39,23 +38,22 @@ abstract public class AbstractStageWholeFileToAvro<O> implements
 	}
 
 	@Override
-	public WholeFile[] toAvroObjects(
+	public CloseableIterator<WholeFile> toAvroObjects(
 			final URL f ) {
 		try {
 			// TODO: consider a streaming mechanism in case a single file is too
 			// large
-			return new WholeFile[] {
-				new WholeFile(
-						ByteBuffer.wrap(IOUtils.toByteArray(f)),
-						f.getPath())
-			};
+			return new CloseableIterator.Wrapper<WholeFile>(
+					Iterators.singletonIterator(new WholeFile(
+							ByteBuffer.wrap(IOUtils.toByteArray(f)),
+							f.getPath())));
 		}
 		catch (final IOException e) {
 			LOGGER.warn(
 					"Unable to read file",
 					e);
 		}
-		return new WholeFile[] {};
+		return new CloseableIterator.Empty<>();
 
 	}
 

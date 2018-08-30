@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -40,8 +40,10 @@ import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
 import mil.nga.giat.geowave.core.store.StoreFactoryFamilySpi;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.WritableDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.index.IndexStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -55,23 +57,23 @@ public class DistortionGroupManagementTest
 	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
 
 	final FeatureDataAdapter adapter;
-	final DataStore dataStore;
-	final AdapterStore adapterStore;
-	final IndexStore indexStore;
+	final DataStorePluginOptions storePluginOptions;
 
 	private <T> void ingest(
 			final WritableDataAdapter<T> adapter,
 			final PrimaryIndex index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		try (IndexWriter writer = storePluginOptions.createDataStore().createWriter(
 				adapter,
 				index)) {
 			writer.write(entry);
 		}
 	}
 
-	public DistortionGroupManagementTest() {
+	public DistortionGroupManagementTest()
+			throws MismatchedIndexToAdapterMapping,
+			IOException {
 		ftype = AnalyticFeature.createGeometryFeatureAdapter(
 				"centroid",
 				new String[] {
@@ -83,18 +85,14 @@ public class DistortionGroupManagementTest
 				ftype);
 		adapter.init(index);
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
-		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
 
-		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
+		final StoreFactoryOptions opts = new MemoryStoreFactoryFamily().getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace(namespace);
-		dataStore = storeFamily.getDataStoreFactory().createStore(
+		storePluginOptions = new DataStorePluginOptions(
 				opts);
-		indexStore = storeFamily.getIndexStoreFactory().createStore(
-				opts);
-		adapterStore = storeFamily.getAdapterStoreFactory().createStore(
-				opts);
-		adapterStore.addAdapter(adapter);
-		indexStore.addIndex(index);
+		storePluginOptions.createDataStore().createWriter(
+				adapter,
+				index).close();
 	}
 
 	private void addDistortion(
@@ -443,9 +441,7 @@ public class DistortionGroupManagementTest
 	public void test()
 			throws IOException {
 		final DistortionGroupManagement distortionGroupManagement = new DistortionGroupManagement(
-				dataStore,
-				indexStore,
-				adapterStore);
+				storePluginOptions);
 		distortionGroupManagement.retainBestGroups(
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
@@ -453,11 +449,13 @@ public class DistortionGroupManagementTest
 				"b1",
 				1);
 		final CentroidManagerGeoWave<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
-				dataStore,
-				indexStore,
-				adapterStore,
+				storePluginOptions.createDataStore(),
+				storePluginOptions.createIndexStore(),
+				storePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
+				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
+						adapter.getAdapterId()),
 				StringUtils.stringFromBinary(index.getId().getBytes()),
 				"b1",
 				1);

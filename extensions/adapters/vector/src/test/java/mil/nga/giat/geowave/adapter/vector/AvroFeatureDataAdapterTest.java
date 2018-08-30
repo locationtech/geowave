@@ -262,7 +262,7 @@ public class AvroFeatureDataAdapterTest
 				new SpatialIndexBuilder().createIndex().getIndexModel());
 
 		final IndexedAdapterPersistenceEncoding encoding = new IndexedAdapterPersistenceEncoding(
-				dataAdapter.getAdapterId(),
+				(short) 1,
 				persistenceEncoding.getDataId(),
 				null,
 				null,

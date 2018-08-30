@@ -14,8 +14,11 @@ import mil.nga.giat.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TemporalBinningStrategy;
 import mil.nga.giat.geowave.core.geotime.index.dimension.TimeDefinition;
-import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimension;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionX;
+import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCRSUnboundedSpatialDimensionY;
 import mil.nga.giat.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LatitudeField;
 import mil.nga.giat.geowave.core.geotime.store.dimension.LongitudeField;
@@ -29,6 +32,7 @@ import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import mil.nga.giat.geowave.core.geotime.store.query.TemporalQuery;
+import mil.nga.giat.geowave.core.index.dimension.bin.BasicBinningStrategy;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class GeoTimePersistableRegistry implements
@@ -82,7 +86,7 @@ public class GeoTimePersistableRegistry implements
 					CustomCRSSpatialField::new),
 			new PersistableIdAndConstructor(
 					(short) 314,
-					CustomCRSSpatialDimension::new),
+					CustomCRSBoundedSpatialDimension::new),
 		    new PersistableIdAndConstructor(
 					(short) 315,
 					CustomCrsIndexModel::new),
@@ -95,6 +99,18 @@ public class GeoTimePersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 318,
 					TemporalQuery::new),
+			new PersistableIdAndConstructor(
+					(short) 319,
+					CustomCRSUnboundedSpatialDimension::new),
+			new PersistableIdAndConstructor(
+					(short) 320,
+					BasicBinningStrategy::new),	
+			new PersistableIdAndConstructor(
+					(short) 321,
+			        CustomCRSUnboundedSpatialDimensionX::new),	
+			new PersistableIdAndConstructor(
+					(short) 322,
+			        CustomCRSUnboundedSpatialDimensionY::new),		
 		};
 	}
 }
