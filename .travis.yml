@@ -16,8 +16,8 @@ env:
     - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-server,compatibility' BUILD_DOCS=false  IT_ONLY=true	
-    - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-client,cloudera' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-client,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
+    - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
     - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='HBase Server IT on Latest HDP Versions'  MAVEN_PROFILES='hbase-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true
   global:
