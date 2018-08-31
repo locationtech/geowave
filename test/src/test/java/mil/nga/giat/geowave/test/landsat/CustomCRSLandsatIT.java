@@ -120,11 +120,11 @@ public class CustomCRSLandsatIT extends
 	private static final int MIN_PATH = 198;
 	private static final int MAX_PATH = 199;
 	private static final int MIN_ROW = 36;
-	private static final int MAX_ROW = 37;
-	private static final double WEST = -2.2;
-	private static final double EAST = -1.4;
-	private static final double NORTH = 34.25;
-	private static final double SOUTH = 33.5;
+	private static final int MAX_ROW = 36;
+	private static final double WEST = -2.4;
+	private static final double EAST = -1.9;
+	private static final double NORTH = 34.5;
+	private static final double SOUTH = 34;
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCRSLandsatIT.class);
 	private static long startMillis;
@@ -170,12 +170,14 @@ public class CustomCRSLandsatIT extends
 		analyzeOptions
 				.setCqlFilter(String
 						.format(
-								"BBOX(%s,%f,%f,%f,%f) AND %s='B3' AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
+								"BBOX(%s,%f,%f,%f,%f) AND (%s='B2' OR %s='B3' OR %s='B4' ) AND %s <= '%s' AND path >= %d AND path <= %d AND row >= %d AND row <= %d",
 								SceneFeatureIterator.SHAPE_ATTRIBUTE_NAME,
 								WEST,
 								SOUTH,
 								EAST,
 								NORTH,
+								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
+								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
 								BandFeatureIterator.BAND_ATTRIBUTE_NAME,
 								SceneFeatureIterator.ACQUISITION_DATE_ATTRIBUTE_NAME,
 								"2016-06-01T00:00:00Z",
@@ -190,7 +192,7 @@ public class CustomCRSLandsatIT extends
 		final Landsat8RasterIngestCommandLineOptions ingestOptions = new Landsat8RasterIngestCommandLineOptions();
 		ingestOptions.setRetainImages(true);
 		ingestOptions.setCreatePyramid(false);
-		ingestOptions.setCreateHistogram(true);
+		ingestOptions.setCreateHistogram(false);
 		ingestOptions.setCoverageName("test");
 		// crop to the specified bbox
 		ingestOptions.setCropToSpatialConstraint(true);
@@ -253,12 +255,34 @@ public class CustomCRSLandsatIT extends
 				null);
 		final RenderedImage result = gridCoverage.getRenderedImage();
 
+		BufferedImage img = PlanarImage.wrapRenderedImage(
+				result).getAsBufferedImage();
+		BufferedImage swappedRedBlueImg = new BufferedImage(
+				img.getWidth(),
+				img.getHeight(),
+				BufferedImage.TYPE_INT_RGB);
+		// this is something you can use an SLD channel selector to make the
+		// third channel red and the first channel blue, but in this case we are
+		// manually doing it, the only purpose is to make the result natural
+		// colored (B2 is blue, B3 is green, and B4 is red)
+		for (int y = 0; y < img.getHeight(); y++) {
+			for (int x = 0; x < img.getWidth(); x++) {
+				int rgb = img.getRGB(
+						x,
+						y);
+				// this will swap the red and blue channel/band
+				swappedRedBlueImg.setRGB(
+						x,
+						y,
+						((rgb & 0xff00ff00) | ((rgb & 0xff0000) >> 16) | ((rgb & 0xff) << 16)));
+			}
+		}
+
 		// test the result with expected, allowing for minimal error
 		final BufferedImage reference = ImageIO.read(new File(
 				CUSTOM_REFERENCE_LANDSAT_IMAGE_PATH));
 		TestUtils.testTileAgainstReference(
-				PlanarImage.wrapRenderedImage(
-						result).getAsBufferedImage(),
+				swappedRedBlueImg,
 				reference,
 				0,
 				0.005);
