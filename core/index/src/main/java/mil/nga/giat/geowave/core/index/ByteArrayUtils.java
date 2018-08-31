@@ -18,7 +18,6 @@ import java.util.UUID;
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.BaseEncoding;
 
 /**
  * Convenience methods for converting binary data to and from strings. The
@@ -31,8 +30,6 @@ import com.google.common.io.BaseEncoding;
  */
 public class ByteArrayUtils
 {
-	private static BaseEncoding ENCODING = BaseEncoding.base64Url().omitPadding();
-
 	private static byte[] internalCombineArrays(
 			final byte[] beginning,
 			final byte[] end ) {
