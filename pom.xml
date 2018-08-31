@@ -36,6 +36,7 @@
 	<properties>
 		<spark.version>2.3.0</spark.version>
 		<geotools.version>19.2</geotools.version>
+		<imageio.ext.version>1.1.24</imageio.ext.version>
 		<guava.version>25.1-jre</guava.version>
 		<hadoop.env.classifier>hadoop2</hadoop.env.classifier>
 		<geoserver.version>2.13.2</geoserver.version>
@@ -421,6 +422,52 @@
 				<groupId>com.beust</groupId>
 				<artifactId>jcommander</artifactId>
 				<version>${jcommander.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>it.geosolutions.imageio-ext</groupId>
+				<artifactId>imageio-ext-gdalgeotiff</artifactId>
+				<version>${imageio.ext.version}</version>
+				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-imageio-ext-gdal</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+				<exclusions>
+					<exclusion>
+						<groupId>com.vividsolutions</groupId>
+						<artifactId>jts</artifactId>
+					</exclusion>
+					<exclusion>
+						<artifactId>gt-epsg-hsql</artifactId>
+						<groupId>org.geotools</groupId>
+					</exclusion>
+				</exclusions>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-referencing</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-api</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.geotools</groupId>
+				<artifactId>gt-geojson</artifactId>
+				<version>${geotools.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.geotools</groupId>
@@ -1336,8 +1383,9 @@
 				<accumulo.api>1.7</accumulo.api>
 				<hadoop.version>2.6.4</hadoop.version>
 				<hbase.version>1.3.1</hbase.version>
-				<geotools.version>18.1</geotools.version>
-				<geoserver.version>2.12.1</geoserver.version>
+				<geotools.version>16.0</geotools.version>
+				<geoserver.version>2.10.0</geoserver.version>
+				<imageio.ext.version>1.1.16</imageio.ext.version>
 				<!-- accumulo 1.7 references com.google.common.net.HostAndPort.getHostText() 
 					which was removed in guava 22.0 -->
 				<guava.version>21.0</guava.version>

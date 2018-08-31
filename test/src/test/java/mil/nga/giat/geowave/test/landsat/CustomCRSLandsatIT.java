@@ -126,7 +126,7 @@ public class CustomCRSLandsatIT extends
 	private static final double NORTH = 34.25;
 	private static final double SOUTH = 33.5;
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(LandsatIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCRSLandsatIT.class);
 	private static long startMillis;
 
 	@BeforeClass
@@ -189,7 +189,7 @@ public class CustomCRSLandsatIT extends
 		final Landsat8DownloadCommandLineOptions downloadOptions = new Landsat8DownloadCommandLineOptions();
 		final Landsat8RasterIngestCommandLineOptions ingestOptions = new Landsat8RasterIngestCommandLineOptions();
 		ingestOptions.setRetainImages(true);
-		ingestOptions.setCreatePyramid(true);
+		ingestOptions.setCreatePyramid(false);
 		ingestOptions.setCreateHistogram(true);
 		ingestOptions.setCoverageName("test");
 		// crop to the specified bbox

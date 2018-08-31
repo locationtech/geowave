@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,11 +10,16 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector;
 
+import mil.nga.giat.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.index.SecondaryIndexManager;
+import mil.nga.giat.geowave.adapter.vector.index.SimpleFeaturePrimaryIndexConfiguration;
+import mil.nga.giat.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
+import mil.nga.giat.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import mil.nga.giat.geowave.adapter.vector.ingest.CQLFilterOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.ingest.FeatureSerializationOptionProvider;
 import mil.nga.giat.geowave.adapter.vector.ingest.TypeNameOptionProvider;
+import mil.nga.giat.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQuery;
 import mil.nga.giat.geowave.adapter.vector.query.cql.CQLQueryFilter;
 import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderAggregation;
@@ -30,6 +35,10 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection;
+import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import mil.nga.giat.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import mil.nga.giat.geowave.core.index.persist.PersistableRegistrySpi;
 
 public class FeatureAdapterPersistableRegistry implements
@@ -104,7 +113,34 @@ public class FeatureAdapterPersistableRegistry implements
 					FeatureTimeRangeStatistics::new),
 			new PersistableIdAndConstructor(
 					(short) 521,
-					DistributedRenderAggregation::new)
+					DistributedRenderAggregation::new),
+			new PersistableIdAndConstructor(
+					(short) 522,
+					SimpleFeatureUserDataConfigurationSet::new),
+			new PersistableIdAndConstructor(
+					(short) 523,
+					TimeDescriptorConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 524,
+					VisibilityConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 525,
+					SimpleFeatureStatsConfigurationCollection::new),
+			new PersistableIdAndConstructor(
+					(short) 526,
+					StatsConfigurationCollection::new),
+			new PersistableIdAndConstructor(
+					(short) 527,
+					NumericSecondaryIndexConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 528,
+					SimpleFeaturePrimaryIndexConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 529,
+					TemporalSecondaryIndexConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 5230,
+					TextSecondaryIndexConfiguration::new)
 		};
 	}
 }

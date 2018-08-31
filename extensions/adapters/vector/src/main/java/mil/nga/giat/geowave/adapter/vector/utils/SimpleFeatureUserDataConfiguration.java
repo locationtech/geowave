@@ -13,6 +13,8 @@ package mil.nga.giat.geowave.adapter.vector.utils;
 import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.opengis.feature.simple.SimpleFeatureType;
 
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+
 /**
  * 
  * A type of configuration data associated with attributes of a simple features
@@ -21,7 +23,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
  */
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS, include = JsonTypeInfo.As.PROPERTY, property = "@class")
 public interface SimpleFeatureUserDataConfiguration extends
-		java.io.Serializable
+		java.io.Serializable,
+		Persistable
 {
 	/**
 	 * Store configuration in user data of the feature type attributes.

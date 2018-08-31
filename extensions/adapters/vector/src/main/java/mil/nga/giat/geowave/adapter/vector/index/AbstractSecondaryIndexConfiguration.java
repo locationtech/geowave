@@ -10,10 +10,14 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.index;
 
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 import org.slf4j.Logger;
@@ -31,10 +35,10 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 
 	private static final long serialVersionUID = -7425830022998223202L;
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractSecondaryIndexConfiguration.class);
-	private final Class<T> clazz;
-	private final Set<String> attributes;
-	private final SecondaryIndexType secondaryIndexType;
-	private final List<String> fieldIds;
+	private Class<T> clazz;
+	private Set<String> attributes;
+	private SecondaryIndexType secondaryIndexType;
+	private List<String> fieldIds;
 
 	public AbstractSecondaryIndexConfiguration(
 			final Class<T> clazz,
@@ -145,6 +149,48 @@ public abstract class AbstractSecondaryIndexConfiguration<T> implements
 				}
 			}
 		}
+	}
+
+	@Override
+	public byte[] toBinary() {
+		byte[] clazzBytes = StringUtils.stringToBinary(clazz.getName());
+		byte[] attributesBytes = StringUtils.stringsToBinary(attributes.toArray(new String[0]));
+		byte secondaryIndexTypeByte = (byte) secondaryIndexType.ordinal();
+		byte[] fieldIdsBytes = StringUtils.stringsToBinary(fieldIds.toArray(new String[0]));
+		ByteBuffer buf = ByteBuffer.allocate(13 + clazzBytes.length + attributesBytes.length + fieldIdsBytes.length);
+		buf.putInt(clazzBytes.length);
+		buf.put(clazzBytes);
+		buf.put(secondaryIndexTypeByte);
+		buf.putInt(attributesBytes.length);
+		buf.put(attributesBytes);
+		buf.putInt(fieldIdsBytes.length);
+		buf.put(fieldIdsBytes);
+		return buf.array();
+	}
+
+	@Override
+	public void fromBinary(
+			byte[] bytes ) {
+		ByteBuffer buf = ByteBuffer.wrap(bytes);
+		byte[] clazzBytes = new byte[buf.getInt()];
+		buf.get(clazzBytes);
+		byte[] attributesBytes = new byte[buf.getInt()];
+		buf.get(attributesBytes);
+		byte secondaryIndexTypeByte = buf.get();
+		byte[] fieldIdsBytes = new byte[buf.getInt()];
+		buf.get(fieldIdsBytes);
+		try {
+			clazz = (Class<T>) Class.forName(StringUtils.stringFromBinary(clazzBytes));
+		}
+		catch (ClassNotFoundException e) {
+			LOGGER.error(
+					"Class not found when deserializing",
+					e);
+		}
+		secondaryIndexType = SecondaryIndexType.values()[secondaryIndexTypeByte];
+		attributes = new HashSet<>(
+				Arrays.asList(StringUtils.stringsFromBinary(attributesBytes)));
+		fieldIds = Arrays.asList(StringUtils.stringsFromBinary(fieldIdsBytes));
 	}
 
 }

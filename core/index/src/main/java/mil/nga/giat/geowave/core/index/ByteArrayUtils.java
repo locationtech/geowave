@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.core.index;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -30,6 +31,8 @@ import com.google.common.base.Preconditions;
  */
 public class ByteArrayUtils
 {
+	private static Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
+
 	private static byte[] internalCombineArrays(
 			final byte[] beginning,
 			final byte[] end ) {
@@ -59,8 +62,7 @@ public class ByteArrayUtils
 	public static String byteArrayToString(
 			final byte[] byteArray ) {
 		return new String(
-				Base64.getUrlEncoder().encode(
-						byteArray),
+				ENCODER.encode(byteArray),
 				StandardCharsets.ISO_8859_1);
 	}
 

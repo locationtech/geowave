@@ -61,7 +61,9 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,
-	KDERasterResizeIT.class,
+	// saving some time for now, seems little need to run both versions of kde
+	// raster resize IT
+	// KDERasterResizeIT.class,
 	CustomCRSKDERasterResizeIT.class,
 	BulkIngestInputGenerationIT.class,
 	GeoWaveNNIT.class,
