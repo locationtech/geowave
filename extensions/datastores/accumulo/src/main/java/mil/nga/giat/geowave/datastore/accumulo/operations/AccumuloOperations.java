@@ -287,6 +287,16 @@ public class AccumuloOperations implements
 				authorization);
 	}
 
+	@Override
+	public boolean createIndex(
+			PrimaryIndex index )
+			throws IOException {
+		return createTable(
+				index.getId().getString(),
+				options.isServerSideLibraryEnabled(),
+				options.isEnableBlockCache());
+	}
+
 	public boolean createTable(
 			final String tableName,
 			final boolean enableVersioning,

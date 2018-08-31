@@ -3,13 +3,16 @@ package mil.nga.giat.geowave.mapreduce;
 import java.io.IOException;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.hadoop.mapreduce.RecordWriter;
+import org.apache.hadoop.mapreduce.TaskAttemptContext;
 
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -19,6 +22,8 @@ import mil.nga.giat.geowave.core.store.index.SecondaryIndexDataStore;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
 import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputFormat.GeoWaveRecordWriter;
+import mil.nga.giat.geowave.mapreduce.output.GeoWaveOutputKey;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
 import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 
@@ -47,6 +52,24 @@ public class BaseMapReduceDataStore extends
 				options,
 				adapterMappingStore);
 		splitsProvider = createSplitsProvider();
+	}
+
+	public RecordWriter<GeoWaveOutputKey<Object>, Object> createRecordWriter(
+			TaskAttemptContext context,
+			IndexStore jobContextIndexStore,
+			TransientAdapterStore jobContextAdapterStore ) {
+		return new GeoWaveRecordWriter(
+				context,
+				this,
+				jobContextIndexStore,
+				jobContextAdapterStore);
+	}
+
+	@Override
+	public void prepareRecordWriter(
+			Configuration conf ) {
+		// generally this can be a no-op, but gives the datastore an opportunity
+		// to set specialized configuration for a job prior to submission
 	}
 
 	@Override
@@ -86,6 +109,7 @@ public class BaseMapReduceDataStore extends
 			final DataStatisticsStore statsStore,
 			final InternalAdapterStore internalAdapterStore,
 			final IndexStore indexStore,
+			final JobContext context,
 			final Integer minSplits,
 			final Integer maxSplits )
 			throws IOException,

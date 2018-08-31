@@ -1288,24 +1288,17 @@ public class GeoServerRestClient
 		// Get the store's db config
 		final Map<String, String> storeConfigMap = inputStoreOptions.getOptionsAsMap();
 
-		// Add in geoserver coverage store info
-		storeConfigMap.put(
-				GEOSERVER_WORKSPACE,
-				workspaceName);
-
 		storeConfigMap.put(
 				"gwNamespace",
 				inputStoreOptions.getGeowaveNamespace());
-
-		storeConfigMap.put(
-				GEOSERVER_CS,
-				cvgStoreName);
 
 		final String cvgStoreXml = createCoverageXml(
 				storeConfigMap,
 				equalizeHistogramOverride,
 				interpolationOverride,
-				scaleTo8Bit);
+				scaleTo8Bit,
+				workspaceName,
+				cvgStoreName);
 
 		LOGGER.debug("Add coverage store - xml params:\n" + cvgStoreXml);
 
@@ -1575,11 +1568,10 @@ public class GeoServerRestClient
 			final Map<String, String> geowaveStoreConfig,
 			final Boolean equalizeHistogramOverride,
 			final String interpolationOverride,
-			final Boolean scaleTo8Bit ) {
+			final Boolean scaleTo8Bit,
+			final String workspace,
+			final String cvgstoreName ) {
 		String coverageXml = null;
-
-		final String workspace = geowaveStoreConfig.get(GEOSERVER_WORKSPACE);
-		final String cvgstoreName = geowaveStoreConfig.get(GEOSERVER_CS);
 
 		StreamResult result = null;
 		try {
@@ -1690,25 +1682,21 @@ public class GeoServerRestClient
 			final Boolean equalizeHistogramOverride,
 			final String interpolationOverride,
 			final Boolean scaleTo8Bit ) {
-		// Retrieve store config
-		final String user = geowaveStoreConfig.get("user");
-		final String pass = geowaveStoreConfig.get("password");
-		final String zookeeper = geowaveStoreConfig.get("zookeeper");
-		final String instance = geowaveStoreConfig.get("instance");
-		final String gwNamespace = geowaveStoreConfig.get("gwNamespace");
-
 		// Create the custom geowave url w/ params
 		final StringBuffer buf = new StringBuffer();
-		buf.append("user=");
-		buf.append(user);
-		buf.append(";password=");
-		buf.append(pass);
-		buf.append(";zookeeper=");
-		buf.append(zookeeper);
-		buf.append(";instance=");
-		buf.append(instance);
-		buf.append(";gwNamespace=");
-		buf.append(gwNamespace);
+		boolean first = true;
+		for (Entry<String, String> e : geowaveStoreConfig.entrySet()) {
+			if (!first) {
+				buf.append(";");
+			}
+			else {
+				first = false;
+			}
+			buf.append(
+					e.getKey()).append(
+					"=").append(
+					e.getValue());
+		}
 		if (equalizeHistogramOverride != null) {
 			buf.append(";equalizeHistogramOverride=");
 			buf.append(equalizeHistogramOverride);

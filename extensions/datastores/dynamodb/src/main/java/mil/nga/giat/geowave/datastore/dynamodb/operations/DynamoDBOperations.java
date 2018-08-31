@@ -195,6 +195,12 @@ public class DynamoDBOperations implements
 				client,
 				qName);
 
+		createTable(qName);
+		return writer;
+	}
+
+	private boolean createTable(
+			String qName ) {
 		if (options.getStoreOptions().isCreateTable()) {
 			synchronized (tableExistsCache) {
 				final Boolean tableExists = tableExistsCache.get(qName);
@@ -226,17 +232,18 @@ public class DynamoDBOperations implements
 						}
 						catch (TableNeverTransitionedToStateException | InterruptedException e) {
 							LOGGER.error(
-									"Unable to wait for active table '" + indexId.getString() + "'",
+									"Unable to wait for active table '" + qName + "'",
 									e);
 						}
 					}
 					tableExistsCache.put(
 							qName,
 							true);
+					return true;
 				}
 			}
 		}
-		return writer;
+		return false;
 
 	}
 
@@ -340,12 +347,7 @@ public class DynamoDBOperations implements
 			final PrimaryIndex index,
 			PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		return false;
-	}
-
-	public PersistentAdapterStore getAdapterStore() {
-		// TODO Auto-generated method stub
-		return null;
+		return true;
 	}
 
 	@Override
@@ -363,5 +365,12 @@ public class DynamoDBOperations implements
 					e);
 		}
 		return false;
+	}
+
+	@Override
+	public boolean createIndex(
+			PrimaryIndex index )
+			throws IOException {
+		return createTable(getQualifiedTableName(index.getId().getString()));
 	}
 }

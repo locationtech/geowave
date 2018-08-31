@@ -1677,4 +1677,16 @@ public class HBaseOperations implements
 		}
 		return version;
 	}
+
+	@Override
+	public boolean createIndex(
+			PrimaryIndex index )
+			throws IOException {
+		createTable(
+				new GeoWaveColumnFamily[0],
+				StringColumnFamilyFactory.getSingletonInstance(),
+				options.isServerSideLibraryEnabled(),
+				getTableName(index.getId().getString()));
+		return true;
+	}
 }

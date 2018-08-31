@@ -19,6 +19,9 @@ import java.util.Locale;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.cli.VersionUtils;
+
 import org.geotools.coverage.grid.io.AbstractGridCoverage2DReader;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
 import org.geotools.coverage.grid.io.imageio.GeoToolsWriteParams;
@@ -86,7 +89,7 @@ public class GeoWaveGTRasterFormat extends
 				"https://github.com/locationtech/geowave");
 		info.put(
 				"version",
-				"0.9.2");
+				VersionUtils.getVersion());
 		mInfo = info;
 
 		// reading parameters

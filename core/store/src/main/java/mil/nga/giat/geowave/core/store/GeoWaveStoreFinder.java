@@ -257,11 +257,21 @@ public class GeoWaveStoreFinder
 
 	public static boolean exactMatch(
 			final StoreFactoryFamilySpi geowaveStoreFactoryFamily,
-			final Map<String, String> params ) {
+			final Map<String, String> filteredParams ) {
+		return exactMatch(
+				geowaveStoreFactoryFamily,
+				filteredParams,
+				null);
+	}
+
+	public static boolean exactMatch(
+			final StoreFactoryFamilySpi geowaveStoreFactoryFamily,
+			final Map<String, String> filteredParams,
+			final Map<String, String> originalParams ) {
 		final ConfigOption[] requiredOptions = GeoWaveStoreFinder.getRequiredOptions(geowaveStoreFactoryFamily);
 		// first ensure all required options are fulfilled
 		for (final ConfigOption requiredOption : requiredOptions) {
-			if (!params.containsKey(requiredOption.getName())) {
+			if (!filteredParams.containsKey(requiredOption.getName())) {
 				return false;
 			}
 		}
@@ -272,7 +282,7 @@ public class GeoWaveStoreFinder
 				true)) {
 			availableOptions.add(option.getName());
 		}
-		for (final String optionName : params.keySet()) {
+		for (final String optionName : filteredParams.keySet()) {
 			if (!availableOptions.contains(optionName) && !STORE_HINT_KEY.equals(optionName)) {
 				return false;
 			}
@@ -283,7 +293,7 @@ public class GeoWaveStoreFinder
 		try {
 			final StoreFactoryOptions options = ConfigUtils.populateOptionsFromList(
 					geowaveStoreFactoryFamily.getDataStoreFactory().createOptionsInstance(),
-					params);
+					originalParams != null ? originalParams : filteredParams);
 			geowaveStoreFactoryFamily.getIndexStoreFactory().createStore(
 					options);
 		}

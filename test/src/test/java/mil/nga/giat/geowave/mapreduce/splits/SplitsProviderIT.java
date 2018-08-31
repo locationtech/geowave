@@ -299,6 +299,7 @@ public class SplitsProviderIT extends
 					null,
 					null,
 					null,
+					null,
 					minSplits,
 					maxSplits);
 		}
