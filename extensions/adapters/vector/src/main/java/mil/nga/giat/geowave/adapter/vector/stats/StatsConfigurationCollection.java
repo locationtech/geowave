@@ -64,15 +64,13 @@ public class StatsConfigurationCollection implements
 
 	@Override
 	public byte[] toBinary() {
-		// TODO Auto-generated method stub
-		return null;
+		return PersistenceUtils.toBinary(configurationsForAttribute);
 	}
 
 	@Override
 	public void fromBinary(
 			byte[] bytes ) {
-		// TODO Auto-generated method stub
-
+		configurationsForAttribute = (List) PersistenceUtils.fromBinaryAsList(bytes);
 	}
 
 	public static class SimpleFeatureStatsConfigurationCollection implements

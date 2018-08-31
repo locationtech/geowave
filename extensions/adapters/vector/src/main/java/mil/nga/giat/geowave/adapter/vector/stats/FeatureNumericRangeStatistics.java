@@ -157,5 +157,14 @@ public class FeatureNumericRangeStatistics extends
 					internalDataAdapterId,
 					fieldName);
 		}
+
+		@Override
+		public byte[] toBinary() {
+			return new byte[0];
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {}
 	}
 }

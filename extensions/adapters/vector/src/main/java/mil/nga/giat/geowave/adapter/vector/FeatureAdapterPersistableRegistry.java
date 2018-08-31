@@ -30,10 +30,15 @@ import mil.nga.giat.geowave.adapter.vector.render.PersistableComposite;
 import mil.nga.giat.geowave.adapter.vector.render.PersistableRenderedImage;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics.FeatureFixedBinConfig;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
+import mil.nga.giat.geowave.adapter.vector.stats.FeatureNumericRangeStatistics.FeatureNumericRangeConfig;
 import mil.nga.giat.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection;
 import mil.nga.giat.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
@@ -131,15 +136,30 @@ public class FeatureAdapterPersistableRegistry implements
 					StatsConfigurationCollection::new),
 			new PersistableIdAndConstructor(
 					(short) 527,
-					NumericSecondaryIndexConfiguration::new),
+					FeatureCountMinSketchConfig::new),
 			new PersistableIdAndConstructor(
 					(short) 528,
-					SimpleFeaturePrimaryIndexConfiguration::new),
+					FeatureFixedBinConfig::new),
 			new PersistableIdAndConstructor(
 					(short) 529,
+					FeatureHyperLogLogConfig::new),
+			new PersistableIdAndConstructor(
+					(short) 530,
+					FeatureNumericHistogramConfig::new),
+			new PersistableIdAndConstructor(
+					(short) 531,
+					FeatureNumericRangeConfig::new),
+			new PersistableIdAndConstructor(
+					(short) 532,
+					NumericSecondaryIndexConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 533,
+					SimpleFeaturePrimaryIndexConfiguration::new),
+			new PersistableIdAndConstructor(
+					(short) 534,
 					TemporalSecondaryIndexConfiguration::new),
 			new PersistableIdAndConstructor(
-					(short) 5230,
+					(short) 535,
 					TextSecondaryIndexConfiguration::new)
 		};
 	}
