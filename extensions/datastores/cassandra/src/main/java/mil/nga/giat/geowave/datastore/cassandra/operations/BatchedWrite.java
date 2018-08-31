@@ -1,5 +1,8 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
@@ -16,15 +19,19 @@ public class BatchedWrite extends
 		BatchHandler implements
 		AutoCloseable
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(BatchedWrite.class);
 	// TODO: default batch size is tiny at 50 KB, reading recommendations re:
 	// micro-batch writing
 	// (https://dzone.com/articles/efficient-cassandra-write), we should be able
 	// to gain some efficiencies for bulk ingests with batches if done
 	// correctly, while other recommendations contradict this article and
 	// suggest don't use batching as a performance optimization
-	private static final boolean ASYNC = false;
+	private static final boolean ASYNC = true;
+	private static int MAX_ASYNC_WRITES = 100;
 	private final int batchSize;
 	private final PreparedStatement preparedInsert;
+	private static int asyncWritesInProgress = 0;
+	private static Object MUTEX = new Object();
 
 	public BatchedWrite(
 			final Session session,
@@ -61,8 +68,29 @@ public class BatchedWrite extends
 		}
 	}
 
+	private void waitForWritesToFinish(
+			int maxWrites ) {
+
+		while (asyncWritesInProgress >= maxWrites) {
+			try {
+				// TODO eventually better to change to wait/notify
+				// for now just sleep
+				Thread.sleep(200L);
+			}
+			catch (InterruptedException e) {
+				LOGGER.warn(
+						"unable to wait for async writes in progress",
+						e);
+			}
+		}
+	}
+
 	private void writeBatch(
 			final BatchStatement batch ) {
+		synchronized (MUTEX) {
+			waitForWritesToFinish(MAX_ASYNC_WRITES);
+			++asyncWritesInProgress;
+		}
 		final ResultSetFuture future = session.executeAsync(batch);
 		Futures.addCallback(
 				future,
@@ -79,6 +107,7 @@ public class BatchedWrite extends
 				writeBatch(batch);
 			}
 		}
+		waitForWritesToFinish(0);
 		// TODO need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
 	}
@@ -91,12 +120,20 @@ public class BatchedWrite extends
 		@Override
 		public void onSuccess(
 				final ResultSet result ) {
+
+			synchronized (MUTEX) {
+				asyncWritesInProgress--;
+			}
 			// placeholder: put any logging or on success logic here.
 		}
 
 		@Override
 		public void onFailure(
 				final Throwable t ) {
+
+			synchronized (MUTEX) {
+				asyncWritesInProgress--;
+			}
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
 			t.printStackTrace();
