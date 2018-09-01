@@ -107,7 +107,7 @@ public class BatchedWrite extends
 				writeBatch(batch);
 			}
 		}
-		waitForWritesToFinish(0);
+		waitForWritesToFinish(1);
 		// TODO need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
 	}
