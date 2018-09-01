@@ -286,7 +286,7 @@ public class CustomCRSLandsatIT extends
 				reference,
 				0,
 				// TODO investigate lowering this and being less lenient
-				0.015);
+				0.05);
 		MapProjection.SKIP_SANITY_CHECKS = false;
 	}
 
