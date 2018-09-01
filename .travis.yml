@@ -14,8 +14,8 @@ env:
     - NAME='Cassandra IT on Latest ASF Versions' MAVEN_PROFILES='cassandra-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='DynamoDB IT on Latest ASF Versions' MAVEN_PROFILES='dynamodb-it' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Bigtable IT on Latest ASF Versions' MAVEN_PROFILES='bigtable-it' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='Accumulo Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true
-    - NAME='HBase Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-server,compatibility' BUILD_DOCS=false  IT_ONLY=true	
+    - NAME='Accumulo Server IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='accumulo-it-server,compatibility' BUILD_DOCS=false  IT_ONLY=true
+    - NAME='HBase Client IT on Older ASF and GeoTools Versions' MAVEN_PROFILES='hbase-it-client,compatibility' BUILD_DOCS=false  IT_ONLY=true	
     - NAME='Accumulo Server IT on Latest CDH Versions' MAVEN_PROFILES='accumulo-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
     - NAME='Accumulo Server IT on Latest HDP Versions' MAVEN_PROFILES='accumulo-it-server,hortonworks' BUILD_DOCS=false  IT_ONLY=true 
     - NAME='HBase Server IT on Latest CDH Versions'  MAVEN_PROFILES='hbase-it-server,cloudera' BUILD_DOCS=false  IT_ONLY=true
