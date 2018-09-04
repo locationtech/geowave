@@ -34,7 +34,7 @@
 		<tag>HEAD</tag>
 	</scm>
 	<properties>
-		<spark.version>2.3.0</spark.version>
+		<spark.version>2.3.1</spark.version>
 		<geotools.version>19.2</geotools.version>
 		<imageio.ext.version>1.1.24</imageio.ext.version>
 		<guava.version>25.1-jre</guava.version>
@@ -51,8 +51,8 @@
 		<guice.version>3.0</guice.version>
 		<skipITs>true</skipITs>
 		<vfs2.version>2.1</vfs2.version>
-		<hbase.version>1.4.4</hbase.version>
-		<hadoop.version>2.8.3</hadoop.version>
+		<hbase.version>1.4.6</hbase.version>
+		<hadoop.version>2.8.4</hadoop.version>
 		<avro.version>1.7.6</avro.version>
 		<awssdk.version>1.11.281</awssdk.version>
 		<httpclient.version>4.5.2</httpclient.version>
