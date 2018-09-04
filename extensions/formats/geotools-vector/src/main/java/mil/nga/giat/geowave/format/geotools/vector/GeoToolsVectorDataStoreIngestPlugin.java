@@ -15,6 +15,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import java.util.Properties;
 import mil.nga.giat.geowave.core.geotime.store.dimension.GeometryWrapper;
 import mil.nga.giat.geowave.core.geotime.store.dimension.Time;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.local.LocalFileIngestPlugin;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -36,6 +38,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.commons.io.FilenameUtils;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFinder;
@@ -116,6 +119,11 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 		map.put(
 				"url",
 				file);
+		if (System.getProperty(StringUtils.GEOWAVE_CHARSET_PROPERTY_NAME) != null) {
+			map.put(
+					"charset",
+					Charset.forName(System.getProperty(StringUtils.GEOWAVE_CHARSET_PROPERTY_NAME)));
+		}
 		final DataStore dataStore = DataStoreFinder.getDataStore(map);
 		return dataStore;
 	}

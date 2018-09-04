@@ -35,7 +35,7 @@ public class StringUtils
 
 	public static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
 	private static final String DEFAULT_GEOWAVE_CHARSET = "ISO-8859-1";
-	private static final String GEOWAVE_CHARSET_PROPERTY_NAME = "geowave.charset";
+	public static final String GEOWAVE_CHARSET_PROPERTY_NAME = "geowave.charset";
 	private static Charset geowaveCharset;
 
 	public static Charset getGeoWaveCharset() {
