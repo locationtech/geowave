@@ -540,11 +540,11 @@ public class CassandraOperations implements
 			// can do logging or start counting errors.
 			semaphore.release();
 			if (!(t instanceof CancellationException)) {
-			LOGGER.error(
-					"Failure from async query",
-					t);
-			throw new RuntimeException(
-					t);
+				LOGGER.error(
+						"Failure from async query",
+						t);
+				throw new RuntimeException(
+						t);
 			}
 		}
 	}
