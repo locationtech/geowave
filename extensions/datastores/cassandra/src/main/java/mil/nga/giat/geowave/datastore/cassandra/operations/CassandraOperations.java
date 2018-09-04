@@ -82,10 +82,17 @@ public class CassandraOperations implements
 	private final String gwNamespace;
 	private final static int WRITE_RESPONSE_THREAD_SIZE = 16;
 	private final static int READ_RESPONSE_THREAD_SIZE = 16;
+	private final static int MAX_CONCURRENT_READ = 100;
 	protected final static ExecutorService WRITE_RESPONSE_THREADS = MoreExecutors
 			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(WRITE_RESPONSE_THREAD_SIZE));
 	protected final static ExecutorService READ_RESPONSE_THREADS = MoreExecutors
 			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(READ_RESPONSE_THREAD_SIZE));
+
+	// only allow so many outstanding async reads or writes, use this semaphore
+	// to control it
+	private static final Semaphore READ_SEMAPHORE = new Semaphore(
+			MAX_CONCURRENT_READ);
+
 	private static final Object CREATE_TABLE_MUTEX = new Object();
 	private final CassandraOptions options;
 	private final KeyspaceState state;
@@ -292,9 +299,6 @@ public class CassandraOperations implements
 
 	}
 
-	final Semaphore semaphore = new Semaphore(
-			1000);
-
 	public CloseableIterator<CassandraRow> executeQueryAsync(
 			final Statement... statements ) {
 		// first create a list of asynchronous query executions
@@ -302,9 +306,9 @@ public class CassandraOperations implements
 				.newArrayListWithExpectedSize(
 						statements.length);
 		for (final Statement s : statements) {
-			try {
-				semaphore.acquire();
 				try {
+					READ_SEMAPHORE.acquire();
+				
 					final ResultSetFuture f = session
 							.executeAsync(
 									s);
@@ -315,23 +319,16 @@ public class CassandraOperations implements
 							.addCallback(
 									f,
 									new QueryCallback(
-											semaphore),
+											READ_SEMAPHORE),
 									CassandraOperations.READ_RESPONSE_THREADS);
 				}
-				catch (Exception e) {
+				catch (InterruptedException e) {
 					LOGGER
 							.warn(
 									"Exception while executing query",
 									e);
+					READ_SEMAPHORE.release();
 				}
-				finally {
-					semaphore.release();
-				}
-			}
-			catch (InterruptedException e) {
-				throw new RuntimeException(
-						e);
-			}
 		}
 
 		Iterator<CassandraRow> resultsIter = Iterators
@@ -540,8 +537,10 @@ public class CassandraOperations implements
 				final Throwable t ) {
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
-			t.printStackTrace();
 			semaphore.release();
+			LOGGER.error(
+					"Failure from async query",
+					t);
 			throw new RuntimeException(
 					t);
 		}

@@ -1,5 +1,7 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
+import java.util.concurrent.Semaphore;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,11 +29,13 @@ public class BatchedWrite extends
 	// correctly, while other recommendations contradict this article and
 	// suggest don't use batching as a performance optimization
 	private static final boolean ASYNC = true;
-	private static int MAX_ASYNC_WRITES = 100;
 	private final int batchSize;
 	private final PreparedStatement preparedInsert;
-	private static int asyncWritesInProgress = 0;
-	private static Object MUTEX = new Object();
+	private final static int MAX_CONCURRENT_WRITE = 50;
+	// only allow so many outstanding async reads or writes, use this semaphore
+	// to control it
+	private final Semaphore writeSemaphore = new Semaphore(
+			MAX_CONCURRENT_WRITE);
 
 	public BatchedWrite(
 			final Session session,
@@ -68,35 +72,25 @@ public class BatchedWrite extends
 		}
 	}
 
-	private void waitForWritesToFinish(
-			int maxWrites ) {
-
-		while (asyncWritesInProgress >= maxWrites) {
-			try {
-				// TODO eventually better to change to wait/notify
-				// for now just sleep
-				Thread.sleep(200L);
-			}
-			catch (InterruptedException e) {
-				LOGGER.warn(
-						"unable to wait for async writes in progress",
-						e);
-			}
-		}
-	}
-
 	private void writeBatch(
 			final BatchStatement batch ) {
-		synchronized (MUTEX) {
-			waitForWritesToFinish(MAX_ASYNC_WRITES);
-			++asyncWritesInProgress;
+		try {
+			writeSemaphore.acquire();
+
+			final ResultSetFuture future = session.executeAsync(batch);
+			Futures.addCallback(
+					future,
+					new IngestCallback(
+							writeSemaphore),
+					CassandraOperations.WRITE_RESPONSE_THREADS);
+			batch.clear();
 		}
-		final ResultSetFuture future = session.executeAsync(batch);
-		Futures.addCallback(
-				future,
-				new IngestCallback(),
-				CassandraOperations.WRITE_RESPONSE_THREADS);
-		batch.clear();
+		catch (InterruptedException e) {
+			LOGGER.warn(
+					"async write semaphore interupted",
+					e);
+			writeSemaphore.release();
+		}
 	}
 
 	@Override
@@ -107,9 +101,10 @@ public class BatchedWrite extends
 				writeBatch(batch);
 			}
 		}
-		waitForWritesToFinish(1);
-		// TODO need to wait for all asynchronous batches to finish writing
+
+		// need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
+		writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
 	}
 
 	// callback class
@@ -117,26 +112,26 @@ public class BatchedWrite extends
 			FutureCallback<ResultSet>
 	{
 
+		private final Semaphore semaphore;
+
+		public IngestCallback(
+				Semaphore semaphore ) {
+			this.semaphore = semaphore;
+		}
+
 		@Override
 		public void onSuccess(
 				final ResultSet result ) {
-
-			synchronized (MUTEX) {
-				asyncWritesInProgress--;
-			}
+			semaphore.release();
 			// placeholder: put any logging or on success logic here.
 		}
 
 		@Override
 		public void onFailure(
 				final Throwable t ) {
-
-			synchronized (MUTEX) {
-				asyncWritesInProgress--;
-			}
+			semaphore.release();
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
-			t.printStackTrace();
 			throw new RuntimeException(
 					t);
 		}
