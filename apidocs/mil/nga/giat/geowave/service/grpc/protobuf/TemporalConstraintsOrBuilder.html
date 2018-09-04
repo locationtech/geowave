@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":6,"i1":6,"i2":6,"i3":6};
+var methods = {"i0":6,"i1":6,"i2":6,"i3":6,"i4":6,"i5":6};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],4:["t3","Abstract Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -50,7 +50,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorQueryGrpc.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorGrpc.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html" target="_top">Frames</a></li>
@@ -130,29 +130,39 @@ extends com.google.protobuf.MessageOrBuilder</pre>
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code>com.google.protobuf.Timestamp</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getEndTime--">getEndTime</a></span>()</code>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </td>
 </tr>
 <tr id="i1" class="rowColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getEndTimeBytes--">getEndTimeBytes</a></span>()</code>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<td class="colFirst"><code>com.google.protobuf.TimestampOrBuilder</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getEndTimeOrBuilder--">getEndTimeOrBuilder</a></span>()</code>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colFirst"><code>com.google.protobuf.Timestamp</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getStartTime--">getStartTime</a></span>()</code>
-<div class="block">
-ISO format e.g.</div>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </td>
 </tr>
 <tr id="i3" class="rowColor">
-<td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getStartTimeBytes--">getStartTimeBytes</a></span>()</code>
-<div class="block">
-ISO format e.g.</div>
+<td class="colFirst"><code>com.google.protobuf.TimestampOrBuilder</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#getStartTimeOrBuilder--">getStartTimeOrBuilder</a></span>()</code>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
+</td>
+</tr>
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#hasEndTime--">hasEndTime</a></span>()</code>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html#hasStartTime--">hasStartTime</a></span>()</code>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </td>
 </tr>
 </table>
@@ -184,32 +194,44 @@ ISO format e.g.</div>
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="hasStartTime--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasStartTime</h4>
+<pre>boolean&nbsp;hasStartTime()</pre>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
+</li>
+</ul>
 <a name="getStartTime--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getStartTime</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getStartTime()</pre>
-<div class="block"><pre>
-ISO format e.g. 2005-05-17T19:32:56Z
- </pre>
-
- <code>optional string startTime = 1;</code></div>
+<pre>com.google.protobuf.Timestamp&nbsp;getStartTime()</pre>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </li>
 </ul>
-<a name="getStartTimeBytes--">
+<a name="getStartTimeOrBuilder--">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>getStartTimeBytes</h4>
-<pre>com.google.protobuf.ByteString&nbsp;getStartTimeBytes()</pre>
-<div class="block"><pre>
-ISO format e.g. 2005-05-17T19:32:56Z
- </pre>
-
- <code>optional string startTime = 1;</code></div>
+<h4>getStartTimeOrBuilder</h4>
+<pre>com.google.protobuf.TimestampOrBuilder&nbsp;getStartTimeOrBuilder()</pre>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
+</li>
+</ul>
+<a name="hasEndTime--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>hasEndTime</h4>
+<pre>boolean&nbsp;hasEndTime()</pre>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </li>
 </ul>
 <a name="getEndTime--">
@@ -218,18 +240,18 @@ ISO format e.g. 2005-05-17T19:32:56Z
 <ul class="blockList">
 <li class="blockList">
 <h4>getEndTime</h4>
-<pre><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getEndTime()</pre>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<pre>com.google.protobuf.Timestamp&nbsp;getEndTime()</pre>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </li>
 </ul>
-<a name="getEndTimeBytes--">
+<a name="getEndTimeOrBuilder--">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>getEndTimeBytes</h4>
-<pre>com.google.protobuf.ByteString&nbsp;getEndTimeBytes()</pre>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<h4>getEndTimeOrBuilder</h4>
+<pre>com.google.protobuf.TimestampOrBuilder&nbsp;getEndTimeOrBuilder()</pre>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </li>
 </ul>
 </li>
@@ -261,7 +283,7 @@ ISO format e.g. 2005-05-17T19:32:56Z
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorQueryGrpc.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorGrpc.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../../../index.html?mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraintsOrBuilder.html" target="_top">Frames</a></li>

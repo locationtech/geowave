@@ -115,15 +115,23 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.query.cql">mil.nga.giat.geowave.adapter.vector.query.cql</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.plugin.visibility">mil.nga.giat.geowave.adapter.vector.plugin.visibility</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.render">mil.nga.giat.geowave.adapter.vector.render</a></td>
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.query.cql">mil.nga.giat.geowave.adapter.vector.query.cql</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.render">mil.nga.giat.geowave.adapter.vector.render</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.stats">mil.nga.giat.geowave.adapter.vector.stats</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.adapter.vector.utils">mil.nga.giat.geowave.adapter.vector.utils</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -586,6 +594,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/package-summary.html">mil.nga.giat.geowave.adapter.vector.index</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/package-summary.html">mil.nga.giat.geowave.adapter.vector.index</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SimpleFeatureSecondaryIndexConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">SimpleFeatureSecondaryIndexConfiguration</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/package-summary.html">mil.nga.giat.geowave.adapter.vector.index</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -595,9 +616,29 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">AbstractSecondaryIndexConfiguration</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/NumericSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">NumericSecondaryIndexConfiguration</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SecondaryIndexManager.html" title="class in mil.nga.giat.geowave.adapter.vector.index">SecondaryIndexManager</a></span></code>
 <div class="block">Class to manage secondary indexes for a Simple Feature Type.</div>
 </td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SimpleFeaturePrimaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">SimpleFeaturePrimaryIndexConfiguration</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/TemporalSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">TemporalSecondaryIndexConfiguration</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/index/TextSecondaryIndexConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.index">TextSecondaryIndexConfiguration</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>
@@ -642,6 +683,27 @@
 <tr class="altColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/ingest/TypeNameOptionProvider.html" title="class in mil.nga.giat.geowave.adapter.vector.ingest">TypeNameOptionProvider</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.plugin.visibility">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin.visibility</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/package-summary.html">mil.nga.giat.geowave.adapter.vector.plugin.visibility</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/VisibilityConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.plugin.visibility">VisibilityConfiguration</a></span></code>
+<div class="block">Describes which attribute in a feature contains the visibility constraints,
+ interpreted by a <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/plugin/visibility/ColumnVisibilityManagementSpi.html" title="interface in mil.nga.giat.geowave.adapter.vector.plugin.visibility"><code>ColumnVisibilityManagementSpi</code></a></div>
+</td>
 </tr>
 </tbody>
 </table>
@@ -712,6 +774,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/package-summary.html">mil.nga.giat.geowave.adapter.vector.stats</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/package-summary.html">mil.nga.giat.geowave.adapter.vector.stats</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfig.html" title="interface in mil.nga.giat.geowave.adapter.vector.stats">StatsConfig</a>&lt;T&gt;</span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
 <caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/package-summary.html">mil.nga.giat.geowave.adapter.vector.stats</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -731,10 +806,18 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics</a></span></code>
 <div class="block">Fixed number of bins for a histogram.</div>
 </td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureFixedBinNumericStatistics.FeatureFixedBinConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureFixedBinNumericStatistics.FeatureFixedBinConfig</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
@@ -744,19 +827,82 @@
 </td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics</a></span></code>
 <div class="block">Dynamic histogram provide very high accuracy for CDF and quantiles over the a
  numeric attribute.</div>
 </td>
 </tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig</a></span></code>&nbsp;</td>
+</tr>
 <tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericRangeStatistics</a></span></code>&nbsp;</td>
 </tr>
 <tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureNumericRangeStatistics.FeatureNumericRangeConfig.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureNumericRangeStatistics.FeatureNumericRangeConfig</a></span></code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colFirst"><code>class&nbsp;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/FeatureTimeRangeStatistics.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">FeatureTimeRangeStatistics</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsConfigurationCollection</a></span></code>
+<div class="block">A collection of statistics configurations targeted to a specific attribute.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/stats/StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection.html" title="class in mil.nga.giat.geowave.adapter.vector.stats">StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.adapter.vector.utils">
+<!--   -->
+</a>
+<h3>Uses of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/package-summary.html">mil.nga.giat.geowave.adapter.vector.utils</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing subinterfaces, and an explanation">
+<caption><span>Subinterfaces of <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a> in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/package-summary.html">mil.nga.giat.geowave.adapter.vector.utils</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Interface and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>interface&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a></span></code>
+<div class="block">A type of configuration data associated with attributes of a simple features
+ such as statistics, indexing constraints, etc.</div>
+</td>
+</tr>
+</tbody>
+</table>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/package-summary.html">mil.nga.giat.geowave.adapter.vector.utils</a> that implement <a href="../../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfigurationSet</a></span></code>
+<div class="block">Represents a set of configurations maintained within the user data of a
+ simple feature type and is tracked by the type name.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/TimeDescriptors.TimeDescriptorConfiguration.html" title="class in mil.nga.giat.geowave.adapter.vector.utils">TimeDescriptors.TimeDescriptorConfiguration</a></span></code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

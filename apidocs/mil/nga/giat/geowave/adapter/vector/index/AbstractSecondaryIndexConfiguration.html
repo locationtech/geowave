@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -109,7 +109,7 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SimpleFeatureSecondaryIndexConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">SimpleFeatureSecondaryIndexConfiguration</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/io/Serializable.html?is-external=true" title="class or interface in java.io">Serializable</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/SimpleFeatureSecondaryIndexConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.index">SimpleFeatureSecondaryIndexConfiguration</a>, <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>, <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></dd>
 </dl>
 <dl>
 <dt>Direct Known Subclasses:</dt>
@@ -185,14 +185,27 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 </td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html#getAttributes--">getAttributes</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html#getFieldIds--">getFieldIds</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/index/AbstractSecondaryIndexConfiguration.html#updateType-org.opengis.feature.simple.SimpleFeatureType-">updateType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
 <div class="block">Store configuration in user data of the feature type attributes.</div>
@@ -321,7 +334,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 <a name="configureFromType-org.opengis.feature.simple.SimpleFeatureType-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>configureFromType</h4>
 <pre>public&nbsp;void&nbsp;configureFromType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
@@ -330,6 +343,40 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/ind
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html#configureFromType-org.opengis.feature.simple.SimpleFeatureType-">configureFromType</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="toBinary--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
+</dl>
+</li>
+</ul>
+<a name="fromBinary-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromBinary</h4>
+<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
 </dl>
 </li>
 </ul>

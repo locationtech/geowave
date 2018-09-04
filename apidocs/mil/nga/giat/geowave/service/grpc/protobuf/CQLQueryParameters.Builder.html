@@ -178,13 +178,13 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#clearBaseParams--">clearBaseParams</a></span>()</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#clearCql--">clearCql</a></span>()</code>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </td>
 </tr>
 <tr id="i6" class="altColor">
@@ -200,33 +200,33 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#clone--">clone</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i9" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#getBaseParams--">getBaseParams</a></span>()</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i10" class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters.Builder</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#getBaseParamsBuilder--">getBaseParamsBuilder</a></span>()</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i11" class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParametersOrBuilder</a></code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParametersOrBuilder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#getBaseParamsOrBuilder--">getBaseParamsOrBuilder</a></span>()</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i12" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#getCql--">getCql</a></span>()</code>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </td>
 </tr>
 <tr id="i13" class="rowColor">
 <td class="colFirst"><code>com.google.protobuf.ByteString</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#getCqlBytes--">getCqlBytes</a></span>()</code>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </td>
 </tr>
 <tr id="i14" class="altColor">
@@ -244,7 +244,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#hasBaseParams--">hasBaseParams</a></span>()</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i18" class="altColor">
@@ -257,8 +257,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 </tr>
 <tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#mergeBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters-">mergeBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a>&nbsp;value)</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#mergeBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters-">mergeBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</code>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i21" class="rowColor">
@@ -280,26 +280,26 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 </tr>
 <tr id="i25" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters.Builder-">setBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters.Builder</a>&nbsp;builderForValue)</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters.Builder-">setBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters.Builder</a>&nbsp;builderForValue)</code>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i26" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters-">setBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a>&nbsp;value)</code>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters-">setBaseParams</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</code>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </td>
 </tr>
 <tr id="i27" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setCql-java.lang.String-">setCql</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </td>
 </tr>
 <tr id="i28" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html#setCqlBytes-com.google.protobuf.ByteString-">setCqlBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </td>
 </tr>
 <tr id="i29" class="rowColor">
@@ -323,7 +323,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.google.protobuf.GeneratedMessageV3.Builder</h3>
-<code>getAllFields, getField, getFieldBuilder, getOneofFieldDescriptor, getParentForChildren, getRepeatedField, getRepeatedFieldBuilder, getRepeatedFieldCount, getUnknownFields, hasField, hasOneof, internalGetMapField, internalGetMutableMapField, isClean, markClean, newBuilderForField, onBuilt, onChanged, parseUnknownField</code></li>
+<code>getAllFields, getField, getFieldBuilder, getOneofFieldDescriptor, getParentForChildren, getRepeatedField, getRepeatedFieldBuilder, getRepeatedFieldCount, getUnknownFields, hasField, hasOneof, internalGetMapField, internalGetMutableMapField, isClean, markClean, newBuilderForField, onBuilt, onChanged, setUnknownFieldsProto3</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.com.google.protobuf.AbstractMessage.Builder">
@@ -337,7 +337,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;com.google.protobuf.AbstractMessageLite.Builder</h3>
-<code>addAll, mergeFrom, newUninitializedMessageException</code></li>
+<code>addAll, addAll, mergeFrom, newUninitializedMessageException</code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
@@ -638,7 +638,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>hasBaseParams</h4>
 <pre>public&nbsp;boolean&nbsp;hasBaseParams()</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html#hasBaseParams--">hasBaseParams</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParametersOrBuilder</a></code></dd>
@@ -651,42 +651,42 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <ul class="blockList">
 <li class="blockList">
 <h4>getBaseParams</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a>&nbsp;getBaseParams()</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;getBaseParams()</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html#getBaseParams--">getBaseParams</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParametersOrBuilder</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters-">
+<a name="setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setBaseParams</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a>&nbsp;value)</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </li>
 </ul>
-<a name="setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters.Builder-">
+<a name="setBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters.Builder-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>setBaseParams</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters.Builder</a>&nbsp;builderForValue)</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters.Builder</a>&nbsp;builderForValue)</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </li>
 </ul>
-<a name="mergeBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.BaseGeoWaveQueryParameters-">
+<a name="mergeBaseParams-mil.nga.giat.geowave.service.grpc.protobuf.VectorStoreParameters-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>mergeBaseParams</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;mergeBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters</a>&nbsp;value)</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;mergeBaseParams(<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters</a>&nbsp;value)</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </li>
 </ul>
 <a name="clearBaseParams--">
@@ -696,7 +696,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>clearBaseParams</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;clearBaseParams()</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </li>
 </ul>
 <a name="getBaseParamsBuilder--">
@@ -705,8 +705,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <ul class="blockList">
 <li class="blockList">
 <h4>getBaseParamsBuilder</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParameters.Builder</a>&nbsp;getBaseParamsBuilder()</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParameters.Builder</a>&nbsp;getBaseParamsBuilder()</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 </li>
 </ul>
 <a name="getBaseParamsOrBuilder--">
@@ -715,8 +715,8 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <ul class="blockList">
 <li class="blockList">
 <h4>getBaseParamsOrBuilder</h4>
-<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/BaseGeoWaveQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">BaseGeoWaveQueryParametersOrBuilder</a>&nbsp;getBaseParamsOrBuilder()</pre>
-<div class="block"><code>optional .BaseGeoWaveQueryParameters baseParams = 1;</code></div>
+<pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/VectorStoreParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">VectorStoreParametersOrBuilder</a>&nbsp;getBaseParamsOrBuilder()</pre>
+<div class="block"><code>.VectorStoreParameters baseParams = 1;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html#getBaseParamsOrBuilder--">getBaseParamsOrBuilder</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParametersOrBuilder</a></code></dd>
@@ -730,7 +730,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>getCql</h4>
 <pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;getCql()</pre>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html#getCql--">getCql</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParametersOrBuilder</a></code></dd>
@@ -744,7 +744,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>getCqlBytes</h4>
 <pre>public&nbsp;com.google.protobuf.ByteString&nbsp;getCqlBytes()</pre>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html#getCqlBytes--">getCqlBytes</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParametersOrBuilder.html" title="interface in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParametersOrBuilder</a></code></dd>
@@ -758,7 +758,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>setCql</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setCql(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</pre>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </li>
 </ul>
 <a name="clearCql--">
@@ -768,7 +768,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>clearCql</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;clearCql()</pre>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </li>
 </ul>
 <a name="setCqlBytes-com.google.protobuf.ByteString-">
@@ -778,7 +778,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/proto
 <li class="blockList">
 <h4>setCqlBytes</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/CQLQueryParameters.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">CQLQueryParameters.Builder</a>&nbsp;setCqlBytes(com.google.protobuf.ByteString&nbsp;value)</pre>
-<div class="block"><code>optional string cql = 2;</code></div>
+<div class="block"><code>string cql = 2;</code></div>
 </li>
 </ul>
 <a name="setUnknownFields-com.google.protobuf.UnknownFieldSet-">

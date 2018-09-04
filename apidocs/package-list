@@ -185,7 +185,6 @@ mil.nga.giat.geowave.datastore.dynamodb
 mil.nga.giat.geowave.datastore.dynamodb.operations
 mil.nga.giat.geowave.datastore.dynamodb.util
 mil.nga.giat.geowave.datastore.hbase
-mil.nga.giat.geowave.datastore.hbase.cli
 mil.nga.giat.geowave.datastore.hbase.cli.config
 mil.nga.giat.geowave.datastore.hbase.coprocessors
 mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf
@@ -232,7 +231,9 @@ mil.nga.giat.geowave.mapreduce.splits
 mil.nga.giat.geowave.service
 mil.nga.giat.geowave.service.client
 mil.nga.giat.geowave.service.grpc
+mil.nga.giat.geowave.service.grpc.cli
 mil.nga.giat.geowave.service.grpc.protobuf
+mil.nga.giat.geowave.service.grpc.services
 mil.nga.giat.geowave.service.rest
 mil.nga.giat.geowave.service.rest.exceptions
 mil.nga.giat.geowave.service.rest.field
@@ -244,6 +245,7 @@ mil.nga.giat.geowave.test.annotation
 mil.nga.giat.geowave.test.kafka
 mil.nga.giat.geowave.test.mapreduce
 mil.nga.giat.geowave.test.services
+mil.nga.giat.geowave.test.services.grpc
 mil.nga.giat.geowave.test.spark
 mil.nga.giat.geowave.types.stanag4676.service
 mil.nga.giat.geowave.types.stanag4676.service.rest

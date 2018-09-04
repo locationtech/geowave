@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -107,10 +107,15 @@ var activeTableTab = "activeTableTab";
 <div class="description">
 <ul class="blockList">
 <li class="blockList">
+<dl>
+<dt>All Implemented Interfaces:</dt>
+<dd><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></dd>
+</dl>
 <hr>
 <br>
 <pre>public class <span class="typeNameLabel">SimpleFeatureUserDataConfigurationSet</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></pre>
+extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
+implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></pre>
 <div class="block">Represents a set of configurations maintained within the user data of a
  simple feature type and is tracked by the type name.</div>
 </li>
@@ -212,24 +217,37 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#fromBinary-byte:A-">fromBinary</a></span>(byte[]&nbsp;bytes)</code>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+</td>
+</tr>
+<tr id="i5" class="rowColor">
+<td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#fromJsonString-java.lang.String-org.opengis.feature.simple.SimpleFeatureType-">fromJsonString</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;jsonConfigString,
               org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
 <div class="block">Converts a JSON formatted config string to a
  SimpleFeatureUserDataConfiguationSet and updates the passed in SFT</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#getConfigurations--">getConfigurations</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfiguration.html" title="interface in mil.nga.giat.geowave.adapter.vector.utils">SimpleFeatureUserDataConfiguration</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#getConfigurationsForType-java.lang.String-">getConfigurationsForType</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;typeName)</code>
 <div class="block">Gets a List of all the SimpleFeatureUserDataConfigurations for the SFT
  specified by the 'typeName' string</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
+<td class="colFirst"><code>byte[]</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#toBinary--">toBinary</a></span>()</code>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+</td>
+</tr>
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/vector/utils/SimpleFeatureUserDataConfigurationSet.html#updateType-org.opengis.feature.simple.SimpleFeatureType-">updateType</a></span>(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</code>
 <div class="block">Updates the SFT with the entire list of
@@ -457,7 +475,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <a name="configureType-org.opengis.feature.simple.SimpleFeatureType-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>configureType</h4>
 <pre>public static&nbsp;org.opengis.feature.simple.SimpleFeatureType&nbsp;configureType(org.opengis.feature.simple.SimpleFeatureType&nbsp;type)</pre>
@@ -468,6 +486,40 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <dd><code>type</code> - - SFT to be updated</dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>the SFT passed in as a parameter</dd>
+</dl>
+</li>
+</ul>
+<a name="toBinary--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>toBinary</h4>
+<pre>public&nbsp;byte[]&nbsp;toBinary()</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">Persistable</a></code></span></div>
+<div class="block">Convert fields and data within an object to binary form for transmission
+ or storage.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#toBinary--">toBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>an array of bytes representing a binary stream representation of
+         the object.</dd>
+</dl>
+</li>
+</ul>
+<a name="fromBinary-byte:A-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>fromBinary</h4>
+<pre>public&nbsp;void&nbsp;fromBinary(byte[]&nbsp;bytes)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">Persistable</a></code></span></div>
+<div class="block">Convert a stream of binary bytes to fields and data within an object.</div>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html#fromBinary-byte:A-">fromBinary</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/index/persist/Persistable.html" title="interface in mil.nga.giat.geowave.core.index.persist">Persistable</a></code></dd>
 </dl>
 </li>
 </ul>

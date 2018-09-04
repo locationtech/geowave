@@ -126,7 +126,7 @@
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#clearEndTime--">clearEndTime</a></span>()</code>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </td>
 </tr>
 <tr class="rowColor">
@@ -140,8 +140,7 @@
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#clearStartTime--">clearStartTime</a></span>()</code>
-<div class="block">
-ISO format e.g.</div>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </td>
 </tr>
 <tr class="altColor">
@@ -156,16 +155,28 @@ ISO format e.g.</div>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeFrom-com.google.protobuf.CodedInputStream-com.google.protobuf.ExtensionRegistryLite-">mergeFrom</a></span>(com.google.protobuf.CodedInputStream&nbsp;input,
-         com.google.protobuf.ExtensionRegistryLite&nbsp;extensionRegistry)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeEndTime-com.google.protobuf.Timestamp-">mergeEndTime</a></span>(com.google.protobuf.Timestamp&nbsp;value)</code>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeFrom-com.google.protobuf.Message-">mergeFrom</a></span>(com.google.protobuf.Message&nbsp;other)</code>&nbsp;</td>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeFrom-com.google.protobuf.CodedInputStream-com.google.protobuf.ExtensionRegistryLite-">mergeFrom</a></span>(com.google.protobuf.CodedInputStream&nbsp;input,
+         com.google.protobuf.ExtensionRegistryLite&nbsp;extensionRegistry)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeFrom-com.google.protobuf.Message-">mergeFrom</a></span>(com.google.protobuf.Message&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
 <td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeFrom-mil.nga.giat.geowave.service.grpc.protobuf.TemporalConstraints-">mergeFrom</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints</a>&nbsp;other)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#mergeStartTime-com.google.protobuf.Timestamp-">mergeStartTime</a></span>(com.google.protobuf.Timestamp&nbsp;value)</code>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
@@ -189,14 +200,14 @@ ISO format e.g.</div>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setEndTime-java.lang.String-">setEndTime</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setEndTime-com.google.protobuf.Timestamp.Builder-">setEndTime</a></span>(com.google.protobuf.Timestamp.Builder&nbsp;builderForValue)</code>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setEndTimeBytes-com.google.protobuf.ByteString-">setEndTimeBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
-<div class="block"><code>optional string endTime = 2;</code></div>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setEndTime-com.google.protobuf.Timestamp-">setEndTime</a></span>(com.google.protobuf.Timestamp&nbsp;value)</code>
+<div class="block"><code>.google.protobuf.Timestamp endTime = 2;</code></div>
 </td>
 </tr>
 <tr class="altColor">
@@ -212,16 +223,14 @@ ISO format e.g.</div>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setStartTime-java.lang.String-">setStartTime</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;value)</code>
-<div class="block">
-ISO format e.g.</div>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setStartTime-com.google.protobuf.Timestamp.Builder-">setStartTime</a></span>(com.google.protobuf.Timestamp.Builder&nbsp;builderForValue)</code>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html" title="class in mil.nga.giat.geowave.service.grpc.protobuf">TemporalConstraints.Builder</a></code></td>
-<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setStartTimeBytes-com.google.protobuf.ByteString-">setStartTimeBytes</a></span>(com.google.protobuf.ByteString&nbsp;value)</code>
-<div class="block">
-ISO format e.g.</div>
+<td class="colLast"><span class="typeNameLabel">TemporalConstraints.Builder.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/service/grpc/protobuf/TemporalConstraints.Builder.html#setStartTime-com.google.protobuf.Timestamp-">setStartTime</a></span>(com.google.protobuf.Timestamp&nbsp;value)</code>
+<div class="block"><code>.google.protobuf.Timestamp startTime = 1;</code></div>
 </td>
 </tr>
 <tr class="altColor">

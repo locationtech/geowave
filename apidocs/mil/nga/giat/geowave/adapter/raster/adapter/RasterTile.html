@@ -18,8 +18,8 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":9,"i3":9,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10};
-var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
 var tableTab = "tableTab";
@@ -154,7 +154,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 </a>
 <h3>Method Summary</h3>
 <table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
-<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t1" class="tableTab"><span><a href="javascript:show(1);">Static Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
 <tr>
 <th class="colFirst" scope="col">Modifier and Type</th>
 <th class="colLast" scope="col">Method and Description</th>
@@ -170,30 +170,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#getDataBuffer--">getDataBuffer</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i2" class="altColor">
-<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#getDataBuffer-byte:A-">getDataBuffer</a></span>(byte[]&nbsp;binary)</code>&nbsp;</td>
-</tr>
-<tr id="i3" class="rowColor">
-<td class="colFirst"><code>protected static byte[]</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#getDataBufferBinary-java.awt.image.DataBuffer-">getDataBufferBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer)</code>&nbsp;</td>
-</tr>
-<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="type parameter in RasterTile">T</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#getMetadata--">getMetadata</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#setDataBuffer-java.awt.image.DataBuffer-">setDataBuffer</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer)</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#setMetadata-T-">setMetadata</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="type parameter in RasterTile">T</a>&nbsp;metadata)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
@@ -267,31 +259,6 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/index/Mergeab
 <li class="blockList">
 <h4>getMetadata</h4>
 <pre>public&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/adapter/raster/adapter/RasterTile.html" title="type parameter in RasterTile">T</a>&nbsp;getMetadata()</pre>
-</li>
-</ul>
-<a name="getDataBufferBinary-java.awt.image.DataBuffer-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDataBufferBinary</h4>
-<pre>protected static&nbsp;byte[]&nbsp;getDataBufferBinary(<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;dataBuffer)</pre>
-</li>
-</ul>
-<a name="getDataBuffer-byte:A-">
-<!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDataBuffer</h4>
-<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/awt/image/DataBuffer.html?is-external=true" title="class or interface in java.awt.image">DataBuffer</a>&nbsp;getDataBuffer(byte[]&nbsp;binary)
-                                   throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
-                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></pre>
-<dl>
-<dt><span class="throwsLabel">Throws:</span></dt>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
-<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/ClassNotFoundException.html?is-external=true" title="class or interface in java.lang">ClassNotFoundException</a></code></dd>
-</dl>
 </li>
 </ul>
 <a name="toBinary--">

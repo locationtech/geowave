@@ -183,19 +183,19 @@
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><a href="#mil.nga.giat.geowave.datastore.hbase.cli">mil.nga.giat.geowave.datastore.hbase.cli</a></td>
-<td class="colLast">&nbsp;</td>
-</tr>
-<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.landsat8">mil.nga.giat.geowave.format.landsat8</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.format.sentinel2">mil.nga.giat.geowave.format.sentinel2</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><a href="#mil.nga.giat.geowave.mapreduce.operations">mil.nga.giat.geowave.mapreduce.operations</a></td>
+<td class="colLast">&nbsp;</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><a href="#mil.nga.giat.geowave.service.grpc.cli">mil.nga.giat.geowave.service.grpc.cli</a></td>
 <td class="colLast">&nbsp;</td>
 </tr>
 <tr class="rowColor">
@@ -1044,41 +1044,6 @@
 </tbody>
 </table>
 </li>
-<li class="blockList"><a name="mil.nga.giat.geowave.datastore.hbase.cli">
-<!--   -->
-</a>
-<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
-<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/package-summary.html">mil.nga.giat.geowave.core.cli.api</a> used by <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/cli/package-summary.html">mil.nga.giat.geowave.datastore.hbase.cli</a></span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colOne" scope="col">Class and Description</th>
-</tr>
-<tbody>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/Command.html#mil.nga.giat.geowave.datastore.hbase.cli">Command</a>
-<div class="block">An operation may choose to implement Command, which will then lead to the
- 'execute' method being called during the execute() phase.</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/DefaultOperation.html#mil.nga.giat.geowave.datastore.hbase.cli">DefaultOperation</a>
-<div class="block">The default operation prevents implementors from having to implement the
- 'prepare' function, if they don't want to.</div>
-</td>
-</tr>
-<tr class="altColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/Operation.html#mil.nga.giat.geowave.datastore.hbase.cli">Operation</a>
-<div class="block">An operation in GeoWave is something that can be prepared() and executed().</div>
-</td>
-</tr>
-<tr class="rowColor">
-<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/OperationParams.html#mil.nga.giat.geowave.datastore.hbase.cli">OperationParams</a>
-<div class="block">This arguments are used to allow sections and commands to modify how
- arguments are parsed during prepare / execution stage.</div>
-</td>
-</tr>
-</tbody>
-</table>
-</li>
 <li class="blockList"><a name="mil.nga.giat.geowave.format.landsat8">
 <!--   -->
 </a>
@@ -1183,6 +1148,41 @@
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/ServiceEnabledCommand.html#mil.nga.giat.geowave.mapreduce.operations">ServiceEnabledCommand</a>&nbsp;</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li class="blockList"><a name="mil.nga.giat.geowave.service.grpc.cli">
+<!--   -->
+</a>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing classes, and an explanation">
+<caption><span>Classes in <a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/package-summary.html">mil.nga.giat.geowave.core.cli.api</a> used by <a href="../../../../../../../mil/nga/giat/geowave/service/grpc/cli/package-summary.html">mil.nga.giat.geowave.service.grpc.cli</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colOne" scope="col">Class and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/Command.html#mil.nga.giat.geowave.service.grpc.cli">Command</a>
+<div class="block">An operation may choose to implement Command, which will then lead to the
+ 'execute' method being called during the execute() phase.</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/DefaultOperation.html#mil.nga.giat.geowave.service.grpc.cli">DefaultOperation</a>
+<div class="block">The default operation prevents implementors from having to implement the
+ 'prepare' function, if they don't want to.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/Operation.html#mil.nga.giat.geowave.service.grpc.cli">Operation</a>
+<div class="block">An operation in GeoWave is something that can be prepared() and executed().</div>
+</td>
+</tr>
+<tr class="rowColor">
+<td class="colOne"><a href="../../../../../../../mil/nga/giat/geowave/core/cli/api/class-use/OperationParams.html#mil.nga.giat.geowave.service.grpc.cli">OperationParams</a>
+<div class="block">This arguments are used to allow sections and commands to modify how
+ arguments are parsed during prepare / execution stage.</div>
+</td>
 </tr>
 </tbody>
 </table>
