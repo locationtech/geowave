@@ -55,7 +55,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		DimensionalityTypeProviderSpi<SpatialTemporalOptions>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(SpatialTemporalDimensionalityTypeProvider.class);
-	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "SPATIAL_TEMPORAL_IDX";
+	private static final String DEFAULT_SPATIAL_TEMPORAL_ID_STR = "ST_IDX";
 
 	// TODO should we use different default IDs for all the different
 	// options, for now lets just use one
