@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Semaphore;
@@ -538,11 +539,13 @@ public class CassandraOperations implements
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
 			semaphore.release();
+			if (!(t instanceof CancellationException)) {
 			LOGGER.error(
 					"Failure from async query",
 					t);
 			throw new RuntimeException(
 					t);
+			}
 		}
 	}
 
