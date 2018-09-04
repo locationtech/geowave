@@ -351,8 +351,8 @@ public class DataStoreUtils
 				buf.array());
 	}
 
-	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.GEOWAVE_CHAR_SET);
-	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.GEOWAVE_CHAR_SET);
+	private static final byte[] BEG_AND_BYTE = "&".getBytes(StringUtils.getGeoWaveCharset());
+	private static final byte[] END_AND_BYTE = ")".getBytes(StringUtils.getGeoWaveCharset());
 
 	public static byte[] mergeVisibilities(
 			final byte vis1[],

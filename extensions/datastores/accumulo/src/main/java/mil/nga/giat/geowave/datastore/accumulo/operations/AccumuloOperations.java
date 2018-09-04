@@ -668,7 +668,7 @@ public class AccumuloOperations implements
 				final List<byte[]> newSet = new ArrayList<byte[]>();
 				for (final String auth : unensuredAuths) {
 					if (!auths.contains(auth)) {
-						newSet.add(auth.getBytes(StringUtils.UTF8_CHAR_SET));
+						newSet.add(auth.getBytes(StringUtils.UTF8_CHARSET));
 					}
 				}
 				if (newSet.size() > 0) {

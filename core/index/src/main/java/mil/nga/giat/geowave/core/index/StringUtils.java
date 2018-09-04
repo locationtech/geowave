@@ -32,8 +32,21 @@ public class StringUtils
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(StringUtils.class);
-	public static final Charset GEOWAVE_CHAR_SET = Charset.forName("ISO-8859-1");
-	public static final Charset UTF8_CHAR_SET = Charset.forName("UTF-8");
+
+	public static final Charset UTF8_CHARSET = Charset.forName("UTF-8");
+	private static final String DEFAULT_GEOWAVE_CHARSET = "ISO-8859-1";
+	private static final String GEOWAVE_CHARSET_PROPERTY_NAME = "geowave.charset";
+	private static Charset geowaveCharset;
+
+	public static Charset getGeoWaveCharset() {
+		if (geowaveCharset == null) {
+			String charset = System.getProperty(
+					GEOWAVE_CHARSET_PROPERTY_NAME,
+					DEFAULT_GEOWAVE_CHARSET);
+			geowaveCharset = Charset.forName(charset);
+		}
+		return geowaveCharset;
+	}
 
 	/**
 	 * Utility to convert a String to bytes
@@ -44,7 +57,7 @@ public class StringUtils
 	 */
 	public static byte[] stringToBinary(
 			final String string ) {
-		return string.getBytes(GEOWAVE_CHAR_SET);
+		return string.getBytes(getGeoWaveCharset());
 	}
 
 	/**
@@ -59,7 +72,7 @@ public class StringUtils
 		int len = 4;
 		final List<byte[]> strsBytes = new ArrayList<byte[]>();
 		for (final String str : strings) {
-			final byte[] strByte = str.getBytes(GEOWAVE_CHAR_SET);
+			final byte[] strByte = str.getBytes(getGeoWaveCharset());
 			strsBytes.add(strByte);
 			len += (strByte.length + 4);
 
@@ -84,7 +97,7 @@ public class StringUtils
 			final byte[] binary ) {
 		return new String(
 				binary,
-				GEOWAVE_CHAR_SET);
+				getGeoWaveCharset());
 	}
 
 	/**
@@ -105,7 +118,7 @@ public class StringUtils
 			buf.get(strBytes);
 			result[i] = new String(
 					strBytes,
-					GEOWAVE_CHAR_SET);
+					getGeoWaveCharset());
 		}
 		return result;
 	}

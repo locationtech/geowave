@@ -102,22 +102,22 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	public void testPIDNonDefault() {
 
 		assertTrue(Arrays.equals(
-				"TS".getBytes(StringUtils.GEOWAVE_CHAR_SET),
+				"TS".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePIDHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pid".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
+								"pid".getBytes(StringUtils.getGeoWaveCharset())),
 						"pid")));
 	}
 
 	@Test
 	public void testPOPNonDefault() {
 		assertTrue(Arrays.equals(
-				"default".getBytes(StringUtils.GEOWAVE_CHAR_SET),
+				"default".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
+								"pop".getBytes(StringUtils.getGeoWaveCharset())),
 						"pop")));
 
 	}
@@ -125,11 +125,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	@Test
 	public void testGEORegexDefault() {
 		assertTrue(Arrays.equals(
-				"S".getBytes(StringUtils.GEOWAVE_CHAR_SET),
+				"S".getBytes(StringUtils.getGeoWaveCharset()),
 				simpleGEOHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"geometry".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
+								"geometry".getBytes(StringUtils.getGeoWaveCharset())),
 						"geometry")));
 
 	}
@@ -140,11 +140,11 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"vis",
 				"{\"pid\":\"TS\", \".*\":\"U\"}");
 		assertTrue(Arrays.equals(
-				"U".getBytes(StringUtils.GEOWAVE_CHAR_SET),
+				"U".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePOPHandler.getVisibility(
 						newFeature,
 						new ByteArrayId(
-								"pop".getBytes(StringUtils.GEOWAVE_CHAR_SET)),
+								"pop".getBytes(StringUtils.getGeoWaveCharset())),
 						"pop")));
 
 	}

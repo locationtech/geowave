@@ -91,7 +91,7 @@ public class TdriveUtils
 			final URL file ) {
 		try (Scanner scanner = new Scanner(
 				file.openStream(),
-				StringUtils.GEOWAVE_CHAR_SET.toString())) {
+				StringUtils.getGeoWaveCharset().toString())) {
 			if (scanner.hasNextLine()) {
 				final String line = scanner.nextLine();
 				return line.split(",").length == 4;

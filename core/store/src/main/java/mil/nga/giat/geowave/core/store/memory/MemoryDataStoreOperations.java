@@ -783,7 +783,7 @@ public class MemoryDataStoreOperations implements
 			this(
 					metadata,
 					UUID.randomUUID().toString().getBytes(
-							StringUtils.GEOWAVE_CHAR_SET));
+							StringUtils.getGeoWaveCharset()));
 		}
 
 		public MemoryMetadataEntry(

@@ -197,7 +197,7 @@ public class GPXConsumerTest
 				"sample_gpx.xml");) {
 
 			final ByteArrayId indexId = new ByteArrayId(
-					"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+					"123".getBytes(StringUtils.getGeoWaveCharset()));
 			final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 			indexIds.add(indexId);
 			final GPXConsumer consumer = new GPXConsumer(
@@ -277,7 +277,7 @@ public class GPXConsumerTest
 			try (final InputStream is = new FileInputStream(
 					dir);) {
 				final ByteArrayId indexId = new ByteArrayId(
-						"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+						"123".getBytes(StringUtils.getGeoWaveCharset()));
 				final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 				indexIds.add(indexId);
 				try (final GPXConsumer consumer = new GPXConsumer(

@@ -250,7 +250,7 @@ public class SceneFeatureIterator implements
 					final LineReader lines = new LineReader(
 							new InputStreamReader(
 									is,
-									StringUtils.UTF8_CHAR_SET));
+									StringUtils.UTF8_CHARSET));
 					while (lines.readLine() != null) {
 						startLine++;
 					}
@@ -435,7 +435,7 @@ public class SceneFeatureIterator implements
 				csvFile);
 		parserIsr = new InputStreamReader(
 				parserFis,
-				StringUtils.UTF8_CHAR_SET);
+				StringUtils.UTF8_CHARSET);
 		parser = new CSVParser(
 				parserIsr,
 				CSVFormat.DEFAULT.withHeader().withSkipHeaderRecord());

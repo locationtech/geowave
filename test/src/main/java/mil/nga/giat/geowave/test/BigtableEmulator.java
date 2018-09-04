@@ -285,7 +285,7 @@ public class BigtableEmulator
 					final boolean closeWhenExhausted ) {
 				final FilterInputStream fis = new FilterInputStream(
 						is) {
-					byte[] startupBytes = ("running on " + emulatorHostPort).getBytes(StringUtils.UTF8_CHAR_SET);
+					byte[] startupBytes = ("running on " + emulatorHostPort).getBytes(StringUtils.UTF8_CHARSET);
 					Queue<Integer> queue = new LinkedList<>();
 
 					private boolean isStartupFound() {

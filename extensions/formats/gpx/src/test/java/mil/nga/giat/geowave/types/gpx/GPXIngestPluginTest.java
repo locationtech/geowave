@@ -76,7 +76,7 @@ public class GPXIngestPluginTest
 						"metadata.xml").getPath()).getParentFile().toURI().toURL());
 
 		final ByteArrayId indexId = new ByteArrayId(
-				"123".getBytes(StringUtils.GEOWAVE_CHAR_SET));
+				"123".getBytes(StringUtils.getGeoWaveCharset()));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(indexId);
 		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(

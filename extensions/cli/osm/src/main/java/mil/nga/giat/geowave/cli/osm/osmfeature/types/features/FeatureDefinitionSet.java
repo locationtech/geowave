@@ -56,7 +56,7 @@ public class FeatureDefinitionSet
 			if (!initialized) {
 				FeatureConfigParser fcp = new FeatureConfigParser();
 				ByteArrayInputStream bais = new ByteArrayInputStream(
-						configFile.getBytes(StringUtils.GEOWAVE_CHAR_SET));
+						configFile.getBytes(StringUtils.getGeoWaveCharset()));
 				try {
 					fcp.parseConfig(bais);
 				}
