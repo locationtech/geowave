@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -10,17 +10,20 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.utils;
 
+import java.nio.ByteBuffer;
+import java.util.BitSet;
 import java.util.Locale;
 
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
 import mil.nga.giat.geowave.core.geotime.TimeUtils;
+import mil.nga.giat.geowave.core.index.StringUtils;
 
 /**
- * 
+ *
  * Describes temporally indexed attributes associated with a feature type.
- * 
+ *
  */
 public class TimeDescriptors
 {
@@ -46,7 +49,7 @@ public class TimeDescriptors
 	public TimeDescriptors(
 			final SimpleFeatureType type,
 			final TimeDescriptorConfiguration configuration ) {
-		this.update(
+		update(
 				type,
 				configuration);
 	}
@@ -170,7 +173,7 @@ public class TimeDescriptors
 
 		public TimeDescriptorConfiguration(
 				final SimpleFeatureType type ) {
-			this.configureFromType(type);
+			configureFromType(type);
 		}
 
 		public String getStartRangeName() {
@@ -288,6 +291,90 @@ public class TimeDescriptors
 					setTimeName(getEndRangeName());
 				}
 				setEndRangeName(null);
+			}
+		}
+
+		@Override
+		public byte[] toBinary() {
+			final BitSet bits = new BitSet(
+					3);
+			int length = 1;
+			byte[] timeBytes, startRangeBytes, endRangeBytes;
+			if (timeName != null) {
+				bits.set(0);
+				timeBytes = StringUtils.stringToBinary(timeName);
+				length += 4;
+				length += timeBytes.length;
+			}
+			else {
+				timeBytes = null;
+			}
+			if (startRangeName != null) {
+				bits.set(1);
+				startRangeBytes = StringUtils.stringToBinary(startRangeName);
+				length += 4;
+				length += startRangeBytes.length;
+			}
+			else {
+				startRangeBytes = null;
+			}
+			if (endRangeName != null) {
+				bits.set(2);
+				endRangeBytes = StringUtils.stringToBinary(endRangeName);
+				length += 4;
+				length += endRangeBytes.length;
+			}
+			else {
+				endRangeBytes = null;
+			}
+			final ByteBuffer buf = ByteBuffer.allocate(length);
+			buf.put(bits.toByteArray()[0]);
+			if (timeBytes != null) {
+				buf.putInt(timeBytes.length);
+				buf.put(timeBytes);
+			}
+			if (startRangeBytes != null) {
+				buf.putInt(startRangeBytes.length);
+				buf.put(startRangeBytes);
+			}
+			if (endRangeBytes != null) {
+				buf.putInt(endRangeBytes.length);
+				buf.put(endRangeBytes);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public void fromBinary(
+				final byte[] bytes ) {
+			final ByteBuffer buf = ByteBuffer.wrap(bytes);
+			final BitSet bitSet = BitSet.valueOf(new byte[] {
+				buf.get()
+			});
+			if (bitSet.get(0)) {
+				byte[] timeBytes = new byte[buf.getInt()];
+				buf.get(timeBytes);
+				timeName = StringUtils.stringFromBinary(timeBytes);
+			}
+			else {
+				timeName = null;
+			}
+			if (bitSet.get(1)) {
+				byte[] startRangeBytes = new byte[buf.getInt()];
+				buf.get(startRangeBytes);
+				startRangeName = StringUtils.stringFromBinary(startRangeBytes);
+			}
+			else {
+				startRangeName = null;
+			}
+			if (bitSet.get(2)) {
+				byte[] endRangeBytes = new byte[buf.getInt()];
+				buf.get(endRangeBytes);
+				endRangeName = StringUtils.stringFromBinary(endRangeBytes);
+
+			}
+			else {
+				endRangeName = null;
 			}
 		}
 

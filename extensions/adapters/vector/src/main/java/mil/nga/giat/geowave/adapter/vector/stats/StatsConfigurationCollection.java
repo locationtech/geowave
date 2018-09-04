@@ -10,11 +10,17 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.stats;
 
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +34,8 @@ import org.opengis.feature.type.AttributeDescriptor;
  * 
  */
 public class StatsConfigurationCollection implements
-		java.io.Serializable
+		java.io.Serializable,
+		Persistable
 {
 
 	private static final long serialVersionUID = -4983543525776889248L;
@@ -53,6 +60,17 @@ public class StatsConfigurationCollection implements
 	public void setConfigurationsForAttribute(
 			final List<StatsConfig<SimpleFeature>> configrationsForAttribute ) {
 		this.configurationsForAttribute = configrationsForAttribute;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		return PersistenceUtils.toBinary(configurationsForAttribute);
+	}
+
+	@Override
+	public void fromBinary(
+			byte[] bytes ) {
+		configurationsForAttribute = (List) PersistenceUtils.fromBinaryAsList(bytes);
 	}
 
 	public static class SimpleFeatureStatsConfigurationCollection implements
@@ -111,6 +129,54 @@ public class StatsConfigurationCollection implements
 							(StatsConfigurationCollection) configObj);
 				}
 			}
+		}
+
+		@Override
+		public byte[] toBinary() {
+			int size = 4;
+			List<byte[]> entries = new ArrayList<>(
+					attConfig.size());
+			for (Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
+				byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
+				int entrySize = 8 + keyBytes.length;
+				byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
+				entrySize += confBytes.length;
+				size += entrySize;
+				ByteBuffer buf = ByteBuffer.allocate(entrySize);
+				buf.putInt(keyBytes.length);
+				buf.put(keyBytes);
+				buf.putInt(confBytes.length);
+				buf.put(confBytes);
+				entries.add(buf.array());
+			}
+			ByteBuffer buf = ByteBuffer.allocate(size);
+			buf.putInt(attConfig.size());
+			for (byte[] e : entries) {
+				buf.put(e);
+			}
+			return buf.array();
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {
+			ByteBuffer buf = ByteBuffer.wrap(bytes);
+			int entrySize = buf.getInt();
+			Map<String, StatsConfigurationCollection> internalAttConfig = new HashMap<>(
+					entrySize);
+			for (int i = 0; i < entrySize; i++) {
+				int keySize = buf.getInt();
+				byte[] keyBytes = new byte[keySize];
+				buf.get(keyBytes);
+				String key = StringUtils.stringFromBinary(keyBytes);
+				byte[] entryBytes = new byte[buf.getInt()];
+				buf.get(entryBytes);
+
+				internalAttConfig.put(
+						key,
+						(StatsConfigurationCollection) PersistenceUtils.fromBinary(entryBytes));
+			}
+			this.attConfig = internalAttConfig;
 		}
 	}
 }

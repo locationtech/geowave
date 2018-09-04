@@ -24,13 +24,13 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.cli.ParseException;
+import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import com.google.common.base.Stopwatch;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
@@ -61,7 +61,7 @@ public class MinimalFullTable extends
 	public void execute(
 			final OperationParams params )
 			throws ParseException {
-		final Stopwatch stopWatch = new Stopwatch();
+		final StopWatch stopWatch = new StopWatch();
 
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1) {

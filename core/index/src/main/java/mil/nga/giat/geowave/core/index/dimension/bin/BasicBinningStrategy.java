@@ -47,7 +47,7 @@ public class BasicBinningStrategy implements
 	public double getBinMax() {
 		return halfInterval;
 	}
-	
+
 	@Override
 	public BinValue getBinnedValue(
 			double value ) {

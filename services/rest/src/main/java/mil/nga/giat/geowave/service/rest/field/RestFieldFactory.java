@@ -79,7 +79,7 @@ public class RestFieldFactory
 		return internalCreateRestFields(
 				instance,
 				instance.getClass(),
-			   (ParameterInitializer<RestFieldValue<?>>)(
+				(ParameterInitializer<RestFieldValue<?>>)(
 						final Field field,
 						final Parameter parameter,
 						final Object i ) -> new ParameterRestFieldValue(

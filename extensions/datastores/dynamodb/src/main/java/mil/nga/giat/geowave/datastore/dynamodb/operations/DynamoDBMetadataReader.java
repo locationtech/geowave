@@ -31,17 +31,13 @@ import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 public class DynamoDBMetadataReader implements
 		MetadataReader
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(DynamoDBMetadataReader.class);
 	private final DynamoDBOperations operations;
-	private final DataStoreOptions options;
 	private final MetadataType metadataType;
 
 	public DynamoDBMetadataReader(
 			final DynamoDBOperations operations,
-			final DataStoreOptions options,
 			final MetadataType metadataType ) {
 		this.operations = operations;
-		this.options = options;
 		this.metadataType = metadataType;
 	}
 

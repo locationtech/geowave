@@ -297,7 +297,6 @@ public class DynamoDBOperations implements
 			final MetadataType metadataType ) {
 		return new DynamoDBMetadataReader(
 				this,
-				options.getBaseOptions(),
 				metadataType);
 	}
 

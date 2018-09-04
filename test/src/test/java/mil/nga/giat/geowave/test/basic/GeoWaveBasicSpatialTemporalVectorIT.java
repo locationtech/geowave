@@ -11,7 +11,6 @@
 package mil.nga.giat.geowave.test.basic;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,7 +20,6 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.geotools.filter.text.cql2.CQLException;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;

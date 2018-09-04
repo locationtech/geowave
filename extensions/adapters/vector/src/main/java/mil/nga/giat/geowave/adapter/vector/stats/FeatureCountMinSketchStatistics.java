@@ -257,5 +257,21 @@ public class FeatureCountMinSketchStatistics extends
 					errorFactor,
 					probabilityOfCorrectness);
 		}
+
+		@Override
+		public byte[] toBinary() {
+			ByteBuffer buf = ByteBuffer.allocate(16);
+			buf.putDouble(errorFactor);
+			buf.putDouble(probabilityOfCorrectness);
+			return buf.array();
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {
+			ByteBuffer buf = ByteBuffer.wrap(bytes);
+			errorFactor = buf.getDouble();
+			probabilityOfCorrectness = buf.getDouble();
+		}
 	}
 }

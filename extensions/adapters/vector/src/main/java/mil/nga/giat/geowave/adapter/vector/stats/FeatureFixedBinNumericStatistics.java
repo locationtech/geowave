@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.stats;
 
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.opengis.feature.simple.SimpleFeature;
@@ -199,6 +200,22 @@ public class FeatureFixedBinNumericStatistics extends
 					bins,
 					minValue,
 					maxValue);
+		}
+
+		@Override
+		public byte[] toBinary() {
+			ByteBuffer buf = ByteBuffer.allocate(16);
+			buf.putDouble(minValue);
+			buf.putDouble(maxValue);
+			return buf.array();
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {
+			ByteBuffer buf = ByteBuffer.wrap(bytes);
+			minValue = buf.getDouble();
+			maxValue = buf.getDouble();
 		}
 	}
 }

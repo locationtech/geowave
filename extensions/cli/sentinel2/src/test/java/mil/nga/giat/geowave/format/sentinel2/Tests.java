@@ -127,7 +127,7 @@ public class Tests
 
 		if (providerName == "THEIA") {
 			final Date startDate = DateUtilities.parseISO("2018-01-01T00:00:00Z");
-			final Date endDate = DateUtilities.parseISO("2018-01-02T00:00:00Z");
+			final Date endDate = DateUtilities.parseISO("2018-01-03T00:00:00Z");
 			return new Date[] {
 				startDate,
 				endDate

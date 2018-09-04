@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -11,20 +11,22 @@
 package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 
 import java.io.ObjectStreamException;
-
-import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
-import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
+import java.nio.ByteBuffer;
 
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
 
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.store.data.visibility.VisibilityManagement;
+
 /**
- * 
+ *
  * Describes which attribute in a feature contains the visibility constraints,
  * interpreted by a {@link ColumnVisibilityManagementSpi}
- * 
+ *
  */
 public class VisibilityConfiguration implements
 		SimpleFeatureUserDataConfiguration
@@ -33,7 +35,7 @@ public class VisibilityConfiguration implements
 	private static final long serialVersionUID = -664252700036603897L;
 	private String attributeName = "GEOWAVE_VISIBILITY";
 	private String managerClassName = JsonDefinitionColumnVisibilityManagement.class.toString();
-	private transient VisibilityManagement<SimpleFeature> manager = new JsonDefinitionColumnVisibilityManagement<SimpleFeature>();
+	private transient VisibilityManagement<SimpleFeature> manager = new JsonDefinitionColumnVisibilityManagement<>();
 
 	public VisibilityConfiguration() {
 
@@ -41,14 +43,14 @@ public class VisibilityConfiguration implements
 
 	public VisibilityConfiguration(
 			final SimpleFeatureType type ) {
-		this.configureFromType(type);
+		configureFromType(type);
 	}
 
 	/**
 	 * Check to see if provided type needs to be updated with the provided
 	 * manager. If no visibilityManager has been set and a valid manager is
 	 * passed in, then set the SimpleFeatureType to reflect the new manager
-	 * 
+	 *
 	 * @param type
 	 *            - feature type object to be checked and updated
 	 * @param manager
@@ -60,8 +62,8 @@ public class VisibilityConfiguration implements
 			final VisibilityManagement<SimpleFeature> manager ) {
 		if ((!configureManager(type)) && (manager != null)) {
 			this.manager = manager;
-			this.managerClassName = manager.getClass().getName();
-			this.updateType(type);
+			managerClassName = manager.getClass().getName();
+			updateType(type);
 		}
 	}
 
@@ -71,7 +73,7 @@ public class VisibilityConfiguration implements
 
 	/**
 	 * USED FOR TESTING
-	 * 
+	 *
 	 * @param attributeName
 	 */
 	public void setAttributeName(
@@ -86,7 +88,7 @@ public class VisibilityConfiguration implements
 	}
 
 	public void setManagerClassName(
-			String managerClassName ) {
+			final String managerClassName ) {
 		this.managerClassName = managerClassName;
 	}
 
@@ -98,7 +100,7 @@ public class VisibilityConfiguration implements
 	/**
 	 * {@inheritDoc} Method that updates visibility for the passed in
 	 * SimpleFeatureType.
-	 * 
+	 *
 	 * @param persistType
 	 *            - type object to be updated
 	 */
@@ -120,17 +122,17 @@ public class VisibilityConfiguration implements
 
 		persistType.getUserData().put(
 				"visibilityManagerClass",
-				this.managerClassName);
+				managerClassName);
 	}
 
 	/**
 	 * {@inheritDoc} Configure this VisibilityConfiguration object based on the
 	 * passed in SimpleFeatureType. This includes setting the 'attributeName' to
 	 * the attribute that has a key of 'visiblity'.
-	 * 
+	 *
 	 * @param persistType
 	 *            - object used to configure this VisibilityConfiguration object
-	 * 
+	 *
 	 */
 	@Override
 	public void configureFromType(
@@ -168,7 +170,7 @@ public class VisibilityConfiguration implements
 				manager = (VisibilityManagement<SimpleFeature>) Class.forName(
 						visMgr.toString()).newInstance();
 			}
-			catch (Exception ex) {
+			catch (final Exception ex) {
 				VisibilityManagementHelper.LOGGER.warn(
 						"Cannot load visibility management class " + visMgr.toString(),
 						ex);
@@ -181,17 +183,77 @@ public class VisibilityConfiguration implements
 	@SuppressWarnings("unchecked")
 	public Object readResolve()
 			throws ObjectStreamException {
-		if (managerClassName != null && !(manager instanceof JsonDefinitionColumnVisibilityManagement)) {
+		if ((managerClassName != null) && !(manager instanceof JsonDefinitionColumnVisibilityManagement)) {
 			try {
 				manager = (VisibilityManagement<SimpleFeature>) Class.forName(
 						managerClassName).newInstance();
 			}
-			catch (Exception ex) {
+			catch (final Exception ex) {
 				VisibilityManagementHelper.LOGGER.warn(
 						"Cannot load visibility management class " + managerClassName,
 						ex);
 			}
 		}
 		return this;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		byte[] managerClassBytes;
+		if (managerClassName != null) {
+			managerClassBytes = StringUtils.stringToBinary(managerClassName);
+		}
+		else {
+			managerClassBytes = new byte[0];
+		}
+		byte[] attributeBytes;
+		if (attributeName != null) {
+			attributeBytes = StringUtils.stringToBinary(attributeName);
+		}
+		else {
+			attributeBytes = new byte[0];
+		}
+		final ByteBuffer buf = ByteBuffer.allocate(attributeBytes.length + managerClassBytes.length + 8);
+		buf.putInt(attributeBytes.length);
+		buf.put(attributeBytes);
+		buf.putInt(managerClassBytes.length);
+		buf.put(managerClassBytes);
+		return buf.array();
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		byte[] attributeBytes;
+		final byte[] managerClassBytes;
+		final ByteBuffer buf = ByteBuffer.wrap(bytes);
+		attributeBytes = new byte[buf.getInt()];
+		if (attributeBytes.length > 0) {
+			buf.get(attributeBytes);
+			attributeName = StringUtils.stringFromBinary(attributeBytes);
+		}
+		else {
+			attributeName = null;
+		}
+		managerClassBytes = new byte[buf.getInt()];
+		if (managerClassBytes.length > 0) {
+			buf.get(managerClassBytes);
+			managerClassName = StringUtils.stringFromBinary(managerClassBytes);
+		}
+		else {
+			managerClassName = null;
+		}
+		if ((managerClassName != null)
+				&& !(managerClassName.equals(JsonDefinitionColumnVisibilityManagement.class.getName()))) {
+			try {
+				manager = (VisibilityManagement<SimpleFeature>) Class.forName(
+						managerClassName).newInstance();
+			}
+			catch (final Exception ex) {
+				VisibilityManagementHelper.LOGGER.warn(
+						"Cannot load visibility management class " + managerClassName,
+						ex);
+			}
+		}
 	}
 }
