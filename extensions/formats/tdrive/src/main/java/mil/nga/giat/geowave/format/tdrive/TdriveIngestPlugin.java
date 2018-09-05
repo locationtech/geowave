@@ -113,7 +113,7 @@ public class TdriveIngestPlugin extends
 			final BufferedReader fr = new BufferedReader(
 					new InputStreamReader(
 							fis,
-							StringUtils.GEOWAVE_CHAR_SET));
+							StringUtils.getGeoWaveCharset()));
 			final BufferedReader br = new BufferedReader(
 					fr);
 			return new CloseableIterator<TdrivePoint>() {

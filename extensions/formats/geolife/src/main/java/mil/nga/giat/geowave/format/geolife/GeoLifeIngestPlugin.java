@@ -180,7 +180,7 @@ public class GeoLifeIngestPlugin extends
 				hfile.getOriginalFile().array());
 		final InputStreamReader isr = new InputStreamReader(
 				in,
-				StringUtils.GEOWAVE_CHAR_SET);
+				StringUtils.getGeoWaveCharset());
 		final BufferedReader br = new BufferedReader(
 				isr);
 		int pointInstance = 0;

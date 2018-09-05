@@ -400,7 +400,7 @@ public class KSamplerMapReduce
 				final byte[] data ) {
 			return new String(
 					getGroup(data),
-					StringUtils.GEOWAVE_CHAR_SET);
+					StringUtils.getGeoWaveCharset());
 		}
 
 		private static byte[] getGroup(
@@ -419,7 +419,7 @@ public class KSamplerMapReduce
 				final double weight,
 				final byte[] dataIdBytes ) {
 			keyBuffer.rewind();
-			final byte[] groupIDBytes = groupID.getBytes(StringUtils.GEOWAVE_CHAR_SET);
+			final byte[] groupIDBytes = groupID.getBytes(StringUtils.getGeoWaveCharset());
 			// try to reuse
 			final int size = dataIdBytes.length + 16 + groupIDBytes.length;
 			if (keyBuffer.capacity() < size) {

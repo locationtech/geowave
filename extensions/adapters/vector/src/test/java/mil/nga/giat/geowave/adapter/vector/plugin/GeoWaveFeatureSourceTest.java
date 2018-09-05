@@ -133,7 +133,7 @@ public class GeoWaveFeatureSourceTest extends
 
 		short internalAdapterId = ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addAdapterId(
 				new ByteArrayId(
-						(typeName).getBytes(StringUtils.GEOWAVE_CHAR_SET)));
+						(typeName).getBytes(StringUtils.getGeoWaveCharset())));
 		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore)
 				.getDataStatisticsStore()
 				.getDataStatistics(

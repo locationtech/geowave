@@ -62,7 +62,7 @@ public class AVROIngestTest
 		assertTrue(validate(toIngest));
 		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(new ByteArrayId(
-				"123".getBytes(StringUtils.UTF8_CHAR_SET)));
+				"123".getBytes(StringUtils.UTF8_CHARSET)));
 		final CloseableIterator<GeoWaveData<SimpleFeature>> features = ingester.toGeoWaveData(
 				toIngest,
 				indexIds,

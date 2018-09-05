@@ -372,7 +372,7 @@ public class AccumuloDataStoreStatsTest
 						}),
 				new DataIdQuery(
 						new ByteArrayId(
-								"test_pt_2".getBytes(StringUtils.GEOWAVE_CHAR_SET))));
+								"test_pt_2".getBytes(StringUtils.getGeoWaveCharset()))));
 		assertFalse(found.get());
 
 		try (CloseableIterator<?> it1 = mockDataStore.query(
@@ -415,7 +415,7 @@ public class AccumuloDataStoreStatsTest
 						}),
 				new DataIdQuery(
 						new ByteArrayId(
-								"test_pt".getBytes(StringUtils.GEOWAVE_CHAR_SET))));
+								"test_pt".getBytes(StringUtils.getGeoWaveCharset()))));
 
 		try (CloseableIterator<?> it1 = mockDataStore.query(
 				new QueryOptions(

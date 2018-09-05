@@ -162,7 +162,7 @@ public class TwitterIngestPlugin extends
 
 			final InputStreamReader isr = new InputStreamReader(
 					zip,
-					StringUtils.UTF8_CHAR_SET);
+					StringUtils.UTF8_CHARSET);
 			final BufferedReader br = new BufferedReader(
 					isr);
 
