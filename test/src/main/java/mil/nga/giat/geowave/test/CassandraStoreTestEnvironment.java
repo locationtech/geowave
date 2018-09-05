@@ -28,6 +28,7 @@ import mil.nga.giat.geowave.core.store.GenericStoreFactory;
 import mil.nga.giat.geowave.core.store.StoreFactoryOptions;
 import mil.nga.giat.geowave.core.store.util.ClasspathUtils;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraStoreFactoryFamily;
+import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraOptions;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
 import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 
@@ -328,6 +329,7 @@ public class CassandraStoreTestEnvironment extends
 			final StoreFactoryOptions options ) {
 		final CassandraRequiredOptions cassandraOpts = (CassandraRequiredOptions) options;
 		cassandraOpts.setContactPoint("127.0.0.1");
+		((CassandraOptions) cassandraOpts.getStoreOptions()).setBatchWriteSize(5);
 	}
 
 	@Override
