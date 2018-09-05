@@ -90,7 +90,7 @@ public class CustomCRSKDERasterResizeIT
 
 	protected DataStorePluginOptions inputDataStorePluginOptions;
 
-	private final static Logger LOGGER = LoggerFactory.getLogger(KDERasterResizeIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(CustomCRSKDERasterResizeIT.class);
 	private static long startMillis;
 
 	@BeforeClass
@@ -98,7 +98,7 @@ public class CustomCRSKDERasterResizeIT
 			throws URISyntaxException {
 		ZipUtils.unZipFile(
 				new File(
-						KDERasterResizeIT.class.getClassLoader().getResource(
+						CustomCRSKDERasterResizeIT.class.getClassLoader().getResource(
 								TEST_DATA_ZIP_RESOURCE_PATH).toURI()),
 				TestUtils.TEST_CASE_BASE);
 		startMillis = System.currentTimeMillis();

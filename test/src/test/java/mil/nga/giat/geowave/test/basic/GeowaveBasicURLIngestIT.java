@@ -13,14 +13,10 @@ package mil.nga.giat.geowave.test.basic;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
-import java.net.URL;
-
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
-import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +31,6 @@ import mil.nga.giat.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import mil.nga.giat.geowave.core.geotime.store.query.SpatialQuery;
 import mil.nga.giat.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
@@ -54,7 +49,7 @@ import mil.nga.giat.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 public class GeowaveBasicURLIngestIT extends
 		AbstractGeoWaveBasicVectorIT
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveBasicSpatialVectorIT.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GeowaveBasicURLIngestIT.class);
 
 	private final static String S3URL = "s3.amazonaws.com";
 	protected static final String GDELT_INPUT_FILE_URL = "s3://geowave-test/data/gdelt/20160202.export.CSV.zip";
@@ -104,7 +99,6 @@ public class GeowaveBasicURLIngestIT extends
 
 		final DataStatisticsStore statsStore = dataStore.createDataStatisticsStore();
 		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
-		int adapterCount = 0;
 		try (CloseableIterator<InternalDataAdapter<?>> adapterIterator = adapterStore.getAdapters()) {
 			while (adapterIterator.hasNext()) {
 				final InternalDataAdapter<?> internalDataAdapter = adapterIterator.next();
@@ -154,8 +148,6 @@ public class GeowaveBasicURLIngestIT extends
 								GDELT_URL_COUNT),
 						new Integer(
 								resultCount));
-
-				adapterCount++;
 			}
 		}
 
