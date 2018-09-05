@@ -21,9 +21,9 @@ import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionRequest;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionResponse;
-import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtos.VersionService;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionRequest;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionResponse;
+import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosServer.VersionService;
 
 public class VersionEndpoint extends
 		VersionService implements

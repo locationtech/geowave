@@ -545,7 +545,7 @@ public class GeoWaveFeatureReader implements
 						e);
 			}
 			return new CloseableIterator.Wrapper(
-					Iterators.emptyIterator());
+					Collections.emptyIterator());
 		}
 	}
 

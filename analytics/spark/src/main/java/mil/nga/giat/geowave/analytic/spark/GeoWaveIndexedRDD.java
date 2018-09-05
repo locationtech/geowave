@@ -2,6 +2,7 @@ package mil.nga.giat.geowave.analytic.spark;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -89,12 +90,12 @@ public class GeoWaveIndexedRDD implements
 									// feature.
 									Geometry geom = (Geometry) inputFeature.getDefaultGeometry();
 									if (geom == null) {
-										return Iterators.emptyIterator();
+										return Collections.emptyIterator();
 									}
 
 									Envelope internalEnvelope = geom.getEnvelopeInternal();
 									if (internalEnvelope.isNull()) {
-										return Iterators.emptyIterator();
+										return Collections.emptyIterator();
 									}
 									// If we have to buffer geometry for
 									// predicate expand bounds

@@ -11,12 +11,14 @@
 package mil.nga.giat.geowave.core.index;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.UUID;
 
 import org.apache.commons.lang3.tuple.Pair;
 
 import com.google.common.base.Preconditions;
-import com.google.common.io.BaseEncoding;
 
 /**
  * Convenience methods for converting binary data to and from strings. The
@@ -29,7 +31,7 @@ import com.google.common.io.BaseEncoding;
  */
 public class ByteArrayUtils
 {
-	private static BaseEncoding ENCODING = BaseEncoding.base64Url().omitPadding();
+	private static Encoder ENCODER = Base64.getUrlEncoder().withoutPadding();
 
 	private static byte[] internalCombineArrays(
 			final byte[] beginning,
@@ -59,7 +61,9 @@ public class ByteArrayUtils
 	 */
 	public static String byteArrayToString(
 			final byte[] byteArray ) {
-		return ENCODING.encode(byteArray);
+		return new String(
+				ENCODER.encode(byteArray),
+				StandardCharsets.ISO_8859_1);
 	}
 
 	/**
@@ -71,7 +75,8 @@ public class ByteArrayUtils
 	 */
 	public static byte[] byteArrayFromString(
 			final String str ) {
-		return ENCODING.decode(str);
+		return Base64.getUrlDecoder().decode(
+				str);
 	}
 
 	/**

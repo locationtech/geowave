@@ -23,7 +23,6 @@ import javax.imageio.ImageIO;
 import javax.media.jai.Interpolation;
 import javax.media.jai.PlanarImage;
 
-import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import mil.nga.giat.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;

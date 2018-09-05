@@ -15,13 +15,20 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import mil.nga.giat.geowave.core.index.StringUtils;
+import mil.nga.giat.geowave.core.index.persist.Persistable;
+import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
+
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -36,7 +43,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * 
  */
 
-public class SimpleFeatureUserDataConfigurationSet
+public class SimpleFeatureUserDataConfigurationSet implements
+		Persistable
 {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureUserDataConfigurationSet.class);
@@ -275,5 +283,67 @@ public class SimpleFeatureUserDataConfigurationSet
 		}
 		return type;
 
+	}
+
+	@Override
+	public byte[] toBinary() {
+		int size = 4;
+		List<byte[]> entries = new ArrayList<>(
+				configurations.size());
+		for (Entry<String, List<SimpleFeatureUserDataConfiguration>> e : configurations.entrySet()) {
+			byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
+			int entrySize = 8 + keyBytes.length;
+			List<byte[]> configs = new ArrayList<>(
+					e.getValue().size());
+			for (SimpleFeatureUserDataConfiguration config : e.getValue()) {
+				byte[] confBytes = PersistenceUtils.toBinary(config);
+				entrySize += 4;
+				entrySize += confBytes.length;
+				configs.add(confBytes);
+			}
+			size += entrySize;
+			ByteBuffer buf = ByteBuffer.allocate(entrySize);
+			buf.putInt(keyBytes.length);
+			buf.put(keyBytes);
+			buf.putInt(configs.size());
+			for (byte[] confBytes : configs) {
+				buf.putInt(confBytes.length);
+				buf.put(confBytes);
+			}
+			entries.add(buf.array());
+		}
+		ByteBuffer buf = ByteBuffer.allocate(size);
+		buf.putInt(configurations.size());
+		for (byte[] e : entries) {
+			buf.put(e);
+		}
+		return buf.array();
+	}
+
+	@Override
+	public void fromBinary(
+			byte[] bytes ) {
+		ByteBuffer buf = ByteBuffer.wrap(bytes);
+		int entrySize = buf.getInt();
+		Map<String, List<SimpleFeatureUserDataConfiguration>> internalConfigurations = new HashMap<>(
+				entrySize);
+		for (int i = 0; i < entrySize; i++) {
+			int keySize = buf.getInt();
+			byte[] keyBytes = new byte[keySize];
+			buf.get(keyBytes);
+			String key = StringUtils.stringFromBinary(keyBytes);
+			int numConfigs = buf.getInt();
+			List<SimpleFeatureUserDataConfiguration> confList = new ArrayList<>(
+					numConfigs);
+			for (int c = 0; c < numConfigs; c++) {
+				byte[] entryBytes = new byte[buf.getInt()];
+				buf.get(entryBytes);
+				confList.add((SimpleFeatureUserDataConfiguration) PersistenceUtils.fromBinary(entryBytes));
+			}
+			internalConfigurations.put(
+					key,
+					confList);
+		}
+		this.configurations = internalConfigurations;
 	}
 }

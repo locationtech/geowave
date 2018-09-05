@@ -1,11 +1,6 @@
 package mil.nga.giat.geowave.adapter.raster.adapter.merge;
 
 import java.awt.image.SampleModel;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -15,18 +10,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
-import javax.media.jai.remote.SerializableState;
-import javax.media.jai.remote.SerializerFactory;
-
-import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
-import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterTile;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
+import mil.nga.giat.geowave.adapter.raster.util.SampleModelPersistenceUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
@@ -209,15 +198,9 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 		final Set<Integer> successfullySerializedModelIds = new HashSet<Integer>();
 		for (final Entry<Integer, SampleModel> entry : sampleModels.entrySet()) {
 			final SampleModel sampleModel = entry.getValue();
-			final SerializableState serializableSampleModel = SerializerFactory.getState(sampleModel);
 			byte[] sampleModelBinary = new byte[0];
 			try {
-				final ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				final ObjectOutputStream oos = new ObjectOutputStream(
-						baos);
-				oos.writeObject(serializableSampleModel);
-				oos.close();
-				sampleModelBinary = baos.toByteArray();
+				sampleModelBinary = SampleModelPersistenceUtils.getSampleModelBinary(sampleModel);
 				byteCount += sampleModelBinary.length;
 				byteCount += 8;
 				sampleModelBinaries.add(sampleModelBinary);
@@ -225,7 +208,7 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 				successfullySerializedModels++;
 				successfullySerializedModelIds.add(entry.getKey());
 			}
-			catch (final IOException e) {
+			catch (final Exception e) {
 				LOGGER.warn(
 						"Unable to serialize sample model",
 						e);
@@ -307,20 +290,11 @@ public class MultiAdapterServerMergeStrategy<T extends Persistable> implements
 			if (sampleModelBinary.length > 0) {
 				try {
 					buf.get(sampleModelBinary);
-					final ByteArrayInputStream bais = new ByteArrayInputStream(
-							sampleModelBinary);
-					final ObjectInputStream ois = new ObjectInputStream(
-							bais);
-					final Object o = ois.readObject();
-					ois.close();
 					final int sampleModelKey = buf.getInt();
-					if ((o instanceof SerializableState)
-							&& (((SerializableState) o).getObject() instanceof SampleModel)) {
-						final SampleModel sampleModel = (SampleModel) ((SerializableState) o).getObject();
-						sampleModels.put(
-								sampleModelKey,
-								sampleModel);
-					}
+					final SampleModel sampleModel = SampleModelPersistenceUtils.getSampleModel(sampleModelBinary);
+					sampleModels.put(
+							sampleModelKey,
+							sampleModel);
 				}
 				catch (final Exception e) {
 					LOGGER.warn(

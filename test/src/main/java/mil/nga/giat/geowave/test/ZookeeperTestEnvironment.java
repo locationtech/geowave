@@ -10,15 +10,10 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.test;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.apache.hadoop.conf.Configuration;
 import org.junit.Assert;
-
-import com.github.sakserv.minicluster.config.ConfigVars;
-import com.github.sakserv.minicluster.impl.ZookeeperLocalCluster;
-import com.github.sakserv.propertyparser.PropertyParser;
 
 public class ZookeeperTestEnvironment implements
 		TestEnvironment
@@ -36,9 +31,10 @@ public class ZookeeperTestEnvironment implements
 	private final static Logger LOGGER = LoggerFactory.getLogger(ZookeeperTestEnvironment.class);
 	protected String zookeeper;
 
-	private ZookeeperLocalCluster zookeeperLocalCluster;
+	private Object zookeeperLocalCluster;
 
 	public static final String ZK_PROPERTY_NAME = "zookeeperUrl";
+	public static final String DEFAULT_ZK_TEMP_DIR = "./target/zk_temp";
 
 	private ZookeeperTestEnvironment() {}
 
@@ -50,38 +46,36 @@ public class ZookeeperTestEnvironment implements
 
 			if (!TestUtils.isSet(zookeeper)) {
 
-				PropertyParser propertyParser = null;
-
 				try {
-					propertyParser = new PropertyParser(
-							HBaseStoreTestEnvironment.HBASE_PROPS_FILE);
-					propertyParser.parsePropsFile();
-				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Unable to load property file: {}" + HBaseStoreTestEnvironment.HBASE_PROPS_FILE,
-							e);
-				}
-
-				if (System.getProperty(
-						"os.name").startsWith(
-						"Windows")) {
+					ClassLoader prevCl = Thread.currentThread().getContextClassLoader();
+					ClassLoader hbaseMiniClusterCl = HBaseMiniClusterClassLoader.getInstance(prevCl);
+					Thread.currentThread().setContextClassLoader(
+							hbaseMiniClusterCl);
+					Configuration conf = (Configuration) Class.forName(
+							"org.apache.hadoop.hbase.HBaseConfiguration",
+							true,
+							hbaseMiniClusterCl).getMethod(
+							"create").invoke(
+							null);
+					conf.setInt(
+							"test.hbase.zookeeper.property.clientPort",
+							2181);
 					System.setProperty(
-							"HADOOP_HOME",
-							System.getenv().get(
-									"HADOOP_HOME"));
-				}
-
-				try {
-					zookeeperLocalCluster = new ZookeeperLocalCluster.Builder()
-							.setPort(
-									Integer.parseInt(propertyParser.getProperty(ConfigVars.ZOOKEEPER_PORT_KEY)))
-							.setTempDir(
-									propertyParser.getProperty(ConfigVars.ZOOKEEPER_TEMP_DIR_KEY))
-							.setZookeeperConnectionString(
-									propertyParser.getProperty(ConfigVars.ZOOKEEPER_CONNECTION_STRING_KEY))
-							.build();
-					zookeeperLocalCluster.start();
+							"test.build.data.basedirectory",
+							conf.get(
+									"zookeeper.temp.dir",
+									DEFAULT_ZK_TEMP_DIR));
+					zookeeperLocalCluster = Class.forName(
+							"org.apache.hadoop.hbase.HBaseTestingUtility",
+							true,
+							hbaseMiniClusterCl).getConstructor(
+							Configuration.class).newInstance(
+							conf);
+					zookeeperLocalCluster.getClass().getMethod(
+							"startMiniZKCluster").invoke(
+							zookeeperLocalCluster);
+					Thread.currentThread().setContextClassLoader(
+							prevCl);
 				}
 				catch (final Exception e) {
 					LOGGER.error(
@@ -89,8 +83,12 @@ public class ZookeeperTestEnvironment implements
 							e);
 					Assert.fail();
 				}
-
-				zookeeper = zookeeperLocalCluster.getZookeeperConnectionString();
+				Object zkCluster = zookeeperLocalCluster.getClass().getMethod(
+						"getZkCluster").invoke(
+						zookeeperLocalCluster);
+				zookeeper = "127.0.0.1:" + zkCluster.getClass().getMethod(
+						"getClientPort").invoke(
+						zkCluster);
 			}
 		}
 	}
@@ -99,11 +97,18 @@ public class ZookeeperTestEnvironment implements
 	public void tearDown()
 			throws Exception {
 		try {
-			zookeeperLocalCluster.stop(true);
+			zookeeperLocalCluster.getClass().getMethod(
+					"shutdownMiniZKCluster").invoke(
+					zookeeperLocalCluster);
+			if (!(Boolean) zookeeperLocalCluster.getClass().getMethod(
+					"cleanupTestDir").invoke(
+					zookeeperLocalCluster)) {
+				LOGGER.warn("Unable to delete mini zookeeper temporary directory");
+			}
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
-					"Unable to delete mini zookeeper temporary directory",
+					"Unable to delete or shutdown mini zookeeper temporary directory",
 					e);
 		}
 

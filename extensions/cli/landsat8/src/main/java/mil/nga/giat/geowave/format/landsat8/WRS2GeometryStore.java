@@ -85,7 +85,7 @@ public class WRS2GeometryStore
 	private static final String WRS2_SHAPE_URL = "https://landsat.usgs.gov/sites/default/files/documents/WRS2_descending.zip";
 	private static final String WRS2_SHAPE_NAME = "WRS2_descending.shp";
 	private static final String WRS2_SHAPE_ZIP = "WRS2_descending.zip";
-	private static final String WRS2_SHAPE_DIRECTORY = "WRS2_descending";
+	protected static final String WRS2_SHAPE_DIRECTORY = "WRS2_descending";
 	private final File wrs2Shape;
 	private final File wrs2Directory;
 	private final Map<WRS2Key, MultiPolygon> featureCache = new HashMap<WRS2Key, MultiPolygon>();

@@ -19,10 +19,10 @@ import java.net.URISyntaxException;
 
 import javax.ws.rs.core.Response;
 
-import org.apache.hadoop.hbase.shaded.org.junit.Assert;
 import org.apache.spark.SparkContext;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Ignore;
@@ -202,7 +202,7 @@ public class IngestIT
 				"Should successfully complete ingest",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.kafkaToGW(
 				storeName,
@@ -249,7 +249,7 @@ public class IngestIT
 				"Should fail to ingest for nonexistent store",
 				"ERROR",
 				r,
-				50);
+				500);
 	}
 
 	@Test
@@ -278,7 +278,7 @@ public class IngestIT
 				"Should successfully complete ingest",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.localToGW(
 				OSM_GPX_INPUT_DIR,
@@ -288,7 +288,7 @@ public class IngestIT
 				"Should fail to complete ingest for nonexistent store",
 				"ERROR",
 				r,
-				50);
+				500);
 	}
 
 	@Test
@@ -304,7 +304,7 @@ public class IngestIT
 				"Should successfully complete ingest",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.localToHdfs(
 				OSM_GPX_INPUT_DIR,
@@ -315,7 +315,7 @@ public class IngestIT
 				"Should fail to ingest for nonexistent directory",
 				"ERROR",
 				r,
-				50);
+				500);
 
 	}
 
@@ -340,7 +340,7 @@ public class IngestIT
 				"Should successfully complete ingest",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.mrToGW(
 				hdfsBaseDirectory,
@@ -355,7 +355,7 @@ public class IngestIT
 				"Should successfully ingest from MapReduce to geowave",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.localToMrGW(
 				OSM_GPX_INPUT_DIR,
@@ -371,7 +371,7 @@ public class IngestIT
 				"Should fail to ingest for nonexistent index",
 				"ERROR",
 				r,
-				50);
+				500);
 
 		r = ingestServiceClient.mrToGW(
 				hdfsBaseDirectory,
@@ -386,7 +386,7 @@ public class IngestIT
 				"Should fail to ingest for nonexistent store",
 				"ERROR",
 				r,
-				50);
+				500);
 	}
 
 	@Test
@@ -403,9 +403,7 @@ public class IngestIT
 				"Should successfully complete ingest",
 				"COMPLETE",
 				r,
-				50);
-
-		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
+				500);
 
 		r = ingestServiceClient.sparkToGW(
 				hdfsBaseDirectory,
@@ -415,7 +413,7 @@ public class IngestIT
 				"Should successfully ingest from spark to geowave",
 				"COMPLETE",
 				r,
-				50);
+				500);
 
 	}
 }

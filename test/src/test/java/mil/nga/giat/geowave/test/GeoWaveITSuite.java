@@ -24,7 +24,6 @@ import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
 import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
-import mil.nga.giat.geowave.test.javaspark.GeowaveSparkIngestIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.CustomCRSLandsatIT;
 import mil.nga.giat.geowave.test.landsat.LandsatIT;
@@ -46,6 +45,7 @@ import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkKMeansIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveJavaSparkSQLIT;
 import mil.nga.giat.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 import mil.nga.giat.geowave.test.services.RemoteIT;
+import mil.nga.giat.geowave.test.services.grpc.GeoWaveGrpcIT;
 import mil.nga.giat.geowave.test.services.IngestIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
@@ -61,7 +61,9 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,
-	KDERasterResizeIT.class,
+	// saving some time for now, seems little need to run both versions of kde
+	// raster resize IT
+	// KDERasterResizeIT.class,
 	CustomCRSKDERasterResizeIT.class,
 	BulkIngestInputGenerationIT.class,
 	GeoWaveNNIT.class,
@@ -77,6 +79,7 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	ConfigServicesIT.class,
 	GeoServerIngestIT.class,
 	GeoServerIT.class,
+	GeoWaveGrpcIT.class,
 	RemoteIT.class,
 	IngestIT.class,
 	FileUploadIT.class,

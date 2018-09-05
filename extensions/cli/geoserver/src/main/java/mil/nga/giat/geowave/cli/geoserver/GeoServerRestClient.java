@@ -80,6 +80,8 @@ import mil.nga.giat.geowave.core.cli.utils.FileUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 import net.sf.json.JSONArray;
@@ -1787,7 +1789,8 @@ public class GeoServerRestClient
 		info.adapterId = adapter.getAdapterId().getString();
 		info.isRaster = false;
 
-		if (adapter instanceof RasterDataAdapter) {
+		if (adapter instanceof RasterDataAdapter
+				|| (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter).getAdapter() instanceof RasterDataAdapter)) {
 			info.isRaster = true;
 		}
 
@@ -1804,12 +1807,16 @@ public class GeoServerRestClient
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.RASTER.name()) && (adapter instanceof RasterDataAdapter)) {
+		if (adapterId.equals(AddOption.RASTER.name())
+				&& (adapter instanceof RasterDataAdapter || (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter)
+						.getAdapter() instanceof RasterDataAdapter))) {
 			LOGGER.debug("id is all-raster and adapter is raster type");
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.VECTOR.name()) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
+		if (adapterId.equals(AddOption.VECTOR.name())
+				&& (adapter instanceof GeotoolsFeatureDataAdapter || (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter)
+						.getAdapter() instanceof GeotoolsFeatureDataAdapter))) {
 			LOGGER.debug("id is all-vector and adapter is vector type");
 			return info;
 		}

@@ -23,7 +23,7 @@ import org.apache.hadoop.hbase.util.ByteStringer;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.FilterProtos;
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosServer;
 
 /**
  * This is a Filter which will run on Tablet Server during Scan. HBase uses
@@ -109,9 +109,9 @@ public class SingleEntryFilter extends
 	public static Filter parseFrom(
 			final byte[] pbBytes )
 			throws DeserializationException {
-		FilterProtos.SingleEntryFilter proto;
+		FilterProtosServer.SingleEntryFilter proto;
 		try {
-			proto = FilterProtos.SingleEntryFilter.parseFrom(pbBytes);
+			proto = FilterProtosServer.SingleEntryFilter.parseFrom(pbBytes);
 		}
 		catch (final InvalidProtocolBufferException e) {
 			throw new DeserializationException(
@@ -124,7 +124,7 @@ public class SingleEntryFilter extends
 
 	@Override
 	public byte[] toByteArray() {
-		final FilterProtos.SingleEntryFilter.Builder builder = FilterProtos.SingleEntryFilter.newBuilder();
+		final FilterProtosServer.SingleEntryFilter.Builder builder = FilterProtosServer.SingleEntryFilter.newBuilder();
 		if (adapterId != null) {
 			builder.setAdapterId(ByteStringer.wrap(adapterId));
 		}

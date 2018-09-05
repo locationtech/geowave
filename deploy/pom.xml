@@ -172,6 +172,11 @@
 					<artifactId>geowave-format-vector</artifactId>
 					<version>${project.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-grpc-server</artifactId>
+					<version>${project.version}</version>
+				</dependency>
 			</dependencies>
 			<build>
 				<plugins>

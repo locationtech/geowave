@@ -102,7 +102,7 @@ public class CassandraOperations implements
 			final CassandraRequiredOptions options ) {
 		if ((options.getGeowaveNamespace() == null) || options.getGeowaveNamespace().equals(
 				"")) {
-			gwNamespace = "default";
+			gwNamespace = "geowave";
 		}
 		else {
 			gwNamespace = getCassandraSafeName(options.getGeowaveNamespace());

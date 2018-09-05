@@ -255,5 +255,19 @@ public class FeatureHyperLogLogStatistics extends
 					fieldName,
 					precision);
 		}
+
+		@Override
+		public byte[] toBinary() {
+			return ByteBuffer.allocate(
+					4).putInt(
+					precision).array();
+		}
+
+		@Override
+		public void fromBinary(
+				byte[] bytes ) {
+			precision = ByteBuffer.wrap(
+					bytes).getInt();
+		}
 	}
 }

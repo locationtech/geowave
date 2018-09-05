@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -324,7 +325,7 @@ public class GeoWaveRecordReader<T> extends
 			final NextRangeCallback nextRangeCallback ) {
 		Preconditions.checkNotNull(inputs);
 		return new Iterator<Entry<GeoWaveInputKey, T>>() {
-			Iterator<Entry<GeoWaveInputKey, T>> currentIterator = Iterators.emptyIterator();
+			Iterator<Entry<GeoWaveInputKey, T>> currentIterator = Collections.emptyIterator();
 			Iterator<Entry<GeoWaveInputKey, T>> removeFrom;
 
 			@Override

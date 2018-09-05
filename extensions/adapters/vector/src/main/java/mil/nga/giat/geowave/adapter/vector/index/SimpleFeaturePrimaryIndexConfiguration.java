@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
- * 
+ *
  * See the NOTICE file distributed with this work for additional
  * information regarding copyright ownership.
  * All rights reserved. This program and the accompanying materials
@@ -14,9 +14,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
-
 import org.opengis.feature.simple.SimpleFeatureType;
+
+import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import mil.nga.giat.geowave.core.index.StringUtils;
 
 public class SimpleFeaturePrimaryIndexConfiguration implements
 		SimpleFeatureUserDataConfiguration,
@@ -33,19 +34,19 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	public SimpleFeaturePrimaryIndexConfiguration(
 			final SimpleFeatureType type ) {
 		super();
-		this.configureFromType(type);
+		configureFromType(type);
 	}
 
 	/**
 	 * Get all the index names associated with the SimpleFeatureType referenced.
-	 * 
+	 *
 	 * @param type
 	 *            - SFT object which contains Index Names
 	 * @return List of index names
 	 */
 	public static final List<String> getIndexNames(
 			final SimpleFeatureType type ) {
-		Object obj = type.getUserData().get(
+		final Object obj = type.getUserData().get(
 				INDEX_NAME);
 		if (obj != null) {
 			return Arrays.asList(obj.toString().split(
@@ -58,7 +59,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	 * {@inheritDoc} This method updates the passed in type by adding a CSV
 	 * string of all the index names for this Simple Feature Primary Index
 	 * Configuration. It is stored in user data as '{@value #INDEX_NAME}'
-	 * 
+	 *
 	 * @param SFT
 	 *            to be updated.
 	 */
@@ -69,7 +70,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 		if (indexNames == null) {
 			return;
 		}
-		for (String name : indexNames) {
+		for (final String name : indexNames) {
 			if (names.length() > 0) {
 				names.append(",");
 			}
@@ -84,7 +85,7 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	@Override
 	public void configureFromType(
 			final SimpleFeatureType type ) {
-		this.indexNames = getIndexNames(type);
+		indexNames = getIndexNames(type);
 	}
 
 	public List<String> getIndexNames() {
@@ -92,8 +93,19 @@ public class SimpleFeaturePrimaryIndexConfiguration implements
 	}
 
 	public void setIndexNames(
-			List<String> indexNames ) {
+			final List<String> indexNames ) {
 		this.indexNames = indexNames;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		return StringUtils.stringsToBinary(indexNames.toArray(new String[0]));
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		indexNames = Arrays.asList(StringUtils.stringsFromBinary(bytes));
 	}
 
 }

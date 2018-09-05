@@ -2,13 +2,13 @@ package mil.nga.giat.geowave.datastore.accumulo.operations;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.apache.accumulo.core.client.BatchScanner;
-import org.apache.accumulo.core.client.IteratorSetting;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Range;
@@ -29,7 +29,6 @@ import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.MetadataQuery;
 import mil.nga.giat.geowave.core.store.operations.MetadataReader;
 import mil.nga.giat.geowave.core.store.operations.MetadataType;
-import mil.nga.giat.geowave.datastore.accumulo.MergingVisibilityCombiner;
 import mil.nga.giat.geowave.datastore.accumulo.util.ScannerClosableWrapper;
 
 public class AccumuloMetadataReader implements
@@ -72,7 +71,7 @@ public class AccumuloMetadataReader implements
 							columnFamily));
 				}
 			}
-			final Collection<Range> ranges = new ArrayList<Range>();
+			final Collection<Range> ranges = new ArrayList<>();
 			if (query.hasPrimaryId()) {
 				ranges.add(new Range(
 						new Text(
@@ -84,7 +83,7 @@ public class AccumuloMetadataReader implements
 			scanner.setRanges(ranges);
 
 			// For stats w/ no server-side support, need to merge here
-			if (metadataType == MetadataType.STATS && !options.isServerSideLibraryEnabled()) {
+			if ((metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled()) {
 
 				final HashMap<Text, Key> keyMap = new HashMap();
 				final HashMap<Text, DataStatistics> mergedDataMap = new HashMap();
@@ -153,7 +152,7 @@ public class AccumuloMetadataReader implements
 					e);
 		}
 		return new CloseableIterator.Wrapper<>(
-				Iterators.emptyIterator());
+				Collections.emptyIterator());
 	}
 
 }

@@ -3,15 +3,11 @@ package mil.nga.giat.geowave.datastore.dynamodb.operations;
 import java.io.Closeable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-
-import org.apache.log4j.Logger;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -31,22 +27,18 @@ import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
-import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
 import mil.nga.giat.geowave.core.store.operations.ParallelDecoder;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
 import mil.nga.giat.geowave.core.store.operations.SimpleParallelDecoder;
 import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow;
-import mil.nga.giat.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.AsyncPaginatedScan;
 import mil.nga.giat.geowave.datastore.dynamodb.util.DynamoDBUtils;
@@ -54,12 +46,10 @@ import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import mil.nga.giat.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
-import mil.nga.giat.geowave.mapreduce.splits.SplitsProvider;
 
 public class DynamoDBReader<T> implements
 		Reader<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(DynamoDBReader.class);
 	private static final boolean ASYNC = false;
 	private final ReaderParams<T> readerParams;
 	private final RecordReaderParams<T> recordReaderParams;
@@ -177,19 +167,19 @@ public class DynamoDBReader<T> implements
 		Iterator<Map<String, AttributeValue>> rawIterator;
 		Predicate<DynamoDBRow> adapterIdFilter = null;
 
-		Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> rawToDynamoDBRow = new Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> () {
+		final Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> rawToDynamoDBRow = new Function<Iterator<Map<String, AttributeValue>>, Iterator<DynamoDBRow>> () {
 
 			@Override
 			public Iterator<DynamoDBRow> apply(
-					Iterator<Map<String, AttributeValue>> input ) {
-				return new GeoWaveRowMergingIterator<DynamoDBRow>(
+					final Iterator<Map<String, AttributeValue>> input ) {
+				return new GeoWaveRowMergingIterator<>(
 						Iterators.filter(
 								Iterators.transform(
 										input,
 										new DynamoDBRow.GuavaRowTranslationHelper()),
 								visibilityFilter));
 			}
-			
+
 		};
 
 		if (!requests.isEmpty()) {
@@ -228,14 +218,14 @@ public class DynamoDBReader<T> implements
 				// filtering by adapter ID
 				if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
 					adapterIdFilter = new Predicate<DynamoDBRow>() {
-	
+
 						@Override
 						public boolean apply(
 								final DynamoDBRow input ) {
 							return readerParams.getAdapterIds().contains(
 											input.getInternalAdapterId());
 						}
-	
+
 					};
 				}
 			}
@@ -248,11 +238,11 @@ public class DynamoDBReader<T> implements
 					adapterIdFilter);
 		}
 		if (parallelDecode) {
-			ParallelDecoder<T> decoder = new SimpleParallelDecoder<T>(rowTransformer, Iterators.transform(rowIter, r -> (GeoWaveRow) r));
+			final ParallelDecoder<T> decoder = new SimpleParallelDecoder<>(rowTransformer, Iterators.transform(rowIter, r -> (GeoWaveRow) r));
 			try {
 				decoder.startDecode();
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				Throwables.propagate(e);
 			}
 			iterator = decoder;
@@ -370,10 +360,10 @@ public class DynamoDBReader<T> implements
 		final ByteArrayId partitionKey = r.getPartitionKey();
 		final byte[] partitionId = ((partitionKey == null) || (partitionKey.getBytes().length == 0))
 				? DynamoDBWriter.EMPTY_PARTITION_KEY : partitionKey.getBytes();
-		if ((internalAdapterIds == null || internalAdapterIds.isEmpty()) && (adapterStore != null)) {
+		if (((internalAdapterIds == null) || internalAdapterIds.isEmpty()) && (adapterStore != null)) {
 			final CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters();
 			internalAdapterIds = new ArrayList<>();
-			final List<Short> adapterIDList = new ArrayList<Short>();
+			final List<Short> adapterIDList = new ArrayList<>();
 			adapters.forEachRemaining(
 					new Consumer<InternalDataAdapter<?>>() {
 						@Override
