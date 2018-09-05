@@ -7,7 +7,8 @@ public class GrpcOperationProvider implements
 {
 	private static final Class<?>[] OPERATIONS = new Class<?>[] {
 		StartGrpcServerCommand.class,
-		StopGrpcServerCommand.class
+		StopGrpcServerCommand.class,
+		GrpcSection.class
 	};
 
 	@Override
