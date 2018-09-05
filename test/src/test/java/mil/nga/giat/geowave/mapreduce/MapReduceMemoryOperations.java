@@ -1,34 +1,19 @@
 package mil.nga.giat.geowave.mapreduce;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.SortedSet;
 
 import com.beust.jcommander.internal.Lists;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
-import mil.nga.giat.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
-import mil.nga.giat.geowave.core.store.data.PersistentDataset;
-import mil.nga.giat.geowave.core.store.data.UnreadFieldDataList;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
-import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadData;
-import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreOperations;
-import mil.nga.giat.geowave.core.store.memory.MemoryDataStoreOperations.MemoryStoreEntry;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
-import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 
 public class MapReduceMemoryOperations extends

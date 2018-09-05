@@ -185,10 +185,18 @@ public class GeoWaveGTDataStoreFactory implements
 						Collectors.toMap(
 								e -> e.getKey() == null ? null : e.getKey().toString(),
 								e -> e.getValue() == null ? null : e.getValue().toString()));
-
+		
+		final Map<String, String> originalParams = params
+				.entrySet()
+				.stream()
+				.collect(
+						Collectors.toMap(
+								e -> e.getKey() == null ? null : e.getKey().toString(),
+								e -> e.getValue() == null ? null : e.getValue().toString()));
 		return GeoWaveStoreFinder.exactMatch(
 				geowaveStoreFactoryFamily,
-				dataStoreParams);
+				dataStoreParams,
+				originalParams);
 	}
 
 	@Override

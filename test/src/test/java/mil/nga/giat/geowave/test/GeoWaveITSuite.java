@@ -19,10 +19,10 @@ import mil.nga.giat.geowave.mapreduce.splits.SplitsProviderIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicRasterIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
-import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
 import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
+import mil.nga.giat.geowave.test.basic.GeowaveBasicURLIngestIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.CustomCRSLandsatIT;
@@ -32,7 +32,6 @@ import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import mil.nga.giat.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
 import mil.nga.giat.geowave.test.mapreduce.DBScanIT;
 import mil.nga.giat.geowave.test.mapreduce.GeoWaveNNIT;
-import mil.nga.giat.geowave.test.mapreduce.KDERasterResizeIT;
 import mil.nga.giat.geowave.test.query.AttributesSubsetQueryIT;
 import mil.nga.giat.geowave.test.query.PolygonDataIdQueryIT;
 import mil.nga.giat.geowave.test.query.SpatialTemporalQueryIT;
@@ -50,9 +49,10 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
-	GeoWaveBasicSpatialVectorIT.class,
 	GeowaveCustomCRSSpatialVectorIT.class,
 	GeoWaveBasicSpatialTemporalVectorIT.class,
+	// TODO need to mock up S3
+	// GeowaveBasicURLIngestIT.class,
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
@@ -61,9 +61,6 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,
-	// saving some time for now, seems little need to run both versions of kde
-	// raster resize IT
-	// KDERasterResizeIT.class,
 	CustomCRSKDERasterResizeIT.class,
 	BulkIngestInputGenerationIT.class,
 	GeoWaveNNIT.class,

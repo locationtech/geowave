@@ -8,7 +8,7 @@ public class CassandraOptions extends
 		BaseDataStoreOptions
 {
 	@Parameter(names = "--batchWriteSize", description = "The number of inserts in a batch write.")
-	private int batchWriteSize = 25000;
+	private int batchWriteSize = 15;
 	@Parameter(names = "--durableWrites", description = "Whether to write to commit log for durability, configured only on creation of new keyspace.", arity = 1)
 	private boolean durableWrites = true;
 	@Parameter(names = "--replicas", description = "The number of replicas to use when creating a new keyspace.")
@@ -18,7 +18,7 @@ public class CassandraOptions extends
 	// space filling curve cluster column precedes the adapter ID so you can
 	// query across adapters efficiently (ie. get all the points regardless of
 	// feature type)
-	// within geoserver this is not a default use case, but this is analgous to
+	// within geoserver this is not a default use case, but this is analogous to
 	// the option of setting locality groups in accumulo
 	// TODO: this is technically a property of the table and should be persisted
 	// as table metadata

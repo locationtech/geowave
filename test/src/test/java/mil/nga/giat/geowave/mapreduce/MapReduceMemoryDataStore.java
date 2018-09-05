@@ -4,10 +4,9 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.apache.hadoop.mapreduce.RecordReader;
+import org.apache.hadoop.mapreduce.JobContext;
 
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore;
@@ -21,8 +20,6 @@ import mil.nga.giat.geowave.core.store.metadata.IndexStoreImpl;
 import mil.nga.giat.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import mil.nga.giat.geowave.core.store.query.DistributableQuery;
 import mil.nga.giat.geowave.core.store.query.QueryOptions;
-import mil.nga.giat.geowave.mapreduce.input.GeoWaveInputKey;
-import mil.nga.giat.geowave.mapreduce.splits.GeoWaveRecordReader;
 
 public class MapReduceMemoryDataStore extends
 		BaseMapReduceDataStore
@@ -63,6 +60,7 @@ public class MapReduceMemoryDataStore extends
 			DataStatisticsStore statsStore,
 			InternalAdapterStore internalAdapterStore,
 			IndexStore indexStore,
+			JobContext context,
 			Integer minSplits,
 			Integer maxSplits )
 			throws IOException,
@@ -75,6 +73,7 @@ public class MapReduceMemoryDataStore extends
 				this.statisticsStore,
 				this.internalAdapterStore,
 				this.indexStore,
+				context,
 				minSplits,
 				maxSplits);
 	}

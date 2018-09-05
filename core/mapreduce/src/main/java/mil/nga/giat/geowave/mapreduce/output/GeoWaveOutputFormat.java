@@ -49,6 +49,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.mapreduce.GeoWaveConfiguratorBase;
 import mil.nga.giat.geowave.mapreduce.JobContextAdapterStore;
 import mil.nga.giat.geowave.mapreduce.JobContextIndexStore;
+import mil.nga.giat.geowave.mapreduce.MapReduceDataStore;
 
 /**
  * This output format is the preferred mechanism for writing data to GeoWave
@@ -128,6 +129,10 @@ public class GeoWaveOutputFormat extends
 					CLASS,
 					config,
 					storeOptions.getOptionsAsMap());
+			final DataStore dataStore = storeOptions.createDataStore();
+			if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
+				((MapReduceDataStore) dataStore).prepareRecordWriter(config);
+			}
 		}
 		else {
 			GeoWaveConfiguratorBase.setStoreOptionsMap(
@@ -257,9 +262,9 @@ public class GeoWaveOutputFormat extends
 
 	/**
 	 * A base class to be used to create {@link RecordWriter} instances that
-	 * write to Accumulo.
+	 * write to GeoWave.
 	 */
-	protected static class GeoWaveRecordWriter extends
+	public static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey<Object>, Object>
 	{
 		private final Map<ByteArrayId, IndexWriter<?>> adapterIdToIndexWriterCache = new HashMap<>();
@@ -267,7 +272,7 @@ public class GeoWaveOutputFormat extends
 		private final IndexStore indexStore;
 		private final DataStore dataStore;
 
-		protected GeoWaveRecordWriter(
+		public GeoWaveRecordWriter(
 				final TaskAttemptContext context,
 				final DataStore dataStore,
 				final IndexStore indexStore,
@@ -337,7 +342,7 @@ public class GeoWaveOutputFormat extends
 				throws MismatchedIndexToAdapterMapping {
 			IndexWriter<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
-				final List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+				final List<PrimaryIndex> indices = new ArrayList<>();
 				for (final ByteArrayId indexId : indexIds) {
 					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(indexId);
 					if (index != null) {
