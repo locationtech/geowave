@@ -109,6 +109,16 @@
 				</dependency>
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-cassandra</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-dynamodb</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-cli-osm</artifactId>
 					<version>${project.version}</version>
 				</dependency>
@@ -274,6 +284,11 @@
 				<dependency>
 					<groupId>mil.nga.giat</groupId>
 					<artifactId>geowave-datastore-cassandra</artifactId>
+					<version>${project.version}</version>
+				</dependency>
+				<dependency>
+					<groupId>mil.nga.giat</groupId>
+					<artifactId>geowave-datastore-dynamodb</artifactId>
 					<version>${project.version}</version>
 				</dependency>
 				<dependency>
