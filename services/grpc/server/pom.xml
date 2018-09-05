@@ -13,11 +13,6 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-deploy</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>mil.nga.giat</groupId>
 			<artifactId>geowave-grpc-protobuf-shaded</artifactId>
 			<version>${project.version}</version>
 		</dependency>
