@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -135,12 +135,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Field and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#GEOWAVE_CHAR_SET">GEOWAVE_CHAR_SET</a></span></code>&nbsp;</td>
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#GEOWAVE_CHARSET_PROPERTY_NAME">GEOWAVE_CHARSET_PROPERTY_NAME</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#UTF8_CHAR_SET">UTF8_CHAR_SET</a></span></code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#UTF8_CHARSET">UTF8_CHARSET</a></span></code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -175,34 +175,38 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colLast" scope="col">Method and Description</th>
 </tr>
 <tr id="i0" class="altColor">
+<td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#getGeoWaveCharset--">getGeoWaveCharset</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#intToString-int-">intToString</a></span>(int&nbsp;number)</code>
 <div class="block">Convert a number to a string.</div>
 </td>
 </tr>
-<tr id="i1" class="rowColor">
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>,<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#parseParams-java.lang.String-">parseParams</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;params)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringFromBinary-byte:A-">stringFromBinary</a></span>(byte[]&nbsp;binary)</code>
 <div class="block">Utility to convert bytes to a String</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringsFromBinary-byte:A-">stringsFromBinary</a></span>(byte[]&nbsp;binary)</code>
 <div class="block">Utility to convert bytes to a String</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringsToBinary-java.lang.String:A-">stringsToBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;strings)</code>
 <div class="block">Utility to convert a String to bytes</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/core/index/StringUtils.html#stringToBinary-java.lang.String-">stringToBinary</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;string)</code>
 <div class="block">Utility to convert a String to bytes</div>
@@ -230,22 +234,26 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Field Detail</h3>
-<a name="GEOWAVE_CHAR_SET">
+<a name="UTF8_CHARSET">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
-<h4>GEOWAVE_CHAR_SET</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a> GEOWAVE_CHAR_SET</pre>
+<h4>UTF8_CHARSET</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a> UTF8_CHARSET</pre>
 </li>
 </ul>
-<a name="UTF8_CHAR_SET">
+<a name="GEOWAVE_CHARSET_PROPERTY_NAME">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>UTF8_CHAR_SET</h4>
-<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a> UTF8_CHAR_SET</pre>
+<h4>GEOWAVE_CHARSET_PROPERTY_NAME</h4>
+<pre>public static final&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a> GEOWAVE_CHARSET_PROPERTY_NAME</pre>
+<dl>
+<dt><span class="seeLabel">See Also:</span></dt>
+<dd><a href="../../../../../../constant-values.html#mil.nga.giat.geowave.core.index.StringUtils.GEOWAVE_CHARSET_PROPERTY_NAME">Constant Field Values</a></dd>
+</dl>
 </li>
 </ul>
 </li>
@@ -273,6 +281,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="getGeoWaveCharset--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getGeoWaveCharset</h4>
+<pre>public static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/nio/charset/Charset.html?is-external=true" title="class or interface in java.nio.charset">Charset</a>&nbsp;getGeoWaveCharset()</pre>
+</li>
+</ul>
 <a name="stringToBinary-java.lang.String-">
 <!--   -->
 </a>
