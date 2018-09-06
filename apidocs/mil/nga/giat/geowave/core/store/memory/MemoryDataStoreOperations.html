@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -183,58 +183,62 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createIndex-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataDeleter.html" title="interface in mil.nga.giat.geowave.core.store.operations">MetadataDeleter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataDeleter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataDeleter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i2" class="altColor">
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataReader.html" title="interface in mil.nga.giat.geowave.core.store.operations">MetadataReader</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataReader-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataWriter.html" title="interface in mil.nga.giat.geowave.core.store.operations">MetadataWriter</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createMetadataWriter-mil.nga.giat.geowave.core.store.operations.MetadataType-">createMetadataWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;metadataType)</code>&nbsp;</td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Reader.html" title="interface in mil.nga.giat.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createReader-mil.nga.giat.geowave.core.store.operations.ReaderParams-">createReader</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/ReaderParams.html" title="class in mil.nga.giat.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
             short&nbsp;adapterId)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#deleteAll--">deleteAll</a></span>()</code>&nbsp;</td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#deleteAll-mil.nga.giat.geowave.core.index.ByteArrayId-java.lang.Short-java.lang.String...-">deleteAll</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;tableName,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&nbsp;internalAdapterId,
          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;additionalAuthorizations)</code>&nbsp;</td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#ensureAuthorizations-java.lang.String-java.lang.String...-">ensureAuthorizations</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;clientUser,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/SortedSet.html?is-external=true" title="class or interface in java.util">SortedSet</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.MemoryStoreEntry.html" title="class in mil.nga.giat.geowave.core.store.memory">MemoryDataStoreOperations.MemoryStoreEntry</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#getRowsForIndex-mil.nga.giat.geowave.core.index.ByteArrayId-">getRowsForIndex</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;id)</code>&nbsp;</td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#indexExists-mil.nga.giat.geowave.core.index.ByteArrayId-">indexExists</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId)</code>&nbsp;</td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#mergeData-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore,
          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;adapterIndexMappingStore)</code>&nbsp;</td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#metadataExists-mil.nga.giat.geowave.core.store.operations.MetadataType-">metadataExists</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
@@ -459,6 +463,22 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/core/store/operati
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#mergeData-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="createIndex-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>createIndex</h4>
+<pre>public&nbsp;boolean&nbsp;createIndex(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index)
+                    throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#createIndex-mil.nga.giat.geowave.core.store.index.PrimaryIndex-">createIndex</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a></code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
 </dl>
 </li>
 </ul>

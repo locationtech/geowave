@@ -18,6 +18,12 @@
     catch(err) {
     }
 //-->
+var methods = {"i0":10,"i1":10};
+var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
+var altColor = "altColor";
+var rowColor = "rowColor";
+var tableTab = "tableTab";
+var activeTableTab = "activeTableTab";
 </script>
 <noscript>
 <div>JavaScript is disabled on your browser.</div>
@@ -71,13 +77,13 @@
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.top">
@@ -181,12 +187,36 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceD
 <!--   -->
 </a>
 <h3>Method Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Method Summary table, listing methods, and an explanation">
+<caption><span id="t0" class="activeTableTab"><span>All Methods</span><span class="tabEnd">&nbsp;</span></span><span id="t2" class="tableTab"><span><a href="javascript:show(2);">Instance Methods</a></span><span class="tabEnd">&nbsp;</span></span><span id="t4" class="tableTab"><span><a href="javascript:show(8);">Concrete Methods</a></span><span class="tabEnd">&nbsp;</span></span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Method and Description</th>
+</tr>
+<tr id="i0" class="altColor">
+<td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.IndexStore-org.apache.hadoop.mapreduce.JobContext-java.lang.Integer-java.lang.Integer-">getSplits</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+         <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+         org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
+         <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)</code>&nbsp;</td>
+</tr>
+<tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraDataStore.html#prepareRecordWriter-org.apache.hadoop.conf.Configuration-">prepareRecordWriter</a></span>(org.apache.hadoop.conf.Configuration&nbsp;conf)</code>&nbsp;</td>
+</tr>
+</table>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;mil.nga.giat.geowave.mapreduce.<a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a></h3>
-<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">createRecordReader</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#createSplitsProvider--">createSplitsProvider</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.IndexStore-java.lang.Integer-java.lang.Integer-">getSplits</a></code></li>
+<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#createRecordReader-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.index.IndexStore-boolean-org.apache.hadoop.mapreduce.InputSplit-">createRecordReader</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#createRecordWriter-org.apache.hadoop.mapreduce.TaskAttemptContext-mil.nga.giat.geowave.core.store.index.IndexStore-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-">createRecordWriter</a>, <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#createSplitsProvider--">createSplitsProvider</a></code></li>
 </ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.mil.nga.giat.geowave.core.store.base.BaseDataStore">
@@ -251,6 +281,58 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceD
 </ul>
 </li>
 </ul>
+<!-- ============ METHOD DETAIL ========== -->
+<ul class="blockList">
+<li class="blockList"><a name="method.detail">
+<!--   -->
+</a>
+<h3>Method Detail</h3>
+<a name="prepareRecordWriter-org.apache.hadoop.conf.Configuration-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>prepareRecordWriter</h4>
+<pre>public&nbsp;void&nbsp;prepareRecordWriter(org.apache.hadoop.conf.Configuration&nbsp;conf)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#prepareRecordWriter-org.apache.hadoop.conf.Configuration-">prepareRecordWriter</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#prepareRecordWriter-org.apache.hadoop.conf.Configuration-">prepareRecordWriter</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.IndexStore-org.apache.hadoop.mapreduce.JobContext-java.lang.Integer-java.lang.Integer-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getSplits</h4>
+<pre>public&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;org.apache.hadoop.mapreduce.InputSplit&gt;&nbsp;getSplits(<a href="../../../../../../mil/nga/giat/geowave/core/store/query/DistributableQuery.html" title="interface in mil.nga.giat.geowave.core.store.query">DistributableQuery</a>&nbsp;query,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/query/QueryOptions.html" title="class in mil.nga.giat.geowave.core.store.query">QueryOptions</a>&nbsp;queryOptions,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/TransientAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">TransientAdapterStore</a>&nbsp;adapterStore,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/AdapterIndexMappingStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">AdapterIndexMappingStore</a>&nbsp;aimStore,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statsStore,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore,
+                                                              <a href="../../../../../../mil/nga/giat/geowave/core/store/index/IndexStore.html" title="interface in mil.nga.giat.geowave.core.store.index">IndexStore</a>&nbsp;indexStore,
+                                                              org.apache.hadoop.mapreduce.JobContext&nbsp;context,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;minSplits,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;maxSplits)
+                                                       throws <a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a>,
+                                                              <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.IndexStore-org.apache.hadoop.mapreduce.JobContext-java.lang.Integer-java.lang.Integer-">getSplits</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/MapReduceDataStore.html" title="interface in mil.nga.giat.geowave.mapreduce">MapReduceDataStore</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html#getSplits-mil.nga.giat.geowave.core.store.query.DistributableQuery-mil.nga.giat.geowave.core.store.query.QueryOptions-mil.nga.giat.geowave.core.store.adapter.TransientAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-mil.nga.giat.geowave.core.store.index.IndexStore-org.apache.hadoop.mapreduce.JobContext-java.lang.Integer-java.lang.Integer-">getSplits</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceDataStore.html" title="class in mil.nga.giat.geowave.mapreduce">BaseMapReduceDataStore</a></code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/io/IOException.html?is-external=true" title="class or interface in java.io">IOException</a></code></dd>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/InterruptedException.html?is-external=true" title="class or interface in java.lang">InterruptedException</a></code></dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 </div>
@@ -305,13 +387,13 @@ extends <a href="../../../../../../mil/nga/giat/geowave/mapreduce/BaseMapReduceD
 <li>Nested&nbsp;|&nbsp;</li>
 <li><a href="#fields.inherited.from.class.mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
-<li><a href="#methods.inherited.from.class.mil.nga.giat.geowave.mapreduce.BaseMapReduceDataStore">Method</a></li>
+<li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
-<li>Method</li>
+<li><a href="#method.detail">Method</a></li>
 </ul>
 </div>
 <a name="skip.navbar.bottom">
