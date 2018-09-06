@@ -56,7 +56,7 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
-	LandsatIT.class,
+//	LandsatIT.class,
 	CustomCRSLandsatIT.class,
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
