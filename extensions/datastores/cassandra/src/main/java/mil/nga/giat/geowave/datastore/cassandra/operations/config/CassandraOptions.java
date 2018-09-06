@@ -8,7 +8,7 @@ public class CassandraOptions extends
 		BaseDataStoreOptions
 {
 	@Parameter(names = "--batchWriteSize", description = "The number of inserts in a batch write.")
-	private int batchWriteSize = 15;
+	private int batchWriteSize = 50;
 	@Parameter(names = "--durableWrites", description = "Whether to write to commit log for durability, configured only on creation of new keyspace.", arity = 1)
 	private boolean durableWrites = true;
 	@Parameter(names = "--replicas", description = "The number of replicas to use when creating a new keyspace.")
