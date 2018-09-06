@@ -54,7 +54,9 @@ public class BatchedWrite extends
 				preparedInsert,
 				row);
 		for (final BoundStatement statement : statements) {
-			insertStatement(row, statement);
+			insertStatement(
+					row,
+					statement);
 		}
 	}
 
@@ -63,7 +65,9 @@ public class BatchedWrite extends
 			final BoundStatement statement ) {
 		if (ASYNC) {
 			if (batchSize > 1) {
-				final BatchStatement currentBatch = addStatement(row, statement);
+				final BatchStatement currentBatch = addStatement(
+						row,
+						statement);
 				synchronized (currentBatch) {
 					if (currentBatch.size() >= batchSize) {
 						writeBatch(currentBatch);
@@ -90,7 +94,6 @@ public class BatchedWrite extends
 	private void writeBatch(
 			final BatchStatement batch ) {
 		try {
-			writeSemaphore.acquire();
 			executeAsync(batch);
 
 			batch.clear();

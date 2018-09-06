@@ -28,9 +28,10 @@ public class BatchHandler
 	}
 
 	protected BatchStatement addStatement(
-			final GeoWaveRow row, 
+			final GeoWaveRow row,
 			final Statement statement ) {
-		ByteArrayId partition = new ByteArrayId(row.getPartitionKey());
+		ByteArrayId partition = new ByteArrayId(
+				row.getPartitionKey());
 		BatchStatement tokenBatch = batches.get(partition);
 
 		if (tokenBatch == null) {
