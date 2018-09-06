@@ -30,7 +30,6 @@ public class BatchedWrite extends
 	// correctly, while other recommendations contradict this article and
 	// suggest don't use batching as a performance optimization
 	private static final boolean ASYNC = true;
-	private static final boolean BATCH = false;
 	private final int batchSize;
 	private final PreparedStatement preparedInsert;
 	private final static int MAX_CONCURRENT_WRITE = 100;
@@ -62,7 +61,7 @@ public class BatchedWrite extends
 	private void insertStatement(
 			final BoundStatement statement ) {
 		if (ASYNC) {
-			if (BATCH) {
+			if (batchSize > 1) {
 				final BatchStatement currentBatch = addStatement(statement);
 				synchronized (currentBatch) {
 					if (currentBatch.size() >= batchSize) {
