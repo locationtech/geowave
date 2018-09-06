@@ -127,6 +127,7 @@ public class BatchedWrite extends
 		// need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
 		writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
+		writeSemaphore.release(MAX_CONCURRENT_WRITE);
 	}
 
 	// callback class
