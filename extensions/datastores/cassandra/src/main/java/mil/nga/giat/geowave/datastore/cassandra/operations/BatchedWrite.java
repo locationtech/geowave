@@ -71,7 +71,15 @@ public class BatchedWrite extends
 				}
 			}
 			else {
-				executeAsync(statement);
+				try {
+					executeAsync(statement);
+				}
+				catch (InterruptedException e) {
+					LOGGER.warn(
+							"async write semaphore interrupted",
+							e);
+					writeSemaphore.release();
+				}
 			}
 		}
 		else {
@@ -89,14 +97,16 @@ public class BatchedWrite extends
 		}
 		catch (InterruptedException e) {
 			LOGGER.warn(
-					"async write semaphore interupted",
+					"async batch write semaphore interrupted",
 					e);
 			writeSemaphore.release();
 		}
 	}
 
 	private void executeAsync(
-			Statement statement ) {
+			Statement statement )
+			throws InterruptedException {
+		writeSemaphore.acquire();
 		final ResultSetFuture future = session.executeAsync(statement);
 		Futures.addCallback(
 				future,
