@@ -161,8 +161,7 @@ public class TimeDescriptors
 	public static class TimeDescriptorConfiguration implements
 			SimpleFeatureUserDataConfiguration
 	{
-
-		private static final long serialVersionUID = -664252700036603897L;
+		private static final long serialVersionUID = 2870075684501325546L;
 		private String startRangeName = null;
 		private String endRangeName = null;
 		private String timeName = null;

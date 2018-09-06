@@ -70,7 +70,7 @@
 		<snappy.version>1.1.2.6</snappy.version>
 		<jcommander.version>1.48</jcommander.version>
 		<jackson.version>1.9.13</jackson.version>
-		<fasterxml.jackson.version>2.6.6</fasterxml.jackson.version>
+		<fasterxml.jackson.version>2.9.6</fasterxml.jackson.version>
 		<spring-security.version>4.2.7.RELEASE</spring-security.version>
 		<slf4j.version>1.7.21</slf4j.version>
 		<junit.version>4.11</junit.version>
@@ -666,6 +666,7 @@
 				<groupId>com.fasterxml.jackson.core</groupId>
 				<artifactId>jackson-core</artifactId>
 				<version>${fasterxml.jackson.version}</version>
+				<scope>${geotools.scope}</scope>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.dataformat</groupId>

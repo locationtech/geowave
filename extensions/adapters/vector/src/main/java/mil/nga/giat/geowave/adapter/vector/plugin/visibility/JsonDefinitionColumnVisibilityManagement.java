@@ -18,8 +18,9 @@ import mil.nga.giat.geowave.core.store.data.field.FieldVisibilityHandler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Object defining visibility is a json structure where each attribute defines
@@ -71,9 +72,9 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
 				final JsonNode attributeMap = mapper.readTree(visibilityObject.toString());
 				final JsonNode field = attributeMap.get(fieldName);
 				if ((field != null) && field.isValueNode()) {
-					return validate(field.getTextValue());
+					return validate(field.textValue());
 				}
-				final Iterator<String> attNameIt = attributeMap.getFieldNames();
+				final Iterator<String> attNameIt = attributeMap.fieldNames();
 				while (attNameIt.hasNext()) {
 					final String attName = attNameIt.next();
 					if (fieldName.matches(attName)) {
@@ -83,7 +84,7 @@ public class JsonDefinitionColumnVisibilityManagement<T> implements
 									+ " was null");
 							return null;
 						}
-						return validate(attNode.getTextValue());
+						return validate(attNode.textValue());
 					}
 				}
 			}

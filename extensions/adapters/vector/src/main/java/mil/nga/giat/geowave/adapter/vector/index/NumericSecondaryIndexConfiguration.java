@@ -14,9 +14,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
+import mil.nga.giat.geowave.core.store.index.SecondaryIndexType;
 
 public class NumericSecondaryIndexConfiguration extends
 		AbstractSecondaryIndexConfiguration<Number>

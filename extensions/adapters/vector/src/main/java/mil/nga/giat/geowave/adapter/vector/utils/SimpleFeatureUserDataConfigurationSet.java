@@ -25,15 +25,13 @@ import java.util.Map.Entry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 
-import org.codehaus.jackson.JsonGenerationException;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.SerializationConfig;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 /**
@@ -44,9 +42,10 @@ import org.opengis.feature.simple.SimpleFeatureType;
  */
 
 public class SimpleFeatureUserDataConfigurationSet implements
+		java.io.Serializable,
 		Persistable
 {
-
+	private static final long serialVersionUID = -1266366263353595379L;
 	private static Logger LOGGER = LoggerFactory.getLogger(SimpleFeatureUserDataConfigurationSet.class);
 	public static final String SIMPLE_FEATURE_CONFIG_FILE_PROP = "SIMPLE_FEATURE_CONFIG_FILE";
 
@@ -186,60 +185,6 @@ public class SimpleFeatureUserDataConfigurationSet implements
 	}
 
 	/**
-	 * 
-	 * @return JSON formatted string representing the
-	 *         SimpleFeatureUserDataConfigurationSet represented by this object
-	 * @throws JsonMappingException
-	 * @throws JsonGenerationException
-	 * @throws IOException
-	 */
-	@SuppressWarnings("deprecation")
-	public String asJsonString()
-			throws JsonGenerationException,
-			JsonMappingException,
-			IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-		final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-
-		serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
-
-		return mapper.writeValueAsString(this);
-	}
-
-	/**
-	 * Converts a JSON formatted config string to a
-	 * SimpleFeatureUserDataConfiguationSet and updates the passed in SFT
-	 * 
-	 * @param jsonConfigString
-	 *            - json formatted configuration string
-	 * @param type
-	 *            - SFT to be updated from the JSON String
-	 *
-	 * @throws JsonMappingException
-	 * @throws JsonParseException
-	 * @throws IOException
-	 */
-	@SuppressWarnings("deprecation")
-	public void fromJsonString(
-			final String jsonConfigString,
-			final SimpleFeatureType type )
-			throws JsonParseException,
-			JsonMappingException,
-			IOException {
-		final ObjectMapper mapper = new ObjectMapper();
-
-		final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-		serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
-
-		final SimpleFeatureUserDataConfigurationSet instance = mapper.readValue(
-				jsonConfigString,
-				SimpleFeatureUserDataConfigurationSet.class);
-
-		configurations = instance.configurations;
-		updateType(type);
-	}
-
-	/**
 	 * Method that reads user data configuration information from
 	 * {@value #SIMPLE_FEATURE_CONFIG_FILE_PROP} and updates the passed in SFT.
 	 * 
@@ -263,9 +208,7 @@ public class SimpleFeatureUserDataConfigurationSet implements
 						configFile); Reader reader = new InputStreamReader(
 						input,
 						"UTF-8")) {
-					final ObjectMapper mapper = new ObjectMapper();
-					final SerializationConfig serializationConfig = mapper.getSerializationConfig();
-					serializationConfig.disable(SerializationConfig.Feature.FAIL_ON_EMPTY_BEANS);
+					final ObjectMapper mapper = new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 					final SimpleFeatureUserDataConfigurationSet instance = mapper.readValue(
 							reader,
 							SimpleFeatureUserDataConfigurationSet.class);
