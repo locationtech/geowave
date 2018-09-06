@@ -659,8 +659,6 @@ public class FeatureDataAdapter extends
 		final String typeName = reprojectedFeatureType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
 		final byte[] axisBytes = StringUtils.stringToBinary(axis);
-		byte[] attrBytes = new byte[0];
-
 		//
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
 		userDataConfiguration.addConfigurations(
