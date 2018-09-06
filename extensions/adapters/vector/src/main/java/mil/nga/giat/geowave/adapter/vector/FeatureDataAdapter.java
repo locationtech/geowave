@@ -807,6 +807,7 @@ public class FeatureDataAdapter extends
 					new VisibilityConfiguration(
 							myType));
 			userDataConfiguration.fromBinary(attrBytes);
+			userDataConfiguration.updateType(myType);
 			setFeatureType(myType);
 			initCRS(indexCrsBytes.length > 0 ? StringUtils.stringFromBinary(indexCrsBytes) : null);
 			// advertise the reprojected type externally

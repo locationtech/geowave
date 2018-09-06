@@ -327,7 +327,8 @@ public class TimeDescriptors
 				endRangeBytes = null;
 			}
 			final ByteBuffer buf = ByteBuffer.allocate(length);
-			buf.put(bits.toByteArray()[0]);
+			byte[] bitMask = bits.toByteArray();
+			buf.put(bitMask.length > 0 ? bitMask[0] : (byte) 0);
 			if (timeBytes != null) {
 				buf.putInt(timeBytes.length);
 				buf.put(timeBytes);
