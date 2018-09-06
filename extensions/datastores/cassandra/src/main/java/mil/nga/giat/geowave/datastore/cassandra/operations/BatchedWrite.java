@@ -54,15 +54,16 @@ public class BatchedWrite extends
 				preparedInsert,
 				row);
 		for (final BoundStatement statement : statements) {
-			insertStatement(statement);
+			insertStatement(row, statement);
 		}
 	}
 
 	private void insertStatement(
+			final GeoWaveRow row,
 			final BoundStatement statement ) {
 		if (ASYNC) {
 			if (batchSize > 1) {
-				final BatchStatement currentBatch = addStatement(statement);
+				final BatchStatement currentBatch = addStatement(row, statement);
 				synchronized (currentBatch) {
 					if (currentBatch.size() >= batchSize) {
 						writeBatch(currentBatch);
