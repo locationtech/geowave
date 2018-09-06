@@ -53,8 +53,7 @@ import mil.nga.giat.geowave.test.services.grpc.GeoWaveGrpcTestUtils;
 	GeoWaveStoreType.BIGTABLE,
 	GeoWaveStoreType.CASSANDRA,
 	GeoWaveStoreType.DYNAMODB,
-// TODO HBase server-side components need to work with GRPC libraries
-// GeoWaveStoreType.HBASE
+	GeoWaveStoreType.HBASE
 })
 public class GeoWaveGrpcIT extends
 		AbstractGeoWaveBasicVectorIT

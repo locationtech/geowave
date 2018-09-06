@@ -56,7 +56,8 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
-	LandsatIT.class,
+	// for now tests are taking too long in travis and landsatIT is a long test
+	// LandsatIT.class,
 	CustomCRSLandsatIT.class,
 	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
