@@ -113,6 +113,7 @@ mkdir -p $TARGET_ROOT/jupyter
 cp $TEMPLATE_ROOT/jupyter/install-conda.sh $TARGET_ROOT/jupyter/install-conda.sh
 cp $TEMPLATE_ROOT/jupyter/jupyterhub_config.py $TARGET_ROOT/jupyter/jupyterhub_config.py
 cp $TEMPLATE_ROOT/jupyter/pre-spawn.sh $TARGET_ROOT/jupyter/pre-spawn.sh
+cp $TEMPLATE_ROOT/jupyter/gw-base.yml $TARGET_ROOT/jupyter/gw-base.yml
 
 cp $TEMPLATE_ROOT/bootstrap-jupyter.sh $TARGET_ROOT/jupyter/bootstrap-jupyter.sh
 cp $TEMPLATE_ROOT/create-configure-kernel.sh $TARGET_ROOT/jupyter/create-configure-kernel.sh
