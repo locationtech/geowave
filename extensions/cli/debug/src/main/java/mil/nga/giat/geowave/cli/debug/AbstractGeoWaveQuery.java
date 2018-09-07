@@ -84,7 +84,9 @@ abstract public class AbstractGeoWaveQuery extends
 
 			final GeotoolsFeatureDataAdapter adapter;
 			if (adapterId != null) {
-				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(storeOptions.createInternalAdapterStore().getInternalAdapterId(adapterId)).getAdapter();
+				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+						storeOptions.createInternalAdapterStore().getInternalAdapterId(
+								adapterId)).getAdapter();
 			}
 			else {
 				final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();

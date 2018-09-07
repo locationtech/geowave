@@ -122,7 +122,10 @@ public class CassandraRow extends MergeableGeoWaveRow
 	}
 
 	private final Row row;
-
+	public CassandraRow() {
+		super(new GeoWaveValue[0]);
+		this.row = null;
+	}
 	public CassandraRow(
 			final Row row ) {
 		super(getFieldValues(row));
