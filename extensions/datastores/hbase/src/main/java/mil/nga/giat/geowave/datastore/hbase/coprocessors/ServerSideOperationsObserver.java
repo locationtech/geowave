@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.datastore.hbase.server.HBaseServerOp;
 import mil.nga.giat.geowave.datastore.hbase.server.ServerOpInternalScannerWrapper;
 import mil.nga.giat.geowave.datastore.hbase.server.ServerOpRegionScannerWrapper;
 import mil.nga.giat.geowave.datastore.hbase.server.ServerSideOperationStore;
+import mil.nga.giat.geowave.datastore.hbase.server.ServerSideOperationUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 
 public class ServerSideOperationsObserver extends
@@ -38,12 +39,8 @@ public class ServerSideOperationsObserver extends
 {
 
 	private final static Logger LOGGER = Logger.getLogger(ServerSideOperationsObserver.class);
-	public static final String SERVER_OP_PREFIX = "serverop";
-	public static final String SERVER_OP_SCOPES_KEY = "scopes";
-	public static final String SERVER_OP_OPTIONS_PREFIX = "options";
-	public static final String SERVER_OP_CLASS_KEY = "class";
-	public static final String SERVER_OP_PRIORITY_KEY = "priority";
-	private static final int SERVER_OP_OPTIONS_PREFIX_LENGTH = SERVER_OP_OPTIONS_PREFIX.length();
+	private static final int SERVER_OP_OPTIONS_PREFIX_LENGTH = ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX
+			.length();
 
 	private ServerSideOperationStore opStore = null;
 	private static final RegionScannerWrapperFactory REGION_SCANNER_FACTORY = new RegionScannerWrapperFactory();
@@ -222,7 +219,7 @@ public class ServerSideOperationsObserver extends
 		final Map<String, List<String>> uniqueOpsWithOptionKeys = new HashMap<>();
 		for (final Map.Entry<String, String> entry : config) {
 			if (entry.getKey().startsWith(
-					SERVER_OP_PREFIX)) {
+					ServerSideOperationUtils.SERVER_OP_PREFIX)) {
 				final String key = entry.getKey();
 				final int index = StringUtils.ordinalIndexOf(
 						key,
@@ -243,7 +240,7 @@ public class ServerSideOperationsObserver extends
 						if (key.substring(
 								uniqueOp.length(),
 								uniqueOp.length() + SERVER_OP_OPTIONS_PREFIX_LENGTH).equals(
-								SERVER_OP_OPTIONS_PREFIX)) {
+								ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX)) {
 							optionKeys.add(key.substring(uniqueOp.length() + 1 + SERVER_OP_OPTIONS_PREFIX_LENGTH));
 						}
 					}
@@ -253,19 +250,19 @@ public class ServerSideOperationsObserver extends
 
 		for (final Entry<String, List<String>> uniqueOpAndOptions : uniqueOpsWithOptionKeys.entrySet()) {
 			final String uniqueOp = uniqueOpAndOptions.getKey();
-			final String priorityStr = config.get(uniqueOp + SERVER_OP_PRIORITY_KEY);
+			final String priorityStr = config.get(uniqueOp + ServerSideOperationUtils.SERVER_OP_PRIORITY_KEY);
 			if ((priorityStr == null) || priorityStr.isEmpty()) {
 				LOGGER.warn("Skipping server op - unable to find priority for '" + uniqueOp + "'");
 				continue;
 			}
 			final int priority = Integer.parseInt(priorityStr);
-			final String commaDelimitedScopes = config.get(uniqueOp + SERVER_OP_SCOPES_KEY);
+			final String commaDelimitedScopes = config.get(uniqueOp + ServerSideOperationUtils.SERVER_OP_SCOPES_KEY);
 			if ((commaDelimitedScopes == null) || commaDelimitedScopes.isEmpty()) {
 				LOGGER.warn("Skipping server op - unable to find scopes for '" + uniqueOp + "'");
 				continue;
 			}
 			final ImmutableSet<ServerOpScope> scopes = HBaseUtils.stringToScopes(commaDelimitedScopes);
-			final String classIdStr = config.get(uniqueOp + SERVER_OP_CLASS_KEY);
+			final String classIdStr = config.get(uniqueOp + ServerSideOperationUtils.SERVER_OP_CLASS_KEY);
 			if ((classIdStr == null) || classIdStr.isEmpty()) {
 				LOGGER.warn("Skipping server op - unable to find class ID for '" + uniqueOp + "'");
 				continue;
@@ -273,7 +270,8 @@ public class ServerSideOperationsObserver extends
 			final List<String> optionKeys = uniqueOpAndOptions.getValue();
 			final Map<String, String> optionsMap = new HashMap<>();
 			for (final String optionKey : optionKeys) {
-				final String optionValue = config.get(uniqueOp + SERVER_OP_OPTIONS_PREFIX + "." + optionKey);
+				final String optionValue = config.get(uniqueOp + ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX
+						+ "." + optionKey);
 				optionsMap.put(
 						optionKey,
 						optionValue);

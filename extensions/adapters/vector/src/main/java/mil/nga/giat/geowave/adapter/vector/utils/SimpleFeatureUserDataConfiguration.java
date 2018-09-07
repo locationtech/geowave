@@ -10,8 +10,9 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.adapter.vector.utils;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.opengis.feature.simple.SimpleFeatureType;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 

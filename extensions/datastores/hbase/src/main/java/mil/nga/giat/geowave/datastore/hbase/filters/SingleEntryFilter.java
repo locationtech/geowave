@@ -19,10 +19,11 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.Filter;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.apache.hadoop.hbase.util.ByteStringer;
+import org.apache.hadoop.hbase.shaded.com.google.protobuf.HBaseZeroCopyByteString;
 
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.FilterProtosServer;
 
 /**
@@ -124,12 +125,12 @@ public class SingleEntryFilter extends
 
 	@Override
 	public byte[] toByteArray() {
-		final FilterProtosServer.SingleEntryFilter.Builder builder = FilterProtosServer.SingleEntryFilter.newBuilder();
+		final FilterProtosClient.SingleEntryFilter.Builder builder = FilterProtosClient.SingleEntryFilter.newBuilder();
 		if (adapterId != null) {
-			builder.setAdapterId(ByteStringer.wrap(adapterId));
+			builder.setAdapterId(HBaseZeroCopyByteString.wrap(adapterId));
 		}
 		if (dataId != null) {
-			builder.setDataId(ByteStringer.wrap(dataId));
+			builder.setDataId(HBaseZeroCopyByteString.wrap(dataId));
 		}
 
 		return builder.build().toByteArray();

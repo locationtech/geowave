@@ -38,6 +38,7 @@
 		<dependency>
             <groupId>org.apache.hbase</groupId>
             <artifactId>hbase-server</artifactId>
+            <scope>provided</scope>
             <exclusions>
                 <exclusion>
                     <groupId>org.apache.hbase</groupId>

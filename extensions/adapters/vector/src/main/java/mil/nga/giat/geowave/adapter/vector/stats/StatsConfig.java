@@ -12,7 +12,7 @@ package mil.nga.giat.geowave.adapter.vector.stats;
 
 import java.io.Serializable;
 
-import org.codehaus.jackson.annotate.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 import mil.nga.giat.geowave.core.index.persist.Persistable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;

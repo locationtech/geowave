@@ -13,10 +13,11 @@ package mil.nga.giat.geowave.adapter.vector.plugin.visibility;
 import java.io.ObjectStreamException;
 import java.nio.ByteBuffer;
 
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import mil.nga.giat.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 import mil.nga.giat.geowave.core.index.StringUtils;
@@ -34,7 +35,7 @@ public class VisibilityConfiguration implements
 
 	private static final long serialVersionUID = -664252700036603897L;
 	private String attributeName = "GEOWAVE_VISIBILITY";
-	private String managerClassName = JsonDefinitionColumnVisibilityManagement.class.toString();
+	private String managerClassName = JsonDefinitionColumnVisibilityManagement.class.getName();
 	private transient VisibilityManagement<SimpleFeature> manager = new JsonDefinitionColumnVisibilityManagement<>();
 
 	public VisibilityConfiguration() {
