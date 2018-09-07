@@ -23,7 +23,7 @@ public class StartGrpcServerCommand extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(StartGrpcServerCommand.class);
 
 	@ParametersDelegate
-	private StartGrpcServerCommandOptions options;
+	private StartGrpcServerCommandOptions options = new StartGrpcServerCommandOptions();
 
 	/**
 	 * Prep the driver & run the operation.
