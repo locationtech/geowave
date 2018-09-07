@@ -445,6 +445,7 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#osm-commands">OSM Commands</a></li>
 <li><a href="#raster-commands">Raster Commands</a></li>
 <li><a href="#vector-commands">Vector Commands</a></li>
+<li><a href="#services-commands">Services Commands</a></li>
 </ul>
 </li>
 </ul>
@@ -9573,6 +9574,93 @@ another point.</p>
 </ul>
 </div>
 <hr>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="services-commands"><a class="anchor" href="#services-commands"></a>Services Commands</h3>
+<div class="paragraph">
+<p>Services operations (Required options are designated with an *)</p>
+</div>
+<div class="ulist">
+<div class="title">Commands:</div>
+<ul>
+<li>
+<p><a href="#grpc-start">grpc start</a></p>
+</li>
+<li>
+<p><a href="#grpc-stop">grpc stop</a></p>
+</li>
+</ul>
+</div>
+<div class="sect3">
+<h4 id="grpc-start"><a class="anchor" href="#grpc-start"></a><strong>geowave grpc start</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave grpc start - Start the GeoWave gRPC server</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave grpc start [options]</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>The geowave grpc start operator will start the GeoWave gRPC server on a given port number. Remote gRPC clients can interact with GeoWave from this service.</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>--port</p>
+<div class="ulist">
+<ul>
+<li>
+<p>The port number the server should run on</p>
+</li>
+<li>
+<p>Default: 8980</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="grpc-stop"><a class="anchor" href="#grpc-stop"></a><strong>geowave grpc stop</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave grpc stop - Stop the GeoWave gRPC server</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave grpc stop</p>
+</div>
+<div class="paragraph">
+<p>DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>Shuts down the GeoWave gRPC server</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
+</div>
+<hr>
 </div>
 </div>
 </div>
@@ -9580,7 +9668,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-09-07 03:25:13 +00:00
+Last updated 2018-09-07 15:57:19 +00:00
 </div>
 </div>
 </body>

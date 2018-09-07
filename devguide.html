@@ -493,6 +493,11 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#query-cql">Contextual Query Language</a></li>
 </ul>
 </li>
+<li><a href="#services">Services</a>
+<ul class="sectlevel2">
+<li><a href="#grpc">gRPC</a></li>
+</ul>
+</li>
 <li><a href="#third-party">Third Party</a>
 <ul class="sectlevel2">
 <li><a href="#geoserver">GeoServer</a></li>
@@ -2291,6 +2296,30 @@ Density of region is measured by a minimum cardinality of enclosed features with
 </div>
 </div>
 <div class="sect1">
+<h2 id="services"><a class="anchor" href="#services"></a>Services</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="grpc"><a class="anchor" href="#grpc"></a>gRPC</h3>
+<div class="paragraph">
+<p>GeoWave&#8217;s gRPC service provides a way for remote gRPC client applications to interact with GeoWave.</p>
+</div>
+<div class="sect3">
+<h4 id="grpc-protobuf"><a class="anchor" href="#grpc-protobuf"></a>gRPC Protobuf</h4>
+<div class="paragraph">
+<p>During the build process, GeoWave auto-generates protobuf message files (.proto) for all GeoWave commands that derive from the abstract class ServiceEnabledCommand. The source for the generation process may be found in the  geowave-grpc-protobuf-generator project. The auto-generated protobuf files, as well as any manually-generated GeoWave protobuf files can be located in the geowave-grpc-protobuf project. The protobuf files are compiled to their respective Java classes by this project as well. For more details on protobuf, please refer to the <a href="https://developers.google.com/protocol-buffers/" target="_blank">Protocol Buffers tutorials</a></p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="grpc-server"><a class="anchor" href="#grpc-server"></a>gRPC server</h4>
+<div class="paragraph">
+<p>The gRPC server discovers and loads all GeoWave gRPC service implementations via the GeoWaveGrpcServiceSpi interface. The server code and gRPC service implementations may be found in the geowave-grpc-server project. This project also contains definitions for a few CLI commands to start and stop the server.</p>
+</div>
+<div style="page-break-after: always;"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
 <h2 id="third-party"><a class="anchor" href="#third-party"></a>Third Party</h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -3287,7 +3316,7 @@ Examples of these include:</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-09-07 03:25:13 +00:00
+Last updated 2018-09-07 15:57:19 +00:00
 </div>
 </div>
 </body>
