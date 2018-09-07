@@ -8,6 +8,10 @@ import java.util.Set;
 
 import com.datastax.driver.core.BatchStatement;
 import com.datastax.driver.core.BatchStatement.Type;
+
+import mil.nga.giat.geowave.core.index.ByteArrayId;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+
 import com.datastax.driver.core.Host;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.Statement;
@@ -15,9 +19,8 @@ import com.datastax.driver.core.Statement;
 public class BatchHandler
 {
 	protected final Session session;
-	private static final int RF = 3;
 	private Type type = Type.UNLOGGED;
-	protected final Map<Set<Host>, BatchStatement> batches = new HashMap<>();
+	protected final Map<ByteArrayId, BatchStatement> batches = new HashMap<>();
 
 	public BatchHandler(
 			final Session session ) {
@@ -25,31 +28,18 @@ public class BatchHandler
 	}
 
 	protected BatchStatement addStatement(
+			final GeoWaveRow row,
 			final Statement statement ) {
-		final Set<Host> hosts = new HashSet<>();
-		int replicas = 0;
-		final Iterator<Host> it = session
-				.getCluster()
-				.getConfiguration()
-				.getPolicies()
-				.getLoadBalancingPolicy()
-				.newQueryPlan(
-						statement.getKeyspace(),
-						statement);
-
-		while (it.hasNext() && (replicas < RF)) {
-			hosts.add(it.next());
-			replicas++;
-		}
-
-		BatchStatement tokenBatch = batches.get(hosts);
+		ByteArrayId partition = new ByteArrayId(
+				row.getPartitionKey());
+		BatchStatement tokenBatch = batches.get(partition);
 
 		if (tokenBatch == null) {
 			tokenBatch = new BatchStatement(
 					type);
 
 			batches.put(
-					hosts,
+					partition,
 					tokenBatch);
 		}
 		synchronized (tokenBatch) {

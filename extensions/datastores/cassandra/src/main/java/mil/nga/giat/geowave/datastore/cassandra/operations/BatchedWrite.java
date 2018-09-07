@@ -11,6 +11,7 @@ import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
 import com.datastax.driver.core.Session;
+import com.datastax.driver.core.Statement;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 
@@ -31,7 +32,7 @@ public class BatchedWrite extends
 	private static final boolean ASYNC = true;
 	private final int batchSize;
 	private final PreparedStatement preparedInsert;
-	private final static int MAX_CONCURRENT_WRITE = 50;
+	private final static int MAX_CONCURRENT_WRITE = 100;
 	// only allow so many outstanding async reads or writes, use this semaphore
 	// to control it
 	private final Semaphore writeSemaphore = new Semaphore(
@@ -53,17 +54,35 @@ public class BatchedWrite extends
 				preparedInsert,
 				row);
 		for (final BoundStatement statement : statements) {
-			insertStatement(statement);
+			insertStatement(
+					row,
+					statement);
 		}
 	}
 
 	private void insertStatement(
+			final GeoWaveRow row,
 			final BoundStatement statement ) {
 		if (ASYNC) {
-			final BatchStatement currentBatch = addStatement(statement);
-			synchronized (currentBatch) {
-				if (currentBatch.size() >= batchSize) {
-					writeBatch(currentBatch);
+			if (batchSize > 1) {
+				final BatchStatement currentBatch = addStatement(
+						row,
+						statement);
+				synchronized (currentBatch) {
+					if (currentBatch.size() >= batchSize) {
+						writeBatch(currentBatch);
+					}
+				}
+			}
+			else {
+				try {
+					executeAsync(statement);
+				}
+				catch (InterruptedException e) {
+					LOGGER.warn(
+							"async write semaphore interrupted",
+							e);
+					writeSemaphore.release();
 				}
 			}
 		}
@@ -75,22 +94,28 @@ public class BatchedWrite extends
 	private void writeBatch(
 			final BatchStatement batch ) {
 		try {
-			writeSemaphore.acquire();
+			executeAsync(batch);
 
-			final ResultSetFuture future = session.executeAsync(batch);
-			Futures.addCallback(
-					future,
-					new IngestCallback(
-							writeSemaphore),
-					CassandraOperations.WRITE_RESPONSE_THREADS);
 			batch.clear();
 		}
 		catch (InterruptedException e) {
 			LOGGER.warn(
-					"async write semaphore interupted",
+					"async batch write semaphore interrupted",
 					e);
 			writeSemaphore.release();
 		}
+	}
+
+	private void executeAsync(
+			Statement statement )
+			throws InterruptedException {
+		writeSemaphore.acquire();
+		final ResultSetFuture future = session.executeAsync(statement);
+		Futures.addCallback(
+				future,
+				new IngestCallback(
+						writeSemaphore),
+				CassandraOperations.WRITE_RESPONSE_THREADS);
 	}
 
 	@Override
@@ -105,6 +130,7 @@ public class BatchedWrite extends
 		// need to wait for all asynchronous batches to finish writing
 		// before exiting close() method
 		writeSemaphore.acquire(MAX_CONCURRENT_WRITE);
+		writeSemaphore.release(MAX_CONCURRENT_WRITE);
 	}
 
 	// callback class
