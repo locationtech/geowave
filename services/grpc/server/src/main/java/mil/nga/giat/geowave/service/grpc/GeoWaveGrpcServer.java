@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
 import io.grpc.netty.NettyServerBuilder;
+import io.grpc.protobuf.services.ProtoReflectionService;
 
 public class GeoWaveGrpcServer
 {
@@ -37,7 +38,7 @@ public class GeoWaveGrpcServer
 			int port )
 			throws IOException {
 		final ServerBuilder<?> builder = NettyServerBuilder.forPort(port);
-
+		builder.addService(ProtoReflectionService.newInstance());
 		try {
 			Iterator<GeoWaveGrpcServiceSpi> grpcServices = serviceLoader.iterator();
 			while (grpcServices.hasNext()) {

@@ -491,6 +491,7 @@ public class GeoWaveGrpcIT extends
 		StartGrpcServerCommand startCmd = new StartGrpcServerCommand();
 		StartGrpcServerCommandOptions grpcCmdOpts = new StartGrpcServerCommandOptions();
 		grpcCmdOpts.setPort(GeoWaveGrpcServiceOptions.port);
+		grpcCmdOpts.setNonBlocking(true);
 		startCmd.setCommandOptions(grpcCmdOpts);
 		startCmd.execute(operationParams);
 		server = GeoWaveGrpcServer.getInstance();

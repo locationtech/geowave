@@ -15,7 +15,7 @@
 		<module>api</module>
 		<module>client</module>
 		<module>grpc/server</module>
-		<module>grpc/protobuf-shaded</module>
+		<module>grpc/protobuf</module>
 		<module>grpc/protobuf-generator</module>
 	</modules>
 </project>
