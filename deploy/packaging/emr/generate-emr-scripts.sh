@@ -15,6 +15,7 @@
 DATASTORES=(
 	"accumulo"
 	"hbase"
+	"cassandra"
 )
 declare -A ARGS
 while [ $# -gt 0 ]; do
@@ -99,6 +100,7 @@ do
 	
 	cp $TEMPLATE_ROOT/geowave-install-lib.sh $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	sed -i -e s/'$DATASTORE_TOKEN'/${datastore}/g $TARGET_ROOT/$datastore/geowave-install-lib.sh
+	sed -e '/$DATASTORE_PUPPET_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_PUPPET_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	sed -e '/$DATASTORE_LIB_TOKEN/ {' -e 'r '$TEMPLATE_ROOT/$datastore/DATASTORE_LIB_TOKEN'' -e 'd' -e '}' -i $TARGET_ROOT/$datastore/geowave-install-lib.sh
 	
 	cp $TEMPLATE_ROOT/quickstart/ingest-and-kde-gdelt.sh.template $TARGET_ROOT/quickstart/$datastore/ingest-and-kde-gdelt.sh

@@ -24,6 +24,8 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
 
 import org.apache.commons.cli.ParseException;
@@ -75,18 +77,18 @@ abstract public class AbstractGeoWaveQuery extends
 		}
 
 		DataStore dataStore;
-		AdapterStore adapterStore;
+		PersistentAdapterStore adapterStore;
 		try {
 			dataStore = storeOptions.createDataStore();
 			adapterStore = storeOptions.createAdapterStore();
 
 			final GeotoolsFeatureDataAdapter adapter;
 			if (adapterId != null) {
-				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(adapterId);
+				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(storeOptions.createInternalAdapterStore().getInternalAdapterId(adapterId)).getAdapter();
 			}
 			else {
-				final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-				adapter = (GeotoolsFeatureDataAdapter) it.next();
+				final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
+				adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
 				it.close();
 			}
 			if (debug && (adapter != null)) {
