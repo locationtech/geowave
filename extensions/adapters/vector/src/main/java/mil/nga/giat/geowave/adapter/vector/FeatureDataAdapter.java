@@ -673,7 +673,7 @@ public class FeatureDataAdapter extends
 				typeName,
 				new VisibilityConfiguration(
 						persistedFeatureType));
-		attrBytes = userDataConfiguration.toBinary();
+		byte[] attrBytes = userDataConfiguration.toBinary();
 		final String namespace = reprojectedFeatureType.getName().getNamespaceURI();
 
 		byte[] namespaceBytes;
