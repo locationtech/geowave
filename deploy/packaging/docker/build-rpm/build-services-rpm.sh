@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
-# 
+#
 # See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.
 # All rights reserved. This program and the accompanying materials
@@ -13,7 +13,7 @@
 # This script will create the geowave services rpms
 #
 
-# This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
+# This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host
 trap 'chmod -R 777 $WORKSPACE' EXIT
 trap 'chmod -R 777 $WORKSPACE && exit' ERR
 set -e
@@ -126,7 +126,7 @@ cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwtomcat.$TIME_TAG.noarch.rpm $W
 echo "Copy REST Services file"
 cp $WORKSPACE/services/rest/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.war restservices.war
 
-# Copy accumulo 1.7 restservices war file 
+# Copy accumulo 1.7 restservices war file
 if [[ -f $WORKSPACE/services/rest/target/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war ]]; then
   cp $WORKSPACE/services/rest/target/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo1.7.war
 fi
@@ -167,9 +167,28 @@ fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices"
     --url "https://locationtech.github.io/geowave" \
     restservices.war=${GEOWAVE_DIR}/tomcat8/webapps/restservices.war
 
+fpm -s dir -t rpm -n "geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc" -a ${ARGS[arch]} \
+    -p geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm \
+    -v ${GEOWAVE_VERSION} \
+    -d java-1.8.0-openjdk \
+    -d geowave-${GEOWAVE_VERSION}-core \
+    -d geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-tools \
+    --post-install ${FPM_SCRIPTS}/gwgrpc_post_install.sh \
+    --post-uninstall ${FPM_SCRIPTS}/gwgrpc_post_uninstall.sh \
+    --iteration $TIME_TAG \
+    --vendor geowave --description "Geowave gRPC service" \
+    --url "https://locationtech.github.io/geowave" \
+    ${FPM_SCRIPTS}/gwgrpc.environment=/etc/geowave/gwgrpc \
+    ${FPM_SCRIPTS}/gwgrpc_logrotate=/etc/logrotate.d/gwgrpc \
+    ${FPM_SCRIPTS}/gwgrpc.rsyslog=/etc/rsyslog.d/gwgrpc.conf \
+    ${FPM_SCRIPTS}/gwgrpc.service=/etc/systemd/system/gwgrpc.service
+
+
+
 #Move the rpms to the repo to indexed later
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-gwgeoserver.$TIME_TAG.noarch.rpm
 cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-restservices.$TIME_TAG.noarch.rpm
+cp geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm $WORKSPACE/${ARGS[buildroot]}/RPMS/${ARGS[arch]}/geowave-${GEOWAVE_VERSION}-${VENDOR_VERSION}-grpc.$TIME_TAG.noarch.rpm
 
 # Move the restservices war to the repo
 cp restservices.war $WORKSPACE/${ARGS[buildroot]}/SOURCES/geowave-restservices-${GEOWAVE_VERSION}-${VENDOR_VERSION}.war
