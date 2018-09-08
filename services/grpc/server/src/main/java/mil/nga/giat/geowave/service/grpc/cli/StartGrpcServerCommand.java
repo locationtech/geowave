@@ -45,6 +45,18 @@ public class StartGrpcServerCommand extends
 					"Exception encountered starting gRPC server",
 					e);
 		}
+		
+		if(options.getBlockUntilShutdown()) {
+			try {
+				server.blockUntilShutdown();
+			} catch (InterruptedException e) {
+				LOGGER.error(
+						"Exception encountered during gRPC server blockUntilShutdown()",
+						e);
+			}
+		}
+		
+		LOGGER.info("GeoWave grpc server started successfully");
 	}
 
 	public void setCommandOptions(
