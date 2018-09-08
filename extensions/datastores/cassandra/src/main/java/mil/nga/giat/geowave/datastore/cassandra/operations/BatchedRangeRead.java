@@ -41,6 +41,7 @@ public class BatchedRangeRead<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BatchedRangeRead.class);
 	private final static int MAX_CONCURRENT_READ = 100;
+	private final static int MAX_BOUNDED_READS_ENQUEUED = 1000000;
 	private final CassandraOperations operations;
 	private final PreparedStatement preparedRead;
 	private final Collection<SinglePartitionQueryRanges> ranges;
@@ -113,7 +114,9 @@ public class BatchedRangeRead<T>
 			final Statement... statements ) {
 		// first create a list of asynchronous query executions
 		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(statements.length);
-		final BlockingQueue<Object> results = new LinkedBlockingQueue<>();
+		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(MAX_BOUNDED_READS_ENQUEUED);
+		new Thread(new Runnable() {
+			public void run() {
 		// set it to 1 to make sure all queries are submitted in the loop
 		final AtomicInteger queryCount = new AtomicInteger(
 				1);
@@ -152,7 +155,8 @@ public class BatchedRangeRead<T>
 				LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
 			}
 		}
-
+			}
+		},"Cassandra Query Executor").start();
 		return new CloseableIteratorWrapper<T>(
 				new Closeable() {
 					@Override
