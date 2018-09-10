@@ -28,12 +28,12 @@ else
     chown -R ${USER}:${USER} ${USER_DIRECTORY}
 fi
 
-if [ hdfs dfs -test -d /user/${USER} ]; then
+if [ hadoop fs -test -d /user/${USER} ]; then
     echo "hdfs directory for user already exists. skipped creation."
 else
     echo "creating hdfs directory for user."
-    hdfs dfs -mkdir /user/${USER}
-    hdfs dfs -chmod 777 /user/${USER}
+    sudo -u hdfs hdfs dfs -mkdir /user/${USER}
+    sudo -u hdfs hdfs dfs -chmod 777 /user/${USER}
 fi
 
 exit 0

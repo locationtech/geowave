@@ -21,6 +21,10 @@ if [ ! -f /tmp/install-conda.sh ]; then
 	sudo chmod +x /tmp/install-conda.sh
 fi
 
+if [ ! -f /tmp/gw-base.yml ]; then
+	aws s3 cp s3://geowave/$GEOWAVE_VERSION_URL_TOKEN/scripts/emr/jupyter/gw-base.yml /tmp/gw-base.yml
+fi
+
 # The EMR customize hooks run _before_ everything else, so Spark is not yet ready
 THIS_SCRIPT="$(realpath "${BASH_SOURCE[0]}")"
 RUN_FLAG="${THIS_SCRIPT}.run"
@@ -44,8 +48,6 @@ echo bootstrap_conda.sh completed. PATH now: $PATH
 echo Performing pixiedust and jupyter kernel setup.
 
 source /etc/profile.d/conda.sh
-
-conda install jupyter ncurses
 
 jupyter nbextension enable --py --sys-prefix ipyleaflet
 jupyter nbextension enable --py --sys-prefix widgetsnbextension
@@ -78,7 +80,7 @@ env HOME=$HOME
 script
     . $HOME/.bashrc
     . /etc/profile.d/conda.sh
-    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook
+    exec start-stop-daemon --start -c hadoop --exec $HOME/conda/bin/jupyter-notebook > /var/log/jupyter.log 2>&1
 end script
 EOF
 sudo mv $HOME/jupyter.conf /etc/init/
