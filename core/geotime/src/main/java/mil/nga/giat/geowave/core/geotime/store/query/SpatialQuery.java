@@ -59,11 +59,11 @@ public class SpatialQuery extends
 	private static class CrsCache
 	{
 		Geometry geometry;
-		Map<ByteArrayId,List<MultiDimensionalNumericData>> constraintsPerIndexId;
+		Map<ByteArrayId, List<MultiDimensionalNumericData>> constraintsPerIndexId;
 
 		public CrsCache(
 				final Geometry geometry,
-				final Map<ByteArrayId,List<MultiDimensionalNumericData>> constraintsPerIndexId ) {
+				final Map<ByteArrayId, List<MultiDimensionalNumericData>> constraintsPerIndexId ) {
 			this.geometry = geometry;
 			this.constraintsPerIndexId = constraintsPerIndexId;
 		}
@@ -283,8 +283,12 @@ public class SpatialQuery extends
 		if (cache != null) {
 			List<MultiDimensionalNumericData> indexConstraints = cache.constraintsPerIndexId.get(index.getId());
 			if (indexConstraints == null) {
-				indexConstraints = indexConstraintsFromGeometry(cache.geometry, index);
-				cache.constraintsPerIndexId.put(index.getId(), indexConstraints);
+				indexConstraints = indexConstraintsFromGeometry(
+						cache.geometry,
+						index);
+				cache.constraintsPerIndexId.put(
+						index.getId(),
+						indexConstraints);
 			}
 			return indexConstraints;
 		}
@@ -297,8 +301,12 @@ public class SpatialQuery extends
 
 		List<MultiDimensionalNumericData> indexConstraints = cache.constraintsPerIndexId.get(index.getId());
 		if (indexConstraints == null) {
-			indexConstraints = indexConstraintsFromGeometry(cache.geometry, index);
-			cache.constraintsPerIndexId.put(index.getId(), indexConstraints);
+			indexConstraints = indexConstraintsFromGeometry(
+					cache.geometry,
+					index);
+			cache.constraintsPerIndexId.put(
+					index.getId(),
+					indexConstraints);
 		}
 		return indexConstraints;
 	}
@@ -311,7 +319,9 @@ public class SpatialQuery extends
 				indexCrsStr)) {
 			List<MultiDimensionalNumericData> constraints = super.getIndexConstraints(index);
 			Map<ByteArrayId, List<MultiDimensionalNumericData>> constraintsPerIndexId = new HashMap<>();
-			constraintsPerIndexId.put(index.getId(), constraints);
+			constraintsPerIndexId.put(
+					index.getId(),
+					constraints);
 			return new CrsCache(
 					queryGeometry,
 					constraintsPerIndexId);
@@ -350,11 +360,16 @@ public class SpatialQuery extends
 				final Geometry indexCrsQueryGeometry = JTS.transform(
 						queryGeometry,
 						transform);
-				List<MultiDimensionalNumericData> indexConstraints = indexConstraintsFromGeometry(indexCrsQueryGeometry, index);
+				List<MultiDimensionalNumericData> indexConstraints = indexConstraintsFromGeometry(
+						indexCrsQueryGeometry,
+						index);
 				Map<ByteArrayId, List<MultiDimensionalNumericData>> constraintsPerIndexId = new HashMap<>();
-				constraintsPerIndexId.put(index.getId(), indexConstraints);
+				constraintsPerIndexId.put(
+						index.getId(),
+						indexConstraints);
 				return new CrsCache(
-						indexCrsQueryGeometry,constraintsPerIndexId);
+						indexCrsQueryGeometry,
+						constraintsPerIndexId);
 			}
 			catch (final FactoryException e) {
 				LOGGER.warn(
@@ -369,13 +384,17 @@ public class SpatialQuery extends
 		}
 		List<MultiDimensionalNumericData> constraints = super.getIndexConstraints(index);
 		Map<ByteArrayId, List<MultiDimensionalNumericData>> constraintsPerIndexId = new HashMap<>();
-		constraintsPerIndexId.put(index.getId(), constraints);
+		constraintsPerIndexId.put(
+				index.getId(),
+				constraints);
 		return new CrsCache(
 				queryGeometry,
 				constraintsPerIndexId);
 	}
-	
-	private static List<MultiDimensionalNumericData> indexConstraintsFromGeometry(Geometry geom, PrimaryIndex index){
+
+	private static List<MultiDimensionalNumericData> indexConstraintsFromGeometry(
+			Geometry geom,
+			PrimaryIndex index ) {
 		return GeometryUtils.basicConstraintsFromGeometry(
 				geom).getIndexConstraints(
 				index.getIndexStrategy());
