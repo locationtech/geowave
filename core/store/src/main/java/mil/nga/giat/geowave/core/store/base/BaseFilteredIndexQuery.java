@@ -25,6 +25,7 @@ import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.FilterList;
@@ -48,12 +49,14 @@ abstract class BaseFilteredIndexQuery extends
 			final PrimaryIndex index,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
 		super(
 				adapterIds,
 				index,
 				fieldIdsAdapterPair,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;

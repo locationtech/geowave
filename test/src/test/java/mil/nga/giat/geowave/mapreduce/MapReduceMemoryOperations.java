@@ -53,6 +53,7 @@ public class MapReduceMemoryOperations extends
 				readerParams.isMixedVisibility(),
 				readerParams.isServersideAggregation(),
 				false,
+				false,
 				new QueryRanges(
 						Collections.singleton(new SinglePartitionQueryRanges(
 								partitionKey,

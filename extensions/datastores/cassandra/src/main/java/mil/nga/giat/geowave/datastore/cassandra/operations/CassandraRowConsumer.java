@@ -1,13 +1,11 @@
 package mil.nga.giat.geowave.datastore.cassandra.operations;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 
 public class CassandraRowConsumer<T> implements
 		Iterator<T>
@@ -58,6 +56,10 @@ public class CassandraRowConsumer<T> implements
 	@Override
 	public T next() {
 		final T retVal = (T) nextRow;
+		if (retVal == null) {
+			throw new NoSuchElementException(
+					"No more Cassandra rows");
+		}
 		nextRow = null;
 		return retVal;
 	}

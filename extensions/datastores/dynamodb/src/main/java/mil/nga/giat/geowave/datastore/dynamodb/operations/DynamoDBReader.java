@@ -18,6 +18,7 @@ import com.amazonaws.services.dynamodbv2.model.ScanRequest;
 import com.amazonaws.services.dynamodbv2.model.ScanResult;
 import com.google.common.base.Function;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -58,7 +59,7 @@ public class DynamoDBReader<T> implements
 	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 	private Closeable closeable = null;
 
-	private ClientVisibilityFilter visibilityFilter;
+	private Predicate<GeoWaveRow> visibilityFilter;
 
 	public DynamoDBReader(
 			final ReaderParams<T> readerParams,
@@ -85,8 +86,8 @@ public class DynamoDBReader<T> implements
 
 	private void processAuthorizations(
 			final String[] authorizations ) {
-		visibilityFilter = new ClientVisibilityFilter(
-				Sets.newHashSet(authorizations));
+		visibilityFilter = readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+				Sets.newHashSet(authorizations)) : Predicates.alwaysTrue();
 	}
 
 	protected void initScanner() {

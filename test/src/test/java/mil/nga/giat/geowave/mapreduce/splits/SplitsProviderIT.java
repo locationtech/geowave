@@ -337,6 +337,7 @@ public class SplitsProviderIT extends
 								null,
 								null,
 								splitInfo.isMixedVisibility(),
+								splitInfo.isAuthorizationsLimiting(),
 								p.getRange(),
 								null,
 								null,

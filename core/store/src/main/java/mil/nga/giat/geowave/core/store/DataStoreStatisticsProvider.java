@@ -23,6 +23,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStati
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatisticsSet;
 import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -57,12 +58,13 @@ public class DataStoreStatisticsProvider<T> implements
 
 		final ByteArrayId[] newSet = Arrays.copyOf(
 				idsFromAdapter,
-				idsFromAdapter.length + 5);
+				idsFromAdapter.length + 6);
 		newSet[idsFromAdapter.length] = RowRangeHistogramStatistics.STATS_TYPE;
 		newSet[idsFromAdapter.length + 1] = IndexMetaDataSet.STATS_TYPE;
 		newSet[idsFromAdapter.length + 2] = DifferingFieldVisibilityEntryCount.STATS_TYPE;
-		newSet[idsFromAdapter.length + 3] = DuplicateEntryCount.STATS_TYPE;
-		newSet[idsFromAdapter.length + 4] = PartitionStatistics.STATS_TYPE;
+		newSet[idsFromAdapter.length + 3] = FieldVisibilityCount.STATS_TYPE;
+		newSet[idsFromAdapter.length + 4] = DuplicateEntryCount.STATS_TYPE;
+		newSet[idsFromAdapter.length + 5] = PartitionStatistics.STATS_TYPE;
 		return newSet;
 	}
 
@@ -87,6 +89,11 @@ public class DataStoreStatisticsProvider<T> implements
 		}
 		if (statisticsType.equals(DifferingFieldVisibilityEntryCount.STATS_TYPE)) {
 			return new DifferingFieldVisibilityEntryCount<>(
+					adapter.getInternalAdapterId(),
+					index.getId());
+		}
+		if (statisticsType.equals(FieldVisibilityCount.STATS_TYPE)) {
+			return new FieldVisibilityCount<>(
 					adapter.getInternalAdapterId(),
 					index.getId());
 		}

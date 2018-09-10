@@ -7,7 +7,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
@@ -25,6 +24,7 @@ abstract public class BaseReaderParams<T>
 	private final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 	private final Pair<List<String>, InternalDataAdapter<?>> fieldSubsets;
 	private final boolean isMixedVisibility;
+	private final boolean isAuthorizationsLimiting;
 	private final Integer limit;
 	private final Integer maxRangeDecomposition;
 	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
@@ -38,6 +38,7 @@ abstract public class BaseReaderParams<T>
 			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldSubsets,
 			final boolean isMixedVisibility,
+			final boolean isAuthorizationsLimiting,
 			final Integer limit,
 			final Integer maxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<T> rowTransformer,
@@ -49,6 +50,7 @@ abstract public class BaseReaderParams<T>
 		this.aggregation = aggregation;
 		this.fieldSubsets = fieldSubsets;
 		this.isMixedVisibility = isMixedVisibility;
+		this.isAuthorizationsLimiting = isAuthorizationsLimiting;
 		this.limit = limit;
 		this.maxRangeDecomposition = maxRangeDecomposition;
 		this.rowTransformer = rowTransformer;
@@ -77,6 +79,10 @@ abstract public class BaseReaderParams<T>
 
 	public Pair<List<String>, InternalDataAdapter<?>> getFieldSubsets() {
 		return fieldSubsets;
+	}
+
+	public boolean isAuthorizationsLimiting() {
+		return isAuthorizationsLimiting;
 	}
 
 	public boolean isMixedVisibility() {

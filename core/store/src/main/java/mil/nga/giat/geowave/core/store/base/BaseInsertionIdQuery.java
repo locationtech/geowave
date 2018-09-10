@@ -4,13 +4,12 @@ import java.util.Collections;
 
 import com.google.common.collect.Lists;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.InsertionIds;
 import mil.nga.giat.geowave.core.index.QueryRanges;
-import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.query.InsertionIdQuery;
@@ -30,7 +29,8 @@ class BaseInsertionIdQuery<T> extends
 			final InsertionIdQuery query,
 			final ScanCallback<T, ?> scanCallback,
 			final DedupeFilter dedupeFilter,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				Collections.<Short> singletonList(adapter.getInternalAdapterId()),
@@ -42,6 +42,7 @@ class BaseInsertionIdQuery<T> extends
 				null,
 				null,
 				null,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 		this.ranges = new InsertionIds(
