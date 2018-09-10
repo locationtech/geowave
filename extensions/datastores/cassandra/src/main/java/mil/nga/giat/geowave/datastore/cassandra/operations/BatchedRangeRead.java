@@ -114,49 +114,54 @@ public class BatchedRangeRead<T>
 			final Statement... statements ) {
 		// first create a list of asynchronous query executions
 		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(statements.length);
-		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(MAX_BOUNDED_READS_ENQUEUED);
-		new Thread(new Runnable() {
-			public void run() {
-		// set it to 1 to make sure all queries are submitted in the loop
-		final AtomicInteger queryCount = new AtomicInteger(
-				1);
-		for (final Statement s : statements) {
-			try {
-				readSemaphore.acquire();
+		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(
+				MAX_BOUNDED_READS_ENQUEUED);
+		new Thread(
+				new Runnable() {
+					public void run() {
+						// set it to 1 to make sure all queries are submitted in
+						// the loop
+						final AtomicInteger queryCount = new AtomicInteger(
+								1);
+						for (final Statement s : statements) {
+							try {
+								readSemaphore.acquire();
 
-				final ResultSetFuture f = operations.getSession().executeAsync(
-						s);
-				futures.add(f);
-				Futures.addCallback(
-						f,
-						new QueryCallback(
-								queryCount,
-								results,
-								rowTransformer,
-								filter,
-								readSemaphore),
-						CassandraOperations.READ_RESPONSE_THREADS);
-			}
-			catch (final InterruptedException e) {
-				LOGGER.warn(
-						"Exception while executing query",
-						e);
-				readSemaphore.release();
-			}
-		}
-		// then decrement
-		if (queryCount.decrementAndGet() <= 0) {
-			// and if there are no queries, there may not have been any
-			// statements submitted
-			try {
-				results.put(CassandraRowConsumer.POISON);
-			}
-			catch (final InterruptedException e) {
-				LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
-			}
-		}
-			}
-		},"Cassandra Query Executor").start();
+								final ResultSetFuture f = operations.getSession().executeAsync(
+										s);
+								futures.add(f);
+								Futures.addCallback(
+										f,
+										new QueryCallback(
+												queryCount,
+												results,
+												rowTransformer,
+												filter,
+												readSemaphore),
+										CassandraOperations.READ_RESPONSE_THREADS);
+							}
+							catch (final InterruptedException e) {
+								LOGGER.warn(
+										"Exception while executing query",
+										e);
+								readSemaphore.release();
+							}
+						}
+						// then decrement
+						if (queryCount.decrementAndGet() <= 0) {
+							// and if there are no queries, there may not have
+							// been any
+							// statements submitted
+							try {
+								results.put(CassandraRowConsumer.POISON);
+							}
+							catch (final InterruptedException e) {
+								LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
+							}
+						}
+					}
+				},
+				"Cassandra Query Executor").start();
 		return new CloseableIteratorWrapper<T>(
 				new Closeable() {
 					@Override
