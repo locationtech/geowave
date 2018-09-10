@@ -73,6 +73,7 @@ import com.beust.jcommander.ParameterException;
 
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
+import mil.nga.giat.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import mil.nga.giat.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import mil.nga.giat.geowave.core.cli.operations.config.security.utils.SecurityUtils;
@@ -805,7 +806,7 @@ public class GeoServerRestClient
 		final String lockMgmt = "memory";
 		final String authMgmtPrvdr = "empty";
 		final String authDataUrl = "";
-		final String queryIndexStrategy = "Best Match";
+		final String queryIndexStrategy = GeoWavePluginConfig.DEFAULT_QUERY_INDEX_STRATEGY;
 
 		final String dataStoreJson = createDatastoreJson(
 				inputStoreOptions.getType(),

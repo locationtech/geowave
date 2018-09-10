@@ -73,6 +73,7 @@ public class GeoWavePluginConfig
 	protected static final String AUTH_URL_KEY = "Authorization Data URL";
 	protected static final String TRANSACTION_BUFFER_SIZE = "Transaction Buffer Size";
 	public static final String QUERY_INDEX_STRATEGY_KEY = "Query Index Strategy";
+	public static final String DEFAULT_QUERY_INDEX_STRATEGY = ChooseHeuristicMatchIndexQueryStrategy.NAME;
 
 	private static final Param GEOWAVE_NAMESPACE = new Param(
 			GEOWAVE_NAMESPACE_KEY,
@@ -337,18 +338,16 @@ public class GeoWavePluginConfig
 			throws GeoWavePluginException {
 		final Serializable param = params.get(
 				QUERY_INDEX_STRATEGY_KEY);
-		if (param != null) {
-			final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
-			while (it.hasNext()) {
-				final IndexQueryStrategySPI spi = it.next();
-				if (spi.toString().equals(
-						param.toString())) {
-					return spi;
-				}
+		final String strategy = param == null ? DEFAULT_QUERY_INDEX_STRATEGY : param.toString();
+		final Iterator<IndexQueryStrategySPI> it = getInxexQueryStrategyList();
+		while (it.hasNext()) {
+			final IndexQueryStrategySPI spi = it.next();
+			if (spi.toString().equals(strategy)) {
+				return spi;
 			}
-
 		}
-		return new ChooseHeuristicMatchIndexQueryStrategy();
+		// This would only get hit if the default query index strategy is removed from the spi registry.
+		return null;
 	}
 
 	public static URL getAuthorizationURL(
