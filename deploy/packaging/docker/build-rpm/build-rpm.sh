@@ -1,6 +1,6 @@
 #-------------------------------------------------------------------------------
 # Copyright (c) 2013-2017 Contributors to the Eclipse Foundation
-# 
+#
 # See the NOTICE file distributed with this work for additional
 # information regarding copyright ownership.
 # All rights reserved. This program and the accompanying materials
@@ -13,7 +13,7 @@
 # This script will build a single set of rpms for a given configuration
 #
 
-# This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host  
+# This script runs with a volume mount to $WORKSPACE, this ensures that any signal failure will leave all of the files $WORKSPACE editable by the host
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm' EXIT
 trap 'chmod -R 777 $WORKSPACE/deploy/packaging/rpm && exit' ERR
 
@@ -54,7 +54,7 @@ else
 	if [[ ! -f deploy-geowave-accumulo-to-hdfs.sh ]]; then
 		# Copy the template for accumulo to sources
 		cp ${WORKSPACE}/deploy/packaging/docker/build-rpm/deploy-geowave-to-hdfs.sh.template deploy-geowave-accumulo-to-hdfs.sh
-	
+
 		# Replace the tokens appropriately for accumulo
 		sed -i -e s/'$DATASTORE_TOKEN'/accumulo/g deploy-geowave-accumulo-to-hdfs.sh
 		sed -i -e s/'$DATASTORE_USER_TOKEN'/accumulo/g deploy-geowave-accumulo-to-hdfs.sh
@@ -63,13 +63,13 @@ else
 	if [[ ! -f deploy-geowave-hbase-to-hdfs.sh ]]; then
 		# Copy the template for hbase to sources
 		cp ${WORKSPACE}/deploy/packaging/docker/build-rpm/deploy-geowave-to-hdfs.sh.template deploy-geowave-hbase-to-hdfs.sh
-	
+
 		# Replace the tokens appropriately for hbase
 		sed -i -e s/'$DATASTORE_TOKEN'/hbase/g deploy-geowave-hbase-to-hdfs.sh
 		sed -i -e s/'$DATASTORE_USER_TOKEN'/hbase/g deploy-geowave-hbase-to-hdfs.sh
 	fi
 	cp /usr/src/geowave/deploy/target/*${GEOWAVE_VERSION}-${VENDOR_VERSION}.jar .
-	
+
     # Copy Accumulo Jars
     find /usr/src/geowave/deploy/target/ -type f -name "*${GEOWAVE_VERSION}-${VENDOR_VERSION}-accumulo*.jar" -exec cp {} . \;
 fi
