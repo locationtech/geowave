@@ -264,6 +264,8 @@
 			<properties>
 				<geotools.scope>provided</geotools.scope>
 				<container.extension>-geotools-container</container.extension>
+				<!-- this will be unnecessary for geoserver 14 and should be removed-->
+				<fasterxml.jackson.version>2.5.0</fasterxml.jackson.version>
 			</properties>
 			<dependencies>
 				<dependency>
@@ -318,7 +320,6 @@
 											<exclude>*:pom:*</exclude>
 											<exclude>log4j:log4j</exclude>
 											<exclude>commons-codec:commons-codec</exclude>
-											<exclude>com.fasterxml.jackson*:*</exclude>
 
 											<!-- the required version of guava should exist in geoserver's 
 												classpath, although in order to get guava's StopWatch working with HBase 

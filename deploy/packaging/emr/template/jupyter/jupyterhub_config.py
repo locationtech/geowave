@@ -55,3 +55,12 @@ c.JupyterHub.port = 9000
 
 # Fix adduser command so it doesn't apply invalid parameters.
 c.Authenticator.add_user_cmd = ['adduser']
+c.PAMAuthenticator.create_system_users = True
+
+from subprocess import check_call
+def copy_notebooks(spawner):
+    username = spawner.user.name
+    check_call(['/srv/jupyterhub/pre-spawn.sh', username])
+
+c.Spawner.pre_spawn_hook = copy_notebooks
+c.Spawner.notebook_dir = u'~/notebooks/'

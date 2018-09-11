@@ -209,9 +209,7 @@ public class GeowaveOperationGrpcGenerator
 			ArrayList<String> rpcList = (ArrayList<String>) pair.getValue();
 			ArrayList<String> rpcInputMessageList = (ArrayList<String>) rpcInputMessages.get(currServiceName);
 
-			String serviceFilename = outputBasePath + "/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
-			// "../protobuf-shaded/src/main/protobuf/GeoWave" + pair.getKey() +
-			// ".proto";
+			final String serviceFilename = outputBasePath + "/src/main/protobuf/GeoWave" + pair.getKey() + ".proto";
 			Writer serviceWriter = null;
 			try {
 				serviceWriter = new OutputStreamWriter(

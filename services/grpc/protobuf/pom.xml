@@ -9,7 +9,7 @@
 		<relativePath>../../</relativePath>
 		<version>0.9.8-SNAPSHOT</version>
 	</parent>
-	<artifactId>geowave-grpc-protobuf-shaded</artifactId>
+	<artifactId>geowave-grpc-protobuf</artifactId>
 	<name>GeoWave gRPC Protobuf Library with Proto3</name>
 	<dependencies>
 		<dependency>

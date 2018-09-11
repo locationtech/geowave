@@ -23,6 +23,8 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.UUID;
 
+import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +82,22 @@ public class DataStoreUtils
 			new UnconstrainedVisibilityHandler());
 
 	public static final byte[] EMTPY_VISIBILITY = new byte[] {};
+
+	public static DataAdapter getDataAdapter(
+			final DataStorePluginOptions dataStore,
+			final ByteArrayId adapterId ) {
+		Short internId = dataStore.createInternalAdapterStore().getInternalAdapterId(adapterId);
+		if ( internId == null) {
+			return null;
+		}
+
+		DataAdapter adapter = dataStore.createAdapterStore().getAdapter(internId);
+		if ( adapter == null ) {
+			return null;
+		}
+
+		return adapter;
+	}
 
 	public static FlattenedUnreadData aggregateFieldData(
 			final GeoWaveKey key,

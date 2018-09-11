@@ -178,8 +178,6 @@ public class StatsManagerTest
 				schema.getTypeName(),
 				new SimpleFeatureStatsConfigurationCollection());
 		config.configureFromType(schema);
-		config.fromJsonString(
-				config.asJsonString(),
-				schema);
+		config.fromBinary(config.toBinary());
 	}
 }

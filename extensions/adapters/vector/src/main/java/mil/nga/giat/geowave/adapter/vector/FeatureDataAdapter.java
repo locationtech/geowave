@@ -659,8 +659,6 @@ public class FeatureDataAdapter extends
 		final String typeName = reprojectedFeatureType.getTypeName();
 		final byte[] typeNameBytes = StringUtils.stringToBinary(typeName);
 		final byte[] axisBytes = StringUtils.stringToBinary(axis);
-		byte[] attrBytes = new byte[0];
-
 		//
 		final SimpleFeatureUserDataConfigurationSet userDataConfiguration = new SimpleFeatureUserDataConfigurationSet();
 		userDataConfiguration.addConfigurations(
@@ -675,16 +673,7 @@ public class FeatureDataAdapter extends
 				typeName,
 				new VisibilityConfiguration(
 						persistedFeatureType));
-
-		try {
-			attrBytes = StringUtils.stringToBinary(userDataConfiguration.asJsonString());
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Failure to encode simple feature user data configuration",
-					e);
-		}
-
+		byte[] attrBytes = userDataConfiguration.toBinary();
 		final String namespace = reprojectedFeatureType.getName().getNamespaceURI();
 
 		byte[] namespaceBytes;
@@ -815,17 +804,8 @@ public class FeatureDataAdapter extends
 					typeName,
 					new VisibilityConfiguration(
 							myType));
-			try {
-				userDataConfiguration.fromJsonString(
-						StringUtils.stringFromBinary(attrBytes),
-						myType);
-
-			}
-			catch (final IOException e) {
-				LOGGER.error(
-						"Failure to decode simple feature user data configuration",
-						e);
-			}
+			userDataConfiguration.fromBinary(attrBytes);
+			userDataConfiguration.updateType(myType);
 			setFeatureType(myType);
 			initCRS(indexCrsBytes.length > 0 ? StringUtils.stringFromBinary(indexCrsBytes) : null);
 			// advertise the reprojected type externally

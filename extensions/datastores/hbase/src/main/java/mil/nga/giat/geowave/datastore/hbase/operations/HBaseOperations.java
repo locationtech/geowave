@@ -59,7 +59,6 @@ import org.slf4j.LoggerFactory;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Lists;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
-import org.apache.hadoop.hbase.shaded.com.google.protobuf.RpcChannel;
 
 import mil.nga.giat.geowave.core.cli.VersionUtils;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
@@ -70,7 +69,6 @@ import mil.nga.giat.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
@@ -103,13 +101,8 @@ import mil.nga.giat.geowave.datastore.hbase.HBaseRow;
 import mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseOptions;
 import mil.nga.giat.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.AggregationEndpoint;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObserver;
-import mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint;
 import mil.nga.giat.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
-import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.ByteArrayColumnFamily;
-import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.ByteArrayColumnFamilyFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.GeoWaveColumnFamilyFactory;
 import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.StringColumnFamily;
 import mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.StringColumnFamilyFactory;
@@ -117,6 +110,7 @@ import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient;
 import mil.nga.giat.geowave.datastore.hbase.query.protobuf.VersionProtosClient.VersionRequest;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingServerOp;
 import mil.nga.giat.geowave.datastore.hbase.server.MergingVisibilityServerOp;
+import mil.nga.giat.geowave.datastore.hbase.server.ServerSideOperationUtils;
 import mil.nga.giat.geowave.datastore.hbase.util.ConnectionPool;
 import mil.nga.giat.geowave.datastore.hbase.util.HBaseUtils;
 import mil.nga.giat.geowave.mapreduce.MapReduceDataStoreOperations;
@@ -893,11 +887,6 @@ public class HBaseOperations implements
 						admin.split(
 								tableName,
 								partition.getBytes());
-
-						// waitForUpdate(
-						// admin,
-						// tableName,
-						// 100L);
 					}
 
 					LOGGER.debug("> Split complete: " + partition.getHexString());
@@ -921,7 +910,7 @@ public class HBaseOperations implements
 		// Use the server-side operations observer
 		verifyCoprocessor(
 				indexId.getString(),
-				ServerSideOperationsObserver.class.getName(),
+				"mil.nga.giat.geowave.datastore.hbase.coprocessors.ServerSideOperationsObserver",
 				options.getCoprocessorJar());
 	}
 
@@ -1151,7 +1140,7 @@ public class HBaseOperations implements
 			if (options.isVerifyCoprocessors()) {
 				verifyCoprocessor(
 						tableName,
-						AggregationEndpoint.class.getName(),
+						"mil.nga.giat.geowave.datastore.hbase.coprocessors.AggregationEndpoint",
 						options.getCoprocessorJar());
 			}
 
@@ -1381,11 +1370,11 @@ public class HBaseOperations implements
 
 			for (final Entry<String, String> e : config.entrySet()) {
 				if (e.getKey().startsWith(
-						ServerSideOperationsObserver.SERVER_OP_PREFIX)) {
+						ServerSideOperationUtils.SERVER_OP_PREFIX)) {
 					final String[] parts = e.getKey().split(
 							SPLIT_STRING);
 					if ((parts.length == 5) && parts[1].equals(namespace) && parts[2].equals(qualifier)
-							&& parts[4].equals(ServerSideOperationsObserver.SERVER_OP_SCOPES_KEY)) {
+							&& parts[4].equals(ServerSideOperationUtils.SERVER_OP_SCOPES_KEY)) {
 						map.put(
 								parts[3],
 								HBaseUtils.stringToScopes(e.getValue()));
@@ -1416,12 +1405,12 @@ public class HBaseOperations implements
 
 			for (final Entry<String, String> e : config.entrySet()) {
 				if (e.getKey().startsWith(
-						ServerSideOperationsObserver.SERVER_OP_PREFIX)) {
+						ServerSideOperationUtils.SERVER_OP_PREFIX)) {
 					final String[] parts = e.getKey().split(
 							SPLIT_STRING);
 					if ((parts.length == 6) && parts[1].equals(namespace) && parts[2].equals(qualifier)
 							&& parts[3].equals(serverOpName)
-							&& parts[4].equals(ServerSideOperationsObserver.SERVER_OP_OPTIONS_PREFIX)) {
+							&& parts[4].equals(ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX)) {
 						map.put(
 								parts[5],
 								e.getValue());
@@ -1477,7 +1466,7 @@ public class HBaseOperations implements
 		boolean changed = false;
 		for (final Entry<String, String> e : config.entrySet()) {
 			if (e.getKey().startsWith(
-					ServerSideOperationsObserver.SERVER_OP_PREFIX)) {
+					ServerSideOperationUtils.SERVER_OP_PREFIX)) {
 				final String[] parts = e.getKey().split(
 						SPLIT_STRING);
 				if ((parts.length >= 5) && parts[1].equals(namespace) && parts[2].equals(qualifier)
@@ -1500,7 +1489,7 @@ public class HBaseOperations implements
 			final ImmutableSet<ServerOpScope> scopes,
 			final Map<String, String> properties ) {
 		final String basePrefix = new StringBuilder(
-				ServerSideOperationsObserver.SERVER_OP_PREFIX)
+				ServerSideOperationUtils.SERVER_OP_PREFIX)
 						.append(
 								".")
 						.append(
@@ -1518,23 +1507,23 @@ public class HBaseOperations implements
 						.toString();
 
 		desc.setConfiguration(
-				basePrefix + ServerSideOperationsObserver.SERVER_OP_CLASS_KEY,
+				basePrefix + ServerSideOperationUtils.SERVER_OP_CLASS_KEY,
 				ByteArrayUtils.byteArrayToString(
 						URLClassloaderUtils.toClassId(
 								operationClassName)));
 		desc.setConfiguration(
-				basePrefix + ServerSideOperationsObserver.SERVER_OP_PRIORITY_KEY,
+				basePrefix + ServerSideOperationUtils.SERVER_OP_PRIORITY_KEY,
 				Integer.toString(
 						priority));
 
 		desc.setConfiguration(
-				basePrefix + ServerSideOperationsObserver.SERVER_OP_SCOPES_KEY,
+				basePrefix + ServerSideOperationUtils.SERVER_OP_SCOPES_KEY,
 				scopes.stream().map(
 						ServerOpScope::name).collect(
 								Collectors.joining(
 										",")));
 		final String optionsPrefix = String.format(
-				basePrefix + ServerSideOperationsObserver.SERVER_OP_OPTIONS_PREFIX + ".");
+				basePrefix + ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX + ".");
 		for (final Entry<String, String> e : properties.entrySet()) {
 			desc.setConfiguration(
 					optionsPrefix + e.getKey(),
@@ -1658,7 +1647,7 @@ public class HBaseOperations implements
 			if (options.isVerifyCoprocessors()) {
 				verifyCoprocessor(
 						tableName,
-						VersionEndpoint.class.getName(),
+						"mil.nga.giat.geowave.datastore.hbase.coprocessors.VersionEndpoint",
 						options.getCoprocessorJar());
 			}
 			final Table table = getTable(tableName);

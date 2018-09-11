@@ -161,8 +161,7 @@ public class TimeDescriptors
 	public static class TimeDescriptorConfiguration implements
 			SimpleFeatureUserDataConfiguration
 	{
-
-		private static final long serialVersionUID = -664252700036603897L;
+		private static final long serialVersionUID = 2870075684501325546L;
 		private String startRangeName = null;
 		private String endRangeName = null;
 		private String timeName = null;
@@ -328,7 +327,8 @@ public class TimeDescriptors
 				endRangeBytes = null;
 			}
 			final ByteBuffer buf = ByteBuffer.allocate(length);
-			buf.put(bits.toByteArray()[0]);
+			byte[] bitMask = bits.toByteArray();
+			buf.put(bitMask.length > 0 ? bitMask[0] : (byte) 0);
 			if (timeBytes != null) {
 				buf.putInt(timeBytes.length);
 				buf.put(timeBytes);

@@ -13,7 +13,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>mil.nga.giat</groupId>
-			<artifactId>geowave-grpc-protobuf-shaded</artifactId>
+			<artifactId>geowave-grpc-protobuf</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
@@ -24,7 +24,11 @@
 			<groupId>com.google.protobuf</groupId>
 			<artifactId>protobuf-java-util</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>io.grpc</groupId>
+			<artifactId>grpc-services</artifactId>
+			<version>${grpc.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.reflections</groupId>
 			<artifactId>reflections</artifactId>

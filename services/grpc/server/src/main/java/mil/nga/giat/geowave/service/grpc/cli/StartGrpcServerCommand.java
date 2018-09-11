@@ -23,7 +23,7 @@ public class StartGrpcServerCommand extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(StartGrpcServerCommand.class);
 
 	@ParametersDelegate
-	private StartGrpcServerCommandOptions options;
+	private StartGrpcServerCommandOptions options = new StartGrpcServerCommandOptions();
 
 	/**
 	 * Prep the driver & run the operation.
@@ -45,6 +45,19 @@ public class StartGrpcServerCommand extends
 					"Exception encountered starting gRPC server",
 					e);
 		}
+
+		if (!options.isNonBlocking()) {
+			try {
+				server.blockUntilShutdown();
+			}
+			catch (InterruptedException e) {
+				LOGGER.error(
+						"Exception encountered during gRPC server blockUntilShutdown()",
+						e);
+			}
+		}
+
+		LOGGER.info("GeoWave grpc server started successfully");
 	}
 
 	public void setCommandOptions(
