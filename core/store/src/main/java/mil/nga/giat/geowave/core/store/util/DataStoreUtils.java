@@ -10,6 +10,7 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.util;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,6 +26,9 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.beust.jcommander.ParameterException;
+import com.google.common.collect.Iterators;
+
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.ByteArrayRange;
 import mil.nga.giat.geowave.core.index.IndexMetaData;
@@ -35,7 +39,12 @@ import mil.nga.giat.geowave.core.index.SinglePartitionInsertionIds;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.index.StringUtils;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import mil.nga.giat.geowave.core.store.CloseableIterator;
+import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.field.FieldReader;
@@ -52,6 +61,7 @@ import mil.nga.giat.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import mil.nga.giat.geowave.core.store.index.CommonIndexModel;
 import mil.nga.giat.geowave.core.store.index.CommonIndexValue;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 
 /*
  */
@@ -372,5 +382,50 @@ public class DataStoreUtils
 		buffer.put(vis2);
 		buffer.put(END_AND_BYTE);
 		return buffer.array();
+	}
+
+	public static boolean mergeStats(
+			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore ) {
+		// Get all statistics, remove all statistics, then re-add
+		try (CloseableIterator<Short> it = internalAdapterStore.getInternalAdapterIds()) {
+			Short internalAdapterId = it.next();
+			while (it.hasNext()) {
+				if (internalAdapterId != null) {
+					DataStatistics<?>[] statsArray;
+					try (final CloseableIterator<DataStatistics<?>> stats = statsStore
+							.getDataStatistics(internalAdapterId)) {
+						statsArray = Iterators.toArray(
+								stats,
+								DataStatistics.class);
+					}
+					catch (IOException e) {
+						// wrap in a parameter exception
+						throw new ParameterException(
+								"Unable to combine stats",
+								e);
+					}
+					// Clear all existing stats
+					statsStore.removeAllStatistics(internalAdapterId);
+					for (DataStatistics<?> stats : statsArray) {
+						statsStore.incorporateStatistics(stats);
+					}
+				}
+			}
+		}
+		catch (IOException e) {
+			LOGGER.error(
+					"Cannot merge stats on table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'",
+					e);
+			return false;
+		}
+		return true;
+	}
+
+	public static boolean mergeData(
+			final PrimaryIndex index,
+			final PersistentAdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+		return false;
 	}
 }

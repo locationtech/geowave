@@ -283,7 +283,9 @@ public class SpatialQuery extends
 		if (cache != null) {
 			List<MultiDimensionalNumericData> indexConstraints = cache.constraintsPerIndexId.get(index.getId());
 			if (indexConstraints == null) {
-				if (crsMatches(crsCode, indexCrsStr) || queryGeometry == null) {
+				if (crsMatches(
+						crsCode,
+						indexCrsStr) || queryGeometry == null) {
 					indexConstraints = super.getIndexConstraints(index);
 				}
 				else {

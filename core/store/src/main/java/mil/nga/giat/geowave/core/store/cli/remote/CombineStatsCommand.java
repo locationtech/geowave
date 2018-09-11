@@ -10,7 +10,6 @@
  ******************************************************************************/
 package mil.nga.giat.geowave.core.store.cli.remote;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,16 +17,12 @@ import java.util.List;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
-import com.google.common.collect.Iterators;
 
 import mil.nga.giat.geowave.core.cli.annotations.GeowaveOperation;
 import mil.nga.giat.geowave.core.cli.api.Command;
 import mil.nga.giat.geowave.core.cli.api.DefaultOperation;
 import mil.nga.giat.geowave.core.cli.api.OperationParams;
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
-import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import mil.nga.giat.geowave.core.store.cli.remote.options.StoreLoader;
@@ -39,8 +34,8 @@ public class CombineStatsCommand extends
 		Command
 {
 
-	@Parameter(description = "<storename> <adapter id>")
-	private List<String> parameters = new ArrayList<String>();
+	@Parameter(description = "<storename>")
+	private List<String> parameters = new ArrayList<>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
 
@@ -52,13 +47,12 @@ public class CombineStatsCommand extends
 			final OperationParams params ) {
 
 		// Ensure we have all the required arguments
-		if (parameters.size() != 2) {
+		if (parameters.size() != 1) {
 			throw new ParameterException(
-					"Requires arguments: <storename> <adapter id>");
+					"Requires arguments: <storename>");
 		}
 
 		final String inputStoreName = parameters.get(0);
-		final String adapterId = parameters.get(1);
 
 		// Attempt to load input store.
 		if (inputStoreOptions == null) {
@@ -72,33 +66,11 @@ public class CombineStatsCommand extends
 		}
 
 		// Get all statistics, remove all statistics, then re-add
-		final DataStatisticsStore store = inputStoreOptions.createDataStatisticsStore();
+		final DataStatisticsStore statsStore = inputStoreOptions.createDataStatisticsStore();
 		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
-		Short internalId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
-				adapterId));
-		if (internalId != null) {
-			DataStatistics<?>[] statsArray;
-			try (final CloseableIterator<DataStatistics<?>> stats = store.getDataStatistics(internalId)) {
-				statsArray = Iterators.toArray(
-						stats,
-						DataStatistics.class);
-			}
-			catch (IOException e) {
-				// wrap in a parameter exception
-				throw new ParameterException(
-						"Unable to combine stats",
-						e);
-			}
-			// Clear all existing stats
-			store.removeAllStatistics(internalId);
-			for (DataStatistics<?> stats : statsArray) {
-				store.incorporateStatistics(stats);
-			}
-		}
-		else {
-			throw new ParameterException(
-					"Cannot find adapter name: " + adapterId);
-		}
+		inputStoreOptions.createDataStoreOperations().mergeStats(
+				statsStore,
+				internalAdapterStore);
 	}
 
 	public List<String> getParameters() {

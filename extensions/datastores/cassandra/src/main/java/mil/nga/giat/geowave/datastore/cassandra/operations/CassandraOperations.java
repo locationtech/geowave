@@ -51,7 +51,9 @@ import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -64,6 +66,7 @@ import mil.nga.giat.geowave.core.store.operations.MetadataWriter;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
 import mil.nga.giat.geowave.core.store.operations.Writer;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraOptions;
@@ -616,7 +619,10 @@ public class CassandraOperations implements
 			final PrimaryIndex index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		return false;
+		return DataStoreUtils.mergeData(
+				index,
+				adapterStore,
+				adapterIndexMappingStore);
 	}
 
 	@Override
@@ -646,5 +652,14 @@ public class CassandraOperations implements
 			PrimaryIndex index )
 			throws IOException {
 		return createTable(index.getId());
+	}
+
+	@Override
+	public boolean mergeStats(
+			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore ) {
+		return DataStoreUtils.mergeStats(
+				statsStore,
+				internalAdapterStore);
 	}
 }

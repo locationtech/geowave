@@ -72,7 +72,9 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveMetadata;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
@@ -816,14 +818,43 @@ public class HBaseOperations implements
 		// distributed process, but this is primarily used for efficiency not
 		// correctness so it seems ok to just let it compact in the background
 		// but we can consider blocking and waiting for completion
-		try (Admin admin = conn.getAdmin()) {
-			admin.compact(getTableName(index.getId().getString()));
+		if (options.isServerSideLibraryEnabled()) {
+			try (Admin admin = conn.getAdmin()) {
+				admin.compact(getTableName(index.getId().getString()));
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Cannot compact table '" + index.getId().getString() + "'",
+						e);
+				return false;
+			}
 		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Cannot compact table '" + index.getId().getString() + "'",
-					e);
-			return false;
+		else {
+			return DataStoreUtils.mergeData(
+					index,
+					adapterStore,
+					adapterIndexMappingStore);
+		}
+		return true;
+	}
+
+	@Override
+	public boolean mergeStats(
+			DataStatisticsStore store,
+			InternalAdapterStore internalAdapterStore ) {
+		if (options.isServerSideLibraryEnabled()) {
+			try (Admin admin = conn.getAdmin()) {
+				admin.compact(getTableName(AbstractGeoWavePersistence.METADATA_TABLE));
+			}
+			catch (final IOException e) {
+				LOGGER.error(
+						"Cannot compact table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'",
+						e);
+				return false;
+			}
+		}
+		else {
+
 		}
 		return true;
 	}
