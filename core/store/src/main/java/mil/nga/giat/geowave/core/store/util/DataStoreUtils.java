@@ -86,13 +86,15 @@ public class DataStoreUtils
 	public static DataAdapter getDataAdapter(
 			final DataStorePluginOptions dataStore,
 			final ByteArrayId adapterId ) {
-		Short internId = dataStore.createInternalAdapterStore().getInternalAdapterId(adapterId);
-		if ( internId == null) {
+		Short internId = dataStore.createInternalAdapterStore().getInternalAdapterId(
+				adapterId);
+		if (internId == null) {
 			return null;
 		}
 
-		DataAdapter adapter = dataStore.createAdapterStore().getAdapter(internId);
-		if ( adapter == null ) {
+		DataAdapter adapter = dataStore.createAdapterStore().getAdapter(
+				internId);
+		if (adapter == null) {
 			return null;
 		}
 
@@ -407,8 +409,8 @@ public class DataStoreUtils
 			final InternalAdapterStore internalAdapterStore ) {
 		// Get all statistics, remove all statistics, then re-add
 		try (CloseableIterator<Short> it = internalAdapterStore.getInternalAdapterIds()) {
-			Short internalAdapterId = it.next();
 			while (it.hasNext()) {
+				Short internalAdapterId = it.next();
 				if (internalAdapterId != null) {
 					DataStatistics<?>[] statsArray;
 					try (final CloseableIterator<DataStatistics<?>> stats = statsStore
