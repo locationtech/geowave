@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
+import mil.nga.giat.geowave.core.store.operations.BaseReaderParams;
 import mil.nga.giat.geowave.core.store.operations.ParallelDecoder;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
@@ -66,7 +67,9 @@ public class DynamoDBReader<T> implements
 			final DynamoDBOperations operations ) {
 		this.readerParams = readerParams;
 		recordReaderParams = null;
-		processAuthorizations(readerParams.getAdditionalAuthorizations());
+		processAuthorizations(
+				readerParams.getAdditionalAuthorizations(),
+				readerParams);
 		this.operations = operations;
 		this.rowTransformer = readerParams.getRowTransformer();
 		initScanner();
@@ -77,7 +80,9 @@ public class DynamoDBReader<T> implements
 			final DynamoDBOperations operations ) {
 		readerParams = null;
 		this.recordReaderParams = recordReaderParams;
-		processAuthorizations(recordReaderParams.getAdditionalAuthorizations());
+		processAuthorizations(
+				recordReaderParams.getAdditionalAuthorizations(),
+				recordReaderParams);
 		this.operations = operations;
 		this.rowTransformer = recordReaderParams.getRowTransformer();
 
@@ -85,8 +90,9 @@ public class DynamoDBReader<T> implements
 	}
 
 	private void processAuthorizations(
-			final String[] authorizations ) {
-		visibilityFilter = readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+			final String[] authorizations,
+			BaseReaderParams<T> params ) {
+		visibilityFilter = params.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
 				Sets.newHashSet(authorizations)) : Predicates.alwaysTrue();
 	}
 

@@ -138,7 +138,7 @@ public class CassandraReader<T> implements
 				adapterIds,
 				Collections.singleton(partitionRange),
 				rowTransformer,
-				readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+				recordReaderParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
 						authorizations) : Predicates.alwaysTrue()).results();
 	}
 
