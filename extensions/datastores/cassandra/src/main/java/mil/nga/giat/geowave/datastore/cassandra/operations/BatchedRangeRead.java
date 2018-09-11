@@ -20,8 +20,10 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.ResultSetFuture;
+import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Statement;
 import com.datastax.driver.core.TypeCodec;
+import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
@@ -34,12 +36,15 @@ import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 
 public class BatchedRangeRead<T>
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(BatchedRangeRead.class);
+	private final static Logger LOGGER = LoggerFactory
+			.getLogger(
+					BatchedRangeRead.class);
 	private final static int MAX_CONCURRENT_READ = 100;
 	private final static int MAX_BOUNDED_READS_ENQUEUED = 1000000;
 	private final CassandraOperations operations;
@@ -76,48 +81,71 @@ public class BatchedRangeRead<T>
 				final BoundStatement boundRead = new BoundStatement(
 						preparedRead);
 				final byte[] start = range.getStart() != null ? range.getStart().getBytes() : new byte[0];
-				final byte[] end = range.getEnd() != null ? range.getEndAsNextPrefix().getBytes() : new byte[] {
-					(byte) 0xFF,
-					(byte) 0xFF,
-					(byte) 0xFF,
-					(byte) 0xFF,
-					(byte) 0xFF,
-					(byte) 0xFF,
-					(byte) 0xFF
-				};
-				boundRead.set(
-						CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName(),
-						ByteBuffer.wrap(start),
-						ByteBuffer.class);
+				final byte[] end = range.getEnd() != null ? range.getEndAsNextPrefix().getBytes()
+						: new byte[] {
+							(byte) 0xFF,
+							(byte) 0xFF,
+							(byte) 0xFF,
+							(byte) 0xFF,
+							(byte) 0xFF,
+							(byte) 0xFF,
+							(byte) 0xFF
+						};
+				boundRead
+						.set(
+								CassandraField.GW_SORT_KEY.getLowerBoundBindMarkerName(),
+								ByteBuffer
+										.wrap(
+												start),
+								ByteBuffer.class);
 
-				boundRead.set(
-						CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName(),
-						ByteBuffer.wrap(end),
-						ByteBuffer.class);
-				boundRead.set(
-						CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
-						ByteBuffer.wrap(r.getPartitionKey().getBytes()),
-						ByteBuffer.class);
+				boundRead
+						.set(
+								CassandraField.GW_SORT_KEY.getUpperBoundBindMarkerName(),
+								ByteBuffer
+										.wrap(
+												end),
+								ByteBuffer.class);
+				boundRead
+						.set(
+								CassandraField.GW_PARTITION_ID_KEY.getBindMarkerName(),
+								ByteBuffer
+										.wrap(
+												r.getPartitionKey().getBytes()),
+								ByteBuffer.class);
 
-				boundRead.set(
-						CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-						Lists.newArrayList(internalAdapterIds),
-						TypeCodec.list(TypeCodec.smallInt()));
-				statements.add(boundRead);
+				boundRead
+						.set(
+								CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
+								Lists
+										.newArrayList(
+												internalAdapterIds),
+								TypeCodec
+										.list(
+												TypeCodec.smallInt()));
+				statements
+						.add(
+								boundRead);
 			}
 
 		}
-		return executeQueryAsync(statements.toArray(new BoundStatement[] {}));
+		return executeQueryAsync(
+				statements
+						.toArray(
+								new BoundStatement[] {}));
 	}
 
 	public CloseableIterator<T> executeQueryAsync(
 			final Statement... statements ) {
 		// first create a list of asynchronous query executions
-		final List<ResultSetFuture> futures = Lists.newArrayListWithExpectedSize(statements.length);
+		final List<ResultSetFuture> futures = Lists
+				.newArrayListWithExpectedSize(
+						statements.length);
 		final BlockingQueue<Object> results = new LinkedBlockingQueue<>(
 				MAX_BOUNDED_READS_ENQUEUED);
 		new Thread(
 				new Runnable() {
+					@Override
 					public void run() {
 						// set it to 1 to make sure all queries are submitted in
 						// the loop
@@ -127,23 +155,29 @@ public class BatchedRangeRead<T>
 							try {
 								readSemaphore.acquire();
 
-								final ResultSetFuture f = operations.getSession().executeAsync(
-										s);
-								futures.add(f);
-								Futures.addCallback(
-										f,
-										new QueryCallback(
-												queryCount,
-												results,
-												rowTransformer,
-												filter,
-												readSemaphore),
-										CassandraOperations.READ_RESPONSE_THREADS);
+								final ResultSetFuture f = operations
+										.getSession()
+										.executeAsync(
+												s);
+								futures
+										.add(
+												f);
+								Futures
+										.addCallback(
+												f,
+												new QueryCallback(
+														queryCount,
+														results,
+														rowTransformer,
+														filter,
+														readSemaphore),
+												CassandraOperations.READ_RESPONSE_THREADS);
 							}
 							catch (final InterruptedException e) {
-								LOGGER.warn(
-										"Exception while executing query",
-										e);
+								LOGGER
+										.warn(
+												"Exception while executing query",
+												e);
 								readSemaphore.release();
 							}
 						}
@@ -153,10 +187,14 @@ public class BatchedRangeRead<T>
 							// been any
 							// statements submitted
 							try {
-								results.put(CassandraRowConsumer.POISON);
+								results
+										.put(
+												CassandraRowConsumer.POISON);
 							}
 							catch (final InterruptedException e) {
-								LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
+								LOGGER
+										.error(
+												"Interrupted while finishing blocking queue, this may result in deadlock!");
 							}
 						}
 					}
@@ -168,7 +206,9 @@ public class BatchedRangeRead<T>
 					public void close()
 							throws IOException {
 						for (final ResultSetFuture f : futures) {
-							f.cancel(true);
+							f
+									.cancel(
+											true);
 						}
 					}
 				},
@@ -205,27 +245,29 @@ public class BatchedRangeRead<T>
 		public void onSuccess(
 				final ResultSet result ) {
 			try {
-				result
-						.forEach(
-								row -> {
-									final CassandraRow cassRow = new CassandraRow(
-											row);
-									try {
-										if (filter
-												.apply(
-														cassRow)) {
+				rowTransform
+						.apply((Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<CassandraRow>(
+								Iterators
+										.filter(
+												Iterators
+														.transform(
+																result.iterator(),
+																new Function<Row, CassandraRow>() {
 
-											Iterator<T> it = rowTransform
-													.apply(
-															Iterators
-																	.singletonIterator(
-																			cassRow));
-											while (it.hasNext()) {
-											resultQueue
-													.put(
-																	it.next());
-											}
-										}
+																	@Override
+																	public CassandraRow apply(
+																			final Row row ) {
+																		return new CassandraRow(
+																				row);
+																	}
+																}),
+												filter)))
+						.forEachRemaining(
+								row -> {
+									try {
+										resultQueue
+												.put(
+														row);
 									}
 									catch (final InterruptedException e) {
 										LOGGER
@@ -234,6 +276,7 @@ public class BatchedRangeRead<T>
 														e);
 									}
 								});
+
 			}
 			finally {
 				checkFinalize();
@@ -248,9 +291,10 @@ public class BatchedRangeRead<T>
 			// go ahead and wrap in a runtime exception for this case, but you
 			// can do logging or start counting errors.
 			if (!(t instanceof CancellationException)) {
-				LOGGER.error(
-						"Failure from async query",
-						t);
+				LOGGER
+						.error(
+								"Failure from async query",
+								t);
 				throw new RuntimeException(
 						t);
 			}
@@ -260,10 +304,14 @@ public class BatchedRangeRead<T>
 			semaphore.release();
 			if (queryCount.decrementAndGet() <= 0) {
 				try {
-					resultQueue.put(CassandraRowConsumer.POISON);
+					resultQueue
+							.put(
+									CassandraRowConsumer.POISON);
 				}
 				catch (final InterruptedException e) {
-					LOGGER.error("Interrupted while finishing blocking queue, this may result in deadlock!");
+					LOGGER
+							.error(
+									"Interrupted while finishing blocking queue, this may result in deadlock!");
 				}
 			}
 		}
