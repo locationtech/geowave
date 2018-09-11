@@ -1,0 +1,22 @@
+# Systemd unit file for Geowave gRPC
+[Unit]
+Description=Geowave gRPC Service
+After=syslog.target network.target
+
+[Service]
+Type=simple
+EnvironmentFile=/etc/geowave/gwgrpc
+
+ExecStart=/bin/bash /usr/local/bin/geowave grpc start --port ${GRPC_PORT}
+ExecStop=/bin/bash /usr/local/bin/geowave grpc stop
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=gwgrpc
+
+User=geowave
+Group=geowave
+RestartSec=10
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

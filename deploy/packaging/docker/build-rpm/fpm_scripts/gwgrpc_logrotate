@@ -1,0 +1,9 @@
+/var/log/gwgrpc.log {
+    compress
+    copytruncate
+    dateext
+    size=+1k
+    notifempty
+    missingok
+    create  644
+}
