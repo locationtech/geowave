@@ -168,7 +168,7 @@ public class FieldVisibilityCount<T> extends
 			String... authorizations ) {
 		Set<String> set = Sets.newHashSet(authorizations);
 		for (Entry<ByteArrayId, Long> vis : countsPerVisibility.entrySet()) {
-			if (vis.getValue() > 0 && !VisibilityExpression.evaluate(
+			if (vis.getValue() > 0 && vis.getKey() != null && vis.getKey().getBytes().length > 0 && !VisibilityExpression.evaluate(
 					vis.getKey().getString(),
 					set)) {
 				return true;
