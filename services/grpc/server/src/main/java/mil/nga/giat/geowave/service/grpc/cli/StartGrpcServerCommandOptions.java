@@ -10,8 +10,18 @@ public class StartGrpcServerCommandOptions
 	}, required = false, description = "The port to run on")
 	private Integer port = 8980;
 
+	@Parameter(names = {
+		"-n",
+		"--nonBlocking"
+	}, required = false, description = "Should the service run as non-blocking or block until shutdown?")
+	private Boolean nonBlocking = false;
+
 	public Integer getPort() {
 		return port;
+	}
+
+	public Boolean isNonBlocking() {
+		return nonBlocking;
 	}
 
 	public void setPort(
@@ -19,4 +29,8 @@ public class StartGrpcServerCommandOptions
 		port = p;
 	}
 
+	public void setNonBlocking(
+			final Boolean b ) {
+		nonBlocking = b;
+	}
 }

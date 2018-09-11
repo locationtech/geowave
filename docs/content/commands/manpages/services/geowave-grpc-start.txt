@@ -23,3 +23,6 @@ OPTIONS
 - --port
  * The port number the server should run on
  * Default: 8980
+- --nonBlocking
+ * Runs the server in non-blocking mode
+ * Default: false
