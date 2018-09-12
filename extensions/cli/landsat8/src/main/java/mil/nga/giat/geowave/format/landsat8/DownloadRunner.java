@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
@@ -58,6 +59,14 @@ public class DownloadRunner extends
 				return;
 			}
 		}
+		final File localTempPath = getDownloadTempFile(
+				band,
+				landsatOptions.getWorkspaceDir());
+		if (localTempPath.exists()) {
+			if (!localTempPath.delete()) {
+				LOGGER.error("Unable to delete file '" + localTempPath.getAbsolutePath() + "'");
+			}
+		}
 		if (!localPath.getParentFile().exists() && !localPath.getParentFile().mkdirs()) {
 			LOGGER.warn("Unable to create directory '" + localPath.getParentFile().getAbsolutePath() + "'");
 		}
@@ -76,11 +85,12 @@ public class DownloadRunner extends
 				success = true;
 
 				final FileOutputStream outStream = new FileOutputStream(
-						localPath);
+						localTempPath);
 				IOUtils.copyLarge(
 						in,
 						outStream);
 				outStream.close();
+				FileUtils.moveFile(localTempPath, localPath);
 			}
 			catch (final IOException | InterruptedException e) {
 				LOGGER.error(
@@ -95,6 +105,12 @@ public class DownloadRunner extends
 		}
 	}
 
+	protected static File getDownloadTempFile(
+			final SimpleFeature band,
+			final String workspaceDirectory ) {
+		File file = getDownloadFile(band, workspaceDirectory);
+		return new File(file.getParentFile(), file.getName() + ".download");
+	}
 	protected static File getDownloadFile(
 			final SimpleFeature band,
 			final String workspaceDirectory ) {
@@ -106,5 +122,4 @@ public class DownloadRunner extends
 						+ File.separator + entity + File.separator + band.getID() + ".TIF");
 
 	}
-
 }
