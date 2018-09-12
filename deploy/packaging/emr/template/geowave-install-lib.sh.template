@@ -84,7 +84,7 @@ repo_base_url => '$GEOWAVE_REPO_BASE_URL_TOKEN',
 class { 'geowave':
 	geowave_version             => '${GEOWAVE_VERSION}',
 	hadoop_vendor_version       => 'apache',
-	install_$DATASTORE_TOKEN  	=> true,
+$DATASTORE_PUPPET_TOKEN
 	install_app                 => true,
 	install_restservices        => true,
 	install_gwgeoserver         => true,

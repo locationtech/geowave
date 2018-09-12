@@ -35,8 +35,10 @@ import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.PersistentDataset;
 import mil.nga.giat.geowave.core.store.data.UnreadFieldDataList;
@@ -865,7 +867,19 @@ public class MemoryDataStoreOperations implements
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		// considering memory data store is for test purposes, this
 		// implementation is unnecessary
-		return true;
+		return DataStoreUtils.mergeData(
+				index,
+				adapterStore,
+				adapterIndexMappingStore);
+	}
+
+	@Override
+	public boolean mergeStats(
+			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore ) {
+		return DataStoreUtils.mergeStats(
+				statsStore,
+				internalAdapterStore);
 	}
 
 	@Override

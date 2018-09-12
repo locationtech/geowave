@@ -9,11 +9,14 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +51,11 @@ import mil.nga.giat.geowave.core.store.BaseDataStoreOptions;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.CloseableIteratorWrapper;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
+import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.operations.Deleter;
@@ -60,6 +66,7 @@ import mil.nga.giat.geowave.core.store.operations.MetadataWriter;
 import mil.nga.giat.geowave.core.store.operations.Reader;
 import mil.nga.giat.geowave.core.store.operations.ReaderParams;
 import mil.nga.giat.geowave.core.store.operations.Writer;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow;
 import mil.nga.giat.geowave.datastore.cassandra.CassandraRow.CassandraField;
 import mil.nga.giat.geowave.datastore.cassandra.operations.config.CassandraOptions;
@@ -83,16 +90,10 @@ public class CassandraOperations implements
 	private final String gwNamespace;
 	private final static int WRITE_RESPONSE_THREAD_SIZE = 16;
 	private final static int READ_RESPONSE_THREAD_SIZE = 16;
-	private final static int MAX_CONCURRENT_READ = 100;
 	protected final static ExecutorService WRITE_RESPONSE_THREADS = MoreExecutors
 			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(WRITE_RESPONSE_THREAD_SIZE));
 	protected final static ExecutorService READ_RESPONSE_THREADS = MoreExecutors
 			.getExitingExecutorService((ThreadPoolExecutor) Executors.newFixedThreadPool(READ_RESPONSE_THREAD_SIZE));
-
-	// only allow so many outstanding async reads or writes, use this semaphore
-	// to control it
-	private static final Semaphore READ_SEMAPHORE = new Semaphore(
-			MAX_CONCURRENT_READ);
 
 	private static final Object CREATE_TABLE_MUTEX = new Object();
 	private final CassandraOptions options;
@@ -215,7 +216,9 @@ public class CassandraOperations implements
 	public BatchedRangeRead getBatchedRangeRead(
 			final String tableName,
 			final Collection<Short> adapterIds,
-			final Collection<SinglePartitionQueryRanges> ranges ) {
+			final Collection<SinglePartitionQueryRanges> ranges,
+			GeoWaveRowIteratorTransformer<?> rowTransformer,
+			Predicate<GeoWaveRow> rowFilter ) {
 		PreparedStatement preparedRead;
 		String safeTableName = getCassandraSafeName(tableName);
 		synchronized (state.preparedRangeReadsPerTable) {
@@ -254,7 +257,9 @@ public class CassandraOperations implements
 				preparedRead,
 				this,
 				adapterIds,
-				ranges);
+				ranges,
+				rowTransformer,
+				rowFilter);
 	}
 
 	public RowRead getRowRead(
@@ -298,64 +303,6 @@ public class CassandraOperations implements
 				sortKey,
 				internalAdapterId == null ? null : internalAdapterId);
 
-	}
-
-	public CloseableIterator<CassandraRow> executeQueryAsync(
-			final Statement... statements ) {
-		// first create a list of asynchronous query executions
-		final List<ResultSetFuture> futures = Lists
-				.newArrayListWithExpectedSize(
-						statements.length);
-		for (final Statement s : statements) {
-				try {
-					READ_SEMAPHORE.acquire();
-				
-					final ResultSetFuture f = session
-							.executeAsync(
-									s);
-					futures
-							.add(
-									f);
-					Futures
-							.addCallback(
-									f,
-									new QueryCallback(
-											READ_SEMAPHORE),
-									CassandraOperations.READ_RESPONSE_THREADS);
-				}
-				catch (InterruptedException e) {
-					LOGGER
-							.warn(
-									"Exception while executing query",
-									e);
-					READ_SEMAPHORE.release();
-				}
-		}
-
-		Iterator<CassandraRow> resultsIter = Iterators
-				.concat(
-						Iterators
-								.transform(
-										futures.iterator(),
-										resultsFuture -> Iterators
-												.transform(
-														resultsFuture.getUninterruptibly().iterator(),
-														row -> new CassandraRow(
-																row))));
-
-		return new CloseableIteratorWrapper<CassandraRow>(
-				new Closeable() {
-					@Override
-					public void close()
-							throws IOException {
-						for (ResultSetFuture f : futures) {
-							f
-									.cancel(
-											true);
-						}
-					}
-				},
-				resultsIter);
 	}
 
 	public CloseableIterator<CassandraRow> executeQuery(
@@ -512,40 +459,6 @@ public class CassandraOperations implements
 		public ByteBuffer apply(
 				final String input ) {
 			return ByteBuffer.wrap(StringUtils.stringToBinary(input));
-		}
-	}
-
-	// callback class
-	protected static class QueryCallback implements
-			FutureCallback<ResultSet>
-	{
-		private final Semaphore semaphore;
-
-		public QueryCallback(
-				Semaphore semaphore ) {
-			this.semaphore = semaphore;
-		}
-
-		@Override
-		public void onSuccess(
-				final ResultSet result ) {
-			// placeholder: put any logging or on success logic here.
-			semaphore.release();
-		}
-
-		@Override
-		public void onFailure(
-				final Throwable t ) {
-			// go ahead and wrap in a runtime exception for this case, but you
-			// can do logging or start counting errors.
-			semaphore.release();
-			if (!(t instanceof CancellationException)) {
-				LOGGER.error(
-						"Failure from async query",
-						t);
-				throw new RuntimeException(
-						t);
-			}
 		}
 	}
 
@@ -706,7 +619,10 @@ public class CassandraOperations implements
 			final PrimaryIndex index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		return false;
+		return DataStoreUtils.mergeData(
+				index,
+				adapterStore,
+				adapterIndexMappingStore);
 	}
 
 	@Override
@@ -736,5 +652,14 @@ public class CassandraOperations implements
 			PrimaryIndex index )
 			throws IOException {
 		return createTable(index.getId());
+	}
+
+	@Override
+	public boolean mergeStats(
+			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore ) {
+		return DataStoreUtils.mergeStats(
+				statsStore,
+				internalAdapterStore);
 	}
 }

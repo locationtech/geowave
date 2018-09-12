@@ -16,14 +16,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+
+import com.google.common.collect.Sets;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.index.Mergeable;
 import mil.nga.giat.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatistics;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.callback.DeleteCallback;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
+import mil.nga.giat.geowave.core.store.filter.ClientVisibilityFilter;
+import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
+import mil.nga.giat.geowave.core.store.util.VisibilityExpression;
 
 public class FieldVisibilityCount<T> extends
 		AbstractDataStatistics<T> implements
@@ -69,14 +76,16 @@ public class FieldVisibilityCount<T> extends
 		int bufferSize = 4;
 		final List<byte[]> serializedCounts = new ArrayList<byte[]>();
 		for (final Entry<ByteArrayId, Long> entry : countsPerVisibility.entrySet()) {
-			final byte[] key = entry.getKey().getBytes();
-			final ByteBuffer buf = ByteBuffer.allocate(key.length + 12);
-			buf.putInt(key.length);
-			buf.put(key);
-			buf.putLong(entry.getValue());
-			final byte[] serializedEntry = buf.array();
-			serializedCounts.add(serializedEntry);
-			bufferSize += serializedEntry.length;
+			if (entry.getValue() != 0) {
+				final byte[] key = entry.getKey().getBytes();
+				final ByteBuffer buf = ByteBuffer.allocate(key.length + 12);
+				buf.putInt(key.length);
+				buf.put(key);
+				buf.putLong(entry.getValue());
+				final byte[] serializedEntry = buf.array();
+				serializedCounts.add(serializedEntry);
+				bufferSize += serializedEntry.length;
+			}
 		}
 		final ByteBuffer buf = super.binaryBuffer(bufferSize);
 		buf.putInt(serializedCounts.size());
@@ -105,10 +114,12 @@ public class FieldVisibilityCount<T> extends
 			final byte[] id = new byte[idCount];
 			buf.get(id);
 			final long count = buf.getLong();
-			countsPerVisibility.put(
-					new ByteArrayId(
-							id),
-					count);
+			if (count != 0) {
+				countsPerVisibility.put(
+						new ByteArrayId(
+								id),
+						count);
+			}
 		}
 	}
 
@@ -153,6 +164,20 @@ public class FieldVisibilityCount<T> extends
 				kvs);
 	}
 
+	public boolean isAuthorizationsLimiting(
+			String... authorizations ) {
+		Set<String> set = Sets.newHashSet(authorizations);
+		for (Entry<ByteArrayId, Long> vis : countsPerVisibility.entrySet()) {
+			if (vis.getValue() > 0 && vis.getKey() != null && vis.getKey().getBytes().length > 0
+					&& !VisibilityExpression.evaluate(
+							vis.getKey().getString(),
+							set)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	@Override
 	public void merge(
 			final Mergeable merge ) {
@@ -168,5 +193,27 @@ public class FieldVisibilityCount<T> extends
 						count + entry.getValue());
 			}
 		}
+	}
+
+	public static FieldVisibilityCount getVisibilityCounts(
+			final PrimaryIndex index,
+			final List<Short> adapterIdsToQuery,
+			final DataStatisticsStore statisticsStore,
+			final String... authorizations ) {
+		FieldVisibilityCount combinedVisibilityCount = null;
+		for (final short adapterId : adapterIdsToQuery) {
+			final FieldVisibilityCount adapterVisibilityCount = (FieldVisibilityCount) statisticsStore
+					.getDataStatistics(
+							adapterId,
+							FieldVisibilityCount.composeId(index.getId()),
+							authorizations);
+			if (combinedVisibilityCount == null) {
+				combinedVisibilityCount = adapterVisibilityCount;
+			}
+			else {
+				combinedVisibilityCount.merge(adapterVisibilityCount);
+			}
+		}
+		return combinedVisibilityCount;
 	}
 }

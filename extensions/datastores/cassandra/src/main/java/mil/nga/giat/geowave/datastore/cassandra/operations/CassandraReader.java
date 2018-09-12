@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import com.datastax.driver.core.querybuilder.Select;
 import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
@@ -32,8 +33,6 @@ import mil.nga.giat.geowave.mapreduce.splits.RecordReaderParams;
 public class CassandraReader<T> implements
 		Reader<T>
 {
-	private final static Logger LOGGER = Logger.getLogger(CassandraReader.class);
-	private static final boolean ASYNC = false;
 	private final ReaderParams<T> readerParams;
 	private final RecordReaderParams<T> recordReaderParams;
 	private final CassandraOperations operations;
@@ -74,8 +73,8 @@ public class CassandraReader<T> implements
 						.apply((Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<CassandraRow>(
 								Iterators.filter(
 										results,
-										new ClientVisibilityFilter(
-												authorizations)))));
+										readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+												authorizations) : Predicates.alwaysTrue()))));
 	}
 
 	protected void initScanner() {
@@ -83,14 +82,13 @@ public class CassandraReader<T> implements
 
 		final Set<String> authorizations = Sets.newHashSet(readerParams.getAdditionalAuthorizations());
 		if ((ranges != null) && !ranges.isEmpty()) {
-			final CloseableIterator<CassandraRow> results = operations.getBatchedRangeRead(
+			iterator = operations.getBatchedRangeRead(
 					readerParams.getIndex().getId().getString(),
 					readerParams.getAdapterIds(),
-					ranges).results();
-
-			iterator = wrapResults(
-					results,
-					authorizations);
+					ranges,
+					rowTransformer,
+					readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+							authorizations) : Predicates.alwaysTrue()).results();
 		}
 		else {
 			// TODO figure out the query select by adapter IDs here
@@ -134,16 +132,14 @@ public class CassandraReader<T> implements
 				Collections.singleton(new ByteArrayRange(
 						startKey,
 						stopKey)));
-		final CloseableIterator<CassandraRow> results = operations.getBatchedRangeRead(
+		final Set<String> authorizations = Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
+		iterator = operations.getBatchedRangeRead(
 				recordReaderParams.getIndex().getId().getString(),
 				adapterIds,
-				Collections.singleton(partitionRange)).results();
-
-		final Set<String> authorizations = Sets.newHashSet(recordReaderParams.getAdditionalAuthorizations());
-
-		iterator = wrapResults(
-				results,
-				authorizations);
+				Collections.singleton(partitionRange),
+				rowTransformer,
+				recordReaderParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
+						authorizations) : Predicates.alwaysTrue()).results();
 	}
 
 	@Override

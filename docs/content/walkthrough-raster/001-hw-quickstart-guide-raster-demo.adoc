@@ -98,6 +98,15 @@ geowave config addstore -t hbase -z $HOSTNAME:2181 landsatraster --gwNamespace g
 geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
 
+.. If running with EMR Cassandra
++
+[source, bash]
+----
+geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster
+
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
+----
+
 . Add a spatial index.
 +
 [source, bash]

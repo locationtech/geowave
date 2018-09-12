@@ -5,7 +5,9 @@ import java.io.IOException;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public interface DataStoreOperations
@@ -79,4 +81,8 @@ public interface DataStoreOperations
 			final PrimaryIndex index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore );
+
+	public boolean mergeStats(
+			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore );
 }

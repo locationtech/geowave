@@ -18,6 +18,7 @@ import mil.nga.giat.geowave.core.store.adapter.InternalDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.DistributableQueryFilter;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -40,17 +41,20 @@ abstract class BaseQuery
 	protected List<Short> adapterIds;
 	protected final PrimaryIndex index;
 	protected final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair;
-	protected final DifferingFieldVisibilityEntryCount visibilityCounts;
+	protected final DifferingFieldVisibilityEntryCount differingVisibilityCounts;
+	protected final FieldVisibilityCount visibilityCounts;
 	protected final String[] authorizations;
 
 	public BaseQuery(
 			final PrimaryIndex index,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
 		this(
 				null,
 				index,
 				null,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 	}
@@ -59,11 +63,13 @@ abstract class BaseQuery
 			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
 		this.fieldIdsAdapterPair = fieldIdsAdapterPair;
+		this.differingVisibilityCounts = differingVisibilityCounts;
 		this.visibilityCounts = visibilityCounts;
 		this.authorizations = authorizations;
 	}
@@ -92,6 +98,7 @@ abstract class BaseQuery
 				getAggregation(),
 				getFieldSubsets(),
 				isMixedVisibilityRows(),
+				isAuthorizationsLimiting(),
 				isServerSideAggregation(options),
 				isRowMerging(adapterStore),
 				getRanges(maxRangeDecomposition),
@@ -171,8 +178,12 @@ abstract class BaseQuery
 		return null;
 	}
 
+	protected boolean isAuthorizationsLimiting() {
+		return (visibilityCounts == null) || visibilityCounts.isAuthorizationsLimiting(authorizations);
+	}
+
 	protected boolean isMixedVisibilityRows() {
-		return (visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity();
+		return (differingVisibilityCounts == null) || differingVisibilityCounts.isAnyEntryDifferingFieldVisiblity();
 	}
 
 	public String[] getAdditionalAuthorizations() {

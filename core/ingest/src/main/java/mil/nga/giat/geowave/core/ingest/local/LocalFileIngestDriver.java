@@ -23,6 +23,7 @@ import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.io.FilenameUtils;
@@ -32,7 +33,6 @@ import org.slf4j.LoggerFactory;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.ingest.GeoWaveData;
 import mil.nga.giat.geowave.core.ingest.IngestUtils;
-import mil.nga.giat.geowave.core.store.AdapterToIndexMapping;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
 import mil.nga.giat.geowave.core.store.DataStore;
 import mil.nga.giat.geowave.core.store.IndexWriter;
@@ -49,7 +49,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class LocalFileIngestDriver extends
 		AbstractLocalFileDriver<LocalFileIngestPlugin<?>, LocalIngestRunData>
 {
-	public final static int INGEST_BATCH_SIZE = 500;
+	public final static int INGEST_BATCH_SIZE = 50000;
 	private final static Logger LOGGER = LoggerFactory.getLogger(LocalFileIngestDriver.class);
 	protected DataStorePluginOptions storeOptions;
 	protected List<IndexPluginOptions> indexOptions;
@@ -473,7 +473,7 @@ public class LocalFileIngestDriver extends
 
 	private static BlockingQueue<GeoWaveData<?>> createBlockingQueue(
 			int batchSize ) {
-		return new ArrayBlockingQueue<GeoWaveData<?>>(
+		return new LinkedBlockingQueue<GeoWaveData<?>>(
 				batchSize);
 	}
 

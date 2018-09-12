@@ -8,6 +8,7 @@ import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.operations.DataStoreOperations;
 import mil.nga.giat.geowave.core.store.operations.Reader;
@@ -29,9 +30,11 @@ abstract class AbstractBaseRowQuery<T> extends
 			final PrimaryIndex index,
 			final String[] authorizations,
 			final ScanCallback<T, ?> scanCallback,
-			final DifferingFieldVisibilityEntryCount visibilityCounts ) {
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts ) {
 		super(
 				index,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 		this.scanCallback = scanCallback;

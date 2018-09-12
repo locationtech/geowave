@@ -14,6 +14,7 @@ public class SplitInfo
 	private PrimaryIndex index;
 	private List<RangeLocationPair> rangeLocationPairs;
 	private boolean mixedVisibility = true;
+	private boolean authorizationsLimiting = true;
 
 	protected SplitInfo() {}
 
@@ -38,6 +39,15 @@ public class SplitInfo
 	public void setMixedVisibility(
 			final boolean mixedVisibility ) {
 		this.mixedVisibility = mixedVisibility;
+	}
+
+	public boolean isAuthorizationsLimiting() {
+		return authorizationsLimiting;
+	}
+
+	public void setAuthorizationsLimiting(
+			boolean authorizationsLimiting ) {
+		this.authorizationsLimiting = authorizationsLimiting;
 	}
 
 	public PrimaryIndex getIndex() {
@@ -74,6 +84,7 @@ public class SplitInfo
 		this.index = index;
 		rangeLocationPairs = rangeList;
 		mixedVisibility = in.readBoolean();
+		authorizationsLimiting = in.readBoolean();
 	}
 
 	public void write(
@@ -87,5 +98,6 @@ public class SplitInfo
 			r.write(out);
 		}
 		out.writeBoolean(mixedVisibility);
+		out.writeBoolean(authorizationsLimiting);
 	}
 }

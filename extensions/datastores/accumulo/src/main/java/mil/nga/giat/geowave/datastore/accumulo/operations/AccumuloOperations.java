@@ -67,8 +67,10 @@ import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
 import mil.nga.giat.geowave.core.store.DataStoreOptions;
 import mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore;
 import mil.nga.giat.geowave.core.store.adapter.DataAdapter;
+import mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 import mil.nga.giat.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import mil.nga.giat.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -89,6 +91,7 @@ import mil.nga.giat.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import mil.nga.giat.geowave.core.store.server.ServerOpHelper;
 import mil.nga.giat.geowave.core.store.server.ServerSideOperations;
 import mil.nga.giat.geowave.core.store.util.DataAdapterAndIndexCache;
+import mil.nga.giat.geowave.core.store.util.DataStoreUtils;
 import mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import mil.nga.giat.geowave.datastore.accumulo.IteratorConfig;
 import mil.nga.giat.geowave.datastore.accumulo.MergingCombiner;
@@ -1439,7 +1442,29 @@ public class AccumuloOperations implements
 			final PrimaryIndex index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		return compactTable(index.getId().getString());
+		if (options.isServerSideLibraryEnabled()) {
+			return compactTable(index.getId().getString());
+		}
+		else {
+			return DataStoreUtils.mergeData(
+					index,
+					adapterStore,
+					adapterIndexMappingStore);
+		}
+	}
+
+	@Override
+	public boolean mergeStats(
+			DataStatisticsStore statsStore,
+			InternalAdapterStore internalAdapterStore ) {
+		if (options.isServerSideLibraryEnabled()) {
+			return compactTable(AbstractGeoWavePersistence.METADATA_TABLE);
+		}
+		else {
+			return DataStoreUtils.mergeStats(
+					statsStore,
+					internalAdapterStore);
+		}
 	}
 
 	public boolean compactTable(
@@ -1725,5 +1750,4 @@ public class AccumuloOperations implements
 		}
 		return null;
 	}
-
 }
