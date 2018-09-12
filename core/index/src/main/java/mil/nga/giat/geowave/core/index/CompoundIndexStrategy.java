@@ -26,7 +26,6 @@ import com.google.common.collect.Collections2;
 
 import mil.nga.giat.geowave.core.index.dimension.NumericDimensionDefinition;
 import mil.nga.giat.geowave.core.index.persist.PersistenceUtils;
-import mil.nga.giat.geowave.core.index.sfc.data.BasicNumericDataset;
 import mil.nga.giat.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 
 /**
@@ -552,6 +551,6 @@ public class CompoundIndexStrategy implements
 
 	@Override
 	public Set<ByteArrayId> getPredefinedSplits() {
-		return null;
+		return subStrategy1.getPredefinedSplits();
 	}
 }
