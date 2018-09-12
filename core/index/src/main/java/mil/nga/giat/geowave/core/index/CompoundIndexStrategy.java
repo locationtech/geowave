@@ -549,4 +549,9 @@ public class CompoundIndexStrategy implements
 		}
 		return partitionKeys;
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return null;
+	}
 }

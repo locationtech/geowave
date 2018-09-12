@@ -1347,9 +1347,9 @@ public class AccumuloOperations implements
 
 	@Override
 	public Writer createWriter(
-			final ByteArrayId indexId,
+			final PrimaryIndex index,
 			final short internalAdapterId ) {
-		final String tableName = indexId.getString();
+		final String tableName = index.getId().getString();
 		if (options.isCreateTable()) {
 			createTable(
 					tableName,

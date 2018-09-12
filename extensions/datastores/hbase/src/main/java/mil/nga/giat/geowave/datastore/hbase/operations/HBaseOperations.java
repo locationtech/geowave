@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -246,6 +247,7 @@ public class HBaseOperations implements
 	}
 
 	protected void createTable(
+			Set<ByteArrayId> preSplits,
 			final Pair<GeoWaveColumnFamily, Boolean>[] columnFamiliesAndVersioningPairs,
 			GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final TableName tableName )
@@ -273,7 +275,12 @@ public class HBaseOperations implements
 							cfSet);
 
 					try {
-						admin.createTable(desc);
+						if (!preSplits.isEmpty()) {
+							admin.createTable(desc, preSplits.stream().map(id -> id.getBytes()).toArray(i -> new byte[i][]));
+						}
+						else {
+							admin.createTable(desc);
+						}
 					}
 					catch (final Exception e) {
 						// We can ignore TableExists on create
@@ -287,12 +294,13 @@ public class HBaseOperations implements
 	}
 
 	protected void createTable(
+			Set<ByteArrayId> preSplits,
 			final GeoWaveColumnFamily[] columnFamilies,
 			final GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final boolean enableVersioning,
 			final TableName tableName )
 			throws IOException {
-		createTable(
+		createTable(preSplits,
 				Arrays
 						.stream(
 								columnFamilies)
@@ -853,51 +861,6 @@ public class HBaseOperations implements
 		return true;
 	}
 
-	public void ensurePartition(
-			final ByteArrayId partition,
-			final String tableNameStr ) {
-		final TableName tableName = getTableName(tableNameStr);
-		Set<ByteArrayId> existingPartitions = partitionCache.get(tableName);
-
-		try {
-			synchronized (partitionCache) {
-				if (existingPartitions == null) {
-					try (RegionLocator regionLocator = getRegionLocator(tableNameStr)) {
-						existingPartitions = new HashSet<>();
-
-						for (final byte[] startKey : regionLocator.getStartKeys()) {
-							if (startKey.length > 0) {
-								existingPartitions.add(new ByteArrayId(
-										startKey));
-							}
-						}
-					}
-
-					partitionCache.put(
-							tableName,
-							existingPartitions);
-				}
-
-				if (!existingPartitions.contains(partition)) {
-					existingPartitions.add(partition);
-
-					LOGGER.debug("> Splitting: " + partition.getHexString());
-
-					try (Admin admin = conn.getAdmin()) {
-						admin.split(
-								tableName,
-								partition.getBytes());
-					}
-
-					LOGGER.debug("> Split complete: " + partition.getHexString());
-				}
-			}
-		}
-		catch (final IOException e) {
-			LOGGER.error("Error accessing region info: " + e.getMessage());
-		}
-	}
-
 	@Override
 	public boolean ensureAuthorizations(
 			final String clientUser,
@@ -915,6 +878,7 @@ public class HBaseOperations implements
 	}
 
 	public void createTable(
+			Set<ByteArrayId> preSplits,
 			final ByteArrayId indexId,
 			final boolean enableVersioning,
 			final short internalAdapterId ) {
@@ -925,6 +889,7 @@ public class HBaseOperations implements
 				ByteArrayUtils.shortToString(internalAdapterId));
 		try {
 			createTable(
+					preSplits,
 					columnFamilies,
 					StringColumnFamilyFactory.getSingletonInstance(),
 					enableVersioning,
@@ -944,8 +909,9 @@ public class HBaseOperations implements
 
 	@Override
 	public Writer createWriter(
-			final ByteArrayId indexId,
+			final PrimaryIndex index,
 			final short internalAdapterId ) {
+		ByteArrayId indexId = index.getId();
 		final TableName tableName = getTableName(indexId.getString());
 		try {
 			final GeoWaveColumnFamily[] columnFamilies = new GeoWaveColumnFamily[1];
@@ -954,6 +920,7 @@ public class HBaseOperations implements
 
 			if (options.isCreateTable()) {
 				createTable(
+						index.getIndexStrategy().getPredefinedSplits(),
 						columnFamilies,
 						StringColumnFamilyFactory.getSingletonInstance(),
 						options.isServerSideLibraryEnabled(),
@@ -968,9 +935,7 @@ public class HBaseOperations implements
 					true);
 
 			return new HBaseWriter(
-					getBufferedMutator(tableName),
-					this,
-					indexId.getString());
+					getBufferedMutator(tableName));
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(
@@ -993,6 +958,7 @@ public class HBaseOperations implements
 		try {
 			if (options.isCreateTable()) {
 				createTable(
+						Collections.EMPTY_SET,
 						METADATA_CFS_VERSIONING,
 						StringColumnFamilyFactory.getSingletonInstance(),
 						tableName);
@@ -1638,6 +1604,7 @@ public class HBaseOperations implements
 			if (!indexExists(new ByteArrayId(
 					tableName))) {
 				createTable(
+						Collections.EMPTY_SET,
 						HBaseOperations.METADATA_CFS_VERSIONING,
 						StringColumnFamilyFactory.getSingletonInstance(),
 						getTableName(getQualifiedTableName(tableName)));
@@ -1704,6 +1671,7 @@ public class HBaseOperations implements
 			PrimaryIndex index )
 			throws IOException {
 		createTable(
+				index.getIndexStrategy().getPredefinedSplits(),
 				new GeoWaveColumnFamily[0],
 				StringColumnFamilyFactory.getSingletonInstance(),
 				options.isServerSideLibraryEnabled(),

@@ -308,4 +308,9 @@ public class SingleTierSubStrategy implements
 				queryData,
 				hints);
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return Collections.EMPTY_SET;
+	}
 }

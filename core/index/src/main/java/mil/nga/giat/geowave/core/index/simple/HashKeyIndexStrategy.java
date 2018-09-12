@@ -170,4 +170,9 @@ public class HashKeyIndexStrategy implements
 			final IndexMetaData... hints ) {
 		return getPartitionKeys();
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return getPartitionKeys();
+	}
 }

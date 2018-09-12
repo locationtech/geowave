@@ -177,7 +177,7 @@ class BaseIndexWriter<T> implements
 		if (writer == null) {
 			try {
 				writer = operations.createWriter(
-						index.getId(),
+						index,
 						adapter.getInternalAdapterId());
 			}
 			catch (final Exception e) {

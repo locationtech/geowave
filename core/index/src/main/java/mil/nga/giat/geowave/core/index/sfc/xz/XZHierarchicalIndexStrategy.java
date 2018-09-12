@@ -13,6 +13,7 @@ package mil.nga.giat.geowave.core.index.sfc.xz;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -571,4 +572,8 @@ public class XZHierarchicalIndexStrategy implements
 				hints);
 	}
 
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return Collections.EMPTY_SET;
+	}
 }

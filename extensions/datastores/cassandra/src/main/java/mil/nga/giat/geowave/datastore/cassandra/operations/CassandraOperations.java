@@ -511,11 +511,11 @@ public class CassandraOperations implements
 
 	@Override
 	public Writer createWriter(
-			final ByteArrayId indexId,
+			final PrimaryIndex index,
 			final short internalAdapterId ) {
-		createTable(indexId);
+		createTable(index.getId());
 		return new CassandraWriter(
-				indexId.getString(),
+				index.getId().getString(),
 				this);
 	}
 

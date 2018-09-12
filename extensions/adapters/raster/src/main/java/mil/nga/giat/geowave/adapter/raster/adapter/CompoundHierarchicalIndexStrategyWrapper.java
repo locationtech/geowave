@@ -277,4 +277,10 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 				queryData,
 				hints);
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return parentStrategies.get(
+				0).getPredefinedSplits();
+	}
 }

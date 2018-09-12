@@ -271,6 +271,11 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	}
 
 	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return Collections.EMPTY_SET;
+	}
+
+	@Override
 	public byte[] toBinary() {
 		return new byte[] {};
 	}

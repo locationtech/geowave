@@ -90,7 +90,9 @@ public class DownloadRunner extends
 						in,
 						outStream);
 				outStream.close();
-				FileUtils.moveFile(localTempPath, localPath);
+				FileUtils.moveFile(
+						localTempPath,
+						localPath);
 			}
 			catch (final IOException | InterruptedException e) {
 				LOGGER.error(
@@ -108,9 +110,14 @@ public class DownloadRunner extends
 	protected static File getDownloadTempFile(
 			final SimpleFeature band,
 			final String workspaceDirectory ) {
-		File file = getDownloadFile(band, workspaceDirectory);
-		return new File(file.getParentFile(), file.getName() + ".download");
+		File file = getDownloadFile(
+				band,
+				workspaceDirectory);
+		return new File(
+				file.getParentFile(),
+				file.getName() + ".download");
 	}
+
 	protected static File getDownloadFile(
 			final SimpleFeature band,
 			final String workspaceDirectory ) {

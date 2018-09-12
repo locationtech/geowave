@@ -149,4 +149,9 @@ public class RoundRobinKeyIndexStrategy implements
 			final IndexMetaData... hints ) {
 		return getPartitionKeys();
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return getPartitionKeys();
+	}
 }

@@ -41,16 +41,10 @@ public class HBaseWriter implements
 
 	protected Set<ByteArrayId> duplicateRowTracker = new HashSet<>();
 	private final BufferedMutator mutator;
-	private final HBaseOperations operations;
-	private final String tableName;
 
 	public HBaseWriter(
-			final BufferedMutator mutator,
-			final HBaseOperations operations,
-			final String tableName ) {
+			final BufferedMutator mutator ) {
 		this.mutator = mutator;
-		this.operations = operations;
-		this.tableName = tableName;
 	}
 
 	@Override
@@ -91,14 +85,6 @@ public class HBaseWriter implements
 	@Override
 	public void write(
 			final GeoWaveRow row ) {
-		final byte[] partition = row.getPartitionKey();
-		if ((partition != null) && (partition.length > 0)) {
-			operations.ensurePartition(
-					new ByteArrayId(
-							partition),
-					tableName);
-		}
-
 		writeMutations(rowToMutation(row));
 	}
 

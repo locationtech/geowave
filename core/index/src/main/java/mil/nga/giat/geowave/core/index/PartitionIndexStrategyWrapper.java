@@ -134,4 +134,9 @@ public class PartitionIndexStrategyWrapper implements
 				queryData,
 				hints);
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return partitionIndexStrategy.getPredefinedSplits();
+	}
 }
