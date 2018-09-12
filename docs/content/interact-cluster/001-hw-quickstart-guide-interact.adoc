@@ -36,7 +36,7 @@ image::sandbox/hbase-overview.png[scaledwidth="100%",alt="select emr"]
 
 === Cassandra
 
-Cassandra status can be monitored using the "nodetool" commandline tool by SSH'ing into any of the nodes.
+Cassandra status can be monitored using the "nodetool" commandline utility by SSH'ing into any of the nodes.
 
 === Accumulo View
 

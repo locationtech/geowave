@@ -12,6 +12,7 @@ Choose the appropriate script for the backend datastore you'd like to use when s
 - For Accumulo use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh[s3://geowave/latest/scripts/emr/accumulo/bootstrap-geowave.sh]
 - For HBase use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh[s3://geowave/latest/scripts/emr/hbase/bootstrap-geowave.sh]
 - For Cassandra use: link:http://s3.amazonaws.com/geowave/latest/scripts/emr/cassandra/bootstrap-geowave.sh[s3://geowave/latest/scripts/emr/cassandra/bootstrap-geowave.sh]
+
 These scripts will provide you with everything necessary to complete this guide, but will also set up Geowave if you would like to use it in other workflows. There are scripts available for each of the releases of Geowave going back to 0.9.3. These can be used by replacing ``/latest/`` with the desired release (i.e. ``/0.9.3/``) 
 
 [NOTE]
