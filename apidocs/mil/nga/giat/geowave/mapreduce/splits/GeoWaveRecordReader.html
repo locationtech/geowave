@@ -312,10 +312,11 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 </tr>
 <tr id="i7" class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-">queryRange</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-boolean-">queryRange</a></span>(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
           <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-          boolean&nbsp;mixedVisibility)</code>&nbsp;</td>
+          boolean&nbsp;mixedVisibility,
+          boolean&nbsp;authorizationsLimiting)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -543,7 +544,7 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 </dl>
 </li>
 </ul>
-<a name="queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-">
+<a name="queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -552,7 +553,8 @@ extends org.apache.hadoop.mapreduce.RecordReader&lt;<a href="../../../../../../m
 <pre>protected&nbsp;<a href="../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;&nbsp;queryRange(<a href="../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                                                                      <a href="../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
                                                                      <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-                                                                     boolean&nbsp;mixedVisibility)</pre>
+                                                                     boolean&nbsp;mixedVisibility,
+                                                                     boolean&nbsp;authorizationsLimiting)</pre>
 </li>
 </ul>
 <a name="close--">

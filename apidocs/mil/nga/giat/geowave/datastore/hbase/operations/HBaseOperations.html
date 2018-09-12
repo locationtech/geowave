@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":9,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10,"i22":10,"i23":10,"i24":10,"i25":10,"i26":10,"i27":10,"i28":10,"i29":10,"i30":10,"i31":10,"i32":10,"i33":10,"i34":10,"i35":10,"i36":10,"i37":10,"i38":10,"i39":10,"i40":10,"i41":10,"i42":10,"i43":10,"i44":10,"i45":10,"i46":10,"i47":10,"i48":10,"i49":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -403,13 +403,18 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 </tr>
 <tr id="i41" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#metadataExists-mil.nga.giat.geowave.core.store.operations.MetadataType-">metadataExists</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#mergeStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;store,
+          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</code>&nbsp;</td>
 </tr>
 <tr id="i42" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#parallelDecodeEnabled--">parallelDecodeEnabled</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#metadataExists-mil.nga.giat.geowave.core.store.operations.MetadataType-">metadataExists</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataType.html" title="enum in mil.nga.giat.geowave.core.store.operations">MetadataType</a>&nbsp;type)</code>&nbsp;</td>
 </tr>
 <tr id="i43" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#parallelDecodeEnabled--">parallelDecodeEnabled</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i44" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#removeServerOp-java.lang.String-java.lang.String-com.google.common.collect.ImmutableSet-">removeServerOp</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
               <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;serverOpName,
@@ -419,12 +424,12 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
  removed entirely regardless of scopes</div>
 </td>
 </tr>
-<tr id="i44" class="altColor">
+<tr id="i45" class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#startParallelScan-mil.nga.giat.geowave.datastore.hbase.operations.HBaseParallelDecoder-java.lang.String-">startParallelScan</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseParallelDecoder.html" title="class in mil.nga.giat.geowave.datastore.hbase.operations">HBaseParallelDecoder</a>&lt;T&gt;&nbsp;scanner,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableName)</code>&nbsp;</td>
 </tr>
-<tr id="i45" class="rowColor">
+<tr id="i46" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#updateServerOp-java.lang.String-int-java.lang.String-java.lang.String-java.util.Map-com.google.common.collect.ImmutableSet-com.google.common.collect.ImmutableSet-">updateServerOp</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;index,
               int&nbsp;priority,
@@ -437,7 +442,7 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
  accumulo requires iteratorscope as a parameter to remove the iterator.</div>
 </td>
 </tr>
-<tr id="i46" class="altColor">
+<tr id="i47" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyColumnFamilies-mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily:A-mil.nga.giat.geowave.datastore.hbase.operations.GeoWaveColumnFamily.GeoWaveColumnFamilyFactory-boolean-org.apache.hadoop.hbase.TableName-boolean-">verifyColumnFamilies</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/GeoWaveColumnFamily.html" title="interface in mil.nga.giat.geowave.datastore.hbase.operations">GeoWaveColumnFamily</a>[]&nbsp;columnFamilies,
                     <a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/GeoWaveColumnFamily.GeoWaveColumnFamilyFactory.html" title="interface in mil.nga.giat.geowave.datastore.hbase.operations">GeoWaveColumnFamily.GeoWaveColumnFamilyFactory</a>&nbsp;columnFamilyFactory,
@@ -445,14 +450,14 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
                     org.apache.hadoop.hbase.TableName&nbsp;tableName,
                     boolean&nbsp;addIfNotExist)</code>&nbsp;</td>
 </tr>
-<tr id="i47" class="rowColor">
+<tr id="i48" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyColumnFamily-short-boolean-java.lang.String-boolean-">verifyColumnFamily</a></span>(short&nbsp;columnFamily,
                   boolean&nbsp;enableVersioning,
                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNameStr,
                   boolean&nbsp;addIfNotExist)</code>&nbsp;</td>
 </tr>
-<tr id="i48" class="altColor">
+<tr id="i49" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#verifyCoprocessor-java.lang.String-java.lang.String-java.lang.String-">verifyCoprocessor</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;tableNameStr,
                  <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;coprocessorName,
@@ -899,6 +904,20 @@ implements <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/MapReduc
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#mergeData-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-mil.nga.giat.geowave.core.store.adapter.AdapterIndexMappingStore-">mergeData</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a></code></dd>
+</dl>
+</li>
+</ul>
+<a name="mergeStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>mergeStats</h4>
+<pre>public&nbsp;boolean&nbsp;mergeStats(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;store,
+                          <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalAdapterStore</a>&nbsp;internalAdapterStore)</pre>
+<dl>
+<dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
+<dd><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#mergeStats-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-mil.nga.giat.geowave.core.store.adapter.InternalAdapterStore-">mergeStats</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a></code></dd>
 </dl>
 </li>
 </ul>

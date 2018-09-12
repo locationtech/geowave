@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10,"i7":10,"i8":10,"i9":10,"i10":10,"i11":10,"i12":10,"i13":10,"i14":10,"i15":10,"i16":10,"i17":10,"i18":10,"i19":10,"i20":10,"i21":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -151,23 +151,27 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#constraints">constraints</a></span></code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#differingVisibilityCounts">differingVisibilityCounts</a></span></code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DistributableQueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">DistributableQueryFilter</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#distributableFilters">distributableFilters</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#fieldIdsAdapterPair">fieldIdsAdapterPair</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#indexMetaData">indexMetaData</a></span></code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/callback/ScanCallback.html" title="interface in mil.nga.giat.geowave.core.store.callback">ScanCallback</a>&lt;?,?&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#scanCallback">scanCallback</a></span></code>&nbsp;</td>
 </tr>
-<tr class="rowColor">
-<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a></code></td>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#visibilityCounts">visibilityCounts</a></span></code>&nbsp;</td>
 </tr>
 </table>
@@ -185,7 +189,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-java.lang.String:A-">BaseConstraintsQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIds,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount-java.lang.String:A-">BaseConstraintsQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIds,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/index/sfc/data/MultiDimensionalNumericData.html" title="interface in mil.nga.giat.geowave.core.index.sfc.data">MultiDimensionalNumericData</a>&gt;&nbsp;constraints,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
@@ -195,11 +199,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                     org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>[]&nbsp;indexMetaData,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">DuplicateEntryCount</a>&nbsp;duplicateCounts,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;differingVisibilityCounts,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a>&nbsp;visibilityCounts,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.query.Query-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-java.lang.String:A-">BaseConstraintsQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIds,
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.query.Query-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount-java.lang.String:A-">BaseConstraintsQuery</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIds,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/query/Query.html" title="interface in mil.nga.giat.geowave.core.store.query">Query</a>&nbsp;query,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/DedupeFilter.html" title="class in mil.nga.giat.geowave.core.store.filter">DedupeFilter</a>&nbsp;clientDedupeFilter,
@@ -208,7 +213,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                     org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>[]&nbsp;indexMetaData,
                     <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">DuplicateEntryCount</a>&nbsp;duplicateCounts,
-                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;differingVisibilityCounts,
+                    <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a>&nbsp;visibilityCounts,
                     <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</code>&nbsp;</td>
 </tr>
 </table>
@@ -290,25 +296,29 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i14" class="altColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isCommonIndexAggregation--">isCommonIndexAggregation</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isAuthorizationsLimiting--">isAuthorizationsLimiting</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i15" class="rowColor">
 <td class="colFirst"><code>protected boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isMixedVisibilityRows--">isMixedVisibilityRows</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isCommonIndexAggregation--">isCommonIndexAggregation</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i16" class="altColor">
-<td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isQueryFiltersEnabled--">isQueryFiltersEnabled</a></span>()</code>&nbsp;</td>
+<td class="colFirst"><code>protected boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isMixedVisibilityRows--">isMixedVisibilityRows</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i17" class="rowColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isRowMerging-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-">isRowMerging</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isQueryFiltersEnabled--">isQueryFiltersEnabled</a></span>()</code>&nbsp;</td>
 </tr>
 <tr id="i18" class="altColor">
 <td class="colFirst"><code>boolean</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isServerSideAggregation-mil.nga.giat.geowave.core.store.DataStoreOptions-">isServerSideAggregation</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;options)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isRowMerging-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-">isRowMerging</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/PersistentAdapterStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter">PersistentAdapterStore</a>&nbsp;adapterStore)</code>&nbsp;</td>
 </tr>
 <tr id="i19" class="rowColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#isServerSideAggregation-mil.nga.giat.geowave.core.store.DataStoreOptions-">isServerSideAggregation</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;options)</code>&nbsp;</td>
+</tr>
+<tr id="i20" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#query-mil.nga.giat.geowave.core.store.operations.DataStoreOperations-mil.nga.giat.geowave.core.store.DataStoreOptions-mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore-double:A-java.lang.Integer-java.lang.Integer-">query</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html" title="interface in mil.nga.giat.geowave.core.store.operations">DataStoreOperations</a>&nbsp;datastoreOperations,
      <a href="../../../../../../../mil/nga/giat/geowave/core/store/DataStoreOptions.html" title="interface in mil.nga.giat.geowave.core.store">DataStoreOptions</a>&nbsp;options,
@@ -317,7 +327,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;limit,
      <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Integer.html?is-external=true" title="class or interface in java.lang">Integer</a>&nbsp;queryMaxRangeDecomposition)</code>&nbsp;</td>
 </tr>
-<tr id="i20" class="altColor">
+<tr id="i21" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/core/store/base/BaseConstraintsQuery.html#setQueryFiltersEnabled-boolean-">setQueryFiltersEnabled</a></span>(boolean&nbsp;queryFiltersEnabled)</code>&nbsp;</td>
 </tr>
@@ -415,13 +425,22 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>protected final&nbsp;org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt; fieldIdsAdapterPair</pre>
 </li>
 </ul>
+<a name="differingVisibilityCounts">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>differingVisibilityCounts</h4>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a> differingVisibilityCounts</pre>
+</li>
+</ul>
 <a name="visibilityCounts">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>visibilityCounts</h4>
-<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a> visibilityCounts</pre>
+<pre>protected final&nbsp;<a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a> visibilityCounts</pre>
 </li>
 </ul>
 <a name="authorizations">
@@ -441,7 +460,7 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.query.Query-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-java.lang.String:A-">
+<a name="BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.core.store.query.Query-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount-java.lang.String:A-">
 <!--   -->
 </a>
 <ul class="blockList">
@@ -456,11 +475,12 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                             org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                             <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>[]&nbsp;indexMetaData,
                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">DuplicateEntryCount</a>&nbsp;duplicateCounts,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;differingVisibilityCounts,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a>&nbsp;visibilityCounts,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 </li>
 </ul>
-<a name="BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-java.lang.String:A-">
+<a name="BaseConstraintsQuery-java.util.List-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-java.util.List-mil.nga.giat.geowave.core.store.filter.DedupeFilter-mil.nga.giat.geowave.core.store.callback.ScanCallback-org.apache.commons.lang3.tuple.Pair-org.apache.commons.lang3.tuple.Pair-mil.nga.giat.geowave.core.index.IndexMetaData:A-mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount-mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount-mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount-java.lang.String:A-">
 <!--   -->
 </a>
 <ul class="blockListLast">
@@ -476,7 +496,8 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
                             org.apache.commons.lang3.tuple.Pair&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&gt;,<a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/InternalDataAdapter.html" title="interface in mil.nga.giat.geowave.core.store.adapter">InternalDataAdapter</a>&lt;?&gt;&gt;&nbsp;fieldIdsAdapterPair,
                             <a href="../../../../../../../mil/nga/giat/geowave/core/index/IndexMetaData.html" title="interface in mil.nga.giat.geowave.core.index">IndexMetaData</a>[]&nbsp;indexMetaData,
                             <a href="../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DuplicateEntryCount.html" title="class in mil.nga.giat.geowave.core.store.adapter.statistics">DuplicateEntryCount</a>&nbsp;duplicateCounts,
-                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;visibilityCounts,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/DifferingFieldVisibilityEntryCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">DifferingFieldVisibilityEntryCount</a>&nbsp;differingVisibilityCounts,
+                            <a href="../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a>&nbsp;visibilityCounts,
                             <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>[]&nbsp;authorizations)</pre>
 </li>
 </ul>
@@ -668,6 +689,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <li class="blockList">
 <h4>getFieldBitmask</h4>
 <pre>protected&nbsp;byte[]&nbsp;getFieldBitmask()</pre>
+</li>
+</ul>
+<a name="isAuthorizationsLimiting--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAuthorizationsLimiting</h4>
+<pre>protected&nbsp;boolean&nbsp;isAuthorizationsLimiting()</pre>
 </li>
 </ul>
 <a name="isMixedVisibilityRows--">

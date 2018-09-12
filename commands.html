@@ -440,7 +440,6 @@ href="images/geowave-icon-logo-small.png">
 <li><a href="#analytic-commands">Analytic Commands</a></li>
 <li><a href="#accumulo-commands">Accumulo Commands</a></li>
 <li><a href="#geoserver-commands">GeoServer Commands</a></li>
-<li><a href="#hbase-commands">HBase Commands</a></li>
 <li><a href="#landsat-commands">Landsat8 Commands</a></li>
 <li><a href="#osm-commands">OSM Commands</a></li>
 <li><a href="#raster-commands">Raster Commands</a></li>
@@ -4408,6 +4407,9 @@ Default: -1</p>
 <p><a href="#remote-mergedata">MergeData</a></p>
 </li>
 <li>
+<p><a href="#remote-combinestats">CombineStats</a></p>
+</li>
+<li>
 <p><a href="#remote-recalcstats">ReCalcStats</a></p>
 </li>
 <li>
@@ -4680,6 +4682,31 @@ Default: -1</p>
 </div>
 </li>
 </ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="remote-combinestats"><a class="anchor" href="#remote-combinestats"></a><strong>geowave remote combinestats</strong></h4>
+<div class="paragraph">
+<p>NAME</p>
+</div>
+<div class="paragraph">
+<p>geowave remote combinestats - Combine all statistics in GeoWave namespace, can be useful for making a datastore more efficient</p>
+</div>
+<div class="paragraph">
+<p>SYNOPSIS</p>
+</div>
+<div class="paragraph">
+<p>geowave remote combinestats [options] &lt;storename&gt;
+DESCRIPTION</p>
+</div>
+<div class="paragraph">
+<p>This command will combine all statistics in a GeoWave namespace</p>
+</div>
+<div class="paragraph">
+<p>OPTIONS</p>
+</div>
+<div class="paragraph">
+<p>There are currently no options for this command</p>
 </div>
 </div>
 <div class="sect3">
@@ -8073,79 +8100,6 @@ another point.</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="hbase-commands"><a class="anchor" href="#hbase-commands"></a>HBase Commands</h3>
-<div class="paragraph">
-<p>Utility operations to combine statistics in hbase (Required options are designated with an *)</p>
-</div>
-<div class="ulist">
-<div class="title">Commands:</div>
-<ul>
-<li>
-<p><a href="#hbase-combinestats">CombineStats</a></p>
-</li>
-<li>
-<p><a href="#hbase-runserver">RunServer</a></p>
-</li>
-</ul>
-</div>
-<div class="sect3">
-<h4 id="hbase-dbscan"><a class="anchor" href="#hbase-dbscan"></a><strong>geowave hbase combinestats</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave hbase combinestats - Combine all statistics in HBase namespace</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave hbase combinestats [options] &lt;storename&gt; &lt;adapter id&gt;</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will combine all statistics in an HBase namespace</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="hbase-runserver"><a class="anchor" href="#hbase-runserver"></a><strong>geowave hbase runserver</strong></h4>
-<div class="paragraph">
-<p>NAME</p>
-</div>
-<div class="paragraph">
-<p>geowave hbase runserver - Runs a standalone mini HBase server for test and debug with GeoWave</p>
-</div>
-<div class="paragraph">
-<p>SYNOPSIS</p>
-</div>
-<div class="paragraph">
-<p>geowave hbase runserver [options]</p>
-</div>
-<div class="paragraph">
-<p>DESCRIPTION</p>
-</div>
-<div class="paragraph">
-<p>This command will run a standalone mini single-node HBase server, which can be used locally for testing and debugging GeoWave, without needing to stand up an entire cluster.</p>
-</div>
-<div class="paragraph">
-<p>OPTIONS</p>
-</div>
-<div class="paragraph">
-<p>There are currently no options for this command</p>
-</div>
-<hr>
-<div style="page-break-after: always;"></div>
-</div>
-</div>
-<div class="sect2">
 <h3 id="landsat-commands"><a class="anchor" href="#landsat-commands"></a>Landsat8 Commands</h3>
 <div class="paragraph">
 <p>Operations to analyze, download, and ingest Landsat 8 imagery publicly available on AWS (Required options are designated with an *)</p>
@@ -9681,7 +9635,7 @@ another point.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-09-11 20:22:59 +00:00
+Last updated 2018-09-12 13:47:36 +00:00
 </div>
 </div>
 </body>

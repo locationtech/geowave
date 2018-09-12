@@ -569,6 +569,16 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
 </div>
 </div>
+</li>
+<li>
+<p>If running with EMR Cassandra</p>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-bash" data-lang="bash">geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster
+
+geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector</code></pre>
+</div>
+</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -655,7 +665,7 @@ More information on the landsat ingest and analyze commands can be found <a href
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2018-09-11 20:22:59 +00:00
+Last updated 2018-09-12 13:47:36 +00:00
 </div>
 </div>
 </body>

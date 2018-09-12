@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":10,"i6":10};
+var methods = {"i0":9,"i1":10,"i2":10,"i3":10,"i4":10,"i5":9,"i6":10,"i7":10,"i8":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -217,10 +217,21 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/call
 </td>
 </tr>
 <tr id="i5" class="rowColor">
+<td class="colFirst"><code>static <a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html#getVisibilityCounts-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-java.lang.String...-">getVisibilityCounts</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIdsToQuery,
+                   <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr id="i6" class="altColor">
+<td class="colFirst"><code>boolean</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html#isAuthorizationsLimiting-java.lang.String...-">isAuthorizationsLimiting</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</code>&nbsp;</td>
+</tr>
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</code>&nbsp;</td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>byte[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html#toBinary--">toBinary</a></span>()</code>
 <div class="block">Convert fields and data within an object to binary form for transmission
@@ -399,10 +410,19 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/call
 </dl>
 </li>
 </ul>
+<a name="isAuthorizationsLimiting-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>isAuthorizationsLimiting</h4>
+<pre>public&nbsp;boolean&nbsp;isAuthorizationsLimiting(<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
+</li>
+</ul>
 <a name="merge-mil.nga.giat.geowave.core.index.Mergeable-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>merge</h4>
 <pre>public&nbsp;void&nbsp;merge(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a>&nbsp;merge)</pre>
@@ -410,6 +430,18 @@ implements <a href="../../../../../../../../mil/nga/giat/geowave/core/store/call
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html#merge-mil.nga.giat.geowave.core.index.Mergeable-">merge</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../../../mil/nga/giat/geowave/core/index/Mergeable.html" title="interface in mil.nga.giat.geowave.core.index">Mergeable</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="getVisibilityCounts-mil.nga.giat.geowave.core.store.index.PrimaryIndex-java.util.List-mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore-java.lang.String...-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>getVisibilityCounts</h4>
+<pre>public static&nbsp;<a href="../../../../../../../../mil/nga/giat/geowave/core/store/data/visibility/FieldVisibilityCount.html" title="class in mil.nga.giat.geowave.core.store.data.visibility">FieldVisibilityCount</a>&nbsp;getVisibilityCounts(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Short.html?is-external=true" title="class or interface in java.lang">Short</a>&gt;&nbsp;adapterIdsToQuery,
+                                                       <a href="../../../../../../../../mil/nga/giat/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in mil.nga.giat.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;statisticsStore,
+                                                       <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>...&nbsp;authorizations)</pre>
 </li>
 </ul>
 </li>

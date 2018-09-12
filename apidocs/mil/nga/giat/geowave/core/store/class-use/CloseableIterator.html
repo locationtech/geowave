@@ -1038,8 +1038,8 @@
 <td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#executeQuery-com.datastax.driver.core.Statement...-">executeQuery</a></span>(com.datastax.driver.core.Statement...&nbsp;statements)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraRow.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraRow</a>&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#executeQueryAsync-com.datastax.driver.core.Statement...-">executeQueryAsync</a></span>(com.datastax.driver.core.Statement...&nbsp;statements)</code>&nbsp;</td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">BatchedRangeRead.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/BatchedRangeRead.html#executeQueryAsync-com.datastax.driver.core.Statement...-">executeQueryAsync</a></span>(com.datastax.driver.core.Statement...&nbsp;statements)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraRow.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraRow</a>&gt;</code></td>
@@ -1053,7 +1053,7 @@
 <td class="colLast"><span class="typeNameLabel">CassandraMetadataReader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraMetadataReader.html#query-mil.nga.giat.geowave.core.store.operations.MetadataQuery-">query</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/operations/MetadataQuery.html" title="class in mil.nga.giat.geowave.core.store.operations">MetadataQuery</a>&nbsp;query)</code>&nbsp;</td>
 </tr>
 <tr class="altColor">
-<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/CassandraRow.html" title="class in mil.nga.giat.geowave.datastore.cassandra">CassandraRow</a>&gt;</code></td>
+<td class="colFirst"><code><a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/BatchedRangeRead.html" title="type parameter in BatchedRangeRead">T</a>&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">BatchedRangeRead.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/BatchedRangeRead.html#results--">results</a></span>()</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -1433,10 +1433,11 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code>protected <a href="../../../../../../../mil/nga/giat/geowave/core/store/CloseableIterator.html" title="interface in mil.nga.giat.geowave.core.store">CloseableIterator</a>&lt;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.Entry.html?is-external=true" title="class or interface in java.util">Map.Entry</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/input/GeoWaveInputKey.html" title="class in mil.nga.giat.geowave.mapreduce.input">GeoWaveInputKey</a>,<a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html" title="type parameter in GeoWaveRecordReader">T</a>&gt;&gt;</code></td>
-<td class="colLast"><span class="typeNameLabel">GeoWaveRecordReader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-">queryRange</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
+<td class="colLast"><span class="typeNameLabel">GeoWaveRecordReader.</span><code><span class="memberNameLink"><a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRecordReader.html#queryRange-mil.nga.giat.geowave.core.store.index.PrimaryIndex-mil.nga.giat.geowave.mapreduce.splits.GeoWaveRowRange-java.util.List-boolean-boolean-">queryRange</a></span>(<a href="../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
           <a href="../../../../../../../mil/nga/giat/geowave/mapreduce/splits/GeoWaveRowRange.html" title="class in mil.nga.giat.geowave.mapreduce.splits">GeoWaveRowRange</a>&nbsp;range,
           <a href="http://docs.oracle.com/javase/7/docs/api/java/util/List.html?is-external=true" title="class or interface in java.util">List</a>&lt;<a href="../../../../../../../mil/nga/giat/geowave/core/store/filter/QueryFilter.html" title="interface in mil.nga.giat.geowave.core.store.filter">QueryFilter</a>&gt;&nbsp;queryFilters,
-          boolean&nbsp;mixedVisibility)</code>&nbsp;</td>
+          boolean&nbsp;mixedVisibility,
+          boolean&nbsp;authorizationsLimiting)</code>&nbsp;</td>
 </tr>
 </tbody>
 </table>

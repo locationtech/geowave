@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":10};
+var methods = {"i0":9,"i1":9,"i2":10};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -203,6 +203,11 @@ extends <a href="../../../../../../mil/nga/giat/geowave/format/landsat8/AnalyzeR
                <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceDirectory)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>protected static <a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/landsat8/DownloadRunner.html#getDownloadTempFile-org.opengis.feature.simple.SimpleFeature-java.lang.String-">getDownloadTempFile</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;band,
+                   <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceDirectory)</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>protected void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../mil/nga/giat/geowave/format/landsat8/DownloadRunner.html#nextBand-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.format.landsat8.AnalyzeRunner.AnalysisInfo-">nextBand</a></span>(org.opengis.feature.simple.SimpleFeature&nbsp;band,
         <a href="../../../../../../mil/nga/giat/geowave/format/landsat8/AnalyzeRunner.AnalysisInfo.html" title="class in mil.nga.giat.geowave.format.landsat8">AnalyzeRunner.AnalysisInfo</a>&nbsp;analysisInfo)</code>&nbsp;</td>
@@ -283,6 +288,16 @@ extends <a href="../../../../../../mil/nga/giat/geowave/format/landsat8/AnalyzeR
 <dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
 <dd><code><a href="../../../../../../mil/nga/giat/geowave/format/landsat8/AnalyzeRunner.html#nextBand-org.opengis.feature.simple.SimpleFeature-mil.nga.giat.geowave.format.landsat8.AnalyzeRunner.AnalysisInfo-">nextBand</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../mil/nga/giat/geowave/format/landsat8/AnalyzeRunner.html" title="class in mil.nga.giat.geowave.format.landsat8">AnalyzeRunner</a></code></dd>
 </dl>
+</li>
+</ul>
+<a name="getDownloadTempFile-org.opengis.feature.simple.SimpleFeature-java.lang.String-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>getDownloadTempFile</h4>
+<pre>protected static&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/io/File.html?is-external=true" title="class or interface in java.io">File</a>&nbsp;getDownloadTempFile(org.opengis.feature.simple.SimpleFeature&nbsp;band,
+                                          <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/String.html?is-external=true" title="class or interface in java.lang">String</a>&nbsp;workspaceDirectory)</pre>
 </li>
 </ul>
 <a name="getDownloadFile-org.opengis.feature.simple.SimpleFeature-java.lang.String-">
