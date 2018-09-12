@@ -22,11 +22,9 @@ import mil.nga.giat.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVectorSerializationIT;
 import mil.nga.giat.geowave.test.basic.GeowaveCustomCRSSpatialVectorIT;
 import mil.nga.giat.geowave.test.basic.GeoWaveVisibilityIT;
-import mil.nga.giat.geowave.test.basic.GeowaveBasicURLIngestIT;
 import mil.nga.giat.geowave.test.config.ConfigCacheIT;
 import mil.nga.giat.geowave.test.kafka.BasicKafkaIT;
 import mil.nga.giat.geowave.test.landsat.CustomCRSLandsatIT;
-import mil.nga.giat.geowave.test.landsat.LandsatIT;
 import mil.nga.giat.geowave.test.mapreduce.BasicMapReduceIT;
 import mil.nga.giat.geowave.test.mapreduce.BulkIngestInputGenerationIT;
 import mil.nga.giat.geowave.test.mapreduce.CustomCRSKDERasterResizeIT;
@@ -49,6 +47,7 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 
 @RunWith(GeoWaveITSuiteRunner.class)
 @SuiteClasses({
+	GeoWaveVisibilityIT.class,
 	GeowaveCustomCRSSpatialVectorIT.class,
 	GeoWaveBasicSpatialTemporalVectorIT.class,
 	// TODO need to mock up S3
@@ -59,7 +58,6 @@ import mil.nga.giat.geowave.test.services.IngestIT;
 	// for now tests are taking too long in travis and landsatIT is a long test
 	// LandsatIT.class,
 	CustomCRSLandsatIT.class,
-	GeoWaveVisibilityIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,
 	CustomCRSKDERasterResizeIT.class,

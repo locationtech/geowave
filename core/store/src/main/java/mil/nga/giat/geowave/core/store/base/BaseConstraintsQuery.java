@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveValue;
@@ -79,7 +80,8 @@ public class BaseConstraintsQuery extends
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String[] authorizations ) {
 		this(
 				adapterIds,
@@ -92,6 +94,7 @@ public class BaseConstraintsQuery extends
 				fieldIdsAdapterPair,
 				indexMetaData,
 				duplicateCounts,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 	}
@@ -107,13 +110,15 @@ public class BaseConstraintsQuery extends
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				adapterIds,
 				index,
 				scanCallback,
 				fieldIdsAdapterPair,
+				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
 		this.constraints = constraints;

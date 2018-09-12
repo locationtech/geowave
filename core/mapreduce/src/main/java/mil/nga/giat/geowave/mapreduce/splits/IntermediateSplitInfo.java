@@ -31,6 +31,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import mil.nga.giat.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import mil.nga.giat.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 public class IntermediateSplitInfo implements
@@ -364,14 +365,22 @@ public class IntermediateSplitInfo implements
 			}
 		}
 		for (final SplitInfo si : splitInfo.values()) {
-			final DifferingFieldVisibilityEntryCount visibilityCounts = DifferingFieldVisibilityEntryCount
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts = DifferingFieldVisibilityEntryCount
 					.getVisibilityCounts(
 							si.getIndex(),
 							indexIdToAdaptersMap.get(si.getIndex().getId()),
 							statisticsStore,
 							authorizations);
+			final FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
+					si.getIndex(),
+					indexIdToAdaptersMap.get(si.getIndex().getId()),
+					statisticsStore,
+					authorizations);
 
-			si.setMixedVisibility((visibilityCounts == null) || visibilityCounts.isAnyEntryDifferingFieldVisiblity());
+			si.setMixedVisibility((differingVisibilityCounts == null)
+					|| differingVisibilityCounts.isAnyEntryDifferingFieldVisiblity());
+			si.setAuthorizationsLimiting((visibilityCounts == null)
+					|| visibilityCounts.isAuthorizationsLimiting(authorizations));
 		}
 		return new GeoWaveInputSplit(
 				splitInfo,

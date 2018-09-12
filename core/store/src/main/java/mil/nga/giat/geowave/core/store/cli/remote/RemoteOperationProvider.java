@@ -28,6 +28,7 @@ public class RemoteOperationProvider implements
 		VersionCommand.class,
 		MergeDataCommand.class,
 		RecalculateStatsCommand.class,
+		CombineStatsCommand.class,
 		RemoveAdapterCommand.class,
 		RemoveStatCommand.class
 	};

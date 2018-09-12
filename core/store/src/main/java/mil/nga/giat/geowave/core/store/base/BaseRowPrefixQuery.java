@@ -22,6 +22,7 @@ import mil.nga.giat.geowave.core.index.QueryRanges;
 import mil.nga.giat.geowave.core.index.SinglePartitionQueryRanges;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 
 /**
@@ -38,12 +39,14 @@ class BaseRowPrefixQuery<T> extends
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKeyPrefix,
 			final ScanCallback<T, ?> scanCallback,
-			final DifferingFieldVisibilityEntryCount visibilityCounts,
+			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String[] authorizations ) {
 		super(
 				index,
 				authorizations,
 				scanCallback,
+				differingVisibilityCounts,
 				visibilityCounts);
 
 		final ByteArrayRange sortKeyPrefixRange = new ByteArrayRange(

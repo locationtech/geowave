@@ -12,12 +12,8 @@ package mil.nga.giat.geowave.core.store.util;
 
 import java.util.Iterator;
 
-import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.IndexUtils;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
-import mil.nga.giat.geowave.core.store.base.BaseDataStoreUtils;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
-import mil.nga.giat.geowave.core.store.entities.GeoWaveKey;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import mil.nga.giat.geowave.core.store.filter.QueryFilter;
@@ -26,7 +22,7 @@ import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
 public class NativeEntryTransformer<T> implements
 		GeoWaveRowIteratorTransformer<T>
 {
-	private final AdapterStore adapterStore;
+	private final PersistentAdapterStore adapterStore;
 	private final PrimaryIndex index;
 	private final QueryFilter clientFilter;
 	private final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
@@ -35,7 +31,7 @@ public class NativeEntryTransformer<T> implements
 	private final boolean decodePersistenceEncoding;
 
 	public NativeEntryTransformer(
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final PrimaryIndex index,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,

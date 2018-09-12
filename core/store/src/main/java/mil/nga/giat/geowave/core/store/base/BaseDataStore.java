@@ -48,6 +48,7 @@ import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.callback.IngestCallbackList;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.filter.DedupeFilter;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
@@ -640,6 +641,11 @@ public class BaseDataStore implements
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				FieldVisibilityCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
 		return constraintsQuery.query(
@@ -669,6 +675,11 @@ public class BaseDataStore implements
 						adapterIdsToQuery,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
+				FieldVisibilityCount.getVisibilityCounts(
+						index,
+						adapterIdsToQuery,
+						statisticsStore,
+						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
 		return prefixQuery.query(
@@ -689,19 +700,24 @@ public class BaseDataStore implements
 			final BaseQueryOptions sanitizedQueryOptions,
 			final PersistentAdapterStore tempAdapterStore,
 			final boolean delete ) {
-		final DifferingFieldVisibilityEntryCount visibilityCounts = DifferingFieldVisibilityEntryCount
+		final DifferingFieldVisibilityEntryCount differingVisibilityCounts = DifferingFieldVisibilityEntryCount
 				.getVisibilityCounts(
 						index,
 						Collections.singletonList(adapter.getInternalAdapterId()),
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations());
-
+		FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
+				index,
+				Collections.singletonList(adapter.getInternalAdapterId()),
+				statisticsStore,
+				sanitizedQueryOptions.getAuthorizations());
 		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<Object>(
 				adapter,
 				index,
 				query,
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				filter,
+				differingVisibilityCounts,
 				visibilityCounts,
 				sanitizedQueryOptions.getAuthorizations());
 		return q.query(

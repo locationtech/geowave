@@ -161,7 +161,8 @@ public class GeoWaveRecordReader<T> extends
 								splitInfo.getIndex(),
 								r.getRange(),
 								queryFilters,
-								splitInfo.isMixedVisibility()));
+								splitInfo.isMixedVisibility(),
+								splitInfo.isAuthorizationsLimiting()));
 				incrementalRangeSums.put(
 						r,
 						sum);
@@ -231,7 +232,8 @@ public class GeoWaveRecordReader<T> extends
 			final PrimaryIndex index,
 			final GeoWaveRowRange range,
 			final List<QueryFilter> queryFilters,
-			final boolean mixedVisibility ) {
+			final boolean mixedVisibility,
+			boolean authorizationsLimiting ) {
 
 		final QueryFilter singleFilter = ((queryFilters == null) || queryFilters.isEmpty()) ? null : queryFilters
 				.size() == 1 ? queryFilters.get(0) : new FilterList<QueryFilter>(
@@ -246,6 +248,7 @@ public class GeoWaveRecordReader<T> extends
 				sanitizedQueryOptions.getAggregation(),
 				sanitizedQueryOptions.getFieldIdsAdapterPair(),
 				mixedVisibility,
+				authorizationsLimiting,
 				range,
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getMaxRangeDecomposition(),

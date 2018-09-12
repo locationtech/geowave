@@ -19,9 +19,8 @@ import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
 
 import mil.nga.giat.geowave.core.index.ByteArrayId;
-import mil.nga.giat.geowave.core.index.ByteArrayUtils;
 import mil.nga.giat.geowave.core.index.Mergeable;
-import mil.nga.giat.geowave.core.store.adapter.AdapterStore;
+import mil.nga.giat.geowave.core.store.adapter.PersistentAdapterStore;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter;
 import mil.nga.giat.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
 import mil.nga.giat.geowave.core.store.callback.ScanCallback;
@@ -42,7 +41,7 @@ public class MergingEntryIterator<T> extends
 	private final Map<Short, RowTransform> transforms;
 
 	public MergingEntryIterator(
-			final AdapterStore adapterStore,
+			final PersistentAdapterStore adapterStore,
 			final PrimaryIndex index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,

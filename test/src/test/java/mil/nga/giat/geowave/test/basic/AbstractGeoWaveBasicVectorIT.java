@@ -64,6 +64,7 @@ import mil.nga.giat.geowave.core.store.adapter.statistics.StatisticsProvider;
 import mil.nga.giat.geowave.core.store.callback.IngestCallback;
 import mil.nga.giat.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import mil.nga.giat.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
+import mil.nga.giat.geowave.core.store.data.visibility.FieldVisibilityCount;
 import mil.nga.giat.geowave.core.store.entities.GeoWaveRow;
 import mil.nga.giat.geowave.core.store.index.IndexMetaDataSet;
 import mil.nga.giat.geowave.core.store.index.PrimaryIndex;
@@ -631,6 +632,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 						final DataStatistics<?> nextStats = statsIterator.next();
 						if ((nextStats instanceof RowRangeHistogramStatistics)
 								|| (nextStats instanceof IndexMetaDataSet)
+								|| (nextStats instanceof FieldVisibilityCount)
 								|| (nextStats instanceof DifferingFieldVisibilityEntryCount)
 								|| (nextStats instanceof DuplicateEntryCount)
 								|| (nextStats instanceof PartitionStatistics)) {
