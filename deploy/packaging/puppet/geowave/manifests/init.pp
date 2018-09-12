@@ -5,8 +5,9 @@ class geowave(
   $install_hbase          = $geowave::params::install_hbase,
   $install_app            = $geowave::params::install_app,
   $install_gwgeoserver    = $geowave::params::install_gwgeoserver,
-  $install_gwgrpc         = $geowave::params::install_gwgrpc
+  $install_gwgrpc         = $geowave::params::install_gwgrpc,
   $install_restservices   = $geowave::params::install_restservices,
+  $grpc_port              = $geowave::params::grpc_port,
   $http_port              = $geowave::params::http_port,
   $ajp_port               = $geowave::params::ajp_port_ajp,
   $shutdown_port          = $geowave::params::shutdown_port,
