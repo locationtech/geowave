@@ -52,9 +52,8 @@ public class SpatialDimensionalityTypeProvider implements
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	public static final int LONGITUDE_BITS = 31;
 	public static final int LATITUDE_BITS = 31;
-	private static final double INTERVAL = 40075017; // this is chosen to place
-														// metric CRSs always in
-														// the same bin
+	// this is chosen to place metric CRSs always in the same bin
+	public static final double DEFAULT_UNBOUNDED_CRS_INTERVAL = 40075017;
 
 	public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
@@ -143,7 +142,7 @@ public class SpatialDimensionalityTypeProvider implements
 					}
 					else {
 						dimensions[d] = new CustomCRSUnboundedSpatialDimension(
-								INTERVAL,
+								DEFAULT_UNBOUNDED_CRS_INTERVAL,
 								(byte) d);
 						fields_temporal[d] = new CustomCRSSpatialField(
 								(CustomCRSUnboundedSpatialDimension) dimensions[d]);
@@ -167,14 +166,14 @@ public class SpatialDimensionalityTypeProvider implements
 					else {
 						if (d == 0) {
 							dimensions[d] = new CustomCRSUnboundedSpatialDimensionX(
-									INTERVAL,
+									DEFAULT_UNBOUNDED_CRS_INTERVAL,
 									(byte) d);
 							fields[d] = new CustomCRSSpatialField(
 									(CustomCRSUnboundedSpatialDimensionX) dimensions[d]);
 						}
 						if (d == 1) {
 							dimensions[d] = new CustomCRSUnboundedSpatialDimensionY(
-									INTERVAL,
+									DEFAULT_UNBOUNDED_CRS_INTERVAL,
 									(byte) d);
 							fields[d] = new CustomCRSSpatialField(
 									(CustomCRSUnboundedSpatialDimensionY) dimensions[d]);
