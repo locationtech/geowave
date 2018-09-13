@@ -52,7 +52,9 @@ public class SpatialDimensionalityTypeProvider implements
 	private static final String DEFAULT_SPATIAL_ID = "SPATIAL_IDX";
 	public static final int LONGITUDE_BITS = 31;
 	public static final int LATITUDE_BITS = 31;
-	private static final double INTERVAL = 500000;
+	private static final double INTERVAL = 40075017; // this is chosen to place
+														// metric CRSs always in
+														// the same bin
 
 	public static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
 		new LongitudeDefinition(),
