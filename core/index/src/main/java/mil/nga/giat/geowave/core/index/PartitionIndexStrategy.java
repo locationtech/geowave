@@ -30,4 +30,6 @@ public interface PartitionIndexStrategy<QueryRangeType extends QueryConstraints,
 	 */
 	public int getPartitionKeyLength();
 
+	public Set<ByteArrayId> getPredefinedSplits();
+
 }

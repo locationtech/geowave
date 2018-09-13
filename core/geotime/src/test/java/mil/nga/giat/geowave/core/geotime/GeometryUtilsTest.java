@@ -298,5 +298,11 @@ public class GeometryUtilsTest
 			return null;
 		}
 
+		@Override
+		public Set<ByteArrayId> getPredefinedSplits() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 }

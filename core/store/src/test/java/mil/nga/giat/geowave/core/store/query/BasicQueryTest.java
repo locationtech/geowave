@@ -434,6 +434,12 @@ public class BasicQueryTest
 			return 0;
 		}
 
+		@Override
+		public Set<ByteArrayId> getPredefinedSplits() {
+			// TODO Auto-generated method stub
+			return null;
+		}
+
 	}
 
 	public static class ConstrainedIndexValue extends

@@ -755,6 +755,12 @@ public class MockComponents
 		public int getPartitionKeyLength() {
 			return 0;
 		}
+
+		@Override
+		public Set<ByteArrayId> getPredefinedSplits() {
+			// TODO Auto-generated method stub
+			return null;
+		}
 	}
 
 	// *************************************************************************

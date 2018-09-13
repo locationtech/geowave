@@ -127,10 +127,10 @@ public class MemoryDataStoreOperations implements
 
 	@Override
 	public Writer createWriter(
-			final ByteArrayId indexId,
+			final PrimaryIndex index,
 			final short adapterId ) {
 		return new MyIndexWriter<>(
-				indexId);
+				index.getId());
 	}
 
 	@Override

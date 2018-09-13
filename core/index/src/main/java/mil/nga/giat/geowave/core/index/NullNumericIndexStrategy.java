@@ -158,4 +158,9 @@ public class NullNumericIndexStrategy implements
 		return null;
 	}
 
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return Collections.EMPTY_SET;
+	}
+
 }

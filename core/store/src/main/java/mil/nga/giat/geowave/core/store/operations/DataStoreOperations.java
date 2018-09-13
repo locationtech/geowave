@@ -67,7 +67,7 @@ public interface DataStoreOperations
 	 *             The table does not exist in this Accumulo instance
 	 */
 	public Writer createWriter(
-			ByteArrayId indexId,
+			PrimaryIndex index,
 			short internalAdapterId );
 
 	public MetadataWriter createMetadataWriter(

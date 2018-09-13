@@ -158,4 +158,9 @@ public class NumericIndexStrategyWrapper implements
 				queryData,
 				hints);
 	}
+
+	@Override
+	public Set<ByteArrayId> getPredefinedSplits() {
+		return indexStrategy.getPredefinedSplits();
+	}
 }

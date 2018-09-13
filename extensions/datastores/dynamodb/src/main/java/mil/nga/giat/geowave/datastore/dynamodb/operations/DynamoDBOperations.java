@@ -200,9 +200,9 @@ public class DynamoDBOperations implements
 
 	@Override
 	public Writer createWriter(
-			final ByteArrayId indexId,
+			final PrimaryIndex index,
 			short internalAdapterId ) {
-		final String qName = getQualifiedTableName(indexId.getString());
+		final String qName = getQualifiedTableName(index.getId().getString());
 
 		final DynamoDBWriter writer = new DynamoDBWriter(
 				client,

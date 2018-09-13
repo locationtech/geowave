@@ -96,6 +96,7 @@ public class HBaseDataStore extends
 					indexName)) {
 				if (baseOptions.isCreateTable()) {
 					((HBaseOperations) baseOperations).createTable(
+							index.getIndexStrategy().getPredefinedSplits(),
 							index.getId(),
 							false,
 							adapter.getInternalAdapterId());
