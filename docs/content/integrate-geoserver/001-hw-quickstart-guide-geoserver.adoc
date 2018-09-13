@@ -47,6 +47,7 @@ You could use the default GeoServer points style, however the SubsamplePoints st
 
 [source, bash]
 ----
+cd /mnt
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/KDEColorMap.sld
 sudo wget s3.amazonaws.com/geowave/latest/scripts/emr/quickstart/SubsamplePoints.sld
 geowave gs addstyle kdecolormap -sld /mnt/KDEColorMap.sld
