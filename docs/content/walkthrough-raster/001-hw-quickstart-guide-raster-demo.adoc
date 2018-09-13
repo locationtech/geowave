@@ -102,7 +102,7 @@ geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat
 +
 [source, bash]
 ----
-geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster
+geowave config addstore -t cassandra --contactPoints localhost landsatraster --gwNamespace geowave.landsat_raster --batchWriteSize 15
 
 geowave config cpstore landsatraster landsatvector --gwNamespace geowave.landsat_vector
 ----
