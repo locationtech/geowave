@@ -163,7 +163,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">MemoryDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">MemoryDataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/memory/MemoryDataStoreOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;adapterId)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -182,7 +182,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">DataStoreOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/DataStoreOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;internalAdapterId)</code>
 <div class="block">Creates a new writer that can be used by an index.</div>
 </td>
@@ -238,7 +238,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">AccumuloOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/accumulo/operations/AccumuloOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -270,7 +270,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">CassandraOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/cassandra/operations/CassandraOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -302,7 +302,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">DynamoDBOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/dynamodb/operations/DynamoDBOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 </tbody>
@@ -338,7 +338,7 @@
 <tbody>
 <tr class="altColor">
 <td class="colFirst"><code><a href="../../../../../../../../mil/nga/giat/geowave/core/store/operations/Writer.html" title="interface in mil.nga.giat.geowave.core.store.operations">Writer</a></code></td>
-<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createWriter-mil.nga.giat.geowave.core.index.ByteArrayId-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/index/ByteArrayId.html" title="class in mil.nga.giat.geowave.core.index">ByteArrayId</a>&nbsp;indexId,
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../../mil/nga/giat/geowave/datastore/hbase/operations/HBaseOperations.html#createWriter-mil.nga.giat.geowave.core.store.index.PrimaryIndex-short-">createWriter</a></span>(<a href="../../../../../../../../mil/nga/giat/geowave/core/store/index/PrimaryIndex.html" title="class in mil.nga.giat.geowave.core.store.index">PrimaryIndex</a>&nbsp;index,
             short&nbsp;internalAdapterId)</code>&nbsp;</td>
 </tr>
 </tbody>
