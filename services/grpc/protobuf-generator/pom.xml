@@ -4,7 +4,7 @@
 		<artifactId>geowave-service-parent</artifactId>
 		<groupId>mil.nga.giat</groupId>
 		<relativePath>../../</relativePath>
-		<version>0.9.8</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 	<artifactId>geowave-grpc-protobuf-generator</artifactId>
 	<name>GeoWave gRPC protobuf generator</name>
