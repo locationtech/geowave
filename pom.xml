@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>mil.nga.giat</groupId>
 	<artifactId>geowave-parent</artifactId>
-	<version>0.9.8-SNAPSHOT</version>
+	<version>0.9.8</version>
 	<name>GeoWave Parent POM</name>
 	<packaging>pom</packaging>
 	<description>Geowave adds spatio-temporal indexing to accumulo through geotools and geoserver</description>
@@ -31,7 +29,7 @@
 	<scm>
 		<url>https://github.com/locationtech/geowave.git</url>
 		<connection>scm:git:https://github.com/locationtech/geowave.git</connection>
-		<tag>HEAD</tag>
+		<tag>v0.9.8</tag>
 	</scm>
 	<properties>
 		<spark.version>2.3.1</spark.version>
@@ -1057,7 +1055,7 @@
 						<LD_LIBRARY_PATH>${gdal.dir}</LD_LIBRARY_PATH>
 						<PATH>${gdal.dir}${path.separator}${env.PATH}</PATH>
 						<GDAL_DIR>${gdal.dir}</GDAL_DIR>
-						<NCS_USER_PREFS></NCS_USER_PREFS>
+						<NCS_USER_PREFS />
 					</environmentVariables>
 					<outputDirectory>${surefire.report.path}</outputDirectory>
 				</configuration>
