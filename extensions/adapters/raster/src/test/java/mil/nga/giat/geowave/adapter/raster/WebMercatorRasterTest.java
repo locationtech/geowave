@@ -99,7 +99,7 @@ public class WebMercatorRasterTest
 				CRS_STR).getCoordinateSystem().getAxis(
 				0).getMaximumValue();
 		if (!Double.isFinite(bounds)) {
-			bounds = 250000;
+			bounds = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL;
 		}
 		bounds /= 32.0;
 		for (double xTile = 0; xTile < xTiles; xTile++) {
@@ -136,18 +136,6 @@ public class WebMercatorRasterTest
 							CRS_STR));
 				}
 			}
-		}
-
-		CloseableIterator<Object> obj = dataStore.query(
-				new QueryOptions(
-						new ByteArrayId(
-								"test"),
-						index.getId()),
-				null);
-		int i = 0;
-		while (obj.hasNext()) {
-			obj.next();
-			i++;
 		}
 		int grid[][] = new int[8][8];
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
@@ -205,23 +193,6 @@ public class WebMercatorRasterTest
 				double expectedMinXMaxYValue = (xTile - 1) * 3 + yTile * 24;
 				double expectedMaxXMinYValue = xTile * 3 + (yTile - 1) * 24;
 				double expectedMaxXMaxYValue = xTile * 3 + yTile * 24;
-				try (CloseableIterator it = dataStore.query(
-						new QueryOptions(),
-						new IndexOnlySpatialQuery(
-								new GeometryFactory().toGeometry(new Envelope(
-										((xTile - 1) * 64) / 8,
-										(xTile * 64) / 8,
-										((yTile - 1) * 64) / 8,
-										(yTile * 64) / 8)),
-								CRS_STR))) {
-					int count = 0;
-					while (it.hasNext()) {
-						count++;
-						it.next();
-					}
-					System.err.println(count);
-				}
-
 				for (int x = 0; x < 32; x++) {
 					for (int y = 0; y < 32; y++) {
 

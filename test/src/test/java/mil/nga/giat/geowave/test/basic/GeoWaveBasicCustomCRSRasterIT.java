@@ -35,6 +35,7 @@ import mil.nga.giat.geowave.adapter.raster.RasterUtils;
 import mil.nga.giat.geowave.adapter.raster.adapter.RasterDataAdapter;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import mil.nga.giat.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
+import mil.nga.giat.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import mil.nga.giat.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import mil.nga.giat.geowave.core.index.ByteArrayId;
 import mil.nga.giat.geowave.core.store.CloseableIterator;
@@ -101,9 +102,9 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 									// size, 128 fails on DynamoDB exceeding
 									// maximum size
 		final double westLon = 0;
-		final double eastLon = 62500;
+		final double eastLon = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 8;
 		final double southLat = 0;
-		final double northLat = 62500;
+		final double northLat = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 8;
 		ingestAndQueryNoDataMergeStrategy(
 				coverageName,
 				tileSize,
@@ -129,9 +130,9 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		final int summingTileSize = 32;
 		final int sumAndAveragingTileSize = 8;
 		final double minX = 0;
-		final double maxX = 244.140625;
+		final double maxX = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 2048;
 		final double minY = 0;
-		final double maxY = 244.140625;
+		final double maxY = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL / 2048;
 
 		ingestGeneralPurpose(
 				summingCoverageName,

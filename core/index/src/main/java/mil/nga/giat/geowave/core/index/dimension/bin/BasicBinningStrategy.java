@@ -34,9 +34,8 @@ public class BasicBinningStrategy implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(16);
+		final ByteBuffer buf = ByteBuffer.allocate(8);
 		buf.putDouble(interval);
-		buf.putDouble(halfInterval);
 		return buf.array();
 	}
 
@@ -45,7 +44,7 @@ public class BasicBinningStrategy implements
 			byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		interval = buf.getDouble();
-		halfInterval = buf.getDouble();
+		halfInterval = interval / 2;
 	}
 
 	@Override
