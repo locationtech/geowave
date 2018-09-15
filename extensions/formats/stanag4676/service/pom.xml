@@ -138,13 +138,6 @@
 			</exclusions>
 		</dependency>
 	</dependencies>
-	<repositories>
-		<repository>
-			<id>xuggle repo</id>
-			<url>http://xuggle.googlecode.com/svn/trunk/repo/share/java/</url>
-		</repository>
-
-	</repositories>
 	<build>
 		<plugins>
 			<plugin>
