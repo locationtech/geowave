@@ -292,13 +292,13 @@ public class SpatialJoinRunner implements
 		NumericIndexStrategy rddStrategy = null;
 		// Did the user provide a strategy for join?
 		if (this.indexStrategy == null) {
-			PrimaryIndex[] leftIndices = this.getIndicesForAdapter(
+			PrimaryIndex[] rddIndices = this.getIndicesForAdapter(
 					storeOptions,
 					adapterId,
-					leftInternalAdapterStore,
+					internalAdapterStore,
 					indexStore);
-			if (leftIndices.length > 0) {
-				rddStrategy = leftIndices[0].getIndexStrategy();
+			if (rddIndices.length > 0) {
+				rddStrategy = rddIndices[0].getIndexStrategy();
 			}
 
 		}
