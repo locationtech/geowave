@@ -175,28 +175,34 @@ public class GeoWaveGTDataStoreFactory implements
 	@Override
 	public boolean canProcess(
 			final Map<String, Serializable> params ) {
-		final Map<String, String> dataStoreParams = params
-				.entrySet()
-				.stream()
-				.filter(
-						e -> !GeoWavePluginConfig.BASE_GEOWAVE_PLUGIN_PARAM_KEYS.contains(
-								e.getKey()))
-				.collect(
-						Collectors.toMap(
-								e -> e.getKey() == null ? null : e.getKey().toString(),
-								e -> e.getValue() == null ? null : e.getValue().toString()));
-		
-		final Map<String, String> originalParams = params
-				.entrySet()
-				.stream()
-				.collect(
-						Collectors.toMap(
-								e -> e.getKey() == null ? null : e.getKey().toString(),
-								e -> e.getValue() == null ? null : e.getValue().toString()));
-		return GeoWaveStoreFinder.exactMatch(
-				geowaveStoreFactoryFamily,
-				dataStoreParams,
-				originalParams);
+		try {
+			final Map<String, String> dataStoreParams = params
+					.entrySet()
+					.stream()
+					.filter(
+							e -> !GeoWavePluginConfig.BASE_GEOWAVE_PLUGIN_PARAM_KEYS.contains(
+									e.getKey()))
+					.collect(
+							Collectors.toMap(
+									e -> e.getKey() == null ? null : e.getKey().toString(),
+									e -> e.getValue() == null ? null : e.getValue().toString()));
+			
+			final Map<String, String> originalParams = params
+					.entrySet()
+					.stream()
+					.collect(
+							Collectors.toMap(
+									e -> e.getKey() == null ? null : e.getKey().toString(),
+									e -> e.getValue() == null ? null : e.getValue().toString()));
+			return GeoWaveStoreFinder.exactMatch(
+					geowaveStoreFactoryFamily,
+					dataStoreParams,
+					originalParams);
+		}
+		catch (Exception e) {
+			LOGGER.info("unable to process params as GeoWave datastore", e);
+			return false;
+		}
 	}
 
 	@Override
