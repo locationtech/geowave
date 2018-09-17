@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.accumulo.AccumuloStoreFactoryFamily
+org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily

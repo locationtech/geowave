@@ -1,7 +1,7 @@
 {
 	"type" : "record",
 	"name" : "TdrivePoint",
-	"namespace" : "mil.nga.giat.geowave.format.tdrive",
+	"namespace" : "org.locationtech.geowave.format.tdrive",
 		"fields" : [{
 				"name" : "taxiid",
 				"type" : "int",

@@ -1,2 +1,2 @@
-mil.nga.giat.geowave.format.geotools.raster.NoDataMergeStrategyProvider
-mil.nga.giat.geowave.format.geotools.raster.NoMergeStrategyProvider
+org.locationtech.geowave.format.geotools.raster.NoDataMergeStrategyProvider
+org.locationtech.geowave.format.geotools.raster.NoMergeStrategyProvider

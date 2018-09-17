@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.store.operations.config.IndexDefaultConfigProvider
+org.locationtech.geowave.core.store.operations.config.IndexDefaultConfigProvider

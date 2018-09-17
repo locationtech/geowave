@@ -22,7 +22,7 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ]; then
 	popd
 	if [ -f target/geowave-dev-resources-${version}.jar ]; then
 		# Install downloaded jar to local repo
-		mvn install:install-file -Dfile=target/geowave-dev-resources-${version}.jar -DgroupId=mil.nga.giat -DartifactId=geowave-dev-resources -Dversion=${version} -Dpackaging=jar
+		mvn install:install-file -Dfile=target/geowave-dev-resources-${version}.jar -DgroupId=org.locationtech -DartifactId=geowave-dev-resources -Dversion=${version} -Dpackaging=jar
 	else
 		# Fallback to building the jar if the S3 pull failed
 		echo -e "Pull from S3 failed. Building..."

@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.mapreduce.VFSClassLoaderTransformer
+org.locationtech.geowave.mapreduce.VFSClassLoaderTransformer

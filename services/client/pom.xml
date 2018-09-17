@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-service-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
@@ -10,7 +10,7 @@
 	<name>GeoWave Java Client for REST services</name>
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-api</artifactId>
 			<version>${project.version}</version>
 		</dependency>

@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.gdelt.GDELTIngestFormat
+org.locationtech.geowave.format.gdelt.GDELTIngestFormat

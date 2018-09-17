@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
-		<groupId>mil.nga.giat</groupId>
+		<groupId>org.locationtech.geowave</groupId>
 		<relativePath>../</relativePath>
 		<version>1.0.0-SNAPSHOT</version>
 	</parent>
@@ -15,12 +15,12 @@
 	<description>A module for integration and functional tests of GeoWave</description>
 	<dependencies>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-deploy</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-spark</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -39,7 +39,7 @@
 			<artifactId>grpc-netty</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-geoserver</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -56,7 +56,7 @@
 			<artifactId>jetty-webapp</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-rest</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -77,17 +77,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-service-client</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-grpc-server</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-vector</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -106,32 +106,32 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-gpx</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-gdelt</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-format-avro</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-osm</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-analytic-mapreduce</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-accumulo</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -146,17 +146,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-dynamodb</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-cassandra</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-hbase</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -175,7 +175,7 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-datastore-bigtable</artifactId>
 			<version>${project.version}</version>
 			<exclusions>
@@ -186,17 +186,17 @@
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-example</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-landsat8</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>mil.nga.giat</groupId>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-cli-sentinel2</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -531,7 +531,7 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>mil.nga.giat.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
+					<mainClass>org.locationtech.geowave.adapter.raster.plugin.gdal.InstallGdal</mainClass>
 					<arguments>
 						<argument>${gdal.dir}</argument>
 					</arguments>

@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.hbase.util.CoprocessorClassLoaderTransformer
+org.locationtech.geowave.datastore.hbase.util.CoprocessorClassLoaderTransformer

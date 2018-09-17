@@ -84,4 +84,4 @@ fi
 LOG_PROPERTIES="-Djava.util.logging.config.file=jul-geowave-cli.properties"
 
 # Using -cp and the classname instead of -jar because Java 7 and below fail to auto-launch jars with more than 65k files
-exec $JAVA $GEOWAVE_TOOL_JAVA_OPT $LOG_PROPERTIES -cp $CLASSPATH mil.nga.giat.geowave.core.cli.GeoWaveMain "$@"
+exec $JAVA $GEOWAVE_TOOL_JAVA_OPT $LOG_PROPERTIES -cp $CLASSPATH org.locationtech.geowave.core.cli.GeoWaveMain "$@"

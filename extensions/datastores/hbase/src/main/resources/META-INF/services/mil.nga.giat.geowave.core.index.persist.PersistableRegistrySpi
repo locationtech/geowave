@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.hbase.HBasePersistableRegistry
+org.locationtech.geowave.datastore.hbase.HBasePersistableRegistry

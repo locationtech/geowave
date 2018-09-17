@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.gpx.GpxIngestFormat
+org.locationtech.geowave.format.gpx.GpxIngestFormat

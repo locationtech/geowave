@@ -1,2 +1,2 @@
-mil.nga.giat.geowave.core.store.cli.remote.RemoteOperationProvider
-mil.nga.giat.geowave.core.store.cli.config.ConfigOperationProvider
+org.locationtech.geowave.core.store.cli.remote.RemoteOperationProvider
+org.locationtech.geowave.core.store.cli.config.ConfigOperationProvider

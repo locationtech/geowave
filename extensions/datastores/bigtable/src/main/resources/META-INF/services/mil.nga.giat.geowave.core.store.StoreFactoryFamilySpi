@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.bigtable.BigTableStoreFactoryFamily
+org.locationtech.geowave.datastore.bigtable.BigTableStoreFactoryFamily

@@ -1,4 +1,4 @@
-mil.nga.giat.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy
-mil.nga.giat.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy
-mil.nga.giat.geowave.adapter.vector.index.ChooseLocalityPreservingQueryStrategy
+org.locationtech.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy
+org.locationtech.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy
+org.locationtech.geowave.adapter.vector.index.ChooseLocalityPreservingQueryStrategy
 

@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.adapter.raster.operations.RasterOperationCLIProvider
+org.locationtech.geowave.adapter.raster.operations.RasterOperationCLIProvider

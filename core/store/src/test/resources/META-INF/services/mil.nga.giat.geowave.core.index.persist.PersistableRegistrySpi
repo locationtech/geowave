@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.store.TestStorePersistableRegistry
+org.locationtech.geowave.core.store.TestStorePersistableRegistry

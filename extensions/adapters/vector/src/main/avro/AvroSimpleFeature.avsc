@@ -1,7 +1,7 @@
 [
     {
         "name" : "AttributeValues",
-        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
             {
@@ -28,7 +28,7 @@
     },
     {
         "name" : "FeatureDefinition",
-        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
              {
@@ -60,7 +60,7 @@
     },
     {
         "name" : "AvroSimpleFeature",
-        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
             {
@@ -75,7 +75,7 @@
     },
     {
         "name" : "AvroSimpleFeatureCollection",
-        "namespace" : "mil.nga.giat.geowave.adapter.vector.avro",
+        "namespace" : "org.locationtech.geowave.adapter.vector.avro",
         "type" : "record",
         "fields" : [
             {"name" : "featureType", "type" : "FeatureDefinition"},

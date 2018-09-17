@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.hbase.HBaseStoreFactoryFamily
+org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily

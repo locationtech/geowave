@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.cli.debug.DebugOperationsProvider
+org.locationtech.geowave.cli.debug.DebugOperationsProvider

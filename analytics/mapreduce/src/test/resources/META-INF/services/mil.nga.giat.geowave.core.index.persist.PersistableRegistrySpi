@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.analytic.mapreduce.TestMapReducePersistableRegistry
+org.locationtech.geowave.analytic.mapreduce.TestMapReducePersistableRegistry

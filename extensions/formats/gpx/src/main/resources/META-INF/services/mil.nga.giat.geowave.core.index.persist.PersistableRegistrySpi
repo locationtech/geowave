@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.gpx.GpxPersistableRegistry
+org.locationtech.geowave.format.gpx.GpxPersistableRegistry

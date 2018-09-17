@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.ingest.hdfs.mapreduce.IngestPersistableRegistry
+org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestPersistableRegistry

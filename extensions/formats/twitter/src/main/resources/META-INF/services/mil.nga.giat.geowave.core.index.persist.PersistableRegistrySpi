@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.twitter.TwitterPersistableRegistry
+org.locationtech.geowave.format.twitter.TwitterPersistableRegistry

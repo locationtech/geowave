@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.store.spi.TestDimensionalityTypeProvider
+org.locationtech.geowave.core.store.spi.TestDimensionalityTypeProvider

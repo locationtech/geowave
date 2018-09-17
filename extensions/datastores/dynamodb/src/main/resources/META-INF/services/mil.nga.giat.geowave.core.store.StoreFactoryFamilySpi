@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily
+org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily

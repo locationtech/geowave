@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.adapter.raster.RasterAdapterPersistableRegistry
+org.locationtech.geowave.adapter.raster.RasterAdapterPersistableRegistry

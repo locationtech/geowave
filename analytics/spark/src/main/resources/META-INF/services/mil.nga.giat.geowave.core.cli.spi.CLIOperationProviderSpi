@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.analytic.spark.AnalyticOperationCLIProvider
+org.locationtech.geowave.analytic.spark.AnalyticOperationCLIProvider

@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.geotime.TestGeoTimePersistableRegistry
+org.locationtech.geowave.core.geotime.TestGeoTimePersistableRegistry

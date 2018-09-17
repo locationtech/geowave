@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.twitter.TwitterIngestFormat
+org.locationtech.geowave.format.twitter.TwitterIngestFormat

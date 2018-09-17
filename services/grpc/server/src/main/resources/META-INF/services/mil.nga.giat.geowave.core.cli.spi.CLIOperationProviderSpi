@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.service.grpc.cli.GrpcOperationProvider
+org.locationtech.geowave.service.grpc.cli.GrpcOperationProvider

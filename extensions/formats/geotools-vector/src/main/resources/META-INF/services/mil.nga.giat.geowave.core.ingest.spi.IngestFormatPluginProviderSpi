@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestFormat
+org.locationtech.geowave.format.geotools.vector.GeoToolsVectorDataStoreIngestFormat

@@ -21,11 +21,10 @@ import org.geotools.process.Processors;
 import org.geotools.process.RenderingProcess;
 import org.geotools.process.factory.AnnotatedBeanProcessFactory;
 import org.geotools.text.Text;
+import org.locationtech.geowave.adapter.vector.plugin.InternalProcessFactory;
+import org.locationtech.geowave.adapter.vector.render.InternalDistributedRenderProcess;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.expression.Expression;
-
-import mil.nga.giat.geowave.adapter.vector.plugin.InternalProcessFactory;
-import mil.nga.giat.geowave.adapter.vector.render.InternalDistributedRenderProcess;
 
 public class DistributedRenderProcessUtils
 {

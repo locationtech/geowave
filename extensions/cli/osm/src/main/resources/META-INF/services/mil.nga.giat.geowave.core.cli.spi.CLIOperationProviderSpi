@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.cli.osm.operations.OSMOperationProvider
+org.locationtech.geowave.cli.osm.operations.OSMOperationProvider

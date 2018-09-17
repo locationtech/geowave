@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.core.index.TestIndexPersistableRegistry
+org.locationtech.geowave.core.index.TestIndexPersistableRegistry

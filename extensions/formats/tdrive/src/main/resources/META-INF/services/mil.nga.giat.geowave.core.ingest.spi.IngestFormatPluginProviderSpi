@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.tdrive.TdriveIngestFormat
+org.locationtech.geowave.format.tdrive.TdriveIngestFormat

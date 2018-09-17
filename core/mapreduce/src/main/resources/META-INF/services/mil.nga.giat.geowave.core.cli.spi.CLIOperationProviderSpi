@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.mapreduce.operations.MapReduceOperationProvider
+org.locationtech.geowave.mapreduce.operations.MapReduceOperationProvider

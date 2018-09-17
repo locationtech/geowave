@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.avro.AvroPersistableRegistry
+org.locationtech.geowave.format.avro.AvroPersistableRegistry

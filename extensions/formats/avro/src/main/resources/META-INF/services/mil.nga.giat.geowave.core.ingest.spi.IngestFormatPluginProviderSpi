@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.avro.AvroIngestFormat
+org.locationtech.geowave.format.avro.AvroIngestFormat

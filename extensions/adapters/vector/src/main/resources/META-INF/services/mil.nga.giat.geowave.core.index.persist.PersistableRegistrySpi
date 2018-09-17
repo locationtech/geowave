@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.adapter.vector.FeatureAdapterPersistableRegistry
+org.locationtech.geowave.adapter.vector.FeatureAdapterPersistableRegistry

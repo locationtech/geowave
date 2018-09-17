@@ -1,1 +1,1 @@
-mil.nga.giat.geowave.format.tdrive.TdrivePersistableRegistry
+org.locationtech.geowave.format.tdrive.TdrivePersistableRegistry
