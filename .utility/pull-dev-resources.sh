@@ -1,7 +1,7 @@
 #!/bin/bash
 # Don't set -e in case the S3 pull fails
 set -v
-version=${DEV_RESOURCES_VERSION:=1.0}
+version=${DEV_RESOURCES_VERSION:=1.2}
 echo -e "Pull or build dev-resources-${version}.jar..."
 
 if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ]; then
@@ -15,7 +15,7 @@ if [ "$TRAVIS_REPO_SLUG" == "locationtech/geowave" ]; then
 	pushd target
 	if [ ! -f geowave-dev-resources-${version}.jar ]; then
 		echo -e "Pulling dev-resources jar from S3...\n"
-		wget https://s3.amazonaws.com/geowave.deploy.emr.4/geowave-clone/geowave-dev-resources-${version}.jar
+		wget https://s3.amazonaws.com/geowave-maven/release/org/locationtech/geowave/geowave-dev-resources/${version}/geowave-dev-resources-${version}.jar
 	else
 		echo -e "dev-resources jar exists"
 	fi
