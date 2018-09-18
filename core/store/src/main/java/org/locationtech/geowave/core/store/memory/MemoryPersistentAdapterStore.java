@@ -47,7 +47,7 @@ public class MemoryPersistentAdapterStore implements
 		adapterMap = Collections.synchronizedMap(new HashMap<Short, InternalDataAdapter<?>>());
 		for (final InternalDataAdapter<?> adapter : adapters) {
 			adapterMap.put(
-					adapter.getInternalAdapterId(),
+					adapter.getAdapterId(),
 					adapter);
 		}
 	}
@@ -56,7 +56,7 @@ public class MemoryPersistentAdapterStore implements
 	public void addAdapter(
 			final InternalDataAdapter<?> InternalDataadapter ) {
 		adapterMap.put(
-				InternalDataadapter.getInternalAdapterId(),
+				InternalDataadapter.getAdapterId(),
 				InternalDataadapter);
 	}
 

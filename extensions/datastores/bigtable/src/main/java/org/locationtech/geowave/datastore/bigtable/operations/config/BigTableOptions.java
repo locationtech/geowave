@@ -36,7 +36,23 @@ public class BigTableOptions extends
 	private final HBaseOptions internalHBaseOptions = new InternalHBaseOptions();
 
 	@ParametersDelegate
-	private final BaseDataStoreOptions additionalOptions = new BaseDataStoreOptions();
+	private BaseDataStoreOptions additionalOptions = new BaseDataStoreOptions();
+
+	public BigTableOptions() {}
+
+	public BigTableOptions(
+			int scanCacheSize,
+			String projectId,
+			String instanceId,
+			String gwNamespace,
+			BaseDataStoreOptions additionalOptions ) {
+		super(
+				gwNamespace);
+		this.scanCacheSize = scanCacheSize;
+		this.projectId = projectId;
+		this.instanceId = instanceId;
+		this.additionalOptions = additionalOptions;
+	}
 
 	@Override
 	public StoreFactoryFamilySpi getStoreFactory() {
@@ -107,39 +123,6 @@ public class BigTableOptions extends
 		public void setPersistDataStatistics(
 				final boolean persistDataStatistics ) {
 			additionalOptions.setPersistDataStatistics(persistDataStatistics);
-		}
-
-		@Override
-		public boolean isPersistAdapter() {
-			return additionalOptions.isPersistAdapter();
-		}
-
-		@Override
-		public void setPersistAdapter(
-				final boolean persistAdapter ) {
-			additionalOptions.setPersistAdapter(persistAdapter);
-		}
-
-		@Override
-		public boolean isPersistIndex() {
-			return additionalOptions.isPersistIndex();
-		}
-
-		@Override
-		public void setPersistIndex(
-				final boolean persistIndex ) {
-			additionalOptions.setPersistIndex(persistIndex);
-		}
-
-		@Override
-		public boolean isCreateTable() {
-			return additionalOptions.isCreateTable();
-		}
-
-		@Override
-		public void setCreateTable(
-				final boolean createTable ) {
-			additionalOptions.setCreateTable(createTable);
 		}
 
 		@Override

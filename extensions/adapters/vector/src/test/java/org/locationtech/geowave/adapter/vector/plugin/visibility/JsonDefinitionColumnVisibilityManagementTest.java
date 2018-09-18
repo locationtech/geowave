@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,8 +22,6 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.visibility.JsonDefinitionColumnVisibilityManagement;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
@@ -42,7 +40,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 	List<AttributeDescriptor> descriptors;
 	Object[] defaults;
 	SimpleFeature newFeature;
-	final JsonDefinitionColumnVisibilityManagement<SimpleFeature> manager = new JsonDefinitionColumnVisibilityManagement<SimpleFeature>();
+	final JsonDefinitionColumnVisibilityManagement<SimpleFeature> manager = new JsonDefinitionColumnVisibilityManagement<>();
 	final GeometryFactory factory = new GeometryFactory(
 			new PrecisionModel(
 					PrecisionModel.FIXED));
@@ -105,8 +103,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"TS".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePIDHandler.getVisibility(
 						newFeature,
-						new ByteArrayId(
-								"pid".getBytes(StringUtils.getGeoWaveCharset())),
+						"pid",
 						"pid")));
 	}
 
@@ -116,8 +113,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"default".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePOPHandler.getVisibility(
 						newFeature,
-						new ByteArrayId(
-								"pop".getBytes(StringUtils.getGeoWaveCharset())),
+						"pop",
 						"pop")));
 
 	}
@@ -128,8 +124,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"S".getBytes(StringUtils.getGeoWaveCharset()),
 				simpleGEOHandler.getVisibility(
 						newFeature,
-						new ByteArrayId(
-								"geometry".getBytes(StringUtils.getGeoWaveCharset())),
+						"geometry",
 						"geometry")));
 
 	}
@@ -143,8 +138,7 @@ public class JsonDefinitionColumnVisibilityManagementTest
 				"U".getBytes(StringUtils.getGeoWaveCharset()),
 				simplePOPHandler.getVisibility(
 						newFeature,
-						new ByteArrayId(
-								"pop".getBytes(StringUtils.getGeoWaveCharset())),
+						"pop",
 						"pop")));
 
 	}

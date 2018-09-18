@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -35,15 +35,12 @@ import org.locationtech.geowave.analytic.clustering.CentroidManager;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
 import org.locationtech.geowave.analytic.distance.FeatureCentroidDistanceFn;
-import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.KMeansIterationsJobRunner;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -75,9 +72,9 @@ public class KMeansIterationsJobRunnerTest
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				"centroid");
 		propertyMgt.store(
-				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString());
+				CentroidParameters.Centroid.INDEX_NAME,
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName());
 		propertyMgt.store(
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
 				new Double(
@@ -143,8 +140,8 @@ public class KMeansIterationsJobRunnerTest
 			KMeansIterationsJobRunner<SimpleFeature>
 	{
 		private int iteration = 1;
-		protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> groups = new HashMap<String, List<AnalyticItemWrapper<SimpleFeature>>>();
-		protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> deletedSet = new HashMap<String, List<AnalyticItemWrapper<SimpleFeature>>>();
+		protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> groups = new HashMap<>();
+		protected static Map<String, List<AnalyticItemWrapper<SimpleFeature>>> deletedSet = new HashMap<>();
 		private static SimpleFeatureItemWrapperFactory factory = new SimpleFeatureItemWrapperFactory();
 		private static final GeometryFactory geoFactory = new GeometryFactory();
 		private static Point[] points = new Point[] {
@@ -232,7 +229,7 @@ public class KMeansIterationsJobRunnerTest
 				@Override
 				public List<String> getAllCentroidGroups()
 						throws IOException {
-					final List<String> ll = new ArrayList<String>();
+					final List<String> ll = new ArrayList<>();
 					for (final String g : groups.keySet()) {
 						ll.add(g);
 					}
@@ -277,15 +274,14 @@ public class KMeansIterationsJobRunnerTest
 				}
 
 				@Override
-				public ByteArrayId getDataTypeId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary("centroid"));
+				public String getDataTypeName() {
+					return "centroid";
 				}
 
 				@Override
-				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-							new SpatialOptions()).getId();
+				public String getIndexName() {
+					return new SpatialDimensionalityTypeProvider().createIndex(
+							new SpatialOptions()).getName();
 				}
 
 				@Override

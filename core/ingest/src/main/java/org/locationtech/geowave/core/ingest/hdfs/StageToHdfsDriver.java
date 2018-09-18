@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -25,7 +25,6 @@ import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.spark_project.guava.base.Throwables;
 
 /**
  * This class actually executes the staging of data to HDFS based on the
@@ -40,10 +39,10 @@ public class StageToHdfsDriver extends
 	private final String basePath;
 
 	public StageToHdfsDriver(
-			Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
-			String hdfsHostPort,
-			String basePath,
-			LocalInputCommandLineOptions inputOptions ) {
+			final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
+			final String hdfsHostPort,
+			final String basePath,
+			final LocalInputCommandLineOptions inputOptions ) {
 		super(
 				inputOptions);
 		this.ingestPlugins = ingestPlugins;
@@ -74,15 +73,12 @@ public class StageToHdfsDriver extends
 					}
 				}
 			}
-			catch (IOException e1) {
-				Throwables.propagate(e1);
-			}
 		}
 	}
 
 	public boolean runOperation(
-			String inputPath,
-			File configFile ) {
+			final String inputPath,
+			final File configFile ) {
 
 		// first collect the stage to hdfs plugins
 		final Map<String, AvroFormatPlugin<?, ?>> stageToHdfsPlugins = ingestPlugins;

@@ -19,7 +19,7 @@ public class HullParameters
 	public enum Hull
 			implements
 			ParameterEnum {
-		INDEX_ID(
+		INDEX_NAME(
 				String.class,
 				"hid",
 				"Index Identifier for Centroids",

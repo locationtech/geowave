@@ -10,17 +10,17 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.accumulo;
 
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.DataStoreFactory;
+import org.locationtech.geowave.core.store.BaseDataStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 
 public class AccumuloDataStoreFactory extends
-		DataStoreFactory
+		BaseDataStoreFactory
 {
 	public AccumuloDataStoreFactory(
 			final String typeName,

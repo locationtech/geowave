@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,21 +12,18 @@ package org.locationtech.geowave.core.store.index.temporal;
 
 import java.util.Date;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
-import org.locationtech.geowave.core.store.index.temporal.TemporalIndexStrategy;
-import org.locationtech.geowave.core.store.index.temporal.TemporalQueryConstraint;
-import org.junit.Assert;
 
 public class TemporalIndexStrategyTest
 {
 	private final TemporalIndexStrategy strategy = new TemporalIndexStrategy();
-	private final ByteArrayId fieldId = new ByteArrayId(
-			"fieldId");
+	private final String fieldId = "fieldId";
 	private final Date date = new Date(
 			1440080038544L);
 

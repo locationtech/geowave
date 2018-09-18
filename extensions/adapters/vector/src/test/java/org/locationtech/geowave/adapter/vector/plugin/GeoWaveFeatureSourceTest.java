@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -31,16 +31,13 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -101,8 +98,8 @@ public class GeoWaveFeatureSourceTest extends
 	}
 
 	public void testFull(
-			Populater populater,
-			String ext )
+			final Populater populater,
+			final String ext )
 			throws Exception {
 		final String typeName = "GeoWaveFeatureSourceTest_full" + ext;
 		final SimpleFeatureType type = DataUtilities.createType(
@@ -131,10 +128,9 @@ public class GeoWaveFeatureSourceTest extends
 				Filter.INCLUDE);
 		assertTrue(source.getCount(query) > 2);
 
-		short internalAdapterId = ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addAdapterId(
-				new ByteArrayId(
-						(typeName).getBytes(StringUtils.getGeoWaveCharset())));
-		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore)
+		final short internalAdapterId = ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addTypeName(
+				typeName);
+		try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> stats = ((GeoWaveGTDataStore) dataStore)
 				.getDataStatisticsStore()
 				.getDataStatistics(
 						internalAdapterId)) {
@@ -145,8 +141,7 @@ public class GeoWaveFeatureSourceTest extends
 			FeatureTimeRangeStatistics timeRangeStats = null;
 			FeatureNumericRangeStatistics popStats = null;
 			while (stats.hasNext()) {
-				final DataStatistics<?> statsData = stats.next();
-				System.out.println(statsData.toString());
+				final InternalDataStatistics<?, ?, ?> statsData = stats.next();
 				if (statsData instanceof BoundingBoxDataStatistics) {
 					bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;
 				}
@@ -198,8 +193,8 @@ public class GeoWaveFeatureSourceTest extends
 	}
 
 	public void testPartial(
-			Populater populater,
-			String ext )
+			final Populater populater,
+			final String ext )
 			throws CQLException,
 			Exception {
 		final String typeName = "GeoWaveFeatureSourceTest_p" + ext;
@@ -252,6 +247,7 @@ public class GeoWaveFeatureSourceTest extends
 	private static class FWPopulater implements
 			Populater
 	{
+		@Override
 		public void populate(
 				final SimpleFeatureType type,
 				final DataStore dataStore )
@@ -326,6 +322,7 @@ public class GeoWaveFeatureSourceTest extends
 	private static class SourcePopulater implements
 			Populater
 	{
+		@Override
 		public void populate(
 				final SimpleFeatureType type,
 				final DataStore dataStore )
@@ -337,7 +334,7 @@ public class GeoWaveFeatureSourceTest extends
 
 			final Transaction transaction1 = new DefaultTransaction();
 
-			SimpleFeatureStore source = (SimpleFeatureStore) dataStore.getFeatureSource(type.getName());
+			final SimpleFeatureStore source = (SimpleFeatureStore) dataStore.getFeatureSource(type.getName());
 			final FeatureWriter<SimpleFeatureType, SimpleFeature> writer = dataStore.getFeatureWriter(
 					type.getTypeName(),
 					transaction1);

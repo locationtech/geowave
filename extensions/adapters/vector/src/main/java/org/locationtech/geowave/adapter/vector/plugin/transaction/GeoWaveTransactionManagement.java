@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,19 +21,19 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.Transaction;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.LinkedListMultimap;
 import com.google.common.collect.Multimap;
@@ -43,8 +43,8 @@ import com.google.common.collect.Multimap;
  * <p>
  * This is used to simulate the functionality of a database including
  * transaction independence.
- * 
- * 
+ *
+ *
  * @source $URL$
  */
 
@@ -56,14 +56,14 @@ public class GeoWaveTransactionManagement extends
 	protected static final Logger LOGGER = LoggerFactory.getLogger(GeoWaveTransactionManagement.class);
 
 	/** Map of modified features; by feature id */
-	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<String, ModifiedFeature>();
-	private final Map<String, SimpleFeature> addedFeatures = new ConcurrentHashMap<String, SimpleFeature>();
+	private final Map<String, ModifiedFeature> modifiedFeatures = new ConcurrentHashMap<>();
+	private final Map<String, SimpleFeature> addedFeatures = new ConcurrentHashMap<>();
 	private final Multimap<String, SimpleFeature> removedFeatures = LinkedListMultimap.create();
 
-	private Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = null;
+	private Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsCache = null;
 
 	/** List of added feature ids; values stored in added above */
-	private final Set<String> addedFidList = new HashSet<String>();
+	private final Set<String> addedFidList = new HashSet<>();
 
 	private int maxAdditionBufferSize = 10000;
 
@@ -98,7 +98,7 @@ public class GeoWaveTransactionManagement extends
 
 	/**
 	 * Create an empty Diff
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	public GeoWaveTransactionManagement(
@@ -121,7 +121,7 @@ public class GeoWaveTransactionManagement extends
 
 	/**
 	 * Check if modifiedFeatures and addedFeatures are empty.
-	 * 
+	 *
 	 * @return true if Diff is empty
 	 */
 	@Override
@@ -146,7 +146,7 @@ public class GeoWaveTransactionManagement extends
 
 	/**
 	 * Record a modification to the indicated fid
-	 * 
+	 *
 	 * @param fid
 	 * @param f
 	 *            replacement feature; null to indicate remove
@@ -327,7 +327,7 @@ public class GeoWaveTransactionManagement extends
 	private void flushAddsToStore(
 			final boolean autoCommitAdds )
 			throws IOException {
-		final Set<String> captureList = autoCommitAdds ? new HashSet<String>() : addedFidList;
+		final Set<String> captureList = autoCommitAdds ? new HashSet<>() : addedFidList;
 		components.write(
 				addedFeatures.values().iterator(),
 				captureList,
@@ -439,7 +439,7 @@ public class GeoWaveTransactionManagement extends
 	}
 
 	@Override
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics() {
+	public Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> getDataStatistics() {
 		if (statsCache == null) {
 			statsCache = super.getDataStatistics();
 		}
@@ -459,10 +459,14 @@ public class GeoWaveTransactionManagement extends
 
 			@Override
 			public boolean hasNext() {
-				if (limit != null && limit.intValue() > 0 && count > limit) return false;
+				if ((limit != null) && (limit.intValue() > 0) && (count > limit)) {
+					return false;
+				}
 				while (addedIt.hasNext() && (feature == null)) {
 					feature = addedIt.next();
-					if (!filter.evaluate(feature)) feature = null;
+					if (!filter.evaluate(feature)) {
+						feature = null;
+					}
 				}
 				while (it.hasNext() && (feature == null)) {
 					feature = it.next();
@@ -506,8 +510,7 @@ public class GeoWaveTransactionManagement extends
 			}
 
 			@Override
-			public void close()
-					throws IOException {
+			public void close() {
 				it.close();
 			}
 

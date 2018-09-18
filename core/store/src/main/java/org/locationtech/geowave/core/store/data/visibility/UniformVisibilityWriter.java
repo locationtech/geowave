@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data.visibility;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 
@@ -25,14 +24,14 @@ public class UniformVisibilityWriter<RowType> implements
 	final FieldVisibilityHandler<RowType, Object> uniformHandler;
 
 	public UniformVisibilityWriter(
-			FieldVisibilityHandler<RowType, Object> uniformHandler ) {
+			final FieldVisibilityHandler<RowType, Object> uniformHandler ) {
 		super();
 		this.uniformHandler = uniformHandler;
 	}
 
 	@Override
 	public FieldVisibilityHandler<RowType, Object> getFieldVisibilityHandler(
-			ByteArrayId fieldId ) {
+			final String fieldName ) {
 
 		return uniformHandler;
 	}

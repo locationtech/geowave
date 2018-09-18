@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,14 +16,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,15 +48,15 @@ public class StatsCompositionTool<T> implements
 
 	int updateCount = 0;
 	DataStatisticsStore statisticsStore;
-	List<DataStatisticsBuilder<T>> statisticsBuilders = null;
+	List<DataStatisticsBuilder<T, ?, ?>> statisticsBuilders = null;
 	final Object MUTEX = new Object();
 	protected boolean skipFlush = false;
 
 	public StatsCompositionTool(
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
-			final PrimaryIndex index,
-			final DataAdapter<T> adapter ) {
+			final Index index,
+			final DataTypeAdapter<T> adapter ) {
 		this.statisticsStore = statisticsStore;
 		this.init(
 				index,
@@ -66,14 +65,14 @@ public class StatsCompositionTool<T> implements
 	}
 
 	private void init(
-			final PrimaryIndex index,
-			final DataAdapter<T> adapter,
+			final Index index,
+			final DataTypeAdapter<T> adapter,
 			final DataStoreStatisticsProvider<T> statisticsProvider ) {
-		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsTypes();
-		statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
+		final StatisticsId[] statisticsIds = statisticsProvider.getSupportedStatistics();
+		statisticsBuilders = new ArrayList<>(
 				statisticsIds.length);
-		for (final ByteArrayId id : statisticsIds) {
-			statisticsBuilders.add(new DataStatisticsBuilder<T>(
+		for (final StatisticsId id : statisticsIds) {
+			statisticsBuilders.add(new DataStatisticsBuilder<>(
 					index,
 					adapter,
 					statisticsProvider,
@@ -99,7 +98,7 @@ public class StatsCompositionTool<T> implements
 			return;
 		}
 		synchronized (MUTEX) {
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
 				builder.entryDeleted(
 						entry,
 						kvs);
@@ -119,7 +118,7 @@ public class StatsCompositionTool<T> implements
 		}
 
 		synchronized (MUTEX) {
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
 				builder.entryScanned(
 						entry,
 						kv);
@@ -140,9 +139,9 @@ public class StatsCompositionTool<T> implements
 		}
 
 		synchronized (MUTEX) {
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-				for (final DataStatistics<T> s : statistics) {
+			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
+				final Collection<InternalDataStatistics<T, ?, ?>> statistics = (Collection) builder.getStatistics();
+				for (final InternalDataStatistics<T, ?, ?> s : statistics) {
 					// using a set and simply checking instanceof this is the
 					// simplest approach to enable per partition statistics
 					// within the current design
@@ -153,7 +152,8 @@ public class StatsCompositionTool<T> implements
 					// which is used by the stats manager within a feature data
 					// adapter etc.
 					if (s instanceof DataStatisticsSet) {
-						for (final DataStatistics<T> statInSet : ((DataStatisticsSet) s).getStatisticsSet()) {
+						for (final InternalDataStatistics<T, ?, ?> statInSet : ((DataStatisticsSet) s)
+								.getStatisticsSet()) {
 							statisticsStore.incorporateStatistics(statInSet);
 						}
 					}
@@ -175,8 +175,8 @@ public class StatsCompositionTool<T> implements
 		}
 
 		synchronized (MUTEX) {
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
+			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
+				final Collection<InternalDataStatistics<T, ?, ?>> statistics = (Collection) builder.getStatistics();
 				statistics.clear();
 			}
 		}
@@ -191,7 +191,7 @@ public class StatsCompositionTool<T> implements
 		}
 
 		synchronized (MUTEX) {
-			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
+			for (final DataStatisticsBuilder<T, ?, ?> builder : statisticsBuilders) {
 				builder.entryIngested(
 						entry,
 						kvs);

@@ -44,7 +44,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 
 public class TieredSFCIndexStrategyTest
 {
@@ -111,7 +111,7 @@ public class TieredSFCIndexStrategyTest
 
 		MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 				dataPerDimension1);
-		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createIndex(
 				new SpatialTemporalOptions()).getIndexStrategy();
 
 		final InsertionIds ids1 = strategy.getInsertionIds(indexedData);

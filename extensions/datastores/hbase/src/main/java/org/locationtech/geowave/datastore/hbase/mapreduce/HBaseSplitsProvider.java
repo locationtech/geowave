@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -31,15 +31,13 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 import org.locationtech.geowave.mapreduce.splits.GeoWaveRowRange;
@@ -59,13 +57,14 @@ public class HBaseSplitsProvider extends
 	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
-			final DistributableQuery query,
+			final QueryConstraints query,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex,
 			final String[] authorizations )
 			throws IOException {
 
@@ -81,7 +80,7 @@ public class HBaseSplitsProvider extends
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 		final int partitionKeyLength = indexStrategy.getPartitionKeyLength();
 
-		final String tableName = hbaseOperations.getQualifiedTableName(index.getId().getString());
+		final String tableName = hbaseOperations.getQualifiedTableName(index.getName());
 
 		// Build list of row ranges from query
 		List<ByteArrayRange> ranges = null;
@@ -91,17 +90,19 @@ public class HBaseSplitsProvider extends
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						maxSplits).getCompositeQueryRanges();
 			}
 			else {
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						-1).getCompositeQueryRanges();
 			}
 		}
 
-		final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges = new HashMap<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>>();
+		final Map<HRegionLocation, Map<HRegionInfo, List<ByteArrayRange>>> binnedRanges = new HashMap<>();
 		final RegionLocator regionLocator = hbaseOperations.getRegionLocator(tableName);
 
 		if (regionLocator == null) {
@@ -163,8 +164,8 @@ public class HBaseSplitsProvider extends
 			final String hostname = locationEntry.getKey().getHostname();
 
 			for (final Entry<HRegionInfo, List<ByteArrayRange>> regionEntry : locationEntry.getValue().entrySet()) {
-				final Map<ByteArrayId, SplitInfo> splitInfo = new HashMap<ByteArrayId, SplitInfo>();
-				final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+				final Map<String, SplitInfo> splitInfo = new HashMap<>();
+				final List<RangeLocationPair> rangeList = new ArrayList<>();
 
 				for (final ByteArrayRange range : regionEntry.getValue()) {
 					final GeoWaveRowRange gwRange = fromHBaseRange(
@@ -191,7 +192,7 @@ public class HBaseSplitsProvider extends
 
 				if (!rangeList.isEmpty()) {
 					splitInfo.put(
-							index.getId(),
+							index.getName(),
 							new SplitInfo(
 									index,
 									rangeList));
@@ -215,7 +216,7 @@ public class HBaseSplitsProvider extends
 		for (final HRegionLocation location : locations) {
 			Map<HRegionInfo, List<ByteArrayRange>> regionInfoMap = binnedRanges.get(location);
 			if (regionInfoMap == null) {
-				regionInfoMap = new HashMap<HRegionInfo, List<ByteArrayRange>>();
+				regionInfoMap = new HashMap<>();
 				binnedRanges.put(
 						location,
 						regionInfoMap);
@@ -224,7 +225,7 @@ public class HBaseSplitsProvider extends
 			final HRegionInfo regionInfo = location.getRegionInfo();
 			List<ByteArrayRange> rangeList = regionInfoMap.get(regionInfo);
 			if (rangeList == null) {
-				rangeList = new ArrayList<ByteArrayRange>();
+				rangeList = new ArrayList<>();
 				regionInfoMap.put(
 						regionInfo,
 						rangeList);
@@ -258,7 +259,7 @@ public class HBaseSplitsProvider extends
 
 			Map<HRegionInfo, List<ByteArrayRange>> regionInfoMap = binnedRanges.get(location);
 			if (regionInfoMap == null) {
-				regionInfoMap = new HashMap<HRegionInfo, List<ByteArrayRange>>();
+				regionInfoMap = new HashMap<>();
 				binnedRanges.put(
 						location,
 						regionInfoMap);
@@ -267,7 +268,7 @@ public class HBaseSplitsProvider extends
 			final HRegionInfo regionInfo = location.getRegionInfo();
 			List<ByteArrayRange> rangeList = regionInfoMap.get(regionInfo);
 			if (rangeList == null) {
-				rangeList = new ArrayList<ByteArrayRange>();
+				rangeList = new ArrayList<>();
 				regionInfoMap.put(
 						regionInfo,
 						rangeList);

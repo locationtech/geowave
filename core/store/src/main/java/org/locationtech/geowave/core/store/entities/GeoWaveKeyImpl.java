@@ -101,7 +101,7 @@ public class GeoWaveKeyImpl implements
 	}
 
 	@Override
-	public short getInternalAdapterId() {
+	public short getAdapterId() {
 		return internalAdapterId;
 	}
 

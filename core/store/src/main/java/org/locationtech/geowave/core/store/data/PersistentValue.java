@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,39 +10,37 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-
 /**
  * This represents a single value in the GeoWave data store as the value plus
  * the field ID pair
- * 
+ *
  * @param <T>
  *            The binding class for this value
  */
 public class PersistentValue<T>
 {
-	private final ByteArrayId id;
+	private final String fieldName;
 	private final T value;
 
 	public PersistentValue(
-			final ByteArrayId id,
+			final String fieldName,
 			final T value ) {
-		this.id = id;
+		this.fieldName = fieldName;
 		this.value = value;
 	}
 
 	/**
-	 * Return the field ID
-	 * 
-	 * @return the field ID
+	 * Return the field name
+	 *
+	 * @return the field name
 	 */
-	public ByteArrayId getId() {
-		return id;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	/**
 	 * Return the value
-	 * 
+	 *
 	 * @return the value
 	 */
 	public T getValue() {

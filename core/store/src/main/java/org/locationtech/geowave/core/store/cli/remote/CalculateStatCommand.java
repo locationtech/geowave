@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,20 +16,21 @@ import java.util.List;
 
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.base.BaseDataStore;
+import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,12 +50,17 @@ public class CalculateStatCommand extends
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CalculateStatCommand.class);
 
-	@Parameter(description = "<store name> <adapterId> <statId>")
-	private List<String> parameters = new ArrayList<String>();
+	@Parameter(description = "<store name> <datatype name> <stat type>")
+	private List<String> parameters = new ArrayList<>();
 
 	// The state we're re-caculating. Set in execute(), used in
 	// calculateStatistics()
-	private String statId;
+	private String statType;
+
+	@Parameter(names = {
+		"--fieldName"
+	}, description = "If the statistic is maintained per field, optionally provide a field name")
+	private String fieldName = "";
 
 	@Override
 	public void execute(
@@ -70,14 +76,18 @@ public class CalculateStatCommand extends
 			throws IOException {
 
 		try {
-
-			final AdapterIndexMappingStore mappingStore = storeOptions.createAdapterIndexMappingStore();
 			final DataStore dataStore = storeOptions.createDataStore();
+			if (!(dataStore instanceof BaseDataStore)) {
+				LOGGER.warn("Datastore type '" + dataStore.getClass().getName()
+						+ "' must be instance of BaseDataStore to recalculate stats");
+				return false;
+			}
+			final AdapterIndexMappingStore mappingStore = storeOptions.createAdapterIndexMappingStore();
 			final IndexStore indexStore = storeOptions.createIndexStore();
 
 			boolean isFirstTime = true;
-			for (final PrimaryIndex index : mappingStore.getIndicesForAdapter(
-					adapter.getInternalAdapterId()).getIndices(
+			for (final Index index : mappingStore.getIndicesForAdapter(
+					adapter.getAdapterId()).getIndices(
 					indexStore)) {
 
 				@SuppressWarnings({
@@ -90,10 +100,12 @@ public class CalculateStatCommand extends
 						index,
 						isFirstTime) {
 					@Override
-					public ByteArrayId[] getSupportedStatisticsTypes() {
-						return new ByteArrayId[] {
-							new ByteArrayId(
-									statId)
+					public StatisticsId[] getSupportedStatistics() {
+						return new StatisticsId[] {
+							new StatisticsId(
+									new BaseStatisticsType<>(
+											statType),
+									fieldName)
 						};
 					}
 				};
@@ -103,18 +115,18 @@ public class CalculateStatCommand extends
 						storeOptions.createDataStatisticsStore(),
 						index,
 						adapter)) {
-					try (CloseableIterator<?> entryIt = dataStore.query(
-							new QueryOptions(
-									adapter,
-									index,
-									(Integer) null,
-									statsTool,
-									authorizations),
-							(Query) null)) {
+
+					try (CloseableIterator<?> entryIt = ((BaseDataStore) dataStore).query(
+							QueryBuilder.newBuilder().addTypeName(
+									adapter.getTypeName()).indexName(
+									index.getName()).setAuthorizations(
+									authorizations).build(),
+							(ScanCallback) statsTool)) {
 						while (entryIt.hasNext()) {
 							entryIt.next();
 						}
 					}
+
 				}
 				isFirstTime = false;
 			}
@@ -136,12 +148,12 @@ public class CalculateStatCommand extends
 
 	public void setParameters(
 			final String storeName,
-			final String adapterId,
-			final String statId ) {
-		parameters = new ArrayList<String>();
+			final String dataTypeName,
+			final String statType ) {
+		parameters = new ArrayList<>();
 		parameters.add(storeName);
-		parameters.add(adapterId);
-		parameters.add(statId);
+		parameters.add(dataTypeName);
+		parameters.add(statType);
 	}
 
 	@Override
@@ -150,10 +162,10 @@ public class CalculateStatCommand extends
 		// Ensure we have all the required arguments
 		if (parameters.size() != 3) {
 			throw new ParameterException(
-					"Requires arguments: <store name> <adapterId> <statId>");
+					"Requires arguments: <store name> <datatype name> <stat type>");
 		}
 
-		statId = parameters.get(2);
+		statType = parameters.get(2);
 
 		super.run(
 				params,

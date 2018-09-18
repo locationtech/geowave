@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,15 +22,12 @@ import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterIndexMappingStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -117,39 +114,36 @@ public class StoreCopyJobRunner extends
 		final AdapterIndexMappingStore adapterIndexMappingStore = inputStoreOptions.createAdapterIndexMappingStore();
 		try (CloseableIterator<InternalDataAdapter<?>> adapterIt = inputStoreOptions.createAdapterStore().getAdapters()) {
 			while (adapterIt.hasNext()) {
-				InternalDataAdapter<?> dataAdapter = adapterIt.next();
+				final InternalDataAdapter<?> dataAdapter = adapterIt.next();
 
-				LOGGER.debug("Adding adapter to output config: "
-						+ StringUtils.stringFromBinary(dataAdapter.getAdapterId().getBytes()));
+				LOGGER.debug("Adding adapter to output config: " + dataAdapter.getTypeName());
 
 				GeoWaveOutputFormat.addDataAdapter(
 						job.getConfiguration(),
 						dataAdapter);
 
 				final AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(dataAdapter
-						.getInternalAdapterId());
+						.getAdapterId());
 
 				JobContextAdapterIndexMappingStore.addAdapterToIndexMapping(
 						job.getConfiguration(),
 						mapping);
-				JobContextInternalAdapterStore.addInternalDataAdapter(
+				JobContextInternalAdapterStore.addTypeName(
 						job.getConfiguration(),
-						dataAdapter.getAdapterId(),
-						dataAdapter.getInternalAdapterId());
+						dataAdapter.getTypeName(),
+						dataAdapter.getAdapterId());
 			}
 		}
 
-		try (CloseableIterator<Index<?, ?>> indexIt = inputStoreOptions.createIndexStore().getIndices()) {
+		try (CloseableIterator<Index> indexIt = inputStoreOptions.createIndexStore().getIndices()) {
 			while (indexIt.hasNext()) {
-				Index<?, ?> index = indexIt.next();
-				if (index instanceof PrimaryIndex) {
-					LOGGER.debug("Adding index to output config: "
-							+ StringUtils.stringFromBinary(index.getId().getBytes()));
+				final Index index = indexIt.next();
 
-					GeoWaveOutputFormat.addIndex(
-							job.getConfiguration(),
-							(PrimaryIndex) index);
-				}
+				LOGGER.debug("Adding index to output config: " + (index.getName()));
+
+				GeoWaveOutputFormat.addIndex(
+						job.getConfiguration(),
+						index);
 			}
 		}
 

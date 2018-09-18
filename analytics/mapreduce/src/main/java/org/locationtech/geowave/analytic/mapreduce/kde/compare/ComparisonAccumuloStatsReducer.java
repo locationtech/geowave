@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,8 +12,7 @@ package org.locationtech.geowave.analytic.mapreduce.kde.compare;
 
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 import javax.vecmath.Point2d;
 
@@ -22,8 +21,7 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.KDEJobRunner;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
@@ -61,7 +59,7 @@ public class ComparisonAccumuloStatsReducer extends
 	private int numXPosts;
 	private int numYPosts;
 	private String coverageName;
-	protected List<ByteArrayId> indexList;
+	protected String[] indexNames;
 
 	@Override
 	protected void reduce(
@@ -103,9 +101,8 @@ public class ComparisonAccumuloStatsReducer extends
 
 			context.write(
 					new GeoWaveOutputKey(
-							new ByteArrayId(
-									coverageName),
-							indexList),
+							coverageName,
+							indexNames),
 					RasterUtils.createCoverageTypeDouble(
 							coverageName,
 							bbox[0].x,
@@ -141,40 +138,61 @@ public class ComparisonAccumuloStatsReducer extends
 			final Context context )
 			throws IOException,
 			InterruptedException {
-		super.setup(context);
-		minLevels = context.getConfiguration().getInt(
-				KDEJobRunner.MIN_LEVEL_KEY,
-				1);
-		maxLevels = context.getConfiguration().getInt(
-				KDEJobRunner.MAX_LEVEL_KEY,
-				25);
-		coverageName = context.getConfiguration().get(
-				KDEJobRunner.COVERAGE_NAME_KEY,
-				"");
+		super.setup(
+				context);
+		minLevels = context
+				.getConfiguration()
+				.getInt(
+						KDEJobRunner.MIN_LEVEL_KEY,
+						1);
+		maxLevels = context
+				.getConfiguration()
+				.getInt(
+						KDEJobRunner.MAX_LEVEL_KEY,
+						25);
+		coverageName = context
+				.getConfiguration()
+				.get(
+						KDEJobRunner.COVERAGE_NAME_KEY,
+						"");
 		numLevels = (maxLevels - minLevels) + 1;
-		level = context.getConfiguration().getInt(
-				"mapred.task.partition",
-				0) + minLevels;
-		numXPosts = (int) Math.pow(
-				2,
-				level + 1);
-		numYPosts = (int) Math.pow(
-				2,
-				level);
+		level = context
+				.getConfiguration()
+				.getInt(
+						"mapred.task.partition",
+						0)
+				+ minLevels;
+		numXPosts = (int) Math
+				.pow(
+						2,
+						level + 1);
+		numYPosts = (int) Math
+				.pow(
+						2,
+						level);
 
-		totalKeys = context.getConfiguration().getLong(
-				"Entries per level.level" + level,
-				10);
-		final PrimaryIndex[] indices = JobContextIndexStore.getIndices(context);
-		indexList = new ArrayList<ByteArrayId>();
+		totalKeys = context
+				.getConfiguration()
+				.getLong(
+						"Entries per level.level" + level,
+						10);
+		final Index[] indices = JobContextIndexStore
+				.getIndices(
+						context);
+
 		if ((indices != null) && (indices.length > 0)) {
-			for (final PrimaryIndex index : indices) {
-				indexList.add(index.getId());
-			}
-
+			indexNames = Arrays
+					.stream(
+							indices)
+					.map(
+							i -> i.getName())
+					.toArray(
+							i -> new String[i]);
 		}
 		else {
-			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getId());
+			indexNames = new String[] {
+				new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName()
+			};
 		}
 	}
 }

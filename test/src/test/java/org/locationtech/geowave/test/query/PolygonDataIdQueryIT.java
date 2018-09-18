@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,8 +12,6 @@ package org.locationtech.geowave.test.query;
 
 import java.io.IOException;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -25,17 +23,18 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -43,6 +42,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -56,8 +57,7 @@ public class PolygonDataIdQueryIT extends
 	private static FeatureDataAdapter dataAdapter;
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
 	private static final String DATA_ID = "dataId";
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
@@ -67,6 +67,7 @@ public class PolygonDataIdQueryIT extends
 	})
 	protected DataStorePluginOptions dataStore;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStore;
 	}
@@ -75,13 +76,13 @@ public class PolygonDataIdQueryIT extends
 
 	@Test
 	public void testPolygonDataIdQueryResults() {
-		final CloseableIterator<SimpleFeature> matches = dataStore.createDataStore().query(
-				new QueryOptions(
-						dataAdapter,
-						TestUtils.DEFAULT_SPATIAL_INDEX),
-				new DataIdQuery(
-						new ByteArrayId(
-								StringUtils.stringToBinary(DATA_ID))));
+		final CloseableIterator<SimpleFeature> matches = (CloseableIterator) dataStore.createDataStore().query(
+				QueryBuilder.newBuilder().addTypeName(
+						dataAdapter.getTypeName()).indexName(
+						TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
+						new DataIdQuery(
+								new ByteArrayId(
+										StringUtils.stringToBinary(DATA_ID)))).build());
 		int numResults = 0;
 		while (matches.hasNext()) {
 			matches.next();
@@ -123,10 +124,12 @@ public class PolygonDataIdQueryIT extends
 	@Before
 	public void ingestSampleData()
 			throws IOException {
-		try (@SuppressWarnings("unchecked")
-		IndexWriter writer = dataStore.createDataStore().createWriter(
+		final DataStore store = dataStore.createDataStore();
+		store.addType(
 				dataAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (@SuppressWarnings("unchecked")
+		Writer writer = store.createWriter(dataAdapter.getTypeName())) {
 			writer.write(buildSimpleFeature(
 					DATA_ID,
 					GeometryUtils.GEOMETRY_FACTORY.createPolygon(new Coordinate[] {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -31,14 +31,13 @@ import org.locationtech.geowave.analytic.mapreduce.nn.NNJobRunner;
 import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce;
 import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
 import org.locationtech.geowave.analytic.param.ClusteringParameters;
-import org.locationtech.geowave.analytic.param.GlobalParameters;
-import org.locationtech.geowave.analytic.param.HullParameters;
-import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.ClusteringParameters.Clustering;
+import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters.Global;
+import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.analytic.param.HullParameters.Hull;
+import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters.Partition;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -168,12 +167,10 @@ public class DBScanJobRunner extends
 						new String[0],
 						namespaceURI,
 						ClusteringUtils.CLUSTERING_CRS));
-		ByteArrayId adapterByteId = new ByteArrayId(
-				adapterID);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				config,
-				adapterByteId,
-				InternalAdapterStoreImpl.getInitialInternalAdapterId(adapterByteId));
+				adapterID,
+				InternalAdapterStoreImpl.getInitialAdapterId(adapterID));
 
 		final Projection<?> projectionFunction = runTimeProperties.getClassInstance(
 				HullParameters.Hull.PROJECTION_CLASS,

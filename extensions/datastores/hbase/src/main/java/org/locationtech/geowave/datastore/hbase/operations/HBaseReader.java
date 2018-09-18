@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,6 +14,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.client.ResultScanner;
@@ -24,28 +25,22 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.filter.PageFilter;
 import org.apache.hadoop.hbase.security.visibility.Authorizations;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexUtils;
-import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
-import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.datastore.hbase.HBaseRow;
 import org.locationtech.geowave.datastore.hbase.filters.FixedCardinalitySkippingFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
 import org.locationtech.geowave.datastore.hbase.mapreduce.HBaseSplitsProvider;
 import org.locationtech.geowave.datastore.hbase.util.HBaseUtils;
-import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,7 +50,7 @@ import com.google.common.collect.Iterators;
 import com.google.inject.Provider;
 
 public class HBaseReader<T> implements
-		Reader<T>
+		RowReader<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseReader.class);
 
@@ -71,9 +66,6 @@ public class HBaseReader<T> implements
 
 	private final boolean wholeRowEncoding;
 	private final int partitionKeyLength;
-
-	private Mergeable aggTotal = null;
-	private boolean aggReady = false;
 
 	public HBaseReader(
 			final ReaderParams<T> readerParams,
@@ -93,9 +85,7 @@ public class HBaseReader<T> implements
 
 		if (readerParams.isServersideAggregation()) {
 			this.scanner = null;
-			this.scanIt = null;
-			aggTotal = operations.aggregateServerSide(readerParams);
-			aggReady = aggTotal != null;
+			scanIt = (Iterator) operations.aggregateServerSide(readerParams);
 		}
 		else {
 			initScanner();
@@ -131,62 +121,55 @@ public class HBaseReader<T> implements
 
 	@Override
 	public boolean hasNext() {
-		if (scanner != null) { // not aggregation
+		if (scanIt != null) {
 			return scanIt.hasNext();
 		}
-
-		// This is a broken scanner situation
-		if (!operations.isServerSideLibraryEnabled()) {
-			return false;
-		}
-
-		// ready for agg result
-		return aggReady;
+		return false;
 	}
 
 	@Override
 	public T next() {
-		if (scanner != null) { // not aggregation
+		if (scanIt != null) { // not aggregation
 			return scanIt.next();
 		}
-
-		// Otherwise, server-side aggregation
-		// Wrap the mergeable result in a GeoWaveRow and return it
-		aggReady = false;
-
-		return rowTransformer.apply(
-				Iterators.singletonIterator(new GeoWaveRowImpl(
-						null,
-						new GeoWaveValue[] {
-							new GeoWaveValueImpl(
-									null,
-									null,
-									URLClassloaderUtils.toBinary(aggTotal))
-						}))).next();
+		throw new NoSuchElementException();
 	}
 
 	protected void initRecordScanner() {
 		final FilterList filterList = new FilterList();
-		final ByteArrayRange range = HBaseSplitsProvider.toHBaseRange(recordReaderParams.getRowRange());
+		final ByteArrayRange range = HBaseSplitsProvider
+				.toHBaseRange(
+						recordReaderParams.getRowRange());
 
 		final Scan rscanner = scanProvider.get();
 
 		// Use this instead of setStartRow/setStopRow for single rowkeys
-		if (Bytes.equals(
-				range.getStart().getBytes(),
-				range.getEnd().getBytes())) {
-			rscanner.setRowPrefixFilter(range.getStart().getBytes());
+		if (Bytes
+				.equals(
+						range.getStart().getBytes(),
+						range.getEnd().getBytes())) {
+			rscanner
+					.setRowPrefixFilter(
+							range.getStart().getBytes());
 		}
 		else {
-			rscanner.setStartRow(range.getStart().getBytes());
+			rscanner
+					.setStartRow(
+							range.getStart().getBytes());
 
 			if (recordReaderParams.getRowRange().isEndSortKeyInclusive()) {
-				byte[] stopRowInclusive = HBaseUtils.getInclusiveEndKey(range.getEnd().getBytes());
+				final byte[] stopRowInclusive = HBaseUtils
+						.getInclusiveEndKey(
+								range.getEnd().getBytes());
 
-				rscanner.setStopRow(stopRowInclusive);
+				rscanner
+						.setStopRow(
+								stopRowInclusive);
 			}
 			else {
-				rscanner.setStopRow(range.getEnd().getBytes());
+				rscanner
+						.setStopRow(
+								range.getEnd().getBytes());
 			}
 		}
 
@@ -204,7 +187,7 @@ public class HBaseReader<T> implements
 						recordReaderParams,
 						filterList);
 			}
-			
+
 			addSkipFilter(
 					recordReaderParams,
 					filterList);
@@ -215,33 +198,48 @@ public class HBaseReader<T> implements
 				filterList);
 		if (!filterList.getFilters().isEmpty()) {
 			if (filterList.getFilters().size() > 1) {
-				rscanner.setFilter(filterList);
+				rscanner
+						.setFilter(
+								filterList);
 			}
 			else {
-				rscanner.setFilter(filterList.getFilters().get(
-						0));
+				rscanner
+						.setFilter(
+								filterList
+										.getFilters()
+										.get(
+												0));
 			}
 		}
 
 		Iterable<Result> resultScanner;
 		try {
-			resultScanner = operations.getScannedResults(
-					rscanner,
-					recordReaderParams.getIndex().getId().getString());
+			resultScanner = operations
+					.getScannedResults(
+							rscanner,
+							recordReaderParams.getIndex().getName());
 			if (resultScanner instanceof ResultScanner) {
 				this.scanner = (Closeable) resultScanner;
 			}
 		}
 		catch (final IOException e) {
-			LOGGER.error(
-					"Could not get the results from scanner",
-					e);
+			LOGGER
+					.error(
+							"Could not get the results from scanner",
+							e);
 			this.scanner = null;
 			this.scanIt = null;
 			return;
 		}
 
-		this.scanIt = this.rowTransformer.apply(Iterators.transform(resultScanner.iterator(), e -> new HBaseRow(e, partitionKeyLength)));
+		this.scanIt = this.rowTransformer
+				.apply(
+						Iterators
+								.transform(
+										resultScanner.iterator(),
+										e -> new HBaseRow(
+												e,
+												partitionKeyLength)));
 	}
 
 	protected void initScanner() {
@@ -261,7 +259,7 @@ public class HBaseReader<T> implements
 						readerParams,
 						filterList);
 			}
-			
+
 			addSkipFilter(
 					readerParams,
 					filterList);
@@ -272,51 +270,71 @@ public class HBaseReader<T> implements
 				filterList);
 
 		if (operations.parallelDecodeEnabled()) {
-			HBaseParallelDecoder<T> parallelScanner = new HBaseParallelDecoder<T>(
+			final HBaseParallelDecoder<T> parallelScanner = new HBaseParallelDecoder<>(
 					rowTransformer,
 					scanProvider,
 					operations,
 					readerParams.getQueryRanges().getCompositeQueryRanges(),
 					partitionKeyLength);
-	
+
 			if (!filterList.getFilters().isEmpty()) {
 				if (filterList.getFilters().size() > 1) {
-					parallelScanner.setFilter(filterList);
+					parallelScanner
+							.setFilter(
+									filterList);
 				}
 				else {
-					parallelScanner.setFilter(filterList.getFilters().get(
-							0));
+					parallelScanner
+							.setFilter(
+									filterList
+											.getFilters()
+											.get(
+													0));
 				}
 			}
 			try {
-				operations.startParallelScan(
-						parallelScanner,
-						readerParams.getIndex().getId().getString());
+				operations
+						.startParallelScan(
+								parallelScanner,
+								readerParams.getIndex().getName());
 				scanner = parallelScanner;
 			}
 			catch (final Exception e) {
-				LOGGER.error(
-						"Could not get the results from scanner",
-						e);
+				LOGGER
+						.error(
+								"Could not get the results from scanner",
+								e);
 				this.scanner = null;
 				this.scanIt = null;
 				return;
 			}
 			this.scanIt = parallelScanner;
-		} else {
-			final Scan multiScanner = getMultiScanner(filterList);
+		}
+		else {
+			final Scan multiScanner = getMultiScanner(
+					filterList);
 			try {
-				Iterable<Result> iterable = operations.getScannedResults(
-						multiScanner,
-						readerParams.getIndex().getId().getString());
+				final Iterable<Result> iterable = operations
+						.getScannedResults(
+								multiScanner,
+								readerParams.getIndex().getName());
 				if (iterable instanceof ResultScanner) {
 					this.scanner = (ResultScanner) iterable;
 				}
-				this.scanIt = rowTransformer.apply(Iterators.transform(iterable.iterator(), e -> new HBaseRow(e, partitionKeyLength)));
-			} catch (Exception e) {
-				LOGGER.error(
-						"Could not get the results from scanner",
-						e);
+				this.scanIt = rowTransformer
+						.apply(
+								Iterators
+										.transform(
+												iterable.iterator(),
+												e -> new HBaseRow(
+														e,
+														partitionKeyLength)));
+			}
+			catch (final Exception e) {
+				LOGGER
+						.error(
+								"Could not get the results from scanner",
+								e);
 				this.scanner = null;
 				this.scanIt = null;
 				return;
@@ -326,8 +344,8 @@ public class HBaseReader<T> implements
 	}
 
 	private static <T> void setLimit(
-			BaseReaderParams<T> readerParams,
-			FilterList filterList ) {
+			final BaseReaderParams<T> readerParams,
+			final FilterList filterList ) {
 		if ((readerParams.getLimit() != null) && (readerParams.getLimit() > 0)) {
 			// @formatter:off
 			// TODO in hbase 1.4.x there is a scan.getLimit() and
@@ -348,15 +366,15 @@ public class HBaseReader<T> implements
 	}
 
 	private void addSkipFilter(
-			BaseReaderParams<T> params,
-			FilterList filterList ) {
+			final BaseReaderParams<T> params,
+			final FilterList filterList ) {
 		// Add skipping filter if requested
 		if (params.getMaxResolutionSubsamplingPerDimension() != null) {
 			if (params.getMaxResolutionSubsamplingPerDimension().length != params
 					.getIndex()
 					.getIndexStrategy()
 					.getOrderedDimensionDefinitions().length) {
-				LOGGER.warn("Unable to subsample for table '" + params.getIndex().getId().getString()
+				LOGGER.warn("Unable to subsample for table '" + params.getIndex().getName()
 						+ "'. Subsample dimensions = " + params.getMaxResolutionSubsamplingPerDimension().length
 						+ " when indexed dimensions = "
 						+ params.getIndex().getIndexStrategy().getOrderedDimensionDefinitions().length);
@@ -374,8 +392,8 @@ public class HBaseReader<T> implements
 	}
 
 	private void addDistFilter(
-			BaseReaderParams<T> params,
-			FilterList filterList ) {
+			final BaseReaderParams<T> params,
+			final FilterList filterList ) {
 		final HBaseDistributableFilter hbdFilter = new HBaseDistributableFilter();
 
 		if (wholeRowEncoding) {
@@ -384,7 +402,7 @@ public class HBaseReader<T> implements
 
 		hbdFilter.setPartitionKeyLength(partitionKeyLength);
 
-		final List<DistributableQueryFilter> distFilters = Lists.newArrayList();
+		final List<QueryFilter> distFilters = Lists.newArrayList();
 		distFilters.add(params.getFilter());
 		hbdFilter.init(
 				distFilters,
@@ -395,8 +413,8 @@ public class HBaseReader<T> implements
 	}
 
 	private void addIndexFilter(
-			BaseReaderParams<T> params,
-			FilterList filterList ) {
+			final BaseReaderParams<T> params,
+			final FilterList filterList ) {
 		final List<MultiDimensionalCoordinateRangesArray> coords = params.getCoordinateRanges();
 		if ((coords != null) && !coords.isEmpty()) {
 			final HBaseNumericIndexStrategyFilter numericIndexFilter = new HBaseNumericIndexStrategyFilter(
@@ -436,9 +454,9 @@ public class HBaseReader<T> implements
 	}
 
 	private Provider<Scan> createScanProvider(
-			BaseReaderParams<T> readerParams,
-			HBaseOperations operations,
-			boolean clientSideRowMerging ) {
+			final BaseReaderParams<T> readerParams,
+			final HBaseOperations operations,
+			final boolean clientSideRowMerging ) {
 		final Authorizations authorizations;
 		if ((readerParams.getAdditionalAuthorizations() != null)
 				&& (readerParams.getAdditionalAuthorizations().length > 0)) {
@@ -452,7 +470,7 @@ public class HBaseReader<T> implements
 		final boolean cacheBlocks = operations.isEnableBlockCache();
 		final Integer limit = readerParams.getLimit();
 		final List<byte[]> families = Lists.newArrayList();
-		if ((readerParams.getAdapterIds() != null) && !readerParams.getAdapterIds().isEmpty()) {
+		if ((readerParams.getAdapterIds() != null) && (readerParams.getAdapterIds().length > 0)) {
 			for (final Short adapterId : readerParams.getAdapterIds()) {
 				// TODO: This prevents the client from sending bad
 				// column family
@@ -463,13 +481,13 @@ public class HBaseReader<T> implements
 				if (operations.verifyColumnFamily(
 						adapterId,
 						true, // because they're not added
-						readerParams.getIndex().getId().getString(),
+						readerParams.getIndex().getName(),
 						false)) {
 					families.add(StringUtils.stringToBinary(ByteArrayUtils.shortToString(adapterId)));
 				}
 				else {
 					LOGGER.warn("Adapter ID: " + adapterId + " not found in table: "
-							+ readerParams.getIndex().getId().getString());
+							+ readerParams.getIndex().getName());
 				}
 			}
 		}
@@ -495,7 +513,7 @@ public class HBaseReader<T> implements
 					scanner.setMaxVersions(HBaseOperations.DEFAULT_MAX_VERSIONS);
 				}
 
-				for (byte[] family : families) {
+				for (final byte[] family : families) {
 					scanner.addFamily(family);
 				}
 

@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.bigtable;
 
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.DataStoreFactory;
+import org.locationtech.geowave.core.store.BaseDataStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
@@ -27,7 +27,7 @@ import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class BigTableDataStoreFactory extends
-		DataStoreFactory
+		BaseDataStoreFactory
 {
 	public BigTableDataStoreFactory(
 			final String typeName,

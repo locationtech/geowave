@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -23,25 +23,19 @@ import org.junit.rules.TestName;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.analytic.AnalyticFeature;
 import org.locationtech.geowave.analytic.SimpleFeatureItemWrapperFactory;
-import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
-import org.locationtech.geowave.analytic.clustering.CentroidPairing;
-import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
-import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import org.locationtech.geowave.analytic.kmeans.AssociationNotification;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -57,13 +51,14 @@ public class NestedGroupCentroidAssignmentTest
 
 	private <T> void ingest(
 			final DataStore dataStore,
-			final WritableDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final DataTypeAdapter<T> adapter,
+			final Index index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			writer.write(entry);
 		}
 	}
@@ -102,7 +97,7 @@ public class NestedGroupCentroidAssignmentTest
 				1,
 				0);
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
@@ -227,19 +222,19 @@ public class NestedGroupCentroidAssignmentTest
 				level2B2G1Feature);
 
 		final SimpleFeatureItemWrapperFactory wrapperFactory = new SimpleFeatureItemWrapperFactory();
-		final CentroidManagerGeoWave<SimpleFeature> mananger = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManagerGeoWave<SimpleFeature> mananger = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
-						adapter.getAdapterId()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				storePluginOptions.createInternalAdapterStore().getAdapterId(
+						adapter.getTypeName()),
+				index.getName(),
 				"b1",
 				1);
 
-		final List<CentroidPairing<SimpleFeature>> capturedPairing = new ArrayList<CentroidPairing<SimpleFeature>>();
+		final List<CentroidPairing<SimpleFeature>> capturedPairing = new ArrayList<>();
 		final AssociationNotification<SimpleFeature> assoc = new AssociationNotification<SimpleFeature>() {
 			@Override
 			public void notify(
@@ -249,7 +244,7 @@ public class NestedGroupCentroidAssignmentTest
 		};
 
 		final FeatureCentroidDistanceFn distanceFn = new FeatureCentroidDistanceFn();
-		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1 = new NestedGroupCentroidAssignment<SimpleFeature>(
+		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1 = new NestedGroupCentroidAssignment<>(
 				mananger,
 				1,
 				"b1",
@@ -266,7 +261,7 @@ public class NestedGroupCentroidAssignmentTest
 						0).getCentroid().getID());
 		capturedPairing.clear();
 
-		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1L2G1 = new NestedGroupCentroidAssignment<SimpleFeature>(
+		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1L2G1 = new NestedGroupCentroidAssignment<>(
 				mananger,
 				2,
 				"b1",
@@ -284,7 +279,7 @@ public class NestedGroupCentroidAssignmentTest
 		capturedPairing.clear();
 
 		// level 2 and different parent grouping
-		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1L2G2 = new NestedGroupCentroidAssignment<SimpleFeature>(
+		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB1L2G2 = new NestedGroupCentroidAssignment<>(
 				mananger,
 				2,
 				"b1",
@@ -303,18 +298,19 @@ public class NestedGroupCentroidAssignmentTest
 
 		// level two with different batch than parent
 
-		final CentroidManagerGeoWave<SimpleFeature> mananger2 = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManagerGeoWave<SimpleFeature> mananger2 = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
-						adapter.getAdapterId()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				storePluginOptions.createInternalAdapterStore().getAdapterId(
+						adapter.getTypeName()),
+
+				index.getName(),
 				"b2",
 				2);
-		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB2L2 = new NestedGroupCentroidAssignment<SimpleFeature>(
+		final NestedGroupCentroidAssignment<SimpleFeature> assigmentB2L2 = new NestedGroupCentroidAssignment<>(
 				mananger2,
 				2,
 				"b1",

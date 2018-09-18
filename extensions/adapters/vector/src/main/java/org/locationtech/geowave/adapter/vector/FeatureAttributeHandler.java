@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,8 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -19,24 +17,23 @@ import org.opengis.feature.type.AttributeDescriptor;
 /**
  * This is used by the FeatureDataAdapter to handle GeoWave 'fields' using
  * SimpleFeature 'attributes.'
- * 
+ *
  */
 public class FeatureAttributeHandler implements
 		NativeFieldHandler<SimpleFeature, Object>
 {
 	protected final AttributeDescriptor attrDesc;
-	private final ByteArrayId fieldId;
+	private final String fieldName;
 
 	public FeatureAttributeHandler(
 			final AttributeDescriptor attrDesc ) {
 		this.attrDesc = attrDesc;
-		fieldId = new ByteArrayId(
-				StringUtils.stringToBinary(attrDesc.getLocalName()));
+		fieldName = attrDesc.getLocalName();
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	@Override

@@ -26,10 +26,10 @@ public interface DataWriter<RowType, FieldType>
 	/**
 	 * Get a writer for an individual field given the ID.
 	 * 
-	 * @param fieldId
+	 * @param fieldName
 	 *            the unique field ID
 	 * @return the writer for the given field
 	 */
 	public FieldWriter<RowType, FieldType> getWriter(
-			ByteArrayId fieldId );
+			String fieldName );
 }

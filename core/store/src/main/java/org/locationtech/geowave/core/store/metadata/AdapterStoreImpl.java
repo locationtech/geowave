@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -71,7 +71,7 @@ public class AdapterStoreImpl extends
 	@Override
 	protected InternalDataAdapter<?> fromValue(
 			final GeoWaveMetadata entry ) {
-		final WritableDataAdapter<?> adapter = (WritableDataAdapter<?>) PersistenceUtils.fromBinary(entry.getValue());
+		final DataTypeAdapter<?> adapter = (DataTypeAdapter<?>) PersistenceUtils.fromBinary(entry.getValue());
 		return new InternalDataAdapterWrapper<>(
 				adapter,
 				ByteArrayUtils.byteArrayToShort(entry.getPrimaryId()));
@@ -100,7 +100,7 @@ public class AdapterStoreImpl extends
 	protected ByteArrayId getPrimaryId(
 			final InternalDataAdapter<?> persistedObject ) {
 		return new ByteArrayId(
-				ByteArrayUtils.shortToByteArray(persistedObject.getInternalAdapterId()));
+				ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId()));
 	}
 
 	@Override

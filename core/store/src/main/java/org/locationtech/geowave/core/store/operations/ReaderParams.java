@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,12 +16,13 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class ReaderParams<T> extends
 		BaseReaderParams<T>
@@ -29,23 +30,24 @@ public class ReaderParams<T> extends
 	private final boolean isServersideAggregation;
 	private final boolean isClientsideRowMerging;
 	private final QueryRanges queryRanges;
-	private final DistributableQueryFilter filter;
+	private final QueryFilter filter;
 	private final List<MultiDimensionalCoordinateRangesArray> coordinateRanges;
 	private final List<MultiDimensionalNumericData> constraints;
 
 	public ReaderParams(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final List<Short> adapterIds,
+			final InternalAdapterStore internalAdapterStore,
+			final short[] adapterIds,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, InternalDataAdapter<?>> fieldSubsets,
+			final Pair<String[], InternalDataAdapter<?>> fieldSubsets,
 			final boolean isMixedVisibility,
 			final boolean isAuthorizationsLimiting,
 			final boolean isServersideAggregation,
 			final boolean isClientsideRowMerging,
 			final QueryRanges queryRanges,
-			final DistributableQueryFilter filter,
+			final QueryFilter filter,
 			final Integer limit,
 			final Integer maxRangeDecomposition,
 			final List<MultiDimensionalCoordinateRangesArray> coordinateRanges,
@@ -55,6 +57,7 @@ public class ReaderParams<T> extends
 		super(
 				index,
 				adapterStore,
+				internalAdapterStore,
 				adapterIds,
 				maxResolutionSubsamplingPerDimension,
 				aggregation,
@@ -73,10 +76,12 @@ public class ReaderParams<T> extends
 		this.constraints = constraints;
 	}
 
+	@Override
 	public List<MultiDimensionalCoordinateRangesArray> getCoordinateRanges() {
 		return coordinateRanges;
 	}
 
+	@Override
 	public List<MultiDimensionalNumericData> getConstraints() {
 		return constraints;
 	}
@@ -85,6 +90,7 @@ public class ReaderParams<T> extends
 		return isClientsideRowMerging;
 	}
 
+	@Override
 	public boolean isServersideAggregation() {
 		return isServersideAggregation;
 	}
@@ -93,7 +99,8 @@ public class ReaderParams<T> extends
 		return queryRanges;
 	}
 
-	public DistributableQueryFilter getFilter() {
+	@Override
+	public QueryFilter getFilter() {
 		return filter;
 	}
 }

@@ -105,7 +105,7 @@ public class URLClassloaderUtils
 		}
 	}
 
-	private static void initClassLoader()
+	public static void initClassLoader()
 			throws MalformedURLException {
 		synchronized (MUTEX) {
 			ClassLoader myCl = URLClassloaderUtils.class.getClassLoader();

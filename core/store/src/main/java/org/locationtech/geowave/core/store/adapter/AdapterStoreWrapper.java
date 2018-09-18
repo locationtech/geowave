@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
@@ -44,20 +44,20 @@ public class AdapterStoreWrapper implements
 
 	@Override
 	public InternalDataAdapter<?> getAdapter(
-			final Short internalAdapterId ) {
-		if (internalAdapterId == null) {
+			final Short adapterId ) {
+		if (adapterId == null) {
 			return null;
 		}
 		return new InternalDataAdapterWrapper<>(
-				(WritableDataAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
-				internalAdapterId);
+				(DataTypeAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId)),
+				adapterId);
 	}
 
 	@Override
 	public boolean adapterExists(
-			final Short internalAdapterId ) {
-		if (internalAdapterId != null) {
-			return internalAdapterStore.getAdapterId(internalAdapterId) != null;
+			final Short adapterId ) {
+		if (adapterId != null) {
+			return internalAdapterStore.getTypeName(adapterId) != null;
 
 		}
 		return false;
@@ -65,19 +65,19 @@ public class AdapterStoreWrapper implements
 
 	@Override
 	public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+		final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
 		return new CloseableIteratorWrapper<>(
 				it,
 				Iterators.transform(
 						it,
-						new Function<DataAdapter<?>, InternalDataAdapter<?>>() {
+						new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
 
 							@Override
 							public InternalDataAdapter<?> apply(
-									final DataAdapter<?> input ) {
+									final DataTypeAdapter<?> input ) {
 								return new InternalDataAdapterWrapper<>(
-										(WritableDataAdapter<?>) input,
-										internalAdapterStore.getInternalAdapterId(input.getAdapterId()));
+										(DataTypeAdapter<?>) input,
+										internalAdapterStore.getAdapterId(input.getTypeName()));
 							}
 
 						}));
@@ -91,9 +91,9 @@ public class AdapterStoreWrapper implements
 	@Override
 	public void removeAdapter(
 			final Short adapterId ) {
-		ByteArrayId id = internalAdapterStore.getAdapterId(adapterId);
-		if (id != null) {
-			adapterStore.removeAdapter(id);
+		final String typeName = internalAdapterStore.getTypeName(adapterId);
+		if (typeName != null) {
+			adapterStore.removeAdapter(typeName);
 		}
 	}
 

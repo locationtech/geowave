@@ -32,7 +32,7 @@ import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.opengis.feature.simple.SimpleFeature;
@@ -60,7 +60,7 @@ public class WFSTemporalQueryTest extends
 			GeoWavePluginException {
 		dataStore = createDataStore();
 		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions()));
+				.createIndex(new SpatialOptions()));
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");

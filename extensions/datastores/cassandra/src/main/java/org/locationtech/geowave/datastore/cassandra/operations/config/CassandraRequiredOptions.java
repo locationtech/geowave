@@ -25,7 +25,19 @@ public class CassandraRequiredOptions extends
 	private String contactPoints;
 
 	@ParametersDelegate
-	private final CassandraOptions additionalOptions = new CassandraOptions();
+	private CassandraOptions additionalOptions = new CassandraOptions();
+
+	public CassandraRequiredOptions() {}
+
+	public CassandraRequiredOptions(
+			String contactPoints,
+			String gwNamespace,
+			CassandraOptions additionalOptions ) {
+		super(
+				gwNamespace);
+		this.contactPoints = contactPoints;
+		this.additionalOptions = additionalOptions;
+	}
 
 	@Override
 	public StoreFactoryFamilySpi getStoreFactory() {

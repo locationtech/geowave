@@ -130,26 +130,22 @@ public class SpatialJoinCommand extends
 
 		// set DataStore options for runner
 		runner.setLeftStore(leftDataStore);
-		if (spatialJoinOptions.getLeftAdapterId() != null) {
-			runner.setLeftAdapterId(new ByteArrayId(
-					spatialJoinOptions.getLeftAdapterId()));
+		if (spatialJoinOptions.getLeftAdapterTypeName() != null) {
+			runner.setLeftAdapterTypeName(spatialJoinOptions.getLeftAdapterTypeName());
 		}
 
 		runner.setRightStore(rightDataStore);
-		if (spatialJoinOptions.getRightAdapterId() != null) {
-			runner.setRightAdapterId(new ByteArrayId(
-					spatialJoinOptions.getRightAdapterId()));
+		if (spatialJoinOptions.getRightAdapterTypeName() != null) {
+			runner.setRightAdapterTypeName(spatialJoinOptions.getRightAdapterTypeName());
 		}
 
 		runner.setOutputStore(outputDataStore);
-		if (spatialJoinOptions.getOutputLeftAdapterId() != null) {
-			runner.setOutputLeftAdapterId(new ByteArrayId(
-					spatialJoinOptions.getOutputLeftAdapterId()));
+		if (spatialJoinOptions.getOutputLeftAdapterTypeName() != null) {
+			runner.setOutputLeftAdapterTypeName(spatialJoinOptions.getOutputLeftAdapterTypeName());
 		}
 
-		if (spatialJoinOptions.getOutputRightAdapterId() != null) {
-			runner.setOutputRightAdapterId(new ByteArrayId(
-					spatialJoinOptions.getOutputRightAdapterId()));
+		if (spatialJoinOptions.getOutputRightAdapterTypeName() != null) {
+			runner.setOutputRightAdapterTypeName(spatialJoinOptions.getOutputRightAdapterTypeName());
 		}
 
 		// Finally call run to execute the join

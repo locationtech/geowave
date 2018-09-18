@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,12 +17,10 @@ import org.apache.commons.collections.IteratorUtils;
 import org.apache.commons.collections.Transformer;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.index.Index;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 /**
  * This class implements an index store by first checking the job context for an
@@ -35,7 +33,7 @@ public class JobContextIndexStore implements
 	private static final Class<?> CLASS = JobContextIndexStore.class;
 	private final JobContext context;
 	private final IndexStore persistentIndexStore;
-	private final Map<ByteArrayId, Index<?, ?>> indexCache = new HashMap<ByteArrayId, Index<?, ?>>();
+	private final Map<String, Index> indexCache = new HashMap<>();
 
 	public JobContextIndexStore(
 			final JobContext context,
@@ -46,46 +44,46 @@ public class JobContextIndexStore implements
 
 	@Override
 	public void addIndex(
-			final Index<?, ?> index ) {
+			final Index index ) {
 		indexCache.put(
-				index.getId(),
+				index.getName(),
 				index);
 	}
 
 	@Override
-	public Index<?, ?> getIndex(
-			final ByteArrayId indexId ) {
-		Index<?, ?> index = indexCache.get(indexId);
+	public Index getIndex(
+			final String indexName ) {
+		Index index = indexCache.get(indexName);
 		if (index == null) {
-			index = getIndexInternal(indexId);
+			index = getIndexInternal(indexName);
 		}
 		return index;
 	}
 
 	@Override
 	public boolean indexExists(
-			final ByteArrayId indexId ) {
-		if (indexCache.containsKey(indexId)) {
+			final String indexName ) {
+		if (indexCache.containsKey(indexName)) {
 			return true;
 		}
-		final Index<?, ?> index = getIndexInternal(indexId);
+		final Index index = getIndexInternal(indexName);
 		return index != null;
 	}
 
-	private Index<?, ?> getIndexInternal(
-			final ByteArrayId indexId ) {
+	private Index getIndexInternal(
+			final String indexName ) {
 		// first try to get it from the job context
-		Index<?, ?> index = getIndex(
+		Index index = getIndex(
 				context,
-				indexId);
+				indexName);
 		if (index == null) {
 			// then try to get it from the accumulo persistent store
-			index = persistentIndexStore.getIndex(indexId);
+			index = persistentIndexStore.getIndex(indexName);
 		}
 
 		if (index != null) {
 			indexCache.put(
-					indexId,
+					indexName,
 					index);
 		}
 		return index;
@@ -97,10 +95,10 @@ public class JobContextIndexStore implements
 	}
 
 	@Override
-	public CloseableIterator<Index<?, ?>> getIndices() {
-		final CloseableIterator<Index<?, ?>> it = persistentIndexStore.getIndices();
+	public CloseableIterator<Index> getIndices() {
+		final CloseableIterator<Index> it = persistentIndexStore.getIndices();
 		// cache any results
-		return new CloseableIteratorWrapper<Index<?, ?>>(
+		return new CloseableIteratorWrapper<Index>(
 				it,
 				IteratorUtils.transformedIterator(
 						it,
@@ -109,11 +107,9 @@ public class JobContextIndexStore implements
 							@Override
 							public Object transform(
 									final Object obj ) {
-								if (obj instanceof Index<?, ?>) {
-									indexCache.put(
-											((Index<?, ?>) obj).getId(),
-											(Index<?, ?>) obj);
-								}
+								indexCache.put(
+										((Index) obj).getName(),
+										(Index) obj);
 								return obj;
 							}
 						}));
@@ -121,23 +117,23 @@ public class JobContextIndexStore implements
 
 	public static void addIndex(
 			final Configuration config,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		GeoWaveConfiguratorBase.addIndex(
 				CLASS,
 				config,
 				index);
 	}
 
-	protected static PrimaryIndex getIndex(
+	protected static Index getIndex(
 			final JobContext context,
-			final ByteArrayId indexId ) {
+			final String indexName ) {
 		return GeoWaveConfiguratorBase.getIndex(
 				CLASS,
 				context,
-				indexId);
+				indexName);
 	}
 
-	public static PrimaryIndex[] getIndices(
+	public static Index[] getIndices(
 			final JobContext context ) {
 		return GeoWaveConfiguratorBase.getIndices(
 				CLASS,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,14 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.format.stanag4676;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,28 +29,26 @@ import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.jaitools.jts.CoordinateSequence2D;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.KeyValueData;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.format.stanag4676.image.ImageChip;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipDataAdapter;
 import org.locationtech.geowave.format.stanag4676.parser.NATO4676Decoder;
@@ -75,10 +70,12 @@ public class Stanag4676IngestPlugin extends
 		LocalFileIngestPlugin<Object>
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(Stanag4676IngestPlugin.class);
-	public final static PrimaryIndex IMAGE_CHIP_INDEX = new NullIndex(
+	public final static Index IMAGE_CHIP_INDEX = new NullIndex(
 			"IMAGERY_CHIPS");
 
-	private static final List<ByteArrayId> IMAGE_CHIP_AS_ID_LIST = Arrays.asList(IMAGE_CHIP_INDEX.getId());
+	private static final String[] IMAGE_CHIP_AS_ARRAY = new String[] {
+		IMAGE_CHIP_INDEX.getName()
+	};
 
 	@Override
 	public String[] getFileExtensionFilters() {
@@ -103,7 +100,7 @@ public class Stanag4676IngestPlugin extends
 		try {
 			return file.openConnection().getContentLength() > 0;
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.info(
 					"Unable to read URL for '" + file.getPath() + "'",
 					e);
@@ -129,17 +126,17 @@ public class Stanag4676IngestPlugin extends
 	@Override
 	public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 			final URL file,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 		return ingestWithMapper().toGeoWaveData(
 				toAvroObjects(
 						file).next(),
-				primaryIndexIds,
+				indexNames,
 				globalVisibility);
 	}
 
 	@Override
-	public WritableDataAdapter<Object>[] getDataAdapters(
+	public DataTypeAdapter<Object>[] getDataAdapters(
 			final String globalVisibility ) {
 		return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
 	}
@@ -204,13 +201,13 @@ public class Stanag4676IngestPlugin extends
 		}
 
 		@Override
-		public WritableDataAdapter<Object>[] getDataAdapters(
+		public DataTypeAdapter<Object>[] getDataAdapters(
 				final String globalVisibility ) {
 			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
 					.isEmpty()) ? new GlobalVisibilityHandler(
 					globalVisibility) : null;
 
-			return new WritableDataAdapter[] {
+			return new DataTypeAdapter[] {
 				new FeatureDataAdapter(
 						pointType,
 						fieldVisiblityHandler),
@@ -250,19 +247,19 @@ public class Stanag4676IngestPlugin extends
 			fileReader.setHandler(handler);
 			fileReader.read(new ByteBufferBackedInputStream(
 					input.getOriginalFile()));
-			return new CloseableIterator.Wrapper<KeyValueData<Text, Stanag4676EventWritable>>(
+			return new CloseableIterator.Wrapper<>(
 					handler.getIntermediateData().iterator());
 		}
 
 		@Override
 		public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 				final Text key,
-				final Collection<ByteArrayId> primaryIndexIds,
+				final String[] indexNames,
 				final String globalVisibility,
 				final Iterable<Stanag4676EventWritable> values ) {
-			final List<GeoWaveData<Object>> geowaveData = new ArrayList<GeoWaveData<Object>>();
+			final List<GeoWaveData<Object>> geowaveData = new ArrayList<>();
 			// sort events
-			final List<Stanag4676EventWritable> sortedEvents = new ArrayList<Stanag4676EventWritable>();
+			final List<Stanag4676EventWritable> sortedEvents = new ArrayList<>();
 
 			for (final Stanag4676EventWritable event : values) {
 				sortedEvents.add(Stanag4676EventWritable.clone(event));
@@ -285,8 +282,8 @@ public class Stanag4676IngestPlugin extends
 			int numTrackPoints = 0;
 			double distanceKm = 0.0;
 			EarthVector prevEv = null;
-			final ArrayList<Double> coord_sequence = new ArrayList<Double>();
-			final ArrayList<Double> detail_coord_sequence = new ArrayList<Double>();
+			final ArrayList<Double> coord_sequence = new ArrayList<>();
+			final ArrayList<Double> detail_coord_sequence = new ArrayList<>();
 			double minSpeed = Double.MAX_VALUE;
 			double maxSpeed = -Double.MAX_VALUE;
 
@@ -338,7 +335,7 @@ public class Stanag4676IngestPlugin extends
 
 					prevEv = currentEv;
 
-					Geometry geometry = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
+					final Geometry geometry = GeometryUtils.GEOMETRY_FACTORY.createPoint(new Coordinate(
 							event.Longitude.get(),
 							event.Latitude.get()));
 
@@ -404,9 +401,8 @@ public class Stanag4676IngestPlugin extends
 					ptBuilder.add(Integer.valueOf(event.PixelColumn.get()));
 
 					geowaveData.add(new GeoWaveData<Object>(
-							new ByteArrayId(
-									StringUtils.stringToBinary(Stanag4676Utils.TRACK_POINT)),
-							primaryIndexIds,
+							Stanag4676Utils.TRACK_POINT,
+							indexNames,
 							ptBuilder.buildFeature(event.TrackItemUUID.toString())));
 				}
 				// build collection of motion events
@@ -463,9 +459,8 @@ public class Stanag4676IngestPlugin extends
 					motionBuilder.add(Integer.valueOf(event.PixelColumn.get()));
 
 					geowaveData.add(new GeoWaveData<Object>(
-							new ByteArrayId(
-									StringUtils.stringToBinary(Stanag4676Utils.MOTION_POINT)),
-							primaryIndexIds,
+							Stanag4676Utils.MOTION_POINT,
+							indexNames,
 							motionBuilder.buildFeature(event.TrackItemUUID.toString())));
 				}
 				else if (event.EventType.get() == 2) {
@@ -502,9 +497,8 @@ public class Stanag4676IngestPlugin extends
 					missionFrameBuilder.add(event.FrameNumber.get());
 
 					geowaveData.add(new GeoWaveData<Object>(
-							new ByteArrayId(
-									StringUtils.stringToBinary(Stanag4676Utils.MISSION_FRAME)),
-							primaryIndexIds,
+							Stanag4676Utils.MISSION_FRAME,
+							indexNames,
 							missionFrameBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				else if (event.EventType.get() == 4) {
@@ -521,17 +515,16 @@ public class Stanag4676IngestPlugin extends
 					missionSummaryBuilder.add(event.ObjectClass.toString());
 
 					geowaveData.add(new GeoWaveData<Object>(
-							new ByteArrayId(
-									StringUtils.stringToBinary(Stanag4676Utils.MISSION_SUMMARY)),
-							primaryIndexIds,
+							Stanag4676Utils.MISSION_SUMMARY,
+							indexNames,
 							missionSummaryBuilder.buildFeature(UUID.randomUUID().toString())));
 				}
 				if (event.Image != null) {
 					final byte[] imageBytes = event.Image.getBytes();
 					if ((imageBytes != null) && (imageBytes.length > 0)) {
 						geowaveData.add(new GeoWaveData(
-								ImageChipDataAdapter.ADAPTER_ID,
-								IMAGE_CHIP_AS_ID_LIST,
+								ImageChipDataAdapter.ADAPTER_TYPE_NAME,
+								IMAGE_CHIP_AS_ARRAY,
 								new ImageChip(
 										mission,
 										trackUuid,
@@ -626,59 +619,51 @@ public class Stanag4676IngestPlugin extends
 				trackBuilder.add(objectClassTimes);
 
 				geowaveData.add(new GeoWaveData<Object>(
-						new ByteArrayId(
-								StringUtils.stringToBinary(Stanag4676Utils.TRACK)),
-						primaryIndexIds,
+						Stanag4676Utils.TRACK,
+						indexNames,
 						trackBuilder.buildFeature(trackUuid)));
 			}
-			return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
+			return new CloseableIterator.Wrapper<>(
 					geowaveData.iterator());
 		}
 
 		@Override
 		public CloseableIterator<GeoWaveData<Object>> toGeoWaveData(
 				final WholeFile input,
-				final Collection<ByteArrayId> primaryIndexIds,
+				final String[] indexNames,
 				final String globalVisibility ) {
 			try (CloseableIterator<KeyValueData<Text, Stanag4676EventWritable>> intermediateData = toIntermediateMapReduceData(input)) {
 				// this is much better done in the reducer of a map reduce job,
 				// this aggregation by track UUID is not memory efficient
-				final Map<Text, List<Stanag4676EventWritable>> trackUuidMap = new HashMap<Text, List<Stanag4676EventWritable>>();
+				final Map<Text, List<Stanag4676EventWritable>> trackUuidMap = new HashMap<>();
 				while (intermediateData.hasNext()) {
 					final KeyValueData<Text, Stanag4676EventWritable> next = intermediateData.next();
 					List<Stanag4676EventWritable> trackEvents = trackUuidMap.get(next.getKey());
 					if (trackEvents == null) {
-						trackEvents = new ArrayList<Stanag4676EventWritable>();
+						trackEvents = new ArrayList<>();
 						trackUuidMap.put(
 								next.getKey(),
 								trackEvents);
 					}
 					trackEvents.add(next.getValue());
 				}
-				final List<CloseableIterator<GeoWaveData<Object>>> iterators = new ArrayList<CloseableIterator<GeoWaveData<Object>>>();
+				final List<CloseableIterator<GeoWaveData<Object>>> iterators = new ArrayList<>();
 				for (final Entry<Text, List<Stanag4676EventWritable>> entry : trackUuidMap.entrySet()) {
 					iterators.add(toGeoWaveData(
 							entry.getKey(),
-							primaryIndexIds,
+							indexNames,
 							globalVisibility,
 							entry.getValue()));
 				}
-				return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
+				return new CloseableIterator.Wrapper<>(
 						Iterators.concat(iterators.iterator()));
 			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Error closing file '" + input.getOriginalFilePath() + "'",
-						e);
-			}
-			return new CloseableIterator.Wrapper<GeoWaveData<Object>>(
-					new ArrayList<GeoWaveData<Object>>().iterator());
 		}
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {
+	public Index[] getRequiredIndices() {
+		return new Index[] {
 			IMAGE_CHIP_INDEX
 		};
 	}

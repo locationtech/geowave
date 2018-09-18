@@ -16,9 +16,10 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public interface RowMergingDataAdapter<T, M extends Mergeable> extends
-		WritableDataAdapter<T>
+		DataTypeAdapter<T>
 {
 	public RowTransform<M> getTransform();
 

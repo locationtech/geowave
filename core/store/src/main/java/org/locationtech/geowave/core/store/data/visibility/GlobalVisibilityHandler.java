@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data.visibility;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 
@@ -18,7 +17,7 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
  * Basic implementation of a visibility handler where the decision of visibility
  * is not determined on a per field or even per row basis, but rather a single
  * visibility is globally assigned for every field written.
- * 
+ *
  * @param <RowType>
  * @param <FieldType>
  */
@@ -35,7 +34,7 @@ public class GlobalVisibilityHandler<RowType, FieldType> implements
 	@Override
 	public byte[] getVisibility(
 			final RowType rowValue,
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final FieldType fieldValue ) {
 		return StringUtils.stringToBinary(globalVisibility);
 	}

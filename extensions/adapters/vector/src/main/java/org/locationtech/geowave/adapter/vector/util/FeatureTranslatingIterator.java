@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector.util;
 
-import java.io.IOException;
 import java.util.Collection;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -52,8 +51,7 @@ public class FeatureTranslatingIterator implements
 	}
 
 	@Override
-	public void close()
-			throws IOException {
+	public void close() {
 		iteratorDelegate.close();
 
 	}

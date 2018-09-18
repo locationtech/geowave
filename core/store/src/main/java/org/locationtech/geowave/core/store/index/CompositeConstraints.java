@@ -14,10 +14,9 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.QueryConstraints;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.index.IndexConstraints;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class CompositeConstraints implements
 		FilterableConstraints
@@ -56,11 +55,11 @@ public class CompositeConstraints implements
 	}
 
 	@Override
-	public DistributableQueryFilter getFilter() {
-		final List<DistributableQueryFilter> filters = new ArrayList<DistributableQueryFilter>();
-		for (final QueryConstraints constraint : constraints) {
+	public QueryFilter getFilter() {
+		final List<QueryFilter> filters = new ArrayList<QueryFilter>();
+		for (final IndexConstraints constraint : constraints) {
 			if (constraint instanceof FilterableConstraints) {
-				DistributableQueryFilter filter = ((FilterableConstraints) constraint).getFilter();
+				QueryFilter filter = ((FilterableConstraints) constraint).getFilter();
 				if (filter != null) {
 					filters.add(filter);
 				}
@@ -72,15 +71,15 @@ public class CompositeConstraints implements
 		if (filters.size() == 1) {
 			return filters.get(0);
 		}
-		return new DistributableFilterList(
+		return new FilterList(
 				intersect,
 				filters);
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
+	public String getFieldName() {
 		return constraints.get(
-				0).getFieldId();
+				0).getFieldName();
 	}
 
 	@Override

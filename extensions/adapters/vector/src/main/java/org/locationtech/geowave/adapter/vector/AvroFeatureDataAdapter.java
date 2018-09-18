@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,10 +13,9 @@ package org.locationtech.geowave.adapter.vector;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -70,7 +69,7 @@ public class AvroFeatureDataAdapter extends
 	@Override
 	protected List<NativeFieldHandler<SimpleFeature, Object>> getFieldHandlersFromFeatureType(
 			final SimpleFeatureType type ) {
-		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(
+		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<>(
 				1);
 
 		nativeHandlers.add(new AvroFeatureAttributeHandler());
@@ -79,48 +78,48 @@ public class AvroFeatureDataAdapter extends
 
 	@Override
 	public FieldReader<Object> getReader(
-			final ByteArrayId fieldId ) {
-		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			final String fieldName ) {
+		if (fieldName.equals(AvroFeatureAttributeHandler.FIELD_NAME)) {
 			return new AvroFeatureReader();
 		}
-		return super.getReader(fieldId);
+		return super.getReader(fieldName);
 	}
 
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
-			final ByteArrayId fieldId ) {
-		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+			final String fieldName ) {
+		if (fieldName.equals(AvroFeatureAttributeHandler.FIELD_NAME)) {
 			return new AvroFeatureWriter();
 		}
-		return super.getWriter(fieldId);
+		return super.getWriter(fieldName);
 	}
 
 	@Override
 	public int getPositionOfOrderedField(
 			final CommonIndexModel model,
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 
-		if (fieldId.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
-			final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
-			return dimensionFieldIds.size();
+		if (fieldName.equals(AvroFeatureAttributeHandler.FIELD_NAME)) {
+			final List<String> dimensionFieldNames = getDimensionFieldNames(model);
+			return dimensionFieldNames.size();
 		}
 		return super.getPositionOfOrderedField(
 				model,
-				fieldId);
+				fieldName);
 	}
 
 	@Override
-	public ByteArrayId getFieldIdForPosition(
+	public String getFieldNameForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
-		if (position < dimensionFieldIds.size()) {
-			return dimensionFieldIds.get(position);
+		final List<String> dimensionFieldNames = getDimensionFieldNames(model);
+		if (position < dimensionFieldNames.size()) {
+			return dimensionFieldNames.get(position);
 		}
-		else if (position == dimensionFieldIds.size()) {
-			return AvroFeatureAttributeHandler.FIELD_ID;
+		else if (position == dimensionFieldNames.size()) {
+			return AvroFeatureAttributeHandler.FIELD_NAME;
 		}
-		return super.getFieldIdForPosition(
+		return super.getFieldNameForPosition(
 				model,
 				position);
 	}

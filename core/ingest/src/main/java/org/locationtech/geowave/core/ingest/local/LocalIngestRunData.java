@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,30 +11,21 @@
 package org.locationtech.geowave.core.ingest.local;
 
 import java.io.Closeable;
-import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.pool2.BaseKeyedPooledObjectFactory;
 import org.apache.commons.pool2.KeyedObjectPool;
 import org.apache.commons.pool2.PooledObject;
 import org.apache.commons.pool2.impl.DefaultPooledObject;
 import org.apache.commons.pool2.impl.GenericKeyedObjectPool;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
-import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
-import org.locationtech.geowave.core.store.memory.MemoryIndexStore;
 
 /**
  * This class maintains a pool of index writers keyed by the primary index. In
@@ -45,16 +36,16 @@ import org.locationtech.geowave.core.store.memory.MemoryIndexStore;
 public class LocalIngestRunData implements
 		Closeable
 {
-	private static class AdapterIdKeyWithIndices
+	private static class TypeNameKeyWithIndices
 	{
-		private ByteArrayId adapterId;
-		private PrimaryIndex[] indices;
+		private final String typeName;
+		private final Index[] indices;
 
-		public AdapterIdKeyWithIndices(
-				ByteArrayId adapterId,
-				PrimaryIndex[] indices ) {
+		public TypeNameKeyWithIndices(
+				final String typeName,
+				final Index[] indices ) {
 			super();
-			this.adapterId = adapterId;
+			this.typeName = typeName;
 			this.indices = indices;
 		}
 
@@ -62,47 +53,57 @@ public class LocalIngestRunData implements
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
+			result = (prime * result) + ((typeName == null) ? 0 : typeName.hashCode());
 			return result;
 		}
 
 		@Override
 		public boolean equals(
-				Object obj ) {
-			if (this == obj) return true;
-			if (obj == null) return false;
-			if (getClass() != obj.getClass()) return false;
-			AdapterIdKeyWithIndices other = (AdapterIdKeyWithIndices) obj;
-			if (adapterId == null) {
-				if (other.adapterId != null) return false;
+				final Object obj ) {
+			if (this == obj) {
+				return true;
 			}
-			else if (!adapterId.equals(other.adapterId)) return false;
+			if (obj == null) {
+				return false;
+			}
+			if (getClass() != obj.getClass()) {
+				return false;
+			}
+			final TypeNameKeyWithIndices other = (TypeNameKeyWithIndices) obj;
+			if (typeName == null) {
+				if (other.typeName != null) {
+					return false;
+				}
+			}
+			else if (!typeName.equals(other.typeName)) {
+				return false;
+			}
 			return true;
 		}
 	}
 
-	private final KeyedObjectPool<AdapterIdKeyWithIndices, IndexWriter> indexWriterPool;
+	private final KeyedObjectPool<TypeNameKeyWithIndices, Writer> indexWriterPool;
 
 	private final TransientAdapterStore adapterStore;
 	private final DataStore dataStore;
 
 	public LocalIngestRunData(
-			final List<WritableDataAdapter<?>> adapters,
+			final List<DataTypeAdapter<?>> adapters,
 			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		indexWriterPool = new GenericKeyedObjectPool<>(
 				new IndexWriterFactory());
 		adapterStore = new MemoryAdapterStore(
-				adapters.toArray(new WritableDataAdapter[0]));
+				adapters.toArray(new DataTypeAdapter[0]));
 	}
 
-	public WritableDataAdapter<?> getDataAdapter(
+	public DataTypeAdapter<?> getDataAdapter(
 			final GeoWaveData<?> data ) {
 		return data.getAdapter(adapterStore);
 	}
 
 	public void addAdapter(
-			final WritableDataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		adapterStore.addAdapter(adapter);
 	}
 
@@ -115,13 +116,13 @@ public class LocalIngestRunData implements
 	 * @return
 	 * @throws Exception
 	 */
-	public IndexWriter getIndexWriter(
-			final ByteArrayId adapterId,
-			List<PrimaryIndex> indices )
+	public Writer getIndexWriter(
+			final String typeName,
+			final List<Index> indices )
 			throws Exception {
-		return indexWriterPool.borrowObject(new AdapterIdKeyWithIndices(
-				adapterId,
-				indices.toArray(new PrimaryIndex[0])));
+		return indexWriterPool.borrowObject(new TypeNameKeyWithIndices(
+				typeName,
+				indices.toArray(new Index[0])));
 	}
 
 	/**
@@ -133,13 +134,13 @@ public class LocalIngestRunData implements
 	 * @throws Exception
 	 */
 	public void releaseIndexWriter(
-			final ByteArrayId adapterId,
-			final IndexWriter writer )
+			final String typeName,
+			final Writer writer )
 			throws Exception {
 		indexWriterPool.returnObject(
-				new AdapterIdKeyWithIndices(
-						adapterId,
-						new PrimaryIndex[0]),
+				new TypeNameKeyWithIndices(
+						typeName,
+						new Index[0]),
 				writer);
 	}
 
@@ -154,22 +155,23 @@ public class LocalIngestRunData implements
 	 * return new instances of an index writer for a given primary index.
 	 */
 	public class IndexWriterFactory extends
-			BaseKeyedPooledObjectFactory<AdapterIdKeyWithIndices, IndexWriter>
+			BaseKeyedPooledObjectFactory<TypeNameKeyWithIndices, Writer>
 	{
 
 		@Override
-		public IndexWriter<?> create(
-				final AdapterIdKeyWithIndices adapterWithIndices )
+		public synchronized Writer<?> create(
+				final TypeNameKeyWithIndices adapterWithIndices )
 				throws Exception {
-			return dataStore.createWriter(
-					(WritableDataAdapter<?>) adapterStore.getAdapter(adapterWithIndices.adapterId),
+			dataStore.addType(
+					adapterStore.getAdapter(adapterWithIndices.typeName),
 					adapterWithIndices.indices);
+			return dataStore.createWriter(adapterWithIndices.typeName);
 		}
 
 		@Override
 		public void destroyObject(
-				final AdapterIdKeyWithIndices key,
-				final PooledObject<IndexWriter> p )
+				final TypeNameKeyWithIndices key,
+				final PooledObject<Writer> p )
 				throws Exception {
 			super.destroyObject(
 					key,
@@ -178,9 +180,9 @@ public class LocalIngestRunData implements
 		}
 
 		@Override
-		public PooledObject<IndexWriter> wrap(
-				final IndexWriter writer ) {
-			return new DefaultPooledObject<IndexWriter>(
+		public PooledObject<Writer> wrap(
+				final Writer writer ) {
+			return new DefaultPooledObject<>(
 					writer);
 		}
 	}

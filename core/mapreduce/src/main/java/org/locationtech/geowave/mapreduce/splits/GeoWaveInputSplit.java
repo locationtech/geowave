@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,9 +20,7 @@ import java.util.Set;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.index.StringUtils;
 
 /**
  * The Class GeoWaveInputSplit. Encapsulates a GeoWave Index and a set of Row
@@ -32,28 +30,28 @@ public class GeoWaveInputSplit extends
 		InputSplit implements
 		Writable
 {
-	private Map<ByteArrayId, SplitInfo> splitInfo;
+	private Map<String, SplitInfo> splitInfo;
 	private String[] locations;
 
 	protected GeoWaveInputSplit() {
-		splitInfo = new HashMap<ByteArrayId, SplitInfo>();
+		splitInfo = new HashMap<>();
 		locations = new String[] {};
 	}
 
 	protected GeoWaveInputSplit(
-			final Map<ByteArrayId, SplitInfo> splitInfo,
+			final Map<String, SplitInfo> splitInfo,
 			final String[] locations ) {
 		this.splitInfo = splitInfo;
 		this.locations = locations;
 	}
 
-	public Set<ByteArrayId> getIndexIds() {
+	public Set<String> getIndexNames() {
 		return splitInfo.keySet();
 	}
 
 	public SplitInfo getInfo(
-			final ByteArrayId indexId ) {
-		return splitInfo.get(indexId);
+			final String indexName ) {
+		return splitInfo.get(indexName);
 	}
 
 	/**
@@ -64,7 +62,7 @@ public class GeoWaveInputSplit extends
 	public long getLength()
 			throws IOException {
 		long diff = 0;
-		for (final Entry<ByteArrayId, SplitInfo> indexEntry : splitInfo.entrySet()) {
+		for (final Entry<String, SplitInfo> indexEntry : splitInfo.entrySet()) {
 			for (final RangeLocationPair range : indexEntry.getValue().getRangeLocationPairs()) {
 				diff += (long) range.getCardinality();
 			}
@@ -83,18 +81,17 @@ public class GeoWaveInputSplit extends
 			final DataInput in )
 			throws IOException {
 		final int numIndices = in.readInt();
-		splitInfo = new HashMap<ByteArrayId, SplitInfo>(
+		splitInfo = new HashMap<>(
 				numIndices);
 		for (int i = 0; i < numIndices; i++) {
-			final int indexIdLength = in.readInt();
-			final byte[] indexIdBytes = new byte[indexIdLength];
-			in.readFully(indexIdBytes);
-			final ByteArrayId indexId = new ByteArrayId(
-					indexIdBytes);
+			final int indexNameLength = in.readInt();
+			final byte[] indexNameBytes = new byte[indexNameLength];
+			in.readFully(indexNameBytes);
+			final String indexName = StringUtils.stringFromBinary(indexNameBytes);
 			final SplitInfo si = new SplitInfo();
 			si.readFields(in);
 			splitInfo.put(
-					indexId,
+					indexName,
 					si);
 		}
 		final int numLocs = in.readInt();
@@ -109,10 +106,10 @@ public class GeoWaveInputSplit extends
 			final DataOutput out )
 			throws IOException {
 		out.writeInt(splitInfo.size());
-		for (final Entry<ByteArrayId, SplitInfo> range : splitInfo.entrySet()) {
-			final byte[] indexIdBytes = range.getKey().getBytes();
-			out.writeInt(indexIdBytes.length);
-			out.write(indexIdBytes);
+		for (final Entry<String, SplitInfo> range : splitInfo.entrySet()) {
+			final byte[] indexNameBytes = StringUtils.stringToBinary(range.getKey());
+			out.writeInt(indexNameBytes.length);
+			out.write(indexNameBytes);
 			final SplitInfo rangeList = range.getValue();
 			rangeList.write(out);
 		}

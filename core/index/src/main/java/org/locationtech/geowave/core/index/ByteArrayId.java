@@ -33,9 +33,9 @@ public class ByteArrayId implements
 
 	public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-	private final byte[] id;
+	protected byte[] id;
 	@SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
-	private transient String stringId;
+	protected transient String stringId;
 
 	public ByteArrayId() {
 		this(
@@ -194,20 +194,5 @@ public class ByteArrayId implements
 		// And increment the last one
 		newStopRow[newStopRow.length - 1]++;
 		return newStopRow;
-	}
-
-	public static List<ByteArrayId> transformStringList(
-			final List<String> str ) {
-		return Lists.transform(
-				str,
-				new Function<String, ByteArrayId>() {
-					@Override
-					public ByteArrayId apply(
-							@Nonnull
-							final String input ) {
-						return new ByteArrayId(
-								input);
-					}
-				});
 	}
 }

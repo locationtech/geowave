@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,68 +11,62 @@
 package org.locationtech.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.SortedIndexStrategy;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.adapter.statistics.IndexStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.IndexStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 public class IndexMetaDataSet<T> extends
-		AbstractDataStatistics<T> implements
+		AbstractDataStatistics<T, List<IndexMetaData>, IndexStatisticsQueryBuilder<List<IndexMetaData>>> implements
 		DeleteCallback<T, GeoWaveRow>
 {
 	private List<IndexMetaData> metaData;
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final IndexStatisticsType<List<IndexMetaData>> STATS_TYPE = new IndexStatisticsType<>(
 			"INDEX_METADATA");
 
 	public IndexMetaDataSet() {}
 
 	private IndexMetaDataSet(
 			final short internalDataAdapterId,
-			final ByteArrayId statisticsId,
+			final String indexName,
 			final List<IndexMetaData> metaData ) {
 		super(
 				internalDataAdapterId,
-				composeId(statisticsId));
+				STATS_TYPE,
+				indexName);
 		this.metaData = metaData;
 	}
 
 	public IndexMetaDataSet(
 			final short internalDataAdapterId,
-			final ByteArrayId statisticsId,
+			final String indexName,
 			final SortedIndexStrategy<?, ?> indexStrategy ) {
-		super(
+		this(
 				internalDataAdapterId,
-				composeId(statisticsId));
-		this.metaData = indexStrategy.createMetaData();
-	}
-
-	public static ByteArrayId composeId(
-			final ByteArrayId statisticsId ) {
-		return composeId(
-				STATS_TYPE.getString(),
-				statisticsId.getString());
+				indexName,
+				indexStrategy.createMetaData());
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
-		return new IndexMetaDataSet<T>(
-				internalDataAdapterId,
-				statisticsId,
+	public InternalDataStatistics<T, List<IndexMetaData>, IndexStatisticsQueryBuilder<List<IndexMetaData>>> duplicate() {
+		return new IndexMetaDataSet<>(
+				adapterId,
+				extendedId,
 				this.metaData);
 	}
 
@@ -140,53 +134,49 @@ public class IndexMetaDataSet<T> extends
 	}
 
 	public static IndexMetaData[] getIndexMetadata(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		IndexMetaDataSet combinedMetaData = null;
 		for (final short adapterId : adapterIdsToQuery) {
-			final IndexMetaDataSet adapterMetadata = (IndexMetaDataSet) statisticsStore.getDataStatistics(
-					adapterId,
-					IndexMetaDataSet.composeId(index.getId()),
-					authorizations);
-			if (combinedMetaData == null) {
-				combinedMetaData = adapterMetadata;
-			}
-			else {
-				combinedMetaData.merge(adapterMetadata);
+			try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> adapterMetadataIt = statisticsStore
+					.getDataStatistics(
+							adapterId,
+							index.getName(),
+							STATS_TYPE,
+							authorizations)) {
+				if (adapterMetadataIt.hasNext()) {
+					final IndexMetaDataSet adapterMetadata = (IndexMetaDataSet) adapterMetadataIt.next();
+					if (combinedMetaData == null) {
+						combinedMetaData = adapterMetadata;
+					}
+					else {
+						combinedMetaData.merge(adapterMetadata);
+					}
+				}
 			}
 		}
 		return combinedMetaData != null ? combinedMetaData.toArray() : null;
 	}
 
-	/**
-	 * Convert Index Metadata statistics to a JSON object
-	 */
+	@Override
+	protected String resultsName() {
+		return "indexHints";
+	}
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
-		jo.put(
-				"statisticsID",
-				statisticsId.getString());
-
-		final JSONArray mdArray = new JSONArray();
+	protected Object resultsValue() {
+		final Collection<Object> mdArray = new ArrayList<>();
 		for (final IndexMetaData imd : this.metaData) {
 			mdArray.add(imd.toJSONObject());
 		}
-		jo.put(
-				"metadata",
-				mdArray);
-
-		return jo;
+		return mdArray;
 	}
+
+	@Override
+	public List<IndexMetaData> getResult() {
+		return metaData;
+	}
+
 }

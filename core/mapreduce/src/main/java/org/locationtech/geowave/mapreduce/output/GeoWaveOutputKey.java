@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,21 +13,13 @@ package org.locationtech.geowave.mapreduce.output;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.hadoop.io.WritableComparable;
-import org.apache.hadoop.io.WritableComparator;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
-import org.locationtech.geowave.mapreduce.GeoWaveKey;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,154 +37,129 @@ public class GeoWaveOutputKey<T> implements
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	protected ByteArrayId adapterId;
-	private Collection<ByteArrayId> indexIds;
-	transient private WritableDataAdapter<T> adapter;
+	protected String typeName;
+	private String[] indexNames;
+	transient private DataTypeAdapter<T> adapter;
 
 	protected GeoWaveOutputKey() {
 		super();
 	}
 
 	public GeoWaveOutputKey(
-			final ByteArrayId adapterId,
-			final ByteArrayId indexId ) {
-		this.adapterId = adapterId;
-		indexIds = Arrays.asList(indexId);
+			final String typeName,
+			final String indexName ) {
+		this.typeName = typeName;
+		indexNames = new String[] {
+			indexName
+		};
 	}
 
 	public GeoWaveOutputKey(
-			final ByteArrayId adapterId,
-			final Collection<ByteArrayId> indexIds ) {
-		this.adapterId = adapterId;
-		this.indexIds = indexIds;
+			final String typeName,
+			final String[] indexNames ) {
+		this.typeName = typeName;
+		this.indexNames = indexNames;
 	}
 
 	public GeoWaveOutputKey(
-			final WritableDataAdapter<T> adapter,
-			final Collection<ByteArrayId> indexIds ) {
+			final DataTypeAdapter<T> adapter,
+			final String[] indexNames ) {
 		this.adapter = adapter;
-		this.indexIds = indexIds;
-		adapterId = adapter.getAdapterId();
+		this.indexNames = indexNames;
+		typeName = adapter.getTypeName();
 	}
 
-	public ByteArrayId getAdapterId() {
-		return adapterId;
+	public GeoWaveOutputKey(
+			final GeoWaveData<T> data ) {
+		this.adapter = data.getAdapter();
+		this.indexNames = data.getIndexNames();
+		this.typeName = data.getTypeName();
 	}
 
-	public void setAdapterId(
-			final ByteArrayId adapterId ) {
-		this.adapterId = adapterId;
+	public String getTypeName() {
+		return typeName;
 	}
 
-	public Collection<ByteArrayId> getIndexIds() {
-		return indexIds;
+	public void setTypeName(
+			final String typeName ) {
+		this.typeName = typeName;
 	}
 
-	public WritableDataAdapter<T> getAdapter(
+	public String[] getIndexNames() {
+		return indexNames;
+	}
+
+	public DataTypeAdapter<T> getAdapter(
 			final TransientAdapterStore adapterCache ) {
 		if (adapter != null) {
 			return adapter;
 		}
-		final DataAdapter<?> adapter = adapterCache.getAdapter(adapterId);
-		if (adapter instanceof WritableDataAdapter) {
-			return (WritableDataAdapter<T>) adapter;
-		}
-		LOGGER.warn("Adapter is not writable");
-		return null;
-	}
-
-	@Override
-	public int compareTo(
-			final GeoWaveOutputKey o ) {
-		final int adapterCompare = WritableComparator.compareBytes(
-				adapterId.getBytes(),
-				0,
-				adapterId.getBytes().length,
-				o.adapterId.getBytes(),
-				0,
-				o.adapterId.getBytes().length);
-		if (adapterCompare != 0) {
-			return adapterCompare;
-		}
-		final GeoWaveOutputKey other = (GeoWaveOutputKey) o;
-		final byte[] thisIndex = getConcatenatedIndexId();
-		final byte[] otherIndex = other.getConcatenatedIndexId();
-		return WritableComparator.compareBytes(
-				thisIndex,
-				0,
-				thisIndex.length,
-				otherIndex,
-				0,
-				otherIndex.length);
-	}
-
-	private byte[] getConcatenatedIndexId() {
-		final Iterator<ByteArrayId> iterator = indexIds.iterator();
-		byte[] bytes = iterator.next().getBytes();
-		if (indexIds.size() > 1) {
-			while (iterator.hasNext()) {
-				bytes = ArrayUtils.addAll(
-						bytes,
-						iterator.next().getBytes());
-			}
-		}
-		return bytes;
+		return (DataTypeAdapter<T>) adapterCache.getAdapter(typeName);
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((adapterId == null) ? 0 : adapterId.hashCode());
-		result = (prime * result) + ((indexIds == null) ? 0 : indexIds.hashCode());
+		result = prime * result + Arrays.hashCode(indexNames);
+		result = prime * result + ((typeName == null) ? 0 : typeName.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			final Object obj ) {
-		if (this == obj) {
-			return true;
+			Object obj ) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
+		if (!Arrays.equals(
+				indexNames,
+				other.indexNames)) return false;
+		if (typeName == null) {
+			if (other.typeName != null) return false;
 		}
-		if (!super.equals(obj)) {
-			return false;
+		else if (!typeName.equals(other.typeName)) return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(
+			final GeoWaveOutputKey o ) {
+		final int adapterCompare = typeName.compareTo(o.typeName);
+		if (adapterCompare != 0) {
+			return adapterCompare;
 		}
-		if (getClass() != obj.getClass()) {
-			return false;
+		final int lengthCompare = Integer.compare(
+				indexNames.length,
+				o.indexNames.length);
+		if (lengthCompare != 0) {
+			return lengthCompare;
 		}
-		final GeoWaveOutputKey other = (GeoWaveOutputKey) obj;
-		if (adapterId == null) {
-			if (other.adapterId != null) return false;
-		}
-		else if (!adapterId.equals(other.adapterId)) return false;
-		if (indexIds == null) {
-			if (other.indexIds != null) {
-				return false;
+		for (int i = 0; i < indexNames.length; i++) {
+			final int indexNameCompare = indexNames[i].compareTo(o.indexNames[i]);
+			if (indexNameCompare != 0) {
+				return indexNameCompare;
 			}
 		}
-		else if (!indexIds.equals(other.indexIds)) {
-			return false;
-		}
-		return true;
+		return 0;
 	}
 
 	@Override
 	public void readFields(
 			final DataInput input )
 			throws IOException {
-		final int adapterIdLength = input.readInt();
-		final byte[] adapterIdBinary = new byte[adapterIdLength];
-		input.readFully(adapterIdBinary);
-		adapterId = new ByteArrayId(
-				adapterIdBinary);
-		final byte indexIdCount = input.readByte();
-		indexIds = new ArrayList<ByteArrayId>();
-		for (int i = 0; i < indexIdCount; i++) {
-			final int indexIdLength = input.readInt();
-			final byte[] indexIdBytes = new byte[indexIdLength];
-			input.readFully(indexIdBytes);
-			indexIds.add(new ByteArrayId(
-					indexIdBytes));
+		final int typeNameLength = input.readInt();
+		final byte[] typeNameBinary = new byte[typeNameLength];
+		input.readFully(typeNameBinary);
+		typeName = StringUtils.stringFromBinary(typeNameBinary);
+		final byte indexNameCount = input.readByte();
+		indexNames = new String[indexNameCount];
+		for (int i = 0; i < indexNameCount; i++) {
+			final int indexNameLength = input.readInt();
+			final byte[] indexNameBytes = new byte[indexNameLength];
+			input.readFully(indexNameBytes);
+			indexNames[i] = StringUtils.stringFromBinary(indexNameBytes);
 		}
 	}
 
@@ -200,13 +167,14 @@ public class GeoWaveOutputKey<T> implements
 	public void write(
 			final DataOutput output )
 			throws IOException {
-		final byte[] adapterIdBinary = adapterId.getBytes();
-		output.writeInt(adapterIdBinary.length);
-		output.write(adapterIdBinary);
-		output.writeByte(indexIds.size());
-		for (final ByteArrayId indexId : indexIds) {
-			output.writeInt(indexId.getBytes().length);
-			output.write(indexId.getBytes());
+		final byte[] typeNameBinary = StringUtils.stringToBinary(typeName);
+		output.writeInt(typeNameBinary.length);
+		output.write(typeNameBinary);
+		output.writeByte(indexNames.length);
+		for (final String indexName : indexNames) {
+			final byte[] indexNameBytes = StringUtils.stringToBinary(indexName);
+			output.writeInt(indexNameBytes.length);
+			output.write(indexNameBytes);
 		}
 	}
 }

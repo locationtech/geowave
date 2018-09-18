@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -27,25 +27,26 @@ import java.util.Set;
 import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseQueryOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.FilterList;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.input.InputFormatIteratorWrapper;
@@ -53,7 +54,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Iterators;
 
 import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 
@@ -77,7 +77,7 @@ public class GeoWaveRecordReader<T> extends
 				final float startProgress,
 				final float endProgress ) {
 			this.startProgress = startProgress;
-			this.deltaProgress = endProgress - startProgress;
+			deltaProgress = endProgress - startProgress;
 		}
 
 		public float getOverallProgress(
@@ -94,7 +94,7 @@ public class GeoWaveRecordReader<T> extends
 	protected RangeLocationPair currentGeoWaveRangeIndexPair = null;
 	protected T currentValue = null;
 	protected GeoWaveInputSplit split;
-	protected DistributableQuery query;
+	protected QueryConstraints constraints;
 	protected BaseQueryOptions sanitizedQueryOptions;
 	protected boolean isOutputWritable;
 	protected TransientAdapterStore adapterStore;
@@ -105,20 +105,27 @@ public class GeoWaveRecordReader<T> extends
 	protected MapReduceDataStoreOperations operations;
 
 	public GeoWaveRecordReader(
-			final DistributableQuery query,
-			final QueryOptions queryOptions,
+			final CommonQueryOptions commonOptions,
+			final DataTypeQueryOptions<?> typeOptions,
+			final IndexQueryOptions indexOptions,
+			final QueryConstraints constraints,
 			final boolean isOutputWritable,
 			final TransientAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore aimStore,
 			final IndexStore indexStore,
 			final MapReduceDataStoreOperations operations ) {
-		this.query = query;
+		this.constraints = constraints;
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
 		// indices
 		sanitizedQueryOptions = new BaseQueryOptions(
-				(queryOptions == null) ? new QueryOptions() : queryOptions,
+				commonOptions,
+				typeOptions,
+				indexOptions,
+				new AdapterStoreWrapper(
+						adapterStore,
+						internalAdapterStore),
 				internalAdapterStore);
 		this.isOutputWritable = isOutputWritable;
 		this.adapterStore = adapterStore;
@@ -141,18 +148,18 @@ public class GeoWaveRecordReader<T> extends
 
 		numKeysRead = 0;
 
-		final Map<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>> iteratorsPerRange = new LinkedHashMap<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>>();
+		final Map<RangeLocationPair, CloseableIterator<Entry<GeoWaveInputKey, T>>> iteratorsPerRange = new LinkedHashMap<>();
 
-		final Set<ByteArrayId> indices = split.getIndexIds();
+		final Set<String> indices = split.getIndexNames();
 		BigDecimal sum = BigDecimal.ZERO;
 
-		final Map<RangeLocationPair, BigDecimal> incrementalRangeSums = new LinkedHashMap<RangeLocationPair, BigDecimal>();
+		final Map<RangeLocationPair, BigDecimal> incrementalRangeSums = new LinkedHashMap<>();
 
-		for (final ByteArrayId i : indices) {
+		for (final String i : indices) {
 			final SplitInfo splitInfo = split.getInfo(i);
 			List<QueryFilter> queryFilters = null;
-			if (query != null) {
-				queryFilters = query.createFilters(splitInfo.getIndex());
+			if (constraints != null) {
+				queryFilters = constraints.createFilters(splitInfo.getIndex());
 			}
 			for (final RangeLocationPair r : splitInfo.getRangeLocationPairs()) {
 				iteratorsPerRange.put(
@@ -171,7 +178,7 @@ public class GeoWaveRecordReader<T> extends
 		}
 
 		// finally we can compute percent progress
-		progressPerRange = new LinkedHashMap<RangeLocationPair, ProgressPerRange>();
+		progressPerRange = new LinkedHashMap<>();
 		RangeLocationPair prevRangeIndex = null;
 		float prevProgress = 0f;
 		if (sum.compareTo(BigDecimal.ZERO) > 0) {
@@ -205,7 +212,7 @@ public class GeoWaveRecordReader<T> extends
 			}
 		}
 		// concatenate iterators
-		iterator = new CloseableIteratorWrapper<Entry<GeoWaveInputKey, T>>(
+		iterator = new CloseableIteratorWrapper<>(
 				new Closeable() {
 					@Override
 					public void close()
@@ -229,20 +236,21 @@ public class GeoWaveRecordReader<T> extends
 	}
 
 	protected CloseableIterator<Entry<GeoWaveInputKey, T>> queryRange(
-			final PrimaryIndex index,
+			final Index index,
 			final GeoWaveRowRange range,
 			final List<QueryFilter> queryFilters,
 			final boolean mixedVisibility,
-			boolean authorizationsLimiting ) {
+			final boolean authorizationsLimiting ) {
 
 		final QueryFilter singleFilter = ((queryFilters == null) || queryFilters.isEmpty()) ? null : queryFilters
-				.size() == 1 ? queryFilters.get(0) : new FilterList<QueryFilter>(
+				.size() == 1 ? queryFilters.get(0) : new FilterList(
 				queryFilters);
-		final Reader reader = operations.createReader(new RecordReaderParams(
+		final RowReader reader = operations.createReader(new RecordReaderParams(
 				index,
 				new AdapterStoreWrapper(
 						adapterStore,
 						internalAdapterStore),
+				internalAdapterStore,
 				sanitizedQueryOptions.getAdapterIds(internalAdapterStore),
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
 				sanitizedQueryOptions.getAggregation(),
@@ -269,14 +277,7 @@ public class GeoWaveRecordReader<T> extends
 	@Override
 	public void close() {
 		if (iterator != null) {
-			try {
-				iterator.close();
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to close iterator",
-						e);
-			}
+			iterator.close();
 		}
 	}
 

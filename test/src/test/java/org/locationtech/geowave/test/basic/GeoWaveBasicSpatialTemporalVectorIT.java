@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,27 +13,21 @@ package org.locationtech.geowave.test.basic;
 import java.io.File;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.export.VectorLocalExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorLocalExportOptions;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
@@ -44,6 +38,8 @@ import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.opengis.feature.simple.SimpleFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
@@ -274,15 +270,15 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 
 		exportCommand.setParameters("test");
 
-		File configFile = File.createTempFile(
+		final File configFile = File.createTempFile(
 				"test_export",
 				null);
-		ManualOperationParams params = new ManualOperationParams();
+		final ManualOperationParams params = new ManualOperationParams();
 
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		AddStoreCommand addStore = new AddStoreCommand();
+		final AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test");
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(params);
@@ -295,9 +291,9 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 		try (CloseableIterator<InternalDataAdapter<?>> adapterIt = adapterStore.getAdapters()) {
 			while (adapterIt.hasNext()) {
 				final InternalDataAdapter<?> adapter = adapterIt.next();
-				final List<String> adapterIds = new ArrayList<String>();
-				adapterIds.add(adapter.getAdapterId().getString());
-				options.setAdapterIds(adapterIds);
+				options.setTypeNames(new String[] {
+					adapter.getTypeName()
+				});
 				if (adapter.getAdapter() instanceof GeotoolsFeatureDataAdapter) {
 					final GeotoolsFeatureDataAdapter gtAdapter = (GeotoolsFeatureDataAdapter) adapter.getAdapter();
 					final TimeDescriptors timeDesc = gtAdapter.getTimeDescriptors();
@@ -331,7 +327,7 @@ public class GeoWaveBasicSpatialTemporalVectorIT extends
 							CQL_DATE_FORMAT.format(startDate));
 					options.setOutputFile(new File(
 							exportDir,
-							adapter.getAdapterId().getString() + TEST_BASE_EXPORT_FILE_NAME));
+							adapter.getTypeName() + TEST_BASE_EXPORT_FILE_NAME));
 					options.setCqlFilter(cqlPredicate);
 					exportCommand.execute(params);
 				}

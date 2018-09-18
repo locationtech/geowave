@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -25,8 +25,6 @@ import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.vividsolutions.jts.geom.prep.PreparedGeometryFactory;
-
 import scala.Tuple2;
 
 public class GeoWaveRDDLoader
@@ -37,7 +35,7 @@ public class GeoWaveRDDLoader
 			final SparkContext sc,
 			final DataStorePluginOptions storeOptions )
 			throws IOException {
-		RDDOptions defaultOptions = new RDDOptions();
+		final RDDOptions defaultOptions = new RDDOptions();
 		return GeoWaveRDDLoader.loadRDD(
 				sc,
 				storeOptions,
@@ -49,7 +47,7 @@ public class GeoWaveRDDLoader
 			final DataStorePluginOptions storeOptions,
 			final RDDOptions rddOpts )
 			throws IOException {
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> rawRDD = GeoWaveRDDLoader.loadRawRDD(
+		final JavaPairRDD<GeoWaveInputKey, SimpleFeature> rawRDD = GeoWaveRDDLoader.loadRawRDD(
 				sc,
 				storeOptions,
 				rddOpts);
@@ -63,7 +61,7 @@ public class GeoWaveRDDLoader
 			final RDDOptions rddOpts,
 			final NumericIndexStrategy indexStrategy )
 			throws IOException {
-		GeoWaveRDD wrappedRDD = GeoWaveRDDLoader.loadRDD(
+		final GeoWaveRDD wrappedRDD = GeoWaveRDDLoader.loadRDD(
 				sc,
 				storeOptions,
 				rddOpts);
@@ -78,7 +76,7 @@ public class GeoWaveRDDLoader
 					indexStrategy);
 		}
 
-		GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
+		final GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
 				wrappedRDD,
 				broadcastStrategy);
 		return returnRDD;
@@ -89,7 +87,7 @@ public class GeoWaveRDDLoader
 			final GeoWaveRDD inputRDD,
 			final NumericIndexStrategy indexStrategy )
 			throws IOException {
-		if (inputRDD == null || !inputRDD.isLoaded()) {
+		if ((inputRDD == null) || !inputRDD.isLoaded()) {
 			return null;
 		}
 		// Index strategy can be expensive so we will broadcast it and store it
@@ -100,7 +98,7 @@ public class GeoWaveRDDLoader
 					indexStrategy);
 		}
 
-		GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
+		final GeoWaveIndexedRDD returnRDD = new GeoWaveIndexedRDD(
 				inputRDD,
 				broadcastStrategy);
 		return returnRDD;
@@ -126,7 +124,7 @@ public class GeoWaveRDDLoader
 			return null;
 		}
 
-		Configuration conf = new Configuration(
+		final Configuration conf = new Configuration(
 				sc.hadoopConfiguration());
 
 		GeoWaveInputFormat.setStoreOptions(
@@ -136,16 +134,13 @@ public class GeoWaveRDDLoader
 		if (rddOpts.getQuery() != null) {
 			GeoWaveInputFormat.setQuery(
 					conf,
-					rddOpts.getQuery());
+					rddOpts.getQuery(),
+					storeOptions.createAdapterStore(),
+					storeOptions.createInternalAdapterStore(),
+					storeOptions.createIndexStore());
 		}
 
-		if (rddOpts.getQueryOptions() != null) {
-			GeoWaveInputFormat.setQueryOptions(
-					conf,
-					rddOpts.getQueryOptions());
-		}
-
-		if (rddOpts.getMinSplits() > -1 || rddOpts.getMaxSplits() > -1) {
+		if ((rddOpts.getMinSplits() > -1) || (rddOpts.getMaxSplits() > -1)) {
 			GeoWaveInputFormat.setMinimumSplitCount(
 					conf,
 					rddOpts.getMinSplits());
@@ -154,7 +149,7 @@ public class GeoWaveRDDLoader
 					rddOpts.getMaxSplits());
 		}
 		else {
-			int defaultSplitsSpark = sc.getConf().getInt(
+			final int defaultSplitsSpark = sc.getConf().getInt(
 					"spark.default.parallelism",
 					-1);
 			// Attempt to grab default partition count for spark and split data
@@ -170,13 +165,13 @@ public class GeoWaveRDDLoader
 			}
 		}
 
-		RDD<Tuple2<GeoWaveInputKey, SimpleFeature>> rdd = sc.newAPIHadoopRDD(
+		final RDD<Tuple2<GeoWaveInputKey, SimpleFeature>> rdd = sc.newAPIHadoopRDD(
 				conf,
 				GeoWaveInputFormat.class,
 				GeoWaveInputKey.class,
 				SimpleFeature.class);
 
-		JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = JavaPairRDD.fromJavaRDD(rdd.toJavaRDD());
+		final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = JavaPairRDD.fromJavaRDD(rdd.toJavaRDD());
 
 		return javaRdd;
 	}

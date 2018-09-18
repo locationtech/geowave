@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -38,20 +38,19 @@ import org.locationtech.geowave.analytic.mapreduce.GeoWaveAnalyticJobRunner;
 import org.locationtech.geowave.analytic.mapreduce.MapReduceIntegration;
 import org.locationtech.geowave.analytic.mapreduce.SequenceFileInputFormatConfiguration;
 import org.locationtech.geowave.analytic.mapreduce.clustering.GroupAssignmentMapReduce;
-import org.locationtech.geowave.analytic.mapreduce.clustering.runner.GroupAssigmentJobRunner;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
-import org.locationtech.geowave.analytic.param.ParameterHelper;
 import org.locationtech.geowave.analytic.param.MapReduceParameters.MRConfig;
+import org.locationtech.geowave.analytic.param.ParameterHelper;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -197,30 +196,30 @@ public class GroupAssigmentJobRunnerTest
 				CommonParameters.Common.DISTANCE_FUNCTION_CLASS,
 				FeatureCentroidDistanceFn.class);
 
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
-		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		opts.setGeowaveNamespace(namespace);
-		PersistableStore store = new PersistableStore(
+		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 
 		runTimeProperties.store(
 				StoreParam.INPUT_STORE,
 				store);
 
-		FeatureDataAdapter adapter = new FeatureDataAdapter(
+		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		adapter.init(index);
 		pluginOptions.createAdapterStore().addAdapter(
 				new InternalDataAdapterWrapper<>(
 						adapter,
-						pluginOptions.createInternalAdapterStore().addAdapterId(
-								adapter.getAdapterId())));
+						pluginOptions.createInternalAdapterStore().addTypeName(
+								adapter.getTypeName())));
 	}
 
 	@Test

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,7 +12,7 @@ package org.locationtech.geowave.adapter.vector.index;
 
 import java.util.Set;
 
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

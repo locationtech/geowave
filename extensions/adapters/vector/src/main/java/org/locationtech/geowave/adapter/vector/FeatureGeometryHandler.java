@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -23,14 +22,14 @@ import com.vividsolutions.jts.geom.Geometry;
 /**
  * This class handles the internal responsibility of persisting JTS geometry to
  * and from a GeoWave common index field for SimpleFeature data.
- * 
+ *
  */
 public class FeatureGeometryHandler implements
 		IndexFieldHandler<SimpleFeature, GeometryWrapper, Object>
 {
 	private final FeatureAttributeHandler nativeGeometryHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
-	private final ByteArrayId[] nativeFieldIds;
+	private final String[] nativeFieldNames;
 
 	public FeatureGeometryHandler(
 			final AttributeDescriptor geometryAttrDesc ) {
@@ -45,14 +44,14 @@ public class FeatureGeometryHandler implements
 		nativeGeometryHandler = new FeatureAttributeHandler(
 				geometryAttrDesc);
 		this.visibilityHandler = visibilityHandler;
-		nativeFieldIds = new ByteArrayId[] {
-			nativeGeometryHandler.getFieldId()
+		nativeFieldNames = new String[] {
+			nativeGeometryHandler.getFieldName()
 		};
 	}
 
 	@Override
-	public ByteArrayId[] getNativeFieldIds() {
-		return nativeFieldIds;
+	public String[] getNativeFieldNames() {
+		return nativeFieldNames;
 	}
 
 	@Override
@@ -63,7 +62,7 @@ public class FeatureGeometryHandler implements
 		if (visibilityHandler != null) {
 			visibility = visibilityHandler.getVisibility(
 					row,
-					nativeGeometryHandler.getFieldId(),
+					nativeGeometryHandler.getFieldName(),
 					geometry);
 		}
 		else {
@@ -79,8 +78,8 @@ public class FeatureGeometryHandler implements
 	public PersistentValue<Object>[] toNativeValues(
 			final GeometryWrapper indexValue ) {
 		return new PersistentValue[] {
-			new PersistentValue<Geometry>(
-					nativeGeometryHandler.getFieldId(),
+			new PersistentValue<>(
+					nativeGeometryHandler.getFieldName(),
 					indexValue.getGeometry())
 		};
 	}

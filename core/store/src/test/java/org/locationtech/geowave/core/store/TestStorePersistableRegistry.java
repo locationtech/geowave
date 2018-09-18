@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
+import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter.TestIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestDimensionField;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel;
@@ -50,7 +51,10 @@ public class TestStorePersistableRegistry implements
 					ExampleNumericIndexStrategy::new),
 			new PersistableIdAndConstructor(
 					(short) 10207,
-					ExampleDimensionOne::new)
+					ExampleDimensionOne::new),
+			new PersistableIdAndConstructor(
+					(short) 10208,
+					TestIndexFieldHandler::new)
 		};
 	}
 }

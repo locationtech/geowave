@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,10 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector;
 
-import org.locationtech.geowave.core.geotime.TimeUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -25,14 +24,14 @@ import org.opengis.feature.type.AttributeDescriptor;
  * instants based on a temporal attribute (a Java binding class of Date or
  * Calendar for an attribute)to and from a GeoWave common index field for
  * SimpleFeature data.
- * 
+ *
  */
 public class FeatureTimestampHandler implements
 		IndexFieldHandler<SimpleFeature, Time, Object>
 {
 	private final FeatureAttributeHandler nativeTimestampHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
-	private final ByteArrayId[] nativeFieldIds;
+	private final String[] nativeFieldNames;
 
 	public FeatureTimestampHandler(
 			final AttributeDescriptor timestampAttrDesc ) {
@@ -47,14 +46,14 @@ public class FeatureTimestampHandler implements
 		nativeTimestampHandler = new FeatureAttributeHandler(
 				timestampAttrDesc);
 		this.visibilityHandler = visibilityHandler;
-		nativeFieldIds = new ByteArrayId[] {
-			nativeTimestampHandler.getFieldId()
+		nativeFieldNames = new String[] {
+			nativeTimestampHandler.getFieldName()
 		};
 	}
 
 	@Override
-	public ByteArrayId[] getNativeFieldIds() {
-		return nativeFieldIds;
+	public String[] getNativeFieldNames() {
+		return nativeFieldNames;
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public class FeatureTimestampHandler implements
 		if (visibilityHandler != null) {
 			visibility = visibilityHandler.getVisibility(
 					row,
-					nativeTimestampHandler.getFieldId(),
+					nativeTimestampHandler.getFieldName(),
 					object);
 		}
 		else {
@@ -85,8 +84,8 @@ public class FeatureTimestampHandler implements
 				bindingClass,
 				(long) indexValue.toNumericData().getCentroid());
 		return new PersistentValue[] {
-			new PersistentValue<Object>(
-					nativeTimestampHandler.getFieldId(),
+			new PersistentValue<>(
+					nativeTimestampHandler.getFieldName(),
 					obj)
 		};
 	}

@@ -332,7 +332,7 @@ public class DBScanMapReduce
 									// unlikely that the value for internal
 									// adapter ID even matters, but if it does
 									// this is the best effort
-									InternalAdapterStoreImpl.getInitialInternalAdapterId(outputAdapter.getAdapterId()),
+									InternalAdapterStoreImpl.getInitialAdapterId(outputAdapter.getTypeName()),
 									new ByteArrayId(
 											newPolygonFeature.getID())),
 							output);

@@ -12,9 +12,9 @@ package org.locationtech.geowave.adapter.vector.ingest;
 
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.feature.simple.SimpleFeature;
 
 abstract public class AbstractSimpleFeatureIngestFormat<I> implements
@@ -23,7 +23,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	protected final SimpleFeatureIngestOptions myOptions = new SimpleFeatureIngestOptions();
 
 	private AbstractSimpleFeatureIngestPlugin<I> getInstance(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		AbstractSimpleFeatureIngestPlugin<I> myInstance = newPluginInstance(options);
 		myInstance.setFilterProvider(myOptions.getCqlFilterOptionProvider());
 		myInstance.setTypeNameProvider(myOptions.getTypeNameOptionProvider());
@@ -33,23 +33,23 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	}
 
 	abstract protected AbstractSimpleFeatureIngestPlugin<I> newPluginInstance(
-			IngestFormatOptionProvider options );
+			IngestFormatOptions options );
 
 	@Override
 	public AvroFormatPlugin<I, SimpleFeature> createAvroFormatPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return getInstance(options);
 	}
 
 	@Override
 	public IngestFromHdfsPlugin<I, SimpleFeature> createIngestFromHdfsPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return getInstance(options);
 	}
 
 	@Override
 	public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return getInstance(options);
 	}
 
@@ -58,7 +58,7 @@ abstract public class AbstractSimpleFeatureIngestFormat<I> implements
 	 * singleton instance to actually allow multiple instances per format.
 	 */
 	@Override
-	public IngestFormatOptionProvider createOptionsInstances() {
+	public IngestFormatOptions createOptionsInstances() {
 		myOptions.setPluginOptions(internalGetIngestFormatOptionProviders());
 		return myOptions;
 	}

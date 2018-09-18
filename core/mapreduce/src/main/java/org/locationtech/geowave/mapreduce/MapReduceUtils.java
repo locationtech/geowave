@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,23 +12,22 @@ package org.locationtech.geowave.mapreduce;
 
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 
 public class MapReduceUtils
 {
-	public static List<ByteArrayId> idsFromAdapters(
-			List<DataAdapter<Object>> adapters ) {
+	public static List<String> idsFromAdapters(
+			final List<DataTypeAdapter<Object>> adapters ) {
 		return Lists.transform(
 				adapters,
-				new Function<DataAdapter<Object>, ByteArrayId>() {
+				new Function<DataTypeAdapter<Object>, String>() {
 					@Override
-					public ByteArrayId apply(
-							final DataAdapter<Object> adapter ) {
-						return adapter == null ? new ByteArrayId() : adapter.getAdapterId();
+					public String apply(
+							final DataTypeAdapter<Object> adapter ) {
+						return adapter == null ? "" : adapter.getTypeName();
 					}
 				});
 	}

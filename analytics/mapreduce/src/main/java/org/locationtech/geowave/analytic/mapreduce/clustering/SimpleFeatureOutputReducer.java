@@ -95,7 +95,7 @@ public class SimpleFeatureOutputReducer extends
 										// the value for internal adapter ID
 										// even matters, but if it does this is
 										// the best effort
-					InternalAdapterStoreImpl.getInitialInternalAdapterId(outputAdapter.getAdapterId()));
+					InternalAdapterStoreImpl.getInitialAdapterId(outputAdapter.getTypeName()));
 			final SimpleFeature feature = getSimpleFeature(
 					key,
 					valIt.next());

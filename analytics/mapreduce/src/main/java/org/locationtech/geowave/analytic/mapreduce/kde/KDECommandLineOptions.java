@@ -19,8 +19,8 @@ public class KDECommandLineOptions
 	@Parameter(names = "--featureType", required = true, description = "The name of the feature type to run a KDE on")
 	private String featureType;
 
-	@Parameter(names = "--indexId", description = "An optional index ID to filter the input data")
-	private String indexId;
+	@Parameter(names = "--indexName", description = "An optional index name to filter the input data")
+	private String indexName;
 
 	@Parameter(names = "--minLevel", required = true, description = "The min level to run a KDE at")
 	private Integer minLevel;
@@ -63,8 +63,8 @@ public class KDECommandLineOptions
 
 	public KDECommandLineOptions() {}
 
-	public String getIndexId() {
-		return indexId;
+	public String getIndexName() {
+		return indexName;
 	}
 
 	public String getFeatureType() {
@@ -114,7 +114,7 @@ public class KDECommandLineOptions
 
 	public void setIndexId(
 			String indexId ) {
-		this.indexId = indexId;
+		this.indexName = indexId;
 	}
 
 	public void setMinLevel(

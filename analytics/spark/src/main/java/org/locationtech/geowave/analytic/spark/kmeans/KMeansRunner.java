@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,7 +15,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.spark.SparkConf;
 import org.apache.spark.api.java.JavaRDD;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.mllib.clustering.KMeans;
@@ -25,25 +24,21 @@ import org.apache.spark.sql.SparkSession;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.GeoWaveSparkConf;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.analytic.spark.RDDUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -74,7 +69,7 @@ public class KMeansRunner
 	private int numIterations = 20;
 	private double epsilon = -1.0;
 	private String cqlFilter = null;
-	private String adapterId = null;
+	private String typeName = null;
 	private String timeField = null;
 	private ScaledTemporalRange scaledTimeRange = null;
 	private ScaledTemporalRange scaledRange = null;
@@ -127,16 +122,11 @@ public class KMeansRunner
 		}
 
 		if (isUseTime()) {
-			ByteArrayId adapterByte = null;
-			if (adapterId != null) {
-				adapterByte = new ByteArrayId(
-						adapterId);
-			}
 
 			scaledRange = KMeansUtils.setRunnerTimeParams(
 					this,
 					inputDataStore,
-					adapterByte);
+					typeName);
 
 			if (scaledRange == null) {
 				LOGGER.error("Failed to set time params for kmeans. Please specify a valid feature type.");
@@ -146,20 +136,18 @@ public class KMeansRunner
 		}
 
 		// Retrieve the feature adapters
-		List<ByteArrayId> featureAdapterIds;
+		final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		List<String> featureTypeNames;
 
 		// If provided, just use the one
-		if (adapterId != null) {
-			featureAdapterIds = new ArrayList<>();
-			featureAdapterIds.add(new ByteArrayId(
-					adapterId));
+		if (typeName != null) {
+			featureTypeNames = new ArrayList<>();
+			featureTypeNames.add(typeName);
 		}
 		else { // otherwise, grab all the feature adapters
-			featureAdapterIds = FeatureDataUtils.getFeatureAdapterIds(inputDataStore);
+			featureTypeNames = FeatureDataUtils.getFeatureTypeNames(inputDataStore);
 		}
-
-		final QueryOptions queryOptions = new QueryOptions();
-		queryOptions.setAdapterIds(featureAdapterIds);
+		bldr.setTypeNames(featureTypeNames.toArray(new String[0]));
 
 		// This is required due to some funkiness in GeoWaveInputFormat
 		final PersistentAdapterStore adapterStore = inputDataStore.createAdapterStore();
@@ -170,23 +158,21 @@ public class KMeansRunner
 		// queryOptions.getAdaptersArray(adapterStore);
 
 		// Add a spatial filter if requested
-		DistributableQuery query = null;
 		try {
 			if (cqlFilter != null) {
 				Geometry bbox = null;
-				ByteArrayId cqlAdapterId;
-				if (adapterId == null) {
-					cqlAdapterId = featureAdapterIds.get(0);
+				String cqlTypeName;
+				if (typeName == null) {
+					cqlTypeName = featureTypeNames.get(0);
 				}
 				else {
-					cqlAdapterId = new ByteArrayId(
-							adapterId);
+					cqlTypeName = typeName;
 				}
 
-				short internalAdpaterId = internalAdapterStore.getInternalAdapterId(cqlAdapterId);
+				final short adapterId = internalAdapterStore.getAdapterId(cqlTypeName);
 
-				final DataAdapter<?> adapter = adapterStore.getAdapter(
-						internalAdpaterId).getAdapter();
+				final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
+						adapterId).getAdapter();
 
 				if (adapter instanceof FeatureDataAdapter) {
 					final String geometryAttribute = ((FeatureDataAdapter) adapter)
@@ -206,8 +192,8 @@ public class KMeansRunner
 				}
 
 				if ((bbox != null) && !bbox.equals(GeometryUtils.infinity())) {
-					query = new SpatialQuery(
-							bbox);
+					bldr.constraints(bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+							bbox).build());
 				}
 			}
 		}
@@ -216,14 +202,11 @@ public class KMeansRunner
 		}
 
 		// Load RDD from datastore
-		RDDOptions kmeansOpts = new RDDOptions();
+		final RDDOptions kmeansOpts = new RDDOptions();
 		kmeansOpts.setMinSplits(minSplits);
 		kmeansOpts.setMaxSplits(maxSplits);
-		kmeansOpts.setQuery(query);
-		kmeansOpts.setQueryOptions(queryOptions);
-
-		LOGGER.debug("Loading RDD from datastore...");
-		GeoWaveRDD kmeansRDD = GeoWaveRDDLoader.loadRDD(
+		kmeansOpts.setQuery(bldr.build());
+		final GeoWaveRDD kmeansRDD = GeoWaveRDDLoader.loadRDD(
 				session.sparkContext(),
 				inputDataStore,
 				kmeansOpts);
@@ -386,9 +369,9 @@ public class KMeansRunner
 		this.cqlFilter = cqlFilter;
 	}
 
-	public void setAdapterId(
-			final String adapterId ) {
-		this.adapterId = adapterId;
+	public void setTypeName(
+			final String typeName ) {
+		this.typeName = typeName;
 	}
 
 	public void setTimeParams(

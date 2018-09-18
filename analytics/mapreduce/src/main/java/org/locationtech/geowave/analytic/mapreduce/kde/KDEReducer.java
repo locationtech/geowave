@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,9 +21,8 @@ import org.apache.hadoop.mapreduce.Reducer;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.analytic.mapreduce.kde.GaussianFilter.ValueRange;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.coverage.grid.GridCoverage;
@@ -133,7 +132,7 @@ public class KDEReducer extends
 	private int numXTiles;
 	private int numYTiles;
 	private String coverageName;
-	protected List<ByteArrayId> indexList;
+	protected List<String> indexList;
 	protected ValueRange[] valueRangePerDimension;
 	protected String crsCode;
 	protected double prevValue = -1;
@@ -201,9 +200,8 @@ public class KDEReducer extends
 						percentile);
 				context.write(
 						new GeoWaveOutputKey(
-								new ByteArrayId(
-										coverageName),
-								indexList),
+								coverageName,
+								indexList.toArray(new String[0])),
 						RasterUtils.createCoverageTypeDouble(
 								coverageName,
 								tileInfo.tileWestLon,
@@ -303,16 +301,16 @@ public class KDEReducer extends
 		totalKeys = context.getConfiguration().getLong(
 				"Entries per level.level" + level,
 				10);
-		final PrimaryIndex[] indices = JobContextIndexStore.getIndices(context);
-		indexList = new ArrayList<ByteArrayId>();
+		final Index[] indices = JobContextIndexStore.getIndices(context);
+		indexList = new ArrayList<>();
 		if ((indices != null) && (indices.length > 0)) {
-			for (final PrimaryIndex index : indices) {
-				indexList.add(index.getId());
+			for (final Index index : indices) {
+				indexList.add(index.getName());
 			}
 
 		}
 		else {
-			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getId());
+			indexList.add(new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName());
 		}
 	}
 }

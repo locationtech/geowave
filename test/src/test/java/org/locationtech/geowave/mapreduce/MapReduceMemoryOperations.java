@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.memory.MemoryDataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
@@ -36,7 +36,7 @@ public class MapReduceMemoryOperations extends
 			.synchronizedMap(new HashMap<ByteArrayId, SortedSet<MemoryStoreEntry>>());
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			RecordReaderParams<T> readerParams ) {
 
 		ByteArrayId partitionKey = new ByteArrayId(
@@ -57,7 +57,8 @@ public class MapReduceMemoryOperations extends
 		return createReader((ReaderParams) new ReaderParams(
 				readerParams.getIndex(),
 				readerParams.getAdapterStore(),
-				Lists.newArrayList(readerParams.getAdapterIds()),
+				readerParams.getInternalAdapterStore(),
+				readerParams.getAdapterIds(),
 				readerParams.getMaxResolutionSubsamplingPerDimension(),
 				readerParams.getAggregation(),
 				readerParams.getFieldSubsets(),

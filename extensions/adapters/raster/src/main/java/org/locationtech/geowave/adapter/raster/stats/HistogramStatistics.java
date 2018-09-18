@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -33,10 +33,11 @@ import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.parameter.ParameterValueGroup;
@@ -48,13 +49,13 @@ import com.vividsolutions.jts.geom.GeometryCollection;
 import com.vividsolutions.jts.geom.Polygon;
 
 public class HistogramStatistics extends
-		AbstractDataStatistics<GridCoverage>
+		AbstractDataStatistics<GridCoverage, Map<Resolution, javax.media.jai.Histogram>, BaseStatisticsQueryBuilder<Map<Resolution, javax.media.jai.Histogram>>>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(HistogramStatistics.class);
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final BaseStatisticsType<Map<Resolution, javax.media.jai.Histogram>> STATS_TYPE = new BaseStatisticsType<>(
 			"HISTOGRAM_STATS");
 
-	private final Map<Resolution, javax.media.jai.Histogram> histograms = new HashMap<Resolution, javax.media.jai.Histogram>();
+	private final Map<Resolution, javax.media.jai.Histogram> histograms = new HashMap<>();
 	private HistogramConfig histogramConfig;
 
 	public HistogramStatistics() {
@@ -69,17 +70,17 @@ public class HistogramStatistics extends
 	}
 
 	public HistogramStatistics(
-			final Short internalAdapterId,
+			final Short adapterId,
 			final HistogramConfig histogramConfig ) {
 		super(
-				internalAdapterId,
+				adapterId,
 				STATS_TYPE);
 		this.histogramConfig = histogramConfig;
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final List<byte[]> perEntryBinary = new ArrayList<byte[]>();
+		final List<byte[]> perEntryBinary = new ArrayList<>();
 		int totalBytes = 4;
 		for (final Entry<Resolution, javax.media.jai.Histogram> entry : histograms.entrySet()) {
 			final ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -340,7 +341,7 @@ public class HistogramStatistics extends
 	public void merge(
 			final Mergeable statistics ) {
 		if ((statistics != null) && (statistics instanceof HistogramStatistics)) {
-			final Set<Resolution> resolutions = new HashSet<Resolution>(
+			final Set<Resolution> resolutions = new HashSet<>(
 					getResolutions());
 			resolutions.addAll(((HistogramStatistics) statistics).getResolutions());
 			for (final Resolution res : resolutions) {
@@ -365,5 +366,33 @@ public class HistogramStatistics extends
 				}
 			}
 		}
+	}
+
+	@Override
+	public Map<Resolution, javax.media.jai.Histogram> getResult() {
+		return histograms;
+	}
+
+	@Override
+	protected String resultsName() {
+		return "histograms";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		final Map<String, Map<String, Object>> map = new HashMap<>();
+		for (final Entry<Resolution, javax.media.jai.Histogram> e : histograms.entrySet()) {
+			final Map<String, Object> h = new HashMap<>();
+			h.put(
+					"resolution",
+					e.getKey().getResolutionPerDimension());
+			h.put(
+					"value",
+					e.getValue().toString());
+			map.put(
+					"histogram",
+					h);
+		}
+		return map;
 	}
 }

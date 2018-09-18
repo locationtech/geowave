@@ -23,7 +23,7 @@ import java.util.concurrent.Future;
 
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,7 +40,7 @@ import com.amazonaws.services.dynamodbv2.model.PutRequest;
 import com.amazonaws.services.dynamodbv2.model.WriteRequest;
 
 public class DynamoDBWriter implements
-		Writer
+		RowWriter
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DynamoDBWriter.class);
 	private static final int NUM_ITEMS = 25;

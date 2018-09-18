@@ -74,8 +74,8 @@ public class KMeansSparkOptions
 	@Parameter(names = {
 		"-f",
 		"--featureType"
-	}, description = "Feature type name (adapter ID) to query")
-	private String adapterId = null;
+	}, description = "Feature type name to query")
+	private String typeName = null;
 
 	@Parameter(names = "--minSplits", description = "The min partitions for the input data")
 	private Integer minSplits = -1;
@@ -86,13 +86,13 @@ public class KMeansSparkOptions
 	@Parameter(names = {
 		"-ct",
 		"--centroidType"
-	}, description = "Feature type name (adapter ID) for centroid output")
+	}, description = "Feature type name for centroid output")
 	private String centroidTypeName = "kmeans_centroids";
 
 	@Parameter(names = {
 		"-ht",
 		"--hullType"
-	}, description = "Feature type name (adapter ID) for hull output")
+	}, description = "Feature type name for hull output")
 	private String hullTypeName = "kmeans_hulls";
 
 	public KMeansSparkOptions() {}
@@ -187,13 +187,13 @@ public class KMeansSparkOptions
 		this.cqlFilter = cqlFilter;
 	}
 
-	public String getAdapterId() {
-		return adapterId;
+	public String getTypeName() {
+		return typeName;
 	}
 
-	public void setAdapterId(
-			String adapterId ) {
-		this.adapterId = adapterId;
+	public void setTypeName(
+			String typeName ) {
+		this.typeName = typeName;
 	}
 
 	public Integer getMinSplits() {

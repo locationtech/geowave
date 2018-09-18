@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -29,23 +28,21 @@ import javax.xml.stream.XMLStreamException;
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.SAXException;
 
 import jersey.repackaged.com.google.common.collect.Iterators;
@@ -94,7 +91,7 @@ public class GpxIngestPlugin extends
 					baseDirectory.toString().concat(
 							"metadata.xml"));
 		}
-		catch (MalformedURLException e1) {
+		catch (final MalformedURLException e1) {
 			LOGGER.info(
 					"Invalid URL for metadata.xml. No metadata will be loaded",
 					e1);
@@ -213,7 +210,7 @@ public class GpxIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final GpxTrack gpxTrack,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 		final InputStream in = new ByteArrayInputStream(
 				gpxTrack.getGpxfile().array());
@@ -221,13 +218,13 @@ public class GpxIngestPlugin extends
 		try {
 			return new GPXConsumer(
 					in,
-					primaryIndexIds,
+					indexNames,
 					gpxTrack.getTrackid() == null ? "" : gpxTrack.getTrackid().toString(),
 					getAdditionalData(gpxTrack),
 					false, // waypoints, even dups, are unique, due to QGis
 							// behavior
 					globalVisibility,
-					this.extentOptProvider.getMaxExtent());
+					extentOptProvider.getMaxExtent());
 		}
 		catch (final Exception e) {
 			LOGGER.warn(
@@ -238,14 +235,14 @@ public class GpxIngestPlugin extends
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	private Map<String, Map<String, String>> getAdditionalData(
 			final GpxTrack gpxTrack ) {
-		final Map<String, Map<String, String>> pathDataSet = new HashMap<String, Map<String, String>>();
-		final Map<String, String> dataSet = new HashMap<String, String>();
+		final Map<String, Map<String, String>> pathDataSet = new HashMap<>();
+		final Map<String, String> dataSet = new HashMap<>();
 		pathDataSet.put(
 				"gpx.trk",
 				dataSet);
@@ -318,11 +315,11 @@ public class GpxIngestPlugin extends
 	}
 
 	public void setExtentOptionProvider(
-			MaxExtentOptProvider extentOptProvider ) {
+			final MaxExtentOptProvider extentOptProvider ) {
 		this.extentOptProvider = extentOptProvider;
 	}
 
 	public MaxExtentOptProvider getExtentOptionProvider() {
-		return this.extentOptProvider;
+		return extentOptProvider;
 	}
 }

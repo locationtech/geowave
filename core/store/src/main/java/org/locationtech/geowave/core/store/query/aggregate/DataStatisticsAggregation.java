@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,20 +11,21 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.Aggregation;
 
 public class DataStatisticsAggregation<T> implements
-		Aggregation<DataStatistics<T>, DataStatistics<T>, T>
+		Aggregation<InternalDataStatistics<T, ?, ?>, InternalDataStatistics<T, ?, ?>, T>
 {
-	private DataStatistics<T> statisticsParam;
+	private InternalDataStatistics<T, ?, ?> statisticsParam;
 
-	private DataStatistics<T> statisticsResult;
+	private InternalDataStatistics<T, ?, ?> statisticsResult;
 	private byte[] defaultResultBinary;
 
 	public DataStatisticsAggregation() {}
 
 	public DataStatisticsAggregation(
-			final DataStatistics<T> statistics ) {
+			final InternalDataStatistics<T, ?, ?> statistics ) {
 		this.statisticsResult = statistics;
 		this.defaultResultBinary = PersistenceUtils.toBinary(statisticsResult);
 		this.statisticsParam = statistics;
@@ -37,23 +38,23 @@ public class DataStatisticsAggregation<T> implements
 	}
 
 	@Override
-	public DataStatistics<T> getParameters() {
+	public InternalDataStatistics<T, ?, ?> getParameters() {
 		return statisticsParam;
 	}
 
 	@Override
 	public void setParameters(
-			final DataStatistics<T> parameters ) {
+			final InternalDataStatistics<T, ?, ?> parameters ) {
 		this.statisticsParam = parameters;
 	}
 
 	@Override
 	public void clearResult() {
-		this.statisticsResult = (DataStatistics<T>) PersistenceUtils.fromBinary(defaultResultBinary);
+		this.statisticsResult = (InternalDataStatistics<T, ?, ?>) PersistenceUtils.fromBinary(defaultResultBinary);
 	}
 
 	@Override
-	public DataStatistics<T> getResult() {
+	public InternalDataStatistics<T, ?, ?> getResult() {
 		return statisticsResult;
 	}
 
@@ -65,5 +66,17 @@ public class DataStatisticsAggregation<T> implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {}
+
+	@Override
+	public byte[] resultToBinary(
+			final InternalDataStatistics<T, ?, ?> result ) {
+		return PersistenceUtils.toBinary(result);
+	}
+
+	@Override
+	public InternalDataStatistics<T, ?, ?> resultFromBinary(
+			final byte[] binary ) {
+		return (InternalDataStatistics<T, ?, ?>) PersistenceUtils.fromBinary(binary);
+	}
 
 }

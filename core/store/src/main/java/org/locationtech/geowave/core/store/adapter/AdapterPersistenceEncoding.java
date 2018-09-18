@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -56,7 +57,7 @@ public class AdapterPersistenceEncoding extends
 
 	@Override
 	public void convertUnknownValues(
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final CommonIndexModel model ) {
 		// inherently no unknown data, nothing to do
 	}

@@ -129,7 +129,7 @@ public class AnalyticFeature
 					builder.buildFeatureType());
 			// TODO any consumers of this method will not be able to utilize
 			// custom CRS
-			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
+			adapter.init(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 			return adapter;
 		}
 		catch (final Exception e) {

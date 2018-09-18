@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,21 +10,31 @@
  ******************************************************************************/
 package org.locationtech.geowave.test.services.grpc;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import org.locationtech.geowave.test.ZookeeperTestEnvironment;
 import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
 
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKBWriter;
+import com.vividsolutions.jts.io.WKTReader;
+
 public class GeoWaveGrpcTestUtils
 {
-	public final static String adapterId = "TestGeometry";
-	public final static String indexId = "grpc-spatial";
+	public final static String typeName = "TestGeometry";
+	public final static String indexName = "grpc-spatial";
 	public final static String storeName = "grpc";
 	public final static String outputStoreName = "grpc-output";
 	public final static String cqlSpatialQuery = "BBOX(geometry,0.0,0.0, 25.0, 25.0)";
-	public final static String wktSpatialQuery = "POLYGON (( " + "0.0 0.0, " + "0.0 25.0, " + "25.0 25.0, "
+	public static final String wktSpatialQuery = "POLYGON (( " + "0.0 0.0, " + "0.0 25.0, " + "25.0 25.0, "
 			+ "25.0 0.0, " + "0.0 0.0" + "))";
+	public static byte[] wkbSpatialQuery;
+	static {
+		try {
+			wkbSpatialQuery = new WKBWriter().write(new WKTReader().read(wktSpatialQuery));
+		}
+		catch (final ParseException e) {
+			e.printStackTrace();
+		}
+	}
 	public final static String temporalQueryStartTime = "2016-02-20T01:32Z";
 	public final static String temporalQueryEndTime = "2016-02-21T01:32Z";
 

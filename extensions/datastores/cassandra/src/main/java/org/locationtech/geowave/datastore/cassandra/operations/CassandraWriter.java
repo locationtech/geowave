@@ -11,12 +11,12 @@
 package org.locationtech.geowave.datastore.cassandra.operations;
 
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class CassandraWriter implements
-		Writer
+		RowWriter
 {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CassandraWriter.class);

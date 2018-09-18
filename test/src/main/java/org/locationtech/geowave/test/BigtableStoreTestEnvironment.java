@@ -11,9 +11,9 @@
 package org.locationtech.geowave.test;
 
 import org.junit.contrib.java.lang.system.EnvironmentVariables;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.bigtable.BigTableStoreFactoryFamily;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.slf4j.Logger;

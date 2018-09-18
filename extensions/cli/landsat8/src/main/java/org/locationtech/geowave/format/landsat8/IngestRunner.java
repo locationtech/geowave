@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,19 +12,18 @@ package org.locationtech.geowave.format.landsat8;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.List;
 
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -32,15 +31,12 @@ import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.ParameterException;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-
 public class IngestRunner extends
 		RasterIngestRunner
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(IngestRunner.class);
-	private IndexWriter<SimpleFeature> bandWriter;
-	private IndexWriter<SimpleFeature> sceneWriter;
+	private Writer<SimpleFeature> bandWriter;
+	private Writer<SimpleFeature> sceneWriter;
 	private final VectorOverrideCommandLineOptions vectorOverrideOptions;
 	private SimpleFeatureType sceneType;
 
@@ -67,14 +63,14 @@ public class IngestRunner extends
 		super.processParameters(params);
 
 		final DataStore vectorStore;
-		final PrimaryIndex[] vectorIndices;
+		final Index[] vectorIndices;
 		// Config file
 		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
 		if ((vectorOverrideOptions.getVectorStore() != null)
 				&& !vectorOverrideOptions.getVectorStore().trim().isEmpty()) {
-			String vectorStoreName = vectorOverrideOptions.getVectorStore();
+			final String vectorStoreName = vectorOverrideOptions.getVectorStore();
 			final StoreLoader vectorStoreLoader = new StoreLoader(
 					vectorStoreName);
 			if (!vectorStoreLoader.loadFromConfig(configFile)) {
@@ -89,7 +85,7 @@ public class IngestRunner extends
 		}
 		if ((vectorOverrideOptions.getVectorIndex() != null)
 				&& !vectorOverrideOptions.getVectorIndex().trim().isEmpty()) {
-			String vectorIndexList = vectorOverrideOptions.getVectorIndex();
+			final String vectorIndexList = vectorOverrideOptions.getVectorIndex();
 
 			// Load the Indices
 			final IndexLoader indexLoader = new IndexLoader(
@@ -100,10 +96,10 @@ public class IngestRunner extends
 			}
 			final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
 
-			vectorIndices = new PrimaryIndex[indexOptions.size()];
+			vectorIndices = new Index[indexOptions.size()];
 			int i = 0;
 			for (final IndexPluginOptions dimensionType : indexOptions) {
-				final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
+				final Index primaryIndex = dimensionType.createIndex();
 				if (primaryIndex == null) {
 					LOGGER.error("Could not get index instance, getIndex() returned null;");
 					throw new IOException(
@@ -118,15 +114,18 @@ public class IngestRunner extends
 		sceneType = SceneFeatureIterator.createFeatureType();
 		final FeatureDataAdapter sceneAdapter = new FeatureDataAdapter(
 				sceneType);
-		sceneWriter = vectorStore.createWriter(
+		vectorStore.addType(
 				sceneAdapter,
 				vectorIndices);
+		sceneWriter = vectorStore.createWriter(sceneAdapter.getTypeName());
 		final SimpleFeatureType bandType = BandFeatureIterator.createFeatureType(sceneType);
 		final FeatureDataAdapter bandAdapter = new FeatureDataAdapter(
 				bandType);
-		bandWriter = vectorStore.createWriter(
+
+		vectorStore.addType(
 				bandAdapter,
 				vectorIndices);
+		bandWriter = vectorStore.createWriter(bandAdapter.getTypeName());
 	}
 
 	@Override
@@ -154,31 +153,17 @@ public class IngestRunner extends
 
 	@Override
 	protected void runInternal(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 		try {
 			super.runInternal(params);
 		}
 		finally {
 			if (sceneWriter != null) {
-				try {
-					sceneWriter.close();
-				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Unable to close writer for scene vectors",
-							e);
-				}
+				sceneWriter.close();
 			}
 			if (bandWriter != null) {
-				try {
-					bandWriter.close();
-				}
-				catch (final IOException e) {
-					LOGGER.error(
-							"Unable to close writer for band vectors",
-							e);
-				}
+				bandWriter.close();
 			}
 		}
 	}

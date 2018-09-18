@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.index;
 
 import java.util.List;
 
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 /**
  * This interface allows for a data adapter to define a set of secondary indices
@@ -22,7 +22,7 @@ import org.locationtech.geowave.core.store.adapter.DataAdapter;
  *
  */
 public interface SecondaryIndexDataAdapter<T> extends
-		DataAdapter<T>
+		DataTypeAdapter<T>
 {
-	public List<SecondaryIndex<T>> getSupportedSecondaryIndices();
+	public List<SecondaryIndexImpl<T>> getSupportedSecondaryIndices();
 }

@@ -18,11 +18,11 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
 
 import java.util.NoSuchElementException;
@@ -41,19 +41,19 @@ import java.util.NoSuchElementException;
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final Reader<GeoWaveRow> reader;
+	private final RowReader<GeoWaveRow> reader;
 	private final QueryFilter queryFilter;
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
 	private Entry<GeoWaveInputKey, T> nextEntry;
-	private final PrimaryIndex index;
+	private final Index index;
 
 	public InputFormatIteratorWrapper(
-			final Reader<GeoWaveRow> reader,
+			final RowReader<GeoWaveRow> reader,
 			final QueryFilter queryFilter,
 			final TransientAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final boolean isOutputWritable ) {
 		this.reader = reader;
 		this.queryFilter = queryFilter;
@@ -71,7 +71,7 @@ public class InputFormatIteratorWrapper<T> implements
 				final Entry<GeoWaveInputKey, T> decodedValue = decodeRow(
 						nextRow,
 						queryFilter,
-						(InternalDataAdapter<T>) serializationTool.getInternalAdapter(nextRow.getInternalAdapterId()),
+						(InternalDataAdapter<T>) serializationTool.getInternalAdapter(nextRow.getAdapterId()),
 						index);
 				if (decodedValue != null) {
 					nextEntry = decodedValue;
@@ -86,7 +86,7 @@ public class InputFormatIteratorWrapper<T> implements
 			final GeoWaveRow row,
 			final QueryFilter clientFilter,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		Object value = null;
 		try {
 			value = BaseDataStoreUtils.decodeRow(
@@ -105,13 +105,13 @@ public class InputFormatIteratorWrapper<T> implements
 		if (value == null) {
 			return null;
 		}
-		final short adapterId = row.getInternalAdapterId();
+		final short adapterId = row.getAdapterId();
 		final T result = (T) (isOutputWritable ? serializationTool.getHadoopWritableSerializerForAdapter(
 				adapterId).toWritable(
 				value) : value);
 		final GeoWaveInputKey key = new GeoWaveInputKey(
 				row,
-				index.getId());
+				index.getName());
 		return new GeoWaveInputFormatEntry(
 				key,
 				result);

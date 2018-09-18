@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -35,23 +35,22 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.AccumuloRow;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -95,11 +94,11 @@ public class AccumuloUtils
 	public static TreeSet<Range> byteArrayRangesToAccumuloRanges(
 			final List<ByteArrayRange> byteArrayRanges ) {
 		if (byteArrayRanges == null) {
-			final TreeSet<Range> range = new TreeSet<Range>();
+			final TreeSet<Range> range = new TreeSet<>();
 			range.add(new Range());
 			return range;
 		}
-		final TreeSet<Range> accumuloRanges = new TreeSet<Range>();
+		final TreeSet<Range> accumuloRanges = new TreeSet<>();
 		for (final ByteArrayRange byteArrayRange : byteArrayRanges) {
 			final Range range = byteArrayRangeToAccumuloRange(byteArrayRange);
 			if (range == null) {
@@ -128,7 +127,7 @@ public class AccumuloUtils
 	 */
 	public static List<String> getNamespaces(
 			final Connector connector ) {
-		final List<String> namespaces = new ArrayList<String>();
+		final List<String> namespaces = new ArrayList<>();
 
 		for (final String table : connector.tableOperations().list()) {
 			final int idx = table.indexOf(AbstractGeoWavePersistence.METADATA_TABLE) - 1;
@@ -147,10 +146,10 @@ public class AccumuloUtils
 	 * @param connector
 	 * @param namespace
 	 */
-	public static List<DataAdapter<?>> getDataAdapters(
+	public static List<DataTypeAdapter<?>> getDataAdapters(
 			final Connector connector,
 			final String namespace ) {
-		final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
+		final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
 
 		final AccumuloOptions options = new AccumuloOptions();
 		final AdapterStore adapterStore = new AdapterStoreImpl(
@@ -160,16 +159,11 @@ public class AccumuloUtils
 						options),
 				options);
 
-		try (final CloseableIterator<DataAdapter<?>> itr = adapterStore.getAdapters()) {
+		try (final CloseableIterator<DataTypeAdapter<?>> itr = adapterStore.getAdapters()) {
 
 			while (itr.hasNext()) {
 				adapters.add(itr.next());
 			}
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to close iterator",
-					e);
 		}
 
 		return adapters;
@@ -181,10 +175,10 @@ public class AccumuloUtils
 	 * @param connector
 	 * @param namespace
 	 */
-	public static List<Index<?, ?>> getIndices(
+	public static List<Index> getIndices(
 			final Connector connector,
 			final String namespace ) {
-		final List<Index<?, ?>> indices = new ArrayList<Index<?, ?>>();
+		final List<Index> indices = new ArrayList<>();
 		final AccumuloOptions options = new AccumuloOptions();
 		final IndexStore indexStore = new IndexStoreImpl(
 				new AccumuloOperations(
@@ -193,18 +187,12 @@ public class AccumuloUtils
 						options),
 				options);
 
-		try (final CloseableIterator<Index<?, ?>> itr = indexStore.getIndices()) {
+		try (final CloseableIterator<Index> itr = indexStore.getIndices()) {
 
 			while (itr.hasNext()) {
 				indices.add(itr.next());
 			}
 		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to close iterator",
-					e);
-		}
-
 		return indices;
 	}
 
@@ -223,7 +211,7 @@ public class AccumuloUtils
 	public static void setSplitsByRandomPartitions(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
+			final Index index,
 			final int randomPartitions )
 			throws AccumuloException,
 			AccumuloSecurityException,
@@ -237,13 +225,13 @@ public class AccumuloUtils
 				randomPartitions);
 
 		operations.createTable(
-				index.getId().getString(),
+				index.getName(),
 				true,
 				true);
 		for (final ByteArrayId p : partitions.getPartitionKeys()) {
 			operations.ensurePartition(
 					p,
-					index.getId().getString());
+					index.getName());
 		}
 	}
 
@@ -263,7 +251,7 @@ public class AccumuloUtils
 			final BaseDataStore dataStore,
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
+			final Index index,
 			final int quantile )
 			throws AccumuloException,
 			AccumuloSecurityException,
@@ -288,7 +276,7 @@ public class AccumuloUtils
 
 			long ii = 0;
 			final long splitInterval = (long) Math.ceil((double) count / (double) quantile);
-			final SortedSet<Text> splits = new TreeSet<Text>();
+			final SortedSet<Text> splits = new TreeSet<>();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
 				ii++;
@@ -300,7 +288,7 @@ public class AccumuloUtils
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(
 					namespace,
-					index.getId().getString());
+					index.getName());
 			connector.tableOperations().addSplits(
 					tableName,
 					splits);
@@ -328,13 +316,13 @@ public class AccumuloUtils
 	public static void setSplitsByNumSplits(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
+			final Index index,
 			final int numSplits )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
 			TableNotFoundException {
-		final SortedSet<Text> splits = new TreeSet<Text>();
+		final SortedSet<Text> splits = new TreeSet<>();
 
 		try (final CloseableIterator<Entry<Key, Value>> iterator = getIterator(
 				connector,
@@ -385,7 +373,7 @@ public class AccumuloUtils
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(
 					namespace,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+					index.getName());
 			connector.tableOperations().addSplits(
 					tableName,
 					splits);
@@ -412,7 +400,7 @@ public class AccumuloUtils
 	public static void setSplitsByNumRows(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
+			final Index index,
 			final long numberRows )
 			throws AccumuloException,
 			AccumuloSecurityException,
@@ -430,7 +418,7 @@ public class AccumuloUtils
 			}
 
 			long ii = 0;
-			final SortedSet<Text> splits = new TreeSet<Text>();
+			final SortedSet<Text> splits = new TreeSet<>();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
 				ii++;
@@ -442,7 +430,7 @@ public class AccumuloUtils
 
 			final String tableName = AccumuloUtils.getQualifiedTableName(
 					namespace,
-					StringUtils.stringFromBinary(index.getId().getBytes()));
+					index.getName());
 			connector.tableOperations().addSplits(
 					tableName,
 					splits);
@@ -470,8 +458,8 @@ public class AccumuloUtils
 	public static boolean isLocalityGroupSet(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
-			final DataAdapter<?> adapter )
+			final Index index,
+			final DataTypeAdapter<?> adapter )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
@@ -481,10 +469,9 @@ public class AccumuloUtils
 				namespace,
 				new AccumuloOptions());
 		// get unqualified table name
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		return operations.localityGroupExists(
-				tableName,
-				adapter.getAdapterId().getBytes());
+				index.getName(),
+				adapter.getTypeName());
 	}
 
 	/**
@@ -501,8 +488,8 @@ public class AccumuloUtils
 	public static void setLocalityGroup(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index,
-			final DataAdapter<?> adapter )
+			final Index index,
+			final InternalDataAdapter<?> adapter )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
@@ -511,11 +498,10 @@ public class AccumuloUtils
 				connector,
 				namespace,
 				new AccumuloOptions());
-		// get unqualified table name
-		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		operations.addLocalityGroup(
-				tableName,
-				adapter.getAdapterId().getBytes());
+				index.getName(),
+				adapter.getTypeName(),
+				adapter.getAdapterId());
 	}
 
 	/**
@@ -532,7 +518,7 @@ public class AccumuloUtils
 			final BaseDataStore dataStore,
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index )
+			final Index index )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException {
@@ -545,7 +531,7 @@ public class AccumuloUtils
 		final IndexStore indexStore = new IndexStoreImpl(
 				operations,
 				options);
-		if (indexStore.indexExists(index.getId())) {
+		if (indexStore.indexExists(index.getName())) {
 			final CloseableIterator<?> iterator = new AccumuloDataStore(
 					operations,
 					options).query(
@@ -563,7 +549,7 @@ public class AccumuloUtils
 	private static CloseableIterator<Entry<Key, Value>> getIterator(
 			final Connector connector,
 			final String namespace,
-			final PrimaryIndex index )
+			final Index index )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
@@ -581,8 +567,8 @@ public class AccumuloUtils
 				operations,
 				options);
 
-		if (indexStore.indexExists(index.getId())) {
-			final ScannerBase scanner = operations.createBatchScanner(index.getId().getString());
+		if (indexStore.indexExists(index.getName())) {
+			final ScannerBase scanner = operations.createBatchScanner(index.getName());
 			((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(null));
 			final IteratorSetting iteratorSettings = new IteratorSetting(
 					10,
@@ -596,7 +582,7 @@ public class AccumuloUtils
 					scanner.iterator(),
 					new DedupeFilter());
 
-			iterator = new CloseableIteratorWrapper<Entry<Key, Value>>(
+			iterator = new CloseableIteratorWrapper<>(
 					new ScannerClosableWrapper(
 							scanner),
 					it);
@@ -610,13 +596,13 @@ public class AccumuloUtils
 
 		private final Iterator<Entry<Key, Value>> scannerIt;
 		private final AdapterStore adapterStore;
-		private final PrimaryIndex index;
+		private final Index index;
 		private final QueryFilter clientFilter;
 		private Entry<Key, Value> nextValue;
 
 		public IteratorWrapper(
 				final AdapterStore adapterStore,
-				final PrimaryIndex index,
+				final Index index,
 				final Iterator<Entry<Key, Value>> scannerIt,
 				final QueryFilter clientFilter ) {
 			this.adapterStore = adapterStore;
@@ -644,9 +630,9 @@ public class AccumuloUtils
 		private Object decodeRow(
 				final Entry<Key, Value> row,
 				final QueryFilter clientFilter,
-				final PrimaryIndex index ) {
+				final Index index ) {
 			try {
-				List<Map<Key, Value>> fieldValueMapList = new ArrayList();
+				final List<Map<Key, Value>> fieldValueMapList = new ArrayList();
 				fieldValueMapList.add(WholeRowIterator.decodeRow(
 						row.getKey(),
 						row.getValue()));

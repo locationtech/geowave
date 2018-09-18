@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -36,16 +36,14 @@ import org.locationtech.geowave.analytic.spark.sparksql.udf.GeomWithinDistance;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.UDFRegistrySPI.UDFNameAndConstructor;
 import org.locationtech.geowave.analytic.spark.spatial.SpatialJoinRunner;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,8 +62,8 @@ public class SqlQueryRunner
 
 	private SparkSession session;
 
-	private final HashMap<String, InputStoreInfo> inputStores = new HashMap<String, InputStoreInfo>();
-	private final List<ExtractedGeomPredicate> extractedPredicates = new ArrayList<ExtractedGeomPredicate>();
+	private final HashMap<String, InputStoreInfo> inputStores = new HashMap<>();
+	private final List<ExtractedGeomPredicate> extractedPredicates = new ArrayList<>();
 	private String sql = null;
 
 	public SqlQueryRunner() {}
@@ -289,13 +287,13 @@ public class SqlQueryRunner
 			joinRunner.setNegativeTest(negativePredicate);
 
 			// Setup store info for runner
-			final PrimaryIndex[] leftIndices = leftStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
-					leftStore.getOrCreateInternalAdapterStore().getInternalAdapterId(
-							leftStore.adapterId)).getIndices(
+			final Index[] leftIndices = leftStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+					leftStore.getOrCreateInternalAdapterStore().getAdapterId(
+							leftStore.typeName)).getIndices(
 					leftStore.getOrCreateIndexStore());
-			final PrimaryIndex[] rightIndices = rightStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
-					rightStore.getOrCreateInternalAdapterStore().getInternalAdapterId(
-							rightStore.adapterId)).getIndices(
+			final Index[] rightIndices = rightStore.getOrCreateAdapterIndexMappingStore().getIndicesForAdapter(
+					rightStore.getOrCreateInternalAdapterStore().getAdapterId(
+							rightStore.typeName)).getIndices(
 					rightStore.getOrCreateIndexStore());
 			;
 			NumericIndexStrategy leftStrat = null;
@@ -332,10 +330,10 @@ public class SqlQueryRunner
 
 			leftResultFrame.init(
 					leftStore.storeOptions,
-					leftStore.adapterId);
+					leftStore.typeName);
 			rightResultFrame.init(
 					rightStore.storeOptions,
-					rightStore.adapterId);
+					rightStore.typeName);
 
 			final Dataset<Row> leftFrame = leftResultFrame.getDataFrame(joinRunner.getLeftResults());
 			final Dataset<Row> rightFrame = rightResultFrame.getDataFrame(joinRunner.getRightResults());
@@ -399,15 +397,9 @@ public class SqlQueryRunner
 		final Collection<InputStoreInfo> addStores = inputStores.values();
 
 		for (final InputStoreInfo storeInfo : addStores) {
-
-			final DataAdapter<?> adapter = storeInfo.getOrCreateAdapterStore().getAdapter(
-					storeInfo.getOrCreateInternalAdapterStore().getInternalAdapterId(
-							storeInfo.adapterId));
-			final QueryOptions queryOptions = new QueryOptions(
-					adapter);
-
 			final RDDOptions rddOpts = new RDDOptions();
-			rddOpts.setQueryOptions(queryOptions);
+			rddOpts.setQuery(QueryBuilder.newBuilder().addTypeName(
+					storeInfo.typeName).build());
 			storeInfo.rdd = GeoWaveRDDLoader.loadRDD(
 					session.sparkContext(),
 					storeInfo.storeOptions,
@@ -419,7 +411,7 @@ public class SqlQueryRunner
 
 			if (!dataFrame.init(
 					storeInfo.storeOptions,
-					storeInfo.adapterId)) {
+					storeInfo.typeName)) {
 				LOGGER.error("Failed to initialize dataframe");
 				return;
 			}
@@ -433,20 +425,20 @@ public class SqlQueryRunner
 
 	public String addInputStore(
 			final DataStorePluginOptions storeOptions,
-			final ByteArrayId adapterId,
+			final String typeName,
 			final String viewName ) {
 		if (storeOptions == null) {
 			LOGGER.error("Must supply datastore plugin options.");
 			return null;
 		}
 		// If view name is null we will attempt to use adapterId as viewName
-		ByteArrayId addAdapter = adapterId;
+		String addTypeName = typeName;
 		// If adapterId is null we grab first adapter available from store
-		if (addAdapter == null) {
-			final List<ByteArrayId> adapterIds = FeatureDataUtils.getFeatureAdapterIds(storeOptions);
-			final int adapterCount = adapterIds.size();
+		if (addTypeName == null) {
+			final List<String> adapterTypes = FeatureDataUtils.getFeatureTypeNames(storeOptions);
+			final int adapterCount = adapterTypes.size();
 			if (adapterCount > 0) {
-				addAdapter = adapterIds.get(0);
+				addTypeName = adapterTypes.get(0);
 			}
 			else {
 				LOGGER.error("Feature adapter not found in store. One must be specified manually");
@@ -455,7 +447,7 @@ public class SqlQueryRunner
 		}
 		String addView = viewName;
 		if (addView == null) {
-			addView = addAdapter.getString();
+			addView = addTypeName;
 		}
 		// Check if store exists already using that view name
 		if (inputStores.containsKey(addView)) {
@@ -464,7 +456,7 @@ public class SqlQueryRunner
 		// Create and add new store info if we make it to this point
 		final InputStoreInfo inputInfo = new InputStoreInfo(
 				storeOptions,
-				addAdapter,
+				addTypeName,
 				addView);
 		inputStores.put(
 				addView,
@@ -510,10 +502,10 @@ public class SqlQueryRunner
 	{
 		public InputStoreInfo(
 				final DataStorePluginOptions storeOptions,
-				final ByteArrayId adapterId,
+				final String typeName,
 				final String viewName ) {
 			this.storeOptions = storeOptions;
-			this.adapterId = adapterId;
+			this.typeName = typeName;
 			this.viewName = viewName;
 		}
 
@@ -522,7 +514,7 @@ public class SqlQueryRunner
 		private PersistentAdapterStore adapterStore = null;
 		private InternalAdapterStore internalAdapterStore = null;
 		private AdapterIndexMappingStore adapterIndexMappingStore = null;
-		private final ByteArrayId adapterId;
+		private final String typeName;
 		private final String viewName;
 		private GeoWaveRDD rdd = null;
 

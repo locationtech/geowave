@@ -22,11 +22,11 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceStatus;
 import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import org.slf4j.Logger;
@@ -51,9 +51,9 @@ public class ListStatsCommand extends
 	private static final Logger LOGGER = LoggerFactory.getLogger(ListStatsCommand.class);
 
 	@Parameter(names = {
-		"--adapterId"
-	}, description = "Optionally list a single adapter's stats")
-	private String adapterId = "";
+		"--typeName"
+	}, description = "Optionally list a single data type's stats")
+	private String typeName = "";
 
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<String>();
@@ -85,7 +85,8 @@ public class ListStatsCommand extends
 
 		final StringBuilder builder = new StringBuilder();
 
-		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
+		try (CloseableIterator<InternalDataStatistics<?, ?, ?>> statsIt = statsStore
+				.getAllDataStatistics(authorizations)) {
 			if (statsOptions.getJsonFormatFlag()) {
 				final JSONArray resultsArray = new JSONArray();
 				final JSONObject outputObject = new JSONObject();
@@ -93,11 +94,11 @@ public class ListStatsCommand extends
 				try {
 					// Output as JSON formatted strings
 					outputObject.put(
-							"adapter",
-							adapter.getAdapterId().getString());
+							"dataType",
+							adapter.getTypeName());
 					while (statsIt.hasNext()) {
-						final DataStatistics<?> stats = statsIt.next();
-						if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
+						final InternalDataStatistics<?, ?, ?> stats = statsIt.next();
+						if (stats.getAdapterId() != adapter.getAdapterId()) {
 							continue;
 						}
 						resultsArray.add(stats.toJSONObject(internalAdapterStore));
@@ -116,14 +117,14 @@ public class ListStatsCommand extends
 			// Output as strings
 			else {
 				while (statsIt.hasNext()) {
-					final DataStatistics<?> stats = statsIt.next();
-					if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
+					final InternalDataStatistics<?, ?, ?> stats = statsIt.next();
+					if (stats.getAdapterId() != adapter.getAdapterId()) {
 						continue;
 					}
 					builder.append("[");
 					builder.append(String.format(
 							"%1$-20s",
-							stats.getStatisticsId().getString()));
+							stats.getType().getString()));
 					builder.append("] ");
 					builder.append(stats.toString());
 					builder.append("\n");
@@ -161,8 +162,8 @@ public class ListStatsCommand extends
 			throw new ParameterException(
 					"Requires arguments: <store name>");
 		}
-		if ((adapterId != null) && !adapterId.trim().isEmpty()) {
-			parameters.add(adapterId);
+		if ((typeName != null) && !typeName.trim().isEmpty()) {
+			parameters.add(typeName);
 		}
 		super.run(
 				params,

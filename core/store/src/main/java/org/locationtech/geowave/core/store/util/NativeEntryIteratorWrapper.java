@@ -16,12 +16,12 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class NativeEntryIteratorWrapper<T> extends
 		EntryIteratorWrapper<T>
@@ -35,7 +35,7 @@ public class NativeEntryIteratorWrapper<T> extends
 
 	public NativeEntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
@@ -59,7 +59,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	protected T decodeRow(
 			final GeoWaveRow row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		Object decodedRow = null;
 		if (adapterValid && (bitPosition == null || passesSkipFilter(row))) {
 			try {

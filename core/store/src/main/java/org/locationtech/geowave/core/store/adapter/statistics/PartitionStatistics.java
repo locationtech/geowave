@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,17 +11,16 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 /**
  * This class is responsible for maintaining all unique Partition IDs that are
@@ -31,11 +30,11 @@ import net.sf.json.JSONObject;
  *            The type of the row to keep statistics on
  */
 public class PartitionStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, Set<ByteArrayId>, IndexStatisticsQueryBuilder<Set<ByteArrayId>>>
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final IndexStatisticsType<Set<ByteArrayId>> STATS_TYPE = new IndexStatisticsType<>(
 			"PARTITIONS");
-	private Set<ByteArrayId> partitions = new HashSet<ByteArrayId>();
+	private Set<ByteArrayId> partitions = new HashSet<>();
 
 	public PartitionStatistics() {
 		super();
@@ -43,40 +42,18 @@ public class PartitionStatistics<T> extends
 
 	public PartitionStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId indexId ) {
+			final String indexName ) {
 		super(
 				internalDataAdapterId,
-				composeId(indexId));
-	}
-
-	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
-		return composeId(
-				STATS_TYPE.getString(),
-				indexId.getString());
+				STATS_TYPE,
+				indexName);
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
-		return new PartitionStatistics<T>(
-				internalDataAdapterId,
-				decomposeIndexIdFromId(statisticsId)); // indexId
-	}
-
-	public static ByteArrayId decomposeIndexIdFromId(
-			final ByteArrayId statisticsId ) {
-		// Need to account for length of type and of the separator
-		final int lengthOfNonId = STATS_TYPE.getBytes().length + STATS_ID_SEPARATOR.length();
-		final int idLength = statisticsId.getBytes().length - lengthOfNonId;
-		final byte[] idBytes = new byte[idLength];
-		System.arraycopy(
-				statisticsId.getBytes(),
-				lengthOfNonId,
-				idBytes,
-				0,
-				idLength);
-		return new ByteArrayId(
-				idBytes);
+	public InternalDataStatistics<T, Set<ByteArrayId>, IndexStatisticsQueryBuilder<Set<ByteArrayId>>> duplicate() {
+		return new PartitionStatistics<>(
+				adapterId,
+				extendedId); // indexId
 	}
 
 	public Set<ByteArrayId> getPartitionKeys() {
@@ -96,8 +73,8 @@ public class PartitionStatistics<T> extends
 		if (!partitions.isEmpty()) {
 			// we know each partition is constant size, so start with the size
 			// of the partition keys
-			ByteArrayId first = partitions.iterator().next();
-			if (first != null && first.getBytes() != null) {
+			final ByteArrayId first = partitions.iterator().next();
+			if ((first != null) && (first.getBytes() != null)) {
 				final ByteBuffer buffer = super.binaryBuffer((first.getBytes().length * partitions.size()) + 1);
 				buffer.put((byte) first.getBytes().length);
 				for (final ByteArrayId e : partitions) {
@@ -116,11 +93,11 @@ public class PartitionStatistics<T> extends
 		final ByteBuffer buffer = super.binaryBuffer(bytes);
 		partitions = new HashSet<>();
 		if (buffer.remaining() > 0) {
-			int partitionKeySize = unsignedToBytes(buffer.get());
+			final int partitionKeySize = unsignedToBytes(buffer.get());
 			if (partitionKeySize > 0) {
-				int numPartitions = buffer.remaining() / partitionKeySize;
+				final int numPartitions = buffer.remaining() / partitionKeySize;
 				for (int i = 0; i < numPartitions; i++) {
-					byte[] partition = new byte[partitionKeySize];
+					final byte[] partition = new byte[partitionKeySize];
 					buffer.get(partition);
 					partitions.add(new ByteArrayId(
 							partition));
@@ -130,7 +107,7 @@ public class PartitionStatistics<T> extends
 	}
 
 	public static int unsignedToBytes(
-			byte b ) {
+			final byte b ) {
 		return b & 0xFF;
 	}
 
@@ -158,10 +135,14 @@ public class PartitionStatistics<T> extends
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer(
-				statisticsId.getString()).append("=");
+				statisticsType.getString()).append(
+				" (").append(
+				extendedId).append(
+				")").append(
+				"=");
 		if (!partitions.isEmpty()) {
 			for (final ByteArrayId p : partitions) {
-				if (p == null || p.getBytes() == null) {
+				if ((p == null) || (p.getBytes() == null)) {
 					buffer.append("null,");
 				}
 				else {
@@ -178,25 +159,25 @@ public class PartitionStatistics<T> extends
 		return buffer.toString();
 	}
 
+	@Override
+	public Set<ByteArrayId> getResult() {
+		return partitions;
+	}
+
+	@Override
+	protected String resultsName() {
+		return "partitions";
+	}
+
 	/**
 	 * Convert Row Range Numeric statistics to a JSON object
 	 */
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-
-		jo.put(
-				"statisticsID",
-				statisticsId.getString());
-		final JSONArray partitionsArray = new JSONArray();
+	protected Object resultsValue() {
+		final Collection<Map<String, String>> partitionsArray = new ArrayList<>();
 		for (final ByteArrayId p : partitions) {
-			final JSONObject partition = new JSONObject();
+			final Map<String, String> partition = new HashMap<>();
 
 			if ((p == null) || (p.getBytes() == null)) {
 				partition.put(
@@ -210,9 +191,6 @@ public class PartitionStatistics<T> extends
 			}
 			partitionsArray.add(partition);
 		}
-		jo.put(
-				"partitions",
-				partitionsArray);
-		return jo;
+		return partitionsArray;
 	}
 }

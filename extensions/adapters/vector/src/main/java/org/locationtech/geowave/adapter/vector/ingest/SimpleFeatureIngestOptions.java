@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector.ingest;
 
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 import com.beust.jcommander.ParametersDelegate;
 
@@ -18,7 +18,7 @@ import com.beust.jcommander.ParametersDelegate;
  * This class is a holder class for options used in AbstractSimpleFeatureIngest.
  */
 public class SimpleFeatureIngestOptions implements
-		IngestFormatOptionProvider
+		IngestFormatOptions
 {
 
 	@ParametersDelegate
@@ -52,7 +52,7 @@ public class SimpleFeatureIngestOptions implements
 	}
 
 	public void setCqlFilterOptionProvider(
-			CQLFilterOptionProvider cqlFilterOptionProvider ) {
+			final CQLFilterOptionProvider cqlFilterOptionProvider ) {
 		this.cqlFilterOptionProvider = cqlFilterOptionProvider;
 	}
 
@@ -61,7 +61,7 @@ public class SimpleFeatureIngestOptions implements
 	}
 
 	public void setTypeNameOptionProvider(
-			TypeNameOptionProvider typeNameOptionProvider ) {
+			final TypeNameOptionProvider typeNameOptionProvider ) {
 		this.typeNameOptionProvider = typeNameOptionProvider;
 	}
 
@@ -70,7 +70,7 @@ public class SimpleFeatureIngestOptions implements
 	}
 
 	public void setSerializationFormatOptionProvider(
-			FeatureSerializationOptionProvider serializationFormatOptionProvider ) {
+			final FeatureSerializationOptionProvider serializationFormatOptionProvider ) {
 		this.serializationFormatOptionProvider = serializationFormatOptionProvider;
 	}
 
@@ -79,7 +79,7 @@ public class SimpleFeatureIngestOptions implements
 	}
 
 	public void setPluginOptions(
-			Object pluginOptions ) {
+			final Object pluginOptions ) {
 		this.pluginOptions = pluginOptions;
 	}
 }

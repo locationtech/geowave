@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.core.ingest.kafka;
 
 import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -24,20 +23,19 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
-import org.locationtech.geowave.core.ingest.index.IndexProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IndexProvider;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +49,7 @@ import kafka.javaapi.consumer.ConsumerConnector;
 /**
  * This class executes the ingestion of intermediate data from a Kafka topic
  * into GeoWave.
- * 
+ *
  */
 public class IngestFromKafkaDriver
 {
@@ -62,14 +60,14 @@ public class IngestFromKafkaDriver
 	private final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins;
 	private final KafkaConsumerCommandLineOptions kafkaOptions;
 	private final VisibilityOptions ingestOptions;
-	private final List<Future<?>> futures = new ArrayList<Future<?>>();
+	private final List<Future<?>> futures = new ArrayList<>();
 
 	public IngestFromKafkaDriver(
-			DataStorePluginOptions storeOptions,
-			List<IndexPluginOptions> indexOptions,
-			Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
-			KafkaConsumerCommandLineOptions kafkaOptions,
-			VisibilityOptions ingestOptions ) {
+			final DataStorePluginOptions storeOptions,
+			final List<IndexPluginOptions> indexOptions,
+			final Map<String, AvroFormatPlugin<?, ?>> ingestPlugins,
+			final KafkaConsumerCommandLineOptions kafkaOptions,
+			final VisibilityOptions ingestOptions ) {
 		this.storeOptions = storeOptions;
 		this.indexOptions = indexOptions;
 		this.ingestPlugins = ingestPlugins;
@@ -81,7 +79,7 @@ public class IngestFromKafkaDriver
 
 		final DataStore dataStore = storeOptions.createDataStore();
 
-		final List<String> queue = new ArrayList<String>();
+		final List<String> queue = new ArrayList<>();
 		addPluginsToQueue(
 				ingestPlugins,
 				queue);
@@ -134,15 +132,15 @@ public class IngestFromKafkaDriver
 			final Map<String, AvroFormatPlugin<?, ?>> pluginProviders,
 			final List<String> queue ) {
 		try {
-			for (Entry<String, AvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
-				final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
+			for (final Entry<String, AvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
+				final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
 
 				AvroFormatPlugin<?, ?> avroFormatPlugin = null;
 				try {
 					avroFormatPlugin = pluginProvider.getValue();
 
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
-					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
+					final DataTypeAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
 							.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final KafkaIngestRunData runData = new KafkaIngestRunData(
@@ -172,7 +170,7 @@ public class IngestFromKafkaDriver
 
 	private ConsumerConnector buildKafkaConsumer() {
 
-		Properties kafkaProperties = kafkaOptions.getProperties();
+		final Properties kafkaProperties = kafkaOptions.getProperties();
 
 		final ConsumerConnector consumer = Consumer.createJavaConsumerConnector(new ConsumerConfig(
 				kafkaProperties));
@@ -323,60 +321,61 @@ public class IngestFromKafkaDriver
 			final AvroFormatPlugin<T, ?> plugin )
 			throws IOException {
 
-		IngestPluginBase<T, ?> ingestPlugin = plugin.getIngestWithAvroPlugin();
-		IndexProvider indexProvider = plugin;
+		final IngestPluginBase<T, ?> ingestPlugin = plugin.getIngestWithAvroPlugin();
+		final IndexProvider indexProvider = plugin;
 
-		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
-		final Map<ByteArrayId, PrimaryIndex> indexMap = new HashMap<ByteArrayId, PrimaryIndex>();
+		final Map<String, Writer> writerMap = new HashMap<>();
+		final Map<String, Index> indexMap = new HashMap<>();
 
-		for (IndexPluginOptions indexOption : indexOptions) {
-			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
+		for (final IndexPluginOptions indexOption : indexOptions) {
+			final Index primaryIndex = indexOption.createIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
 						"Could not get index instance, getIndex() returned null");
 			}
 			indexMap.put(
-					primaryIndex.getId(),
+					primaryIndex.getName(),
 					primaryIndex);
 		}
 
-		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
+		final Index[] requiredIndices = indexProvider.getRequiredIndices();
 		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
-			for (final PrimaryIndex requiredIndex : requiredIndices) {
+			for (final Index requiredIndex : requiredIndices) {
 				indexMap.put(
-						requiredIndex.getId(),
+						requiredIndex.getName(),
 						requiredIndex);
 			}
 		}
 
 		try (CloseableIterator<?> geowaveDataIt = ingestPlugin.toGeoWaveData(
 				dataRecord,
-				indexMap.keySet(),
+				indexMap.keySet().toArray(
+						new String[0]),
 				ingestOptions.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+				final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
 				if (adapter == null) {
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;
 				}
-				IndexWriter indexWriter = writerMap.get(adapter.getAdapterId());
+				Writer indexWriter = writerMap.get(adapter.getTypeName());
 				if (indexWriter == null) {
-					List<PrimaryIndex> indexList = new ArrayList<PrimaryIndex>();
-					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-						final PrimaryIndex index = indexMap.get(indexId);
+					final List<Index> indexList = new ArrayList<>();
+					for (final String indexName : geowaveData.getIndexNames()) {
+						final Index index = indexMap.get(indexName);
 						if (index == null) {
-							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
+							LOGGER.warn("Index '" + indexName + "' not found for " + geowaveData.getValue());
 							continue;
 						}
 						indexList.add(index);
 					}
 					indexWriter = ingestRunData.getIndexWriter(
 							adapter,
-							indexList.toArray(new PrimaryIndex[indexList.size()]));
+							indexList.toArray(new Index[indexList.size()]));
 					writerMap.put(
-							adapter.getAdapterId(),
+							adapter.getTypeName(),
 							indexWriter);
 				}
 
@@ -392,11 +391,11 @@ public class IngestFromKafkaDriver
 
 	/**
 	 * Only true if all futures are complete.
-	 * 
+	 *
 	 * @return
 	 */
 	public boolean isComplete() {
-		for (Future<?> future : futures) {
+		for (final Future<?> future : futures) {
 			if (!future.isDone()) {
 				return false;
 			}
@@ -406,7 +405,7 @@ public class IngestFromKafkaDriver
 
 	/**
 	 * Wait for all kafka topics to complete, then return the result objects.
-	 * 
+	 *
 	 * @return
 	 * @throws InterruptedException
 	 * @throws ExecutionException
@@ -414,8 +413,8 @@ public class IngestFromKafkaDriver
 	public List<Object> waitFutures()
 			throws InterruptedException,
 			ExecutionException {
-		List<Object> results = new ArrayList<Object>();
-		for (Future<?> future : futures) {
+		final List<Object> results = new ArrayList<>();
+		for (final Future<?> future : futures) {
 			results.add(future.get());
 		}
 		return results;

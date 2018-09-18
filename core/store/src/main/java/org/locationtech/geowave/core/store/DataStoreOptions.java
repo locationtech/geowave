@@ -12,13 +12,7 @@ package org.locationtech.geowave.core.store;
 
 public interface DataStoreOptions
 {
-	public boolean isPersistIndex();
-
-	public boolean isPersistAdapter();
-
 	public boolean isPersistDataStatistics();
-
-	public boolean isCreateTable();
 
 	public boolean isEnableBlockCache();
 

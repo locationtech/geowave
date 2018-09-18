@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -48,20 +48,17 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.DataStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.referencing.FactoryException;
 import org.slf4j.Logger;
@@ -174,7 +171,7 @@ public class DBScanIT extends
 	}
 
 	private void runScan(
-			final DistributableQuery query )
+			final QueryConstraints query )
 			throws Exception {
 
 		final DBScanIterationsJobRunner jobRunner = new DBScanIterationsJobRunner();
@@ -184,7 +181,6 @@ public class DBScanIT extends
 				new PropertyManagement(
 						new ParameterEnum[] {
 							ExtractParameters.Extract.QUERY,
-							ExtractParameters.Extract.QUERY_OPTIONS,
 							ExtractParameters.Extract.MIN_INPUT_SPLIT,
 							ExtractParameters.Extract.MAX_INPUT_SPLIT,
 							PartitionParameters.Partition.MAX_DISTANCE,
@@ -199,8 +195,8 @@ public class DBScanIT extends
 							PartitionParameters.Partition.PARTITION_PRECISION
 						},
 						new Object[] {
-							query,
-							new QueryOptions(),
+							QueryBuilder.newBuilder().constraints(
+									query).build(),
 							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
 							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							10000.0,
@@ -227,17 +223,16 @@ public class DBScanIT extends
 
 	private int readHulls()
 			throws Exception {
-		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<>(
 				dataStorePluginOptions.createDataStore(),
 				dataStorePluginOptions.createIndexStore(),
 				dataStorePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
 				"concave_hull",
-				dataStorePluginOptions.createInternalAdapterStore().addAdapterId(
-						new ByteArrayId(
-								"concave_hull")),
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString(),
+				dataStorePluginOptions.createInternalAdapterStore().addTypeName(
+						"concave_hull"),
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName(),
 				"bx5",
 				0);
 

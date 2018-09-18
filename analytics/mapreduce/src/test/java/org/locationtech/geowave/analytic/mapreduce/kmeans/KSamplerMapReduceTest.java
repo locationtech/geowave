@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.analytic.mapreduce.kmeans;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -34,7 +33,6 @@ import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.extract.CentroidExtractor;
-import org.locationtech.geowave.analytic.mapreduce.kmeans.KSamplerMapReduce;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.SampleParameters;
@@ -45,8 +43,8 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -70,7 +68,7 @@ public class KSamplerMapReduceTest
 	@Rule
 	public TestName name = new TestName();
 
-	private static final List<Object> capturedObjects = new ArrayList<Object>();
+	private static final List<Object> capturedObjects = new ArrayList<>();
 
 	public KSamplerMapReduceTest() {}
 
@@ -116,11 +114,11 @@ public class KSamplerMapReduceTest
 	@Before
 	public void setUp()
 			throws IOException {
-		final KSamplerMapReduce.SampleMap<TestObject> mapper = new KSamplerMapReduce.SampleMap<TestObject>();
-		final KSamplerMapReduce.SampleReducer<TestObject> reducer = new KSamplerMapReduce.SampleReducer<TestObject>();
+		final KSamplerMapReduce.SampleMap<TestObject> mapper = new KSamplerMapReduce.SampleMap<>();
+		final KSamplerMapReduce.SampleReducer<TestObject> reducer = new KSamplerMapReduce.SampleReducer<>();
 		mapDriver = MapDriver.newMapDriver(mapper);
 		reduceDriver = ReduceDriver.newReduceDriver(reducer);
-		final WritableDataAdapter<?> adapter = AnalyticFeature.createGeometryFeatureAdapter(
+		final DataTypeAdapter<?> adapter = AnalyticFeature.createGeometryFeatureAdapter(
 				"altoids",
 				new String[] {},
 				"http://geowave.test.net",
@@ -128,15 +126,15 @@ public class KSamplerMapReduceTest
 
 		final PropertyManagement propManagement = new PropertyManagement();
 
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
-		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		opts.setGeowaveNamespace(namespace);
-		PersistableStore store = new PersistableStore(
+		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 
 		propManagement.store(
@@ -144,9 +142,9 @@ public class KSamplerMapReduceTest
 				store);
 
 		propManagement.store(
-				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString());
+				CentroidParameters.Centroid.INDEX_NAME,
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				"altoids");
@@ -174,9 +172,10 @@ public class KSamplerMapReduceTest
 		// TODO it seems the centroid adapter is required to have been written,
 		// should this initialization be handled by the runner class rather than
 		// externally such as in the test?
-		store.getDataStoreOptions().createDataStore().createWriter(
+		final DataStore dataStore = store.getDataStoreOptions().createDataStore();
+		dataStore.addType(
 				adapter,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions())).close();
+				new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 
 		mapDriver.getConfiguration().setClass(
 				GeoWaveConfiguratorBase.enumToConfKey(
@@ -184,21 +183,21 @@ public class KSamplerMapReduceTest
 						SampleParameters.Sample.SAMPLE_RANK_FUNCTION),
 				TestSamplingMidRankFunction.class,
 				SamplingRankFunction.class);
-		internalAdapterId = InternalAdapterStoreImpl.getInitialInternalAdapterId(testObjectAdapter.getAdapterId());
-		other = InternalAdapterStoreImpl.getInitialInternalAdapterId(adapter.getAdapterId());
+		internalAdapterId = InternalAdapterStoreImpl.getInitialAdapterId(testObjectAdapter.getTypeName());
+		other = InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName());
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				testObjectAdapter);
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				adapter);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				mapDriver.getConfiguration(),
-				testObjectAdapter.getAdapterId(),
+				testObjectAdapter.getTypeName(),
 				internalAdapterId);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				mapDriver.getConfiguration(),
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				other);
 
 		mapDriver.getConfiguration().setInt(
@@ -219,19 +218,19 @@ public class KSamplerMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				testObjectAdapter);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				reduceDriver.getConfiguration(),
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				other);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				reduceDriver.getConfiguration(),
-				testObjectAdapter.getAdapterId(),
+				testObjectAdapter.getTypeName(),
 				internalAdapterId);
 
 		reduceDriver.getConfiguration().set(
 				GeoWaveConfiguratorBase.enumToConfKey(
 						KSamplerMapReduce.class,
-						SampleParameters.Sample.DATA_TYPE_ID),
+						SampleParameters.Sample.DATA_TYPE_NAME),
 				"altoids");
 
 		reduceDriver.getConfiguration().setClass(
@@ -464,14 +463,14 @@ public class KSamplerMapReduceTest
 		assertEquals(
 				2,
 				results.size());
-		assertTrue(Arrays.equals(
+		assertEquals(
 				results.get(
-						0).getFirst().getAdapterId().getBytes(),
-				"altoids".getBytes()));
-		assertTrue(Arrays.equals(
+						0).getFirst().getTypeName(),
+				"altoids");
+		assertEquals(
 				results.get(
-						1).getFirst().getAdapterId().getBytes(),
-				"altoids".getBytes()));
+						1).getFirst().getTypeName(),
+				"altoids");
 		assertEquals(
 				"abc",
 				results.get(

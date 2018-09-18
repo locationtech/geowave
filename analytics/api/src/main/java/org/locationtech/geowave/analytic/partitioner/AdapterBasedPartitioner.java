@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -25,7 +25,6 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -34,13 +33,12 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.slf4j.Logger;
@@ -50,8 +48,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 /**
- * This class uses the {@link DataAdapter} to decode the dimension fields to be
- * indexed. Although seemingly more flexible than the
+ * This class uses the {@link DataTypeAdapter} to decode the dimension fields to
+ * be indexed. Although seemingly more flexible than the
  * {@link OrthodromicDistancePartitioner}, handling different types of data
  * entries, the assumption is that each object decode by the adapter provides
  * the fields required according to the supplied model.
@@ -99,11 +97,11 @@ public class AdapterBasedPartitioner extends
 
 	public static class AdapterDataEntry
 	{
-		ByteArrayId adapterId;
+		String adapterId;
 		Object data;
 
 		public AdapterDataEntry(
-				final ByteArrayId adapterId,
+				final String adapterId,
 				final Object data ) {
 			super();
 			this.adapterId = adapterId;
@@ -117,7 +115,7 @@ public class AdapterBasedPartitioner extends
 		final NumericDataHolder numericDataHolder = new NumericDataHolder();
 
 		@SuppressWarnings("unchecked")
-		final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(entry.adapterId);
+		final DataTypeAdapter<Object> adapter = (DataTypeAdapter<Object>) adapterStore.getAdapter(entry.adapterId);
 		if (adapter == null) {
 			LOGGER.error(
 					"Unable to find an adapter for id {}",
@@ -189,7 +187,7 @@ public class AdapterBasedPartitioner extends
 			final MultiDimensionalNumericData dimensionsData,
 			final double[] distances ) {
 
-		final List<NumericRange[]> resultList = new ArrayList<NumericRange[]>();
+		final List<NumericRange[]> resultList = new ArrayList<>();
 		final NumericRange[] currentData = new NumericRange[dimensionsData.getDimensionCount()];
 		addToList(
 				resultList,
@@ -301,35 +299,35 @@ public class AdapterBasedPartitioner extends
 
 		@Override
 		public void addAdapter(
-				final DataAdapter<?> adapter ) {
+				final DataTypeAdapter<?> adapter ) {
 			adapterStore.addAdapter(new InternalDataAdapterWrapper(
-					(WritableDataAdapter) adapter,
-					internalAdapterStore.addAdapterId(adapter.getAdapterId())));
+					adapter,
+					internalAdapterStore.addTypeName(adapter.getTypeName())));
 		}
 
 		@Override
-		public DataAdapter<?> getAdapter(
-				final ByteArrayId adapterId ) {
-			return adapterStore.getAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
+		public DataTypeAdapter<?> getAdapter(
+				final String typeName ) {
+			return adapterStore.getAdapter(internalAdapterStore.getAdapterId(typeName));
 		}
 
 		@Override
 		public boolean adapterExists(
-				final ByteArrayId adapterId ) {
-			return adapterStore.adapterExists(internalAdapterStore.getInternalAdapterId(adapterId));
+				final String typeName ) {
+			return adapterStore.adapterExists(internalAdapterStore.getAdapterId(typeName));
 		}
 
 		@Override
-		public CloseableIterator<DataAdapter<?>> getAdapters() {
+		public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
 			final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-			return new CloseableIteratorWrapper<DataAdapter<?>>(
+			return new CloseableIteratorWrapper<>(
 					it,
 					Iterators.transform(
 							it,
-							new Function<InternalDataAdapter<?>, DataAdapter<?>>() {
+							new Function<InternalDataAdapter<?>, DataTypeAdapter<?>>() {
 
 								@Override
-								public DataAdapter<?> apply(
+								public DataTypeAdapter<?> apply(
 										final InternalDataAdapter<?> input ) {
 									return input.getAdapter();
 								}
@@ -344,9 +342,9 @@ public class AdapterBasedPartitioner extends
 
 		@Override
 		public void removeAdapter(
-				final ByteArrayId adapterId ) {
-			adapterStore.removeAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
-			internalAdapterStore.remove(adapterId);
+				final String typeName ) {
+			adapterStore.removeAdapter(internalAdapterStore.getAdapterId(typeName));
+			internalAdapterStore.remove(typeName);
 		}
 	}
 }

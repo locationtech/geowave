@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,15 +10,12 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
-import java.util.Collection;
-
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.ingest.DataAdapterProvider;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 
 /**
  * This interface is used by the IngestFromHdfsPlugin to implement ingestion
@@ -26,7 +23,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
  * GeoWave. The implementation will be directly persisted to the job
  * configuration and called to generate key value pairs from intermediate data
  * in the mapper and to produce GeoWaveData to be written in the reducer.
- * 
+ *
  * @param <I>
  *            data type for intermediate data
  * @param K
@@ -51,7 +48,7 @@ public interface IngestWithReducer<I, K extends WritableComparable<?>, V extends
 
 	public CloseableIterator<GeoWaveData<O>> toGeoWaveData(
 			K key,
-			Collection<ByteArrayId> primaryIndexIds,
+			String[] indexNames,
 			String globalVisibility,
 			Iterable<V> values );
 }

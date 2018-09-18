@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,29 +10,25 @@
  ******************************************************************************/
 package org.locationtech.geowave.format.geotools.vector;
 
-import java.io.IOException;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.geotools.data.DataStore;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is a wrapper for a GeoTools SimpleFeatureCollection as a convenience to
@@ -48,7 +44,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 			CloseableIterator<GeoWaveData<SimpleFeature>>
 	{
 		private final SimpleFeatureIterator featureIterator;
-		private final WritableDataAdapter<SimpleFeature> dataAdapter;
+		private final DataTypeAdapter<SimpleFeature> dataAdapter;
 		private RetypingVectorDataSource source = null;
 		private final Filter filter;
 		private SimpleFeatureBuilder builder = null;
@@ -118,9 +114,9 @@ public class SimpleFeatureGeoWaveWrapper implements
 				}
 			}
 			while (!filter.evaluate(nextAcceptedFeature));
-			currentData = new GeoWaveData<SimpleFeature>(
+			currentData = new GeoWaveData<>(
 					dataAdapter,
-					primaryIndexIds,
+					indexNames,
 					nextAcceptedFeature);
 			return true;
 		}
@@ -129,15 +125,14 @@ public class SimpleFeatureGeoWaveWrapper implements
 		public void remove() {}
 
 		@Override
-		public void close()
-				throws IOException {
+		public void close() {
 			featureIterator.close();
 		}
 
 	}
 
 	private final List<SimpleFeatureCollection> featureCollections;
-	private final Collection<ByteArrayId> primaryIndexIds;
+	private final String[] indexNames;
 	private InternalIterator currentIterator = null;
 	private final String visibility;
 	private final DataStore dataStore;
@@ -146,14 +141,14 @@ public class SimpleFeatureGeoWaveWrapper implements
 
 	public SimpleFeatureGeoWaveWrapper(
 			final List<SimpleFeatureCollection> featureCollections,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String visibility,
 			final DataStore dataStore,
 			final RetypingVectorDataPlugin retypingPlugin,
 			final Filter filter ) {
 		this.featureCollections = featureCollections;
 		this.visibility = visibility;
-		this.primaryIndexIds = primaryIndexIds;
+		this.indexNames = indexNames;
 		this.dataStore = dataStore;
 		this.retypingPlugin = retypingPlugin;
 		this.filter = filter;
@@ -171,14 +166,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 
 	private synchronized boolean nextIterator() {
 		if (currentIterator != null) {
-			try {
-				currentIterator.close();
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Cannot close feature iterator",
-						e);
-			}
+			currentIterator.close();
 		}
 		final Iterator<SimpleFeatureCollection> it = featureCollections.iterator();
 		while (it.hasNext()) {
@@ -190,14 +178,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 
 			it.remove();
 			if (!featureIt.hasNext()) {
-				try {
-					featureIt.close();
-				}
-				catch (final IOException e) {
-					LOGGER.warn(
-							"Cannot close feature iterator",
-							e);
-				}
+				featureIt.close();
 			}
 			else {
 				currentIterator = featureIt;
@@ -227,8 +208,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 	}
 
 	@Override
-	public void close()
-			throws IOException {
+	public void close() {
 		if (currentIterator != null) {
 			currentIterator.close();
 		}

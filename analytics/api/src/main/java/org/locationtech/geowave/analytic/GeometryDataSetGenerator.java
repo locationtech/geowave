@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -31,9 +31,9 @@ import org.locationtech.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
@@ -51,7 +51,7 @@ import com.vividsolutions.jts.geom.Point;
 
 /**
  * Generate clusters of geometries.
- * 
+ *
  */
 public class GeometryDataSetGenerator
 {
@@ -121,7 +121,7 @@ public class GeometryDataSetGenerator
 
 	/**
 	 * Calculate the range for the given bounds
-	 * 
+	 *
 	 * @param factor
 	 * @param minAxis
 	 * @param maxAxis
@@ -142,7 +142,7 @@ public class GeometryDataSetGenerator
 	 * Pick a random grid cell and supply the boundary. The grid is determined
 	 * by the parameter,which provides a percentage of distance over the total
 	 * range for each cell.
-	 * 
+	 *
 	 * @param minCenterDistanceFactor
 	 * @return
 	 */
@@ -178,7 +178,7 @@ public class GeometryDataSetGenerator
 			final DataStore dataStore,
 			final List<SimpleFeature> featureData )
 			throws IOException {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureData.get(
 						0).getFeatureType());
@@ -188,9 +188,10 @@ public class GeometryDataSetGenerator
 						0).getFeatureType());
 
 		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getFeatureType().getTypeName());
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			for (final SimpleFeature feature : featureData) {
 				writer.write(feature);
 				featureBuilder.reset();
@@ -255,7 +256,7 @@ public class GeometryDataSetGenerator
 
 		/**
 		 * Pick the initial centers which have minimum distance from each other.
-		 * 
+		 *
 		 */
 		while (pointSet.size() < numberOfCenters) {
 
@@ -372,7 +373,7 @@ public class GeometryDataSetGenerator
 	 * Find the distance maximum distance of the entire space and multiply that
 	 * by the distance factor to determine a minimum distance each initial
 	 * center point occurs from each other.
-	 * 
+	 *
 	 * @param minCenterDistanceFactor
 	 * @return
 	 */
@@ -461,7 +462,7 @@ public class GeometryDataSetGenerator
 	/**
 	 * Change the constrain min and max to center around the coordinate to keep
 	 * the polygons tight.
-	 * 
+	 *
 	 * @param coordinate
 	 * @param constrainedMaxAxis
 	 * @param constrainedMinAxis

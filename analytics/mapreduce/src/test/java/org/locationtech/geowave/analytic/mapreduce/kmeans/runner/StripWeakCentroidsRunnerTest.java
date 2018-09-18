@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -26,15 +26,12 @@ import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.clustering.CentroidManager;
 import org.locationtech.geowave.analytic.clustering.LongCentroid;
 import org.locationtech.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
-import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.MaxChangeBreakStrategy;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.StableChangeBreakStrategy;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailMaxBreakStrategy;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.runner.StripWeakCentroidsRunner.TailStableChangeBreakStrategy;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
@@ -56,7 +53,7 @@ public class StripWeakCentroidsRunnerTest
 	public void testStable1()
 			throws Exception {
 
-		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<>();
 		final int cnts[] = new int[] {
 			1000,
 			851,
@@ -74,7 +71,7 @@ public class StripWeakCentroidsRunnerTest
 					"",
 					cnts[i]));
 		}
-		final StableChangeBreakStrategy<Long> breakS = new StableChangeBreakStrategy<Long>();
+		final StableChangeBreakStrategy<Long> breakS = new StableChangeBreakStrategy<>();
 		assertEquals(
 				5,
 				breakS.getBreakPoint(list));
@@ -84,7 +81,7 @@ public class StripWeakCentroidsRunnerTest
 	public void testStableUniform()
 			throws Exception {
 
-		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<>();
 		final int cnts[] = new int[] {
 			1000,
 			851,
@@ -102,7 +99,7 @@ public class StripWeakCentroidsRunnerTest
 					"",
 					cnts[i]));
 		}
-		final TailStableChangeBreakStrategy<Long> breakS = new TailStableChangeBreakStrategy<Long>();
+		final TailStableChangeBreakStrategy<Long> breakS = new TailStableChangeBreakStrategy<>();
 		assertEquals(
 				5,
 				breakS.getBreakPoint(list));
@@ -112,7 +109,7 @@ public class StripWeakCentroidsRunnerTest
 	public void testMaxDense()
 			throws Exception {
 
-		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<>();
 		final int cnts[] = new int[] {
 			900,
 			600,
@@ -124,7 +121,7 @@ public class StripWeakCentroidsRunnerTest
 					"",
 					cnts[i]));
 		}
-		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<Long>();
+		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<>();
 		assertEquals(
 				3,
 				breakS.getBreakPoint(list));
@@ -134,7 +131,7 @@ public class StripWeakCentroidsRunnerTest
 	public void testMaxUniform()
 			throws Exception {
 
-		final List<AnalyticItemWrapper<Long>> list = new ArrayList<AnalyticItemWrapper<Long>>();
+		final List<AnalyticItemWrapper<Long>> list = new ArrayList<>();
 		final int cnts[] = new int[] {
 			1000,
 			851,
@@ -151,7 +148,7 @@ public class StripWeakCentroidsRunnerTest
 					"",
 					cnts[i]));
 		}
-		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<Long>();
+		final TailMaxBreakStrategy<Long> breakS = new TailMaxBreakStrategy<>();
 		assertEquals(
 				5,
 				breakS.getBreakPoint(list));
@@ -277,15 +274,14 @@ public class StripWeakCentroidsRunnerTest
 				}
 
 				@Override
-				public ByteArrayId getDataTypeId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary("centroid"));
+				public String getDataTypeName() {
+					return "centroid";
 				}
 
 				@Override
-				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-							new SpatialOptions()).getId();
+				public String getIndexName() {
+					return new SpatialDimensionalityTypeProvider().createIndex(
+							new SpatialOptions()).getName();
 				}
 
 				@Override
@@ -308,7 +304,7 @@ public class StripWeakCentroidsRunnerTest
 			final Random rand = new Random(
 					2331);
 			int begin = 100000000;
-			final List<AnalyticItemWrapper<Long>> centroids = new ArrayList<AnalyticItemWrapper<Long>>();
+			final List<AnalyticItemWrapper<Long>> centroids = new ArrayList<>();
 			for (int i = 0; i <= 100; i++) {
 				if ((i > 0) && ((i % 20) == 0)) {
 					begin /= (Math.pow(
@@ -416,15 +412,14 @@ public class StripWeakCentroidsRunnerTest
 				}
 
 				@Override
-				public ByteArrayId getDataTypeId() {
-					return new ByteArrayId(
-							StringUtils.stringToBinary("centroid"));
+				public String getDataTypeName() {
+					return "centroid";
 				}
 
 				@Override
-				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-							new SpatialOptions()).getId();
+				public String getIndexName() {
+					return new SpatialDimensionalityTypeProvider().createIndex(
+							new SpatialOptions()).getName();
 				}
 
 				@Override

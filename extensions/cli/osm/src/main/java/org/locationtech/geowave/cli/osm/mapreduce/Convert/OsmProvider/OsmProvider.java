@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -30,12 +30,15 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.Authorizations;
 import org.apache.hadoop.io.Text;
+import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnFamily;
+import org.locationtech.geowave.cli.osm.accumulo.osmschema.ColumnQualifier;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Schema;
 import org.locationtech.geowave.cli.osm.mapreduce.Convert.SimpleFeatureGenerator;
 import org.locationtech.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinition;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -61,8 +64,8 @@ public class OsmProvider
 	private static final byte EMPTY_BYTES[] = new byte[0];
 
 	public OsmProvider(
-			OSMIngestCommandArgs args,
-			AccumuloRequiredOptions store )
+			final OSMIngestCommandArgs args,
+			final AccumuloRequiredOptions store )
 			throws AccumuloSecurityException,
 			AccumuloException,
 			TableNotFoundException {
@@ -80,14 +83,14 @@ public class OsmProvider
 	}
 
 	public Geometry processRelation(
-			SimpleFeatureGenerator.OSMUnion osmunion,
-			FeatureDefinition fd ) {
+			final SimpleFeatureGenerator.OSMUnion osmunion,
+			final FeatureDefinition fd ) {
 
 		// multipolygon type
-		if (osmunion.relationSets != null && osmunion.relationSets.size() > 0 && osmunion.tags != null
+		if ((osmunion.relationSets != null) && (osmunion.relationSets.size() > 0) && (osmunion.tags != null)
 				&& "multipolygon".equals(osmunion.tags.get("type"))) {
 
-			Map<String, List<LinearRing>> rings = waysFromAccumulo(
+			final Map<String, List<LinearRing>> rings = waysFromAccumulo(
 					osmunion.relationSets,
 					osmunion);
 
@@ -95,19 +98,19 @@ public class OsmProvider
 				return null;
 			}
 
-			List<LinearRing> outer = rings.get("outer");
-			List<LinearRing> inner = rings.get("inner");
+			final List<LinearRing> outer = rings.get("outer");
+			final List<LinearRing> inner = rings.get("inner");
 
 			if (outer.size() == 0) {
 				LOGGER.error("Polygons must have at least one outer ring; error with relation: " + osmunion.Id);
 				return null;
 			}
 
-			List<Polygon> polygons = new ArrayList<Polygon>();
+			final List<Polygon> polygons = new ArrayList<>();
 
-			for (LinearRing lr : outer) {
-				List<LinearRing> tempInner = new ArrayList<>();
-				for (LinearRing i : inner) {
+			for (final LinearRing lr : outer) {
+				final List<LinearRing> tempInner = new ArrayList<>();
+				for (final LinearRing i : inner) {
 					if (lr.contains(i)) {
 						tempInner.add(i);
 					}
@@ -136,20 +139,20 @@ public class OsmProvider
 	}
 
 	public Geometry processWay(
-			SimpleFeatureGenerator.OSMUnion osmunion,
-			FeatureDefinition fd ) {
+			final SimpleFeatureGenerator.OSMUnion osmunion,
+			final FeatureDefinition fd ) {
 
-		if (osmunion.Nodes == null || osmunion.Nodes.size() == 0) {
+		if ((osmunion.Nodes == null) || (osmunion.Nodes.size() == 0)) {
 			return null;
 		}
 
-		Map<Long, Coordinate> coords = nodesFromAccumulo(osmunion.Nodes);
-		Coordinate[] orderedCoords = new Coordinate[osmunion.Nodes.size()];
+		final Map<Long, Coordinate> coords = nodesFromAccumulo(osmunion.Nodes);
+		final Coordinate[] orderedCoords = new Coordinate[osmunion.Nodes.size()];
 
-		List<String> missingNodes = new ArrayList<>();
+		final List<String> missingNodes = new ArrayList<>();
 
 		int i = 0;
-		for (long l : osmunion.Nodes) {
+		for (final long l : osmunion.Nodes) {
 			// String hash = new String(Schema.getIdHash(l));
 
 			orderedCoords[i] = (coords.get(l));
@@ -170,7 +173,7 @@ public class OsmProvider
 			return null;
 		}
 
-		if (osmunion.Nodes.size() > 2 && osmunion.Nodes.get(0) == osmunion.Nodes.get(osmunion.Nodes.size() - 1)) {
+		if ((osmunion.Nodes.size() > 2) && (osmunion.Nodes.get(0) == osmunion.Nodes.get(osmunion.Nodes.size() - 1))) {
 			// closed way
 			switch (fd.type) {
 				case Geometry: { // best guess on type = polygon (closed way)
@@ -192,17 +195,18 @@ public class OsmProvider
 			// open way
 			switch (fd.type) {
 				case Geometry: { // best guess on type
-					String area = osmunion.tags.get("area");
-					if (area != null && "yes".equals(area)) {
+					final String area = osmunion.tags.get("area");
+					if ((area != null) && "yes".equals(area)) {
 						// close the geometry - it's supposto be an area
-						Coordinate[] closedCords = Arrays.copyOf(
+						final Coordinate[] closedCords = Arrays.copyOf(
 								orderedCoords,
 								orderedCoords.length + 1);
 						closedCords[closedCords.length - 1] = closedCords[0];
 						return GeometryUtils.GEOMETRY_FACTORY.createPolygon(closedCords);
 					}
-					else
+					else {
 						return GeometryUtils.GEOMETRY_FACTORY.createLineString(orderedCoords);
+					}
 
 				}
 				case Polygon: {
@@ -214,7 +218,7 @@ public class OsmProvider
 					}
 					// close the geometry since it's unclosed, but coereced to a
 					// polygon
-					Coordinate[] closedCords = Arrays.copyOf(
+					final Coordinate[] closedCords = Arrays.copyOf(
 							orderedCoords,
 							orderedCoords.length + 1);
 					closedCords[closedCords.length - 1] = closedCords[0];
@@ -243,10 +247,10 @@ public class OsmProvider
 	}
 
 	private Map<String, List<LinearRing>> waysFromAccumulo(
-			Map<Integer, SimpleFeatureGenerator.RelationSet> relations,
-			SimpleFeatureGenerator.OSMUnion osmunion ) {
+			final Map<Integer, SimpleFeatureGenerator.RelationSet> relations,
+			final SimpleFeatureGenerator.OSMUnion osmunion ) {
 
-		Map<String, List<LinearRing>> rings = new HashMap<>();
+		final Map<String, List<LinearRing>> rings = new HashMap<>();
 		rings.put(
 				"inner",
 				new ArrayList<LinearRing>());
@@ -254,10 +258,10 @@ public class OsmProvider
 				"outer",
 				new ArrayList<LinearRing>());
 
-		List<Long> outerWays = new ArrayList<>();
-		List<Long> innerWays = new ArrayList<>();
+		final List<Long> outerWays = new ArrayList<>();
+		final List<Long> innerWays = new ArrayList<>();
 
-		for (Map.Entry<Integer, SimpleFeatureGenerator.RelationSet> kvp : relations.entrySet()) {
+		for (final Map.Entry<Integer, SimpleFeatureGenerator.RelationSet> kvp : relations.entrySet()) {
 			switch (kvp.getValue().memType) {
 				case RELATION: {
 					LOGGER.warn("Super-relations not currently supported");
@@ -280,21 +284,21 @@ public class OsmProvider
 
 		}
 
-		List<Range> ranges = new ArrayList<>(
+		final List<Range> ranges = new ArrayList<>(
 				outerWays.size() + innerWays.size());
 		if (ranges.size() == 0) {
 			LOGGER.warn("No multipolygon relations found for relation: " + osmunion.Id);
 			return null;
 		}
 
-		for (Long l : outerWays) {
-			byte[] row = Schema.getIdHash(l);
+		for (final Long l : outerWays) {
+			final byte[] row = Schema.getIdHash(l);
 			ranges.add(new Range(
 					new Text(
 							row)));
 		}
-		for (Long l : innerWays) {
-			byte[] row = Schema.getIdHash(l);
+		for (final Long l : innerWays) {
+			final byte[] row = Schema.getIdHash(l);
 			ranges.add(new Range(
 					new Text(
 							row)));
@@ -304,47 +308,47 @@ public class OsmProvider
 		bs.clearColumns();
 		bs.fetchColumn(
 				new Text(
-						Schema.CF.WAY),
+						ColumnFamily.WAY),
 				new Text(
-						Schema.CQ.ID));
+						ColumnQualifier.ID));
 		bs.fetchColumn(
 				new Text(
-						Schema.CF.WAY),
+						ColumnFamily.WAY),
 				new Text(
-						Schema.CQ.REFERENCES));
+						ColumnQualifier.REFERENCES));
 
-		Map<Long, List<Long>> vals = new HashMap<>();
+		final Map<Long, List<Long>> vals = new HashMap<>();
 
 		long id = -1;
 		List<Long> tvals = null;
 		ByteSequence lastkey = null;
 
-		for (Map.Entry<Key, Value> row : bs) {
+		for (final Map.Entry<Key, Value> row : bs) {
 			if (lastkey == null) {
 				lastkey = row.getKey().getRowData();
 			}
 
 			if (Schema.arraysEqual(
 					row.getKey().getColumnQualifierData(),
-					Schema.CQ.ID)) {
+					StringUtils.stringToBinary(ColumnQualifier.ID))) {
 				id = longReader.readField(row.getValue().get());
 			}
 			else if (Schema.arraysEqual(
 					row.getKey().getColumnQualifierData(),
-					Schema.CQ.REFERENCES)) {
+					StringUtils.stringToBinary(ColumnQualifier.REFERENCES))) {
 				try {
 					tvals = TypeUtils.deserializeLongArray(
 							row.getValue().get(),
 							null).getIds();
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					LOGGER.error(
 							"Error deserializing member array for way: ",
 							e);
 				}
 			}
 
-			if (id != -1 && tvals != null) {
+			if ((id != -1) && (tvals != null)) {
 				vals.put(
 						id,
 						tvals);
@@ -360,12 +364,12 @@ public class OsmProvider
 
 		}
 
-		for (Map.Entry<Long, List<Long>> kvp : vals.entrySet()) {
-			Map<Long, Coordinate> ring = nodesFromAccumulo(kvp.getValue());
+		for (final Map.Entry<Long, List<Long>> kvp : vals.entrySet()) {
+			final Map<Long, Coordinate> ring = nodesFromAccumulo(kvp.getValue());
 			Coordinate[] sortedCoords = new Coordinate[ring.size()];
-			List<String> missingIds = new ArrayList<>();
+			final List<String> missingIds = new ArrayList<>();
 			int i = 0;
-			for (long l : kvp.getValue()) {
+			for (final long l : kvp.getValue()) {
 				sortedCoords[i] = ring.get(l);
 				if (sortedCoords[i] == null) {
 
@@ -383,7 +387,7 @@ public class OsmProvider
 
 			if (sortedCoords[0] != sortedCoords[sortedCoords.length - 1]) {
 				// ring not closed, should be by definition -f ix
-				Coordinate[] closedCords = Arrays.copyOf(
+				final Coordinate[] closedCords = Arrays.copyOf(
 						sortedCoords,
 						sortedCoords.length + 1);
 				closedCords[sortedCoords.length + 1] = closedCords[0];
@@ -395,7 +399,7 @@ public class OsmProvider
 				return null;
 			}
 
-			LinearRing lr = GeometryUtils.GEOMETRY_FACTORY.createLinearRing(sortedCoords);
+			final LinearRing lr = GeometryUtils.GEOMETRY_FACTORY.createLinearRing(sortedCoords);
 
 			if (innerWays.contains(kvp.getKey())) {
 				rings.get(
@@ -417,12 +421,12 @@ public class OsmProvider
 	}
 
 	private Map<Long, Coordinate> nodesFromAccumulo(
-			List<Long> vals ) {
+			final List<Long> vals ) {
 
 		List<Range> ranges = new ArrayList<>(
 				vals.size());
-		for (Long l : vals) {
-			byte[] row = Schema.getIdHash(l);
+		for (final Long l : vals) {
+			final byte[] row = Schema.getIdHash(l);
 			ranges.add(new Range(
 					new Text(
 							row)));
@@ -435,21 +439,21 @@ public class OsmProvider
 		// bs.fetchColumnFamily(new Text(Schema.CF.NODE));
 		bs.fetchColumn(
 				new Text(
-						Schema.CF.NODE),
+						ColumnFamily.NODE),
 				new Text(
-						Schema.CQ.LONGITUDE));
+						ColumnQualifier.LONGITUDE));
 		bs.fetchColumn(
 				new Text(
-						Schema.CF.NODE),
+						ColumnFamily.NODE),
 				new Text(
-						Schema.CQ.LATITUDE));
+						ColumnQualifier.LATITUDE));
 		bs.fetchColumn(
 				new Text(
-						Schema.CF.NODE),
+						ColumnFamily.NODE),
 				new Text(
-						Schema.CQ.ID));
+						ColumnQualifier.ID));
 
-		Map<Long, Coordinate> coords = new HashMap<>();
+		final Map<Long, Coordinate> coords = new HashMap<>();
 
 		long id = -1L;
 		Coordinate crd = new Coordinate(
@@ -457,28 +461,28 @@ public class OsmProvider
 				-200);
 		ByteSequence lastkey = null;
 
-		for (Map.Entry<Key, Value> row : bs) {
+		for (final Map.Entry<Key, Value> row : bs) {
 			if (lastkey == null) {
 				lastkey = row.getKey().getRowData();
 			}
 
 			if (Schema.arraysEqual(
 					row.getKey().getColumnQualifierData(),
-					Schema.CQ.LONGITUDE)) {
+					StringUtils.stringToBinary(ColumnQualifier.LONGITUDE))) {
 				crd.x = doubleReader.readField(row.getValue().get());
 			}
 			else if (Schema.arraysEqual(
 					row.getKey().getColumnQualifierData(),
-					Schema.CQ.LATITUDE)) {
+					StringUtils.stringToBinary(ColumnQualifier.LATITUDE))) {
 				crd.y = doubleReader.readField(row.getValue().get());
 			}
 			else if (Schema.arraysEqual(
 					row.getKey().getColumnQualifierData(),
-					Schema.CQ.ID)) {
+					StringUtils.stringToBinary(ColumnQualifier.ID))) {
 				id = longReader.readField(row.getValue().get());
 			}
 
-			if (id != -1L && crd.x >= -180 && crd.y >= -180) {
+			if ((id != -1L) && (crd.x >= -180) && (crd.y >= -180)) {
 				coords.put(
 						id,
 						crd);

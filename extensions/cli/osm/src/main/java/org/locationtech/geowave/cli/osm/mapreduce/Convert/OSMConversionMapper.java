@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,7 +19,6 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.cli.osm.mapreduce.Convert.OsmProvider.OsmProvider;
 import org.locationtech.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
@@ -31,7 +30,7 @@ public class OSMConversionMapper extends
 		Mapper<Key, Value, GeoWaveOutputKey, Object>
 {
 
-	private ByteArrayId indexId = null;
+	private String indexName = null;
 	private String globalVisibility = "";
 	private final SimpleFeatureGenerator sfg = new SimpleFeatureGenerator();
 	private OsmProvider osmProvider = null;
@@ -53,9 +52,8 @@ public class OSMConversionMapper extends
 				final String name = feat.getType().getTypeName();
 				context.write(
 						new GeoWaveOutputKey(
-								new ByteArrayId(
-										name),
-								indexId),
+								name,
+								indexName),
 						feat);
 			}
 		}
@@ -81,10 +79,9 @@ public class OSMConversionMapper extends
 			globalVisibility = context.getConfiguration().get(
 					AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
 			final String primaryIndexIdStr = context.getConfiguration().get(
-					AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY);
+					AbstractMapReduceIngest.INDEX_NAMES_KEY);
 			if (primaryIndexIdStr != null) {
-				indexId = new ByteArrayId(
-						primaryIndexIdStr);
+				indexName = primaryIndexIdStr;
 			}
 			final OSMIngestCommandArgs args = new OSMIngestCommandArgs();
 			args.deserializeFromString(context.getConfiguration().get(

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,17 +10,14 @@
  ******************************************************************************/
 package org.locationtech.geowave.cli.debug;
 
-import java.io.IOException;
-
-import org.geotools.filter.text.cql2.CQLException;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
-import org.locationtech.geowave.core.store.query.aggregate.CountResult;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,59 +38,39 @@ public class CQLQuery extends
 		"--useAggregation",
 		"-agg"
 	}, description = "Compute count on the server side")
-	private Boolean useAggregation = Boolean.FALSE;
+	private final Boolean useAggregation = Boolean.FALSE;
 
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexId,
+			final String typeName,
+			final String indexName,
 			final DataStore dataStore,
 			final boolean debug ) {
 		long count = 0;
 		if (useAggregation) {
-			final QueryOptions options = new QueryOptions(
-					adapterId,
-					indexId);
-			options.setAggregation(
-					new CountAggregation(),
-					adapter);
-			try (final CloseableIterator<Object> it = dataStore.query(
-					options,
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
-							cqlStr,
-							adapter,
-							null,
-							null))) {
-				if (it.hasNext()) {
-					final CountResult result = ((CountResult) (it.next()));
-					if (result != null) {
-						count += result.getCount();
-					}
-				}
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to read result",
-						e);
-			}
-			catch (final CQLException e1) {
-				LOGGER.error(
-						"Unable to create optimal query",
-						e1);
+			final VectorAggregationQueryBuilder<Persistable, Long> bldr = (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder
+					.newBuilder()
+					.count(
+							typeName)
+					.indexName(
+							indexName);
+			final Long countResult = dataStore.aggregate(bldr.constraints(
+					bldr.constraintsFactory().cqlConstraints(
+							cqlStr)).build());
+			if (countResult != null) {
+				count += countResult;
 			}
 			return count;
 		}
 		else {
-			try (final CloseableIterator<Object> it = dataStore.query(
-					new QueryOptions(
-							adapterId,
-							indexId),
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
-							cqlStr,
-							adapter,
-							null,
-							null))) {
+			final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
+					typeName).indexName(
+					indexName);
+
+			try (final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.constraints(
+					bldr.constraintsFactory().cqlConstraints(
+							cqlStr)).build())) {
 				while (it.hasNext()) {
 					if (debug) {
 						System.out.println(it.next());
@@ -103,16 +80,6 @@ public class CQLQuery extends
 					}
 					count++;
 				}
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to read result",
-						e);
-			}
-			catch (final CQLException e1) {
-				LOGGER.error(
-						"Unable to create optimal query",
-						e1);
 			}
 			return count;
 		}

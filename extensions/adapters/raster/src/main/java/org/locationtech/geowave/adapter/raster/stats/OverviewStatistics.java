@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,22 +12,25 @@ package org.locationtech.geowave.adapter.raster.stats;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.Resolution;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.coverage.grid.GridCoverage;
 
 public class OverviewStatistics extends
-		AbstractDataStatistics<GridCoverage>
+		AbstractDataStatistics<GridCoverage, Resolution[], BaseStatisticsQueryBuilder<Resolution[]>>
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final BaseStatisticsType<Resolution[]> STATS_TYPE = new BaseStatisticsType<>(
 			"OVERVIEW");
 
 	private Resolution[] resolutions = new Resolution[] {};
@@ -38,16 +41,16 @@ public class OverviewStatistics extends
 	}
 
 	public OverviewStatistics(
-			final Short internalAdapterId ) {
+			final Short adapterId ) {
 		super(
-				internalAdapterId,
+				adapterId,
 				STATS_TYPE);
 	}
 
 	@Override
 	public byte[] toBinary() {
 		synchronized (this) {
-			final List<byte[]> resolutionBinaries = new ArrayList<byte[]>(
+			final List<byte[]> resolutionBinaries = new ArrayList<>(
 					resolutions.length);
 			int byteCount = 4; // an int for the list size
 			for (final Resolution res : resolutions) {
@@ -101,7 +104,7 @@ public class OverviewStatistics extends
 	private static Resolution[] incorporateResolutions(
 			final Resolution[] res1,
 			final Resolution[] res2 ) {
-		final TreeSet<Resolution> resolutionSet = new TreeSet<Resolution>();
+		final TreeSet<Resolution> resolutionSet = new TreeSet<>();
 		for (final Resolution res : res1) {
 			resolutionSet.add(res);
 		}
@@ -132,5 +135,28 @@ public class OverviewStatistics extends
 		synchronized (this) {
 			return resolutions;
 		}
+	}
+
+	@Override
+	public Resolution[] getResult() {
+		return getResolutions();
+	}
+
+	@Override
+	protected String resultsName() {
+		return "resolutions";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		final Map<Integer, double[]> map = new HashMap<>();
+		synchronized (this) {
+			for (int i = 0; i < resolutions.length; i++) {
+				map.put(
+						i,
+						resolutions[i].getResolutionPerDimension());
+			}
+		}
+		return map;
 	}
 }

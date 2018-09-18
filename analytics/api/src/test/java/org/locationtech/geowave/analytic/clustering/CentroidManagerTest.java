@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,21 +24,17 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.analytic.AnalyticFeature;
 import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 import org.locationtech.geowave.analytic.SimpleFeatureItemWrapperFactory;
-import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
-import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.clustering.CentroidManager.CentroidProcessingFn;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -54,12 +50,13 @@ public class CentroidManagerTest
 	private void ingest(
 			final DataStore dataStore,
 			final FeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final SimpleFeature feature )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			writer.write(feature);
 		}
 	}
@@ -98,13 +95,13 @@ public class CentroidManagerTest
 				1,
 				0);
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		final StoreFactoryFamilySpi storeFamily = new MemoryStoreFactoryFamily();
-		StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
+		final StoreFactoryOptions opts = storeFamily.getDataStoreFactory().createOptionsInstance();
 		opts.setGeowaveNamespace(namespace);
 		final DataStore dataStore = storeFamily.getDataStoreFactory().createStore(
 				opts);
@@ -222,14 +219,14 @@ public class CentroidManagerTest
 				index,
 				feature);
 
-		CentroidManagerGeoWave<SimpleFeature> manager = new CentroidManagerGeoWave<SimpleFeature>(
+		CentroidManagerGeoWave<SimpleFeature> manager = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				internalAdapterStore.getInternalAdapterId(adapter.getAdapterId()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				internalAdapterStore.getAdapterId(adapter.getTypeName()),
+				index.getName(),
 				"b1",
 				1);
 		List<AnalyticItemWrapper<SimpleFeature>> centroids = manager.getCentroidsForGroup(null);
@@ -259,14 +256,14 @@ public class CentroidManagerTest
 				(Double) feature.getAttribute("extra1"),
 				0.001);
 
-		manager = new CentroidManagerGeoWave<SimpleFeature>(
+		manager = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				internalAdapterStore.getInternalAdapterId(adapter.getAdapterId()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				internalAdapterStore.getAdapterId(adapter.getTypeName()),
+				index.getName(),
 				"b1",
 				1);
 

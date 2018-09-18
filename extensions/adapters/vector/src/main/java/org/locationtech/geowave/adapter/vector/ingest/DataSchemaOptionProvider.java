@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,13 +11,13 @@
 package org.locationtech.geowave.adapter.vector.ingest;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 import com.beust.jcommander.Parameter;
 
 public class DataSchemaOptionProvider implements
 		Persistable,
-		IngestFormatOptionProvider
+		IngestFormatOptions
 {
 	@Parameter(names = "--extended", description = "A flag to indicate whether extended data format should be used")
 	private boolean includeSupplementalFields = false;
@@ -44,10 +44,10 @@ public class DataSchemaOptionProvider implements
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void setSupplementalFields(
-			boolean supplementalFields ) {
+			final boolean supplementalFields ) {
 		includeSupplementalFields = supplementalFields;
 	}
 }

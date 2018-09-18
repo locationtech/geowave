@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,18 +12,13 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram.FixedBinNumericHistogramFactory;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 /**
  *
@@ -43,50 +38,61 @@ import net.sf.json.JSONObject;
  *
  */
 public abstract class FixedBinNumericStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>>
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
-			"FIXED_BIN_NUMERIC_HISTOGRAM");
-	FixedBinNumericHistogram histogram = new FixedBinNumericHistogram(
-			1024);
+	protected FixedBinNumericHistogram histogram;
 
 	protected FixedBinNumericStatistics() {
 		super();
+		histogram = new FixedBinNumericHistogram(
+				1024);
 	}
 
 	public FixedBinNumericStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId statisticsId ) {
-		super(
+			final StatisticsType<FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> type,
+			final String fieldName ) {
+		this(
 				internalDataAdapterId,
-				statisticsId);
+				type,
+				fieldName,
+				1024);
 	}
 
 	public FixedBinNumericStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId statisticsId,
+			final StatisticsType<FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> type,
+			final String fieldName,
 			final int bins ) {
 		super(
 				internalDataAdapterId,
-				statisticsId);
+				type,
+				fieldName);
 		histogram = new FixedBinNumericHistogram(
 				bins);
 	}
 
 	public FixedBinNumericStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId statisticsId,
+			final StatisticsType<FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> type,
+			final String fieldName,
 			final int bins,
 			final double minValue,
 			final double maxValue ) {
 		super(
 				internalDataAdapterId,
-				statisticsId);
+				type,
+				fieldName);
 		histogram = new FixedBinNumericHistogram(
 				bins,
 				minValue,
 				maxValue);
 
+	}
+
+	@Override
+	public FixedBinNumericHistogram getResult() {
+		return histogram;
 	}
 
 	public double[] quantile(
@@ -130,13 +136,9 @@ public abstract class FixedBinNumericStatistics<T> extends
 
 	@Override
 	public byte[] toBinary() {
-
 		final ByteBuffer buffer = super.binaryBuffer(histogram.bufferSize());
 		histogram.toBinary(buffer);
-		final byte result[] = new byte[buffer.position()];
-		buffer.rewind();
-		buffer.get(result);
-		return result;
+		return buffer.array();
 	}
 
 	@Override
@@ -160,8 +162,8 @@ public abstract class FixedBinNumericStatistics<T> extends
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"histogram[internalDataAdapterId=").append(
-				super.getInternalDataAdapterId());
+				"histogram[adapterId=").append(
+				super.getAdapterId());
 		buffer.append(
 				", identifier=").append(
 				getFieldIdentifier());
@@ -198,49 +200,37 @@ public abstract class FixedBinNumericStatistics<T> extends
 		return buffer.toString();
 	}
 
-	/**
-	 * Convert Fixed Bin Numeric statistics to a JSON object
-	 */
+	@Override
+	protected String resultsName() {
+		return "histogram";
+	}
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
+	protected Object resultsValue() {
+		final Map<String, Object> value = new HashMap<>();
 
-		jo.put(
-				"field_identifier",
-				getFieldIdentifier());
-
-		jo.put(
+		value.put(
 				"range_min",
 				histogram.getMinValue());
-		jo.put(
+		value.put(
 				"range_max",
 				histogram.getMaxValue());
-		final JSONArray binsArray = new JSONArray();
+		final Collection<Double> binsArray = new ArrayList<>();
 		for (final double v : this.quantile(10)) {
 			binsArray.add(v);
 		}
-		jo.put(
+		value.put(
 				"bins",
 				binsArray);
 
-		final JSONArray countsArray = new JSONArray();
+		final Collection<Long> countsArray = new ArrayList<>();
 		for (final long v : count(10)) {
 			countsArray.add(v);
 		}
-		jo.put(
+		value.put(
 				"counts",
 				countsArray);
-
-		return jo;
+		return value;
 	}
 
 }

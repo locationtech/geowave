@@ -22,8 +22,7 @@ import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
 public class TextIndexStrategyTest
 {
 	private final TextIndexStrategy strategy = new TextIndexStrategy();
-	private final ByteArrayId fieldId = new ByteArrayId(
-			"fieldId");
+	private final String fieldId = "fieldId";
 	private final String value = "myString";
 
 	@Test

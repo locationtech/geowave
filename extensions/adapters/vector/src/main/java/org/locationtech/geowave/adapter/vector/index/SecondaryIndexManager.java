@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,12 +17,10 @@ import java.util.Map;
 import org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
 import org.locationtech.geowave.adapter.vector.stats.StatsManager;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import org.locationtech.geowave.core.store.index.temporal.TemporalIndexStrategy;
@@ -42,7 +40,7 @@ import com.google.common.base.Splitter;
 public class SecondaryIndexManager implements
 		Persistable
 {
-	private final List<SecondaryIndex<SimpleFeature>> supportedSecondaryIndices = new ArrayList<>();
+	private final List<SecondaryIndexImpl<SimpleFeature>> supportedSecondaryIndices = new ArrayList<>();
 	private transient SimpleFeatureType sft;
 	private transient StatsManager statsManager;
 
@@ -74,11 +72,9 @@ public class SecondaryIndexManager implements
 
 			final Map<Object, Object> userData = desc.getUserData();
 			final String attributeName = desc.getLocalName();
-			final ByteArrayId fieldId = new ByteArrayId(
-					attributeName);
 			String secondaryIndex = null;
 			SecondaryIndexType secondaryIndexType = null;
-			final List<ByteArrayId> fieldsForPartial = new ArrayList<>();
+			final List<String> fieldsForPartial = new ArrayList<>();
 
 			if (userData.containsKey(NumericSecondaryIndexConfiguration.INDEX_KEY)) {
 				secondaryIndex = NumericSecondaryIndexConfiguration.INDEX_KEY;
@@ -108,20 +104,19 @@ public class SecondaryIndexManager implements
 							",").split(
 							joined);
 					for (final String field : split) {
-						fieldsForPartial.add(new ByteArrayId(
-								field));
+						fieldsForPartial.add(field);
 					}
 				}
 				addIndex(
 						secondaryIndex,
-						fieldId,
+						attributeName,
 						secondaryIndexType,
 						fieldsForPartial);
 			}
 		}
 	}
 
-	public List<SecondaryIndex<SimpleFeature>> getSupportedSecondaryIndices() {
+	public List<SecondaryIndexImpl<SimpleFeature>> getSupportedSecondaryIndices() {
 		return supportedSecondaryIndices;
 	}
 
@@ -136,21 +131,21 @@ public class SecondaryIndexManager implements
 
 	private void addIndex(
 			final String secondaryIndexKey,
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final SecondaryIndexType secondaryIndexType,
-			final List<ByteArrayId> fieldsForPartial ) {
+			final List<String> fieldsForPartial ) {
 
-		final List<DataStatistics<SimpleFeature>> statistics = new ArrayList<>();
-		DataStatistics<SimpleFeature> stat = null;
+		final List<InternalDataStatistics<SimpleFeature, ?, ?>> statistics = new ArrayList<>();
+		InternalDataStatistics<SimpleFeature, ?, ?> stat = null;
 		switch (secondaryIndexKey) {
 
 			case NumericSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureNumericHistogramStatistics(
-						fieldId.getString());
+						fieldName);
 				statistics.add(stat);
-				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+				supportedSecondaryIndices.add(new SecondaryIndexImpl<>(
 						new NumericFieldIndexStrategy(),
-						fieldId,
+						fieldName,
 						statistics,
 						secondaryIndexType,
 						fieldsForPartial));
@@ -158,12 +153,12 @@ public class SecondaryIndexManager implements
 
 			case TextSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureHyperLogLogStatistics(
-						fieldId.getString(),
+						fieldName,
 						16);
 				statistics.add(stat);
-				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+				supportedSecondaryIndices.add(new SecondaryIndexImpl<>(
 						new TextIndexStrategy(),
-						fieldId,
+						fieldName,
 						statistics,
 						secondaryIndexType,
 						fieldsForPartial));
@@ -171,11 +166,11 @@ public class SecondaryIndexManager implements
 
 			case TemporalSecondaryIndexConfiguration.INDEX_KEY:
 				stat = new FeatureNumericHistogramStatistics(
-						fieldId.getString());
+						fieldName);
 				statistics.add(stat);
-				supportedSecondaryIndices.add(new SecondaryIndex<SimpleFeature>(
+				supportedSecondaryIndices.add(new SecondaryIndexImpl<>(
 						new TemporalIndexStrategy(),
-						fieldId,
+						fieldName,
 						statistics,
 						secondaryIndexType,
 						fieldsForPartial));
@@ -185,10 +180,10 @@ public class SecondaryIndexManager implements
 				break;
 
 		}
-		for (final DataStatistics<SimpleFeature> statistic : statistics) {
+		for (final InternalDataStatistics<SimpleFeature, ?, ?> statistic : statistics) {
 			statsManager.addStats(
 					statistic,
-					fieldId);
+					fieldName);
 		}
 	}
 
@@ -199,8 +194,8 @@ public class SecondaryIndexManager implements
 	 */
 	@Override
 	public byte[] toBinary() {
-		final List<Persistable> persistables = new ArrayList<Persistable>();
-		for (final SecondaryIndex<SimpleFeature> secondaryIndex : supportedSecondaryIndices) {
+		final List<Persistable> persistables = new ArrayList<>();
+		for (final SecondaryIndexImpl<SimpleFeature> secondaryIndex : supportedSecondaryIndices) {
 			persistables.add(secondaryIndex);
 		}
 		return PersistenceUtils.toBinary(persistables);
@@ -218,7 +213,7 @@ public class SecondaryIndexManager implements
 			final byte[] bytes ) {
 		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(bytes);
 		for (final Persistable persistable : persistables) {
-			supportedSecondaryIndices.add((SecondaryIndex<SimpleFeature>) persistable);
+			supportedSecondaryIndices.add((SecondaryIndexImpl<SimpleFeature>) persistable);
 		}
 	}
 

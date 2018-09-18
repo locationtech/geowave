@@ -62,6 +62,24 @@ public class AccumuloRequiredOptions extends
 	@ParametersDelegate
 	private AccumuloOptions additionalOptions = new AccumuloOptions();
 
+	public AccumuloRequiredOptions() {}
+
+	public AccumuloRequiredOptions(
+			String zookeeper,
+			String instance,
+			String user,
+			String password,
+			String gwNamespace,
+			AccumuloOptions additionalOptions ) {
+		super(
+				gwNamespace);
+		this.zookeeper = zookeeper;
+		this.instance = instance;
+		this.user = user;
+		this.password = password;
+		this.additionalOptions = additionalOptions;
+	}
+
 	public String getZookeeper() {
 		return zookeeper;
 	}

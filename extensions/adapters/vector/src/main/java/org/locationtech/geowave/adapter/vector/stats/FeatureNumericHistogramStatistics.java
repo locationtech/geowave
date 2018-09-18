@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,16 +12,23 @@ package org.locationtech.geowave.adapter.vector.stats;
 
 import java.nio.ByteBuffer;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.zip.DataFormatException;
 
 import org.HdrHistogram.AbstractHistogram;
 import org.HdrHistogram.DoubleHistogram;
 import org.HdrHistogram.Histogram;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.apache.commons.lang3.tuple.Pair;
+import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -31,10 +38,10 @@ import org.opengis.feature.simple.SimpleFeature;
  *
  */
 public class FeatureNumericHistogramStatistics extends
-		AbstractDataStatistics<SimpleFeature> implements
-		FeatureStatistic
+		AbstractDataStatistics<SimpleFeature, Pair<DoubleHistogram, DoubleHistogram>, FieldStatisticsQueryBuilder<Pair<DoubleHistogram, DoubleHistogram>>> implements
+		FieldNameStatistic
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final FieldStatisticsType<Pair<DoubleHistogram, DoubleHistogram>> STATS_TYPE = new FieldStatisticsType<>(
 			"ATT_HISTOGRAM");
 	private DoubleHistogram positiveHistogram = new LocalDoubleHistogram();
 	private DoubleHistogram negativeHistogram = null;
@@ -61,31 +68,23 @@ public class FeatureNumericHistogramStatistics extends
 	}
 
 	public FeatureNumericHistogramStatistics(
-			final Short internalDataAdapterId,
+			final Short adapterId,
 			final String fieldName ) {
 		super(
-				internalDataAdapterId,
-				composeId(
-						STATS_TYPE.getString(),
-						fieldName));
-	}
-
-	public static final ByteArrayId composeId(
-			final String fieldName ) {
-		return composeId(
-				STATS_TYPE.getString(),
+				adapterId,
+				STATS_TYPE,
 				fieldName);
 	}
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return extendedId;
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature, Pair<DoubleHistogram, DoubleHistogram>, FieldStatisticsQueryBuilder<Pair<DoubleHistogram, DoubleHistogram>>> duplicate() {
 		return new FeatureNumericHistogramStatistics(
-				internalDataAdapterId,
+				adapterId,
 				getFieldName());
 	}
 
@@ -266,7 +265,7 @@ public class FeatureNumericHistogramStatistics extends
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"histogram[internalDataAdapterId=").append(
-				super.getInternalDataAdapterId());
+				super.getAdapterId());
 		buffer.append(
 				", field=").append(
 				getFieldName());
@@ -377,7 +376,7 @@ public class FeatureNumericHistogramStatistics extends
 		private static final long serialVersionUID = 6309383518148391565L;
 
 		@Override
-		public DataStatistics<SimpleFeature> create(
+		public InternalDataStatistics<SimpleFeature, Pair<DoubleHistogram, DoubleHistogram>, FieldStatisticsQueryBuilder<Pair<DoubleHistogram, DoubleHistogram>>> create(
 				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureNumericHistogramStatistics(
@@ -392,6 +391,38 @@ public class FeatureNumericHistogramStatistics extends
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {}
+				final byte[] bytes ) {}
+	}
+
+	@Override
+	public Pair<DoubleHistogram, DoubleHistogram> getResult() {
+		return Pair.of(
+				negativeHistogram,
+				positiveHistogram);
+	}
+
+	@Override
+	protected String resultsName() {
+		return "histograms";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		final Map<String, List<Object>> results = new HashMap<>();
+		final List<Object> quantilesList = new ArrayList<>();
+		for (final double v : this.quantile(10)) {
+			quantilesList.add(v);
+		}
+		results.put(
+				"quantiles",
+				quantilesList);
+		final List<Object> countsList = new ArrayList<>();
+		for (final long v : count(10)) {
+			countsList.add(v);
+		}
+		results.put(
+				"counts",
+				countsList);
+		return results;
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,16 +13,16 @@ package org.locationtech.geowave.adapter.vector.plugin.transaction;
 import java.io.IOException;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
 /**
  * Represent the Writer's pluggable strategy of a transaction
- * 
- * 
+ *
+ *
  * @source $URL$
  */
 
@@ -36,14 +36,14 @@ public interface GeoWaveTransaction
 			throws IOException;
 
 	/**
-	 * 
+	 *
 	 * @return true if transaction is empty
 	 */
 	public boolean isEmpty();
 
 	/**
 	 * Record a modification to the indicated fid
-	 * 
+	 *
 	 * @param fid
 	 * @param f
 	 *            replacement feature; null to indicate remove
@@ -68,7 +68,7 @@ public interface GeoWaveTransaction
 
 	public String composeVisibility();
 
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics();
+	public Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> getDataStatistics();
 
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
 			final Integer limit,

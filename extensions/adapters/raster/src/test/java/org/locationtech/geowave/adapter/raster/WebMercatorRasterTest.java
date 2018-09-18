@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,43 +12,31 @@ package org.locationtech.geowave.adapter.raster;
 
 import java.awt.Rectangle;
 import java.awt.image.Raster;
-import java.awt.image.RenderedImage;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collections;
 
 import org.geotools.geometry.GeneralEnvelope;
 import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
-import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.NoSuchAuthorityCodeException;
-
-import com.vividsolutions.jts.geom.Envelope;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 public class WebMercatorRasterTest
 {
@@ -65,25 +53,25 @@ public class WebMercatorRasterTest
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
-		DataStore dataStore = GeoWaveStoreFinder.createDataStore(Collections.EMPTY_MAP);
-		int xTiles = 8;
-		int yTiles = 8;
-		double[] minsPerBand = new double[] {
+		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(Collections.EMPTY_MAP);
+		final int xTiles = 8;
+		final int yTiles = 8;
+		final double[] minsPerBand = new double[] {
 			0,
 			0,
 			0
 		};
-		double[] maxesPerBand = new double[] {
-			xTiles * 3 + yTiles * 24,
-			xTiles * 3 + yTiles * 24,
-			xTiles * 3 + yTiles * 24
+		final double[] maxesPerBand = new double[] {
+			(xTiles * 3) + (yTiles * 24),
+			(xTiles * 3) + (yTiles * 24),
+			(xTiles * 3) + (yTiles * 24)
 		};
-		String[] namesPerBand = new String[] {
+		final String[] namesPerBand = new String[] {
 			"b1",
 			"b2",
 			"b3"
 		};
-		RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
+		final RasterDataAdapter adapter = RasterUtils.createDataAdapterTypeDouble(
 				"test",
 				3,
 				64,
@@ -91,10 +79,9 @@ public class WebMercatorRasterTest
 				maxesPerBand,
 				namesPerBand,
 				new NoDataMergeStrategy());
-		PrimaryIndex index = new SpatialIndexBuilder().setCrs(
+		final Index index = new SpatialIndexBuilder().setCrs(
 				CRS_STR) // 3857
 				.createIndex();
-		adapter.init(index);
 		double bounds = CRS.decode(
 				CRS_STR).getCoordinateSystem().getAxis(
 				0).getMaximumValue();
@@ -102,11 +89,12 @@ public class WebMercatorRasterTest
 			bounds = SpatialDimensionalityTypeProvider.DEFAULT_UNBOUNDED_CRS_INTERVAL;
 		}
 		bounds /= 32.0;
+		dataStore.addType(
+				adapter,
+				index);
 		for (double xTile = 0; xTile < xTiles; xTile++) {
 			for (double yTile = 0; yTile < yTiles; yTile++) {
-				try (IndexWriter<GridCoverage> writer = dataStore.createWriter(
-						adapter,
-						index)) {
+				try (Writer<GridCoverage> writer = dataStore.createWriter(adapter.getTypeName())) {
 					final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 							3,
 							64);
@@ -114,13 +102,13 @@ public class WebMercatorRasterTest
 							raster,
 							new double[][] {
 								{
-									xTile * 3 + yTile * 24
+									(xTile * 3) + (yTile * 24)
 								},
 								{
-									xTile * 3 + yTile * 24 + 1
+									(xTile * 3) + (yTile * 24) + 1
 								},
 								{
-									xTile * 3 + yTile * 24 + 2
+									(xTile * 3) + (yTile * 24) + 2
 								}
 							});
 					writer.write(RasterUtils.createCoverageTypeDouble(
@@ -137,7 +125,7 @@ public class WebMercatorRasterTest
 				}
 			}
 		}
-		int grid[][] = new int[8][8];
+		final int grid[][] = new int[8][8];
 		final GeoWaveRasterReader reader = new GeoWaveRasterReader(
 				GeoWaveRasterConfig.createConfig(
 						Collections.EMPTY_MAP,
@@ -150,15 +138,15 @@ public class WebMercatorRasterTest
 							// will be no
 							// scaling on the tile composition/rendering
 
-							(xTile - 15 / 64.0) * bounds,
-							(yTile - 15 / 64.0) * bounds
+							(xTile - (15 / 64.0)) * bounds,
+							(yTile - (15 / 64.0)) * bounds
 						},
 						new double[] {
 							// these values are also on a tile boundary, to
 							// avoid
 							// scaling
-							(xTile + 15 / 64.0) * bounds,
-							(yTile + 15 / 64.0) * bounds
+							(xTile + (15 / 64.0)) * bounds,
+							(yTile + (15 / 64.0)) * bounds
 						});
 				queryEnvelope.setCoordinateReferenceSystem(CRS.decode(CRS_STR));
 				final GridCoverage gridCoverage = reader.renderGridCoverage(
@@ -170,7 +158,7 @@ public class WebMercatorRasterTest
 						null,
 						null,
 						null);
-				Raster img = gridCoverage.getRenderedImage().getData();
+				final Raster img = gridCoverage.getRenderedImage().getData();
 
 				grid[xTile - 1][yTile - 1] = img.getSample(
 						0,
@@ -189,10 +177,10 @@ public class WebMercatorRasterTest
 						0,
 						0);
 
-				double expectedMinXMinYValue = (xTile - 1) * 3 + (yTile - 1) * 24;
-				double expectedMinXMaxYValue = (xTile - 1) * 3 + yTile * 24;
-				double expectedMaxXMinYValue = xTile * 3 + (yTile - 1) * 24;
-				double expectedMaxXMaxYValue = xTile * 3 + yTile * 24;
+				final double expectedMinXMinYValue = ((xTile - 1) * 3) + ((yTile - 1) * 24);
+				final double expectedMinXMaxYValue = ((xTile - 1) * 3) + (yTile * 24);
+				final double expectedMaxXMinYValue = (xTile * 3) + ((yTile - 1) * 24);
+				final double expectedMaxXMaxYValue = (xTile * 3) + (yTile * 24);
 				for (int x = 0; x < 32; x++) {
 					for (int y = 0; y < 32; y++) {
 

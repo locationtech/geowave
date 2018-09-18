@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,8 +17,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -26,9 +24,7 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.gpx.GPXConsumer;
 import org.locationtech.geowave.types.HelperClass;
 import org.locationtech.geowave.types.ValidateObject;
@@ -37,7 +33,7 @@ import org.opengis.feature.simple.SimpleFeature;
 public class GPXConsumerTest
 {
 
-	Map<String, ValidateObject<SimpleFeature>> expectedResults = new HashMap<String, ValidateObject<SimpleFeature>>();
+	Map<String, ValidateObject<SimpleFeature>> expectedResults = new HashMap<>();
 
 	@Before
 	public void setup() {
@@ -195,13 +191,11 @@ public class GPXConsumerTest
 		try (final InputStream is = this.getClass().getClassLoader().getResourceAsStream(
 				"sample_gpx.xml");) {
 
-			final ByteArrayId indexId = new ByteArrayId(
-					"123".getBytes(StringUtils.getGeoWaveCharset()));
-			final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-			indexIds.add(indexId);
 			final GPXConsumer consumer = new GPXConsumer(
 					is,
-					indexIds,
+					new String[] {
+						"123"
+					},
 					"123",
 					new HashMap<String, Map<String, String>>(),
 					true,
@@ -240,7 +234,7 @@ public class GPXConsumerTest
 
 	/**
 	 * run test and each duplicate is treated uniquely
-	 * 
+	 *
 	 * @throws IOException
 	 */
 	@Test
@@ -250,7 +244,7 @@ public class GPXConsumerTest
 				"src/test/resources/gpx"));
 	}
 
-	private static Map<String, Long> fileCount = new HashMap<String, Long>();
+	private static Map<String, Long> fileCount = new HashMap<>();
 
 	static {
 		fileCount.put(
@@ -275,19 +269,17 @@ public class GPXConsumerTest
 				"gpx")) {
 			try (final InputStream is = new FileInputStream(
 					dir);) {
-				final ByteArrayId indexId = new ByteArrayId(
-						"123".getBytes(StringUtils.getGeoWaveCharset()));
-				final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-				indexIds.add(indexId);
 				try (final GPXConsumer consumer = new GPXConsumer(
 						is,
-						indexIds,
+						new String[] {
+							"123"
+						},
 						"",
 						new HashMap<String, Map<String, String>>(),
 						false,
 						"",
 						Double.MAX_VALUE)) {
-					final Set<String> ids = new HashSet<String>();
+					final Set<String> ids = new HashSet<>();
 					while (consumer.hasNext()) {
 						final String id = consumer.next().getValue().getID();
 						// ensure uniqueness...even for duplicate points

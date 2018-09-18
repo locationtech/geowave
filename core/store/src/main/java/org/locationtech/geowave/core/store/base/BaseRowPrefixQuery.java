@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,10 +19,10 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 /**
  * Represents a query operation using an Accumulo row prefix.
@@ -34,7 +34,7 @@ class BaseRowPrefixQuery<T> extends
 	final QueryRanges queryRanges;
 
 	public BaseRowPrefixQuery(
-			final PrimaryIndex index,
+			final Index index,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKeyPrefix,
 			final ScanCallback<T, ?> scanCallback,
@@ -52,7 +52,7 @@ class BaseRowPrefixQuery<T> extends
 				sortKeyPrefix,
 				sortKeyPrefix,
 				false);
-		final List<SinglePartitionQueryRanges> ranges = new ArrayList<SinglePartitionQueryRanges>();
+		final List<SinglePartitionQueryRanges> ranges = new ArrayList<>();
 		final Collection<ByteArrayRange> sortKeys = Collections.singleton(sortKeyPrefixRange);
 		ranges.add(new SinglePartitionQueryRanges(
 				partitionKey,
@@ -63,7 +63,8 @@ class BaseRowPrefixQuery<T> extends
 
 	@Override
 	protected QueryRanges getRanges(
-			int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex ) {
 		return queryRanges;
 	}
 

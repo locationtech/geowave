@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,11 +14,10 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
+import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSBoundedSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialField;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
@@ -27,17 +26,17 @@ import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -97,12 +96,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex(
-			SpatialTemporalOptions options ) {
-		return internalCreatePrimaryIndex(options);
+	public Index createIndex(
+			final SpatialTemporalOptions options ) {
+		return internalCreateIndex(options);
 	}
 
-	private static PrimaryIndex internalCreatePrimaryIndex(
+	private static Index internalCreateIndex(
 			final SpatialTemporalOptions options ) {
 
 		NumericDimensionDefinition[] dimensions;
@@ -111,7 +110,8 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		boolean isDefaultCRS;
 		String crsCode = null;
 
-		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+		if ((options.crs == null) || options.crs.isEmpty()
+				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_TEMPORAL_DIMENSIONS;
 			fields = SPATIAL_TEMPORAL_FIELDS;
 			isDefaultCRS = true;
@@ -119,14 +119,14 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 		else {
 			crs = decodeCRS(options.crs);
-			CoordinateSystem cs = crs.getCoordinateSystem();
+			final CoordinateSystem cs = crs.getCoordinateSystem();
 			isDefaultCRS = false;
 			crsCode = options.crs;
 			dimensions = new NumericDimensionDefinition[cs.getDimension() + 1];
 			fields = new NumericDimensionField[dimensions.length];
 
-			for (int d = 0; d < dimensions.length - 1; d++) {
-				CoordinateSystemAxis csa = cs.getAxis(d);
+			for (int d = 0; d < (dimensions.length - 1); d++) {
+				final CoordinateSystemAxis csa = cs.getAxis(d);
 				dimensions[d] = new CustomCRSBoundedSpatialDimension(
 						(byte) d,
 						csa.getMinimumValue(),
@@ -162,7 +162,7 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 		final String combinedId = combinedArrayID;
 
-		return new CustomIdIndex(
+		return new CustomNameIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						dimensions,
 						new int[] {
@@ -173,12 +173,11 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 						SFCType.HILBERT,
 						options.maxDuplicates),
 				indexModel,
-				new ByteArrayId(
-						combinedId));
+				combinedId);
 	}
 
 	public static CoordinateReferenceSystem decodeCRS(
-			String crsCode ) {
+			final String crsCode ) {
 
 		CoordinateReferenceSystem crs = null;
 		try {
@@ -326,13 +325,13 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 
 		@Override
-		public PrimaryIndex createIndex() {
-			return createIndex(internalCreatePrimaryIndex(options));
+		public Index createIndex() {
+			return createIndex(internalCreateIndex(options));
 		}
 	}
 
 	public static boolean isSpatialTemporal(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (index == null) {
 			return false;
 		}

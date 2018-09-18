@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -71,7 +71,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected void buildCache() {
-		CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
+		final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
 				MAX_ENTRIES);
 		this.cache = cacheBuilder.<ByteArrayId, T> build();
 	}
@@ -139,7 +139,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				primaryId,
 				secondaryId);
 		if (combinedId != null) {
-			boolean present = cache.getIfPresent(combinedId) != null;
+			final boolean present = cache.getIfPresent(combinedId) != null;
 			if (present) {
 				cache.invalidate(combinedId);
 			}
@@ -294,16 +294,6 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 					entry,
 					authorizations);
 		}
-		catch (final IOException e) {
-			if (warnIfNotExists) {
-				LOGGER.warn(
-						"Unable to find object '" + getCombinedId(
-								primaryId,
-								secondaryId).getString() + "'",
-						e);
-			}
-		}
-		return null;
 	}
 
 	protected boolean objectExists(
@@ -325,7 +315,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 				authorizations));
 	}
 
-	private CloseableIterator<T> internalGetObjects(
+	protected CloseableIterator<T> internalGetObjects(
 			final MetadataQuery query ) {
 		try {
 			if (!operations.metadataExists(getType())) {
@@ -409,6 +399,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		}
 		try (final MetadataDeleter deleter = operations.createMetadataDeleter(type)) {
 			if (primaryId != null) {
+				// TODO look at issue #1443, this should delete multiple - also
+				// in general does this delete from the cache???
 				return deleter.delete(new MetadataQuery(
 						primaryId.getBytes(),
 						secondaryId != null ? secondaryId.getBytes() : null,
@@ -454,7 +446,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 		private NativeIteratorWrapper(
 				final CloseableIterator<GeoWaveMetadata> it,
-				String[] authorizations ) {
+				final String[] authorizations ) {
 			this.it = it;
 			this.authorizations = authorizations;
 		}
@@ -477,8 +469,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		}
 
 		@Override
-		public void close()
-				throws IOException {
+		public void close() {
 			it.close();
 		}
 

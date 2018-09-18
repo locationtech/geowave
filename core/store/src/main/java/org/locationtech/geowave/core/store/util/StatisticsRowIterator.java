@@ -10,18 +10,18 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.util;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
 import com.google.common.base.Predicate;
@@ -31,7 +31,7 @@ public class StatisticsRowIterator implements
 		CloseableIterator<GeoWaveMetadata>
 {
 	final private CloseableIterator<GeoWaveMetadata> it;
-	private DataStatistics<?> nextVal = null;
+	private InternalDataStatistics<?, ?, ?> nextVal = null;
 
 	public StatisticsRowIterator(
 			final CloseableIterator<GeoWaveMetadata> resultIterator,
@@ -82,21 +82,22 @@ public class StatisticsRowIterator implements
 
 	@Override
 	public GeoWaveMetadata next() {
-		DataStatistics<?> currentStatistics = nextVal;
+		InternalDataStatistics<?, ?, ?> currentStatistics = nextVal;
 
 		nextVal = null;
 		while (it.hasNext()) {
 			final GeoWaveMetadata row = it.next();
 
-			final DataStatistics<?> statEntry = entryToValue(row);
+			final InternalDataStatistics<?, ?, ?> statEntry = entryToValue(row);
 
 			if (currentStatistics == null) {
 				currentStatistics = statEntry;
 			}
 			else {
-				if (statEntry.getStatisticsId().equals(
-						currentStatistics.getStatisticsId()) && statEntry.getInternalDataAdapterId().equals(
-						currentStatistics.getInternalDataAdapterId())) {
+				if (statEntry.getType().equals(
+						currentStatistics.getType()) && statEntry.getAdapterId().equals(
+						currentStatistics.getAdapterId()) && statEntry.getExtendedId().equals(
+						currentStatistics.getExtendedId())) {
 					currentStatistics.merge(statEntry);
 				}
 				else {
@@ -109,13 +110,14 @@ public class StatisticsRowIterator implements
 		return statsToMetadata(currentStatistics);
 	}
 
-	protected DataStatistics<?> entryToValue(
+	protected InternalDataStatistics<?, ?, ?> entryToValue(
 			final GeoWaveMetadata entry ) {
-		final DataStatistics<?> stats = (DataStatistics<?>) PersistenceUtils.fromBinary(entry.getValue());
+		final InternalDataStatistics<?, ?, ?> stats = (InternalDataStatistics<?, ?, ?>) PersistenceUtils
+				.fromBinary(entry.getValue());
 
 		if (stats != null) {
-			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
-			stats.setStatisticsId(new ByteArrayId(
+			stats.setAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
+			stats.setType((StatisticsType) new BaseStatisticsType(
 					entry.getPrimaryId()));
 		}
 
@@ -123,17 +125,16 @@ public class StatisticsRowIterator implements
 	}
 
 	protected GeoWaveMetadata statsToMetadata(
-			final DataStatistics<?> stats ) {
+			final InternalDataStatistics<?, ?, ?> stats ) {
 		return new GeoWaveMetadata(
-				stats.getStatisticsId().getBytes(),
-				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
+				stats.getType().getBytes(),
+				ByteArrayUtils.shortToByteArray(stats.getAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));
 	}
 
 	@Override
-	public void close()
-			throws IOException {
+	public void close() {
 		it.close();
 	}
 }

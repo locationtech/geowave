@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public interface TransientAdapterStore extends
-		AdapterStore<ByteArrayId, DataAdapter<?>>
+		AdapterStore<String, DataTypeAdapter<?>>
 {
 
 }

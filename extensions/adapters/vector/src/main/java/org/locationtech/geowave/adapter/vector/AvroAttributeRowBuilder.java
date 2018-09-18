@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,7 +21,7 @@ import org.opengis.feature.simple.SimpleFeature;
  * rows from a set field values (in this case SimpleFeatures from a set of
  * attribute values). This implementation simply wraps a geotools
  * SimpleFeatureBuilder.
- * 
+ *
  */
 public class AvroAttributeRowBuilder implements
 		RowBuilder<SimpleFeature, Object>
@@ -33,16 +33,16 @@ public class AvroAttributeRowBuilder implements
 	@Override
 	public SimpleFeature buildRow(
 			final ByteArrayId dataId ) {
-		SimpleFeature sf = (SimpleFeature) object;
+		final SimpleFeature sf = (SimpleFeature) object;
 		return sf;
 	}
 
 	@Override
 	public void setField(
-			ByteArrayId id,
-			Object fieldValue ) {
+			final String fieldName,
+			final Object fieldValue ) {
 		// Only interested in the relevant fields
-		if (id.equals(AvroFeatureAttributeHandler.FIELD_ID)) {
+		if (fieldName.equals(AvroFeatureAttributeHandler.FIELD_NAME)) {
 			object = fieldValue;
 		}
 
@@ -50,9 +50,9 @@ public class AvroAttributeRowBuilder implements
 
 	@Override
 	public void setFields(
-			Map<ByteArrayId, Object> values ) {
-		if (values.containsKey(AvroFeatureAttributeHandler.FIELD_ID)) {
-			object = values.get(AvroFeatureAttributeHandler.FIELD_ID);
+			final Map<String, Object> values ) {
+		if (values.containsKey(AvroFeatureAttributeHandler.FIELD_NAME)) {
+			object = values.get(AvroFeatureAttributeHandler.FIELD_NAME);
 		}
 	}
 }

@@ -63,7 +63,7 @@ public class ByteArrayUtils
 			final byte[] byteArray ) {
 		return new String(
 				ENCODER.encode(byteArray),
-				StandardCharsets.ISO_8859_1);
+				StringUtils.getGeoWaveCharset());
 	}
 
 	/**

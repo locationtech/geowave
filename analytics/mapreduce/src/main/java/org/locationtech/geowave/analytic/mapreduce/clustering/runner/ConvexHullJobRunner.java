@@ -87,7 +87,7 @@ public class ConvexHullJobRunner extends
 					HullParameters.Hull.WRAPPER_FACTORY_CLASS,
 					HullParameters.Hull.PROJECTION_CLASS,
 					HullParameters.Hull.DATA_TYPE_ID,
-					HullParameters.Hull.INDEX_ID
+					HullParameters.Hull.INDEX_NAME
 				},
 				config,
 				getScope());
@@ -120,9 +120,9 @@ public class ConvexHullJobRunner extends
 						HullParameters.Hull.DATA_NAMESPACE_URI));
 		checkIndex(
 				runTimeProperties,
-				HullParameters.Hull.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString());
+				HullParameters.Hull.INDEX_NAME,
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName());
 		// HP Fortify "Command Injection" false positive
 		// What Fortify considers "externally-influenced input"
 		// comes only from users with OS-level access anyway
@@ -151,7 +151,7 @@ public class ConvexHullJobRunner extends
 			HullParameters.Hull.REDUCER_COUNT,
 			HullParameters.Hull.DATA_TYPE_ID,
 			HullParameters.Hull.DATA_NAMESPACE_URI,
-			HullParameters.Hull.INDEX_ID
+			HullParameters.Hull.INDEX_NAME
 		}));
 		return params;
 	}

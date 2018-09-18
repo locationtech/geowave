@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.mapreduce.copy;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 
 import org.apache.hadoop.io.ObjectWritable;
@@ -45,9 +44,9 @@ public class StoreCopyReducer extends
 
 	@Override
 	protected void reduceNativeValues(
-			GeoWaveInputKey key,
-			Iterable<Object> values,
-			Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, Object>.Context context )
+			final GeoWaveInputKey key,
+			final Iterable<Object> values,
+			final Reducer<GeoWaveInputKey, ObjectWritable, GeoWaveOutputKey, Object>.Context context )
 			throws IOException,
 			InterruptedException {
 		final Iterator<Object> objects = values.iterator();
@@ -55,8 +54,8 @@ public class StoreCopyReducer extends
 			final AdapterToIndexMapping mapping = store.getIndicesForAdapter(key.getInternalAdapterId());
 			context.write(
 					new GeoWaveOutputKey<>(
-							internalAdapterStore.getAdapterId(mapping.getInternalAdapterId()),
-							Arrays.asList(mapping.getIndexIds())),
+							internalAdapterStore.getTypeName(mapping.getAdapterId()),
+							mapping.getIndexNames()),
 					objects.next());
 		}
 	}

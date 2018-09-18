@@ -36,13 +36,13 @@ public class SampleParameters
 				"Max Sample Size",
 				false,
 				true),
-		DATA_TYPE_ID(
+		DATA_TYPE_NAME(
 				String.class,
 				"sdt",
 				"Sample Data Type Id",
 				false,
 				true),
-		INDEX_ID(
+		INDEX_NAME(
 				String.class,
 				"sdt",
 				"Sample Index Type Id",

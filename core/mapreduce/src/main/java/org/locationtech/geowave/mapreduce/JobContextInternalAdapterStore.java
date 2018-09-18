@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,8 +12,6 @@ package org.locationtech.geowave.mapreduce;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 
 import com.google.common.collect.BiMap;
@@ -25,7 +23,7 @@ public class JobContextInternalAdapterStore implements
 	private static final Class<?> CLASS = JobContextInternalAdapterStore.class;
 	private final JobContext context;
 	private final InternalAdapterStore persistentInternalAdapterStore;
-	protected final BiMap<ByteArrayId, Short> cache = HashBiMap.create();
+	protected final BiMap<String, Short> cache = HashBiMap.create();
 
 	public JobContextInternalAdapterStore(
 			final JobContext context,
@@ -35,105 +33,105 @@ public class JobContextInternalAdapterStore implements
 	}
 
 	@Override
-	public ByteArrayId getAdapterId(
-			final short internalAdapterId ) {
-		ByteArrayId adapterId = cache.inverse().get(
-				internalAdapterId);
-		if (adapterId == null) {
-			adapterId = getAdapterIdInternal(internalAdapterId);
+	public String getTypeName(
+			final short adapterId ) {
+		String typeName = cache.inverse().get(
+				adapterId);
+		if (typeName == null) {
+			typeName = getTypeNameIInternal(adapterId);
 		}
-		return adapterId;
+		return typeName;
 	}
 
-	private ByteArrayId getAdapterIdInternal(
-			final short internalAdapterId ) {
+	private String getTypeNameIInternal(
+			final short adapterId ) {
 		// first try to get it from the job context
-		ByteArrayId adapterId = getAdapterIdFromJobContext(internalAdapterId);
-		if (adapterId == null) {
+		String typeName = getAdapterIdFromJobContext(adapterId);
+		if (typeName == null) {
 			// then try to get it from the persistent store
-			adapterId = persistentInternalAdapterStore.getAdapterId(internalAdapterId);
+			typeName = persistentInternalAdapterStore.getTypeName(adapterId);
 		}
 
-		if (adapterId != null) {
+		if (typeName != null) {
 			cache.put(
-					adapterId,
-					internalAdapterId);
+					typeName,
+					adapterId);
 		}
-		return adapterId;
+		return typeName;
 	}
 
-	private Short getInternalAdapterIdInternal(
-			final ByteArrayId adapterId ) {
+	private Short getAdapterIdInternal(
+			final String typeName ) {
 		// first try to get it from the job context
-		Short internalAdapterId = getInternalAdapterIdFromJobContext(adapterId);
+		Short internalAdapterId = getAdapterIdFromJobContext(typeName);
 		if (internalAdapterId == null) {
 			// then try to get it from the persistent store
-			internalAdapterId = persistentInternalAdapterStore.getInternalAdapterId(adapterId);
+			internalAdapterId = persistentInternalAdapterStore.getAdapterId(typeName);
 		}
 
 		if (internalAdapterId != null) {
 			cache.put(
-					adapterId,
+					typeName,
 					internalAdapterId);
 		}
 		return internalAdapterId;
 	}
 
 	@Override
-	public Short getInternalAdapterId(
-			final ByteArrayId adapterId ) {
-		Short internalAdapterId = cache.get(adapterId);
+	public Short getAdapterId(
+			final String typeName ) {
+		Short internalAdapterId = cache.get(typeName);
 		if (internalAdapterId == null) {
-			internalAdapterId = getInternalAdapterIdInternal(adapterId);
+			internalAdapterId = getAdapterIdInternal(typeName);
 		}
 		return internalAdapterId;
 	}
 
-	protected Short getInternalAdapterIdFromJobContext(
-			final ByteArrayId adapterId ) {
-		return GeoWaveConfiguratorBase.getInternalAdapterId(
-				CLASS,
-				context,
-				adapterId);
-	}
-
-	protected ByteArrayId getAdapterIdFromJobContext(
-			final short internalAdapterId ) {
+	protected Short getAdapterIdFromJobContext(
+			final String typeName ) {
 		return GeoWaveConfiguratorBase.getAdapterId(
 				CLASS,
 				context,
+				typeName);
+	}
+
+	protected String getAdapterIdFromJobContext(
+			final short internalAdapterId ) {
+		return GeoWaveConfiguratorBase.getTypeName(
+				CLASS,
+				context,
 				internalAdapterId);
 	}
 
 	@Override
-	public short addAdapterId(
-			final ByteArrayId adapterId ) {
-		return persistentInternalAdapterStore.addAdapterId(adapterId);
+	public short addTypeName(
+			final String typeName ) {
+		return persistentInternalAdapterStore.addTypeName(typeName);
 	}
 
 	@Override
 	public boolean remove(
-			final ByteArrayId adapterId ) {
-		return persistentInternalAdapterStore.remove(adapterId);
+			final String typeName ) {
+		return persistentInternalAdapterStore.remove(typeName);
 	}
 
-	public static void addInternalDataAdapter(
+	public static void addTypeName(
 			final Configuration configuration,
-			final ByteArrayId adapterId,
-			final short internalAdapterId ) {
-		GeoWaveConfiguratorBase.addInternalAdapterId(
+			final String typeName,
+			final short adapterId ) {
+		GeoWaveConfiguratorBase.addTypeName(
 				CLASS,
 				configuration,
-				adapterId,
-				internalAdapterId);
+				typeName,
+				adapterId);
 	}
 
 	@Override
 	public boolean remove(
-			final short internalAdapterId ) {
+			final short adapterId ) {
 		cache.inverse().remove(
-				internalAdapterId);
-		return persistentInternalAdapterStore.remove(internalAdapterId);
+				adapterId);
+		return persistentInternalAdapterStore.remove(adapterId);
 	}
 
 	@Override
@@ -143,13 +141,13 @@ public class JobContextInternalAdapterStore implements
 	}
 
 	@Override
-	public CloseableIterator<ByteArrayId> getAdapterIds() {
-		return persistentInternalAdapterStore.getAdapterIds();
+	public String[] getTypeNames() {
+		return persistentInternalAdapterStore.getTypeNames();
 	}
 
 	@Override
-	public CloseableIterator<Short> getInternalAdapterIds() {
-		return persistentInternalAdapterStore.getInternalAdapterIds();
+	public short[] getAdapterIds() {
+		return persistentInternalAdapterStore.getAdapterIds();
 	}
 
 }

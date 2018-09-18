@@ -143,8 +143,8 @@ public class DBScanCommand extends
 		converter.readProperties(commonOptions);
 		converter.readProperties(dbScanOptions);
 		properties.store(
-				Extract.QUERY_OPTIONS,
-				commonOptions.buildQueryOptions());
+				Extract.QUERY,
+				commonOptions.buildQuery());
 
 		final DBScanIterationsJobRunner runner = new DBScanIterationsJobRunner();
 		final int status = runner.run(properties);

@@ -22,11 +22,11 @@ import org.locationtech.geowave.core.store.cli.config.RemoveIndexGroupCommand;
 import org.locationtech.geowave.core.store.cli.config.RemoveStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.CalculateStatCommand;
 import org.locationtech.geowave.core.store.cli.remote.ClearCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListAdapterCommand;
-import org.locationtech.geowave.core.store.cli.remote.ListIndexCommand;
+import org.locationtech.geowave.core.store.cli.remote.ListTypesCommand;
+import org.locationtech.geowave.core.store.cli.remote.ListIndicesCommand;
 import org.locationtech.geowave.core.store.cli.remote.ListStatsCommand;
 import org.locationtech.geowave.core.store.cli.remote.RecalculateStatsCommand;
-import org.locationtech.geowave.core.store.cli.remote.RemoveAdapterCommand;
+import org.locationtech.geowave.core.store.cli.remote.RemoveTypeCommand;
 import org.locationtech.geowave.core.store.cli.remote.RemoveStatCommand;
 import org.locationtech.geowave.core.store.operations.remote.VersionCommand;
 import org.locationtech.geowave.service.grpc.GeoWaveGrpcServiceOptions;
@@ -54,10 +54,10 @@ public class GeoWaveGrpcCoreStoreService extends
 	}
 
 	@Override
-	public void removeAdapterCommand(
-			org.locationtech.geowave.service.grpc.protobuf.RemoveAdapterCommandParameters request,
+	public void removeTypeCommand(
+			org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParameters request,
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
-		RemoveAdapterCommand cmd = new RemoveAdapterCommand();
+		RemoveTypeCommand cmd = new RemoveTypeCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
@@ -122,11 +122,11 @@ public class GeoWaveGrpcCoreStoreService extends
 	}
 
 	@Override
-	public void listAdapterCommand(
-			org.locationtech.geowave.service.grpc.protobuf.ListAdapterCommandParameters request,
+	public void listTypesCommand(
+			org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParameters request,
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
-		ListAdapterCommand cmd = new ListAdapterCommand();
+		ListTypesCommand cmd = new ListTypesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,
@@ -293,11 +293,11 @@ public class GeoWaveGrpcCoreStoreService extends
 	}
 
 	@Override
-	public void listIndexCommand(
-			org.locationtech.geowave.service.grpc.protobuf.ListIndexCommandParameters request,
+	public void listIndicesCommand(
+			org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParameters request,
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 
-		ListIndexCommand cmd = new ListIndexCommand();
+		ListIndicesCommand cmd = new ListIndicesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
 		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
 				m,

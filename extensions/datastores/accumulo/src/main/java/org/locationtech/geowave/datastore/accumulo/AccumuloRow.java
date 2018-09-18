@@ -120,8 +120,8 @@ public class AccumuloRow implements
 	}
 
 	@Override
-	public short getInternalAdapterId() {
-		return key.getInternalAdapterId();
+	public short getAdapterId() {
+		return key.getAdapterId();
 	}
 
 	@Override

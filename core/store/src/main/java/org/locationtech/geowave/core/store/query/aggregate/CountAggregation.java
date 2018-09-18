@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,13 +10,15 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.query.aggregate;
 
+import java.nio.ByteBuffer;
+
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
 public class CountAggregation implements
-		CommonIndexAggregation<Persistable, CountResult>
+		CommonIndexAggregation<Persistable, Long>
 {
-	private long count = Long.MIN_VALUE;
+	private long count = 0;
 
 	public CountAggregation() {}
 
@@ -37,11 +39,7 @@ public class CountAggregation implements
 	@Override
 	public void aggregate(
 			final CommonIndexedPersistenceEncoding entry ) {
-		if (!isSet()) {
-			count = 0;
-		}
-
-		count += 1;
+		count++;
 	}
 
 	@Override
@@ -50,13 +48,8 @@ public class CountAggregation implements
 	}
 
 	@Override
-	public CountResult getResult() {
-		if (!isSet()) {
-			return null;
-		}
-
-		return new CountResult(
-				count);
+	public Long getResult() {
+		return count;
 	}
 
 	@Override
@@ -76,4 +69,26 @@ public class CountAggregation implements
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {}
+
+	@Override
+	public Long merge(
+			final Long result1,
+			final Long result2 ) {
+		return result1 + result2;
+	}
+
+	@Override
+	public byte[] resultToBinary(
+			final Long result ) {
+		return ByteBuffer.allocate(
+				8).putLong(
+				result).array();
+	}
+
+	@Override
+	public Long resultFromBinary(
+			final byte[] binary ) {
+		return ByteBuffer.wrap(
+				binary).getLong();
+	}
 }

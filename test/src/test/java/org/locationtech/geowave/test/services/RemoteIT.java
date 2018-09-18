@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.test.services;
 
 import java.io.IOException;
-
 import java.util.List;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -21,22 +20,21 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
 import org.locationtech.geowave.service.client.RemoteServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.test.services.ServicesTestEnvironment;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -52,7 +50,7 @@ public class RemoteIT
 	private static ConfigServiceClient configServiceClient;
 	private RemoteServiceClient remoteServiceClient;
 
-	private String store_name = "test_store";
+	private final String store_name = "test_store";
 
 	private final static String testName = "RemoteIT";
 
@@ -94,7 +92,7 @@ public class RemoteIT
 
 		final DataStore ds = dataStoreOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
+		final Index idx = SimpleIngest.createSpatialIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
 				new SimpleFeatureBuilder(
@@ -105,9 +103,10 @@ public class RemoteIT
 				features.size()));
 		int ingestedFeatures = 0;
 		final int featuresPer5Percent = features.size() / 20;
-		try (IndexWriter writer = ds.createWriter(
+		ds.addType(
 				fda,
-				idx)) {
+				idx);
+		try (Writer writer = ds.createWriter(fda.getTypeName())) {
 			for (final SimpleFeature feat : features) {
 				writer.write(feat);
 				ingestedFeatures++;

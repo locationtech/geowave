@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,17 +24,15 @@ import org.locationtech.geowave.adapter.raster.operations.options.RasterTileResi
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -52,10 +50,10 @@ public class RasterTileResizeJobRunner extends
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RasterTileResizeJobRunner.class);
 
+	public static final String NEW_TYPE_NAME_KEY = "NEW_TYPE_NAME";
 	public static final String NEW_ADAPTER_ID_KEY = "NEW_ADAPTER_ID";
-	public static final String NEW_INTERNAL_ADAPTER_ID_KEY = "NEW_INTERNAL_ADAPTER_ID";
+	public static final String OLD_TYPE_NAME_KEY = "OLD_TYPE_NAME";
 	public static final String OLD_ADAPTER_ID_KEY = "OLD_ADAPTER_ID";
-	public static final String OLD_INTERNAL_ADAPTER_ID_KEY = "OLD_INTERNAL_ADAPTER_ID";
 
 	private final DataStorePluginOptions inputStoreOptions;
 	private final DataStorePluginOptions outputStoreOptions;
@@ -87,10 +85,10 @@ public class RasterTileResizeJobRunner extends
 				rasterResizeOptions.getJobTrackerOrResourceManHostPort(),
 				conf);
 		conf.set(
-				OLD_ADAPTER_ID_KEY,
+				OLD_TYPE_NAME_KEY,
 				rasterResizeOptions.getInputCoverageName());
 		conf.set(
-				NEW_ADAPTER_ID_KEY,
+				NEW_TYPE_NAME_KEY,
 				rasterResizeOptions.getOutputCoverageName());
 		final Job job = new Job(
 				conf);
@@ -123,9 +121,8 @@ public class RasterTileResizeJobRunner extends
 				inputStoreOptions);
 
 		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
-		final short internalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
-				rasterResizeOptions.getInputCoverageName()));
-		final DataAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
+		final short internalAdapterId = internalAdapterStore.getAdapterId(rasterResizeOptions.getInputCoverageName());
+		final DataTypeAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
 				internalAdapterId).getAdapter();
 
 		if (adapter == null) {
@@ -145,15 +142,14 @@ public class RasterTileResizeJobRunner extends
 		JobContextAdapterStore.addDataAdapter(
 				job.getConfiguration(),
 				newAdapter);
-		PrimaryIndex index = null;
+		Index index = null;
 		final IndexStore indexStore = inputStoreOptions.createIndexStore();
-		if (rasterResizeOptions.getIndexId() != null) {
-			index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-					rasterResizeOptions.getIndexId()));
+		if (rasterResizeOptions.getIndexName() != null) {
+			index = indexStore.getIndex(rasterResizeOptions.getIndexName());
 		}
 		if (index == null) {
-			try (CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
-				index = (PrimaryIndex) indices.next();
+			try (CloseableIterator<Index> indices = indexStore.getIndices()) {
+				index = indices.next();
 			}
 			if (index == null) {
 				throw new IllegalArgumentException(
@@ -167,28 +163,28 @@ public class RasterTileResizeJobRunner extends
 				job.getConfiguration(),
 				index);
 		final DataStore store = outputStoreOptions.createDataStore();
-		store.createWriter(
+		store.addType(
 				newAdapter,
-				index).close();
-		final short newInternalAdapterId = outputStoreOptions.createInternalAdapterStore().addAdapterId(
-				newAdapter.getAdapterId());
+				index);
+		final short newInternalAdapterId = outputStoreOptions.createInternalAdapterStore().addTypeName(
+				newAdapter.getTypeName());
 		// what if the adapter IDs are the same, but the internal IDs are
 		// different (unlikely corner case, but seemingly possible)
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				job.getConfiguration(),
-				newAdapter.getAdapterId(),
+				newAdapter.getTypeName(),
 				newInternalAdapterId);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				job.getConfiguration(),
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				internalAdapterId);
 
 		job.getConfiguration().setInt(
-				OLD_INTERNAL_ADAPTER_ID_KEY,
+				OLD_ADAPTER_ID_KEY,
 				internalAdapterId);
 
 		job.getConfiguration().setInt(
-				NEW_INTERNAL_ADAPTER_ID_KEY,
+				NEW_ADAPTER_ID_KEY,
 				newInternalAdapterId);
 		if (outputStoreOptions.getFactoryOptions().getStoreOptions().isPersistDataStatistics()) {
 			try {
@@ -214,16 +210,12 @@ public class RasterTileResizeJobRunner extends
 					ex);
 		}
 
-		CloseableIterator<Object> obj = outputStoreOptions.createDataStore().query(
-				new QueryOptions(
-						new ByteArrayId(
-								rasterResizeOptions.getOutputCoverageName()),
-						index.getId()),
-				null);
-		int i = 0;
+		final CloseableIterator<Object> obj = outputStoreOptions.createDataStore().query(
+				QueryBuilder.newBuilder().addTypeName(
+						rasterResizeOptions.getOutputCoverageName()).indexName(
+						index.getName()).build());
 		while (obj.hasNext()) {
 			obj.next();
-			i++;
 		}
 
 		return retVal ? 0 : 1;

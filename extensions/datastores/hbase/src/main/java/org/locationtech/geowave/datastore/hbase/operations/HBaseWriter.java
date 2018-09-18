@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 
 /**
  * This is a basic wrapper around the HBase BufferedMutator so that write
@@ -34,7 +34,7 @@ import org.locationtech.geowave.core.store.operations.Writer;
  * this implementation within a custom implementation of HBaseOperations.
  */
 public class HBaseWriter implements
-		Writer
+		RowWriter
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseWriter.class);
 
@@ -131,7 +131,7 @@ public class HBaseWriter implements
 					rowBytes);
 
 			put.addColumn(
-					StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getInternalAdapterId())),
+					StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getAdapterId())),
 					value.getFieldMask(),
 					value.getValue());
 

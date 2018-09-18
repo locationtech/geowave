@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,16 +19,11 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
-import org.locationtech.geowave.core.store.index.numeric.NumericEqualsConstraint;
-import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
-import org.locationtech.geowave.core.store.index.numeric.NumericGreaterThanOrEqualToConstraint;
-import org.locationtech.geowave.core.store.index.numeric.NumericLessThanOrEqualToConstraint;
 
 public class NumericIndexStrategyTest
 {
 	private final NumericFieldIndexStrategy strategy = new NumericFieldIndexStrategy();
-	private final ByteArrayId fieldId = new ByteArrayId(
-			"fieldId");
+	private final String fieldId = "fieldId";
 	private final int number = 10;
 
 	@Test

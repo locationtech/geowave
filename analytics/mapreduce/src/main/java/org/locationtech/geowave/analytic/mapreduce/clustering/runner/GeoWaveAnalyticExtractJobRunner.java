@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -38,21 +38,21 @@ import org.locationtech.geowave.analytic.param.ExtractParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.MapReduceParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.dedupe.GeoWaveDedupeJobRunner;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
- * 
+ *
  * Run a map reduce job to extract a population of data from GeoWave (Accumulo),
  * remove duplicates, and output a SimpleFeature with the ID and the extracted
  * geometry from each of the GeoWave data item.
- * 
+ *
  */
 public class GeoWaveAnalyticExtractJobRunner extends
 		GeoWaveDedupeJobRunner implements
@@ -189,20 +189,45 @@ public class GeoWaveAnalyticExtractJobRunner extends
 						GlobalParameters.Global.BATCH_ID,
 						UUID.randomUUID().toString()));
 
-		DistributableQuery myQuery = query;
-		if (myQuery == null) {
-			myQuery = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
-		}
+		final Query query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
+
 		setMinInputSplits(runTimeProperties.getPropertyAsInt(
 				ExtractParameters.Extract.MIN_INPUT_SPLIT,
 				1));
 		setMaxInputSplits(runTimeProperties.getPropertyAsInt(
 				ExtractParameters.Extract.MAX_INPUT_SPLIT,
 				10000));
-		if (myQuery != null) {
-			GeoWaveInputFormat.setQuery(
-					config,
-					query);
+		if (query != null) {
+			if (query.getQueryConstraints() != null) {
+				GeoWaveInputFormat.setQueryConstraints(
+						config,
+						(QueryConstraints) query.getQueryConstraints());
+				setQueryConstraints((QueryConstraints) query.getQueryConstraints());
+			}
+
+			if (query.getCommonQueryOptions() != null) {
+				GeoWaveInputFormat.setCommonQueryOptions(
+						config,
+						query.getCommonQueryOptions());
+				setCommonQueryOptions(query.getCommonQueryOptions());
+			}
+
+			if (query.getDataTypeQueryOptions() != null) {
+				GeoWaveInputFormat.setDataTypeQueryOptions(
+						config,
+						query.getDataTypeQueryOptions(),
+						dataStoreOptions.createAdapterStore(),
+						dataStoreOptions.createInternalAdapterStore());
+				setDataTypeQueryOptions(query.getDataTypeQueryOptions());
+			}
+
+			if (query.getIndexQueryOptions() != null) {
+				GeoWaveInputFormat.setIndexQueryOptions(
+						config,
+						query.getIndexQueryOptions(),
+						dataStoreOptions.createIndexStore());
+				setIndexQueryOptions(query.getIndexQueryOptions());
+			}
 		}
 		if (minInputSplits != null) {
 			GeoWaveInputFormat.setMinimumSplitCount(
@@ -228,7 +253,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				DimensionExtractor.class);
 
 		final PersistableStore store = ((PersistableStore) runTimeProperties.getProperty(StoreParam.INPUT_STORE));
-		setQueryOptions(runTimeProperties.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
 		dataStoreOptions = store.getDataStoreOptions();
 
 		GeoWaveInputFormat.setStoreOptions(
@@ -240,7 +264,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 				dataStoreOptions);
 
 		try (final FileSystem fs = FileSystem.get(config)) {
-			if (fs.exists(this.getHdfsOutputPath())) {
+			if (fs.exists(getHdfsOutputPath())) {
 				fs.delete(
 						// HPFortify "Path Manipulation"
 						// False positive - path is internally managed
@@ -257,7 +281,7 @@ public class GeoWaveAnalyticExtractJobRunner extends
 
 	@Override
 	public Collection<ParameterEnum<?>> getParameters() {
-		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
+		final Set<ParameterEnum<?>> params = new HashSet<>();
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
 			ExtractParameters.Extract.REDUCER_COUNT,
 			ExtractParameters.Extract.OUTPUT_DATA_TYPE_ID,
@@ -266,7 +290,6 @@ public class GeoWaveAnalyticExtractJobRunner extends
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.QUERY,
-			ExtractParameters.Extract.QUERY_OPTIONS,
 			StoreParam.INPUT_STORE,
 			GlobalParameters.Global.BATCH_ID
 		}));

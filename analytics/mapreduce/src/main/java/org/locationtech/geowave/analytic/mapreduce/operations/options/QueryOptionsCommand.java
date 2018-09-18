@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,48 +10,46 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.mapreduce.operations.options;
 
-import java.util.List;
-
 import com.beust.jcommander.Parameter;
 
 public class QueryOptionsCommand
 {
 
 	@Parameter(names = "--auth", description = "The comma-separated list of authorizations used during extract; by default all authorizations are used.")
-	private List<String> authorizations;
+	private String[] authorizations;
 
-	@Parameter(names = "--adapters", required = true, description = "The comma-separated list of data adapters to query; by default all adapters are used.")
-	private List<String> adapterIds = null;
+	@Parameter(names = "--typeNames", required = true, description = "The comma-separated list of data typess to query; by default all data types are used.")
+	private String[] typeNames = null;
 
-	@Parameter(names = "--index", description = "The specific index to query; by default one is chosen for each adapter.")
-	private String indexId = null;
+	@Parameter(names = "--indexName", description = "The specific index to query; by default one is chosen for each adapter.")
+	private String indexName = null;
 
 	public QueryOptionsCommand() {}
 
-	public List<String> getAuthorizations() {
+	public String[] getAuthorizations() {
 		return authorizations;
 	}
 
 	public void setAuthorizations(
-			List<String> authorizations ) {
+			final String[] authorizations ) {
 		this.authorizations = authorizations;
 	}
 
-	public List<String> getAdapterIds() {
-		return adapterIds;
+	public String[] getTypeNames() {
+		return typeNames;
 	}
 
-	public void setAdapterIds(
-			List<String> adapterIds ) {
-		this.adapterIds = adapterIds;
+	public void setTypeNames(
+			final String[] typeNames ) {
+		this.typeNames = typeNames;
 	}
 
-	public String getIndexId() {
-		return indexId;
+	public String getIndexName() {
+		return indexName;
 	}
 
-	public void setIndexId(
-			String indexId ) {
-		this.indexId = indexId;
+	public void setIndexName(
+			final String indexName ) {
+		this.indexName = indexName;
 	}
 }

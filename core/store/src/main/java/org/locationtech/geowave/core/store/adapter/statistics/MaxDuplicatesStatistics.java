@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,15 +12,13 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public class MaxDuplicatesStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, Integer, IndexStatisticsQueryBuilder<Integer>>
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final IndexStatisticsType<Integer> STATS_TYPE = new IndexStatisticsType<>(
 			"MAX_DUPLICATES");
 	private int maxDuplicates = 0;
 
@@ -34,37 +32,29 @@ public class MaxDuplicatesStatistics<T> extends
 
 	private MaxDuplicatesStatistics(
 			final short internalDataAdapterId,
-			final ByteArrayId statsId,
+			final String indexName,
 			final int maxDuplicates ) {
 		super(
 				internalDataAdapterId,
-				statsId);
+				STATS_TYPE,
+				indexName);
 		this.maxDuplicates = maxDuplicates;
 	}
 
 	public MaxDuplicatesStatistics(
 			final short internalDataAdapterId,
-			final ByteArrayId indexId ) {
+			final String indexName ) {
 		super(
 				internalDataAdapterId,
-				composeId(indexId));
-	}
-
-	public static ByteArrayId composeId(
-			final ByteArrayId indexId ) {
-		return new ByteArrayId(
-				ArrayUtils.addAll(
-						ArrayUtils.addAll(
-								STATS_TYPE.getBytes(),
-								STATS_SEPARATOR.getBytes()),
-						indexId.getBytes()));
+				STATS_TYPE,
+				indexName);
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
-		return new MaxDuplicatesStatistics<>(
-				internalDataAdapterId,
-				statisticsId,
+	public InternalDataStatistics<T, Integer, IndexStatisticsQueryBuilder<Integer>> duplicate() {
+		return (InternalDataStatistics) new MaxDuplicatesStatistics<>(
+				adapterId,
+				extendedId,
 				maxDuplicates);
 	}
 
@@ -101,5 +91,20 @@ public class MaxDuplicatesStatistics<T> extends
 					maxDuplicates,
 					((MaxDuplicatesStatistics) merge).maxDuplicates);
 		}
+	}
+
+	@Override
+	public Integer getResult() {
+		return maxDuplicates;
+	}
+
+	@Override
+	protected String resultsName() {
+		return "maxDuplicates";
+	}
+
+	@Override
+	protected String resultsValue() {
+		return Integer.toString(maxDuplicates);
 	}
 }

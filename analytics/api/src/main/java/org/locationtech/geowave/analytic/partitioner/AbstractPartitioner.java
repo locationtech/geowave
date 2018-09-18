@@ -38,6 +38,7 @@ import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
@@ -54,7 +55,7 @@ public abstract class AbstractPartitioner<T> implements
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private transient PrimaryIndex index = null;
+	private transient Index index = null;
 	private double[] distancePerDimension = null;
 	private double precisionFactor = 1.0;
 
@@ -81,7 +82,7 @@ public abstract class AbstractPartitioner<T> implements
 		return distancePerDimension;
 	}
 
-	protected PrimaryIndex getIndex() {
+	protected Index getIndex() {
 		return index;
 	}
 
@@ -331,7 +332,7 @@ public abstract class AbstractPartitioner<T> implements
 			ClassNotFoundException {
 		final byte[] indexData = new byte[stream.readInt()];
 		stream.readFully(indexData);
-		index = (PrimaryIndex) PersistenceUtils.fromBinary(indexData);
+		index = (Index) PersistenceUtils.fromBinary(indexData);
 		precisionFactor = stream.readDouble();
 		distancePerDimension = new double[stream.readInt()];
 		for (int i = 0; i < distancePerDimension.length; i++) {

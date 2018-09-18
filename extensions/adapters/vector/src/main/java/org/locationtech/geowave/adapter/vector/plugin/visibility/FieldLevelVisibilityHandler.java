@@ -78,7 +78,7 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
 	@Override
 	public byte[] getVisibility(
 			T rowValue,
-			ByteArrayId fieldId,
+			String fieldName,
 			CommonIndexValue fieldValue ) {
 
 		SimpleFeature feature = (SimpleFeature) rowValue;
@@ -89,7 +89,7 @@ public abstract class FieldLevelVisibilityHandler<T, CommonIndexValue> implement
 		return result != null ? result : (defaultFieldVisiblityHandler == null ? new byte[0]
 				: defaultFieldVisiblityHandler.getVisibility(
 						rowValue,
-						fieldId,
+						fieldName,
 						fieldValue));
 	}
 

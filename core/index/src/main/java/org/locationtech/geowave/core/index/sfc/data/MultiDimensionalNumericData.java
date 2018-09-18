@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.index.sfc.data;
 
-import org.locationtech.geowave.core.index.QueryConstraints;
+import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 /**
@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.index.persist.Persistable;
  * 
  */
 public interface MultiDimensionalNumericData extends
-		QueryConstraints,
+		IndexConstraints,
 		Persistable
 {
 	/**

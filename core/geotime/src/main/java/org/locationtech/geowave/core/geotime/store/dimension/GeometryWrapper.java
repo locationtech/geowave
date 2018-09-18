@@ -27,6 +27,7 @@ import com.vividsolutions.jts.geom.Envelope;
 public class GeometryWrapper implements
 		CommonIndexValue
 {
+	public final static String DEFAULT_GEOMETRY_FIELD_NAME = "default_geom_dimension";
 	private byte[] visibility;
 	private final com.vividsolutions.jts.geom.Geometry geometry;
 	private static final double DOUBLE_TOLERANCE = 1E-12d;

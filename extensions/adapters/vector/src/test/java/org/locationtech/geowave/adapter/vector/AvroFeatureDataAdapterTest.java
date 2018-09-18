@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -32,29 +32,25 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.AvroFeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.FeatureTimeRangeHandler;
-import org.locationtech.geowave.adapter.vector.FeatureTimestampHandler;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -68,7 +64,7 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class AvroFeatureDataAdapterTest
 {
-
+	private static final String INDEX_NAME = new SpatialIndexBuilder().createIndex().getName();
 	private SimpleFeatureType schema;
 	private SimpleFeature newFeature;
 	private Date time1;
@@ -130,11 +126,12 @@ public class AvroFeatureDataAdapterTest
 			final List<SimpleFeature> data )
 			throws IOException {
 
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		adapter.init(index);
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer indexWriter = dataStore.createWriter(adapter.getTypeName())) {
 			for (final SimpleFeature sf : data) {
 				indexWriter.write(
 						sf,
@@ -209,12 +206,12 @@ public class AvroFeatureDataAdapterTest
 				-180,
 				-90);
 		// read data using the whole feature data adapter
-		try (final CloseableIterator<SimpleFeature> itr = dataStore.query(
-				new QueryOptions(
-						adapter,
-						new SpatialIndexBuilder().createIndex()),
-				new SpatialQuery(
-						new GeometryFactory().createPolygon(coordArray)))) {
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				INDEX_NAME);
+		bldr = bldr.constraints(bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+				new GeometryFactory().createPolygon(coordArray)).build());
+		try (final CloseableIterator<SimpleFeature> itr = dataStore.query(bldr.build())) {
 
 			while (itr.hasNext()) {
 				final SimpleFeature feat = itr.next();
@@ -241,7 +238,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
@@ -277,7 +274,8 @@ public class AvroFeatureDataAdapterTest
 		final SimpleFeature decodedFeature = dataAdapter.decode(
 				encoding,
 				new PrimaryIndex(
-						null, // because we know the feature data adapter
+						null, // because we know the feature data
+								// adapter
 						// doesn't use the numeric index strategy
 						// and only the common index model to decode
 						// the simple feature, we pass along a null
@@ -309,7 +307,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -317,8 +315,8 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -355,7 +353,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -363,8 +361,8 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -418,7 +416,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -426,8 +424,8 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -472,7 +470,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -480,8 +478,8 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -554,7 +552,7 @@ public class AvroFeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -562,8 +560,8 @@ public class AvroFeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -620,7 +618,7 @@ public class AvroFeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		dataAdapter.init(index);
 		final byte[] binary = dataAdapter.toBinary();
 

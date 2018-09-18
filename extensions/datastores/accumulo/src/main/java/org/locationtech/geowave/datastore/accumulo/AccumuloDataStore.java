@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,15 +14,13 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -129,26 +127,18 @@ public class AccumuloDataStore extends
 	@Override
 	protected void initOnIndexWriterCreate(
 			final InternalDataAdapter adapter,
-			final PrimaryIndex index ) {
-
-		final String indexName = index.getId().getString();
-
+			final Index index ) {
+		final String indexName = index.getName();
+		final String typeName = adapter.getTypeName();
 		try {
 			if (adapter.getAdapter() instanceof RowMergingDataAdapter) {
 				if (!((AccumuloOperations) baseOperations).isRowMergingEnabled(
-						adapter.getInternalAdapterId(),
+						adapter.getAdapterId(),
 						indexName)) {
-					if (baseOptions.isCreateTable()) {
-						if (!((AccumuloOperations) baseOperations).createTable(
-								indexName,
-								false,
-								baseOptions.isEnableBlockCache())) {
-							((AccumuloOperations) baseOperations).enableVersioningIterator(
-									indexName,
-									false);
-						}
-					}
-					else {
+					if (!((AccumuloOperations) baseOperations).createTable(
+							indexName,
+							false,
+							baseOptions.isEnableBlockCache())) {
 						((AccumuloOperations) baseOperations).enableVersioningIterator(
 								indexName,
 								false);
@@ -156,7 +146,7 @@ public class AccumuloDataStore extends
 					if (baseOptions.isServerSideLibraryEnabled()) {
 						ServerOpHelper.addServerSideRowMerging(
 								((RowMergingDataAdapter<?, ?>) adapter.getAdapter()),
-								adapter.getInternalAdapterId(),
+								adapter.getAdapterId(),
 								(ServerSideOperations) baseOperations,
 								RowMergingCombiner.class.getName(),
 								RowMergingVisibilityCombiner.class.getName(),
@@ -164,20 +154,19 @@ public class AccumuloDataStore extends
 					}
 				}
 			}
-
-			final byte[] adapterId = adapter.getAdapterId().getBytes();
 			if (((AccumuloOptions) baseOptions).isUseLocalityGroups()
 					&& !((AccumuloOperations) baseOperations).localityGroupExists(
 							indexName,
-							adapterId)) {
+							adapter.getTypeName())) {
 				((AccumuloOperations) baseOperations).addLocalityGroup(
 						indexName,
-						adapterId);
+						adapter.getTypeName(),
+						adapter.getAdapterId());
 			}
 		}
 		catch (AccumuloException | TableNotFoundException | AccumuloSecurityException e) {
 			LOGGER.error(
-					"Unable to determine existence of locality group [" + adapter.getAdapterId().getString() + "]",
+					"Unable to determine existence of locality group [" + typeName + "]",
 					e);
 		}
 

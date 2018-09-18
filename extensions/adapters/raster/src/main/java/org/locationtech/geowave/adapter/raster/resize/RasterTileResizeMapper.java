@@ -64,9 +64,9 @@ public class RasterTileResizeMapper extends
 								sortKey == null ? null : sortKey.getBytes(),
 								0);
 						final GeoWaveInputKey inputKey = new GeoWaveInputKey(
-								helper.getNewInternalAdapterId(),
+								helper.getNewAdapterId(),
 								geowaveKey,
-								helper.getIndexId());
+								helper.getIndexName());
 						context.write(
 								inputKey,
 								c);

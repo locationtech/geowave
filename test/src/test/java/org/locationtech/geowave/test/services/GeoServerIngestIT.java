@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -34,21 +34,20 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
 import org.locationtech.geowave.service.client.GeoServerServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.test.services.ServicesTestEnvironment;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -110,8 +109,8 @@ public class GeoServerIngestIT
 			URISyntaxException {
 		final DataStore ds = dataStorePluginOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final PrimaryIndex spatialIdx = SimpleIngest.createSpatialIndex();
-		final PrimaryIndex spatialTemporalIdx = SimpleIngest.createSpatialTemporalIndex();
+		final Index spatialIdx = SimpleIngest.createSpatialIndex();
+		final Index spatialTemporalIdx = SimpleIngest.createSpatialTemporalIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 		final List<SimpleFeature> features = SimpleIngest.getGriddedTemporalFeatures(
 				new SimpleFeatureBuilder(
@@ -122,10 +121,11 @@ public class GeoServerIngestIT
 				features.size()));
 		int ingestedFeatures = 0;
 		final int featuresPer5Percent = features.size() / 20;
-		try (IndexWriter writer = ds.createWriter(
+		ds.addType(
 				fda,
 				spatialIdx,
-				spatialTemporalIdx)) {
+				spatialTemporalIdx);
+		try (Writer writer = ds.createWriter(fda.getTypeName())) {
 			for (final SimpleFeature feat : features) {
 				writer.write(feat);
 				ingestedFeatures++;

@@ -12,7 +12,7 @@ package org.locationtech.geowave.format.landsat8;
 
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.ConvertCQLStrToFilterConverter;
 import org.locationtech.geowave.adapter.vector.ingest.CQLFilterOptionProvider.FilterParameter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.filter.Filter;
 
 import com.beust.jcommander.Parameter;

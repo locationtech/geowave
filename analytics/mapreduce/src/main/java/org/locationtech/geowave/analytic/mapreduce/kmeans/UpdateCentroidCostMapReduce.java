@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,8 +11,6 @@
 package org.locationtech.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -30,7 +28,6 @@ import org.locationtech.geowave.analytic.kmeans.AssociationNotification;
 import org.locationtech.geowave.analytic.mapreduce.CountofDoubleWritable;
 import org.locationtech.geowave.analytic.mapreduce.GroupIDText;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -40,25 +37,25 @@ import org.slf4j.LoggerFactory;
 /**
  * Update the SINGLE cost of the clustering as a measure of distance from all
  * points to their closest center.
- * 
+ *
  * As an FYI: During the clustering algorithm, the cost should be monotonic
  * decreasing.
- * 
+ *
  * @formatter:off
- * 
+ *
  *                Context configuration parameters include:
- * 
+ *
  *                "UpdateCentroidCostMapReduce.Common.DistanceFunctionClass" ->
  *                Used to determine distance to centroid
- * 
+ *
  *                "UpdateCentroidCostMapReduce.Centroid.WrapperFactoryClass" ->
  *                {@link AnalyticItemWrapperFactory} to extract wrap spatial
  *                objects with Centroid management functions
- * 
+ *
  * @see CentroidManagerGeoWave
- * 
+ *
  * @formatter:on
- * 
+ *
  */
 
 public class UpdateCentroidCostMapReduce
@@ -116,7 +113,7 @@ public class UpdateCentroidCostMapReduce
 					UpdateCentroidCostMapReduce.LOGGER);
 
 			try {
-				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
+				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<>(
 						context,
 						UpdateCentroidCostMapReduce.class,
 						UpdateCentroidCostMapReduce.LOGGER);
@@ -178,7 +175,7 @@ public class UpdateCentroidCostMapReduce
 	{
 
 		private CentroidManager<Object> centroidManager;
-		private List<ByteArrayId> indexIds;
+		private String[] indexNames;
 
 		@Override
 		protected void reduce(
@@ -218,8 +215,8 @@ public class UpdateCentroidCostMapReduce
 			UpdateCentroidCostMapReduce.LOGGER.info("Update centroid " + centroid.toString());
 			context.write(
 					new GeoWaveOutputKey(
-							centroidManager.getDataTypeId(),
-							indexIds),
+							centroidManager.getDataTypeName(),
+							indexNames),
 					centroid.getWrappedItem());
 		}
 
@@ -241,13 +238,14 @@ public class UpdateCentroidCostMapReduce
 			super.setup(context);
 
 			try {
-				centroidManager = new CentroidManagerGeoWave<Object>(
+				centroidManager = new CentroidManagerGeoWave<>(
 
 						context,
 						UpdateCentroidCostMapReduce.class,
 						UpdateCentroidCostMapReduce.LOGGER);
-				indexIds = new ArrayList<ByteArrayId>();
-				indexIds.add(centroidManager.getIndexId());
+				indexNames = new String[] {
+					centroidManager.getIndexName()
+				};
 			}
 			catch (final Exception e) {
 				UpdateCentroidCostMapReduce.LOGGER.warn(

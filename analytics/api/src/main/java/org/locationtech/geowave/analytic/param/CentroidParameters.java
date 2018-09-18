@@ -18,7 +18,7 @@ public class CentroidParameters
 	public enum Centroid
 			implements
 			ParameterEnum {
-		INDEX_ID(
+		INDEX_NAME(
 				String.class,
 				"cid",
 				"Index Identifier for Centroids",

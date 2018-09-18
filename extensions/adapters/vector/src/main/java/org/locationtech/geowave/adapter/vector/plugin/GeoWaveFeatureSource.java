@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,16 +19,16 @@ import org.geotools.data.Query;
 import org.geotools.data.store.ContentEntry;
 import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
-import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -68,14 +68,13 @@ public class GeoWaveFeatureSource extends
 			throws IOException {
 		double minx = -90.0, maxx = 90.0, miny = -180.0, maxy = 180.0;
 
-		DataStatistics<SimpleFeature> bboxStats = null;
+		InternalDataStatistics<SimpleFeature, ?, ?> bboxStats = null;
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+			final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats = new GeoWaveEmptyTransaction(
 					components).getDataStatistics();
-			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(getFeatureType()
-					.getGeometryDescriptor()
-					.getLocalName()));
+			bboxStats = stats.get(VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+					getFeatureType().getGeometryDescriptor().getLocalName()).build().getId());
 		}
 		if (bboxStats != null) {
 			minx = ((BoundingBoxDataStatistics) bboxStats).getMinX();
@@ -127,9 +126,14 @@ public class GeoWaveFeatureSource extends
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+		final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats = new GeoWaveEmptyTransaction(
 				components).getDataStatistics();
-		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_TYPE);
+		final InternalDataStatistics<SimpleFeature, ?, ?> countStats = stats.get(VectorStatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.count()
+				.build()
+				.getId());
 		if ((countStats != null) && query.getFilter().equals(
 				Filter.INCLUDE)) {
 			return (int) ((CountDataStatistics) countStats).getCount();

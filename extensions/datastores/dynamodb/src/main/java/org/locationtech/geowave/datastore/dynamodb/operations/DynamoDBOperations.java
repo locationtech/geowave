@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -23,19 +23,19 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
-import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
-import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
@@ -130,7 +130,7 @@ public class DynamoDBOperations implements
 		final ScanRequest request = new ScanRequest(
 				qName);
 		final ScanResult scanResult = client.scan(request);
-		final Iterator<DynamoDBRow> everything = new GeoWaveRowMergingIterator<DynamoDBRow>(
+		final Iterator<DynamoDBRow> everything = new GeoWaveRowMergingIterator<>(
 				Iterators.transform(
 						new LazyPaginatedScan(
 								scanResult,
@@ -146,7 +146,7 @@ public class DynamoDBOperations implements
 							final DynamoDBRow input ) {
 						return dataIdsSet.contains(new ByteArrayId(
 								input.getDataId())) && Short.valueOf(
-								input.getInternalAdapterId()).equals(
+								input.getAdapterId()).equals(
 								adapterIdObj);
 					}
 				});
@@ -167,12 +167,12 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean indexExists(
-			final ByteArrayId indexId )
+			final String indexName )
 			throws IOException {
 		try {
 			return TableStatus.ACTIVE.name().equals(
 					client.describeTable(
-							getQualifiedTableName(indexId.getString())).getTable().getTableStatus());
+							getQualifiedTableName(indexName)).getTable().getTableStatus());
 		}
 		catch (final AmazonDynamoDBException e) {
 			LOGGER.info(
@@ -184,8 +184,8 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean deleteAll(
-			final ByteArrayId indexId,
-			Short internalAdapterId,
+			final String indexName,
+			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		// TODO Auto-generated method stub
 		return false;
@@ -199,10 +199,11 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public Writer createWriter(
-			final PrimaryIndex index,
-			short internalAdapterId ) {
-		final String qName = getQualifiedTableName(index.getId().getString());
+	public RowWriter createWriter(
+			final Index index,
+			final String typeName,
+			final short internalAdapterId ) {
+		final String qName = getQualifiedTableName(index.getName());
 
 		final DynamoDBWriter writer = new DynamoDBWriter(
 				client,
@@ -213,47 +214,45 @@ public class DynamoDBOperations implements
 	}
 
 	private boolean createTable(
-			String qName ) {
-		if (options.getStoreOptions().isCreateTable()) {
-			synchronized (tableExistsCache) {
-				final Boolean tableExists = tableExistsCache.get(qName);
-				if ((tableExists == null) || !tableExists) {
-					final boolean tableCreated = TableUtils.createTableIfNotExists(
-							client,
-							new CreateTableRequest().withTableName(
-									qName).withAttributeDefinitions(
-									new AttributeDefinition(
-											DynamoDBRow.GW_PARTITION_ID_KEY,
-											ScalarAttributeType.B),
-									new AttributeDefinition(
-											DynamoDBRow.GW_RANGE_KEY,
-											ScalarAttributeType.B)).withKeySchema(
-									new KeySchemaElement(
-											DynamoDBRow.GW_PARTITION_ID_KEY,
-											KeyType.HASH),
-									new KeySchemaElement(
-											DynamoDBRow.GW_RANGE_KEY,
-											KeyType.RANGE)).withProvisionedThroughput(
-									new ProvisionedThroughput(
-											Long.valueOf(options.getReadCapacity()),
-											Long.valueOf(options.getWriteCapacity()))));
-					if (tableCreated) {
-						try {
-							TableUtils.waitUntilActive(
-									client,
-									qName);
-						}
-						catch (TableNeverTransitionedToStateException | InterruptedException e) {
-							LOGGER.error(
-									"Unable to wait for active table '" + qName + "'",
-									e);
-						}
+			final String qName ) {
+		synchronized (tableExistsCache) {
+			final Boolean tableExists = tableExistsCache.get(qName);
+			if ((tableExists == null) || !tableExists) {
+				final boolean tableCreated = TableUtils.createTableIfNotExists(
+						client,
+						new CreateTableRequest().withTableName(
+								qName).withAttributeDefinitions(
+								new AttributeDefinition(
+										DynamoDBRow.GW_PARTITION_ID_KEY,
+										ScalarAttributeType.B),
+								new AttributeDefinition(
+										DynamoDBRow.GW_RANGE_KEY,
+										ScalarAttributeType.B)).withKeySchema(
+								new KeySchemaElement(
+										DynamoDBRow.GW_PARTITION_ID_KEY,
+										KeyType.HASH),
+								new KeySchemaElement(
+										DynamoDBRow.GW_RANGE_KEY,
+										KeyType.RANGE)).withProvisionedThroughput(
+								new ProvisionedThroughput(
+										Long.valueOf(options.getReadCapacity()),
+										Long.valueOf(options.getWriteCapacity()))));
+				if (tableCreated) {
+					try {
+						TableUtils.waitUntilActive(
+								client,
+								qName);
 					}
-					tableExistsCache.put(
-							qName,
-							true);
-					return true;
+					catch (TableNeverTransitionedToStateException | InterruptedException e) {
+						LOGGER.error(
+								"Unable to wait for active table '" + qName + "'",
+								e);
+					}
 				}
+				tableExistsCache.put(
+						qName,
+						true);
+				return true;
 			}
 		}
 		return false;
@@ -265,45 +264,43 @@ public class DynamoDBOperations implements
 			final MetadataType metadataType ) {
 		final String tableName = getMetadataTableName(metadataType);
 
-		if (options.getStoreOptions().isCreateTable()) {
-			synchronized (DynamoDBOperations.tableExistsCache) {
-				final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
-				if ((tableExists == null) || !tableExists) {
-					final boolean tableCreated = TableUtils.createTableIfNotExists(
-							client,
-							new CreateTableRequest().withTableName(
-									tableName).withAttributeDefinitions(
-									new AttributeDefinition(
-											METADATA_PRIMARY_ID_KEY,
-											ScalarAttributeType.B)).withKeySchema(
-									new KeySchemaElement(
-											METADATA_PRIMARY_ID_KEY,
-											KeyType.HASH)).withAttributeDefinitions(
-									new AttributeDefinition(
-											METADATA_TIMESTAMP_KEY,
-											ScalarAttributeType.N)).withKeySchema(
-									new KeySchemaElement(
-											METADATA_TIMESTAMP_KEY,
-											KeyType.RANGE)).withProvisionedThroughput(
-									new ProvisionedThroughput(
-											Long.valueOf(5),
-											Long.valueOf(5))));
-					if (tableCreated) {
-						try {
-							TableUtils.waitUntilActive(
-									client,
-									tableName);
-						}
-						catch (TableNeverTransitionedToStateException | InterruptedException e) {
-							LOGGER.error(
-									"Unable to wait for active table '" + tableName + "'",
-									e);
-						}
+		synchronized (DynamoDBOperations.tableExistsCache) {
+			final Boolean tableExists = DynamoDBOperations.tableExistsCache.get(tableName);
+			if ((tableExists == null) || !tableExists) {
+				final boolean tableCreated = TableUtils.createTableIfNotExists(
+						client,
+						new CreateTableRequest().withTableName(
+								tableName).withAttributeDefinitions(
+								new AttributeDefinition(
+										METADATA_PRIMARY_ID_KEY,
+										ScalarAttributeType.B)).withKeySchema(
+								new KeySchemaElement(
+										METADATA_PRIMARY_ID_KEY,
+										KeyType.HASH)).withAttributeDefinitions(
+								new AttributeDefinition(
+										METADATA_TIMESTAMP_KEY,
+										ScalarAttributeType.N)).withKeySchema(
+								new KeySchemaElement(
+										METADATA_TIMESTAMP_KEY,
+										KeyType.RANGE)).withProvisionedThroughput(
+								new ProvisionedThroughput(
+										Long.valueOf(5),
+										Long.valueOf(5))));
+				if (tableCreated) {
+					try {
+						TableUtils.waitUntilActive(
+								client,
+								tableName);
 					}
-					DynamoDBOperations.tableExistsCache.put(
-							tableName,
-							true);
+					catch (TableNeverTransitionedToStateException | InterruptedException e) {
+						LOGGER.error(
+								"Unable to wait for active table '" + tableName + "'",
+								e);
+					}
 				}
+				DynamoDBOperations.tableExistsCache.put(
+						tableName,
+						true);
 			}
 		}
 
@@ -329,33 +326,33 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final ReaderParams<T> readerParams ) {
-		return new DynamoDBReader<T>(
+		return new DynamoDBReader<>(
 				readerParams,
 				this);
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final RecordReaderParams<T> recordReaderParams ) {
-		return new DynamoDBReader<T>(
+		return new DynamoDBReader<>(
 				recordReaderParams,
 				this);
 	}
 
 	public RowDeleter createDeleter(
-			final ByteArrayId indexId,
+			final String indexName,
 			final String... authorizations ) {
 		return new DynamoDBDeleter(
 				this,
-				getQualifiedTableName(indexId.getString()));
+				getQualifiedTableName(indexName));
 	}
 
 	@Override
 	public boolean mergeData(
-			final PrimaryIndex index,
-			PersistentAdapterStore adapterStore,
+			final Index index,
+			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		return DataStoreUtils.mergeData(
 				index,
@@ -365,8 +362,8 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean mergeStats(
-			DataStatisticsStore statsStore,
-			InternalAdapterStore internalAdapterStore ) {
+			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore ) {
 		return DataStoreUtils.mergeStats(
 				statsStore,
 				internalAdapterStore);
@@ -391,17 +388,17 @@ public class DynamoDBOperations implements
 
 	@Override
 	public boolean createIndex(
-			PrimaryIndex index )
+			final Index index )
 			throws IOException {
-		return createTable(getQualifiedTableName(index.getId().getString()));
+		return createTable(getQualifiedTableName(index.getName()));
 	}
 
 	@Override
 	public <T> Deleter<T> createDeleter(
-			ReaderParams<T> readerParams ) {
+			final ReaderParams<T> readerParams ) {
 		return new QueryAndDeleteByRow<>(
 				createDeleter(
-						readerParams.getIndex().getId(),
+						readerParams.getIndex().getName(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));
 	}

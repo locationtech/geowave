@@ -8,7 +8,7 @@ public class QueryAndDeleteByRow<T> implements
 		Deleter<T>
 {
 	private final RowDeleter rowDeleter;
-	private final Reader<T> reader;
+	private final RowReader<T> reader;
 
 	public QueryAndDeleteByRow() {
 		this.reader = new EmptyReader<>();
@@ -17,7 +17,7 @@ public class QueryAndDeleteByRow<T> implements
 
 	public QueryAndDeleteByRow(
 			final RowDeleter rowDeleter,
-			final Reader<T> reader ) {
+			final RowReader<T> reader ) {
 		this.rowDeleter = rowDeleter;
 		this.reader = reader;
 	}
@@ -47,7 +47,7 @@ public class QueryAndDeleteByRow<T> implements
 	}
 
 	private static class EmptyReader<T> implements
-			Reader<T>
+			RowReader<T>
 	{
 
 		@Override

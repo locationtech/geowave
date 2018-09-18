@@ -14,23 +14,23 @@ import com.beust.jcommander.Parameter;
 
 public class SplitCommandLineOptions
 {
-	@Parameter(names = "--indexId", description = "The geowave index ID (optional; default is all indices)")
-	private String indexId;
+	@Parameter(names = "--indexName", description = "The geowave index name (optional; default is all indices)")
+	private String indexName;
 
 	@Parameter(names = "--num", required = true, description = "The number of partitions (or entries)")
 	private long number;
 
-	public String getIndexId() {
-		return indexId;
+	public String getIndexName() {
+		return indexName;
 	}
 
 	public long getNumber() {
 		return number;
 	}
 
-	public void setIndexId(
-			String indexId ) {
-		this.indexId = indexId;
+	public void setIndexName(
+			String indexName ) {
+		this.indexName = indexName;
 	}
 
 	public void setNumber(

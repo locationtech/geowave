@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,8 +14,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.apache.avro.file.DataFileStream;
 import org.apache.avro.specific.SpecificDatumReader;
@@ -23,11 +21,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.format.avro.AvroIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class AVROIngestTest
@@ -58,12 +53,11 @@ public class AVROIngestTest
 				filePath);
 
 		assertTrue(validate(toIngest));
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(new ByteArrayId(
-				"123".getBytes(StringUtils.UTF8_CHARSET)));
 		final CloseableIterator<GeoWaveData<SimpleFeature>> features = ingester.toGeoWaveData(
 				toIngest,
-				indexIds,
+				new String[] {
+					"123"
+				},
 				"");
 
 		assertTrue((features != null) && features.hasNext());
@@ -102,8 +96,8 @@ public class AVROIngestTest
 	}
 
 	private boolean validate(
-			URL file ) {
-		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<AvroSimpleFeatureCollection>(
+			final URL file ) {
+		try (DataFileStream<AvroSimpleFeatureCollection> ds = new DataFileStream<>(
 				file.openStream(),
 				new SpecificDatumReader<AvroSimpleFeatureCollection>())) {
 			if (ds.getHeader() != null) {

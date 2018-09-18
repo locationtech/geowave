@@ -60,7 +60,7 @@ public class CassandraUtils
 					ByteBuffer.class);
 			retVal[i].set(
 					CassandraField.GW_ADAPTER_ID_KEY.getBindMarkerName(),
-					row.getInternalAdapterId(),
+					row.getAdapterId(),
 					Short.class);
 			retVal[i].set(
 					CassandraField.GW_VALUE_KEY.getBindMarkerName(),

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -27,10 +27,10 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
-import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 
 public class MapReduceMemoryDataStore extends
 		BaseMapReduceDataStore
@@ -64,24 +64,28 @@ public class MapReduceMemoryDataStore extends
 
 	@Override
 	public List<InputSplit> getSplits(
-			DistributableQuery query,
-			QueryOptions queryOptions,
-			TransientAdapterStore adapterStore,
-			AdapterIndexMappingStore aimStore,
-			DataStatisticsStore statsStore,
-			InternalAdapterStore internalAdapterStore,
-			IndexStore indexStore,
-			JobContext context,
-			Integer minSplits,
-			Integer maxSplits )
+			final CommonQueryOptions commonOptions,
+			final DataTypeQueryOptions<?> typeOptions,
+			final IndexQueryOptions indexOptions,
+			final QueryConstraints constraints,
+			final TransientAdapterStore adapterStore,
+			final AdapterIndexMappingStore aimStore,
+			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore,
+			final IndexStore indexStore,
+			final JobContext context,
+			final Integer minSplits,
+			final Integer maxSplits )
 			throws IOException,
 			InterruptedException {
 		return super.getSplits(
-				query,
-				queryOptions,
+				commonOptions,
+				typeOptions,
+				indexOptions,
+				constraints,
 				adapterStore,
-				this.indexMappingStore,
-				this.statisticsStore,
+				indexMappingStore,
+				statisticsStore,
 				this.internalAdapterStore,
 				this.indexStore,
 				context,
@@ -90,6 +94,10 @@ public class MapReduceMemoryDataStore extends
 	}
 
 	public PersistentAdapterStore getAdapterStore() {
-		return this.adapterStore;
+		return adapterStore;
+	}
+
+	public InternalAdapterStore getInternalAdapterStore() {
+		return internalAdapterStore;
 	}
 }

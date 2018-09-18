@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,10 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -26,9 +24,9 @@ import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 import com.google.common.math.DoubleMath;
 
@@ -72,7 +70,7 @@ public class CommonIndexedPersistenceEncoding extends
 	 * @return The insertions IDs for this object in the index
 	 */
 	public InsertionIds getInsertionIds(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final MultiDimensionalNumericData boxRangeData = getNumericData(index.getIndexModel().getDimensions());
 		final InsertionIds untrimmedResult = index.getIndexStrategy().getInsertionIds(
 				boxRangeData);
@@ -156,7 +154,7 @@ public class CommonIndexedPersistenceEncoding extends
 		final NumericData[] dataPerDimension = new NumericData[dimensions.length];
 		for (int d = 0; d < dimensions.length; d++) {
 			final CommonIndexValue val = getCommonData().getValue(
-					dimensions[d].getFieldId());
+					dimensions[d].getFieldName());
 			if (val != null) {
 				dataPerDimension[d] = dimensions[d].getNumericData(val);
 			}
@@ -198,7 +196,7 @@ public class CommonIndexedPersistenceEncoding extends
 	// to avoid the extra cost of checking the result
 	protected boolean overlaps(
 			final NumericData[] insertTileRange,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		@SuppressWarnings("rawtypes")
 		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
 		final NumericDimensionField[] fields = index.getIndexModel().getDimensions();
@@ -219,7 +217,7 @@ public class CommonIndexedPersistenceEncoding extends
 		// However, provided in the correct order for interpretation, the
 		// CommonIndexValue can use those numeric data items
 		// to judge an overlap of range data.
-		final Map<ByteArrayId, DimensionRangePair> fieldsRangeData = new HashMap<ByteArrayId, DimensionRangePair>(
+		final Map<String, DimensionRangePair> fieldsRangeData = new HashMap<>(
 				dimensions.length);
 
 		for (int d = 0; d < dimensions.length; d++) {
@@ -232,11 +230,11 @@ public class CommonIndexedPersistenceEncoding extends
 			}
 			final NumericDimensionField field = dimensionTypeToFieldMap.get(baseDefinitionCls);
 			if (field != null) {
-				final ByteArrayId fieldId = field.getFieldId();
-				final DimensionRangePair fieldData = fieldsRangeData.get(fieldId);
+				final String fieldName = field.getFieldName();
+				final DimensionRangePair fieldData = fieldsRangeData.get(fieldName);
 				if (fieldData == null) {
 					fieldsRangeData.put(
-							fieldId,
+							fieldName,
 							new DimensionRangePair(
 									field,
 									insertTileRange[d]));
@@ -249,7 +247,7 @@ public class CommonIndexedPersistenceEncoding extends
 			}
 		}
 
-		for (final Entry<ByteArrayId, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
+		for (final Entry<String, DimensionRangePair> entry : fieldsRangeData.entrySet()) {
 			final PersistentDataset<CommonIndexValue> commonData = getCommonData();
 			if (commonData != null) {
 				final CommonIndexValue value = commonData.getValue(entry.getKey());

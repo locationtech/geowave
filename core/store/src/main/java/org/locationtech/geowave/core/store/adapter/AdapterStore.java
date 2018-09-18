@@ -11,12 +11,13 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 /**
  * This is responsible for persisting data adapters (either in memory or to disk
  * depending on the implementation).
  */
-public interface AdapterStore<K, V extends DataAdapter<?>>
+public interface AdapterStore<K, V extends DataTypeAdapter<?>>
 {
 	/**
 	 * Add the adapter to the store
@@ -35,7 +36,7 @@ public interface AdapterStore<K, V extends DataAdapter<?>>
 	 * @return the adapter, null if it doesn't exist
 	 */
 	public V getAdapter(
-			K internalAdapterId );
+			K adapterId );
 
 	/**
 	 * Check for the existence of the adapter with the given unique ID
@@ -45,7 +46,7 @@ public interface AdapterStore<K, V extends DataAdapter<?>>
 	 * @return a boolean flag indicating whether the adapter exists
 	 */
 	public boolean adapterExists(
-			K internalAdapterId );
+			K adapterId );
 
 	/**
 	 * Get the full set of adapters within this store

@@ -11,7 +11,7 @@
 package org.locationtech.geowave.mapreduce;
 
 import org.apache.hadoop.io.Writable;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 /**
  * This is an interface that extends data adapter to allow map reduce jobs to
@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.store.adapter.DataAdapter;
  *            the writable type
  */
 public interface HadoopDataAdapter<T, W extends Writable> extends
-		DataAdapter<T>
+		DataTypeAdapter<T>
 {
 	public HadoopWritableSerializer<T, W> createWritableSerializer();
 }

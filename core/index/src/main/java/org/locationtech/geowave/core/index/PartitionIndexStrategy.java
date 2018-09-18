@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.index;
 
 import java.util.Set;
 
-public interface PartitionIndexStrategy<QueryRangeType extends QueryConstraints, EntryRangeType> extends
+public interface PartitionIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType> extends
 		IndexStrategy
 {
 	public Set<ByteArrayId> getInsertionPartitionKeys(

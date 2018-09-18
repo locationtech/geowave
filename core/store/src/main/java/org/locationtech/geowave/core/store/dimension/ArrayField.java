@@ -62,8 +62,8 @@ abstract public class ArrayField<T extends CommonIndexValue> implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return elementField.getFieldId();
+	public String getFieldName() {
+		return elementField.getFieldName();
 	}
 
 	@Override

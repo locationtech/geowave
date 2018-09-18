@@ -17,8 +17,6 @@ import java.nio.ByteBuffer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
@@ -109,7 +107,7 @@ public class SimpleFeatureSerializationProvider
 		@Override
 		public byte[] getVisibility(
 				final Object rowValue,
-				final ByteArrayId fieldId,
+				final String fieldName,
 				final Object[] fieldValue ) {
 			return new byte[] {};
 		}

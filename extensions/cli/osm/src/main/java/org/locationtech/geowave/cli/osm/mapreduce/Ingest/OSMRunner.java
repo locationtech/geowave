@@ -114,16 +114,6 @@ public class OSMRunner extends
 				argv.getOsmTableName(),
 				true,
 				true);
-
-		bao.addLocalityGroup(
-				argv.getOsmTableName(),
-				ColumnFamily.NODE);
-		bao.addLocalityGroup(
-				argv.getOsmTableName(),
-				ColumnFamily.WAY);
-		bao.addLocalityGroup(
-				argv.getOsmTableName(),
-				ColumnFamily.RELATION);
 	}
 
 	@Override

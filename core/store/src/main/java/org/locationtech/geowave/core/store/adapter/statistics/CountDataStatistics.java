@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,18 +15,14 @@ import java.util.HashSet;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 public class CountDataStatistics<T> extends
-		AbstractDataStatistics<T> implements
+		AbstractDataStatistics<T, Long, BaseStatisticsQueryBuilder<Long>> implements
 		DeleteCallback<T, GeoWaveRow>
 {
-	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+	public final static BaseStatisticsType<Long> STATS_TYPE = new BaseStatisticsType<>(
 			"COUNT_DATA");
 
 	private long count = Long.MIN_VALUE;
@@ -94,7 +90,7 @@ public class CountDataStatistics<T> extends
 	 * This is expensive, but necessary since there may be duplicates
 	 */
 	// TODO entryDeleted should only be called once with all duplicates
-	private transient HashSet<ByteArrayId> ids = new HashSet<ByteArrayId>();
+	private transient HashSet<ByteArrayId> ids = new HashSet<>();
 
 	@Override
 	public void entryDeleted(
@@ -115,8 +111,8 @@ public class CountDataStatistics<T> extends
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"count[internalDataAdapterId=").append(
-				super.getInternalDataAdapterId());
+				"count[adapterId=").append(
+				super.getAdapterId());
 		buffer.append(
 				", count=").append(
 				count);
@@ -124,27 +120,18 @@ public class CountDataStatistics<T> extends
 		return buffer.toString();
 	}
 
-	/**
-	 * Convert Count statistics to a JSON object
-	 */
+	@Override
+	public Long getResult() {
+		return count;
+	}
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		jo.put(
-				"statisticsID",
-				statisticsId.getString());
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
-		jo.put(
-				"count",
-				count);
-		return jo;
+	protected String resultsName() {
+		return "count";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		return Long.toString(count);
 	}
 }

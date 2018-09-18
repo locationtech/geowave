@@ -42,10 +42,10 @@ public class SimpleFeatureDataFrame
 
 	public boolean init(
 			final DataStorePluginOptions dataStore,
-			final ByteArrayId adapterId ) {
+			final String typeName ) {
 		featureType = FeatureDataUtils.getFeatureType(
 				dataStore,
-				adapterId);
+				typeName);
 		if (featureType == null) {
 			return false;
 		}

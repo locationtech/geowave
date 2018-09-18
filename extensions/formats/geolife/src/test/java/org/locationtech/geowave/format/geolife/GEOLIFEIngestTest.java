@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,21 +12,14 @@ package org.locationtech.geowave.format.geolife;
 
 import static org.junit.Assert.assertTrue;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.format.geolife.GeoLifeIngestPlugin;
-import org.locationtech.geowave.format.geolife.GeoLifeUtils;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class GEOLIFEIngestTest
@@ -56,12 +49,11 @@ public class GEOLIFEIngestTest
 				filePath);
 
 		assertTrue(GeoLifeUtils.validate(toIngest));
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(new ByteArrayId(
-				"123".getBytes(StringUtils.UTF8_CHARSET)));
 		final CloseableIterator<GeoWaveData<SimpleFeature>> features = ingester.toGeoWaveData(
 				toIngest,
-				indexIds,
+				new String[] {
+					"123"
+				},
 				"");
 
 		assertTrue((features != null) && features.hasNext());

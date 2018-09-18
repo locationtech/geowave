@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -28,25 +28,18 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection;
-import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.adapter.vector.stats.FeatureCountMinSketchStatistics.FeatureCountMinSketchConfig;
 import org.locationtech.geowave.adapter.vector.stats.FeatureFixedBinNumericStatistics.FeatureFixedBinConfig;
 import org.locationtech.geowave.adapter.vector.stats.FeatureHyperLogLogStatistics.FeatureHyperLogLogConfig;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericHistogramStatistics.FeatureNumericHistogramConfig;
 import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
+import org.locationtech.geowave.core.geotime.store.statistics.FeatureBoundingBoxStatistics;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -78,30 +71,43 @@ public class StatsManagerTest
 		final StatsManager statsManager = new StatsManager(
 				dataAdapter,
 				schema);
-		final ByteArrayId[] ids = statsManager.getSupportedStatisticsIds();
+		final StatisticsId[] ids = statsManager.getSupportedStatistics();
 		assertTrue(ids.length > 6);
 		assertTrue(ArrayUtils.contains(
 				ids,
-				FeatureNumericRangeStatistics.composeId("pop")));
+				FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
+						"pop").build().getId()));
 		assertTrue(ArrayUtils.contains(
 				ids,
-				FeatureBoundingBoxStatistics.composeId("somewhere")));
+				VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+						"somewhere").build().getId()));
 		assertTrue(ArrayUtils.contains(
 				ids,
-				FeatureBoundingBoxStatistics.composeId("geometry")));
+				VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+						"geometry").build().getId()));
 		assertTrue(ArrayUtils.contains(
 				ids,
-				FeatureTimeRangeStatistics.composeId("when")));
+				VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+						"when").build().getId()));
 		assertTrue(ArrayUtils.contains(
 				ids,
-				FeatureTimeRangeStatistics.composeId("whennot")));
+				VectorStatisticsQueryBuilder.newBuilder().factory().timeRange().fieldName(
+						"whennot").build().getId()));
 
 		// can each type be created uniquely
-		DataStatistics<SimpleFeature> stat = statsManager.createDataStatistics(FeatureBoundingBoxStatistics
-				.composeId("somewhere"));
-		stat.setInternalDataAdapterId((short) -1);
+		InternalDataStatistics<SimpleFeature, ?, ?> stat = statsManager
+				.createDataStatistics(VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+						"somewhere").build().getId());
+		stat.setAdapterId((short) -1);
 		assertNotNull(stat);
-		assertFalse(stat == statsManager.createDataStatistics(FeatureBoundingBoxStatistics.composeId("somewhere")));
+		assertFalse(stat == statsManager.createDataStatistics(VectorStatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.bbox()
+				.fieldName(
+						"somewhere")
+				.build()
+				.getId()));
 
 		final FeatureBoundingBoxStatistics newStat = new FeatureBoundingBoxStatistics(
 				(short) -1,
@@ -115,13 +121,33 @@ public class StatsManagerTest
 				newStat.getFieldName(),
 				((FeatureBoundingBoxStatistics) stat).getFieldName());
 
-		stat = statsManager.createDataStatistics(FeatureTimeRangeStatistics.composeId("when"));
+		stat = statsManager.createDataStatistics(VectorStatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.timeRange()
+				.fieldName(
+						"when")
+				.build()
+				.getId());
 		assertNotNull(stat);
-		assertFalse(stat == statsManager.createDataStatistics(FeatureTimeRangeStatistics.composeId("when")));
+		assertFalse(stat == statsManager.createDataStatistics(VectorStatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.timeRange()
+				.fieldName(
+						"when")
+				.build()
+				.getId()));
 
-		stat = statsManager.createDataStatistics(FeatureNumericRangeStatistics.composeId("pop"));
+		stat = statsManager.createDataStatistics(FeatureNumericRangeStatistics.STATS_TYPE.newBuilder().fieldName(
+				"pop").build().getId());
 		assertNotNull(stat);
-		assertFalse(stat == statsManager.createDataStatistics(FeatureNumericRangeStatistics.composeId("pop")));
+		assertFalse(stat == statsManager.createDataStatistics(FeatureNumericRangeStatistics.STATS_TYPE
+				.newBuilder()
+				.fieldName(
+						"pop")
+				.build()
+				.getId()));
 
 	}
 
@@ -167,18 +193,22 @@ public class StatsManagerTest
 				dataAdapter,
 				schema);
 
-		final ByteArrayId[] ids = statsManager.getSupportedStatisticsIds();
+		final StatisticsId[] ids = statsManager.getSupportedStatistics();
 		assertEquals(
 				9,
 				ids.length);
-		DataStatistics<SimpleFeature> stat = statsManager.createDataStatistics(FeatureFixedBinNumericStatistics
-				.composeId("pop"));
+		InternalDataStatistics<SimpleFeature, ?, ?> stat = statsManager
+				.createDataStatistics(FeatureFixedBinNumericStatistics.STATS_TYPE.newBuilder().fieldName(
+						"pop").build().getId());
 		assertNotNull(stat);
-		stat = statsManager.createDataStatistics(FeatureNumericHistogramStatistics.composeId("pop"));
+		stat = statsManager.createDataStatistics(FeatureNumericHistogramStatistics.STATS_TYPE.newBuilder().fieldName(
+				"pop").build().getId());
 		assertNotNull(stat);
-		stat = statsManager.createDataStatistics(FeatureHyperLogLogStatistics.composeId("pid"));
+		stat = statsManager.createDataStatistics(FeatureHyperLogLogStatistics.STATS_TYPE.newBuilder().fieldName(
+				"pid").build().getId());
 		assertNotNull(stat);
-		stat = statsManager.createDataStatistics(FeatureCountMinSketchStatistics.composeId("pid"));
+		stat = statsManager.createDataStatistics(FeatureCountMinSketchStatistics.STATS_TYPE.newBuilder().fieldName(
+				"pid").build().getId());
 		assertNotNull(stat);
 
 		final SimpleFeatureUserDataConfigurationSet config = new SimpleFeatureUserDataConfigurationSet();

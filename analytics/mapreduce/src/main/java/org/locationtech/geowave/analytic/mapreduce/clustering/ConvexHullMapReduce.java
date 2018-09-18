@@ -173,7 +173,7 @@ public class ConvexHullMapReduce
 	{
 
 		private CentroidManager<T> centroidManager;
-		private List<ByteArrayId> indexIds;
+		private String[] indexNames;
 		private FeatureDataAdapter outputAdapter;
 		private Projection<T> projectionFunction;
 		/*
@@ -245,8 +245,8 @@ public class ConvexHullMapReduce
 			// new center
 			context.write(
 					new GeoWaveOutputKey(
-							outputAdapter.getAdapterId(),
-							indexIds),
+							outputAdapter.getTypeName(),
+							indexNames),
 					newPolygonFeature);
 		}
 
@@ -323,14 +323,11 @@ public class ConvexHullMapReduce
 							BasicFeatureTypes.DEFAULT_NAMESPACE),
 					ClusteringUtils.CLUSTERING_CRS);
 
-			indexIds = new ArrayList<ByteArrayId>();
-			indexIds.add(new ByteArrayId(
-					StringUtils.stringToBinary(config.getString(
-							HullParameters.Hull.INDEX_ID,
-							new SpatialDimensionalityTypeProvider.SpatialIndexBuilder()
-									.createIndex()
-									.getId()
-									.getString()))));
+			indexNames = new String[] {
+				config.getString(
+						HullParameters.Hull.INDEX_NAME,
+						new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName())
+			};
 
 		}
 	}
