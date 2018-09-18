@@ -13,17 +13,17 @@ package org.locationtech.geowave.core.store.util;
 import java.util.Iterator;
 
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class NativeEntryTransformer<T> implements
 		GeoWaveRowIteratorTransformer<T>
 {
 	private final PersistentAdapterStore adapterStore;
-	private final PrimaryIndex index;
+	private final Index index;
 	private final QueryFilter clientFilter;
 	private final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
 	private final byte[] fieldSubsetBitmask;
@@ -32,7 +32,7 @@ public class NativeEntryTransformer<T> implements
 
 	public NativeEntryTransformer(
 			final PersistentAdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback,
 			final byte[] fieldSubsetBitmask,

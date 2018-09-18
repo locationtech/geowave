@@ -19,11 +19,10 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.Index;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -82,10 +81,10 @@ public class ListIndexCommand extends
 
 			final DataStorePluginOptions inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-			final CloseableIterator<Index<?, ?>> it = inputStoreOptions.createIndexStore().getIndices();
+			final CloseableIterator<Index> it = inputStoreOptions.createIndexStore().getIndices();
 			final StringBuffer buffer = new StringBuffer();
 			while (it.hasNext()) {
-				final Index<?, ?> index = it.next();
+				final Index index = it.next();
 				buffer.append(
 						index.getId().getString()).append(
 						' ');

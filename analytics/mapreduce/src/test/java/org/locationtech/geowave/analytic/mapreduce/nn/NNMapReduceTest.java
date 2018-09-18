@@ -45,7 +45,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -105,7 +105,7 @@ public class NNMapReduceTest
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);

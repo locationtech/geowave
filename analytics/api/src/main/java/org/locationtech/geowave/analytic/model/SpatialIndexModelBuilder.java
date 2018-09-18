@@ -25,7 +25,7 @@ public class SpatialIndexModelBuilder implements
 
 	@Override
 	public CommonIndexModel buildModel() {
-		return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+		return new SpatialDimensionalityTypeProvider().createIndex(
 				new SpatialOptions()).getIndexModel();
 	}
 

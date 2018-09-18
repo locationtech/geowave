@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store;
 
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
@@ -19,10 +20,10 @@ import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 
-public class DataStoreFactory extends
+public class BaseDataStoreFactory extends
 		BaseStoreFactory<DataStore>
 {
-	public DataStoreFactory(
+	public BaseDataStoreFactory(
 			final String typeName,
 			final String description,
 			final StoreFactoryHelper helper ) {

@@ -13,31 +13,31 @@ package org.locationtech.geowave.core.store;
 import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.EmptyStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatisticsSet;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class DataStoreStatisticsProvider<T> implements
 		StatisticsProvider<T>
 {
 	final InternalDataAdapter<T> adapter;
 	final boolean includeAdapterStats;
-	final PrimaryIndex index;
+	final Index index;
 
 	public DataStoreStatisticsProvider(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final boolean includeAdapterStats ) {
 		super();
 		this.adapter = adapter;

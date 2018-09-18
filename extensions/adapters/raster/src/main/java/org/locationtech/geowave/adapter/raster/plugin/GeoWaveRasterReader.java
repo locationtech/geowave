@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -31,8 +32,6 @@ import javax.media.jai.Histogram;
 import javax.media.jai.ImageLayout;
 import javax.media.jai.Interpolation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
@@ -43,7 +42,6 @@ import org.geotools.coverage.grid.io.OverviewPolicy;
 import org.geotools.data.DataSourceException;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
@@ -57,30 +55,27 @@ import org.locationtech.geowave.adapter.raster.stats.HistogramStatistics;
 import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
-import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.coverage.grid.Format;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.coverage.grid.GridEnvelope;
@@ -94,6 +89,8 @@ import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.CoordinateOperationFactory;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -275,7 +272,7 @@ public class GeoWaveRasterReader extends
 		AdapterToIndexMapping adapterMapping = geowaveAdapterIndexMappingStore
 				.getIndicesForAdapter(getInternalAdapterId(new ByteArrayId(
 						coverageName)));
-		PrimaryIndex[] indices = adapterMapping.getIndices(geowaveIndexStore);
+		Index[] indices = adapterMapping.getIndices(geowaveIndexStore);
 
 		if (indices != null && indices.length > 0) {
 			crs = GeometryUtils.getIndexCrs(indices[0]);
@@ -837,11 +834,11 @@ public class GeoWaveRasterReader extends
 			final double[] targetResolutionPerDimension ) {
 		final AdapterToIndexMapping adapterIndexMapping = geowaveAdapterIndexMappingStore
 				.getIndicesForAdapter(getInternalAdapterId(adapter.getAdapterId()));
-		final PrimaryIndex[] indices = adapterIndexMapping.getIndices(geowaveIndexStore);
+		final Index[] indices = adapterIndexMapping.getIndices(geowaveIndexStore);
 		// just work on the first spatial only index that contains this adapter
 		// ID
 		// TODO consider the best strategy for handling temporal queries here
-		for (final PrimaryIndex rasterIndex : indices) {
+		for (final Index rasterIndex : indices) {
 			if (SpatialDimensionalityTypeProvider.isSpatial(rasterIndex)) {
 				// determine the correct tier to query for the given resolution
 				final HierarchicalNumericIndexStrategy strategy = CompoundHierarchicalIndexStrategyWrapper

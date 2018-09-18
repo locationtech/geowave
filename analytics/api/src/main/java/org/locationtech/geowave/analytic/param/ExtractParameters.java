@@ -11,8 +11,8 @@
 package org.locationtech.geowave.analytic.param;
 
 import org.locationtech.geowave.analytic.extract.DimensionExtractor;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 
 public class ExtractParameters
 {

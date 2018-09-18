@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,7 +22,6 @@ import java.util.Map;
 import java.util.Random;
 
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
@@ -36,16 +35,15 @@ import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
@@ -56,17 +54,17 @@ import com.beust.jcommander.internal.Maps;
 
 public class ChooseBestMatchIndexQueryStrategyTest
 {
-	final PrimaryIndex IMAGE_CHIP_INDEX1 = new NullIndex(
+	final Index IMAGE_CHIP_INDEX1 = new NullIndex(
 			"IMAGERY_CHIPS1");
-	final PrimaryIndex IMAGE_CHIP_INDEX2 = new NullIndex(
+	final Index IMAGE_CHIP_INDEX2 = new NullIndex(
 			"IMAGERY_CHIPS2");
 	private static long SEED = 12345;
 	private static long ROWS = 1000000;
 
 	@Test
 	public void testChooseSpatialTemporalWithStats() {
-		final PrimaryIndex temporalindex = new SpatialTemporalIndexBuilder().createIndex();
-		final PrimaryIndex spatialIndex = new SpatialIndexBuilder().createIndex();
+		final Index temporalindex = new SpatialTemporalIndexBuilder().createIndex();
+		final Index spatialIndex = new SpatialIndexBuilder().createIndex();
 
 		final RowRangeHistogramStatistics<SimpleFeature> rangeTempStats = new RowRangeHistogramStatistics<>(
 				null,
@@ -158,7 +156,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 								new GeoWaveValue[] {}));
 			}
 		}
-		PrimaryIndex index = new SpatialIndexBuilder().createIndex();
+		final Index index = new SpatialIndexBuilder().createIndex();
 		final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
 
 		for (int i = 0; i < ROWS; i++) {
@@ -191,7 +189,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 			}
 		}
 
-		final Iterator<Index<?, ?>> it = getIndices(
+		final Iterator<Index> it = getIndices(
 				statsMap,
 				query,
 				strategy);
@@ -203,14 +201,14 @@ public class ChooseBestMatchIndexQueryStrategyTest
 
 	}
 
-	public Iterator<Index<?, ?>> getIndices(
+	public Iterator<Index> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
 			final ChooseBestMatchIndexQueryStrategy strategy ) {
 		return strategy.getIndices(
 				stats,
 				query,
-				new PrimaryIndex[] {
+				new Index[] {
 					IMAGE_CHIP_INDEX1,
 					new SpatialTemporalIndexBuilder().createIndex(),
 					new SpatialIndexBuilder().createIndex(),

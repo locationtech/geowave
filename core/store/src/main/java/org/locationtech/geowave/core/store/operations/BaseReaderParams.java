@@ -18,15 +18,15 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 abstract public class BaseReaderParams<T>
 {
 
-	private final PrimaryIndex index;
+	private final Index index;
 	private final PersistentAdapterStore adapterStore;
 	private final Collection<Short> adapterIds;
 	private final double[] maxResolutionSubsamplingPerDimension;
@@ -40,7 +40,7 @@ abstract public class BaseReaderParams<T>
 	private final String[] additionalAuthorizations;
 
 	public BaseReaderParams(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final Collection<Short> adapterIds,
 			final double[] maxResolutionSubsamplingPerDimension,
@@ -66,7 +66,7 @@ abstract public class BaseReaderParams<T>
 		this.additionalAuthorizations = additionalAuthorizations;
 	}
 
-	public PrimaryIndex getIndex() {
+	public Index getIndex() {
 		return index;
 	}
 

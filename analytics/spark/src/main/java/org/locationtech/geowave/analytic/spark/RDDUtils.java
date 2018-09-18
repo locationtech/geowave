@@ -29,9 +29,9 @@ import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
@@ -62,7 +62,7 @@ public class RDDUtils
 	 */
 	public static void writeRDDToGeoWave(
 			SparkContext sc,
-			PrimaryIndex index,
+			Index index,
 			DataStorePluginOptions outputStoreOptions,
 			FeatureDataAdapter adapter,
 			GeoWaveRDD inputRDD )
@@ -82,7 +82,7 @@ public class RDDUtils
 
 	public static void writeRDDToGeoWave(
 			SparkContext sc,
-			PrimaryIndex[] indices,
+			Index[] indices,
 			DataStorePluginOptions outputStoreOptions,
 			FeatureDataAdapter adapter,
 			GeoWaveRDD inputRDD )
@@ -229,7 +229,7 @@ public class RDDUtils
 	 * @throws IOException
 	 */
 	private static void writeToGeoWave(SparkContext sc,
-	                                    PrimaryIndex index,
+	                                    Index index,
 	                                    DataStorePluginOptions outputStoreOptions,
 	                                    DataAdapter adapter,
 	                                    JavaRDD<SimpleFeature> inputRDD) throws IOException{

@@ -25,6 +25,8 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -32,7 +34,6 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ import org.slf4j.LoggerFactory;
  *            The type for the entries handled by this adapter
  */
 abstract public class AbstractDataAdapter<T> implements
-		WritableDataAdapter<T>
+		DataAdapter<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDataAdapter.class);
 	protected Map<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> typeMatchingFieldHandlers;
@@ -224,7 +225,7 @@ abstract public class AbstractDataAdapter<T> implements
 	@Override
 	public T decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final RowBuilder<T, Object> builder = newBuilder();
 		if (index != null) {
 			final CommonIndexModel indexModel = index.getIndexModel();

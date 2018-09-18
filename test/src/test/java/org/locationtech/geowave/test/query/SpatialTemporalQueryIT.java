@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -41,19 +41,18 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -82,15 +81,15 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
-	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
 			10).setPeriodicity(
 			Unit.DAY).createIndex();
-	private static final PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index MONTH_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.HASH).setNumPartitions(
 			100).setPeriodicity(
 			Unit.MONTH).createIndex();
-	private static final PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index YEAR_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.HASH).setNumPartitions(
 			10).setPeriodicity(
 			Unit.YEAR).createIndex();
@@ -98,7 +97,7 @@ public class SpatialTemporalQueryIT
 	private FeatureDataAdapter timeRangeAdapter;
 	private DataStore dataStore;
 	private GeoWaveGTDataStore geowaveGtDataStore;
-	private PrimaryIndex currentGeotoolsIndex;
+	private Index currentGeotoolsIndex;
 
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -305,18 +304,18 @@ public class SpatialTemporalQueryIT
 						return new IndexQueryStrategySPI() {
 
 							@Override
-							public CloseableIterator<Index<?, ?>> getIndices(
+							public CloseableIterator<Index> getIndices(
 									final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 									final BasicQuery query,
-									final PrimaryIndex[] indices,
+									final Index[] indices,
 									final Map<QueryHint, Object> hints ) {
-								return new CloseableIteratorWrapper<Index<?, ?>>(
+								return new CloseableIteratorWrapper<>(
 										new Closeable() {
 											@Override
 											public void close()
 													throws IOException {}
 										},
-										(Iterator) Collections.singleton(
+										Collections.singleton(
 												currentGeotoolsIndex).iterator());
 							}
 						};
@@ -498,7 +497,7 @@ public class SpatialTemporalQueryIT
 			final Date endOfQuery )
 			throws CQLException,
 			IOException {
-		final Set<String> fidExpectedResults = new HashSet<String>(
+		final Set<String> fidExpectedResults = new HashSet<>(
 				(maxExpectedResult - minExpectedResult) + 1);
 		for (int i = minExpectedResult; i <= maxExpectedResult; i++) {
 			fidExpectedResults.add(name + ":" + i);
@@ -528,7 +527,7 @@ public class SpatialTemporalQueryIT
 		final String cqlPredicate = "BBOX(\"geo\",-1,-1,1,1) AND \"" + startTimeAttribute + "\" <= '"
 				+ CQL_DATE_FORMAT.format(endOfQuery) + "' AND \"" + endTimeAttribute + "\" >= '"
 				+ CQL_DATE_FORMAT.format(startOfQuery) + "'";
-		final Set<String> fidResults = new HashSet<String>();
+		final Set<String> fidResults = new HashSet<>();
 		try (CloseableIterator<SimpleFeature> it = dataStore.query(
 				options,
 				new SpatialTemporalQuery(
@@ -549,7 +548,7 @@ public class SpatialTemporalQueryIT
 				fidExpectedResults,
 				fidResults);
 
-		final Set<String> geotoolsFidResults = new HashSet<String>();
+		final Set<String> geotoolsFidResults = new HashSet<>();
 		// now make sure geotools results match
 		try (final SimpleFeatureIterator features = geowaveGtDataStore.getFeatureSource(
 				adapterId).getFeatures(
@@ -653,7 +652,7 @@ public class SpatialTemporalQueryIT
 				field,
 				midPoint - 1);
 		Date endOfQuery = cal.getTime();
-		Set<String> fidExpectedResults = new HashSet<String>();
+		Set<String> fidExpectedResults = new HashSet<>();
 		fidExpectedResults.add(name + ":fullrange");
 		fidExpectedResults.add(name + ":firsthalfrange");
 
@@ -675,7 +674,7 @@ public class SpatialTemporalQueryIT
 				field,
 				max);
 		endOfQuery = cal.getTime();
-		fidExpectedResults = new HashSet<String>();
+		fidExpectedResults = new HashSet<>();
 		fidExpectedResults.add(name + ":fullrange");
 		fidExpectedResults.add(name + ":secondhalfrange");
 

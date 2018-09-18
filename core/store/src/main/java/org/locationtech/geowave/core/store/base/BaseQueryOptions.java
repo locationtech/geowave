@@ -24,18 +24,17 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,7 @@ public class BaseQueryOptions
 	private Collection<InternalDataAdapter<?>> adapters = null;
 	private Collection<Short> adapterIds = null;
 	private ByteArrayId indexId = null;
-	private transient PrimaryIndex index = null;
+	private transient Index index = null;
 	private Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer limit = -1;
 	private Integer maxRangeDecomposition = null;
@@ -86,7 +85,7 @@ public class BaseQueryOptions
 			final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 			aggregationAdapterPair = new ImmutablePair<>(
 					new InternalDataAdapterWrapper(
-							(WritableDataAdapter) adapter,
+							(DataAdapter) adapter,
 							internalAdapterId),
 					options.getAggregation().getRight());
 		}
@@ -97,7 +96,7 @@ public class BaseQueryOptions
 			fieldIdsAdapterPair = new ImmutablePair<>(
 					options.getFieldIdsAdapterPair().getLeft(),
 					new InternalDataAdapterWrapper(
-							(WritableDataAdapter) adapter,
+							(DataAdapter) adapter,
 							internalAdapterId));
 		}
 
@@ -140,7 +139,7 @@ public class BaseQueryOptions
 										return null;
 									}
 									return new InternalDataAdapterWrapper(
-											(WritableDataAdapter) adapter,
+											(DataAdapter) adapter,
 											internalAdapterId);
 								}
 							}),
@@ -170,7 +169,7 @@ public class BaseQueryOptions
 	 * @throws IOException
 	 */
 
-	public List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
+	public List<Pair<Index, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
@@ -228,7 +227,7 @@ public class BaseQueryOptions
 		return adapterIds;
 	}
 
-	private List<Pair<PrimaryIndex, InternalDataAdapter<?>>> compileIndicesForAdapters(
+	private List<Pair<Index, InternalDataAdapter<?>>> compileIndicesForAdapters(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
@@ -255,7 +254,7 @@ public class BaseQueryOptions
 		else if (adapters == null) {
 			adapters = Collections.emptyList();
 		}
-		final List<Pair<PrimaryIndex, InternalDataAdapter<?>>> result = new ArrayList<>();
+		final List<Pair<Index, InternalDataAdapter<?>>> result = new ArrayList<>();
 		for (final InternalDataAdapter<?> adapter : adapters) {
 			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(adapter
 					.getInternalAdapterId());
@@ -266,7 +265,7 @@ public class BaseQueryOptions
 			}
 			else if ((indexId != null) && indices.contains(indexId)) {
 				if (index == null) {
-					index = (PrimaryIndex) indexStore.getIndex(indexId);
+					index = (Index) indexStore.getIndex(indexId);
 					result.add(Pair.of(
 							index,
 							adapter));
@@ -274,7 +273,7 @@ public class BaseQueryOptions
 			}
 			else if (indices.isNotEmpty()) {
 				for (final ByteArrayId id : indices.getIndexIds()) {
-					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
+					final Index pIndex = (Index) indexStore.getIndex(id);
 					// this could happen if persistent was turned off
 					if (pIndex != null) {
 						result.add(Pair.of(
@@ -392,7 +391,7 @@ public class BaseQueryOptions
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
+	public List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )

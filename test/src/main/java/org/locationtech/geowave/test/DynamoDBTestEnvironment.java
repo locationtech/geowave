@@ -11,9 +11,9 @@
 package org.locationtech.geowave.test;
 
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBStoreFactoryFamily;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;

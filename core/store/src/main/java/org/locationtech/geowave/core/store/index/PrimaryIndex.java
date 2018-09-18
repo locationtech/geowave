@@ -16,14 +16,14 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
 
 /**
  * This class fully describes everything necessary to index data within GeoWave.
  * The key components are the indexing strategy and the common index model.
  */
 public class PrimaryIndex implements
-		Index<MultiDimensionalNumericData, MultiDimensionalNumericData>
+		Index
 {
 	protected NumericIndexStrategy indexStrategy;
 	protected CommonIndexModel indexModel;

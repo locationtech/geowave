@@ -17,11 +17,11 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class CoordinateRangeQuery implements
 		DistributableQuery
@@ -40,7 +40,7 @@ public class CoordinateRangeQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		return Collections.singletonList(new CoordinateRangeQueryFilter(
 				indexStrategy,
 				coordinateRanges));
@@ -48,7 +48,7 @@ public class CoordinateRangeQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		// TODO should we consider implementing this?
 		return Collections.EMPTY_LIST;
 	}
@@ -65,20 +65,20 @@ public class CoordinateRangeQuery implements
 			final byte[] bytes ) {
 		final CoordinateRangeQueryFilter filter = new CoordinateRangeQueryFilter();
 		filter.fromBinary(bytes);
-		indexStrategy = filter.indexStrategy;
-		coordinateRanges = filter.coordinateRanges;
+		indexStrategy = filter.getIndexStrategy();
+		coordinateRanges = filter.getCoordinateRanges();
 	}
 
 	@Override
 	public List<ByteArrayRange> getSecondaryIndexConstraints(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		// TODO should we consider implementing this?
 		return null;
 	}
 
 	@Override
 	public List<DistributableQueryFilter> getSecondaryQueryFilter(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		// TODO should we consider implementing this?
 		return null;
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -28,7 +28,6 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
@@ -38,12 +37,13 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.base.BaseQueryOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
@@ -71,15 +71,15 @@ public class QueryOptionsTest
 	public void testGetAdaptersWithMinimalSetOfIndices()
 			throws IOException {
 		final QueryOptions ops = new QueryOptions();
-		final PrimaryIndex index1 = new PrimaryIndex(
+		final Index index1 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
 						"QOT_tm1"));
-		final PrimaryIndex index2 = new PrimaryIndex(
+		final Index index2 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
 						"QOT_tm2"));
-		final PrimaryIndex index3 = new PrimaryIndex(
+		final Index index3 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
 						"QOT_tm3"));
@@ -214,7 +214,7 @@ public class QueryOptionsTest
 		final BaseQueryOptions bops = new BaseQueryOptions(
 				ops,
 				internalAdapterStore);
-		final List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> result = bops.getAdaptersWithMinimalSetOfIndices(
+		final List<Pair<Index, List<InternalDataAdapter<?>>>> result = bops.getAdaptersWithMinimalSetOfIndices(
 				adapterStore,
 				new AdapterIndexMappingStore() {
 
@@ -224,7 +224,7 @@ public class QueryOptionsTest
 						if (adapterId == 1) {
 							return new AdapterToIndexMapping(
 									adapterId,
-									new PrimaryIndex[] {
+									new Index[] {
 										index1,
 										index2
 									});
@@ -232,14 +232,14 @@ public class QueryOptionsTest
 						else if (adapterId == 2) {
 							return new AdapterToIndexMapping(
 									adapterId,
-									new PrimaryIndex[] {
+									new Index[] {
 										index1,
 										index3
 									});
 						}
 						return new AdapterToIndexMapping(
 								adapterId,
-								new PrimaryIndex[] {
+								new Index[] {
 									index2,
 									index3
 								});
@@ -261,10 +261,10 @@ public class QueryOptionsTest
 
 					@Override
 					public void addIndex(
-							final Index<?, ?> index ) {}
+							final Index index ) {}
 
 					@Override
-					public Index<?, ?> getIndex(
+					public Index getIndex(
 							final ByteArrayId indexId ) {
 						if (indexId.equals(index1.getId())) {
 							return index1;
@@ -294,7 +294,7 @@ public class QueryOptionsTest
 					}
 
 					@Override
-					public CloseableIterator<Index<?, ?>> getIndices() {
+					public CloseableIterator<Index> getIndices() {
 						return new CloseableIterator.Wrapper(
 								Arrays.asList(
 										index1,
@@ -402,9 +402,9 @@ public class QueryOptionsTest
 			"two",
 			"three"
 		});
-		final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers = new ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>>();
+		final ArrayList<PersistentIndexFieldHandler<Integer, ? extends CommonIndexValue, Object>> indexFieldHandlers = new ArrayList<>();
 		indexFieldHandlers.add(new MockComponents.TestPersistentIndexFieldHandler());
-		final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<NativeFieldHandler<Integer, Object>>();
+		final ArrayList<NativeFieldHandler<Integer, Object>> nativeFieldHandlers = new ArrayList<>();
 		nativeFieldHandlers.add(new MockComponents.TestNativeFieldHandler());
 		final MockComponents.MockAbstractDataAdapter mockAbstractDataAdapter = new MockComponents.MockAbstractDataAdapter(
 				indexFieldHandlers,

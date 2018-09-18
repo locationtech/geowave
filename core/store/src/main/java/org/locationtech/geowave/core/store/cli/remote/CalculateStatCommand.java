@@ -18,18 +18,18 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,7 +76,7 @@ public class CalculateStatCommand extends
 			final IndexStore indexStore = storeOptions.createIndexStore();
 
 			boolean isFirstTime = true;
-			for (final PrimaryIndex index : mappingStore.getIndicesForAdapter(
+			for (final Index index : mappingStore.getIndicesForAdapter(
 					adapter.getInternalAdapterId()).getIndices(
 					indexStore)) {
 

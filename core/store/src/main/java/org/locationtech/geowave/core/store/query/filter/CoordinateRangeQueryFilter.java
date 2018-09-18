@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.query;
+package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 
@@ -19,7 +19,6 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
 import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
@@ -103,5 +102,13 @@ public class CoordinateRangeQueryFilter implements
 					e);
 		}
 
+	}
+
+	public NumericIndexStrategy getIndexStrategy() {
+		return indexStrategy;
+	}
+
+	public MultiDimensionalCoordinateRangesArray[] getCoordinateRanges() {
+		return coordinateRanges;
 	}
 }

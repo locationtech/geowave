@@ -11,7 +11,7 @@
 package org.locationtech.geowave.adapter.vector.plugin;
 
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
@@ -19,7 +19,7 @@ import org.opengis.filter.Filter;
 public interface QueryIssuer
 {
 	CloseableIterator<SimpleFeature> query(
-			PrimaryIndex index,
+			Index index,
 			BasicQuery constraints );
 
 	Filter getFilter();

@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;

@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
 public class CassandraStatisticsIterator implements

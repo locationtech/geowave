@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
 import org.locationtech.geowave.core.store.util.GenericTypeResolver;
 
 import com.google.common.collect.Interner;

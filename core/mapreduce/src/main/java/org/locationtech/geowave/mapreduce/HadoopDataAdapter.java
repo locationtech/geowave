@@ -11,7 +11,7 @@
 package org.locationtech.geowave.mapreduce;
 
 import org.apache.hadoop.io.Writable;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 /**
  * This is an interface that extends data adapter to allow map reduce jobs to

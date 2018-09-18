@@ -16,7 +16,8 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -25,10 +26,9 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class ImageChipDataAdapter implements
-		WritableDataAdapter<ImageChip>
+		DataAdapter<ImageChip>
 {
 	public final static ByteArrayId ADAPTER_ID = new ByteArrayId(
 			"image");
@@ -66,7 +66,7 @@ public class ImageChipDataAdapter implements
 	@Override
 	public ImageChip decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		return ImageChipUtils.fromDataIdAndValue(
 				data.getDataId(),
 				(byte[]) data.getAdapterExtendedData().getValue(
@@ -163,7 +163,7 @@ public class ImageChipDataAdapter implements
 
 	@Override
 	public void init(
-			PrimaryIndex... indices ) {
+			Index... indices ) {
 		// TODO Auto-generated method stub
 
 	}

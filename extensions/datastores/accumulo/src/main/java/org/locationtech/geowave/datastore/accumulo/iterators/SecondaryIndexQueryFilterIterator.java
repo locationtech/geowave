@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 

@@ -31,9 +31,9 @@ import org.locationtech.geowave.analytic.distance.CoordinateCircleDistanceFn;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
@@ -178,7 +178,7 @@ public class GeometryDataSetGenerator
 			final DataStore dataStore,
 			final List<SimpleFeature> featureData )
 			throws IOException {
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				featureData.get(
 						0).getFeatureType());

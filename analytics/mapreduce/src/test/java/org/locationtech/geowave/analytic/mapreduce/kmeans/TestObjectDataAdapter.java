@@ -20,6 +20,7 @@ import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -27,7 +28,6 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 
@@ -298,7 +298,7 @@ public class TestObjectDataAdapter extends
 
 	@Override
 	public void init(
-			PrimaryIndex... indices ) {
+			Index... indices ) {
 		// TODO Auto-generated method stub
 
 	}

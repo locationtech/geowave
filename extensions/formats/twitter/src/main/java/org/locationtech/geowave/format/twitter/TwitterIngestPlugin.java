@@ -31,8 +31,8 @@ import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -335,8 +335,8 @@ public class TwitterIngestPlugin extends
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

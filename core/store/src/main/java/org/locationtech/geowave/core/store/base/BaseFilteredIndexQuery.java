@@ -26,21 +26,21 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.FilterList;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.MergingEntryIterator;
 import org.locationtech.geowave.core.store.util.NativeEntryIteratorWrapper;
 
@@ -55,7 +55,7 @@ abstract class BaseFilteredIndexQuery extends
 
 	public BaseFilteredIndexQuery(
 			final List<Short> adapterIds,
-			final PrimaryIndex index,
+			final Index index,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,

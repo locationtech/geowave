@@ -18,12 +18,13 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +57,7 @@ public class StatsCompositionTool<T> implements
 	public StatsCompositionTool(
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
-			final PrimaryIndex index,
+			final Index index,
 			final DataAdapter<T> adapter ) {
 		this.statisticsStore = statisticsStore;
 		this.init(
@@ -66,7 +67,7 @@ public class StatsCompositionTool<T> implements
 	}
 
 	private void init(
-			final PrimaryIndex index,
+			final Index index,
 			final DataAdapter<T> adapter,
 			final DataStoreStatisticsProvider<T> statisticsProvider ) {
 		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsTypes();

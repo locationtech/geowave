@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,7 +12,6 @@ package org.locationtech.geowave.datastore.dynamodb;
 
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -27,8 +26,8 @@ import org.locationtech.geowave.core.store.metadata.SecondaryIndexStoreImpl;
 import org.locationtech.geowave.datastore.dynamodb.operations.DynamoDBOperations;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
-public class DynamoDBDataStore extends
-		BaseMapReduceDataStore
+public class DynamoDBDataStore<T> extends
+		BaseMapReduceDataStore<T>
 {
 	public final static String TYPE = "dynamodb";
 

@@ -32,12 +32,12 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -97,12 +97,12 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex(
+	public Index createIndex(
 			SpatialTemporalOptions options ) {
-		return internalCreatePrimaryIndex(options);
+		return internalCreateIndex(options);
 	}
 
-	private static PrimaryIndex internalCreatePrimaryIndex(
+	private static Index internalCreateIndex(
 			final SpatialTemporalOptions options ) {
 
 		NumericDimensionDefinition[] dimensions;
@@ -326,13 +326,13 @@ public class SpatialTemporalDimensionalityTypeProvider implements
 		}
 
 		@Override
-		public PrimaryIndex createIndex() {
-			return createIndex(internalCreatePrimaryIndex(options));
+		public Index createIndex() {
+			return createIndex(internalCreateIndex(options));
 		}
 	}
 
 	public static boolean isSpatialTemporal(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (index == null) {
 			return false;
 		}

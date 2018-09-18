@@ -14,6 +14,7 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;

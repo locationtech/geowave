@@ -24,8 +24,6 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.filter.text.cql2.CQLException;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
@@ -34,18 +32,18 @@ import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.google.common.base.Function;
@@ -122,14 +120,7 @@ public class VectorMRExportJobRunner extends
 						"Unable to find index '" + mrOptions.getIndexId() + "' in store");
 				return -1;
 			}
-			if (index instanceof PrimaryIndex) {
-				options.setIndex((PrimaryIndex) index);
-			}
-			else {
-				JCommander.getConsole().println(
-						"Index '" + mrOptions.getIndexId() + "' is not a primary index");
-				return -1;
-			}
+			options.setIndex((Index) index);
 		}
 		if (mrOptions.getCqlFilter() != null) {
 			if ((adapterIds == null) || (adapterIds.size() != 1)) {

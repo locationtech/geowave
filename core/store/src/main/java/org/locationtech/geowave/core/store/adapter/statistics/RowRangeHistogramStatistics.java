@@ -22,6 +22,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericH
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 import net.sf.json.JSONArray;

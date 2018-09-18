@@ -26,15 +26,14 @@ import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -145,15 +144,15 @@ public class RasterTileResizeJobRunner extends
 		JobContextAdapterStore.addDataAdapter(
 				job.getConfiguration(),
 				newAdapter);
-		PrimaryIndex index = null;
+		Index index = null;
 		final IndexStore indexStore = inputStoreOptions.createIndexStore();
 		if (rasterResizeOptions.getIndexId() != null) {
-			index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
+			index = indexStore.getIndex(new ByteArrayId(
 					rasterResizeOptions.getIndexId()));
 		}
 		if (index == null) {
-			try (CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
-				index = (PrimaryIndex) indices.next();
+			try (CloseableIterator<Index> indices = indexStore.getIndices()) {
+				index = indices.next();
 			}
 			if (index == null) {
 				throw new IllegalArgumentException(

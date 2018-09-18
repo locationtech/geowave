@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -27,15 +27,14 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -72,8 +71,7 @@ public class QueryOptionsIT
 			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 					GUADALAJARA,
 					ATLANTA)));
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	@GeoWaveTestStore({
 		GeoWaveStoreType.ACCUMULO,
@@ -196,7 +194,7 @@ public class QueryOptionsIT
 	@SuppressWarnings("unchecked")
 	private void ingestSampleData(
 			final SimpleFeatureBuilder builder,
-			final WritableDataAdapter<?> adapter )
+			final DataAdapter<?> adapter )
 			throws IOException {
 		try (@SuppressWarnings("rawtypes")
 		IndexWriter writer = dataStoreOptions.createDataStore().createWriter(

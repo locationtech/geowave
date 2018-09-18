@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 
 public interface DataStoreOperations
 {
@@ -28,7 +28,7 @@ public interface DataStoreOperations
 			throws IOException;
 
 	public boolean createIndex(
-			PrimaryIndex index )
+			Index index )
 			throws IOException;
 
 	public boolean metadataExists(
@@ -67,7 +67,7 @@ public interface DataStoreOperations
 	 *             The table does not exist in this Accumulo instance
 	 */
 	public Writer createWriter(
-			PrimaryIndex index,
+			Index index,
 			short internalAdapterId );
 
 	public MetadataWriter createMetadataWriter(
@@ -88,7 +88,7 @@ public interface DataStoreOperations
 			throws Exception;
 
 	public boolean mergeData(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore );
 

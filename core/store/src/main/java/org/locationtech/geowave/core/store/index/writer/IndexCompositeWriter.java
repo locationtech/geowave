@@ -17,9 +17,9 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class IndexCompositeWriter<T> implements
 		IndexWriter<T>
@@ -69,12 +69,12 @@ public class IndexCompositeWriter<T> implements
 	}
 
 	@Override
-	public PrimaryIndex[] getIndices() {
-		final List<PrimaryIndex> ids = new ArrayList<PrimaryIndex>();
+	public Index[] getIndices() {
+		final List<Index> ids = new ArrayList<Index>();
 		for (final IndexWriter<T> indexWriter : writers) {
 			ids.addAll(Arrays.asList(indexWriter.getIndices()));
 		}
-		return ids.toArray(new PrimaryIndex[ids.size()]);
+		return ids.toArray(new Index[ids.size()]);
 	}
 
 	@Override

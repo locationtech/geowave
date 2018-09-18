@@ -17,7 +17,7 @@ import java.util.Set;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Delete;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;

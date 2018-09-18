@@ -13,7 +13,7 @@ package org.locationtech.geowave.datastore.dynamodb.operations;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;

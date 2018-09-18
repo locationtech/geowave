@@ -8,20 +8,21 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store;
+package org.locationtech.geowave.core.store.api;
 
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 
 /**
  * A DataStore can both ingest and query data based on persisted indices and
  * data adapters. When the data is ingested it is explicitly given an index and
  * a data adapter which is then persisted to be used in subsequent queries.
+ * 
+ * @param <T>
+ *            The type of data that this datastore manages.
  */
-public interface DataStore
+public interface DataStore<T>
 {
 	/**
 	 * Returns an index writer to perform batched write operations
@@ -34,9 +35,9 @@ public interface DataStore
 	 * @return Returns the index writer which can be used for batch write
 	 *         operations
 	 */
-	public <T> IndexWriter<T> createWriter(
-			WritableDataAdapter<T> adapter,
-			PrimaryIndex... index )
+	public IndexWriter<T> createWriter(
+			DataAdapter<T> adapter,
+			Index... index )
 			throws MismatchedIndexToAdapterMapping;
 
 	/**
@@ -50,13 +51,13 @@ public interface DataStore
 	 * 
 	 * @param queryOptions
 	 *            additional options for the processing the query
-	 * @param the
+	 * @param query
 	 *            data constraints for the query
 	 * @return An iterator on all results that match the query. The iterator
 	 *         implements Closeable and it is best practice to close the
 	 *         iterator after it is no longer needed.
 	 */
-	public <T> CloseableIterator<T> query(
+	public CloseableIterator<T> query(
 			final QueryOptions queryOptions,
 			final Query query );
 
@@ -82,4 +83,41 @@ public interface DataStore
 	public boolean delete(
 			final QueryOptions queryOptions,
 			final Query query );
+
+	/**
+	 * Get all data statistics for a given adapter ID using the authorizations
+	 * provided. If adapter ID is null, it will return all statistics in this
+	 * data store.
+	 * 
+	 * @param adapterId
+	 *            The Adapter to get the accumulated statistics for all the data
+	 *            that has been ingested. If null, it will return all data
+	 *            statistics.
+	 * @param authorizations
+	 *            A set of authorizations to use for access to the atatistics
+	 * @return An iterator on the data statistics. The iterator implements
+	 *         Closeable and it is best practice to close the iterator after it
+	 *         is no longer needed.
+	 */
+	public CloseableIterator<DataStatistics<T>> getDataStatistics(
+			ByteArrayId adapterId,
+			String... authorizations );
+
+	/**
+	 * Get all the adapters that have been used within this data store
+	 * 
+	 * @return An iterator on the adapters. The iterator implements Closeable
+	 *         and it is best practice to close the iterator after it is no
+	 *         longer needed.
+	 */
+	public CloseableIterator<DataAdapter<T>> getAdapters();
+
+	/**
+	 * Get all the indices that have been used within this data store
+	 * 
+	 * @return An iterator on the indices. The iterator implements Closeable and
+	 *         it is best practice to close the iterator after it is no longer
+	 *         needed.
+	 */
+	public CloseableIterator<Index> getIndices();
 }

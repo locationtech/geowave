@@ -15,7 +15,7 @@ import java.util.Collection;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
 /**
@@ -41,7 +41,7 @@ public class GeoWaveData<T>
 	}
 
 	public GeoWaveData(
-			final WritableDataAdapter<T> adapter,
+			final DataAdapter<T> adapter,
 			final Collection<ByteArrayId> indexIds,
 			final T data ) {
 		this.outputKey = new GeoWaveOutputKey<T>(
@@ -50,7 +50,7 @@ public class GeoWaveData<T>
 		this.data = data;
 	}
 
-	public WritableDataAdapter<T> getAdapter(
+	public DataAdapter<T> getAdapter(
 			final TransientAdapterStore adapterCache ) {
 		return outputKey.getAdapter(adapterCache);
 	}

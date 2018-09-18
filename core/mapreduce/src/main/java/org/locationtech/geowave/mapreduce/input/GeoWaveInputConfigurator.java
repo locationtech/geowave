@@ -14,9 +14,9 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 
 import java.util.Map;
@@ -102,7 +102,7 @@ public class GeoWaveInputConfigurator extends
 		return null;
 	}
 
-	public static PrimaryIndex getIndex(
+	public static Index getIndex(
 			final Class<?> implementingClass,
 			final Configuration config ) {
 		final String input = config.get(enumToConfKey(
@@ -110,7 +110,7 @@ public class GeoWaveInputConfigurator extends
 				GeoWaveConfg.INDEX));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
-			return (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
+			return (Index) PersistenceUtils.fromBinary(indexBytes);
 		}
 		return null;
 	}

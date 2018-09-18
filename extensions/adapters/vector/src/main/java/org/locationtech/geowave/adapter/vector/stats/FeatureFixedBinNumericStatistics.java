@@ -14,8 +14,8 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 

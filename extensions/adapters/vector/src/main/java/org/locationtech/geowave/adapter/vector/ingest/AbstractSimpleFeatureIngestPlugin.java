@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -131,7 +131,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		simpOptionProvider.fromBinary(geometrySimpBinary);
 	}
 
-	protected WritableDataAdapter<SimpleFeature> newAdapter(
+	protected DataAdapter<SimpleFeature> newAdapter(
 			final SimpleFeatureType type,
 			final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler ) {
 		if (serializationFormatOptionProvider.isAvro()) {
@@ -146,13 +146,13 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 	abstract protected SimpleFeatureType[] getTypes();
 
 	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
+	public DataAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
 		final FieldVisibilityHandler<SimpleFeature, Object> fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
 				.isEmpty()) ? new GlobalVisibilityHandler<SimpleFeature, Object>(
 				globalVisibility) : null;
 		final SimpleFeatureType[] types = getTypes();
-		final WritableDataAdapter<SimpleFeature>[] retVal = new WritableDataAdapter[types.length];
+		final DataAdapter<SimpleFeature>[] retVal = new DataAdapter[types.length];
 		for (int i = 0; i < types.length; i++) {
 			retVal[i] = newAdapter(
 					types[i],
@@ -305,7 +305,7 @@ abstract public class AbstractSimpleFeatureIngestPlugin<I> implements
 		}
 
 		@Override
-		public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
+		public DataAdapter<SimpleFeature>[] getDataAdapters(
 				final String globalVisibility ) {
 			return parentPlugin.getDataAdapters(globalVisibility);
 		}

@@ -38,21 +38,20 @@ import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class BasicQueryTest
 {
@@ -62,7 +61,7 @@ public class BasicQueryTest
 
 	@Test
 	public void testIntersectCasesWithPersistence() {
-		final PrimaryIndex index = new CustomIdIndex(
+		final Index index = new CustomIdIndex(
 				new ExampleNumericIndexStrategy(),
 				new BasicIndexModel(
 						new NumericDimensionField[] {
@@ -205,7 +204,7 @@ public class BasicQueryTest
 				constraints).toBinary();
 		final BasicQuery query = new BasicQuery();
 		query.fromBinary(image);
-		final PrimaryIndex index = new CustomIdIndex(
+		final Index index = new CustomIdIndex(
 				new ExampleNumericIndexStrategy(),
 				new BasicIndexModel(
 						new NumericDimensionField[] {

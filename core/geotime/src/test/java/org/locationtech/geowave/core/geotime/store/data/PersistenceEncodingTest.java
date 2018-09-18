@@ -42,6 +42,7 @@ import org.locationtech.geowave.core.store.adapter.DimensionMatchingIndexFieldHa
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -70,7 +71,7 @@ public class PersistenceEncodingTest
 				Unit.YEAR),
 	};
 
-	private static final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+	private static final CommonIndexModel model = new SpatialTemporalDimensionalityTypeProvider().createIndex(
 			new SpatialTemporalOptions()).getIndexModel();
 
 	private static final NumericIndexStrategy strategy = TieredSFCIndexFactory.createSingleTierStrategy(
@@ -82,7 +83,7 @@ public class PersistenceEncodingTest
 			},
 			SFCType.HILBERT);
 
-	private static final PrimaryIndex index = new PrimaryIndex(
+	private static final Index index = new PrimaryIndex(
 			strategy,
 			model);
 
@@ -162,7 +163,7 @@ public class PersistenceEncodingTest
 				},
 				SFCType.HILBERT);
 
-		final PrimaryIndex index = new PrimaryIndex(
+		final Index index = new PrimaryIndex(
 				strategy,
 				model);
 
@@ -554,7 +555,7 @@ public class PersistenceEncodingTest
 
 		@Override
 		public void init(
-				PrimaryIndex... indices ) {
+				Index... indices ) {
 			// TODO Auto-generated method stub
 
 		}

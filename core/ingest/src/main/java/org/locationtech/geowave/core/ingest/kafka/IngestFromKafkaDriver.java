@@ -31,13 +31,13 @@ import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
 import org.locationtech.geowave.core.ingest.index.IndexProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -135,14 +135,14 @@ public class IngestFromKafkaDriver
 			final List<String> queue ) {
 		try {
 			for (Entry<String, AvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
-				final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
+				final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
 
 				AvroFormatPlugin<?, ?> avroFormatPlugin = null;
 				try {
 					avroFormatPlugin = pluginProvider.getValue();
 
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
-					final WritableDataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
+					final DataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
 							.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final KafkaIngestRunData runData = new KafkaIngestRunData(
@@ -327,10 +327,10 @@ public class IngestFromKafkaDriver
 		IndexProvider indexProvider = plugin;
 
 		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
-		final Map<ByteArrayId, PrimaryIndex> indexMap = new HashMap<ByteArrayId, PrimaryIndex>();
+		final Map<ByteArrayId, Index> indexMap = new HashMap<ByteArrayId, Index>();
 
 		for (IndexPluginOptions indexOption : indexOptions) {
-			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
+			final Index primaryIndex = indexOption.createIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
@@ -341,9 +341,9 @@ public class IngestFromKafkaDriver
 					primaryIndex);
 		}
 
-		final PrimaryIndex[] requiredIndices = indexProvider.getRequiredIndices();
+		final Index[] requiredIndices = indexProvider.getRequiredIndices();
 		if ((requiredIndices != null) && (requiredIndices.length > 0)) {
-			for (final PrimaryIndex requiredIndex : requiredIndices) {
+			for (final Index requiredIndex : requiredIndices) {
 				indexMap.put(
 						requiredIndex.getId(),
 						requiredIndex);
@@ -356,16 +356,16 @@ public class IngestFromKafkaDriver
 				ingestOptions.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-				final WritableDataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+				final DataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
 				if (adapter == null) {
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;
 				}
 				IndexWriter indexWriter = writerMap.get(adapter.getAdapterId());
 				if (indexWriter == null) {
-					List<PrimaryIndex> indexList = new ArrayList<PrimaryIndex>();
+					List<Index> indexList = new ArrayList<Index>();
 					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-						final PrimaryIndex index = indexMap.get(indexId);
+						final Index index = indexMap.get(indexId);
 						if (index == null) {
 							LOGGER.warn("Index '" + indexId.getString() + "' not found for " + geowaveData.getValue());
 							continue;
@@ -374,7 +374,7 @@ public class IngestFromKafkaDriver
 					}
 					indexWriter = ingestRunData.getIndexWriter(
 							adapter,
-							indexList.toArray(new PrimaryIndex[indexList.size()]));
+							indexList.toArray(new Index[indexList.size()]));
 					writerMap.put(
 							adapter.getAdapterId(),
 							indexWriter);

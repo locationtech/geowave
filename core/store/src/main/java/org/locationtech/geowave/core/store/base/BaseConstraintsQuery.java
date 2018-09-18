@@ -26,27 +26,27 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Reader;
-import org.locationtech.geowave.core.store.query.CoordinateRangeQueryFilter;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
+import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 
 import com.google.common.collect.Iterators;
@@ -67,11 +67,11 @@ public class BaseConstraintsQuery extends
 	public final List<DistributableQueryFilter> distributableFilters;
 
 	public final IndexMetaData[] indexMetaData;
-	private final PrimaryIndex index;
+	private final Index index;
 
 	public BaseConstraintsQuery(
 			final List<Short> adapterIds,
-			final PrimaryIndex index,
+			final Index index,
 			final Query query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
@@ -100,7 +100,7 @@ public class BaseConstraintsQuery extends
 
 	public BaseConstraintsQuery(
 			final List<Short> adapterIds,
-			final PrimaryIndex index,
+			final Index index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			DedupeFilter clientDedupeFilter,

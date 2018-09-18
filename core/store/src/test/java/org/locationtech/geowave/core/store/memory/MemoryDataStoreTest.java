@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -27,31 +27,28 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.adapter.MockComponents;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
-import org.locationtech.geowave.core.store.adapter.MockComponents.TestIndexModel;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
-import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MemoryDataStoreTest
 {
@@ -60,7 +57,7 @@ public class MemoryDataStoreTest
 	public void test()
 			throws IOException,
 			MismatchedIndexToAdapterMapping {
-		final PrimaryIndex index = new PrimaryIndex(
+		final Index index = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel());
 		final String namespace = "test_" + getClass().getName();
@@ -71,7 +68,7 @@ public class MemoryDataStoreTest
 				reqOptions);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
 				reqOptions);
-		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
+		final DataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
@@ -229,11 +226,11 @@ public class MemoryDataStoreTest
 	public void testMultipleIndices()
 			throws IOException,
 			MismatchedIndexToAdapterMapping {
-		final PrimaryIndex index1 = new PrimaryIndex(
+		final Index index1 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
 						"tm1"));
-		final PrimaryIndex index2 = new PrimaryIndex(
+		final Index index2 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
 						"tm2"));
@@ -245,7 +242,7 @@ public class MemoryDataStoreTest
 				opts);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
 				opts);
-		final WritableDataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
+		final DataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
@@ -510,7 +507,7 @@ public class MemoryDataStoreTest
 
 		@Override
 		public List<QueryFilter> createFilters(
-				final PrimaryIndex index ) {
+				final Index index ) {
 			return Arrays.asList((QueryFilter) new TestQueryFilter(
 					index.getIndexModel(),
 					min,
@@ -519,7 +516,7 @@ public class MemoryDataStoreTest
 
 		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
-				final PrimaryIndex index ) {
+				final Index index ) {
 			return Collections.<MultiDimensionalNumericData> singletonList(new BasicNumericDataset(
 					new NumericData[] {
 						new NumericRange(

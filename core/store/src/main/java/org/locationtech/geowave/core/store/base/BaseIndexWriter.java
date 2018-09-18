@@ -17,13 +17,13 @@ import java.io.IOException;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Writer;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -34,7 +34,7 @@ class BaseIndexWriter<T> implements
 		IndexWriter<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseIndexWriter.class);
-	protected final PrimaryIndex index;
+	protected final Index index;
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;
 	protected final IngestCallback<T> callback;
@@ -45,7 +45,7 @@ class BaseIndexWriter<T> implements
 
 	public BaseIndexWriter(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final IngestCallback<T> callback,
@@ -59,8 +59,8 @@ class BaseIndexWriter<T> implements
 	}
 
 	@Override
-	public PrimaryIndex[] getIndices() {
-		return new PrimaryIndex[] {
+	public Index[] getIndices() {
+		return new Index[] {
 			index
 		};
 	}

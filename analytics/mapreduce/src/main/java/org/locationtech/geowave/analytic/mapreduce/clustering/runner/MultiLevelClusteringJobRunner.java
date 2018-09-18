@@ -149,12 +149,12 @@ public abstract class MultiLevelClusteringJobRunner extends
 		// TODO: set out index type for extracts?
 		propertyManagement.storeIfEmpty(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString());
 
 		propertyManagement.storeIfEmpty(
 				HullParameters.Hull.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString());
 
 		// first. extract data

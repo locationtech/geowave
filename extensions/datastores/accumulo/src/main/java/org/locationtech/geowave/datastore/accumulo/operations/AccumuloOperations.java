@@ -68,12 +68,13 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
@@ -85,7 +86,6 @@ import org.locationtech.geowave.core.store.operations.MetadataWriter;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.Writer;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
@@ -301,7 +301,7 @@ public class AccumuloOperations implements
 
 	@Override
 	public boolean createIndex(
-			PrimaryIndex index )
+			Index index )
 			throws IOException {
 		return createTable(
 				index.getId().getString(),
@@ -1346,7 +1346,7 @@ public class AccumuloOperations implements
 
 	@Override
 	public Writer createWriter(
-			final PrimaryIndex index,
+			final Index index,
 			final short internalAdapterId ) {
 		final String tableName = index.getId().getString();
 		if (options.isCreateTable()) {
@@ -1448,7 +1448,7 @@ public class AccumuloOperations implements
 
 	@Override
 	public boolean mergeData(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		if (options.isServerSideLibraryEnabled()) {

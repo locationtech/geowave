@@ -33,8 +33,8 @@ import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
@@ -50,7 +50,7 @@ public class ComparisonStatsJobRunner extends
 			final DataStorePluginOptions inputDataStoreOptions,
 			final DataStorePluginOptions outputDataStoreOptions,
 			final File configFile,
-			final PrimaryIndex outputIndex ) {
+			final Index outputIndex ) {
 		super(
 				kdeCommandLineOptions,
 				inputDataStoreOptions,
@@ -206,7 +206,7 @@ public class ComparisonStatsJobRunner extends
 								ComparisonAccumuloStatsReducer.MAXES_PER_BAND,
 								ComparisonAccumuloStatsReducer.NAME_PER_BAND,
 								null),
-						new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
+						new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 				return ingester.waitForCompletion(true);
 
 			}
@@ -292,7 +292,7 @@ public class ComparisonStatsJobRunner extends
 			final Job statsReducer,
 			final String statsNamespace,
 			final String coverageName,
-			final PrimaryIndex index )
+			final Index index )
 			throws Exception {
 		FileOutputFormat.setOutputPath(
 				statsReducer,

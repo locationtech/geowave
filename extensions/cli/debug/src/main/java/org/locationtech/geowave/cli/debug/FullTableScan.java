@@ -16,8 +16,8 @@ import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

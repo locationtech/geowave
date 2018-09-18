@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -25,15 +25,13 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.index.Index;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -75,13 +73,13 @@ public class ClusteringUtils
 			final PropertyManagement propertyManagement )
 			throws IOException {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
 		final org.locationtech.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-		final List<DataAdapter> adapters = new LinkedList<DataAdapter>();
+		final List<DataAdapter> adapters = new LinkedList<>();
 		while (it.hasNext()) {
 			adapters.add(it.next());
 		}
@@ -91,18 +89,18 @@ public class ClusteringUtils
 		return result;
 	}
 
-	public static PrimaryIndex[] getIndices(
+	public static Index[] getIndices(
 			final PropertyManagement propertyManagement ) {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
 
-		final org.locationtech.geowave.core.store.CloseableIterator<Index<?, ?>> it = indexStore.getIndices();
-		final List<PrimaryIndex> indices = new LinkedList<PrimaryIndex>();
+		final org.locationtech.geowave.core.store.CloseableIterator<Index> it = indexStore.getIndices();
+		final List<Index> indices = new LinkedList<>();
 		while (it.hasNext()) {
-			indices.add((PrimaryIndex) it.next());
+			indices.add(it.next());
 		}
 		try {
 			it.close();
@@ -110,7 +108,7 @@ public class ClusteringUtils
 		catch (final IOException e) {
 			LOGGER.warn("Unable to close iterator" + e);
 		}
-		final PrimaryIndex[] result = new PrimaryIndex[indices.size()];
+		final Index[] result = new Index[indices.size()];
 		indices.toArray(result);
 		return result;
 	}
@@ -122,7 +120,7 @@ public class ClusteringUtils
 	protected static QueryRanges getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 				new SpatialQuery(
 						polygon).getIndexConstraints(index),
@@ -132,14 +130,14 @@ public class ClusteringUtils
 		return ranges;
 	}
 
-	public static PrimaryIndex createIndex(
+	public static Index createIndex(
 			final PropertyManagement propertyManagement ) {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
-		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
+		return indexStore.getIndex(new ByteArrayId(
 				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID)));
 	}
 

@@ -28,8 +28,8 @@ import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistic
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;

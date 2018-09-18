@@ -30,7 +30,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;

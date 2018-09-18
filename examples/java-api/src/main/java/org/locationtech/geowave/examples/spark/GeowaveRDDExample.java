@@ -18,7 +18,7 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.query.DistributableQuery;

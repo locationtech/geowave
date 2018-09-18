@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -30,8 +30,6 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TimeZone;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -51,19 +49,18 @@ import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
 import org.locationtech.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.DataIdQuery;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CountResult;
 import org.opengis.feature.simple.SimpleFeature;
@@ -74,6 +71,8 @@ import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Envelope;
@@ -159,7 +158,7 @@ public class GeoWaveFeatureReader implements
 	}
 
 	public CloseableIterator<SimpleFeature> getNoData() {
-		return new CloseableIterator.Empty<SimpleFeature>();
+		return new CloseableIterator.Empty<>();
 	}
 
 	public long getCount() {
@@ -213,7 +212,7 @@ public class GeoWaveFeatureReader implements
 			final TemporalConstraintsSet timeBounds,
 			final QueryIssuer issuer ) {
 
-		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<CloseableIterator<SimpleFeature>>();
+		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<>();
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 
 		final BasicQuery query = getQuery(
@@ -221,11 +220,11 @@ public class GeoWaveFeatureReader implements
 				jtsBounds,
 				timeBounds);
 
-		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
+		try (CloseableIterator<Index> indexIt = getComponents().getIndices(
 				statsMap,
 				query)) {
 			while (indexIt.hasNext()) {
-				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
+				final Index index = indexIt.next();
 
 				final CloseableIterator<SimpleFeature> it = issuer.query(
 						index,
@@ -246,7 +245,7 @@ public class GeoWaveFeatureReader implements
 		return interweaveTransaction(
 				issuer.getLimit(),
 				issuer.getFilter(),
-				new CloseableIteratorWrapper<SimpleFeature>(
+				new CloseableIteratorWrapper<>(
 
 						new Closeable() {
 							@Override
@@ -261,7 +260,7 @@ public class GeoWaveFeatureReader implements
 	}
 
 	protected static boolean hasAtLeastSpatial(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if ((index == null) || (index.getIndexStrategy() == null)
 				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
 			return false;
@@ -280,7 +279,7 @@ public class GeoWaveFeatureReader implements
 	}
 
 	protected static boolean hasTime(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if ((index == null) || (index.getIndexStrategy() == null)
 				|| (index.getIndexStrategy().getOrderedDimensionDefinitions() == null)) {
 			return false;
@@ -311,7 +310,7 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final PrimaryIndex index,
+				final Index index,
 				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
@@ -360,7 +359,7 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final PrimaryIndex index,
+				final Index index,
 				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
@@ -423,7 +422,7 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final PrimaryIndex index,
+				final Index index,
 				final BasicQuery query ) {
 
 			final QueryOptions options = new QueryOptions(
@@ -504,7 +503,7 @@ public class GeoWaveFeatureReader implements
 
 		@Override
 		public CloseableIterator<SimpleFeature> query(
-				final PrimaryIndex index,
+				final Index index,
 				final BasicQuery query ) {
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
@@ -604,15 +603,14 @@ public class GeoWaveFeatureReader implements
 			final Integer limit ) {
 		if (filter instanceof FidFilterImpl) {
 			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
-			final List<ByteArrayId> ids = new ArrayList<ByteArrayId>();
+			final List<ByteArrayId> ids = new ArrayList<>();
 			for (final String fid : fids) {
 				ids.add(new ByteArrayId(
 						fid));
 			}
 
-			final PrimaryIndex[] writeIndices = components.getAdapterIndices();
-			final PrimaryIndex queryIndex = ((writeIndices != null) && (writeIndices.length > 0)) ? writeIndices[0]
-					: null;
+			final Index[] writeIndices = components.getAdapterIndices();
+			final Index queryIndex = ((writeIndices != null) && (writeIndices.length > 0)) ? writeIndices[0] : null;
 
 			final QueryOptions queryOptions = new QueryOptions(
 					components.getAdapter(),
@@ -656,7 +654,7 @@ public class GeoWaveFeatureReader implements
 
 	protected List<DataStatistics<SimpleFeature>> getStatsFor(
 			final String name ) {
-		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<DataStatistics<SimpleFeature>>();
+		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<>();
 		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 		for (final Map.Entry<ByteArrayId, DataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
 			if ((stat.getValue() instanceof FeatureStatistic)

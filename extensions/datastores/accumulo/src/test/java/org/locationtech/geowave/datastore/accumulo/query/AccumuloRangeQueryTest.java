@@ -28,21 +28,23 @@ import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -51,9 +53,6 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
@@ -69,8 +68,8 @@ import com.vividsolutions.jts.io.WKBWriter;
 public class AccumuloRangeQueryTest
 {
 	private DataStore mockDataStore;
-	private PrimaryIndex index;
-	private WritableDataAdapter<TestGeometry> adapter;
+	private Index index;
+	private DataAdapter<TestGeometry> adapter;
 	private final GeometryFactory factory = new GeometryFactory();
 	private final TestGeometry testdata = new TestGeometry(
 			factory.createPolygon(new Coordinate[] {
@@ -107,7 +106,7 @@ public class AccumuloRangeQueryTest
 						options),
 				options);
 
-		index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		adapter = new TestGeometryAdapter();
 
 		try (IndexWriter writer = mockDataStore.createWriter(
@@ -327,7 +326,7 @@ public class AccumuloRangeQueryTest
 		}
 	}
 
-	protected WritableDataAdapter<TestGeometry> createGeometryAdapter() {
+	protected DataAdapter<TestGeometry> createGeometryAdapter() {
 		return new TestGeometryAdapter();
 	}
 
@@ -563,7 +562,7 @@ public class AccumuloRangeQueryTest
 
 		@Override
 		public void init(
-				PrimaryIndex... indices ) {
+				Index... indices ) {
 			// TODO Auto-generated method stub
 
 		}

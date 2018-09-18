@@ -22,21 +22,21 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * This class is used internally to perform query operations against a base data
@@ -48,14 +48,14 @@ abstract class BaseQuery
 	private final static Logger LOGGER = Logger.getLogger(BaseQuery.class);
 
 	protected List<Short> adapterIds;
-	protected final PrimaryIndex index;
+	protected final Index index;
 	protected final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair;
 	protected final DifferingFieldVisibilityEntryCount differingVisibilityCounts;
 	protected final FieldVisibilityCount visibilityCounts;
 	protected final String[] authorizations;
 
 	public BaseQuery(
-			final PrimaryIndex index,
+			final Index index,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
 			FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
@@ -70,7 +70,7 @@ abstract class BaseQuery
 
 	public BaseQuery(
 			final List<Short> adapterIds,
-			final PrimaryIndex index,
+			final Index index,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
 			FieldVisibilityCount visibilityCounts,

@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.query;
+package org.locationtech.geowave.core.store.api;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,12 +33,9 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -86,7 +83,7 @@ public class QueryOptions implements
 	})
 	private List<ByteArrayId> adapterIds = null;
 	private ByteArrayId indexId = null;
-	private transient PrimaryIndex index = null;
+	private transient Index index = null;
 	private Pair<DataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer maxRangeDecomposition = null;
 	private Integer limit = -1;
@@ -108,13 +105,13 @@ public class QueryOptions implements
 	}
 
 	public QueryOptions(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		setIndex(index);
 	}
 
 	public QueryOptions(
 			final DataAdapter<?> adapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		setAdapter(adapter);
 		setIndex(index);
 	}
@@ -133,7 +130,7 @@ public class QueryOptions implements
 
 	public QueryOptions(
 			final DataAdapter<?> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final String[] authorizations ) {
 		setAdapter(adapter);
 		setIndex(index);
@@ -165,7 +162,7 @@ public class QueryOptions implements
 	 */
 	public QueryOptions(
 			final DataAdapter<?> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final Integer limit,
 			final ScanCallback<?, ?> scanCallback,
 			final String[] authorizations ) {
@@ -271,7 +268,7 @@ public class QueryOptions implements
 	 * @param index
 	 */
 	public void setIndex(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (index != null) {
 			indexId = index.getId();
 			this.index = index;
@@ -315,7 +312,7 @@ public class QueryOptions implements
 		this.maxRangeDecomposition = maxRangeDecomposition;
 	}
 
-	public PrimaryIndex getIndex() {
+	public Index getIndex() {
 		return index;
 	}
 

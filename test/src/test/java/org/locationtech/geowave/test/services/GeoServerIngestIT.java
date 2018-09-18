@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -35,20 +35,19 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
 import org.locationtech.geowave.service.client.GeoServerServiceClient;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.test.services.ServicesTestEnvironment;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -110,7 +109,7 @@ public class GeoServerIngestIT
 			URISyntaxException {
 		final DataStore ds = dataStorePluginOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
+		final Index idx = SimpleIngest.createSpatialIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
 				new SimpleFeatureBuilder(

@@ -12,11 +12,11 @@ package org.locationtech.geowave.core.store.base;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 class IntermediaryReadEntryInfo<T>
 {
@@ -24,19 +24,19 @@ class IntermediaryReadEntryInfo<T>
 	private final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
 	private final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
 	private final boolean decodeRow;
-	private final PrimaryIndex index;
+	private final Index index;
 
 	private InternalDataAdapter<T> dataAdapter;
 	private boolean adapterVerified;
 
 	public IntermediaryReadEntryInfo(
-			final PrimaryIndex index,
+			final Index index,
 			final boolean decodeRow ) {
 		this.index = index;
 		this.decodeRow = decodeRow;
 	}
 
-	public PrimaryIndex getIndex() {
+	public Index getIndex() {
 		return index;
 	}
 

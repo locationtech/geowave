@@ -18,7 +18,7 @@ import org.apache.accumulo.core.client.Connector;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.split.AbstractAccumuloSplitsOperation;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
@@ -47,7 +47,7 @@ public class SplitQuantileCommand extends
 			@Override
 			protected boolean setSplits(
 					final Connector connector,
-					final PrimaryIndex index,
+					final Index index,
 					final String namespace,
 					final long number ) {
 				try {

@@ -54,8 +54,8 @@ import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.local.LocalPluginFileVisitor.PluginVisitor;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPluginOptions;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -331,7 +331,7 @@ public class SparkIngestDriver implements
 
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
-		final List<WritableDataAdapter<?>> adapters = new ArrayList<WritableDataAdapter<?>>();
+		final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
 		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
 			if (!IngestUtils.checkIndexesAgainstProvider(

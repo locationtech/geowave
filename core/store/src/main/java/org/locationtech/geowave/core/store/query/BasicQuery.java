@@ -31,18 +31,16 @@ import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -204,7 +202,7 @@ public class BasicQuery implements
 		}
 
 		protected DistributableQueryFilter createFilter(
-				final PrimaryIndex index,
+				final Index index,
 				final BasicQuery basicQuery ) {
 			final CommonIndexModel indexModel = index.getIndexModel();
 			final NumericDimensionField<?>[] dimensionFields = indexModel.getDimensions();
@@ -616,7 +614,7 @@ public class BasicQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final List<DistributableQueryFilter> filters = new ArrayList<>();
 		for (final ConstraintSet constraint : constraints.constraintsSets) {
 			final DistributableQueryFilter filter = constraint.createFilter(
@@ -639,7 +637,7 @@ public class BasicQuery implements
 			final MultiDimensionalNumericData constraints,
 			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
 			final NumericDimensionField<?>[] unconstrainedDimensionFields,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		return new BasicQueryFilter(
 				constraints,
 				orderedConstrainedDimensionFields,
@@ -647,7 +645,7 @@ public class BasicQuery implements
 	}
 
 	public boolean secondaryIndexSupports(
-			final SecondaryIndex index ) {
+			final SecondaryIndexImpl index ) {
 		if (additionalConstraints.containsKey(index.getFieldId())) {
 			return true;
 		}
@@ -656,7 +654,7 @@ public class BasicQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final PrimaryIndex primaryIndex ) {
+			final Index primaryIndex ) {
 		return constraints.getIndexConstraints(primaryIndex.getIndexStrategy());
 	}
 
@@ -702,7 +700,7 @@ public class BasicQuery implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ByteArrayRange> getSecondaryIndexConstraints(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final List<ByteArrayRange> allRanges = new ArrayList<>();
 		final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
 		for (final QueryConstraints queryConstraint : queryConstraints) {
@@ -718,7 +716,7 @@ public class BasicQuery implements
 
 	@Override
 	public List<DistributableQueryFilter> getSecondaryQueryFilter(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final List<DistributableQueryFilter> allFilters = new ArrayList<>();
 		final List<FilterableConstraints> queryConstraints = getSecondaryIndexQueryConstraints(index);
 		for (final FilterableConstraints queryConstraint : queryConstraints) {
@@ -731,7 +729,7 @@ public class BasicQuery implements
 	}
 
 	public List<FilterableConstraints> getSecondaryIndexQueryConstraints(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final List<FilterableConstraints> constraints = new ArrayList<>();
 		if (additionalConstraints.get(index.getFieldId()) != null) {
 			constraints.add(additionalConstraints.get(index.getFieldId()));

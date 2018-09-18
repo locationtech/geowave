@@ -13,8 +13,8 @@ package org.locationtech.geowave.adapter.vector.stats;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 
 import net.sf.json.JSONException;

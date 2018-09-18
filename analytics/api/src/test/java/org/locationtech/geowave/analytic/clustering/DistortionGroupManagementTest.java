@@ -33,16 +33,16 @@ import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.Di
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -56,14 +56,14 @@ public class DistortionGroupManagementTest
 	public TestName name = new TestName();
 	final GeometryFactory factory = new GeometryFactory();
 	final SimpleFeatureType ftype;
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+	final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	final FeatureDataAdapter adapter;
 	final DataStorePluginOptions storePluginOptions;
 
 	private <T> void ingest(
-			final WritableDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final DataAdapter<T> adapter,
+			final Index index,
 			final T entry )
 			throws IOException {
 		try (IndexWriter writer = storePluginOptions.createDataStore().createWriter(

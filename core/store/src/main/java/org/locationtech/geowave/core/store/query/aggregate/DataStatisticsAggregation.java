@@ -11,7 +11,8 @@
 package org.locationtech.geowave.core.store.query.aggregate;
 
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 
 public class DataStatisticsAggregation<T> implements
 		Aggregation<DataStatistics<T>, DataStatistics<T>, T>

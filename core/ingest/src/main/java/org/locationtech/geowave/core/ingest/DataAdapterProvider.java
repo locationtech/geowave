@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.ingest;
 
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 
 /**
@@ -32,7 +32,7 @@ public interface DataAdapterProvider<T>
 	 *            string that will be passed to IngestPluginBase.toGeoWaveData()
 	 * @return An array of adapters that may be used by this plugin
 	 */
-	public WritableDataAdapter<T>[] getDataAdapters(
+	public DataAdapter<T>[] getDataAdapters(
 			String globalVisibility );
 
 	/**

@@ -31,26 +31,25 @@ import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import org.locationtech.geowave.core.geotime.store.query.TemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.TemporalQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.query.AdapterQuery;
 import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.Query;
 import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
@@ -72,7 +71,7 @@ public class CQLQuery implements
 	public static Query createOptimalQuery(
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
-			final PrimaryIndex index )
+			final Index index )
 			throws CQLException {
 		return createOptimalQuery(
 				cql,
@@ -84,7 +83,7 @@ public class CQLQuery implements
 	public static Query createOptimalQuery(
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final BasicQuery baseQuery )
 			throws CQLException {
 		return createOptimalQuery(
@@ -99,7 +98,7 @@ public class CQLQuery implements
 			final String cql,
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
-			final PrimaryIndex index,
+			final Index index,
 			final BasicQuery baseQuery )
 			throws CQLException {
 		final Filter cqlFilter = CQL.toFilter(cql);
@@ -114,7 +113,7 @@ public class CQLQuery implements
 	public static Query createOptimalQuery(
 			final Filter cqlFilter,
 			final GeotoolsFeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final BasicQuery baseQuery ) {
 		return createOptimalQuery(
 				cqlFilter,
@@ -128,7 +127,7 @@ public class CQLQuery implements
 			final Filter cqlFilter,
 			final GeotoolsFeatureDataAdapter adapter,
 			final CompareOperation geoCompareOp,
-			final PrimaryIndex index,
+			final Index index,
 			BasicQuery baseQuery ) {
 		final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
 
@@ -274,7 +273,7 @@ public class CQLQuery implements
 
 	@Override
 	public List<QueryFilter> createFilters(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		List<QueryFilter> queryFilters;
 		// note, this assumes the CQL filter covers the baseQuery which *should*
 		// be a safe assumption, otherwise we need to add the
@@ -290,7 +289,7 @@ public class CQLQuery implements
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (baseQuery != null) {
 			return baseQuery.getIndexConstraints(index);
 		}
@@ -364,7 +363,7 @@ public class CQLQuery implements
 
 	@Override
 	public List<ByteArrayRange> getSecondaryIndexConstraints(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final PropertyFilterVisitor visitor = new PropertyFilterVisitor();
 		final PropertyConstraintSet constraints = (PropertyConstraintSet) cqlFilter.accept(
 				visitor,
@@ -374,7 +373,7 @@ public class CQLQuery implements
 
 	@Override
 	public List<DistributableQueryFilter> getSecondaryQueryFilter(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final PropertyFilterVisitor visitor = new PropertyFilterVisitor();
 		final PropertyConstraintSet constraints = (PropertyConstraintSet) cqlFilter.accept(
 				visitor,
@@ -383,7 +382,7 @@ public class CQLQuery implements
 	}
 
 	protected static boolean hasAtLeastSpatial(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if ((index == null) || (index.getIndexModel() == null) || (index.getIndexModel().getDimensions() == null)) {
 			return false;
 		}
@@ -401,7 +400,7 @@ public class CQLQuery implements
 	}
 
 	protected static boolean hasTime(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if ((index == null) || (index.getIndexModel() == null) || (index.getIndexModel().getDimensions() == null)) {
 			return false;
 		}

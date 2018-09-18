@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.QueryConstraints;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 public class CompositeConstraints implements
 		FilterableConstraints

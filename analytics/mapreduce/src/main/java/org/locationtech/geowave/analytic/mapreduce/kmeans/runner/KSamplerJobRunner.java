@@ -31,12 +31,12 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalit
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -107,12 +107,12 @@ public class KSamplerJobRunner extends
 		return adapterStore.getAdapter(sampleInternalAdapterId);
 	}
 
-	private PrimaryIndex getIndex(
+	private Index getIndex(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		final IndexStore indexStore = super.getIndexStore(runTimeProperties);
 
-		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
+		return (Index) indexStore.getIndex(new ByteArrayId(
 				runTimeProperties.getPropertyAsString(
 						SampleParameters.Sample.INDEX_ID,
 						"index")));
@@ -138,7 +138,7 @@ public class KSamplerJobRunner extends
 
 		runTimeProperties.storeIfEmpty(
 				SampleParameters.Sample.INDEX_ID,
-				new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialTemporalDimensionalityTypeProvider().createIndex(
 						new SpatialTemporalOptions()).getId());
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {

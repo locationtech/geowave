@@ -46,7 +46,7 @@ import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfig
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;

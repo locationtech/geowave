@@ -106,22 +106,22 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.util.IteratorWrapper;
 import org.locationtech.geowave.core.store.util.IteratorWrapper.Converter;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
@@ -498,7 +498,7 @@ public class RasterDataAdapter implements
 
 	@Override
 	public Iterator<GridCoverage> convertToIndex(
-			final PrimaryIndex index,
+			final Index index,
 			final GridCoverage gridCoverage ) {
 		final HierarchicalNumericIndexStrategy indexStrategy = CompoundHierarchicalIndexStrategyWrapper
 				.findHierarchicalStrategy(index.getIndexStrategy());
@@ -1007,7 +1007,7 @@ public class RasterDataAdapter implements
 	@Override
 	public GridCoverage decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final Object rasterTile = data.getAdapterExtendedData().getValue(
 				DATA_FIELD_ID);
 		if ((rasterTile == null) || !(rasterTile instanceof RasterTile)) {
@@ -1024,7 +1024,7 @@ public class RasterDataAdapter implements
 			final RasterTile rasterTile,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortKey,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final MultiDimensionalNumericData indexRange = index.getIndexStrategy().getRangeForId(
 				partitionKey,
 				sortKey);
@@ -2159,7 +2159,7 @@ public class RasterDataAdapter implements
 
 	@Override
 	public void init(
-			final PrimaryIndex... indices ) {
+			final Index... indices ) {
 		// TODO Auto-generated method stub
 	}
 

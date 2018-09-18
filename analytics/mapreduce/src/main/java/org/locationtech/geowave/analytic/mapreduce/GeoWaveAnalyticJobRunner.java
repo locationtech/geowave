@@ -41,14 +41,14 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -217,7 +217,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 	public static void addIndex(
 			final Configuration config,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		JobContextIndexStore.addIndex(
 				config,
 				index);
@@ -348,11 +348,10 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 		final IndexStore indexStore = getIndexStore(runTimeProperties);
 
-		PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
+		Index index = (Index) indexStore.getIndex(new ByteArrayId(
 				indexId));
 		if (index == null) {
-			final PrimaryIndex defaultSpatialIndex = new SpatialDimensionalityTypeProvider()
-					.createPrimaryIndex(new SpatialOptions());
+			final Index defaultSpatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 			index = new CustomIdIndex(
 					defaultSpatialIndex.getIndexStrategy(),
 					defaultSpatialIndex.getIndexModel(),

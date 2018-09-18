@@ -25,16 +25,16 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -200,7 +200,7 @@ public class GeoWaveConfiguratorBase
 	public static void addIndex(
 			final Class<?> implementingClass,
 			final Configuration config,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (index != null) {
 			config.set(
 					enumToConfKey(
@@ -211,7 +211,7 @@ public class GeoWaveConfiguratorBase
 		}
 	}
 
-	public static PrimaryIndex getIndex(
+	public static Index getIndex(
 			final Class<?> implementingClass,
 			final JobContext context,
 			final ByteArrayId indexId ) {
@@ -422,7 +422,7 @@ public class GeoWaveConfiguratorBase
 		return new DataAdapter[] {};
 	}
 
-	private static PrimaryIndex getIndexInternal(
+	private static Index getIndexInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration,
 			final ByteArrayId indexId ) {
@@ -432,12 +432,12 @@ public class GeoWaveConfiguratorBase
 				indexId.getString()));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
-			return (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
+			return (Index) PersistenceUtils.fromBinary(indexBytes);
 		}
 		return null;
 	}
 
-	public static PrimaryIndex[] getIndices(
+	public static Index[] getIndices(
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		return getIndicesInternal(
@@ -492,22 +492,22 @@ public class GeoWaveConfiguratorBase
 				GeoWaveStoreFinder.createInternalAdapterStore(configOptions));
 	}
 
-	private static PrimaryIndex[] getIndicesInternal(
+	private static Index[] getIndicesInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration ) {
 		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
 				implementingClass,
 				GeoWaveConfg.INDEX) + "*");
 		if (input != null) {
-			final List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>(
+			final List<Index> indices = new ArrayList<Index>(
 					input.size());
 			for (final String indexStr : input.values()) {
 				final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(indexStr);
-				indices.add((PrimaryIndex) PersistenceUtils.fromBinary(indexBytes));
+				indices.add((Index) PersistenceUtils.fromBinary(indexBytes));
 			}
-			return indices.toArray(new PrimaryIndex[indices.size()]);
+			return indices.toArray(new Index[indices.size()]);
 		}
-		return new PrimaryIndex[] {};
+		return new Index[] {};
 	}
 
 	// use reflection to pull the Configuration out of the JobContext for Hadoop

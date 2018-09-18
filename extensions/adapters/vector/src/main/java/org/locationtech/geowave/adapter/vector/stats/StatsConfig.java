@@ -13,7 +13,7 @@ package org.locationtech.geowave.adapter.vector.stats;
 import java.io.Serializable;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

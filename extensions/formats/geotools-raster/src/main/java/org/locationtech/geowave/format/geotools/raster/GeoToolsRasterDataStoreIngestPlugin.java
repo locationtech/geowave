@@ -39,9 +39,9 @@ import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 
@@ -260,14 +260,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public WritableDataAdapter<GridCoverage>[] getDataAdapters(
+	public DataAdapter<GridCoverage>[] getDataAdapters(
 			final String globalVisibility ) {
-		return new WritableDataAdapter[] {};
+		return new DataAdapter[] {};
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

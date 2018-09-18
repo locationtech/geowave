@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 /**
  * This is responsible for persisting data adapters (either in memory or to disk

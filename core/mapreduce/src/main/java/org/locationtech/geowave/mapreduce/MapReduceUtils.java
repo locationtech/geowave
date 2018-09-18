@@ -13,7 +13,7 @@ package org.locationtech.geowave.mapreduce;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;

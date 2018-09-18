@@ -18,15 +18,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.ServiceLoader;
 import java.util.Set;
 
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.config.ConfigOption;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;

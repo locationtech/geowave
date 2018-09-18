@@ -47,7 +47,7 @@ import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -107,7 +107,7 @@ public class DBScanMapReduceTest
 				SimpleFeatureProjection.class,
 				Projection.class);
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);

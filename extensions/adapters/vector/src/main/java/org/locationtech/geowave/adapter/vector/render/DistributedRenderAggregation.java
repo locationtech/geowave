@@ -24,7 +24,7 @@ import org.geoserver.wms.ScaleComputationMethod;
 import org.geoserver.wms.WMSMapContent;
 import org.geotools.map.FeatureLayer;
 import org.geotools.map.MapViewport;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.api.Aggregation;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;

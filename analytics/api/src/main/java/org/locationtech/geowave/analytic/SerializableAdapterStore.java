@@ -15,8 +15,8 @@ import java.io.Serializable;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

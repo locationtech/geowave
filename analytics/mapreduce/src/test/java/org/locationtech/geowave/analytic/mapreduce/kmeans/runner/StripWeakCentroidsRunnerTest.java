@@ -284,7 +284,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+					return new SpatialDimensionalityTypeProvider().createIndex(
 							new SpatialOptions()).getId();
 				}
 
@@ -423,7 +423,7 @@ public class StripWeakCentroidsRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+					return new SpatialDimensionalityTypeProvider().createIndex(
 							new SpatialOptions()).getId();
 				}
 

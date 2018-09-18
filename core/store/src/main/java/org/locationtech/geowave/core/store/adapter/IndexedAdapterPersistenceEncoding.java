@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.adapter;
 import java.util.Map.Entry;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;

@@ -40,9 +40,9 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
@@ -146,9 +146,9 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
+	public DataAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
-		return new WritableDataAdapter[] {};
+		return new DataAdapter[] {};
 	}
 
 	@Override
@@ -223,8 +223,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

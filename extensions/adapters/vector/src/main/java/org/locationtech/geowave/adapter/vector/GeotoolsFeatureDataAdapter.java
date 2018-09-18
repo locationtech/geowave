@@ -12,13 +12,13 @@ package org.locationtech.geowave.adapter.vector;
 
 import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public interface GeotoolsFeatureDataAdapter extends
-		WritableDataAdapter<SimpleFeature>,
+		DataAdapter<SimpleFeature>,
 		StatisticsProvider<SimpleFeature>
 {
 	public SimpleFeatureType getFeatureType();

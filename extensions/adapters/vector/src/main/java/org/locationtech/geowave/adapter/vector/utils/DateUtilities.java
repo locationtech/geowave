@@ -16,11 +16,11 @@ import java.util.Date;
 import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 public class DateUtilities

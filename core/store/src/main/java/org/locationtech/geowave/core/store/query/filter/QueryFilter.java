@@ -8,18 +8,21 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.index;
+package org.locationtech.geowave.core.store.query.filter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.QueryConstraints;
-import org.locationtech.geowave.core.index.SortedIndexStrategy;
-import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
+import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
-public interface Index<QueryRangeType extends QueryConstraints, EntryRangeType> extends
-		Persistable
+/**
+ * A simple filter interface to determine inclusion/exclusion based on a generic
+ * persistence encoding. Client-side filters will be given an
+ * AdapterPersistenceEncoding but distributable filters will be given a generic
+ * PersistenceEncoding.
+ * 
+ */
+public interface QueryFilter
 {
-	public ByteArrayId getId();
-
-	public SortedIndexStrategy<QueryRangeType, EntryRangeType> getIndexStrategy();
-
+	public boolean accept(
+			CommonIndexModel indexModel,
+			IndexedPersistenceEncoding<?> persistenceEncoding );
 }

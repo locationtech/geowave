@@ -22,14 +22,14 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MergingEntryIterator<T> extends
 		NativeEntryIteratorWrapper<T>
@@ -41,7 +41,7 @@ public class MergingEntryIterator<T> extends
 
 	public MergingEntryIterator(
 			final PersistentAdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, GeoWaveRow> scanCallback,

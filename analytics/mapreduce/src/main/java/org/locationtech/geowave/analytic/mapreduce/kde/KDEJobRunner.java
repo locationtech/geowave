@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
@@ -36,10 +35,8 @@ import org.apache.hadoop.mapreduce.lib.output.SequenceFileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.ecql.ECQL;
-import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.operations.ResizeCommand;
-import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
 import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
@@ -51,26 +48,21 @@ import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.ClearCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.config.ConfigUtils;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
@@ -81,7 +73,6 @@ import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.cs.CoordinateSystem;
 import org.opengis.referencing.cs.CoordinateSystemAxis;
-import org.opengis.referencing.operation.MathTransform;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -102,7 +93,7 @@ public class KDEJobRunner extends
 	protected DataStorePluginOptions inputDataStoreOptions;
 	protected DataStorePluginOptions outputDataStoreOptions;
 	protected File configFile;
-	protected PrimaryIndex outputIndex;
+	protected Index outputIndex;
 	public static final String X_MIN_KEY = "X_MIN";
 	public static final String X_MAX_KEY = "X_MAX";
 	public static final String Y_MIN_KEY = "Y_MIN";
@@ -115,7 +106,7 @@ public class KDEJobRunner extends
 			final DataStorePluginOptions inputDataStoreOptions,
 			final DataStorePluginOptions outputDataStoreOptions,
 			final File configFile,
-			final PrimaryIndex outputIndex ) {
+			final Index outputIndex ) {
 		this.kdeCommandLineOptions = kdeCommandLineOptions;
 		this.inputDataStoreOptions = inputDataStoreOptions;
 		this.outputDataStoreOptions = outputDataStoreOptions;
@@ -135,12 +126,12 @@ public class KDEJobRunner extends
 			setConf(conf);
 		}
 
-		PrimaryIndex inputPrimaryIndex = null;
-		final CloseableIterator<Index<?, ?>> it1 = inputDataStoreOptions.createIndexStore().getIndices();
+		Index inputPrimaryIndex = null;
+		final CloseableIterator<Index> it1 = inputDataStoreOptions.createIndexStore().getIndices();
 		while (it1.hasNext()) {
-			Index<?, ?> index = it1.next();
-			if (index instanceof PrimaryIndex) {
-				inputPrimaryIndex = (PrimaryIndex) index;
+			Index index = it1.next();
+			if (index != null) {
+				inputPrimaryIndex = (Index) index;
 				break;
 			}
 		}
@@ -148,7 +139,7 @@ public class KDEJobRunner extends
 		CoordinateReferenceSystem inputIndexCrs = GeometryUtils.getIndexCrs(inputPrimaryIndex);
 		String inputCrsCode = GeometryUtils.getCrsCode(inputIndexCrs);
 
-		PrimaryIndex outputPrimaryIndex = outputIndex;
+		Index outputPrimaryIndex = outputIndex;
 		CoordinateReferenceSystem outputIndexCrs = null;
 		String outputCrsCode = null;
 
@@ -160,7 +151,7 @@ public class KDEJobRunner extends
 			SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
 			SpatialOptions so = sdp.createOptions();
 			so.setCrs(inputCrsCode);
-			outputPrimaryIndex = sdp.createPrimaryIndex(so);
+			outputPrimaryIndex = sdp.createIndex(so);
 			outputIndexCrs = inputIndexCrs;
 			outputCrsCode = inputCrsCode;
 		}
@@ -289,8 +280,8 @@ public class KDEJobRunner extends
 		if (kdeCommandLineOptions.getIndexId() != null) {
 			final Index index = indexStore.getIndex(new ByteArrayId(
 					kdeCommandLineOptions.getIndexId()));
-			if ((index != null) && (index instanceof PrimaryIndex)) {
-				queryOptions.setIndex((PrimaryIndex) index);
+			if (index != null) {
+				queryOptions.setIndex(index);
 
 			}
 		}
@@ -573,9 +564,9 @@ public class KDEJobRunner extends
 			final Job statsReducer,
 			final String statsNamespace,
 			final String coverageName,
-			final PrimaryIndex index )
+			final Index index )
 			throws Exception {
-		final WritableDataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
+		final DataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				KDEReducer.NUM_BANDS,
 				TILE_SIZE,
@@ -593,8 +584,8 @@ public class KDEJobRunner extends
 	protected void setup(
 			final Job job,
 			final String namespace,
-			final WritableDataAdapter<?> adapter,
-			final PrimaryIndex index )
+			final DataAdapter<?> adapter,
+			final Index index )
 			throws IOException,
 			MismatchedIndexToAdapterMapping {
 		GeoWaveOutputFormat.setStoreOptions(

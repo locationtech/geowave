@@ -331,7 +331,7 @@ public class KSamplerMapReduce
 			final ByteArrayId indexId = new ByteArrayId(
 					StringUtils.stringToBinary(config.getString(
 							SampleParameters.Sample.INDEX_ID,
-							new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+							new SpatialDimensionalityTypeProvider().createIndex(
 									new SpatialOptions()).getId().getString())));
 			indexIds = new ArrayList<ByteArrayId>();
 			indexIds.add(indexId);

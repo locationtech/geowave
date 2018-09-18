@@ -15,10 +15,10 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
@@ -36,7 +36,7 @@ abstract class AbstractBaseRowQuery<T> extends
 	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractBaseRowQuery(
-			final PrimaryIndex index,
+			final Index index,
 			final String[] authorizations,
 			final ScanCallback<T, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,

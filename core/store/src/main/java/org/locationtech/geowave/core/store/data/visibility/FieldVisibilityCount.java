@@ -20,13 +20,13 @@ import java.util.Map.Entry;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.ClientVisibilityFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.core.store.util.VisibilityExpression;
 
 import java.util.Set;
@@ -197,7 +197,7 @@ public class FieldVisibilityCount<T> extends
 	}
 
 	public static FieldVisibilityCount getVisibilityCounts(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {

@@ -28,10 +28,10 @@ import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
 import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter;
-import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
-import org.locationtech.geowave.core.geotime.store.query.TemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.IndexOnlySpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.TemporalQuery;
 import org.locationtech.geowave.core.index.dimension.bin.BasicBinningStrategy;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 

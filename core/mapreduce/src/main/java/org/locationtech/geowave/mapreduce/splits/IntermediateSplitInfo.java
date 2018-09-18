@@ -27,9 +27,9 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,11 +42,11 @@ public class IntermediateSplitInfo implements
 	protected class IndexRangeLocation
 	{
 		private RangeLocationPair rangeLocationPair;
-		private final PrimaryIndex index;
+		private final Index index;
 
 		public IndexRangeLocation(
 				final RangeLocationPair rangeLocationPair,
-				final PrimaryIndex index ) {
+				final Index index ) {
 			this.rangeLocationPair = rangeLocationPair;
 			this.index = index;
 		}
@@ -225,7 +225,7 @@ public class IntermediateSplitInfo implements
 	 * @return the new split.
 	 */
 	synchronized IntermediateSplitInfo split(
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache ) {
+			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache ) {
 		// generically you'd want the split to be as limiting to total
 		// locations as possible and then as limiting as possible to total
 		// indices, but in this case split() is only called when all ranges
@@ -337,7 +337,7 @@ public class IntermediateSplitInfo implements
 	private void addPairForIndex(
 			final Map<ByteArrayId, SplitInfo> otherSplitInfo,
 			final RangeLocationPair pair,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		SplitInfo other = otherSplitInfo.get(index.getId());
 		if (other == null) {
 			other = new SplitInfo(

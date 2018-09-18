@@ -29,15 +29,15 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
@@ -134,7 +134,7 @@ public class SpatialQueryExample
 
 	private void ingest(
 			final FeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final List<SimpleFeature> features ) {
 		try (IndexWriter indexWriter = dataStore.createWriter(
 				adapter,

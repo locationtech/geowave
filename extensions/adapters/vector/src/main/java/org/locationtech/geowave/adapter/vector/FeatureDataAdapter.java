@@ -40,13 +40,14 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -54,8 +55,7 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataAdapter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
@@ -265,21 +265,21 @@ public class FeatureDataAdapter extends
 	// -----------------------------------------------------------------------------------
 	// Simplify for call from pyspark/jupyter
 	public void init(
-			final PrimaryIndex index ) {
-		this.init(new PrimaryIndex[] {
+			final Index index ) {
+		this.init(new Index[] {
 			index
 		});
 	}
 
 	@Override
 	public void init(
-			final PrimaryIndex... indices )
+			final Index... indices )
 			throws RuntimeException {
 		// TODO get projection here, make sure if multiple indices are given
 		// that they match
 
 		String indexCrsCode = null;
-		for (final PrimaryIndex primaryindx : indices) {
+		for (final Index primaryindx : indices) {
 
 			// for first iteration
 			if (indexCrsCode == null) {
@@ -981,7 +981,7 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public List<SecondaryIndex<SimpleFeature>> getSupportedSecondaryIndices() {
+	public List<SecondaryIndexImpl<SimpleFeature>> getSupportedSecondaryIndices() {
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 

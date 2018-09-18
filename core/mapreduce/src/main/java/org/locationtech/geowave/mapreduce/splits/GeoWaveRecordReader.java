@@ -34,18 +34,18 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStoreWrapper;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseQueryOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.FilterList;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.input.InputFormatIteratorWrapper;
@@ -229,7 +229,7 @@ public class GeoWaveRecordReader<T> extends
 	}
 
 	protected CloseableIterator<Entry<GeoWaveInputKey, T>> queryRange(
-			final PrimaryIndex index,
+			final Index index,
 			final GeoWaveRowRange range,
 			final List<QueryFilter> queryFilters,
 			final boolean mixedVisibility,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,15 +14,13 @@ import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -50,8 +48,8 @@ import org.slf4j.LoggerFactory;
  * explicitly given an index and a data adapter which is then persisted to be
  * used in subsequent queries.
  */
-public class AccumuloDataStore extends
-		BaseMapReduceDataStore
+public class AccumuloDataStore<T> extends
+		BaseMapReduceDataStore<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloDataStore.class);
 
@@ -129,7 +127,7 @@ public class AccumuloDataStore extends
 	@Override
 	protected void initOnIndexWriterCreate(
 			final InternalDataAdapter adapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 
 		final String indexName = index.getId().getString();
 

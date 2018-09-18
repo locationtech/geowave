@@ -17,9 +17,9 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.opengis.feature.simple.SimpleFeature;
@@ -101,7 +101,7 @@ public class SimpleIngestProducerConsumer extends
 		final GeotoolsFeatureDataAdapter adapter = createDataAdapter(point);
 
 		// This describes how to index the data
-		final PrimaryIndex index = createSpatialIndex();
+		final Index index = createSpatialIndex();
 
 		final Thread ingestThread = new Thread(
 				new Runnable() {

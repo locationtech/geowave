@@ -12,7 +12,8 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 /**

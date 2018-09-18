@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.ingest.index;
 
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 
 public interface IndexProvider
 {
@@ -27,5 +27,5 @@ public interface IndexProvider
 	 * @return the array of indices that are supported by this ingest
 	 *         implementation
 	 */
-	public PrimaryIndex[] getRequiredIndices();
+	public Index[] getRequiredIndices();
 }

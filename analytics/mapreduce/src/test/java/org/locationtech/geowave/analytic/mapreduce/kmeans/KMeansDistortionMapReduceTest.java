@@ -49,11 +49,11 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -89,7 +89,7 @@ public class KMeansDistortionMapReduceTest
 
 	private static final List<Object> capturedObjects = new ArrayList<Object>();
 
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+	final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
 
@@ -127,7 +127,7 @@ public class KMeansDistortionMapReduceTest
 		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
@@ -208,7 +208,7 @@ public class KMeansDistortionMapReduceTest
 	private void ingest(
 			final DataStore dataStore,
 			final FeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final SimpleFeature feature )
 			throws IOException {
 		try (IndexWriter writer = dataStore.createWriter(

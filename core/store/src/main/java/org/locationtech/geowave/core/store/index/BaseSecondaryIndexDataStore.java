@@ -19,9 +19,9 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

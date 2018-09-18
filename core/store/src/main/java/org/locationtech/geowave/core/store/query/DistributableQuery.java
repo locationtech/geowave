@@ -14,8 +14,9 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 /**
  * This interface fully describes a query and is persistable so that it can be
@@ -34,8 +35,8 @@ public interface DistributableQuery extends
 	 * @return A collection of ranges over secondary index keys.
 	 */
 	public List<ByteArrayRange> getSecondaryIndexConstraints(
-			SecondaryIndex<?> index );
+			SecondaryIndexImpl<?> index );
 
 	public List<DistributableQueryFilter> getSecondaryQueryFilter(
-			SecondaryIndex<?> index );
+			SecondaryIndexImpl<?> index );
 }

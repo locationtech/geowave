@@ -22,7 +22,7 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.GeoWaveKey;
 
 /**
@@ -99,7 +99,7 @@ public class GeoWaveInputKey implements
 	}
 
 	public Pair<byte[], byte[]> getPartitionAndSortKey(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final int partitionKeyLength = index.getIndexStrategy().getPartitionKeyLength();
 		final int indexIdLength = index.getId().getBytes().length;
 		if (dataId.getBytes().length < (indexIdLength + partitionKeyLength)) {

@@ -23,10 +23,9 @@ import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.mapreduce.GeoWaveKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +46,7 @@ public class GeoWaveOutputKey<T> implements
 	private static final long serialVersionUID = 1L;
 	protected ByteArrayId adapterId;
 	private Collection<ByteArrayId> indexIds;
-	transient private WritableDataAdapter<T> adapter;
+	transient private DataAdapter<T> adapter;
 
 	protected GeoWaveOutputKey() {
 		super();
@@ -68,7 +67,7 @@ public class GeoWaveOutputKey<T> implements
 	}
 
 	public GeoWaveOutputKey(
-			final WritableDataAdapter<T> adapter,
+			final DataAdapter<T> adapter,
 			final Collection<ByteArrayId> indexIds ) {
 		this.adapter = adapter;
 		this.indexIds = indexIds;
@@ -88,14 +87,14 @@ public class GeoWaveOutputKey<T> implements
 		return indexIds;
 	}
 
-	public WritableDataAdapter<T> getAdapter(
+	public DataAdapter<T> getAdapter(
 			final TransientAdapterStore adapterCache ) {
 		if (adapter != null) {
 			return adapter;
 		}
 		final DataAdapter<?> adapter = adapterCache.getAdapter(adapterId);
-		if (adapter instanceof WritableDataAdapter) {
-			return (WritableDataAdapter<T>) adapter;
+		if (adapter instanceof DataAdapter) {
+			return (DataAdapter<T>) adapter;
 		}
 		LOGGER.warn("Adapter is not writable");
 		return null;

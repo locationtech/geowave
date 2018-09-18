@@ -25,9 +25,9 @@ import org.apache.hadoop.hbase.security.visibility.VisibilityLabelServiceManager
 import org.apache.hadoop.hbase.security.visibility.VisibilityTestUtil;
 import org.apache.hadoop.hbase.security.visibility.VisibilityUtils;
 import org.junit.Assert;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.datastore.hbase.HBaseStoreFactoryFamily;
 import org.locationtech.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 import org.locationtech.geowave.datastore.hbase.util.ConnectionPool;

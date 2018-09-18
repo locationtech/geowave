@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -34,13 +32,13 @@ import org.locationtech.geowave.adapter.vector.util.FeatureTranslatingIterator;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -48,6 +46,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -69,6 +69,7 @@ public class AttributesSubsetQueryIT extends
 	})
 	protected DataStorePluginOptions dataStore;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStore;
 	}
@@ -80,8 +81,7 @@ public class AttributesSubsetQueryIT extends
 	private static final String LAND_AREA_ATTRIBUTE = "landArea";
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
 
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	private static final Collection<String> ALL_ATTRIBUTES = Arrays.asList(
 			CITY_ATTRIBUTE,

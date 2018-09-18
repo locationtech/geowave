@@ -39,14 +39,14 @@ import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisit
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.format.sentinel2.BandFeatureIterator;
 import org.locationtech.geowave.format.sentinel2.DownloadRunner;
 import org.locationtech.geowave.format.sentinel2.RasterIngestRunner;
@@ -95,7 +95,7 @@ public class RasterIngestRunner extends
 	protected String[] bandsIngested;
 	protected DataStore store = null;
 	protected DataStorePluginOptions dataStorePluginOptions = null;
-	protected PrimaryIndex[] indices = null;
+	protected Index[] indices = null;
 	protected Sentinel2ImageryProvider provider;
 
 	public RasterIngestRunner(
@@ -154,10 +154,10 @@ public class RasterIngestRunner extends
 		}
 
 		final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
-		indices = new PrimaryIndex[indexOptions.size()];
+		indices = new Index[indexOptions.size()];
 		int i = 0;
 		for (final IndexPluginOptions dimensionType : indexOptions) {
-			final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
+			final Index primaryIndex = dimensionType.createIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
@@ -399,7 +399,7 @@ public class RasterIngestRunner extends
 		if (!ingestOptions.isSkipMerge()) {
 			System.out.println("Merging overlapping tiles...");
 
-			for (final PrimaryIndex index : indices) {
+			for (final Index index : indices) {
 				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
 						index,
 						dataStorePluginOptions.createAdapterStore(),

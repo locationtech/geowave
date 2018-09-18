@@ -13,8 +13,8 @@ package org.locationtech.geowave.core.store.index.text;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 /**
  * A class based on FilterableConstraints that uses a text value for query

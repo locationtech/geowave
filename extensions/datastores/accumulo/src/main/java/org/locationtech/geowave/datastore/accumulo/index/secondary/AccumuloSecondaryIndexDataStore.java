@@ -30,19 +30,19 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.BaseSecondaryIndexDataStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.locationtech.geowave.core.store.operations.Writer;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
 import org.locationtech.geowave.core.store.query.PrefixIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.slf4j.Logger;
@@ -202,10 +202,10 @@ public class AccumuloSecondaryIndexDataStore extends
 
 	@Override
 	public <T> CloseableIterator<T> query(
-			final SecondaryIndex<T> secondaryIndex,
+			final SecondaryIndexImpl<T> secondaryIndex,
 			final ByteArrayId indexedAttributeFieldId,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex primaryIndex,
+			final Index primaryIndex,
 			final DistributableQuery query,
 			final String... authorizations ) {
 		final Scanner scanner = getScanner(

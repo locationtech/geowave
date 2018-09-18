@@ -26,9 +26,9 @@ import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 import com.google.common.math.DoubleMath;
 
@@ -72,7 +72,7 @@ public class CommonIndexedPersistenceEncoding extends
 	 * @return The insertions IDs for this object in the index
 	 */
 	public InsertionIds getInsertionIds(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final MultiDimensionalNumericData boxRangeData = getNumericData(index.getIndexModel().getDimensions());
 		final InsertionIds untrimmedResult = index.getIndexStrategy().getInsertionIds(
 				boxRangeData);
@@ -198,7 +198,7 @@ public class CommonIndexedPersistenceEncoding extends
 	// to avoid the extra cost of checking the result
 	protected boolean overlaps(
 			final NumericData[] insertTileRange,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		@SuppressWarnings("rawtypes")
 		final NumericDimensionDefinition[] dimensions = index.getIndexStrategy().getOrderedDimensionDefinitions();
 		final NumericDimensionField[] fields = index.getIndexModel().getDimensions();

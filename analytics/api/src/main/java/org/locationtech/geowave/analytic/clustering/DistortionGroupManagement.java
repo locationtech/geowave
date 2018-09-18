@@ -28,12 +28,15 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
@@ -42,16 +45,12 @@ import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -72,7 +71,7 @@ public class DistortionGroupManagement
 {
 
 	final static Logger LOGGER = LoggerFactory.getLogger(DistortionGroupManagement.class);
-	public final static PrimaryIndex DISTORTIONS_INDEX = new NullIndex(
+	public final static Index DISTORTIONS_INDEX = new NullIndex(
 			"DISTORTIONS");
 	public final static List<ByteArrayId> DISTORTIONS_INDEX_LIST = Collections.unmodifiableList(Arrays
 			.asList(DISTORTIONS_INDEX.getId()));
@@ -151,14 +150,14 @@ public class DistortionGroupManagement
 
 		@Override
 		public List<QueryFilter> createFilters(
-				final PrimaryIndex index ) {
+				final Index index ) {
 			return Collections.<QueryFilter> singletonList(new BatchIdFilter(
 					batchId));
 		}
 
 		@Override
 		public List<MultiDimensionalNumericData> getIndexConstraints(
-				final PrimaryIndex index ) {
+				final Index index ) {
 			return Collections.emptyList();
 		}
 
@@ -364,7 +363,7 @@ public class DistortionGroupManagement
 	}
 
 	public static class DistortionDataAdapter implements
-			WritableDataAdapter<DistortionEntry>
+			DataAdapter<DistortionEntry>
 	{
 		public final static ByteArrayId ADAPTER_ID = new ByteArrayId(
 				"distortion");
@@ -402,7 +401,7 @@ public class DistortionGroupManagement
 		@Override
 		public DistortionEntry decode(
 				final IndexedAdapterPersistenceEncoding data,
-				final PrimaryIndex index ) {
+				final Index index ) {
 			return new DistortionEntry(
 					data.getDataId(),
 					(Double) data.getAdapterExtendedData().getValue(
@@ -499,7 +498,7 @@ public class DistortionGroupManagement
 
 		@Override
 		public void init(
-				final PrimaryIndex... indices ) {
+				final Index... indices ) {
 			// TODO Auto-generated method stub
 
 		}

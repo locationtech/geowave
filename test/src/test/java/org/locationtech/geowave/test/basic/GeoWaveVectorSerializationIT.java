@@ -31,12 +31,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -214,7 +214,7 @@ public class GeoWaveVectorSerializationIT extends
 					arg.getValue());
 		}
 
-		final org.locationtech.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
+		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStore.createDataStore();
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
 		try (IndexWriter writer = geowaveStore.createWriter(

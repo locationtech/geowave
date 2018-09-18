@@ -17,12 +17,13 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class DataStatisticsBuilder<T> implements
 		IngestCallback<T>,
@@ -35,7 +36,7 @@ public class DataStatisticsBuilder<T> implements
 	private final EntryVisibilityHandler<T> visibilityHandler;
 
 	public DataStatisticsBuilder(
-			final PrimaryIndex index,
+			final Index index,
 			final DataAdapter<T> adapter,
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final ByteArrayId statisticsId ) {

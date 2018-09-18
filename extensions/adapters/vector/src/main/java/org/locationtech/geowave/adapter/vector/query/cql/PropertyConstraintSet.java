@@ -17,9 +17,9 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 public class PropertyConstraintSet
 {
@@ -52,7 +52,7 @@ public class PropertyConstraintSet
 	}
 
 	public List<ByteArrayRange> getRangesFor(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final List<ByteArrayRange> result = new LinkedList<ByteArrayRange>();
 		final FilterableConstraints c = constraints.get(index.getFieldId());
 		if (c != null) {
@@ -64,7 +64,7 @@ public class PropertyConstraintSet
 	}
 
 	public List<DistributableQueryFilter> getFiltersFor(
-			final SecondaryIndex<?> index ) {
+			final SecondaryIndexImpl<?> index ) {
 		final List<DistributableQueryFilter> result = new LinkedList<DistributableQueryFilter>();
 		final FilterableConstraints c = constraints.get(index.getFieldId());
 		if (c != null) {

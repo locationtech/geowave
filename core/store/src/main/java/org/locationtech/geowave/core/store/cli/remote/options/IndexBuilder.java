@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.cli.remote.options;
 
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 
 public interface IndexBuilder
 {
-	public PrimaryIndex createIndex();
+	public Index createIndex();
 }

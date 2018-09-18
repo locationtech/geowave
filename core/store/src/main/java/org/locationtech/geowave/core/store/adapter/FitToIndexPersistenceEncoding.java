@@ -14,9 +14,9 @@ import java.util.Collections;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class FitToIndexPersistenceEncoding extends
 		AdapterPersistenceEncoding
@@ -40,7 +40,7 @@ public class FitToIndexPersistenceEncoding extends
 
 	@Override
 	public InsertionIds getInsertionIds(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		return insertionIds;
 	}
 

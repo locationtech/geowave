@@ -21,9 +21,9 @@ import java.util.concurrent.TimeUnit;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,8 +41,8 @@ public class IngestTask implements
 	private final String id;
 	private final BlockingQueue<GeoWaveData<?>> readQueue;
 	private final LocalIngestRunData runData;
-	private final Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes;
-	private final Map<ByteArrayId, PrimaryIndex> requiredIndexMap;
+	private final Map<ByteArrayId, Index> specifiedPrimaryIndexes;
+	private final Map<ByteArrayId, Index> requiredIndexMap;
 	private volatile boolean isTerminated = false;
 	private volatile boolean isFinished = false;
 
@@ -52,8 +52,8 @@ public class IngestTask implements
 	public IngestTask(
 			String id,
 			LocalIngestRunData runData,
-			Map<ByteArrayId, PrimaryIndex> specifiedPrimaryIndexes,
-			Map<ByteArrayId, PrimaryIndex> requiredIndexMap,
+			Map<ByteArrayId, Index> specifiedPrimaryIndexes,
+			Map<ByteArrayId, Index> requiredIndexMap,
 			BlockingQueue<GeoWaveData<?>> queue ) {
 		this.id = id;
 		this.runData = runData;
@@ -127,7 +127,7 @@ public class IngestTask implements
 					continue;
 				}
 
-				final WritableDataAdapter adapter = runData.getDataAdapter(geowaveData);
+				final DataAdapter adapter = runData.getDataAdapter(geowaveData);
 				if (adapter == null) {
 					LOGGER.warn(String.format(
 							"Adapter not found for [%s] worker [%s]",
@@ -183,7 +183,7 @@ public class IngestTask implements
 
 	private long ingestData(
 			GeoWaveData<?> geowaveData,
-			WritableDataAdapter adapter )
+			DataAdapter adapter )
 			throws Exception {
 
 		ByteArrayId adapterId = adapter.getAdapterId();
@@ -191,9 +191,9 @@ public class IngestTask implements
 		IndexWriter writer = indexWriters.get(adapterId);
 
 		if (writer == null) {
-			List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+			List<Index> indices = new ArrayList<Index>();
 			for (final ByteArrayId indexId : geowaveData.getIndexIds()) {
-				PrimaryIndex index = specifiedPrimaryIndexes.get(indexId);
+				Index index = specifiedPrimaryIndexes.get(indexId);
 				if (index == null) {
 					index = requiredIndexMap.get(indexId);
 					if (index == null) {

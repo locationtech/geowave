@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.adapter.statistics;
+package org.locationtech.geowave.core.store.api;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;

@@ -18,7 +18,8 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -47,7 +48,7 @@ public class SecondaryIndexDataManager<T> implements
 	public SecondaryIndexDataManager(
 			final SecondaryIndexDataStore secondaryIndexStore,
 			final SecondaryIndexDataAdapter<T> adapter,
-			final PrimaryIndex primaryIndex ) {
+			final Index primaryIndex ) {
 		this.adapter = adapter;
 		this.secondaryIndexStore = secondaryIndexStore;
 		this.primaryIndexModel = primaryIndex.getIndexModel();
@@ -61,7 +62,7 @@ public class SecondaryIndexDataManager<T> implements
 			final GeoWaveRow... kvs ) {
 		// loop secondary indices for adapter
 		final InsertionIds primaryIndexInsertionIds = DataStoreUtils.keysToInsertionIds(kvs);
-		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
+		for (final SecondaryIndexImpl<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
 			final ByteArrayId indexedAttributeFieldId = secondaryIndex.getFieldId();
 			final int position = adapter.getPositionOfOrderedField(
 					primaryIndexModel,

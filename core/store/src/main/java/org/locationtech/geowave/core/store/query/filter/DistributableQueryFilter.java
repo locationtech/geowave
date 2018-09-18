@@ -8,9 +8,16 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.filter;
+package org.locationtech.geowave.core.store.query.filter;
 
-public interface FixedResolutionSubsampleQueryFilter
+import org.locationtech.geowave.core.index.persist.Persistable;
+
+/**
+ * This interface represents a QueryFilter that is Persistable
+ * 
+ */
+public interface DistributableQueryFilter extends
+		QueryFilter,
+		Persistable
 {
-
 }

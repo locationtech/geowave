@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
 

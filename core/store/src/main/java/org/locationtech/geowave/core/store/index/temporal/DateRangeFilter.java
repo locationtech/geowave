@@ -16,8 +16,8 @@ import java.util.Date;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 public class DateRangeFilter implements
 		DistributableQueryFilter

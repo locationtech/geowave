@@ -36,13 +36,15 @@ import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.DataWriter;
@@ -53,16 +55,13 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.flatten.BitmaskedPairComparator;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,7 +79,7 @@ public class BaseDataStoreUtils
 	public static <T> GeoWaveRow[] getGeoWaveRows(
 			final T entry,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		return getWriteInfo(
 				entry,
@@ -102,7 +101,7 @@ public class BaseDataStoreUtils
 			final QueryFilter clientFilter,
 			final InternalDataAdapter<T> adapter,
 			final AdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final ScanCallback scanCallback,
 			final byte[] fieldSubsetBitmask,
 			final boolean decodeRow )
@@ -295,7 +294,7 @@ public class BaseDataStoreUtils
 	protected static <T> IntermediaryWriteEntryInfo getWriteInfo(
 			final T entry,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final VisibilityWriter<T> customFieldVisibilityWriter ) {
 		final CommonIndexModel indexModel = index.getIndexModel();
 
@@ -380,7 +379,7 @@ public class BaseDataStoreUtils
 	private static <T> List<FieldInfo<?>> composeFlattenedFields(
 			final List<FieldInfo<?>> originalList,
 			final CommonIndexModel model,
-			final WritableDataAdapter<?> writableAdapter ) {
+			final DataAdapter<?> writableAdapter ) {
 		final List<FieldInfo<?>> retVal = new ArrayList<>();
 		final Map<ByteArrayId, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
 		boolean sharedVisibility = false;
@@ -495,15 +494,15 @@ public class BaseDataStoreUtils
 	}
 
 	private static <T> void sortInPlace(
-			final List<Pair<PrimaryIndex, T>> input ) {
+			final List<Pair<Index, T>> input ) {
 		Collections.sort(
 				input,
-				new Comparator<Pair<PrimaryIndex, T>>() {
+				new Comparator<Pair<Index, T>>() {
 
 					@Override
 					public int compare(
-							final Pair<PrimaryIndex, T> o1,
-							final Pair<PrimaryIndex, T> o2 ) {
+							final Pair<Index, T> o1,
+							final Pair<Index, T> o2 ) {
 
 						return o1.getKey().getId().compareTo(
 								o1.getKey().getId());
@@ -511,13 +510,13 @@ public class BaseDataStoreUtils
 				});
 	}
 
-	public static <T> List<Pair<PrimaryIndex, List<T>>> combineByIndex(
-			final List<Pair<PrimaryIndex, T>> input ) {
-		final List<Pair<PrimaryIndex, List<T>>> result = new ArrayList<Pair<PrimaryIndex, List<T>>>();
+	public static <T> List<Pair<Index, List<T>>> combineByIndex(
+			final List<Pair<Index, T>> input ) {
+		final List<Pair<Index, List<T>>> result = new ArrayList<Pair<Index, List<T>>>();
 		sortInPlace(input);
 		List<T> valueSet = new ArrayList<T>();
-		Pair<PrimaryIndex, T> last = null;
-		for (final Pair<PrimaryIndex, T> item : input) {
+		Pair<Index, T> last = null;
+		for (final Pair<Index, T> item : input) {
 			if ((last != null) && !last.getKey().getId().equals(
 					item.getKey().getId())) {
 				result.add(Pair.of(
@@ -537,7 +536,7 @@ public class BaseDataStoreUtils
 		return result;
 	}
 
-	public static List<Pair<PrimaryIndex, List<Short>>> getAdaptersWithMinimalSetOfIndices(
+	public static List<Pair<Index, List<Short>>> getAdaptersWithMinimalSetOfIndices(
 			QueryOptions options,
 			TransientAdapterStore adapterStore,
 			InternalAdapterStore internalAdapterStore,
@@ -552,7 +551,7 @@ public class BaseDataStoreUtils
 				indexStore));
 	}
 
-	private static List<Pair<PrimaryIndex, Short>> compileIndicesForAdapters(
+	private static List<Pair<Index, Short>> compileIndicesForAdapters(
 			QueryOptions options,
 			TransientAdapterStore adapterStore,
 			InternalAdapterStore internalAdapterStore,
@@ -589,7 +588,7 @@ public class BaseDataStoreUtils
 						return input != null;
 					}
 				});
-		final List<Pair<PrimaryIndex, Short>> result = new ArrayList<>();
+		final List<Pair<Index, Short>> result = new ArrayList<>();
 		for (final Short internalAdapterId : internalAdapterIds) {
 			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(internalAdapterId);
 			if (options.getIndex() != null) {
@@ -599,12 +598,12 @@ public class BaseDataStoreUtils
 			}
 			else if ((options.getIndexId() != null) && indices.contains(options.getIndexId())) {
 				result.add(Pair.of(
-						(PrimaryIndex) indexStore.getIndex(options.getIndexId()),
+						(Index) indexStore.getIndex(options.getIndexId()),
 						internalAdapterId));
 			}
 			else if (indices.isNotEmpty()) {
 				for (final ByteArrayId id : indices.getIndexIds()) {
-					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
+					final Index pIndex = (Index) indexStore.getIndex(id);
 					// this could happen if persistent was turned off
 					if (pIndex != null) {
 						result.add(Pair.of(
@@ -617,13 +616,13 @@ public class BaseDataStoreUtils
 		return result;
 	}
 
-	protected static <T> List<Pair<PrimaryIndex, List<T>>> reduceIndicesAndGroupByIndex(
-			final List<Pair<PrimaryIndex, T>> input ) {
-		final List<Pair<PrimaryIndex, T>> result = new ArrayList<>();
+	protected static <T> List<Pair<Index, List<T>>> reduceIndicesAndGroupByIndex(
+			final List<Pair<Index, T>> input ) {
+		final List<Pair<Index, T>> result = new ArrayList<>();
 		// sort by index to eliminate the amount of indices returned
 		sortInPlace(input);
 		final Set<T> adapterSet = new HashSet<T>();
-		for (final Pair<PrimaryIndex, T> item : input) {
+		for (final Pair<Index, T> item : input) {
 			if (adapterSet.add(item.getRight())) {
 				result.add(item);
 			}

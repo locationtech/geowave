@@ -60,7 +60,7 @@ public class WFSTemporalQueryTest extends
 			GeoWavePluginException {
 		dataStore = createDataStore();
 		((GeoWaveGTDataStore) dataStore).indexStore.addIndex(new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions()));
+				.createIndex(new SpatialOptions()));
 		type = DataUtilities.createType(
 				"geostuff",
 				"geometry:Geometry:srid=4326,pop:java.lang.Long,pid:String,start:Date,end:Date");

@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.adapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
@@ -49,7 +50,7 @@ public class AdapterStoreWrapper implements
 			return null;
 		}
 		return new InternalDataAdapterWrapper<>(
-				(WritableDataAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
+				(DataAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
 				internalAdapterId);
 	}
 
@@ -76,7 +77,7 @@ public class AdapterStoreWrapper implements
 							public InternalDataAdapter<?> apply(
 									final DataAdapter<?> input ) {
 								return new InternalDataAdapterWrapper<>(
-										(WritableDataAdapter<?>) input,
+										(DataAdapter<?>) input,
 										internalAdapterStore.getInternalAdapterId(input.getAdapterId()));
 							}
 

@@ -29,20 +29,18 @@ import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
@@ -69,7 +67,7 @@ public class GeoWaveOutputFormat extends
 			final Map<String, String> configOptions = getStoreOptionsMap(context);
 
 			final IndexStore persistentIndexStore = GeoWaveStoreFinder.createIndexStore(configOptions);
-			final Index<?, ?>[] indices = JobContextIndexStore.getIndices(context);
+			final Index[] indices = JobContextIndexStore.getIndices(context);
 			if (LOGGER.isDebugEnabled()) {
 				final StringBuilder sbDebug = new StringBuilder();
 
@@ -96,7 +94,7 @@ public class GeoWaveOutputFormat extends
 				LOGGER.debug(sbDebug.toString());
 			}
 
-			for (final Index<?, ?> i : indices) {
+			for (final Index i : indices) {
 				if (!persistentIndexStore.indexExists(i.getId())) {
 					persistentIndexStore.addIndex(i);
 				}
@@ -152,7 +150,7 @@ public class GeoWaveOutputFormat extends
 
 	public static void addIndex(
 			final Configuration config,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		JobContextIndexStore.addIndex(
 				config,
 				index);
@@ -304,7 +302,7 @@ public class GeoWaveOutputFormat extends
 						"Empty index ID input list");
 			}
 
-			final WritableDataAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
+			final DataAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
 			if (adapter != null) {
 				final IndexWriter indexWriter = getIndexWriter(
 						adapter,
@@ -336,14 +334,14 @@ public class GeoWaveOutputFormat extends
 		}
 
 		private synchronized IndexWriter<?> getIndexWriter(
-				final WritableDataAdapter<?> adapter,
+				final DataAdapter<?> adapter,
 				final Collection<ByteArrayId> indexIds )
 				throws MismatchedIndexToAdapterMapping {
 			IndexWriter<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
-				final List<PrimaryIndex> indices = new ArrayList<>();
+				final List<Index> indices = new ArrayList<>();
 				for (final ByteArrayId indexId : indexIds) {
-					final PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(indexId);
+					final Index index = (Index) indexStore.getIndex(indexId);
 					if (index != null) {
 						indices.add(index);
 					}
@@ -354,7 +352,7 @@ public class GeoWaveOutputFormat extends
 
 				writer = dataStore.createWriter(
 						adapter,
-						indices.toArray(new PrimaryIndex[indices.size()]));
+						indices.toArray(new Index[indices.size()]));
 
 				adapterIdToIndexWriterCache.put(
 						adapter.getAdapterId(),

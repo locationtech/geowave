@@ -16,21 +16,16 @@ import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCoun
 import org.locationtech.geowave.core.store.adapter.statistics.MaxDuplicatesStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
-import org.locationtech.geowave.core.store.filter.AdapterIdQueryFilter;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter;
-import org.locationtech.geowave.core.store.filter.DataIdQueryFilter;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.InsertionIdQueryFilter;
-import org.locationtech.geowave.core.store.filter.PrefixIdQueryFilter;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.NullIndex;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.numeric.NumberRangeFilter;
 import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
 import org.locationtech.geowave.core.store.index.temporal.DateRangeFilter;
@@ -39,11 +34,17 @@ import org.locationtech.geowave.core.store.index.text.TextExactMatchFilter;
 import org.locationtech.geowave.core.store.index.text.TextIndexStrategy;
 import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.locationtech.geowave.core.store.query.CoordinateRangeQuery;
-import org.locationtech.geowave.core.store.query.CoordinateRangeQueryFilter;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CountResult;
 import org.locationtech.geowave.core.store.query.aggregate.DataStatisticsAggregation;
+import org.locationtech.geowave.core.store.query.filter.AdapterIdQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DataIdQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.PrefixIdQueryFilter;
 
 public class StorePersistableRegistry implements
 		PersistableRegistrySpi
@@ -108,7 +109,7 @@ public class StorePersistableRegistry implements
 					NullIndex::new),
 			new PersistableIdAndConstructor(
 					(short) 220,
-					SecondaryIndex::new),
+					SecondaryIndexImpl::new),
 			new PersistableIdAndConstructor(
 					(short) 221,
 					NumberRangeFilter::new),

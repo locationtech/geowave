@@ -45,7 +45,6 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -53,13 +52,13 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
@@ -80,7 +79,7 @@ public class GeoWaveGTDataStore extends
 	protected DataStore dataStore;
 	protected DataStoreOptions dataStoreOptions;
 	protected AdapterIndexMappingStore adapterIndexMappingStore;
-	private final Map<String, PrimaryIndex[]> preferredIndexes = new ConcurrentHashMap<String, PrimaryIndex[]>();
+	private final Map<String, Index[]> preferredIndexes = new ConcurrentHashMap<String, Index[]>();
 
 	private final VisibilityManagement<SimpleFeature> visibilityManagement = VisibilityManagementHelper
 			.loadVisibilityManagement();
@@ -152,9 +151,9 @@ public class GeoWaveGTDataStore extends
 		return dataStatisticsStore;
 	}
 
-	protected PrimaryIndex[] getIndicesForAdapter(
+	protected Index[] getIndicesForAdapter(
 			final GeotoolsFeatureDataAdapter adapter ) {
-		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
+		Index[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
 		if (currentSelections != null) {
 			return currentSelections;
 		}
@@ -190,7 +189,7 @@ public class GeoWaveGTDataStore extends
 			// it is questionable whether createSchema *should* write the
 			// adapter to the store, it is missing the proper index information
 			// at this stage
-			adapter.init(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
+			adapter.init(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 			if (featureNameSpaceURI != null) {
 				adapter.setNamespace(featureNameSpaceURI.toString());
 			}
@@ -347,10 +346,10 @@ public class GeoWaveGTDataStore extends
 		}
 	}
 
-	public PrimaryIndex[] getPreferredIndices(
+	public Index[] getPreferredIndices(
 			final GeotoolsFeatureDataAdapter adapter ) {
 
-		final List<PrimaryIndex> currentSelectionsList = new ArrayList<PrimaryIndex>(
+		final List<Index> currentSelectionsList = new ArrayList<Index>(
 				2);
 		final List<String> indexNames = SimpleFeaturePrimaryIndexConfiguration.getIndexNames(adapter.getFeatureType());
 		final boolean canUseTime = adapter.hasTemporalConstraints();
@@ -359,13 +358,13 @@ public class GeoWaveGTDataStore extends
 		 * Requires the indices to EXIST prior to set up of the adapter.
 		 * Otherwise, only Geospatial is chosen and the index Names are ignored.
 		 */
-		try (CloseableIterator<Index<?, ?>> indices = indexStore.getIndices()) {
+		try (CloseableIterator<Index> indices = indexStore.getIndices()) {
 			while (indices.hasNext()) {
-				final Index<?, ?> nextIndex = indices.next();
-				if (!(nextIndex instanceof PrimaryIndex)) {
+				final Index nextIndex = indices.next();
+				if (!(nextIndex instanceof Index)) {
 					continue;
 				}
-				final PrimaryIndex index = (PrimaryIndex) nextIndex;
+				final Index index = (Index) nextIndex;
 
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
@@ -400,9 +399,9 @@ public class GeoWaveGTDataStore extends
 		}
 
 		if (currentSelectionsList.isEmpty()) {
-			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions()));
+			currentSelectionsList.add(new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions()));
 		}
 
-		return currentSelectionsList.toArray(new PrimaryIndex[currentSelectionsList.size()]);
+		return currentSelectionsList.toArray(new Index[currentSelectionsList.size()]);
 	}
 }

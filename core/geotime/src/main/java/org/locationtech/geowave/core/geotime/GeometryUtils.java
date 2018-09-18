@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
 import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
 import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
@@ -421,11 +421,11 @@ public class GeometryUtils
 	}
 
 	public static CoordinateReferenceSystem getIndexCrs(
-			final PrimaryIndex[] indices ) {
+			final Index[] indices ) {
 
 		CoordinateReferenceSystem indexCrs = null;
 
-		for (final PrimaryIndex primaryindx : indices) {
+		for (final Index primaryindx : indices) {
 
 			// for first iteration
 			if (indexCrs == null) {
@@ -455,7 +455,7 @@ public class GeometryUtils
 	}
 
 	public static CoordinateReferenceSystem getIndexCrs(
-			final PrimaryIndex index ) {
+			final Index index ) {
 
 		CoordinateReferenceSystem indexCrs = null;
 

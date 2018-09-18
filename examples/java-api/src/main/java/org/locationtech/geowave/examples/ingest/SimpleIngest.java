@@ -26,8 +26,8 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
@@ -161,7 +161,7 @@ public class SimpleIngest
 	 *
 	 * @return GeoWave index for a default SPATIAL index
 	 */
-	public static PrimaryIndex createSpatialIndex() {
+	public static Index createSpatialIndex() {
 
 		// Reasonable values for spatial and spatial-temporal are provided
 		// through index builders.

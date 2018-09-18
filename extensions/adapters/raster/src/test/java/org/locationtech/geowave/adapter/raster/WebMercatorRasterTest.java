@@ -29,19 +29,19 @@ import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterConfig;
 import org.locationtech.geowave.adapter.raster.plugin.GeoWaveRasterReader;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.IndexOnlySpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -91,7 +91,7 @@ public class WebMercatorRasterTest
 				maxesPerBand,
 				namesPerBand,
 				new NoDataMergeStrategy());
-		PrimaryIndex index = new SpatialIndexBuilder().setCrs(
+		Index index = new SpatialIndexBuilder().setCrs(
 				CRS_STR) // 3857
 				.createIndex();
 		adapter.init(index);

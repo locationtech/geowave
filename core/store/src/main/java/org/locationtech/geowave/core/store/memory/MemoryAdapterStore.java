@@ -21,8 +21,8 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 /**
  * This is a simple HashMap based in-memory implementation of the AdapterStore

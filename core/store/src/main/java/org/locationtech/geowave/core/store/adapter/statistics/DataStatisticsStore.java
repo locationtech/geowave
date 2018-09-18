@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.DataStatistics;
 
 /**
  * This is responsible for persisting data statistics (either in memory or to

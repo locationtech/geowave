@@ -22,8 +22,8 @@ import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
@@ -36,7 +36,7 @@ public class RasterTileResizeHelper
 	private RasterDataAdapter newAdapter;
 	private final short oldInternalAdapterId;
 	private final short newInternalAdapterId;
-	private final PrimaryIndex index;
+	private final Index index;
 	private final List<ByteArrayId> indexIds;
 
 	public RasterTileResizeHelper(

@@ -8,62 +8,56 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.filter;
+package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
-import java.util.Objects;
+import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
-public class InsertionIdQueryFilter implements
+public class PrefixIdQueryFilter implements
 		DistributableQueryFilter
 {
 	private byte[] partitionKey;
-	private byte[] sortKey;
-	private byte[] dataId;
+	private byte[] sortKeyPrefix;
 
-	public InsertionIdQueryFilter() {}
+	public PrefixIdQueryFilter() {}
 
-	public InsertionIdQueryFilter(
+	public PrefixIdQueryFilter(
 			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
-			final ByteArrayId dataId ) {
-		this.partitionKey = partitionKey != null ? partitionKey.getBytes() : new byte[] {};
-		this.sortKey = sortKey != null ? sortKey.getBytes() : new byte[] {};
-		this.dataId = dataId != null ? dataId.getBytes() : new byte[] {};
+			final ByteArrayId sortKeyPrefix ) {
+		this.partitionKey = ((partitionKey != null) && (partitionKey.getBytes() != null)) ? partitionKey.getBytes()
+				: new byte[0];
+		this.sortKeyPrefix = sortKeyPrefix.getBytes();
 	}
 
 	@Override
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding persistenceEncoding ) {
-		return Objects.deepEquals(
+		final ByteArrayId otherPartitionKey = persistenceEncoding.getInsertionPartitionKey();
+		final byte[] otherPartitionKeyBytes = ((otherPartitionKey != null) && (otherPartitionKey.getBytes() != null)) ? otherPartitionKey
+				.getBytes() : new byte[0];
+		final ByteArrayId sortKey = persistenceEncoding.getInsertionSortKey();
+		return (Arrays.equals(
+				sortKeyPrefix,
+				Arrays.copyOf(
+						sortKey.getBytes(),
+						sortKeyPrefix.length)) && Arrays.equals(
 				partitionKey,
-				persistenceEncoding.getInsertionPartitionKey() != null ? persistenceEncoding
-						.getInsertionPartitionKey()
-						.getBytes() : new byte[] {})
-				&& Objects.deepEquals(
-						sortKey,
-						persistenceEncoding.getInsertionSortKey() != null ? persistenceEncoding
-								.getInsertionSortKey()
-								.getBytes() : new byte[] {})
-				&& Objects.deepEquals(
-						dataId,
-						persistenceEncoding.getDataId() != null ? persistenceEncoding.getDataId().getBytes()
-								: new byte[] {});
+				otherPartitionKeyBytes));
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer buf = ByteBuffer.allocate(12 + partitionKey.length + sortKey.length + dataId.length);
+		final ByteBuffer buf = ByteBuffer.allocate(8 + partitionKey.length + sortKeyPrefix.length);
 		buf.putInt(partitionKey.length);
 		buf.put(partitionKey);
-		buf.putInt(sortKey.length);
-		buf.put(sortKey);
-		buf.putInt(dataId.length);
-		buf.put(dataId);
+		buf.putInt(sortKeyPrefix.length);
+		buf.put(sortKeyPrefix);
+
 		return buf.array();
 	}
 
@@ -73,10 +67,7 @@ public class InsertionIdQueryFilter implements
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		partitionKey = new byte[buf.getInt()];
 		buf.get(partitionKey);
-		sortKey = new byte[buf.getInt()];
-		buf.get(sortKey);
-		dataId = new byte[buf.getInt()];
-		buf.get(dataId);
+		sortKeyPrefix = new byte[buf.getInt()];
+		buf.get(sortKeyPrefix);
 	}
-
 }

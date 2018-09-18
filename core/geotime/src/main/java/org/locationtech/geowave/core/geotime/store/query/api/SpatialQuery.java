@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.geotime.store.query;
+package org.locationtech.geowave.core.geotime.store.query.api;
 
 import java.nio.ByteBuffer;
 import java.util.Collections;
@@ -25,13 +25,13 @@ import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.Com
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.query.BasicQuery;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -248,7 +248,7 @@ public class SpatialQuery extends
 			final MultiDimensionalNumericData constraints,
 			final NumericDimensionField<?>[] orderedConstrainedDimensionFields,
 			final NumericDimensionField<?>[] unconstrainedDimensionDefinitions,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		return new SpatialQueryFilter(
 				constraints,
 				orderedConstrainedDimensionFields,
@@ -259,7 +259,7 @@ public class SpatialQuery extends
 	}
 
 	private Geometry internalGetGeometry(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final String indexCrsStr = getCrs(index.getIndexModel());
 		CrsCache cache = crsCodeCache.get(indexCrsStr);
 		if (cache != null) {
@@ -276,7 +276,7 @@ public class SpatialQuery extends
 
 	@Override
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final String indexCrsStr = getCrs(index.getIndexModel());
 		CrsCache cache = crsCodeCache.get(indexCrsStr);
 		if (cache != null) {
@@ -309,7 +309,7 @@ public class SpatialQuery extends
 
 	private CrsCache transformToIndex(
 			final String indexCrsStr,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (crsMatches(
 				crsCode,
 				indexCrsStr) || queryGeometry == null) {
@@ -390,7 +390,7 @@ public class SpatialQuery extends
 
 	private static List<MultiDimensionalNumericData> indexConstraintsFromGeometry(
 			Geometry geom,
-			PrimaryIndex index ) {
+			Index index ) {
 		return GeometryUtils.basicConstraintsFromGeometry(
 				geom).getIndexConstraints(
 				index.getIndexStrategy());

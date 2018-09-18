@@ -8,14 +8,12 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.query;
+package org.locationtech.geowave.core.store.api;
 
 import java.util.List;
 
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * This interface fully describes a query
@@ -36,7 +34,7 @@ public interface Query
 	 * @return A list of the query filters
 	 */
 	public List<QueryFilter> createFilters(
-			PrimaryIndex index );
+			Index index );
 
 	/**
 	 * Return a set of constraints to apply to the primary index based on the
@@ -51,6 +49,6 @@ public interface Query
 	 *         constraints for the index
 	 */
 	public List<MultiDimensionalNumericData> getIndexConstraints(
-			PrimaryIndex index );
+			Index index );
 
 }

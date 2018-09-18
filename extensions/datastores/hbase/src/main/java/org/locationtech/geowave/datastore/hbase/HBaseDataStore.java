@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
@@ -36,8 +36,8 @@ import org.locationtech.geowave.datastore.hbase.server.RowMergingServerOp;
 import org.locationtech.geowave.datastore.hbase.server.RowMergingVisibilityServerOp;
 import org.locationtech.geowave.mapreduce.BaseMapReduceDataStore;
 
-public class HBaseDataStore extends
-		BaseMapReduceDataStore
+public class HBaseDataStore<T> extends
+		BaseMapReduceDataStore<T>
 {
 	public HBaseDataStore(
 			final HBaseOperations operations,
@@ -87,7 +87,7 @@ public class HBaseDataStore extends
 	@Override
 	protected <T> void initOnIndexWriterCreate(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final String indexName = index.getId().getString();
 		final boolean rowMerging = adapter.getAdapter() instanceof RowMergingDataAdapter;
 		if (rowMerging) {

@@ -30,12 +30,12 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
@@ -62,8 +62,7 @@ public class GeotoolsQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static DataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(

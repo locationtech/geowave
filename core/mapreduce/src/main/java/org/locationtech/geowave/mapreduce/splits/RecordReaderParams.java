@@ -16,10 +16,10 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 
 public class RecordReaderParams<T> extends
 		BaseReaderParams<T>
@@ -27,7 +27,7 @@ public class RecordReaderParams<T> extends
 	private final GeoWaveRowRange rowRange;
 
 	public RecordReaderParams(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final Collection<Short> adapterIds,
 			final double[] maxResolutionSubsamplingPerDimension,

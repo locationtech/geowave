@@ -76,7 +76,7 @@ public class KMeansIterationsJobRunnerTest
 				"centroid");
 		propertyMgt.store(
 				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString());
 		propertyMgt.store(
 				ClusteringParameters.Clustering.CONVERGANCE_TOLERANCE,
@@ -284,7 +284,7 @@ public class KMeansIterationsJobRunnerTest
 
 				@Override
 				public ByteArrayId getIndexId() {
-					return new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+					return new SpatialDimensionalityTypeProvider().createIndex(
 							new SpatialOptions()).getId();
 				}
 

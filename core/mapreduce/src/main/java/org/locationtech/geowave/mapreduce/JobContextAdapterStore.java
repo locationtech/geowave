@@ -22,11 +22,11 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 
 /**
  * This class implements an adapter store by first checking the job context for

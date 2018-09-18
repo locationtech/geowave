@@ -18,22 +18,22 @@ import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class IndependentAdapterIndexWriter<T> implements
 		IndexWriter<T>
 {
 
 	final IndexDependentDataAdapter<T> adapter;
-	final PrimaryIndex index;
+	final Index index;
 	final IndexWriter<T> writer;
 
 	public IndependentAdapterIndexWriter(
 			IndexDependentDataAdapter<T> adapter,
-			PrimaryIndex index,
+			Index index,
 			IndexWriter<T> writer ) {
 		super();
 		this.writer = writer;
@@ -82,7 +82,7 @@ public class IndependentAdapterIndexWriter<T> implements
 	}
 
 	@Override
-	public PrimaryIndex[] getIndices() {
+	public Index[] getIndices() {
 		return writer.getIndices();
 	}
 

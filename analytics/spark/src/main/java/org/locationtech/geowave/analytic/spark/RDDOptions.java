@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark;
 
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 
 public class RDDOptions
 {

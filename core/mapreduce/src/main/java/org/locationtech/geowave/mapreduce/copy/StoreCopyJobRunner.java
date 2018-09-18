@@ -26,11 +26,9 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterIndexMappingStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -139,17 +137,17 @@ public class StoreCopyJobRunner extends
 			}
 		}
 
-		try (CloseableIterator<Index<?, ?>> indexIt = inputStoreOptions.createIndexStore().getIndices()) {
+		try (CloseableIterator<Index> indexIt = inputStoreOptions.createIndexStore().getIndices()) {
 			while (indexIt.hasNext()) {
-				Index<?, ?> index = indexIt.next();
-				if (index instanceof PrimaryIndex) {
-					LOGGER.debug("Adding index to output config: "
-							+ StringUtils.stringFromBinary(index.getId().getBytes()));
+				Index index = indexIt.next();
 
-					GeoWaveOutputFormat.addIndex(
-							job.getConfiguration(),
-							(PrimaryIndex) index);
-				}
+				LOGGER
+						.debug("Adding index to output config: "
+								+ StringUtils.stringFromBinary(index.getId().getBytes()));
+
+				GeoWaveOutputFormat.addIndex(
+						job.getConfiguration(),
+						(Index) index);
 			}
 		}
 

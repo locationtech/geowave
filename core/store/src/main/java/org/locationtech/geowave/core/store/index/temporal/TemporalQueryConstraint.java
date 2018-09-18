@@ -17,8 +17,8 @@ import java.util.List;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 /**
  * A class based on FilterableConstraints that uses temporal values and includes

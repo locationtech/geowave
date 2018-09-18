@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,8 +21,8 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
  * table named with the provided ID and primarily useful to access the data by
  * row ID. Because it has no dimensions, range scans will result in full table
  * scans.
- * 
- * 
+ *
+ *
  */
 public class NullIndex extends
 		PrimaryIndex

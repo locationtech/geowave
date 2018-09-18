@@ -34,13 +34,12 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.slf4j.Logger;
@@ -303,7 +302,7 @@ public class AdapterBasedPartitioner extends
 		public void addAdapter(
 				final DataAdapter<?> adapter ) {
 			adapterStore.addAdapter(new InternalDataAdapterWrapper(
-					(WritableDataAdapter) adapter,
+					(DataAdapter) adapter,
 					internalAdapterStore.addAdapterId(adapter.getAdapterId())));
 		}
 

@@ -42,8 +42,8 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
@@ -61,10 +61,10 @@ import com.vividsolutions.jts.geom.PrecisionModel;
 
 public class QueryIndexHelperTest
 {
-	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
-	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialTemporalOptions());
+	private static final Index SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createIndex(new SpatialOptions());
+	private static final Index SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
+			.createIndex(new SpatialTemporalOptions());
 	final ByteArrayId dataAdapterId = new ByteArrayId(
 			"123");
 

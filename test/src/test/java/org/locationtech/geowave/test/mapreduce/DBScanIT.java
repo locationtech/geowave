@@ -47,12 +47,12 @@ import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitio
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.DataStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
@@ -236,7 +236,7 @@ public class DBScanIT extends
 				dataStorePluginOptions.createInternalAdapterStore().addAdapterId(
 						new ByteArrayId(
 								"concave_hull")),
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString(),
 				"bx5",
 				0);

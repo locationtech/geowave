@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.ingest.avro.AbstractStageWholeFileToAvro;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,7 +100,7 @@ abstract public class AbstractLocalIngestWithMapper<T> extends
 		}
 
 		@Override
-		public WritableDataAdapter<T>[] getDataAdapters(
+		public DataAdapter<T>[] getDataAdapters(
 				final String globalVisibility ) {
 			return parentPlugin.getDataAdapters(globalVisibility);
 		}

@@ -11,8 +11,8 @@
 package org.locationtech.geowave.datastore.cassandra;
 
 import org.locationtech.geowave.core.store.BaseDataStoreFamily;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GenericStoreFactory;
+import org.locationtech.geowave.core.store.api.DataStore;
 
 public class CassandraStoreFactoryFamily extends
 		BaseDataStoreFamily

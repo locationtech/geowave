@@ -11,19 +11,20 @@
 package org.locationtech.geowave.core.store.adapter;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class InternalDataAdapterWrapper<T> implements
 		InternalDataAdapter<T>
 {
-	private WritableDataAdapter<T> adapter;
+	private DataAdapter<T> adapter;
 	private short internalAdapterId;
 
 	public InternalDataAdapterWrapper(
-			WritableDataAdapter<T> adapter,
+			DataAdapter<T> adapter,
 			short internalAdapterId ) {
 		this.adapter = adapter;
 		this.internalAdapterId = internalAdapterId;
@@ -68,7 +69,7 @@ public class InternalDataAdapterWrapper<T> implements
 
 	public T decode(
 			IndexedAdapterPersistenceEncoding data,
-			PrimaryIndex index ) {
+			Index index ) {
 		return adapter.decode(
 				data,
 				index);
@@ -101,12 +102,12 @@ public class InternalDataAdapterWrapper<T> implements
 	}
 
 	public void init(
-			PrimaryIndex... indices ) {
+			Index... indices ) {
 		adapter.init(indices);
 	}
 
 	@Override
-	public WritableDataAdapter<?> getAdapter() {
+	public DataAdapter<?> getAdapter() {
 		return adapter;
 	}
 }

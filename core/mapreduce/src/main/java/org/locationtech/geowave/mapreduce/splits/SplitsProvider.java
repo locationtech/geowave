@@ -29,7 +29,6 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -37,12 +36,13 @@ import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.MapReduceUtils;
 import org.slf4j.Logger;
@@ -73,18 +73,17 @@ public class SplitsProvider
 			throws IOException,
 			InterruptedException {
 
-		final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>>();
+		final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>>();
 
 		final List<InputSplit> retVal = new ArrayList<InputSplit>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
 		final Map<ByteArrayId, List<Short>> indexIdToAdaptersMap = new HashMap<>();
-		for (final Pair<PrimaryIndex, List<Short>> indexAdapterIdPair : BaseDataStoreUtils
-				.getAdaptersWithMinimalSetOfIndices(
-						queryOptions,
-						adapterStore,
-						internalAdapterStore,
-						adapterIndexMappingStore,
-						indexStore)) {
+		for (final Pair<Index, List<Short>> indexAdapterIdPair : BaseDataStoreUtils.getAdaptersWithMinimalSetOfIndices(
+				queryOptions,
+				adapterStore,
+				internalAdapterStore,
+				adapterIndexMappingStore,
+				indexStore)) {
 			indexIdToAdaptersMap.put(
 					indexAdapterIdPair.getKey().getId(),
 					indexAdapterIdPair.getValue());
@@ -165,9 +164,9 @@ public class SplitsProvider
 	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -302,11 +301,11 @@ public class SplitsProvider
 	}
 
 	protected RowRangeHistogramStatistics<?> getHistStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
 			final ByteArrayId partitionKey,
 			final String[] authorizations )
 			throws IOException {
@@ -358,7 +357,7 @@ public class SplitsProvider
 	}
 
 	private RowRangeHistogramStatistics<?> getRangeStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore store,
@@ -384,7 +383,7 @@ public class SplitsProvider
 	}
 
 	protected PartitionStatistics<?> getPartitionStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
 
 			final DataStatisticsStore store,

@@ -121,7 +121,7 @@ public class ConvexHullJobRunner extends
 		checkIndex(
 				runTimeProperties,
 				HullParameters.Hull.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getId().getString());
 		// HP Fortify "Command Injection" false positive
 		// What Fortify considers "externally-influenced input"

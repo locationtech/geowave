@@ -19,19 +19,18 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.DeleteCallbackList;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataAdapter;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataManager;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
@@ -59,7 +58,7 @@ public class DataStoreCallbackManager
 
 	public <T> IngestCallback<T> getIngestCallback(
 			final InternalDataAdapter<T> writableAdapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (!icache.containsKey(writableAdapter.getInternalAdapterId())) {
 			final DataStoreStatisticsProvider<T> statsProvider = new DataStoreStatisticsProvider<T>(
 					writableAdapter,
@@ -95,7 +94,7 @@ public class DataStoreCallbackManager
 
 	public <T> DeleteCallback<T, GeoWaveRow> getDeleteCallback(
 			final InternalDataAdapter<T> writableAdapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (!dcache.containsKey(writableAdapter.getInternalAdapterId())) {
 			final DataStoreStatisticsProvider<T> statsProvider = new DataStoreStatisticsProvider<T>(
 					writableAdapter,

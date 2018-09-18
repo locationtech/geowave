@@ -16,8 +16,8 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.simple.HashKeyIndexStrategy;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.remote.options.BasicIndexOptions;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
@@ -114,17 +114,17 @@ public class IndexPluginOptions extends
 		return indexPlugin;
 	}
 
-	public PrimaryIndex createPrimaryIndex() {
-		final PrimaryIndex index = indexPlugin.createPrimaryIndex(indexOptions);
+	public Index createIndex() {
+		final Index index = indexPlugin.createIndex(indexOptions);
 		return wrapIndexWithOptions(
 				index,
 				this);
 	}
 
-	private static PrimaryIndex wrapIndexWithOptions(
-			final PrimaryIndex index,
+	private static Index wrapIndexWithOptions(
+			final Index index,
 			final IndexPluginOptions options ) {
-		PrimaryIndex retVal = index;
+		Index retVal = index;
 		if ((options.basicIndexOptions.getNumPartitions() > 1)
 				&& options.basicIndexOptions.getPartitionStrategy().equals(
 						PartitionStrategy.ROUND_ROBIN)) {
@@ -213,8 +213,8 @@ public class IndexPluginOptions extends
 			return (T) this;
 		}
 
-		public PrimaryIndex createIndex(
-				final PrimaryIndex dimensionalityIndex ) {
+		public Index createIndex(
+				final Index dimensionalityIndex ) {
 			return wrapIndexWithOptions(
 					dimensionalityIndex,
 					options);

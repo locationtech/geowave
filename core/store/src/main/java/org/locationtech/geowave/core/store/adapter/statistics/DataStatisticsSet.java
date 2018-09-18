@@ -10,6 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter.statistics;
 
+import org.locationtech.geowave.core.store.api.DataStatistics;
+
 public interface DataStatisticsSet<T> extends
 		DataStatistics<T>
 {

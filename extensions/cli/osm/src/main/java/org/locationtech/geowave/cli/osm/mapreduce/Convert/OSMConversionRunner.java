@@ -36,8 +36,8 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -179,8 +179,7 @@ public class OSMConversionRunner extends
 					fda);
 		}
 
-		final PrimaryIndex primaryIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index primaryIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				primaryIndex);

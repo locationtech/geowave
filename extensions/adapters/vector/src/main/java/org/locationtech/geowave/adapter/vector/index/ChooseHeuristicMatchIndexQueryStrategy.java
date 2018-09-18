@@ -19,9 +19,8 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.BasicQuery;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -45,13 +44,13 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 	}
 
 	@Override
-	public CloseableIterator<Index<?, ?>> getIndices(
+	public CloseableIterator<Index> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
-			final PrimaryIndex[] indices,
+			final Index[] indices,
 			final Map<QueryHint, Object> hints ) {
-		return new CloseableIterator<Index<?, ?>>() {
-			PrimaryIndex nextIdx = null;
+		return new CloseableIterator<Index>() {
+			Index nextIdx = null;
 			boolean done = false;
 			int i = 0;
 
@@ -59,7 +58,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 			public boolean hasNext() {
 				double bestIndexBitsUsed = -1;
 				int bestIndexDimensionCount = -1;
-				PrimaryIndex bestIdx = null;
+				Index bestIdx = null;
 				while (!done && (i < indices.length)) {
 					nextIdx = indices[i++];
 					if (nextIdx.getIndexStrategy().getOrderedDimensionDefinitions().length == 0) {
@@ -106,12 +105,12 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 			}
 
 			@Override
-			public Index<?, ?> next()
+			public Index next()
 					throws NoSuchElementException {
 				if (nextIdx == null) {
 					throw new NoSuchElementException();
 				}
-				final Index<?, ?> returnVal = nextIdx;
+				final Index returnVal = nextIdx;
 				nextIdx = null;
 				return returnVal;
 			}

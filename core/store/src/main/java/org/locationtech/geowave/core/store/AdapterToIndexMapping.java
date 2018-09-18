@@ -16,8 +16,8 @@ import java.util.Arrays;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 /**
  * Meta-data for retaining Adapter to Index association
@@ -37,7 +37,7 @@ public class AdapterToIndexMapping implements
 
 	public AdapterToIndexMapping(
 			short internalAdapterId,
-			PrimaryIndex[] indices ) {
+			Index[] indices ) {
 		super();
 		this.internalAdapterId = internalAdapterId;
 		this.indexIds = new ByteArrayId[indices.length];
@@ -61,11 +61,11 @@ public class AdapterToIndexMapping implements
 		return indexIds;
 	}
 
-	public PrimaryIndex[] getIndices(
+	public Index[] getIndices(
 			IndexStore indexStore ) {
-		final PrimaryIndex[] indices = new PrimaryIndex[indexIds.length];
+		final Index[] indices = new Index[indexIds.length];
 		for (int i = 0; i < this.indexIds.length; i++) {
-			indices[i] = (PrimaryIndex) indexStore.getIndex(this.indexIds[i]);
+			indices[i] = (Index) indexStore.getIndex(this.indexIds[i]);
 		}
 		return indices;
 	}

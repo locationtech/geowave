@@ -17,13 +17,13 @@ import java.util.List;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.format.sentinel2.IngestRunner;
 import org.locationtech.geowave.format.sentinel2.RasterIngestRunner;
 import org.locationtech.geowave.format.sentinel2.Sentinel2BasicCommandLineOptions;
@@ -69,7 +69,7 @@ public class IngestRunner extends
 		super.processParameters(params);
 
 		final DataStore vectorStore;
-		final PrimaryIndex[] vectorIndices;
+		final Index[] vectorIndices;
 
 		// Config file
 		final File configFile = (File) params.getContext().get(
@@ -106,10 +106,10 @@ public class IngestRunner extends
 			}
 
 			final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
-			vectorIndices = new PrimaryIndex[indexOptions.size()];
+			vectorIndices = new Index[indexOptions.size()];
 			int i = 0;
 			for (final IndexPluginOptions dimensionType : indexOptions) {
-				final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
+				final Index primaryIndex = dimensionType.createIndex();
 				if (primaryIndex == null) {
 					LOGGER.error("Could not get index instance, getIndex() returned null;");
 					throw new IOException(

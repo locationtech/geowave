@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.store.query.aggregate;
 
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
 public interface CommonIndexAggregation<P extends Persistable, R extends Mergeable> extends

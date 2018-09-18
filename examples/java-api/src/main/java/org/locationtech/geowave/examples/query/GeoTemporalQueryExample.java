@@ -33,13 +33,13 @@ import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
-import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
+import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
@@ -70,8 +70,8 @@ public class GeoTemporalQueryExample
 	private static MiniAccumuloClusterImpl accumulo;
 	private static AccumuloDataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialTemporalOptions());
+	private static final Index index = new SpatialTemporalDimensionalityTypeProvider()
+			.createIndex(new SpatialTemporalOptions());
 	private static final FeatureDataAdapter adapter = new FeatureDataAdapter(
 			getPointSimpleFeatureType());
 

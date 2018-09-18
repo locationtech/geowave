@@ -25,30 +25,31 @@ import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
@@ -59,15 +60,14 @@ import org.locationtech.geowave.core.store.query.AdapterQuery;
 import org.locationtech.geowave.core.store.query.EverythingQuery;
 import org.locationtech.geowave.core.store.query.InsertionIdQuery;
 import org.locationtech.geowave.core.store.query.PrefixIdQuery;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
-public class BaseDataStore implements
-		DataStore
+public class BaseDataStore<T> implements
+		DataStore<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseDataStore.class);
 
@@ -103,7 +103,7 @@ public class BaseDataStore implements
 	}
 
 	public void store(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (baseOptions.isPersistIndex() && !indexStore.indexExists(index.getId())) {
 			indexStore.addIndex(index);
 		}
@@ -122,9 +122,9 @@ public class BaseDataStore implements
 	}
 
 	@Override
-	public <T> IndexWriter<T> createWriter(
-			final WritableDataAdapter<T> adapter,
-			final PrimaryIndex... indices )
+	public IndexWriter<T> createWriter(
+			final DataAdapter<T> adapter,
+			final Index... indices )
 			throws MismatchedIndexToAdapterMapping {
 		adapter.init(indices);
 		// add internal adapter
@@ -139,7 +139,7 @@ public class BaseDataStore implements
 		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
 
 		int i = 0;
-		for (final PrimaryIndex index : indices) {
+		for (final Index index : indices) {
 			final DataStoreCallbackManager callbackManager = new DataStoreCallbackManager(
 					statisticsStore,
 					secondaryIndexDataStore,
@@ -192,7 +192,7 @@ public class BaseDataStore implements
 	}
 
 	@Override
-	public <T> CloseableIterator<T> query(
+	public CloseableIterator<T> query(
 			final QueryOptions queryOptions,
 			final Query query ) {
 		return internalQuery(
@@ -261,7 +261,7 @@ public class BaseDataStore implements
 			// keep a list of adapters that have been queried, to only load an
 			// adapter to be queried once
 			final Set<Short> queriedAdapters = new HashSet<Short>();
-			for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
+			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getAdaptersWithMinimalSetOfIndices(
 							tempAdapterStore,
 							indexMappingStore,
@@ -276,7 +276,7 @@ public class BaseDataStore implements
 						deleteCallbacks.add(callbackCache);
 						final ScanCallback callback = sanitizedQueryOptions.getScanCallback();
 
-						final PrimaryIndex index = indexAdapterPair.getLeft();
+						final Index index = indexAdapterPair.getLeft();
 						sanitizedQueryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
 
 							@Override
@@ -405,12 +405,12 @@ public class BaseDataStore implements
 		final Set<Short> queriedAdapters = new HashSet<Short>();
 		Deleter idxDeleter = null, altIdxDeleter = null;
 		try {
-			for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
+			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getIndicesForAdapters(
 							adapterStore,
 							indexMappingStore,
 							indexStore)) {
-				final PrimaryIndex index = indexAdapterPair.getLeft();
+				final Index index = indexAdapterPair.getLeft();
 				if (index == null) {
 					continue;
 				}
@@ -572,7 +572,7 @@ public class BaseDataStore implements
 
 	private <T> void deleteEntries(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final String... additionalAuthorizations )
 			throws IOException {
 		final String altIdxTableName = index.getId().getString() + ALT_INDEX_TABLE;
@@ -611,7 +611,7 @@ public class BaseDataStore implements
 
 	protected CloseableIterator<Object> queryConstraints(
 			final List<Short> adapterIdsToQuery,
-			final PrimaryIndex index,
+			final Index index,
 			final Query sanitizedQuery,
 			final DedupeFilter filter,
 			final BaseQueryOptions sanitizedQueryOptions,
@@ -657,7 +657,7 @@ public class BaseDataStore implements
 	}
 
 	protected CloseableIterator<Object> queryRowPrefix(
-			final PrimaryIndex index,
+			final Index index,
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortPrefix,
 			final BaseQueryOptions sanitizedQueryOptions,
@@ -693,7 +693,7 @@ public class BaseDataStore implements
 
 	protected CloseableIterator<Object> queryInsertionId(
 			final InternalDataAdapter<?> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final InsertionIdQuery query,
 			final DedupeFilter filter,
 			final BaseQueryOptions sanitizedQueryOptions,
@@ -730,7 +730,7 @@ public class BaseDataStore implements
 
 	protected <T> IndexWriter<T> createIndexWriter(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final DataStoreOperations baseOperations,
 			final DataStoreOptions baseOptions,
 			final IngestCallback<T> callback,
@@ -746,7 +746,7 @@ public class BaseDataStore implements
 
 	protected <T> void initOnIndexWriterCreate(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {}
+			final Index index ) {}
 
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
@@ -756,7 +756,7 @@ public class BaseDataStore implements
 		try {
 			callbacks.add(new AltIndexCallback<T>(
 					indexName,
-					(WritableDataAdapter<T>) adapter,
+					(DataAdapter<T>) adapter,
 					primaryIndexId));
 
 		}
@@ -774,14 +774,14 @@ public class BaseDataStore implements
 				new byte[0]);
 		private final ByteArrayId EMPTY_FIELD_ID = new ByteArrayId(
 				new byte[0]);
-		private final WritableDataAdapter<T> adapter;
+		private final DataAdapter<T> adapter;
 		private final String altIdxTableName;
 		private final ByteArrayId primaryIndexId;
 		private final ByteArrayId altIndexId;
 
 		public AltIndexCallback(
 				final String indexName,
-				final WritableDataAdapter<T> adapter,
+				final DataAdapter<T> adapter,
 				final ByteArrayId primaryIndexId ) {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
@@ -840,5 +840,33 @@ public class BaseDataStore implements
 				}
 			}
 		}
+	}
+
+	@Override
+	public CloseableIterator<DataStatistics<T>> getDataStatistics(
+			ByteArrayId adapterId,
+			String... authorizations ) {
+		if (adapterId == null) {
+			return (CloseableIterator) statisticsStore.getAllDataStatistics(authorizations);
+		}
+		Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+		if (internalAdapterId == null) {
+			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "'");
+			return new CloseableIterator.Empty<>();
+		}
+		return (CloseableIterator) statisticsStore.getDataStatistics(
+				internalAdapterId,
+				authorizations);
+	}
+
+	@Override
+	public CloseableIterator<DataAdapter<T>> getAdapters() {
+		CloseableIterator<InternalDataAdapter<?> >it = adapterStore.getAdapters();
+		return new CloseableIteratorWrapper<DataAdapter<T>>(it,Iterators.transform(it, a -> (DataAdapter<T>)a.getAdapter()));
+	}
+
+	@Override
+	public CloseableIterator<Index> getIndices() {
+		return indexStore.getIndices();
 	}
 }

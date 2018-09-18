@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.filter;
+package org.locationtech.geowave.core.store.query.filter;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,12 +23,12 @@ import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.BasicQueryTest;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
+import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 
 public class DistributedQueryFilterTest
 {
