@@ -63,11 +63,11 @@ OPTIONS
 //:-------
 
 - -cce, --centroidExtractorClass
- * Centroid Exractor Class implements _mil.nga.giat.geowave.analytics.extract.CentroidExtractor_
+ * Centroid Exractor Class implements _org.locationtech.geowave.analytics.extract.CentroidExtractor_
 - -cid, --centroidIndexId
  * Index Identifier for Centroids
 - -cfc, --centroidWrapperFactoryClass
- * A factory class that implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+ * A factory class that implements _org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory_
 - -czl, --centroidZoomLevel
  * Zoom Level Number
 - -cct, --clusteringConverganceTolerance
@@ -79,9 +79,9 @@ OPTIONS
 - * -zl, --clusteringZoomLevels
  * Number of Zoom Levels to Process
 - -dde, --commonDimensionExtractClass
- * Dimension Extractor Class implements _mil.nga.giat.geowave.analytics.extract.DimensionExtractor_
+ * Dimension Extractor Class implements _org.locationtech.geowave.analytics.extract.DimensionExtractor_
 - -cdf, --commonDistanceFunctionClass
- * Distance Function Class implements _mil.nga.giat.geowave.analytics.distance.DistanceFn_
+ * Distance Function Class implements _org.locationtech.geowave.analytics.distance.DistanceFn_
 - -ens, --extractDataNamespaceUri
  * Output Data Namespace URI
 - -ede, --extractDimensionExtractClass
@@ -107,11 +107,11 @@ OPTIONS
 - -hid, --hullIndexId
  * Index Identifier for Centroids
 - -hpe, --hullProjectionClass
- * Class to project on to 2D space. Implements _mil.nga.giat.geowave.analytics.tools.Projection_
+ * Class to project on to 2D space. Implements _org.locationtech.geowave.analytics.tools.Projection_
 - -hrc, --hullReducerCount
  * Centroid Reducer Count
 - -hfc, --hullWrapperFactoryClass
- * Class to create analytic item to capture hulls. Implements _mil.nga.giat.geowave.analytics.tools.AnalyticItemWrapperFactory_
+ * Class to create analytic item to capture hulls. Implements _org.locationtech.geowave.analytics.tools.AnalyticItemWrapperFactory_
 - -ifc, --inputFormatClass
  * Input Format Class
 - -conf, --mapReduceConfigFile
