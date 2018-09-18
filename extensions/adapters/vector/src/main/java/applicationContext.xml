@@ -11,7 +11,7 @@
 -->
 <!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
 <beans>
-    <bean id="getMapCallback" class="mil.nga.giat.geowave.adapter.vector.render.DistributedRenderCallback">
+    <bean id="getMapCallback" class="org.locationtech.geowave.adapter.vector.render.DistributedRenderCallback">
       <constructor-arg ref="wms" />
     </bean>
 </beans>

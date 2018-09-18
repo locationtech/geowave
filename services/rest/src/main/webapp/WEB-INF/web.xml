@@ -29,7 +29,7 @@
 		<servlet-class>org.restlet.ext.servlet.ServerServlet</servlet-class>
 		<init-param>
 			<param-name>org.restlet.application</param-name>
-			<param-value>mil.nga.giat.geowave.service.rest.ApiRestletApplication</param-value>
+			<param-value>org.locationtech.geowave.service.rest.ApiRestletApplication</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

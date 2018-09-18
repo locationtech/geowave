@@ -5,7 +5,7 @@
 
 Authorization Management provides the set of credentials compared against the security labels attached to each cell. Authorization Management determines the set of authorizations associated with each WFS-T request. The available Authorization Management strategies are registered through the Server Provider model, within the file
 
-`META-INF/services/mil.nga.giat.geowave.vector.auth.AuthorizationFactorySPI`.
+`META-INF/services/org.locationtech.geowave.vector.auth.AuthorizationFactorySPI`.
 
 The provided implementations include the following
 
@@ -27,9 +27,9 @@ Fred has three authorization labels. Barney has one.
 [geoserver-visibility-management]
 ==== Visibility Management
 
-Visibility constraints, applied to feature instances during insertions, are ultimately determined in `mil.nga.giat.geowave.store.data.field.FieldWriter`. There are writers for each supported data type in Geoserver. By default, the set visibility expression attached to each feature property is empty. Visibility Management supports selection of a strategy by wrapping each writer to provide visibility. This alleviates the need to extend the type specific FieldWriters.
+Visibility constraints, applied to feature instances during insertions, are ultimately determined in `org.locationtech.geowave.store.data.field.FieldWriter`. There are writers for each supported data type in Geoserver. By default, the set visibility expression attached to each feature property is empty. Visibility Management supports selection of a strategy by wrapping each writer to provide visibility. This alleviates the need to extend the type specific FieldWriters.
 
-The visibility management strategy is registered through the Java Service Provider Interface (SPI) model, within the file `META-INF/services/mil.nga.giat.geowave.vector.plugin.visibility.ColumnVisibilityManagement`. The only provided implementation is the `JsonDefinitionColumnVisibilityManagement`. The implementation expects a property within each feature instance to contain a JSON string describing how to set the visibility for each property of the feature instance. This approach allows each instance to determine its own visibility criteria.
+The visibility management strategy is registered through the Java Service Provider Interface (SPI) model, within the file `META-INF/services/org.locationtech.geowave.vector.plugin.visibility.ColumnVisibilityManagement`. The only provided implementation is the `JsonDefinitionColumnVisibilityManagement`. The implementation expects a property within each feature instance to contain a JSON string describing how to set the visibility for each property of the feature instance. This approach allows each instance to determine its own visibility criteria.
 
 Each name/value pair within the JSON structure defines the visibility for the associated feature property with the same name. In the following example, the _geometry_ property is given a visibility `S` and the eventName is given a visibility `TS`.
 

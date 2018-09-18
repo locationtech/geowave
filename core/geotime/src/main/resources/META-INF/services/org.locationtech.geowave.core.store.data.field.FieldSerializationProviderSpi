@@ -1,0 +1,6 @@
+org.locationtech.geowave.core.geotime.store.field.CalendarArraySerializationProvider
+org.locationtech.geowave.core.geotime.store.field.CalendarSerializationProvider
+org.locationtech.geowave.core.geotime.store.field.DateArraySerializationProvider
+org.locationtech.geowave.core.geotime.store.field.DateSerializationProvider
+org.locationtech.geowave.core.geotime.store.field.GeometryArraySerializationProvider
+org.locationtech.geowave.core.geotime.store.field.GeometrySerializationProvider

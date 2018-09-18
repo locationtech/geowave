@@ -9,7 +9,7 @@ Analytics embody algorithms tailored to geospatial data.  Most analytics leverag
 
 [NOTE]
 ====
-GeoWaveInputFormat does not remove duplicate features that reference lines and/or polygons spanning multiple index regions. If working with duplication in time ranges, please take a look at the GeoWave https://github.com/locationtech/geowave/blob/master/core/mapreduce/src/main/java/mil/nga/giat/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.java[GeoWaveDedupeJobRunner, window="_blank"].
+GeoWaveInputFormat does not remove duplicate features that reference lines and/or polygons spanning multiple index regions. If working with duplication in time ranges, please take a look at the GeoWave https://github.com/locationtech/geowave/blob/master/core/mapreduce/src/main/java/org/locationtech/geowave/mapreduce/dedupe/GeoWaveDedupeJobRunner.java[GeoWaveDedupeJobRunner, window="_blank"].
 
 It is also important to note that, while duplication can arise as an issue, though if using the XZ-Order SFC (which is used by default for lines and polygons), it does not require duplication. The only time there should be a duplication issue is if you are indexing a time range and the time range spans multiple periods based on your temporal binning strategy. The default periodicity is "YEAR," meaning that a row must be duplicate under default spatial-temporal indexing if you are trying to index a time range that crosses December 31 23:59:59.999 and January 1 00:00:00 of the following year.
 ====

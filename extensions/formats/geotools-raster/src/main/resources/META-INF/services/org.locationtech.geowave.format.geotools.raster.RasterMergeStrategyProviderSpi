@@ -1,0 +1,2 @@
+org.locationtech.geowave.format.geotools.raster.NoDataMergeStrategyProvider
+org.locationtech.geowave.format.geotools.raster.NoMergeStrategyProvider

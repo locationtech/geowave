@@ -1,0 +1,8 @@
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcAnalyticMapreduceService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcAnalyticSparkService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcCliGeoserverService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcCoreCliService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcCoreIngestService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcCoreMapreduceService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcCoreStoreService
+org.locationtech.geowave.service.grpc.services.GeoWaveGrpcVectorService

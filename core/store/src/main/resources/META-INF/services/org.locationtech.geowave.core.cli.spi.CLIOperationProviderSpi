@@ -1,0 +1,2 @@
+org.locationtech.geowave.core.store.cli.remote.RemoteOperationProvider
+org.locationtech.geowave.core.store.cli.config.ConfigOperationProvider

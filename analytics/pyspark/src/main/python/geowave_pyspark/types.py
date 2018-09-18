@@ -24,7 +24,7 @@ class AbstractGeometryUDT(UserDefinedType):
 
     @classmethod
     def scalaUDT(cls):
-        return 'mil.nga.giat.geowave.analytic.spark.sparksql.udt.' + cls.__name__
+        return 'org.locationtech.geowave.analytic.spark.sparksql.udt.' + cls.__name__
 
     def serialize(self, obj):
         return _serialize_to_wkb(obj)

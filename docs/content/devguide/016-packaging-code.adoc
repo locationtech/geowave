@@ -43,7 +43,7 @@ $ vi ~/.profile         [Press Enter]
 +
 [source]
 ----
-alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-${project.version}-tools.jar mil.nga.giat.geowave.core.cli.GeoWaveMain"
+alias geowave="java -cp $GEOWAVE_HOME/deploy/target/geowave-deploy-${project.version}-tools.jar org.locationtech.geowave.core.cli.GeoWaveMain"
 ----
 +
 [NOTE]

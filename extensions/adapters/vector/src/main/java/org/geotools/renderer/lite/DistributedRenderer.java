@@ -23,17 +23,16 @@ import java.util.concurrent.BlockingQueue;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.geotools.process.function.ProcessFunction;
+import org.locationtech.geowave.adapter.vector.plugin.DistributedRenderProcess;
+import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
+import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
+import org.locationtech.geowave.adapter.vector.render.InternalDistributedRenderProcess;
+import org.locationtech.geowave.adapter.vector.render.PersistableComposite;
+import org.locationtech.geowave.adapter.vector.render.PersistableRenderedImage;
+import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult.CompositeGroupResult;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-
-import mil.nga.giat.geowave.adapter.vector.plugin.DistributedRenderProcess;
-import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderOptions;
-import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderResult;
-import mil.nga.giat.geowave.adapter.vector.render.InternalDistributedRenderProcess;
-import mil.nga.giat.geowave.adapter.vector.render.DistributedRenderResult.CompositeGroupResult;
-import mil.nga.giat.geowave.adapter.vector.render.PersistableComposite;
-import mil.nga.giat.geowave.adapter.vector.render.PersistableRenderedImage;
 
 public class DistributedRenderer extends
 		StreamingRenderer

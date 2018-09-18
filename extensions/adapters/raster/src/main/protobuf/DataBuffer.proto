@@ -1,4 +1,4 @@
-option java_package = "mil.nga.giat.geowave.adapter.raster.protobuf";
+option java_package = "org.locationtech.geowave.adapter.raster.protobuf";
 option java_outer_classname = "DataBufferProtos";
 option optimize_for = SPEED;
 

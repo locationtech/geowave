@@ -1,0 +1,4 @@
+org.locationtech.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQueryStrategy
+org.locationtech.geowave.adapter.vector.index.ChooseBestMatchIndexQueryStrategy
+org.locationtech.geowave.adapter.vector.index.ChooseLocalityPreservingQueryStrategy
+

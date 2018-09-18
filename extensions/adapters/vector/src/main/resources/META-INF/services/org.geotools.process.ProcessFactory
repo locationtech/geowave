@@ -1,2 +1,2 @@
-mil.nga.giat.geowave.adapter.vector.plugin.GeoWaveGSProcessFactory
+org.locationtech.geowave.adapter.vector.plugin.GeoWaveGSProcessFactory
 

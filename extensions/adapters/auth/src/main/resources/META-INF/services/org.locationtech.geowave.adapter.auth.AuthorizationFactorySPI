@@ -1,0 +1,2 @@
+org.locationtech.geowave.adapter.auth.JsonFileAuthorizationFactory
+org.locationtech.geowave.adapter.auth.EmptyAuthorizationFactory
