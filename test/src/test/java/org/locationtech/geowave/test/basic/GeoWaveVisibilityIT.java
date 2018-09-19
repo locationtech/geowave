@@ -36,6 +36,9 @@ import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -783,22 +786,27 @@ public class GeoWaveVisibilityIT extends
 						getFeatureVisWriter());
 			}
 		}
+		DataStatisticsStore statsStore = dataStoreOptions.createDataStatisticsStore();
 		final InternalAdapterStore internalDataStore = dataStoreOptions.createInternalAdapterStore();
 		short internalAdapterId = internalDataStore.getInternalAdapterId(adapter.getAdapterId());
-		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) dataStoreOptions
-				.createDataStatisticsStore()
+		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) statsStore
 				.getDataStatistics(
 						internalAdapterId,
 						DifferingFieldVisibilityEntryCount.composeId(TestUtils.DEFAULT_SPATIAL_INDEX.getId()));
+
 		Assert.assertEquals(
 				"Exactly half the entries should have differing visibility",
 				TOTAL_FEATURES / 2,
 				differingVisibilities.getEntriesWithDifferingFieldVisibilities());
 		testQueryMixed(
 				store,
+				statsStore,
+				internalAdapterId,
 				false);
 		testQueryMixed(
 				store,
+				statsStore,
+				internalAdapterId,
 				true);
 		TestUtils.deleteAll(dataStoreOptions);
 	}
@@ -885,6 +893,8 @@ public class GeoWaveVisibilityIT extends
 
 	private static void testQueryMixed(
 			final DataStore store,
+			final DataStatisticsStore statsStore,
+			short internalAdapterId,
 			boolean spatial )
 			throws IOException {
 
@@ -893,6 +903,8 @@ public class GeoWaveVisibilityIT extends
 		// for other fields there is exactly
 		testQuery(
 				store,
+				statsStore,
+				internalAdapterId,
 				new String[] {},
 				spatial,
 				(5 * TOTAL_FEATURES) / 8,
@@ -905,6 +917,8 @@ public class GeoWaveVisibilityIT extends
 		}) {
 			testQuery(
 					store,
+					statsStore,
+					internalAdapterId,
 					new String[] {
 						auth
 					},
@@ -942,6 +956,8 @@ public class GeoWaveVisibilityIT extends
 		}) {
 			testQuery(
 					store,
+					statsStore,
+					internalAdapterId,
 					auths,
 					spatial,
 					(7 * TOTAL_FEATURES) / 8,
@@ -950,6 +966,8 @@ public class GeoWaveVisibilityIT extends
 
 		testQuery(
 				store,
+				statsStore,
+				internalAdapterId,
 				new String[] {
 					"a",
 					"b",
@@ -962,6 +980,8 @@ public class GeoWaveVisibilityIT extends
 
 	private static void testQuery(
 			final DataStore store,
+			DataStatisticsStore statsStore,
+			short internalAdapterId,
 			final String[] auths,
 			final boolean spatial,
 			final int expectedResultCount,
@@ -1024,6 +1044,16 @@ public class GeoWaveVisibilityIT extends
 					expectedResultCount,
 					count);
 		}
+		CountDataStatistics<?> stats = (CountDataStatistics<?>) statsStore.getDataStatistics(
+				internalAdapterId,
+				CountDataStatistics.STATS_TYPE,
+				auths);
+
+		Assert.assertEquals(
+				"Unexpected stats result count for " + (spatial ? "spatial query" : "full table scan") + " with auths "
+						+ Arrays.toString(auths),
+				expectedResultCount,
+				stats.getCount());
 	}
 
 	private static SimpleFeatureType getType() {
