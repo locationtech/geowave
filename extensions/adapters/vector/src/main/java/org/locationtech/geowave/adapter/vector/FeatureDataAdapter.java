@@ -739,16 +739,7 @@ public class FeatureDataAdapter extends
 		final byte versionId = buf.get();
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 
-		// TODO: DONTMAINTAIN! Don't maintain after 1.0. This was specifically
-		// made to support GeoWave 0.9.6 - 0.9.7 data
-		final byte[] indexCrsBytes;
-		if (versionId < VERSION) {
-			LOGGER.warn("Mismatched Feature Data Adapter version");
-			indexCrsBytes = new byte[0];
-		}
-		else {
-			indexCrsBytes = new byte[buf.getInt()];
-		}
+		final byte[] indexCrsBytes = new byte[buf.getInt()];
 		final byte[] namespaceBytes = new byte[buf.getInt()];
 
 		final byte[] attrBytes = new byte[buf.getInt()];
@@ -771,15 +762,8 @@ public class FeatureDataAdapter extends
 		// version
 		// TODO: DONTMAINTAIN! Don't maintain after 1.0. This was specifically
 		// made to support GeoWave 0.9.6 - 0.9.7 data
-		final byte[] secondaryIndexBytes;
-		if (versionId < VERSION) {
-			secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-					- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 21];
-		}
-		else {
-			secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
-					- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
-		}
+		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
+				- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
 		buf.get(secondaryIndexBytes);
 
 		final String encodedType = StringUtils.stringFromBinary(encodedTypeBytes);
