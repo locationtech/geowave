@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.api;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 
 /**
  * A DataStore can both ingest and query data based on persisted indices and
@@ -67,8 +68,8 @@ public interface DataStore<T>
 	 * (the same adapter ID as the ID ingested). All data that matches the
 	 * query, adapter ID, and is in the index ID will be deleted.
 	 * 
-	 * For ({@link org.locationtech.geowave.core.store.query.AdapterIdQuery), all
-	 * supporting statistics and secondary indices are also deleted.
+	 * For ({@link org.locationtech.geowave.core.store.query.AdapterIdQuery),
+	 * all supporting statistics and secondary indices are also deleted.
 	 * 
 	 * Statistics and secondary indices are updated as required for all other
 	 * types of queries.
@@ -85,6 +86,13 @@ public interface DataStore<T>
 			final Query query );
 
 	/**
+	 * Get all the adapters that have been used within this data store
+	 * 
+	 * @return An array of the adapters used within this datastore.
+	 */
+	public DataAdapter<T>[] getAdapters();
+
+	/**
 	 * Get all data statistics for a given adapter ID using the authorizations
 	 * provided. If adapter ID is null, it will return all statistics in this
 	 * data store.
@@ -99,25 +107,44 @@ public interface DataStore<T>
 	 *         Closeable and it is best practice to close the iterator after it
 	 *         is no longer needed.
 	 */
-	public CloseableIterator<DataStatistics<T>> getDataStatistics(
+	public DataStatistics<T>[] getStatistics(
 			ByteArrayId adapterId,
 			String... authorizations );
 
 	/**
-	 * Get all the adapters that have been used within this data store
+	 * Get all data statistics for a given adapter ID using the authorizations
+	 * provided. If adapter ID is null, it will return all statistics in this
+	 * data store.
 	 * 
-	 * @return An iterator on the adapters. The iterator implements Closeable
-	 *         and it is best practice to close the iterator after it is no
-	 *         longer needed.
+	 * @param adapterId
+	 *            The Adapter to get the accumulated statistics for all the data
+	 *            that has been ingested. If null, it will return all data
+	 *            statistics.
+	 * @param statisticsId
+	 *            the data statistics ID
+	 * @param authorizations
+	 *            A set of authorizations to use for access to the atatistics
+	 * @return An iterator on the data statistics. The iterator implements
+	 *         Closeable and it is best practice to close the iterator after it
+	 *         is no longer needed.
 	 */
-	public CloseableIterator<DataAdapter<T>> getAdapters();
+	public <R extends DataStatistics<T>> R getStatistics(
+			ByteArrayId adapterId,
+			StatisticsType<R> statisticsType,
+			String... authorizations );
 
 	/**
-	 * Get all the indices that have been used within this data store
+	 * Get the indices that have been used within this data store for a
+	 * particular adapter ID. Note that once data has been written for an
+	 * adapter with a set of indices, that set of indices must be consistently
+	 * used for subsequent writes (otherwise a user will run the risk of
+	 * inconsistent data).
 	 * 
-	 * @return An iterator on the indices. The iterator implements Closeable and
-	 *         it is best practice to close the iterator after it is no longer
-	 *         needed.
+	 * @param adapterID
+	 *            an adapter ID to find the relevant indices
+	 * 
+	 * @return An array of the indices for a given adapter.
 	 */
-	public CloseableIterator<Index> getIndices();
+	public Index[] getIndices(
+			ByteArrayId adapterId );
 }

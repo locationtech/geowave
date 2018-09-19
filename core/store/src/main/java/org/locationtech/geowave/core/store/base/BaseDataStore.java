@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -35,6 +35,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 import org.locationtech.geowave.core.store.api.DataAdapter;
 import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -128,7 +129,7 @@ public class BaseDataStore<T> implements
 			throws MismatchedIndexToAdapterMapping {
 		adapter.init(indices);
 		// add internal adapter
-		final InternalDataAdapter<T> internalAdapter = new InternalDataAdapterWrapper<T>(
+		final InternalDataAdapter<T> internalAdapter = new InternalDataAdapterWrapper<>(
 				adapter,
 				internalAdapterStore.addAdapterId(adapter.getAdapterId()));
 		store(internalAdapter);
@@ -147,7 +148,7 @@ public class BaseDataStore<T> implements
 
 			callbackManager.setPersistStats(baseOptions.isPersistDataStatistics());
 
-			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
+			final List<IngestCallback<T>> callbacks = new ArrayList<>();
 
 			store(index);
 
@@ -168,7 +169,7 @@ public class BaseDataStore<T> implements
 					internalAdapter,
 					index);
 
-			final IngestCallbackList<T> callbacksList = new IngestCallbackList<T>(
+			final IngestCallbackList<T> callbacksList = new IngestCallbackList<>(
 					callbacks);
 			writers[i] = createIndexWriter(
 					internalAdapter,
@@ -179,7 +180,7 @@ public class BaseDataStore<T> implements
 					callbacksList);
 
 			if (adapter instanceof IndexDependentDataAdapter) {
-				writers[i] = new IndependentAdapterIndexWriter<T>(
+				writers[i] = new IndependentAdapterIndexWriter<>(
 						(IndexDependentDataAdapter<T>) adapter,
 						index,
 						writers[i]);
@@ -216,7 +217,7 @@ public class BaseDataStore<T> implements
 			final QueryOptions queryOptions,
 			final Query query,
 			final boolean delete ) {
-		final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
+		final List<CloseableIterator<Object>> results = new ArrayList<>();
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
 		// indices
@@ -260,7 +261,7 @@ public class BaseDataStore<T> implements
 					sanitizedQueryOptions.getAdaptersArray(adapterStore));
 			// keep a list of adapters that have been queried, to only load an
 			// adapter to be queried once
-			final Set<Short> queriedAdapters = new HashSet<Short>();
+			final Set<Short> queriedAdapters = new HashSet<>();
 			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getAdaptersWithMinimalSetOfIndices(
 							tempAdapterStore,
@@ -342,7 +343,7 @@ public class BaseDataStore<T> implements
 					"Failed to resolve adapter or index for query",
 					e1);
 		}
-		return new CloseableIteratorWrapper<T>(
+		return new CloseableIteratorWrapper<>(
 				new Closeable() {
 					@Override
 					public void close()
@@ -402,7 +403,7 @@ public class BaseDataStore<T> implements
 		// keep a list of adapters that have been queried, to only low an
 		// adapter to be queried
 		// once
-		final Set<Short> queriedAdapters = new HashSet<Short>();
+		final Set<Short> queriedAdapters = new HashSet<>();
 		Deleter idxDeleter = null, altIdxDeleter = null;
 		try {
 			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
@@ -664,7 +665,7 @@ public class BaseDataStore<T> implements
 			final PersistentAdapterStore tempAdapterStore,
 			final List<Short> adapterIdsToQuery,
 			final boolean delete ) {
-		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<Object>(
+		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<>(
 				index,
 				partitionKey,
 				sortPrefix,
@@ -705,12 +706,12 @@ public class BaseDataStore<T> implements
 						Collections.singletonList(adapter.getInternalAdapterId()),
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations());
-		FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
+		final FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
 				index,
 				Collections.singletonList(adapter.getInternalAdapterId()),
 				statisticsStore,
 				sanitizedQueryOptions.getAuthorizations());
-		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<Object>(
+		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<>(
 				adapter,
 				index,
 				query,
@@ -735,7 +736,7 @@ public class BaseDataStore<T> implements
 			final DataStoreOptions baseOptions,
 			final IngestCallback<T> callback,
 			final Closeable closable ) {
-		return new BaseIndexWriter<T>(
+		return new BaseIndexWriter<>(
 				adapter,
 				index,
 				baseOperations,
@@ -754,9 +755,9 @@ public class BaseDataStore<T> implements
 			final DataAdapter<T> adapter,
 			final ByteArrayId primaryIndexId ) {
 		try {
-			callbacks.add(new AltIndexCallback<T>(
+			callbacks.add(new AltIndexCallback<>(
 					indexName,
-					(DataAdapter<T>) adapter,
+					adapter,
 					primaryIndexId));
 
 		}
@@ -843,30 +844,87 @@ public class BaseDataStore<T> implements
 	}
 
 	@Override
-	public CloseableIterator<DataStatistics<T>> getDataStatistics(
-			ByteArrayId adapterId,
-			String... authorizations ) {
+	public DataStatistics<T>[] getStatistics(
+			final ByteArrayId adapterId,
+			final String... authorizations ) {
 		if (adapterId == null) {
-			return (CloseableIterator) statisticsStore.getAllDataStatistics(authorizations);
+			try (CloseableIterator<DataStatistics<T>> it = (CloseableIterator) statisticsStore
+					.getAllDataStatistics(authorizations)) {
+				return Iterators.toArray(
+						it,
+						DataStatistics.class);
+			}
+			catch (IOException e) {
+				LOGGER.warn(
+						"Unable to close statistics iterator",
+						e);
+				return new DataStatistics[0];
+			}
 		}
+		final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+		if (internalAdapterId == null) {
+			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "' for stats");
+			return new DataStatistics[0];
+		}
+		try (CloseableIterator<DataStatistics<T>> it = (CloseableIterator) statisticsStore.getDataStatistics(
+				internalAdapterId,
+				authorizations)) {
+			return Iterators.toArray(
+					it,
+					DataStatistics.class);
+		}
+		catch (IOException e) {
+			LOGGER.warn(
+					"Unable to close statistics iterator per adapter",
+					e);
+			return new DataStatistics[0];
+		}
+	}
+
+	@Override
+	public DataAdapter<T>[] getAdapters() {
+		try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+			return Iterators
+					.toArray(
+							Iterators
+									.transform(
+											it,
+											a -> (DataAdapter<T>) a.getAdapter()),
+							DataAdapter.class);
+		}
+		catch (final IOException e) {
+			LOGGER
+					.warn(
+							"Unable to close adapter iterator",
+							e);
+			return new DataAdapter[0];		}
+	}
+
+	@Override
+	public Index[] getIndices(
+			ByteArrayId adapterId ) {
 		Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 		if (internalAdapterId == null) {
-			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "'");
-			return new CloseableIterator.Empty<>();
+			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "' for indices");
+			return new Index[0];
 		}
-		return (CloseableIterator) statisticsStore.getDataStatistics(
+		AdapterToIndexMapping indices = indexMappingStore.getIndicesForAdapter(internalAdapterId);
+		return indices.getIndices(indexStore);
+	}
+
+	@Override
+	public <R extends DataStatistics<T>> R getStatistics(
+			ByteArrayId adapterId,
+			StatisticsType<R> statisticsType,
+			String... authorizations ) {
+		Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
+		if (internalAdapterId == null) {
+			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "' for statistics");
+			return null;
+		}
+		return (R) statisticsStore.getDataStatistics(
 				internalAdapterId,
+				statisticsType,
 				authorizations);
-	}
-
-	@Override
-	public CloseableIterator<DataAdapter<T>> getAdapters() {
-		CloseableIterator<InternalDataAdapter<?> >it = adapterStore.getAdapters();
-		return new CloseableIteratorWrapper<DataAdapter<T>>(it,Iterators.transform(it, a -> (DataAdapter<T>)a.getAdapter()));
-	}
-
-	@Override
-	public CloseableIterator<Index> getIndices() {
-		return indexStore.getIndices();
 	}
 }
