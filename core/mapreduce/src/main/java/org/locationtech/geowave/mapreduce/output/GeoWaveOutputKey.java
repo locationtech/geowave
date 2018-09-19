@@ -92,12 +92,7 @@ public class GeoWaveOutputKey<T> implements
 		if (adapter != null) {
 			return adapter;
 		}
-		final DataAdapter<?> adapter = adapterCache.getAdapter(adapterId);
-		if (adapter instanceof DataAdapter) {
-			return (DataAdapter<T>) adapter;
-		}
-		LOGGER.warn("Adapter is not writable");
-		return null;
+		return (DataAdapter<T>) adapterCache.getAdapter(adapterId);
 	}
 
 	@Override

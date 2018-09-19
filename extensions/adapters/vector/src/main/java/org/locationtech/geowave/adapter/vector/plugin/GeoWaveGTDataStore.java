@@ -360,12 +360,7 @@ public class GeoWaveGTDataStore extends
 		 */
 		try (CloseableIterator<Index> indices = indexStore.getIndices()) {
 			while (indices.hasNext()) {
-				final Index nextIndex = indices.next();
-				if (!(nextIndex instanceof Index)) {
-					continue;
-				}
-				final Index index = (Index) nextIndex;
-
+				final Index index = indices.next();
 				if (!indexNames.isEmpty()) {
 					// Only used selected preferred indices
 					if (indexNames.contains(index.getId().getString())) {
