@@ -10,17 +10,12 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.api;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,14 +23,8 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
-import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.IndexStore;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -59,10 +48,7 @@ import com.google.common.collect.Lists;
  * Container object that encapsulates additional options to be applied to a
  * {@link Query}
  *
- * @since 0.8.7
  */
-
-// TODO: Allow secondary index requests to bypass CBO.
 
 public class QueryOptions implements
 		Persistable,
