@@ -26,9 +26,7 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
 import org.opengis.feature.simple.SimpleFeature;
@@ -74,66 +72,6 @@ public class SimpleIngest
 			}
 		}
 		return feats;
-	}
-
-	/***
-	 * DataStore is essentially the controller that take the accumulo
-	 * information, geowave configuration, and data type, and inserts/queries
-	 * from accumulo
-	 *
-	 * @param instance
-	 *            Accumulo instance configuration
-	 * @return DataStore object for the particular accumulo instance
-	 */
-	protected DataStore getAccumuloGeowaveDataStore(
-			final AccumuloOperations operations,
-			final AccumuloOptions options ) {
-		// GeoWave persists both the index and data adapter to the same accumulo
-		// namespace as the data. The intent here
-		// is that all data is discoverable without configuration/classes stored
-		// outside of the accumulo instance.
-		return new AccumuloDataStore(
-				operations,
-				options);
-	}
-
-	/***
-	 * The class tells geowave about the accumulo instance it should connect to,
-	 * as well as what tables it should create/store it's data in
-	 *
-	 * @param zookeepers
-	 *            Zookeepers associated with the accumulo instance, comma
-	 *            separate
-	 * @param accumuloInstance
-	 *            Accumulo instance name
-	 * @param accumuloUser
-	 *            User geowave should connect to accumulo as
-	 * @param accumuloPass
-	 *            Password for user to connect to accumulo
-	 * @param geowaveNamespace
-	 *            Different than an accumulo namespace (unfortunate naming
-	 *            usage) - this is basically a prefix on the table names geowave
-	 *            uses.
-	 * @return Object encapsulating the accumulo connection information
-	 * @throws AccumuloException
-	 * @throws AccumuloSecurityException
-	 */
-	protected AccumuloOperations getAccumuloOperationsInstance(
-			final String zookeepers,
-			final String accumuloInstance,
-			final String accumuloUser,
-			final String accumuloPass,
-			final String geowaveNamespace,
-			final AccumuloOptions options )
-			throws AccumuloException,
-			AccumuloSecurityException {
-		return new AccumuloOperations(
-				zookeepers,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPass,
-				geowaveNamespace,
-				options);
 	}
 
 	/***

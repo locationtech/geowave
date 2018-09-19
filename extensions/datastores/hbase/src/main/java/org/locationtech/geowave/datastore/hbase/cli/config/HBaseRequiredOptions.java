@@ -33,6 +33,18 @@ public class HBaseRequiredOptions extends
 	@ParametersDelegate
 	private HBaseOptions additionalOptions = new HBaseOptions();
 
+	public HBaseRequiredOptions() {}
+
+	public HBaseRequiredOptions(
+			String zookeeper,
+			String gwNamespace,
+			HBaseOptions additionalOptions ) {
+		super(
+				gwNamespace);
+		this.zookeeper = zookeeper;
+		this.additionalOptions = additionalOptions;
+	}
+
 	public String getZookeeper() {
 		return zookeeper;
 	}

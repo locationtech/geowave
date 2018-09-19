@@ -36,7 +36,23 @@ public class BigTableOptions extends
 	private final HBaseOptions internalHBaseOptions = new InternalHBaseOptions();
 
 	@ParametersDelegate
-	private final BaseDataStoreOptions additionalOptions = new BaseDataStoreOptions();
+	private BaseDataStoreOptions additionalOptions = new BaseDataStoreOptions();
+
+	public BigTableOptions() {}
+
+	public BigTableOptions(
+			int scanCacheSize,
+			String projectId,
+			String instanceId,
+			String gwNamespace,
+			BaseDataStoreOptions additionalOptions ) {
+		super(
+				gwNamespace);
+		this.scanCacheSize = scanCacheSize;
+		this.projectId = projectId;
+		this.instanceId = instanceId;
+		this.additionalOptions = additionalOptions;
+	}
 
 	@Override
 	public StoreFactoryFamilySpi getStoreFactory() {

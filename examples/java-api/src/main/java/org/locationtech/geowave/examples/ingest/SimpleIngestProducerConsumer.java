@@ -18,10 +18,11 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
-import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
+import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -52,24 +53,21 @@ public class SimpleIngestProducerConsumer extends
 					.error("Invalid arguments, expected: zookeepers, accumuloInstance, accumuloUser, accumuloPass, geowaveNamespace");
 			System.exit(1);
 		}
-		namespace = args[5];
+		namespace = args[4];
 		instance = args[2];
 		final AccumuloOptions options = new AccumuloOptions();
 		try {
-			final AccumuloOperations bao = si.getAccumuloOperationsInstance(
+			geowaveDataStore = DataStoreFactory.createDataStore(new AccumuloRequiredOptions(
+					args[0],
 					args[1],
 					args[2],
 					args[3],
 					args[4],
-					args[5],
-					options);
-			geowaveDataStore = si.getAccumuloGeowaveDataStore(
-					bao,
-					options);
+					options));
 		}
 		catch (final Exception e) {
 			log.error(
-					"Error creating BasicAccumuloOperations",
+					"Error creating data store",
 					e);
 			System.exit(1);
 		}
