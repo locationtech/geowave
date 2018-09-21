@@ -20,7 +20,6 @@ import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -39,7 +38,6 @@ import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
-import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow.GuavaRowTranslationHelper;
 import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
@@ -72,6 +70,7 @@ public class DynamoDBOperations implements
 	public static final String METADATA_PRIMARY_ID_KEY = "I";
 	public static final String METADATA_SECONDARY_ID_KEY = "S";
 	public static final String METADATA_TIMESTAMP_KEY = "T";
+	public static final String METADATA_VISIBILITY_KEY = "A";
 	public static final String METADATA_VALUE_KEY = "V";
 
 	private final AmazonDynamoDBAsync client;

@@ -90,11 +90,6 @@ public class CassandraOperations implements
 		MapReduceDataStoreOperations
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(CassandraOperations.class);
-	protected static final String PRIMARY_ID_KEY = "I";
-	protected static final String SECONDARY_ID_KEY = "S";
-	// serves as unique ID for instances where primary+secondary are repeated
-	protected static final String TIMESTAMP_ID_KEY = "T";
-	protected static final String VALUE_KEY = "V";
 	private final Session session;
 	private final String gwNamespace;
 	private final static int WRITE_RESPONSE_THREAD_SIZE = 16;
@@ -558,19 +553,24 @@ public class CassandraOperations implements
 						// create table
 						final Create create = getCreateTable(tableName);
 						create.addPartitionKey(
-								PRIMARY_ID_KEY,
+								CassandraMetadataWriter.PRIMARY_ID_KEY,
 								DataType.blob());
 						if (MetadataType.STATS.equals(metadataType)
 								|| MetadataType.INTERNAL_ADAPTER.equals(metadataType)) {
 							create.addClusteringColumn(
-									SECONDARY_ID_KEY,
+									CassandraMetadataWriter.SECONDARY_ID_KEY,
 									DataType.blob());
 							create.addClusteringColumn(
-									TIMESTAMP_ID_KEY,
+									CassandraMetadataWriter.TIMESTAMP_ID_KEY,
 									DataType.timeuuid());
+							if (MetadataType.STATS.equals(metadataType)) {
+								create.addColumn(
+										CassandraMetadataWriter.VISIBILITY_KEY,
+										DataType.blob());
+							}
 						}
 						create.addColumn(
-								VALUE_KEY,
+								CassandraMetadataWriter.VALUE_KEY,
 								DataType.blob());
 						executeCreateTable(
 								create,
