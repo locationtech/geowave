@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.format.sentinel2.IngestRunner;
 import org.locationtech.geowave.format.sentinel2.Sentinel2BasicCommandLineOptions;
 import org.locationtech.geowave.format.sentinel2.Sentinel2DownloadCommandLineOptions;

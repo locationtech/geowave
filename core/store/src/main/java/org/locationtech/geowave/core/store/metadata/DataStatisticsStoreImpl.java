@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -37,7 +37,7 @@ import com.google.common.cache.CacheBuilder;
  *
  **/
 public class DataStatisticsStoreImpl extends
-		AbstractGeoWavePersistence<DataStatistics<?>> implements
+		AbstractGeoWavePersistence<InternalDataStatistics<?>> implements
 		DataStatisticsStore
 {
 	// this is fairly arbitrary at the moment because it is the only custom
@@ -62,7 +62,7 @@ public class DataStatisticsStoreImpl extends
 				MAX_ENTRIES).expireAfterWrite(
 				STATISTICS_CACHE_TIMEOUT,
 				TimeUnit.MILLISECONDS);
-		this.cache = cacheBuilder.<ByteArrayId, Map<String, DataStatistics<?>>> build();
+		this.cache = cacheBuilder.<ByteArrayId, Map<String, InternalDataStatistics<?>>> build();
 	}
 
 	private String getCombinedAuths(
@@ -82,7 +82,7 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	public void incorporateStatistics(
-			final DataStatistics<?> statistics ) {
+			final InternalDataStatistics<?> statistics ) {
 		// because we're using the combiner, we should simply be able to add the
 		// object
 		addObject(statistics);
@@ -96,15 +96,16 @@ public class DataStatisticsStoreImpl extends
 	protected void addObjectToCache(
 			final ByteArrayId primaryId,
 			final ByteArrayId secondaryId,
-			final DataStatistics<?> object,
+			final InternalDataStatistics<?> object,
 			final String... authorizations ) {
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 
-		Map<String, DataStatistics<?>> cached = (Map<String, DataStatistics<?>>) cache.getIfPresent(combinedId);
+		Map<String, InternalDataStatistics<?>> cached = (Map<String, InternalDataStatistics<?>>) cache
+				.getIfPresent(combinedId);
 		if (cached == null) {
-			cached = new ConcurrentHashMap<String, DataStatistics<?>>();
+			cached = new ConcurrentHashMap<String, InternalDataStatistics<?>>();
 			cache.put(
 					combinedId,
 					cached);
@@ -124,7 +125,8 @@ public class DataStatisticsStoreImpl extends
 		final ByteArrayId combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
-		Map<String, DataStatistics<?>> cached = (Map<String, DataStatistics<?>>) cache.getIfPresent(combinedId);
+		Map<String, InternalDataStatistics<?>> cached = (Map<String, InternalDataStatistics<?>>) cache
+				.getIfPresent(combinedId);
 		if (cached != null) {
 			return cached.get(getCombinedAuths(authorizations));
 		}
@@ -143,7 +145,7 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
-	public DataStatistics<?> getDataStatistics(
+	public InternalDataStatistics<?> getDataStatistics(
 			final short internalAdapterId,
 			final ByteArrayId statisticsId,
 			final String... authorizations ) {
@@ -156,15 +158,15 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
-	protected DataStatistics<?> entryToValue(
+	protected InternalDataStatistics<?> entryToValue(
 			final GeoWaveMetadata entry,
 			String... authorizations ) {
-		final DataStatistics<?> stats = super.entryToValue(
+		final InternalDataStatistics<?> stats = super.entryToValue(
 				entry,
 				authorizations);
 		if (stats != null) {
 			stats.setInternalDataAdapterId(byteArrayToShort(entry.getSecondaryId()));
-			stats.setStatisticsId(new ByteArrayId(
+			stats.setStatisticsType(new ByteArrayId(
 					entry.getPrimaryId()));
 			final byte[] visibility = entry.getVisibility();
 			if (visibility != null) {
@@ -176,27 +178,27 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	protected ByteArrayId getPrimaryId(
-			final DataStatistics<?> persistedObject ) {
-		return persistedObject.getStatisticsId();
+			final InternalDataStatistics<?> persistedObject ) {
+		return persistedObject.getStatisticsType();
 	}
 
 	@Override
 	protected ByteArrayId getSecondaryId(
-			final DataStatistics<?> persistedObject ) {
+			final InternalDataStatistics<?> persistedObject ) {
 		return shortToByteArrayId(persistedObject.getInternalDataAdapterId());
 	}
 
 	@Override
 	public void setStatistics(
-			final DataStatistics<?> statistics ) {
+			final InternalDataStatistics<?> statistics ) {
 		removeStatistics(
 				statistics.getInternalDataAdapterId(),
-				statistics.getStatisticsId());
+				statistics.getStatisticsType());
 		addObject(statistics);
 	}
 
 	@Override
-	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
+	public CloseableIterator<InternalDataStatistics<?>> getAllDataStatistics(
 			final String... authorizations ) {
 		return getObjects(authorizations);
 	}
@@ -213,7 +215,7 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
-	public CloseableIterator<DataStatistics<?>> getDataStatistics(
+	public CloseableIterator<InternalDataStatistics<?>> getDataStatistics(
 			final short internalAdapterId,
 			final String... authorizations ) {
 		return getAllObjectsWithSecondaryId(
@@ -223,7 +225,7 @@ public class DataStatisticsStoreImpl extends
 
 	@Override
 	protected byte[] getVisibility(
-			final DataStatistics<?> entry ) {
+			final InternalDataStatistics<?> entry ) {
 		return entry.getVisibility();
 	}
 

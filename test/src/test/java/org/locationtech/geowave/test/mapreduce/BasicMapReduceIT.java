@@ -49,12 +49,12 @@ import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
@@ -225,15 +225,15 @@ public class BasicMapReduceIT extends
 				dataStorePluginOptions,
 				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
-		final DataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
+		final DataTypeAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
-		for (final DataAdapter<SimpleFeature> adapter : adapters) {
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
 			adapter.init(TestUtils.DEFAULT_SPATIAL_INDEX);
 		}
 
 		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
 		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<>();
-		for (final DataAdapter<SimpleFeature> adapter : adapters) {
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
 			adapterIdToResultsMap.put(
 					adapter.getAdapterId(),
 					TestUtils.getExpectedResults(geowaveStore.query(
@@ -243,7 +243,7 @@ public class BasicMapReduceIT extends
 							new EverythingQuery())));
 		}
 
-		final List<DataAdapter<?>> firstTwoAdapters = new ArrayList<>();
+		final List<DataTypeAdapter<?>> firstTwoAdapters = new ArrayList<>();
 		firstTwoAdapters.add(adapters[0]);
 		firstTwoAdapters.add(adapters[1]);
 
@@ -266,7 +266,7 @@ public class BasicMapReduceIT extends
 		// re-ingest it
 		testMapReduceExportAndReingest(DimensionalityType.ALL);
 		// first try each adapter individually
-		for (final DataAdapter<SimpleFeature> adapter : adapters) {
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
 			final ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getAdapterId());
 
 			if (expResults.count > 0) {
@@ -274,7 +274,7 @@ public class BasicMapReduceIT extends
 				runTestJob(
 						expResults,
 						null,
-						new DataAdapter[] {
+						new DataTypeAdapter[] {
 							adapter
 						},
 						null);
@@ -286,7 +286,7 @@ public class BasicMapReduceIT extends
 		runTestJob(
 				firstTwoAdaptersResults,
 				null,
-				new DataAdapter[] {
+				new DataTypeAdapter[] {
 					adapters[0],
 					adapters[1]
 				},
@@ -368,7 +368,7 @@ public class BasicMapReduceIT extends
 	private void runTestJob(
 			final ExpectedResults expectedResults,
 			final DistributableQuery query,
-			final DataAdapter<?>[] adapters,
+			final DataTypeAdapter<?>[] adapters,
 			final Index index )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(

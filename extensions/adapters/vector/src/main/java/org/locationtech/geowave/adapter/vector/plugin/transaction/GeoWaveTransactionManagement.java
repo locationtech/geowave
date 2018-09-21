@@ -30,7 +30,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagement;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -60,7 +60,7 @@ public class GeoWaveTransactionManagement extends
 	private final Map<String, SimpleFeature> addedFeatures = new ConcurrentHashMap<String, SimpleFeature>();
 	private final Multimap<String, SimpleFeature> removedFeatures = LinkedListMultimap.create();
 
-	private Map<ByteArrayId, DataStatistics<SimpleFeature>> statsCache = null;
+	private Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsCache = null;
 
 	/** List of added feature ids; values stored in added above */
 	private final Set<String> addedFidList = new HashSet<String>();
@@ -439,7 +439,7 @@ public class GeoWaveTransactionManagement extends
 	}
 
 	@Override
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics() {
+	public Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> getDataStatistics() {
 		if (statsCache == null) {
 			statsCache = super.getDataStatistics();
 		}

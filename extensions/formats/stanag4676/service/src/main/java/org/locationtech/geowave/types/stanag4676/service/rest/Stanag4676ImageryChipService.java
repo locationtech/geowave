@@ -59,7 +59,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryOptions;
-import org.locationtech.geowave.core.store.query.PrefixIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.format.stanag4676.Stanag4676IngestPlugin;
 import org.locationtech.geowave.format.stanag4676.image.ImageChip;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipDataAdapter;

@@ -22,7 +22,7 @@ import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
@@ -44,7 +44,7 @@ public class RasterTileResizeHelper
 		index = JobContextIndexStore.getIndices(context)[0];
 		indexIds = new ArrayList<ByteArrayId>();
 		indexIds.add(index.getId());
-		final DataAdapter[] adapters = JobContextAdapterStore.getDataAdapters(context);
+		final DataTypeAdapter[] adapters = JobContextAdapterStore.getDataAdapters(context);
 		final Configuration conf = context.getConfiguration();
 		final String newAdapterId = conf.get(RasterTileResizeJobRunner.NEW_ADAPTER_ID_KEY);
 		oldInternalAdapterId = (short) conf.getInt(
@@ -54,7 +54,7 @@ public class RasterTileResizeHelper
 				RasterTileResizeJobRunner.NEW_INTERNAL_ADAPTER_ID_KEY,
 				InternalAdapterStoreImpl.getInitialInternalAdapterId(new ByteArrayId(
 						newAdapterId)));
-		for (final DataAdapter adapter : adapters) {
+		for (final DataTypeAdapter adapter : adapters) {
 			if (adapter.getAdapterId().getString().equals(
 					newAdapterId)) {
 				if (((RasterDataAdapter) adapter).getTransform() == null) {

@@ -30,11 +30,11 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
@@ -146,7 +146,7 @@ public class GeoWaveJavaSparkKMeansIT
 		short centroidInternalAdapterId = inputDataStore.createInternalAdapterStore().getInternalAdapterId(
 				new ByteArrayId(
 						"kmeans-centroids-test"));
-		DataAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
+		DataTypeAdapter centroidAdapter = inputDataStore.createAdapterStore().getAdapter(
 				centroidInternalAdapterId);
 
 		// Query back from the new adapter
@@ -179,7 +179,7 @@ public class GeoWaveJavaSparkKMeansIT
 				new ByteArrayId(
 						"kmeans-hulls-test"));
 		// Write out the hull features w/ metadata
-		DataAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
+		DataTypeAdapter hullAdapter = inputDataStore.createAdapterStore().getAdapter(
 				hullInternalAdapterId);
 
 		mark = System.currentTimeMillis();
@@ -195,7 +195,7 @@ public class GeoWaveJavaSparkKMeansIT
 	}
 
 	private void queryFeatures(
-			final DataAdapter dataAdapter,
+			final DataTypeAdapter dataAdapter,
 			final int expectedCount ) {
 		final DataStore featureStore = inputDataStore.createDataStore();
 		int count = 0;

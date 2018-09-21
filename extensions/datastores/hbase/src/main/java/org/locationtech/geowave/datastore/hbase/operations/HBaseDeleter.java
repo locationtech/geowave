@@ -17,7 +17,7 @@ import java.util.Set;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Delete;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
@@ -53,7 +53,7 @@ public class HBaseDeleter implements
 	@Override
 	public void delete(
 			final GeoWaveRow row,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 
 		byte[] rowBytes = GeoWaveKey.getCompositeId(row);
 		final Delete delete = new Delete(

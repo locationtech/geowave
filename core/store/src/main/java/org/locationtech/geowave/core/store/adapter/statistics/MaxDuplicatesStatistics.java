@@ -15,7 +15,6 @@ import java.nio.ByteBuffer;
 import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public class MaxDuplicatesStatistics<T> extends
@@ -62,7 +61,7 @@ public class MaxDuplicatesStatistics<T> extends
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
+	public InternalDataStatistics<T> duplicate() {
 		return new MaxDuplicatesStatistics<>(
 				internalDataAdapterId,
 				statisticsId,

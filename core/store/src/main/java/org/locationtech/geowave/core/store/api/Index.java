@@ -9,9 +9,9 @@ public interface Index extends
 		Persistable
 {
 
-	public ByteArrayId getId();
+	ByteArrayId getId();
 
-	public NumericIndexStrategy getIndexStrategy();
+	NumericIndexStrategy getIndexStrategy();
 
-	public CommonIndexModel getIndexModel();
+	CommonIndexModel getIndexModel();
 }

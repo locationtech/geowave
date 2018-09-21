@@ -27,7 +27,7 @@ import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -52,7 +52,7 @@ public class SerializableAdapterStoreTest
 		adapter.init(index);
 		final SerializableAdapterStore store = new SerializableAdapterStore(
 				new MemoryAdapterStore(
-						new DataAdapter<?>[] {
+						new DataTypeAdapter<?>[] {
 							adapter
 						}));
 

@@ -87,11 +87,11 @@ import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterFootprintStatistics;
 import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -111,10 +111,10 @@ import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -1705,9 +1705,9 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public DataStatistics<GridCoverage> createDataStatistics(
+	public InternalDataStatistics<GridCoverage> createDataStatistics(
 			final ByteArrayId statisticsType ) {
-		DataStatistics<GridCoverage> retVal = null;
+		InternalDataStatistics<GridCoverage> retVal = null;
 		if (OverviewStatistics.STATS_TYPE.equals(statisticsType)) {
 			retVal = new OverviewStatistics();
 		}
@@ -2166,7 +2166,7 @@ public class RasterDataAdapter implements
 	@Override
 	public EntryVisibilityHandler<GridCoverage> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<GridCoverage> adapter,
+			final DataTypeAdapter<GridCoverage> adapter,
 			final ByteArrayId statisticsId ) {
 		return visibilityHandler;
 	}

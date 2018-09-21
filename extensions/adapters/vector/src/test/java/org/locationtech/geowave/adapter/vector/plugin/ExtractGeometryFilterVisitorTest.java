@@ -21,10 +21,10 @@ import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTS;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.filter.Filter;
 import org.opengis.referencing.operation.TransformException;
 

@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.mapreduce.GeoWaveKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,7 +46,7 @@ public class GeoWaveOutputKey<T> implements
 	private static final long serialVersionUID = 1L;
 	protected ByteArrayId adapterId;
 	private Collection<ByteArrayId> indexIds;
-	transient private DataAdapter<T> adapter;
+	transient private DataTypeAdapter<T> adapter;
 
 	protected GeoWaveOutputKey() {
 		super();
@@ -67,7 +67,7 @@ public class GeoWaveOutputKey<T> implements
 	}
 
 	public GeoWaveOutputKey(
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final Collection<ByteArrayId> indexIds ) {
 		this.adapter = adapter;
 		this.indexIds = indexIds;
@@ -87,12 +87,12 @@ public class GeoWaveOutputKey<T> implements
 		return indexIds;
 	}
 
-	public DataAdapter<T> getAdapter(
+	public DataTypeAdapter<T> getAdapter(
 			final TransientAdapterStore adapterCache ) {
 		if (adapter != null) {
 			return adapter;
 		}
-		return (DataAdapter<T>) adapterCache.getAdapter(adapterId);
+		return (DataTypeAdapter<T>) adapterCache.getAdapter(adapterId);
 	}
 
 	@Override

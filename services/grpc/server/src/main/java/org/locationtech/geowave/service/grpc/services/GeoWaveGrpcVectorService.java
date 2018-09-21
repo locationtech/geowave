@@ -25,15 +25,15 @@ import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
-import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.store.query.CQLQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -182,7 +182,7 @@ public class GeoWaveGrpcVectorService extends
 			private ByteArrayId indexId = null;
 			private IndexWriter<SimpleFeature> writer = null;
 
-			private DataAdapter adapter = null;
+			private DataTypeAdapter adapter = null;
 			private Index pIndex = null;
 			private SimpleFeatureTypeBuilder typeBuilder = null;
 			private SimpleFeatureBuilder featureBuilder = null;
@@ -476,7 +476,7 @@ public class GeoWaveGrpcVectorService extends
 		if (adapterId != null) {
 			Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 			if (internalAdapterId != null) {
-				DataAdapter genericAdapter = adapterStore.getAdapter(internalAdapterId);
+				DataTypeAdapter genericAdapter = adapterStore.getAdapter(internalAdapterId);
 				if (genericAdapter instanceof GeotoolsFeatureDataAdapter) {
 					adapter = (GeotoolsFeatureDataAdapter) genericAdapter;
 				}

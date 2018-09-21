@@ -27,14 +27,14 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
 import org.locationtech.geowave.adapter.vector.utils.PolygonAreaCalculator;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -56,7 +56,7 @@ public class KMeansUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansUtils.class);
 
-	public static DataAdapter writeClusterCentroids(
+	public static DataTypeAdapter writeClusterCentroids(
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
 			final String centroidAdapterName,
@@ -155,7 +155,7 @@ public class KMeansUtils
 		return featureAdapter;
 	}
 
-	public static DataAdapter writeClusterHulls(
+	public static DataTypeAdapter writeClusterHulls(
 			final JavaRDD<Vector> inputCentroids,
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,

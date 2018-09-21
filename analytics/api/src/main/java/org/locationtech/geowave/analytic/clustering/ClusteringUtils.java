@@ -25,11 +25,11 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -45,7 +45,7 @@ public class ClusteringUtils
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ClusteringUtils.class);
 
-	private static DataAdapter<?> createAdapter(
+	private static DataTypeAdapter<?> createAdapter(
 			final String sampleDataTypeId,
 			final String sampleDataNamespaceURI,
 			final AdapterStore adapterStore,
@@ -69,7 +69,7 @@ public class ClusteringUtils
 
 	}
 
-	public static DataAdapter[] getAdapters(
+	public static DataTypeAdapter[] getAdapters(
 			final PropertyManagement propertyManagement )
 			throws IOException {
 
@@ -78,13 +78,13 @@ public class ClusteringUtils
 
 		final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
-		final org.locationtech.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-		final List<DataAdapter> adapters = new LinkedList<>();
+		final org.locationtech.geowave.core.store.CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
+		final List<DataTypeAdapter> adapters = new LinkedList<>();
 		while (it.hasNext()) {
 			adapters.add(it.next());
 		}
 		it.close();
-		final DataAdapter[] result = new DataAdapter[adapters.size()];
+		final DataTypeAdapter[] result = new DataTypeAdapter[adapters.size()];
 		adapters.toArray(result);
 		return result;
 	}
@@ -141,7 +141,7 @@ public class ClusteringUtils
 				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID)));
 	}
 
-	public static DataAdapter<?> createAdapter(
+	public static DataTypeAdapter<?> createAdapter(
 			final PropertyManagement propertyManagement )
 			throws ClassNotFoundException,
 			InstantiationException,

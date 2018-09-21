@@ -19,7 +19,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.locationtech.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
 import org.slf4j.Logger;

@@ -13,7 +13,7 @@ package org.locationtech.geowave.adapter.vector.stats;
 import java.io.Serializable;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -22,7 +22,7 @@ public interface StatsConfig<T> extends
 		Serializable,
 		Persistable
 {
-	DataStatistics<T> create(
+	InternalDataStatistics<T> create(
 			Short internalDataAdapterId,
 			final String fieldName );
 }

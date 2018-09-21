@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.Writable;
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;

@@ -22,10 +22,10 @@ import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
@@ -110,7 +110,7 @@ public class CalculateStatCommand extends
 									(Integer) null,
 									statsTool,
 									authorizations),
-							(Query) null)) {
+							(QueryConstraints) null)) {
 						while (entryIt.hasNext()) {
 							entryIt.next();
 						}

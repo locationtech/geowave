@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.api;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
-public interface Aggregation<P extends Persistable, R extends Mergeable, T> extends
+public interface Aggregation<P extends Persistable, R, T> extends
 		Persistable
 {
 	/**
@@ -23,7 +23,7 @@ public interface Aggregation<P extends Persistable, R extends Mergeable, T> exte
 	 * @return A persistable object for any parameters that must be persisted to
 	 *         properly compute the aggregation
 	 */
-	public P getParameters();
+	P getParameters();
 
 	/**
 	 * Sets the parameters based on what has been persisted
@@ -31,7 +31,7 @@ public interface Aggregation<P extends Persistable, R extends Mergeable, T> exte
 	 * @param parameters
 	 *            the persisted parameters for this aggregation function
 	 */
-	public void setParameters(
+	void setParameters(
 			P parameters );
 
 	/**
@@ -42,13 +42,23 @@ public interface Aggregation<P extends Persistable, R extends Mergeable, T> exte
 	 *
 	 * @return the current result of the aggregation
 	 */
-	public R getResult();
+	R getResult();
+
+	R merge(
+			R result1,
+			R result2 );
+
+	byte[] resultToBinary(
+			R result );
+
+	R resultFromBinary(
+			byte[] binary );
 
 	/**
 	 * this will be called if the result should be reset to its default value
 	 *
 	 */
-	public void clearResult();
+	void clearResult();
 
 	/**
 	 * Update the aggregation result using the new entry provided
@@ -56,6 +66,6 @@ public interface Aggregation<P extends Persistable, R extends Mergeable, T> exte
 	 * @param entry
 	 *            the new entry to compute an updated aggregation result on
 	 */
-	public void aggregate(
+	void aggregate(
 			T entry );
 }

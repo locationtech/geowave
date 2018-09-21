@@ -31,8 +31,6 @@ import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
 import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
@@ -40,12 +38,14 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -160,7 +160,7 @@ public class QueryIndexHelperTest
 		final Date stime1 = DateUtilities.parseISO("2005-05-18T20:32:56Z");
 		final Date etime1 = DateUtilities.parseISO("2005-05-19T20:32:56Z");
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics whenStats = new FeatureTimeRangeStatistics(
 				"when");
 		statsMap.put(
@@ -228,7 +228,7 @@ public class QueryIndexHelperTest
 	public void testGetTemporalConstraintsForRangeClippedFullRange()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				"start");
 		statsMap.put(
@@ -298,7 +298,7 @@ public class QueryIndexHelperTest
 	public void testComposeQueryWithTimeRange()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				"start");
 		statsMap.put(
@@ -388,7 +388,7 @@ public class QueryIndexHelperTest
 
 	@Test
 	public void testComposeQueryWithOutTimeRange() {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				"geometry");
 		statsMap.put(
@@ -447,7 +447,7 @@ public class QueryIndexHelperTest
 
 	@Test
 	public void testGetBBOX() {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureBoundingBoxStatistics geoStats = new FeatureBoundingBoxStatistics(
 				"geometry");
 		statsMap.put(
@@ -605,7 +605,7 @@ public class QueryIndexHelperTest
 	public void testComposeSubsetConstraints()
 			throws ParseException {
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		final FeatureTimeRangeStatistics startStats = new FeatureTimeRangeStatistics(
 				"start");
 		statsMap.put(

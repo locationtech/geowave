@@ -20,15 +20,13 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
  * data adapters. When the data is ingested it is explicitly given an index and
  * a data adapter which is then persisted to be used in subsequent queries.
  * 
- * @param <T>
- *            The type of data that this datastore manages.
  */
-public interface DataStore<T>
+public interface DataStore
 {
 	/**
 	 * Returns an index writer to perform batched write operations
 	 * 
-	 * @param adapter
+	 * @param dataTypeAdapter
 	 *            The adapter that describes the data written to the set of
 	 *            indices.
 	 * @param index
@@ -36,8 +34,8 @@ public interface DataStore<T>
 	 * @return Returns the index writer which can be used for batch write
 	 *         operations
 	 */
-	public IndexWriter<T> createWriter(
-			DataAdapter<T> adapter,
+	public <T> IndexWriter<T> createWriter(
+			DataTypeAdapter<T> dataTypeAdapter,
 			Index... index )
 			throws MismatchedIndexToAdapterMapping;
 
@@ -50,17 +48,15 @@ public interface DataStore<T>
 	 * this adapter supports. The iterator will only return as many results as
 	 * the limit passed in.
 	 * 
-	 * @param queryOptions
-	 *            additional options for the processing the query
 	 * @param query
-	 *            data constraints for the query
+	 *            data constraints for the query and additional options for the
+	 *            processing the query
 	 * @return An iterator on all results that match the query. The iterator
 	 *         implements Closeable and it is best practice to close the
 	 *         iterator after it is no longer needed.
 	 */
-	public CloseableIterator<T> query(
-			final QueryOptions queryOptions,
-			final Query query );
+	public <T> CloseableIterator<T> query(
+			final Query<T> query );
 
 /**
 	 * Delete all data in this data store that matches the query parameter
@@ -81,34 +77,33 @@ public interface DataStore<T>
 	 *            data constraints for the query
 	 * @return true on success
 	 */
-	public boolean delete(
-			final QueryOptions queryOptions,
-			final Query query );
+	public <T> boolean delete(
+			final Query<T> query );
 
 	/**
 	 * Get all the adapters that have been used within this data store
 	 * 
 	 * @return An array of the adapters used within this datastore.
 	 */
-	public DataAdapter<T>[] getAdapters();
+	DataTypeAdapter<?>[] getTypes();
 
 	/**
 	 * Get all data statistics for a given adapter ID using the authorizations
 	 * provided. If adapter ID is null, it will return all statistics in this
 	 * data store.
 	 * 
-	 * @param adapterId
+	 * @param dataTypeId
 	 *            The Adapter to get the accumulated statistics for all the data
 	 *            that has been ingested. If null, it will return all data
 	 *            statistics.
 	 * @param authorizations
-	 *            A set of authorizations to use for access to the atatistics
+	 *            A set of authorizations to use for access to the statistics
 	 * @return An iterator on the data statistics. The iterator implements
 	 *         Closeable and it is best practice to close the iterator after it
 	 *         is no longer needed.
 	 */
-	public DataStatistics<T>[] getStatistics(
-			ByteArrayId adapterId,
+	Statistics<?>[] getStatistics(
+			ByteArrayId dataTypeId,
 			String... authorizations );
 
 	/**
@@ -116,7 +111,7 @@ public interface DataStore<T>
 	 * provided. If adapter ID is null, it will return all statistics in this
 	 * data store.
 	 * 
-	 * @param adapterId
+	 * @param dataTypeId
 	 *            The Adapter to get the accumulated statistics for all the data
 	 *            that has been ingested. If null, it will return all data
 	 *            statistics.
@@ -128,8 +123,8 @@ public interface DataStore<T>
 	 *         Closeable and it is best practice to close the iterator after it
 	 *         is no longer needed.
 	 */
-	public <R extends DataStatistics<T>> R getStatistics(
-			ByteArrayId adapterId,
+	<R> R getStatisticsResult(
+			ByteArrayId dataTypeId,
 			StatisticsType<R> statisticsType,
 			String... authorizations );
 
@@ -138,13 +133,15 @@ public interface DataStore<T>
 	 * particular adapter ID. Note that once data has been written for an
 	 * adapter with a set of indices, that set of indices must be consistently
 	 * used for subsequent writes (otherwise a user will run the risk of
-	 * inconsistent data).
+	 * inconsistent data). If data type ID is null it will return all
+	 * statistics.
 	 * 
-	 * @param adapterID
-	 *            an adapter ID to find the relevant indices
+	 * @param dataTypeId
+	 *            an data type adapter ID to find the relevant indices, or all
+	 *            indices if data type ID is null
 	 * 
-	 * @return An array of the indices for a given adapter.
+	 * @return An array of the indices for a given data type.
 	 */
-	public Index[] getIndices(
-			ByteArrayId adapterId );
+	Index[] getIndices(
+			ByteArrayId dataTypeId );
 }

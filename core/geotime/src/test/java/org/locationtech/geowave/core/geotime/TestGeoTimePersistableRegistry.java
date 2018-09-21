@@ -25,8 +25,8 @@ import org.locationtech.geowave.core.geotime.store.dimension.TimeArrayField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
-import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 

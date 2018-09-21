@@ -29,7 +29,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
@@ -150,7 +150,7 @@ abstract class BaseFilteredIndexQuery extends
 			final PersistentAdapterStore adapterStore ) {
 		final Map<Short, RowMergingDataAdapter> mergingAdapters = new HashMap<Short, RowMergingDataAdapter>();
 		for (final Short adapterId : adapterIds) {
-			final DataAdapter<?> adapter = adapterStore.getAdapter(
+			final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 					adapterId).getAdapter();
 			if ((adapter instanceof RowMergingDataAdapter)
 					&& (((RowMergingDataAdapter) adapter).getTransform() != null)) {

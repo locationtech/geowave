@@ -25,25 +25,25 @@ import org.apache.spark.sql.SparkSession;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.GeoWaveSparkConf;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.analytic.spark.RDDUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.opengis.filter.Filter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,7 +190,7 @@ public class KMeansRunner
 
 				short internalAdpaterId = internalAdapterStore.getInternalAdapterId(cqlAdapterId);
 
-				final DataAdapter<?> adapter = adapterStore.getAdapter(
+				final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 						internalAdpaterId).getAdapter();
 
 				if (adapter instanceof FeatureDataAdapter) {

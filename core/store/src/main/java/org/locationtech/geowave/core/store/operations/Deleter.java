@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.operations;
 
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public interface Deleter extends
@@ -18,5 +18,5 @@ public interface Deleter extends
 {
 	public void delete(
 			GeoWaveRow row,
-			DataAdapter<?> adapter );
+			DataTypeAdapter<?> adapter );
 }

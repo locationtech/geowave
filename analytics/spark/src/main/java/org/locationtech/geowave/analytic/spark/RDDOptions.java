@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark;
 
-import org.locationtech.geowave.core.store.api.QueryOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 
 public class RDDOptions
 {
 	private DistributableQuery query = null;
-	private QueryOptions queryOptions = null;
+	private QueryOptionsInt queryOptions = null;
 	private int minSplits = -1;
 	private int maxSplits = -1;
 
@@ -31,12 +31,12 @@ public class RDDOptions
 		this.query = query;
 	}
 
-	public QueryOptions getQueryOptions() {
+	public QueryOptionsInt getQueryOptions() {
 		return queryOptions;
 	}
 
 	public void setQueryOptions(
-			QueryOptions queryOptions ) {
+			QueryOptionsInt queryOptions ) {
 		this.queryOptions = queryOptions;
 	}
 

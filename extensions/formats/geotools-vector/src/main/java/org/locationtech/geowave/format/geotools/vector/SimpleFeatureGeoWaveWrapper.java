@@ -27,7 +27,7 @@ import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfig
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.format.geotools.vector.RetypingVectorDataPlugin.RetypingVectorDataSource;
 import org.opengis.feature.simple.SimpleFeature;
@@ -48,7 +48,7 @@ public class SimpleFeatureGeoWaveWrapper implements
 			CloseableIterator<GeoWaveData<SimpleFeature>>
 	{
 		private final SimpleFeatureIterator featureIterator;
-		private final DataAdapter<SimpleFeature> dataAdapter;
+		private final DataTypeAdapter<SimpleFeature> dataAdapter;
 		private RetypingVectorDataSource source = null;
 		private final Filter filter;
 		private SimpleFeatureBuilder builder = null;

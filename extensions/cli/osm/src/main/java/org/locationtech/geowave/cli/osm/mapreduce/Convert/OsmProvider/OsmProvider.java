@@ -35,7 +35,7 @@ import org.locationtech.geowave.cli.osm.mapreduce.Convert.SimpleFeatureGenerator
 import org.locationtech.geowave.cli.osm.operations.options.OSMIngestCommandArgs;
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinition;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;

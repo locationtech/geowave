@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeCache;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeLookupFactory;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 
 public class HBaseNumericIndexStrategyFilter extends

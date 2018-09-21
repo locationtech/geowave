@@ -15,7 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.QueryConstraints;
+import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
 import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
@@ -58,7 +58,7 @@ public class CompositeConstraints implements
 	@Override
 	public DistributableQueryFilter getFilter() {
 		final List<DistributableQueryFilter> filters = new ArrayList<DistributableQueryFilter>();
-		for (final QueryConstraints constraint : constraints) {
+		for (final IndexConstraints constraint : constraints) {
 			if (constraint instanceof FilterableConstraints) {
 				DistributableQueryFilter filter = ((FilterableConstraints) constraint).getFilter();
 				if (filter != null) {

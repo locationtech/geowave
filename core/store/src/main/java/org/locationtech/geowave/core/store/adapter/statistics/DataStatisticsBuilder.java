@@ -17,8 +17,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
@@ -31,13 +30,13 @@ public class DataStatisticsBuilder<T> implements
 		ScanCallback<T, GeoWaveRow>
 {
 	private final DataStoreStatisticsProvider<T> statisticsProvider;
-	private final Map<ByteArrayId, DataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, DataStatistics<T>>();
+	private final Map<ByteArrayId, InternalDataStatistics<T>> statisticsMap = new HashMap<ByteArrayId, InternalDataStatistics<T>>();
 	private final ByteArrayId statisticsId;
 	private final EntryVisibilityHandler<T> visibilityHandler;
 
 	public DataStatisticsBuilder(
 			final Index index,
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final ByteArrayId statisticsId ) {
 		this.statisticsProvider = statisticsProvider;
@@ -56,7 +55,7 @@ public class DataStatisticsBuilder<T> implements
 				visibilityHandler.getVisibility(
 						entry,
 						kvs));
-		DataStatistics<T> statistics = statisticsMap.get(visibility);
+		InternalDataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			if (statistics == null) {
@@ -72,7 +71,7 @@ public class DataStatisticsBuilder<T> implements
 				kvs);
 	}
 
-	public Collection<DataStatistics<T>> getStatistics() {
+	public Collection<InternalDataStatistics<T>> getStatistics() {
 		return statisticsMap.values();
 	}
 
@@ -85,7 +84,7 @@ public class DataStatisticsBuilder<T> implements
 				visibilityHandler.getVisibility(
 						entry,
 						kv));
-		DataStatistics<T> statistics = statisticsMap.get(visibilityByteArray);
+		InternalDataStatistics<T> statistics = statisticsMap.get(visibilityByteArray);
 		if (statistics == null) {
 			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			statistics.setVisibility(visibilityByteArray.getBytes());
@@ -108,7 +107,7 @@ public class DataStatisticsBuilder<T> implements
 				visibilityHandler.getVisibility(
 						entry,
 						kv));
-		DataStatistics<T> statistics = statisticsMap.get(visibility);
+		InternalDataStatistics<T> statistics = statisticsMap.get(visibility);
 		if (statistics == null) {
 			statistics = statisticsProvider.createDataStatistics(statisticsId);
 			if (statistics == null) {

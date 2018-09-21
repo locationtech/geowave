@@ -19,16 +19,16 @@ import org.geotools.data.Query;
 import org.geotools.data.store.ContentEntry;
 import org.geotools.data.store.ContentFeatureStore;
 import org.geotools.geometry.jts.ReferencedEnvelope;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -68,10 +68,10 @@ public class GeoWaveFeatureSource extends
 			throws IOException {
 		double minx = -90.0, maxx = 90.0, miny = -180.0, maxy = 180.0;
 
-		DataStatistics<SimpleFeature> bboxStats = null;
+		InternalDataStatistics<SimpleFeature> bboxStats = null;
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
 					components).getDataStatistics();
 			bboxStats = stats.get(FeatureBoundingBoxStatistics.composeId(getFeatureType()
 					.getGeometryDescriptor()
@@ -127,9 +127,9 @@ public class GeoWaveFeatureSource extends
 	protected int getCountInternal(
 			final Query query )
 			throws IOException {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats = new GeoWaveEmptyTransaction(
 				components).getDataStatistics();
-		final DataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_TYPE);
+		final InternalDataStatistics<SimpleFeature> countStats = stats.get(CountDataStatistics.STATS_TYPE);
 		if ((countStats != null) && query.getFilter().equals(
 				Filter.INCLUDE)) {
 			return (int) ((CountDataStatistics) countStats).getCount();

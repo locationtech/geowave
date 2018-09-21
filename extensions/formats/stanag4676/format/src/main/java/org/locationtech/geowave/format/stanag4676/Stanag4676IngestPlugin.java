@@ -32,9 +32,9 @@ import org.apache.hadoop.io.Text;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.jaitools.jts.CoordinateSequence2D;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -48,7 +48,7 @@ import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.KeyValueData;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
@@ -139,7 +139,7 @@ public class Stanag4676IngestPlugin extends
 	}
 
 	@Override
-	public DataAdapter<Object>[] getDataAdapters(
+	public DataTypeAdapter<Object>[] getDataAdapters(
 			final String globalVisibility ) {
 		return new IngestWithReducerImpl().getDataAdapters(globalVisibility);
 	}
@@ -204,13 +204,13 @@ public class Stanag4676IngestPlugin extends
 		}
 
 		@Override
-		public DataAdapter<Object>[] getDataAdapters(
+		public DataTypeAdapter<Object>[] getDataAdapters(
 				final String globalVisibility ) {
 			final FieldVisibilityHandler fieldVisiblityHandler = ((globalVisibility != null) && !globalVisibility
 					.isEmpty()) ? new GlobalVisibilityHandler(
 					globalVisibility) : null;
 
-			return new DataAdapter[] {
+			return new DataTypeAdapter[] {
 				new FeatureDataAdapter(
 						pointType,
 						fieldVisiblityHandler),

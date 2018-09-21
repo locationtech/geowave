@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -158,7 +158,7 @@ public class GeoWaveOutputFormat extends
 
 	public static void addDataAdapter(
 			final Configuration config,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		JobContextAdapterStore.addDataAdapter(
 				config,
 				adapter);
@@ -302,7 +302,7 @@ public class GeoWaveOutputFormat extends
 						"Empty index ID input list");
 			}
 
-			final DataAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
+			final DataTypeAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
 			if (adapter != null) {
 				final IndexWriter indexWriter = getIndexWriter(
 						adapter,
@@ -334,7 +334,7 @@ public class GeoWaveOutputFormat extends
 		}
 
 		private synchronized IndexWriter<?> getIndexWriter(
-				final DataAdapter<?> adapter,
+				final DataTypeAdapter<?> adapter,
 				final Collection<ByteArrayId> indexIds )
 				throws MismatchedIndexToAdapterMapping {
 			IndexWriter<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());

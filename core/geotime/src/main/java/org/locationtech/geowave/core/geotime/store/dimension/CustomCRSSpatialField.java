@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;

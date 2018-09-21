@@ -41,9 +41,10 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
@@ -400,10 +401,10 @@ public class SqlQueryRunner
 
 		for (final InputStoreInfo storeInfo : addStores) {
 
-			final DataAdapter<?> adapter = storeInfo.getOrCreateAdapterStore().getAdapter(
+			final DataTypeAdapter<?> adapter = storeInfo.getOrCreateAdapterStore().getAdapter(
 					storeInfo.getOrCreateInternalAdapterStore().getInternalAdapterId(
 							storeInfo.adapterId));
-			final QueryOptions queryOptions = new QueryOptions(
+			final QueryOptionsInt queryOptions = new QueryOptions(
 					adapter);
 
 			final RDDOptions rddOpts = new RDDOptions();

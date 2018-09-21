@@ -17,7 +17,7 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.slf4j.Logger;

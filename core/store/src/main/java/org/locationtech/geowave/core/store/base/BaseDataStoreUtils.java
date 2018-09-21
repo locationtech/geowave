@@ -42,9 +42,9 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.DataWriter;
@@ -379,7 +379,7 @@ public class BaseDataStoreUtils
 	private static <T> List<FieldInfo<?>> composeFlattenedFields(
 			final List<FieldInfo<?>> originalList,
 			final CommonIndexModel model,
-			final DataAdapter<?> writableAdapter ) {
+			final DataTypeAdapter<?> writableAdapter ) {
 		final List<FieldInfo<?>> retVal = new ArrayList<>();
 		final Map<ByteArrayId, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
 		boolean sharedVisibility = false;
@@ -537,7 +537,7 @@ public class BaseDataStoreUtils
 	}
 
 	public static List<Pair<Index, List<Short>>> getAdaptersWithMinimalSetOfIndices(
-			QueryOptions options,
+			QueryOptionsInt options,
 			TransientAdapterStore adapterStore,
 			InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
@@ -552,7 +552,7 @@ public class BaseDataStoreUtils
 	}
 
 	private static List<Pair<Index, Short>> compileIndicesForAdapters(
-			QueryOptions options,
+			QueryOptionsInt options,
 			TransientAdapterStore adapterStore,
 			InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
@@ -563,7 +563,7 @@ public class BaseDataStoreUtils
 		List<ByteArrayId> adapterIds = options.getAdapterIds();
 		if ((adapterIds == null) || adapterIds.isEmpty()) {
 			adapterIds = new ArrayList<ByteArrayId>();
-			try (CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+			try (CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters()) {
 				while (it.hasNext()) {
 					adapterIds.add(it.next().getAdapterId());
 				}

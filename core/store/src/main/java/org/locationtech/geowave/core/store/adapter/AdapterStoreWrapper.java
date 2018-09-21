@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.adapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
@@ -50,7 +50,7 @@ public class AdapterStoreWrapper implements
 			return null;
 		}
 		return new InternalDataAdapterWrapper<>(
-				(DataAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
+				(DataTypeAdapter<?>) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
 				internalAdapterId);
 	}
 
@@ -66,18 +66,18 @@ public class AdapterStoreWrapper implements
 
 	@Override
 	public CloseableIterator<InternalDataAdapter<?>> getAdapters() {
-		final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
+		final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
 		return new CloseableIteratorWrapper<>(
 				it,
 				Iterators.transform(
 						it,
-						new Function<DataAdapter<?>, InternalDataAdapter<?>>() {
+						new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
 
 							@Override
 							public InternalDataAdapter<?> apply(
-									final DataAdapter<?> input ) {
+									final DataTypeAdapter<?> input ) {
 								return new InternalDataAdapterWrapper<>(
-										(DataAdapter<?>) input,
+										(DataTypeAdapter<?>) input,
 										internalAdapterStore.getInternalAdapterId(input.getAdapterId()));
 							}
 

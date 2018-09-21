@@ -29,7 +29,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.BaseDataStoreTest;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 

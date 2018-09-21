@@ -14,8 +14,8 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -102,11 +102,11 @@ public class FeatureFixedBinNumericStatistics extends
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return decomposeNameFromId(getStatisticsType());
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature> duplicate() {
 		return new FeatureFixedBinNumericStatistics(
 				internalDataAdapterId,
 				getFieldName());
@@ -190,7 +190,7 @@ public class FeatureFixedBinNumericStatistics extends
 		}
 
 		@Override
-		public DataStatistics<SimpleFeature> create(
+		public InternalDataStatistics<SimpleFeature> create(
 				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureFixedBinNumericStatistics(

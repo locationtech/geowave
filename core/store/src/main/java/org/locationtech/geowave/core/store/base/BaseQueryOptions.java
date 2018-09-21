@@ -29,9 +29,9 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -70,7 +70,7 @@ public class BaseQueryOptions
 	private boolean nullId = false;
 
 	public BaseQueryOptions(
-			final QueryOptions options,
+			final QueryOptionsInt options,
 			final InternalAdapterStore internalAdapterStore ) {
 		super();
 		indexId = options.getIndexId();
@@ -81,22 +81,22 @@ public class BaseQueryOptions
 		authorizations = options.getAuthorizations();
 
 		if (options.getAggregation() != null) {
-			final DataAdapter<?> adapter = options.getAggregation().getLeft();
+			final DataTypeAdapter<?> adapter = options.getAggregation().getLeft();
 			final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 			aggregationAdapterPair = new ImmutablePair<>(
 					new InternalDataAdapterWrapper(
-							(DataAdapter) adapter,
+							(DataTypeAdapter) adapter,
 							internalAdapterId),
 					options.getAggregation().getRight());
 		}
 
 		if (options.getFieldIdsAdapterPair() != null) {
-			final DataAdapter<?> adapter = options.getFieldIdsAdapterPair().getRight();
+			final DataTypeAdapter<?> adapter = options.getFieldIdsAdapterPair().getRight();
 			final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
 			fieldIdsAdapterPair = new ImmutablePair<>(
 					options.getFieldIdsAdapterPair().getLeft(),
 					new InternalDataAdapterWrapper(
-							(DataAdapter) adapter,
+							(DataTypeAdapter) adapter,
 							internalAdapterId));
 		}
 
@@ -127,10 +127,10 @@ public class BaseQueryOptions
 			adapters = Collections2.filter(
 					Lists.transform(
 							options.getAdapters(),
-							new Function<DataAdapter<?>, InternalDataAdapter<?>>() {
+							new Function<DataTypeAdapter<?>, InternalDataAdapter<?>>() {
 								@Override
 								public InternalDataAdapter<?> apply(
-										final DataAdapter<?> adapter ) {
+										final DataTypeAdapter<?> adapter ) {
 									final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter
 											.getAdapterId());
 									if (internalAdapterId == null) {
@@ -139,7 +139,7 @@ public class BaseQueryOptions
 										return null;
 									}
 									return new InternalDataAdapterWrapper(
-											(DataAdapter) adapter,
+											(DataTypeAdapter) adapter,
 											internalAdapterId);
 								}
 							}),

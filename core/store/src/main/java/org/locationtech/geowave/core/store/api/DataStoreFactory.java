@@ -5,7 +5,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 
 public class DataStoreFactory
 {
-	public static DataStore<?> createDataStore(
+	public static DataStore createDataStore(
 			StoreFactoryOptions requiredOptions ) {
 		return new DataStorePluginOptions(
 				requiredOptions).createDataStore();

@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
@@ -331,7 +331,7 @@ public class GeoWaveConfiguratorBase
 	public static void addDataAdapter(
 			final Class<?> implementingClass,
 			final Configuration conf,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		if (adapter != null) {
 			conf.set(
 					enumToConfKey(
@@ -354,7 +354,7 @@ public class GeoWaveConfiguratorBase
 		}
 	}
 
-	public static DataAdapter<?> getDataAdapter(
+	public static DataTypeAdapter<?> getDataAdapter(
 			final Class<?> implementingClass,
 			final JobContext context,
 			final ByteArrayId adapterId ) {
@@ -364,7 +364,7 @@ public class GeoWaveConfiguratorBase
 				adapterId);
 	}
 
-	private static DataAdapter<?> getDataAdapterInternal(
+	private static DataTypeAdapter<?> getDataAdapterInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration,
 			final ByteArrayId adapterId ) {
@@ -374,12 +374,12 @@ public class GeoWaveConfiguratorBase
 				adapterId.getString()));
 		if (input != null) {
 			final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(input);
-			return (DataAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes);
+			return (DataTypeAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes);
 		}
 		return null;
 	}
 
-	public static DataAdapter<?>[] getDataAdapters(
+	public static DataTypeAdapter<?>[] getDataAdapters(
 			final Class<?> implementingClass,
 			final JobContext context ) {
 		return getDataAdaptersInternal(
@@ -404,22 +404,22 @@ public class GeoWaveConfiguratorBase
 		return retVal;
 	}
 
-	private static DataAdapter<?>[] getDataAdaptersInternal(
+	private static DataTypeAdapter<?>[] getDataAdaptersInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration ) {
 		final Map<String, String> input = configuration.getValByRegex(enumToConfKey(
 				implementingClass,
 				GeoWaveConfg.DATA_ADAPTER) + "*");
 		if (input != null) {
-			final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>(
+			final List<DataTypeAdapter<?>> adapters = new ArrayList<DataTypeAdapter<?>>(
 					input.size());
 			for (final String dataAdapterStr : input.values()) {
 				final byte[] dataAdapterBytes = ByteArrayUtils.byteArrayFromString(dataAdapterStr);
-				adapters.add((DataAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes));
+				adapters.add((DataTypeAdapter<?>) PersistenceUtils.fromBinary(dataAdapterBytes));
 			}
-			return adapters.toArray(new DataAdapter[adapters.size()]);
+			return adapters.toArray(new DataTypeAdapter[adapters.size()]);
 		}
-		return new DataAdapter[] {};
+		return new DataTypeAdapter[] {};
 	}
 
 	private static Index getIndexInternal(

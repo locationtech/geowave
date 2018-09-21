@@ -12,11 +12,11 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Iterator;
 
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 
 public interface IndexDependentDataAdapter<T> extends
-		DataAdapter<T>
+		DataTypeAdapter<T>
 {
 	public Iterator<T> convertToIndex(
 			Index index,

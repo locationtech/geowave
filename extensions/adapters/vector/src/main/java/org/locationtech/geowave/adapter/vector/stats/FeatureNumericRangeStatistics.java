@@ -13,8 +13,8 @@ package org.locationtech.geowave.adapter.vector.stats;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 
 import net.sf.json.JSONException;
@@ -57,7 +57,7 @@ public class FeatureNumericRangeStatistics extends
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return decomposeNameFromId(getStatisticsType());
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class FeatureNumericRangeStatistics extends
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature> duplicate() {
 		return new FeatureNumericRangeStatistics(
 				internalDataAdapterId,
 				getFieldName());
@@ -150,7 +150,7 @@ public class FeatureNumericRangeStatistics extends
 		private static final long serialVersionUID = 6309383518148391565L;
 
 		@Override
-		public DataStatistics<SimpleFeature> create(
+		public InternalDataStatistics<SimpleFeature> create(
 				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureNumericRangeStatistics(

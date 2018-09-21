@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
  *            The type for the entries handled by this adapter
  */
 abstract public class AbstractDataAdapter<T> implements
-		DataAdapter<T>
+		DataTypeAdapter<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AbstractDataAdapter.class);
 	protected Map<Class<?>, IndexFieldHandler<T, ? extends CommonIndexValue, Object>> typeMatchingFieldHandlers;

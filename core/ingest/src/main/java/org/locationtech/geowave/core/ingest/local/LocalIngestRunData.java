@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -87,22 +87,22 @@ public class LocalIngestRunData implements
 	private final DataStore dataStore;
 
 	public LocalIngestRunData(
-			final List<DataAdapter<?>> adapters,
+			final List<DataTypeAdapter<?>> adapters,
 			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		indexWriterPool = new GenericKeyedObjectPool<>(
 				new IndexWriterFactory());
 		adapterStore = new MemoryAdapterStore(
-				adapters.toArray(new DataAdapter[0]));
+				adapters.toArray(new DataTypeAdapter[0]));
 	}
 
-	public DataAdapter<?> getDataAdapter(
+	public DataTypeAdapter<?> getDataAdapter(
 			final GeoWaveData<?> data ) {
 		return data.getAdapter(adapterStore);
 	}
 
 	public void addAdapter(
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		adapterStore.addAdapter(adapter);
 	}
 
@@ -162,7 +162,7 @@ public class LocalIngestRunData implements
 				final AdapterIdKeyWithIndices adapterWithIndices )
 				throws Exception {
 			return dataStore.createWriter(
-					(DataAdapter<?>) adapterStore.getAdapter(adapterWithIndices.adapterId),
+					(DataTypeAdapter<?>) adapterStore.getAdapter(adapterWithIndices.adapterId),
 					adapterWithIndices.indices);
 		}
 

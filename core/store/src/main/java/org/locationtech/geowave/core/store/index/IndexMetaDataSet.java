@@ -21,8 +21,8 @@ import org.locationtech.geowave.core.index.SortedIndexStrategy;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -70,7 +70,7 @@ public class IndexMetaDataSet<T> extends
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
+	public InternalDataStatistics<T> duplicate() {
 		return new IndexMetaDataSet<T>(
 				internalDataAdapterId,
 				statisticsId,

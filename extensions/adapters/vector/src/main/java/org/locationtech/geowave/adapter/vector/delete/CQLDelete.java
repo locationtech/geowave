@@ -18,19 +18,19 @@ import java.util.List;
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.time.StopWatch;
 import org.geotools.filter.text.cql2.CQLException;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.cli.VectorSection;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
@@ -151,7 +151,7 @@ public class CQLDelete extends
 					new QueryOptions(
 							adapterId,
 							indexId),
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
+					org.locationtech.geowave.core.geotime.store.query.CQLQuery.createOptimalQuery(
 							cqlStr,
 							adapter,
 							null,
@@ -173,7 +173,7 @@ public class CQLDelete extends
 					new QueryOptions(
 							adapterId,
 							indexId),
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
+					org.locationtech.geowave.core.geotime.store.query.CQLQuery.createOptimalQuery(
 							cqlStr,
 							adapter,
 							null,

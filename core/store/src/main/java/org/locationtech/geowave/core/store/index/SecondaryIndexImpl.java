@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 
 /**
@@ -42,7 +42,7 @@ public class SecondaryIndexImpl<T> implements
 	private static final String TABLE_PREFIX = "GEOWAVE_2ND_IDX_";
 	private FieldIndexStrategy<?, ?> indexStrategy;
 	private ByteArrayId fieldId;
-	private List<DataStatistics<T>> associatedStatistics;
+	private List<InternalDataStatistics<T>> associatedStatistics;
 	private SecondaryIndexType secondaryIndexType;
 	private ByteArrayId secondaryIndexId;
 	private List<ByteArrayId> partialFieldIds;
@@ -52,7 +52,7 @@ public class SecondaryIndexImpl<T> implements
 	public SecondaryIndexImpl(
 			final FieldIndexStrategy<?, ?> indexStrategy,
 			final ByteArrayId fieldId,
-			final List<DataStatistics<T>> associatedStatistics,
+			final List<InternalDataStatistics<T>> associatedStatistics,
 			final SecondaryIndexType secondaryIndexType ) {
 		this(
 				indexStrategy,
@@ -65,7 +65,7 @@ public class SecondaryIndexImpl<T> implements
 	public SecondaryIndexImpl(
 			final FieldIndexStrategy<?, ?> indexStrategy,
 			final ByteArrayId fieldId,
-			final List<DataStatistics<T>> associatedStatistics,
+			final List<InternalDataStatistics<T>> associatedStatistics,
 			final SecondaryIndexType secondaryIndexType,
 			final List<ByteArrayId> partialFieldIds ) {
 		super();
@@ -96,7 +96,7 @@ public class SecondaryIndexImpl<T> implements
 		return secondaryIndexId;
 	}
 
-	public List<DataStatistics<T>> getAssociatedStatistics() {
+	public List<InternalDataStatistics<T>> getAssociatedStatistics() {
 		return associatedStatistics;
 	}
 
@@ -141,7 +141,7 @@ public class SecondaryIndexImpl<T> implements
 		final byte[] fieldIdBinary = fieldId.getBytes();
 		final byte[] secondaryIndexTypeBinary = StringUtils.stringToBinary(secondaryIndexType.getValue());
 		final List<Persistable> persistables = new ArrayList<Persistable>();
-		for (DataStatistics<T> dataStatistics : associatedStatistics) {
+		for (InternalDataStatistics<T> dataStatistics : associatedStatistics) {
 			persistables.add(dataStatistics);
 		}
 		final byte[] persistablesBinary = PersistenceUtils.toBinary(persistables);
@@ -208,7 +208,7 @@ public class SecondaryIndexImpl<T> implements
 		buf.get(persistablesBinary);
 		final List<Persistable> persistables = PersistenceUtils.fromBinaryAsList(persistablesBinary);
 		for (final Persistable persistable : persistables) {
-			associatedStatistics.add((DataStatistics<T>) persistable);
+			associatedStatistics.add((InternalDataStatistics<T>) persistable);
 		}
 		secondaryIndexId = new ByteArrayId(
 				StringUtils.stringToBinary(indexStrategy.getId() + "_" + secondaryIndexType.getValue()));

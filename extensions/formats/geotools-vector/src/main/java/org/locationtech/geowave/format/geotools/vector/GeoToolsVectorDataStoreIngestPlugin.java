@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.opengis.feature.simple.SimpleFeature;
@@ -146,9 +146,9 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public DataAdapter<SimpleFeature>[] getDataAdapters(
+	public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
-		return new DataAdapter[] {};
+		return new DataTypeAdapter[] {};
 	}
 
 	@Override

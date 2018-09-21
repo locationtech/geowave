@@ -17,8 +17,8 @@ import static org.junit.Assert.assertTrue;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public class TimeDescriptorsTest

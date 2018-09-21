@@ -18,7 +18,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -82,7 +81,7 @@ public class DuplicateEntryCount<T> extends
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
+	public InternalDataStatistics<T> duplicate() {
 		return new DuplicateEntryCount<>(
 				internalDataAdapterId,
 				statisticsId,

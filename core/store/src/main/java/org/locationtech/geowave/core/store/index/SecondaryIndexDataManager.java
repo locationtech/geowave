@@ -18,7 +18,7 @@ import java.util.List;
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
@@ -183,7 +183,7 @@ public class SecondaryIndexDataManager<T> implements
 			}
 			if (delete) {
 				// capture statistics
-				for (final DataStatistics<T> associatedStatistic : secondaryIndex.getAssociatedStatistics()) {
+				for (final InternalDataStatistics<T> associatedStatistic : secondaryIndex.getAssociatedStatistics()) {
 					associatedStatistic.entryIngested(
 							entry,
 							kvs);

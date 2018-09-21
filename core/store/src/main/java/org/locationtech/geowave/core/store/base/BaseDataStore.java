@@ -33,15 +33,15 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
@@ -57,18 +57,18 @@ import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Deleter;
-import org.locationtech.geowave.core.store.query.AdapterQuery;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.InsertionIdQuery;
-import org.locationtech.geowave.core.store.query.PrefixIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 
-public class BaseDataStore<T> implements
-		DataStore<T>
+public class BaseDataStore implements
+		DataStore
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseDataStore.class);
 
@@ -123,8 +123,8 @@ public class BaseDataStore<T> implements
 	}
 
 	@Override
-	public IndexWriter<T> createWriter(
-			final DataAdapter<T> adapter,
+	public <T> IndexWriter<T> createWriter(
+			final DataTypeAdapter<T> adapter,
 			final Index... indices )
 			throws MismatchedIndexToAdapterMapping {
 		adapter.init(indices);
@@ -193,9 +193,9 @@ public class BaseDataStore<T> implements
 	}
 
 	@Override
-	public CloseableIterator<T> query(
-			final QueryOptions queryOptions,
-			final Query query ) {
+	public <T> CloseableIterator<T> query(
+			final QueryOptions<T> queryOptions,
+			final QueryConstraints query ) {
 		return internalQuery(
 				queryOptions,
 				query,
@@ -214,8 +214,8 @@ public class BaseDataStore<T> implements
 	 * org.locationtech.geowave.core.store.query.Query)
 	 */
 	protected <T> CloseableIterator<T> internalQuery(
-			final QueryOptions queryOptions,
-			final Query query,
+			final QueryOptions<T> queryOptions,
+			final QueryConstraints query,
 			final boolean delete ) {
 		final List<CloseableIterator<Object>> results = new ArrayList<>();
 		// all queries will use the same instance of the dedupe filter for
@@ -226,8 +226,8 @@ public class BaseDataStore<T> implements
 				internalAdapterStore);
 
 		// If CQL filter is set
-		if (query instanceof AdapterQuery) {
-			final ByteArrayId CQlAdapterId = ((AdapterQuery) query).getAdapterId();
+		if (query instanceof TypeConstraintQuery) {
+			final ByteArrayId CQlAdapterId = ((TypeConstraintQuery) query).getAdapterId();
 
 			if ((sanitizedQueryOptions.getAdapterIds() == null) || (sanitizedQueryOptions.getAdapterIds().isEmpty())) {
 				sanitizedQueryOptions.setInternalAdapterId(internalAdapterStore.getInternalAdapterId(CQlAdapterId));
@@ -250,7 +250,7 @@ public class BaseDataStore<T> implements
 
 		}
 
-		final Query sanitizedQuery = (query == null) ? new EverythingQuery() : query;
+		final QueryConstraints sanitizedQuery = (query == null) ? new EverythingQuery() : query;
 
 		final DedupeFilter filter = new DedupeFilter();
 		MemoryPersistentAdapterStore tempAdapterStore;
@@ -363,7 +363,7 @@ public class BaseDataStore<T> implements
 	@Override
 	public boolean delete(
 			final QueryOptions queryOptions,
-			final Query query ) {
+			final QueryConstraints query ) {
 		if (((query == null) || (query instanceof EverythingQuery)) && queryOptions.isAllAdapters()) {
 			return deleteEverything();
 		}
@@ -375,8 +375,8 @@ public class BaseDataStore<T> implements
 				true);
 
 		// If CQL filter is set
-		if (query instanceof AdapterQuery) {
-			final ByteArrayId CQlAdapterId = ((AdapterQuery) query).getAdapterId();
+		if (query instanceof TypeConstraintQuery) {
+			final ByteArrayId CQlAdapterId = ((TypeConstraintQuery) query).getAdapterId();
 
 			if ((sanitizedQueryOptions.getAdapterIds() == null) || (sanitizedQueryOptions.getAdapterIds().isEmpty())) {
 				sanitizedQueryOptions.setInternalAdapterId(internalAdapterStore.getInternalAdapterId(CQlAdapterId));
@@ -613,7 +613,7 @@ public class BaseDataStore<T> implements
 	protected CloseableIterator<Object> queryConstraints(
 			final List<Short> adapterIdsToQuery,
 			final Index index,
-			final Query sanitizedQuery,
+			final QueryConstraints sanitizedQuery,
 			final DedupeFilter filter,
 			final BaseQueryOptions sanitizedQueryOptions,
 			final PersistentAdapterStore tempAdapterStore,
@@ -752,7 +752,7 @@ public class BaseDataStore<T> implements
 	protected <T> void addAltIndexCallback(
 			final List<IngestCallback<T>> callbacks,
 			final String indexName,
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final ByteArrayId primaryIndexId ) {
 		try {
 			callbacks.add(new AltIndexCallback<>(
@@ -775,14 +775,14 @@ public class BaseDataStore<T> implements
 				new byte[0]);
 		private final ByteArrayId EMPTY_FIELD_ID = new ByteArrayId(
 				new byte[0]);
-		private final DataAdapter<T> adapter;
+		private final DataTypeAdapter<T> adapter;
 		private final String altIdxTableName;
 		private final ByteArrayId primaryIndexId;
 		private final ByteArrayId altIndexId;
 
 		public AltIndexCallback(
 				final String indexName,
-				final DataAdapter<T> adapter,
+				final DataTypeAdapter<T> adapter,
 				final ByteArrayId primaryIndexId ) {
 			this.adapter = adapter;
 			altIdxTableName = indexName + ALT_INDEX_TABLE;
@@ -844,60 +844,60 @@ public class BaseDataStore<T> implements
 	}
 
 	@Override
-	public DataStatistics<T>[] getStatistics(
+	public InternalDataStatistics<?>[] getStatistics(
 			final ByteArrayId adapterId,
 			final String... authorizations ) {
 		if (adapterId == null) {
-			try (CloseableIterator<DataStatistics<T>> it = (CloseableIterator) statisticsStore
+			try (CloseableIterator<InternalDataStatistics<?>> it = (CloseableIterator) statisticsStore
 					.getAllDataStatistics(authorizations)) {
 				return Iterators.toArray(
 						it,
-						DataStatistics.class);
+						InternalDataStatistics.class);
 			}
 			catch (IOException e) {
 				LOGGER.warn(
 						"Unable to close statistics iterator",
 						e);
-				return new DataStatistics[0];
+				return new InternalDataStatistics[0];
 			}
 		}
 		final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
 		if (internalAdapterId == null) {
 			LOGGER.warn("Unable to find adapter '" + adapterId.getString() + "' for stats");
-			return new DataStatistics[0];
+			return new InternalDataStatistics[0];
 		}
-		try (CloseableIterator<DataStatistics<T>> it = (CloseableIterator) statisticsStore.getDataStatistics(
+		try (CloseableIterator<InternalDataStatistics<?>> it = (CloseableIterator) statisticsStore.getDataStatistics(
 				internalAdapterId,
 				authorizations)) {
 			return Iterators.toArray(
 					it,
-					DataStatistics.class);
+					InternalDataStatistics.class);
 		}
 		catch (IOException e) {
 			LOGGER.warn(
 					"Unable to close statistics iterator per adapter",
 					e);
-			return new DataStatistics[0];
+			return new InternalDataStatistics[0];
 		}
 	}
 
 	@Override
-	public DataAdapter<T>[] getAdapters() {
+	public DataTypeAdapter<?>[] getAdapters() {
 		try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
 			return Iterators
 					.toArray(
 							Iterators
 									.transform(
 											it,
-											a -> (DataAdapter<T>) a.getAdapter()),
-							DataAdapter.class);
+											a -> (DataTypeAdapter<?>) a.getAdapter()),
+							DataTypeAdapter.class);
 		}
 		catch (final IOException e) {
 			LOGGER
 					.warn(
 							"Unable to close adapter iterator",
 							e);
-			return new DataAdapter[0];		}
+			return new DataTypeAdapter[0];		}
 	}
 
 	@Override
@@ -913,7 +913,7 @@ public class BaseDataStore<T> implements
 	}
 
 	@Override
-	public <R extends DataStatistics<T>> R getStatistics(
+	public <R extends InternalDataStatistics<?>> R getStatistics(
 			ByteArrayId adapterId,
 			StatisticsType<R> statisticsType,
 			String... authorizations ) {

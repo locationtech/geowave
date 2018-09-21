@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
@@ -38,7 +38,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
@@ -164,10 +164,10 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				job.getConfiguration(),
 				dataStoreOptions);
 		final DataStore store = dataStoreOptions.createDataStore();
-		final DataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
+		final DataTypeAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
 		final Index[] indexesArray = indexes.toArray(new Index[indexes.size()]);
 		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-			for (final DataAdapter<?> dataAdapter : dataAdapters) {
+			for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
 				// from a controlled client, intialize the writer within the
 				// context of the datastore before distributing ingest
 				// however, after ingest we should cleanup any pre-created
@@ -230,7 +230,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 			PersistentAdapterStore adapterStore = null;
 			AdapterIndexMappingStore adapterIndexMappingStore = null;
 			InternalAdapterStore internalAdapterStore = null;
-			for (final DataAdapter<?> dataAdapter : dataAdapters) {
+			for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
 				final QueryOptions queryOptions = new QueryOptions(
 						dataAdapter);
 				queryOptions.setLimit(1);

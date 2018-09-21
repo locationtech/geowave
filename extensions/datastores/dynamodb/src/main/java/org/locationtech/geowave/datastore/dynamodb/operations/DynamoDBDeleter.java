@@ -13,7 +13,7 @@ package org.locationtech.geowave.datastore.dynamodb.operations;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
@@ -46,7 +46,7 @@ public class DynamoDBDeleter implements
 	@Override
 	public void delete(
 			final GeoWaveRow row,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		final DynamoDBRow dynRow = (DynamoDBRow) row;
 
 		for (final Map<String, AttributeValue> attributeMappings : dynRow.getAttributeMapping()) {

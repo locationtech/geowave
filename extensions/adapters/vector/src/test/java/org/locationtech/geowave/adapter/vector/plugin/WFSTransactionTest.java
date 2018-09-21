@@ -38,7 +38,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -152,7 +152,7 @@ public class WFSTransactionTest extends
 		reader = ((GeoWaveFeatureSource) ((GeoWaveGTDataStore) dataStore).getFeatureSource(
 				"geostuff",
 				transaction3)).getReaderInternal(query);
-		Map<ByteArrayId, DataStatistics<SimpleFeature>> transStats = ((GeoWaveFeatureReader) reader)
+		Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> transStats = ((GeoWaveFeatureReader) reader)
 				.getTransaction()
 				.getDataStatistics();
 		assertNotNull(transStats.get(FeatureNumericRangeStatistics.composeId("pop")));

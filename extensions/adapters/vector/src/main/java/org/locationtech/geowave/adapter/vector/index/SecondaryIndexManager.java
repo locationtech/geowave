@@ -20,7 +20,7 @@ import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.geowave.core.store.index.numeric.NumericFieldIndexStrategy;
@@ -139,8 +139,8 @@ public class SecondaryIndexManager implements
 			final SecondaryIndexType secondaryIndexType,
 			final List<ByteArrayId> fieldsForPartial ) {
 
-		final List<DataStatistics<SimpleFeature>> statistics = new ArrayList<>();
-		DataStatistics<SimpleFeature> stat = null;
+		final List<InternalDataStatistics<SimpleFeature>> statistics = new ArrayList<>();
+		InternalDataStatistics<SimpleFeature> stat = null;
 		switch (secondaryIndexKey) {
 
 			case NumericSecondaryIndexConfiguration.INDEX_KEY:
@@ -184,7 +184,7 @@ public class SecondaryIndexManager implements
 				break;
 
 		}
-		for (final DataStatistics<SimpleFeature> statistic : statistics) {
+		for (final InternalDataStatistics<SimpleFeature> statistic : statistics) {
 			statsManager.addStats(
 					statistic,
 					fieldId);

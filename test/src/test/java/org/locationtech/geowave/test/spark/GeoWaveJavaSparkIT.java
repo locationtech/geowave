@@ -26,10 +26,10 @@ import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
@@ -185,11 +185,11 @@ public class GeoWaveJavaSparkIT extends
 
 		// Retrieve the adapters
 		CloseableIterator<InternalDataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
-		DataAdapter hailAdapter = null;
-		DataAdapter tornadoAdapter = null;
+		DataTypeAdapter hailAdapter = null;
+		DataTypeAdapter tornadoAdapter = null;
 
 		while (adapterIt.hasNext()) {
-			DataAdapter adapter = adapterIt.next().getAdapter();
+			DataTypeAdapter adapter = adapterIt.next().getAdapter();
 			String adapterName = StringUtils.stringFromBinary(adapter.getAdapterId().getBytes());
 
 			if (adapterName.equals("hail")) {

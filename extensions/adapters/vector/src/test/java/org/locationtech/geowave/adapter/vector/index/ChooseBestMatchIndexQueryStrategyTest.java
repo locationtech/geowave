@@ -35,8 +35,8 @@ import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -44,10 +44,10 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.beust.jcommander.internal.Maps;
@@ -76,7 +76,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 				spatialIndex.getId(),
 				null);
 
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = new HashMap<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = new HashMap<>();
 		statsMap.put(
 				RowRangeHistogramStatistics.composeId(
 						spatialIndex.getId(),
@@ -202,7 +202,7 @@ public class ChooseBestMatchIndexQueryStrategyTest
 	}
 
 	public Iterator<Index> getIndices(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
 			final ChooseBestMatchIndexQueryStrategy strategy ) {
 		return strategy.getIndices(

@@ -13,13 +13,13 @@ package org.locationtech.geowave.core.store.metadata;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
 
 public class SecondaryIndexStoreImpl implements
 		SecondaryIndexDataStore

@@ -44,7 +44,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
@@ -61,9 +61,9 @@ import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.IndexStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.InsertionIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
 import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
@@ -153,7 +153,7 @@ public class AccumuloOptionsTest
 			throws IOException {
 
 		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-		final DataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
+		final DataTypeAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		accumuloOptions.setCreateTable(false);
 		accumuloOptions.setPersistIndex(false);
@@ -271,7 +271,7 @@ public class AccumuloOptionsTest
 			throws IOException {
 
 		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-		final DataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
+		final DataTypeAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 
 		final String tableName = StringUtils.stringFromBinary(index.getId().getBytes());
 		final byte[] adapterId = adapter.getAdapterId().getBytes();
@@ -371,7 +371,7 @@ public class AccumuloOptionsTest
 			throws IOException {
 
 		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-		final DataAdapter<TestGeometry> adapter = new TestGeometryAdapter();
+		final DataTypeAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 		accumuloOptions.setPersistAdapter(false);
 
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
@@ -507,8 +507,8 @@ public class AccumuloOptionsTest
 	public void testDeleteAll()
 			throws IOException {
 		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
-		final DataAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
-		final DataAdapter<TestGeometry> adapter1 = new AnotherAdapter();
+		final DataTypeAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
+		final DataTypeAdapter<TestGeometry> adapter1 = new AnotherAdapter();
 
 		accumuloOptions.setUseAltIndex(true);
 

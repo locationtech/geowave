@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.ingest;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 
 import com.beust.jcommander.Parameter;

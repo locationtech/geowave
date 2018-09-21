@@ -24,7 +24,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureWritable;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 

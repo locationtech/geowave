@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -134,7 +134,7 @@ public class GeoWaveFeatureSourceTest extends
 		short internalAdapterId = ((GeoWaveGTDataStore) dataStore).getInternalAdapterStore().addAdapterId(
 				new ByteArrayId(
 						(typeName).getBytes(StringUtils.getGeoWaveCharset())));
-		try (final CloseableIterator<DataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore)
+		try (final CloseableIterator<InternalDataStatistics<?>> stats = ((GeoWaveGTDataStore) dataStore)
 				.getDataStatisticsStore()
 				.getDataStatistics(
 						internalAdapterId)) {
@@ -145,7 +145,7 @@ public class GeoWaveFeatureSourceTest extends
 			FeatureTimeRangeStatistics timeRangeStats = null;
 			FeatureNumericRangeStatistics popStats = null;
 			while (stats.hasNext()) {
-				final DataStatistics<?> statsData = stats.next();
+				final InternalDataStatistics<?> statsData = stats.next();
 				System.out.println(statsData.toString());
 				if (statsData instanceof BoundingBoxDataStatistics) {
 					bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsData;

@@ -17,7 +17,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
@@ -52,8 +52,8 @@ public class DynamoDBStatisticsIterator implements
 				currentStatistics = statEntry;
 			}
 			else {
-				if (statEntry.getStatisticsId().equals(
-						currentStatistics.getStatisticsId()) && statEntry.getInternalDataAdapterId().equals(
+				if (statEntry.getStatisticsType().equals(
+						currentStatistics.getStatisticsType()) && statEntry.getInternalDataAdapterId().equals(
 						currentStatistics.getInternalDataAdapterId())) {
 					currentStatistics.merge(statEntry);
 				}
@@ -78,7 +78,7 @@ public class DynamoDBStatisticsIterator implements
 
 		if (stats != null) {
 			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(DynamoDBUtils.getSecondaryId(entry)));
-			stats.setStatisticsId(new ByteArrayId(
+			stats.setStatisticsType(new ByteArrayId(
 					DynamoDBUtils.getPrimaryId(entry)));
 		}
 
@@ -88,7 +88,7 @@ public class DynamoDBStatisticsIterator implements
 	protected GeoWaveMetadata statsToMetadata(
 			final DataStatistics<?> stats ) {
 		return new GeoWaveMetadata(
-				stats.getStatisticsId().getBytes(),
+				stats.getStatisticsType().getBytes(),
 				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));

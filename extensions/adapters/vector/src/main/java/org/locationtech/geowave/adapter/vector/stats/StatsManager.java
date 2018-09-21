@@ -15,15 +15,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.geotime.TimeUtils;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -52,7 +52,7 @@ public class StatsManager
 	 * List of stats objects supported by this manager for the adapter
 	 */
 
-	private final List<DataStatistics<SimpleFeature>> statsObjList = new ArrayList<DataStatistics<SimpleFeature>>();
+	private final List<InternalDataStatistics<SimpleFeature>> statsObjList = new ArrayList<InternalDataStatistics<SimpleFeature>>();
 	/**
 	 * List of visibility handlers supported by this manager for the stats
 	 * objects
@@ -74,7 +74,7 @@ public class StatsManager
 	 */
 
 	public StatsManager(
-			final DataAdapter<SimpleFeature> dataAdapter,
+			final DataTypeAdapter<SimpleFeature> dataAdapter,
 			final SimpleFeatureType persistedType ) {
 		this(
 				dataAdapter,
@@ -104,7 +104,7 @@ public class StatsManager
 	 */
 
 	public StatsManager(
-			final DataAdapter<SimpleFeature> dataAdapter,
+			final DataTypeAdapter<SimpleFeature> dataAdapter,
 			final SimpleFeatureType persistedType,
 			final SimpleFeatureType reprojectedType,
 			final MathTransform transform ) {
@@ -197,10 +197,10 @@ public class StatsManager
 	 * @return new statistics object of specified type
 	 */
 
-	public DataStatistics<SimpleFeature> createDataStatistics(
+	public InternalDataStatistics<SimpleFeature> createDataStatistics(
 			final ByteArrayId statisticsId ) {
-		for (final DataStatistics<SimpleFeature> statObj : statsObjList) {
-			if (statObj.getStatisticsId().equals(
+		for (final InternalDataStatistics<SimpleFeature> statObj : statsObjList) {
+			if (statObj.getStatisticsType().equals(
 					statisticsId)) {
 				// TODO most of the data statistics seem to do shallow clones
 				// that pass along a lot of references - this seems
@@ -235,7 +235,7 @@ public class StatsManager
 
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<SimpleFeature> adapter,
+			final DataTypeAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
 		// If the statistics object is of type CountDataStats or there is no
 		// visibility handler, then return the default visibility handler
@@ -266,14 +266,14 @@ public class StatsManager
 	 */
 
 	public void addStats(
-			final DataStatistics<SimpleFeature> statsObj,
+			final InternalDataStatistics<SimpleFeature> statsObj,
 			final ByteArrayId fieldId ) {
 		int replaceStat = 0;
 
 		// Go through stats list managed by this manager and look for a match
-		for (final DataStatistics<SimpleFeature> currentStat : statsObjList) {
-			if (currentStat.getStatisticsId().equals(
-					statsObj.getStatisticsId())) {
+		for (final InternalDataStatistics<SimpleFeature> currentStat : statsObjList) {
+			if (currentStat.getStatisticsType().equals(
+					statsObj.getStatisticsType())) {
 				// If a match was found for an existing stat object in list,
 				// remove it now and replace it later.
 				statsObjList.remove(replaceStat);
@@ -284,7 +284,7 @@ public class StatsManager
 
 		statsObjList.add(statsObj);
 		statisticsIdToFieldIdMap.put(
-				statsObj.getStatisticsId(),
+				statsObj.getStatisticsType(),
 				fieldId);
 	}
 
@@ -303,8 +303,8 @@ public class StatsManager
 		final ByteArrayId[] statObjIds = new ByteArrayId[statsObjList.size() + 1];
 		int i = 0;
 
-		for (final DataStatistics<SimpleFeature> statObj : statsObjList) {
-			statObjIds[i++] = statObj.getStatisticsId();
+		for (final InternalDataStatistics<SimpleFeature> statObj : statsObjList) {
+			statObjIds[i++] = statObj.getStatisticsType();
 		}
 
 		statObjIds[i] = CountDataStatistics.STATS_TYPE;

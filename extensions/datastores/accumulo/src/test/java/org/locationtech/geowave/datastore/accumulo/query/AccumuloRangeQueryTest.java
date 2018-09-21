@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -37,13 +37,13 @@ import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -69,7 +69,7 @@ public class AccumuloRangeQueryTest
 {
 	private DataStore mockDataStore;
 	private Index index;
-	private DataAdapter<TestGeometry> adapter;
+	private DataTypeAdapter<TestGeometry> adapter;
 	private final GeometryFactory factory = new GeometryFactory();
 	private final TestGeometry testdata = new TestGeometry(
 			factory.createPolygon(new Coordinate[] {
@@ -133,7 +133,7 @@ public class AccumuloRangeQueryTest
 					1.0249,
 					1.0319)
 		});
-		final Query intersectQuery = new SpatialQuery(
+		final QueryConstraints intersectQuery = new SpatialQuery(
 				testGeo);
 		Assert.assertTrue(testdata.geom.intersects(testGeo));
 		final CloseableIterator<TestGeometry> resultOfIntersect = mockDataStore.query(
@@ -147,7 +147,7 @@ public class AccumuloRangeQueryTest
 	@Test
 	public void largeQuery() {
 		final Geometry largeGeo = createPolygon(50000);
-		final Query largeQuery = new SpatialQuery(
+		final QueryConstraints largeQuery = new SpatialQuery(
 				largeGeo);
 		final CloseableIterator itr = mockDataStore.query(
 				new QueryOptions(
@@ -236,7 +236,7 @@ public class AccumuloRangeQueryTest
 
 	@Test
 	public void testMiss() {
-		final Query intersectQuery = new SpatialQuery(
+		final QueryConstraints intersectQuery = new SpatialQuery(
 				factory.createPolygon(new Coordinate[] {
 					new Coordinate(
 							1.0247,
@@ -261,7 +261,7 @@ public class AccumuloRangeQueryTest
 
 	@Test
 	public void testEncompass() {
-		final Query encompassQuery = new SpatialQuery(
+		final QueryConstraints encompassQuery = new SpatialQuery(
 				factory.createPolygon(new Coordinate[] {
 					new Coordinate(
 							1.0249,
@@ -326,7 +326,7 @@ public class AccumuloRangeQueryTest
 		}
 	}
 
-	protected DataAdapter<TestGeometry> createGeometryAdapter() {
+	protected DataTypeAdapter<TestGeometry> createGeometryAdapter() {
 		return new TestGeometryAdapter();
 	}
 
@@ -546,7 +546,7 @@ public class AccumuloRangeQueryTest
 		@Override
 		public EntryVisibilityHandler<TestGeometry> getVisibilityHandler(
 				final CommonIndexModel indexModel,
-				final DataAdapter<TestGeometry> adapter,
+				final DataTypeAdapter<TestGeometry> adapter,
 				final ByteArrayId statisticsId ) {
 			// TODO Auto-generated method stub
 			return new EntryVisibilityHandler<AccumuloRangeQueryTest.TestGeometry>() {

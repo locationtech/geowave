@@ -65,17 +65,17 @@ import javax.xml.transform.stream.StreamResult;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
 import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.locationtech.geowave.core.cli.utils.FileUtils;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
@@ -1755,9 +1755,9 @@ public class GeoServerRestClient
 
 		LOGGER.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
 
-		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+		try (final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
-				final DataAdapter<?> adapter = it.next();
+				final DataTypeAdapter<?> adapter = it.next();
 
 				final DataAdapterInfo info = getAdapterInfo(
 						adapterId,
@@ -1783,7 +1783,7 @@ public class GeoServerRestClient
 
 	private DataAdapterInfo getAdapterInfo(
 			final String adapterId,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		LOGGER.debug("getAdapterInfo for id = " + adapterId);
 
 		final DataAdapterInfo info = new DataAdapterInfo();

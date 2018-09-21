@@ -14,7 +14,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.utils.FeatureGeometryUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;

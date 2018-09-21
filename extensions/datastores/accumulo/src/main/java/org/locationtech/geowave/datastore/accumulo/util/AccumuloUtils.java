@@ -41,7 +41,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
@@ -146,10 +146,10 @@ public class AccumuloUtils
 	 * @param connector
 	 * @param namespace
 	 */
-	public static List<DataAdapter<?>> getDataAdapters(
+	public static List<DataTypeAdapter<?>> getDataAdapters(
 			final Connector connector,
 			final String namespace ) {
-		final List<DataAdapter<?>> adapters = new ArrayList<>();
+		final List<DataTypeAdapter<?>> adapters = new ArrayList<>();
 
 		final AccumuloOptions options = new AccumuloOptions();
 		final AdapterStore adapterStore = new AdapterStoreImpl(
@@ -159,7 +159,7 @@ public class AccumuloUtils
 						options),
 				options);
 
-		try (final CloseableIterator<DataAdapter<?>> itr = adapterStore.getAdapters()) {
+		try (final CloseableIterator<DataTypeAdapter<?>> itr = adapterStore.getAdapters()) {
 
 			while (itr.hasNext()) {
 				adapters.add(itr.next());
@@ -470,7 +470,7 @@ public class AccumuloUtils
 			final Connector connector,
 			final String namespace,
 			final Index index,
-			final DataAdapter<?> adapter )
+			final DataTypeAdapter<?> adapter )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,
@@ -501,7 +501,7 @@ public class AccumuloUtils
 			final Connector connector,
 			final String namespace,
 			final Index index,
-			final DataAdapter<?> adapter )
+			final DataTypeAdapter<?> adapter )
 			throws AccumuloException,
 			AccumuloSecurityException,
 			IOException,

@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 
 public class CountAggregation implements
-		CommonIndexAggregation<Persistable, CountResult>
+		CommonIndexAggregation<Persistable, Long>
 {
 	private long count = Long.MIN_VALUE;
 

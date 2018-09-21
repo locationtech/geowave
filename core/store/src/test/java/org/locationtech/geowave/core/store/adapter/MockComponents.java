@@ -38,11 +38,11 @@ import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldIdStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -237,12 +237,12 @@ public class MockComponents
 			return new ByteArrayId[] {
 				CountDataStatistics.STATS_TYPE,
 				new IntegerRangeDataStatistics(
-						getAdapterId()).getStatisticsId()
+						getAdapterId()).getStatisticsType()
 			};
 		}
 
 		@Override
-		public DataStatistics<Integer> createDataStatistics(
+		public InternalDataStatistics<Integer> createDataStatistics(
 				final ByteArrayId statisticsId ) {
 			if (statisticsId == CountDataStatistics.STATS_TYPE) {
 				return new CountDataStatistics<Integer>();
@@ -306,7 +306,7 @@ public class MockComponents
 		@Override
 		public EntryVisibilityHandler<Integer> getVisibilityHandler(
 				final CommonIndexModel indexModel,
-				final DataAdapter<Integer> adapter,
+				final DataTypeAdapter<Integer> adapter,
 				final ByteArrayId statisticsId ) {
 			return new FieldIdStatisticVisibility<Integer>(
 					new TestDimensionField().fieldId,

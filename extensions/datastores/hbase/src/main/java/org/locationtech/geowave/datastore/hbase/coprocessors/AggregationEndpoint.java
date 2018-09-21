@@ -32,7 +32,7 @@ import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.AggregationProtosServer;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseDistributableFilter;
 import org.locationtech.geowave.datastore.hbase.filters.HBaseNumericIndexStrategyFilter;
@@ -85,7 +85,7 @@ public class AggregationEndpoint extends
 			final AggregationProtosServer.AggregationRequest request,
 			final RpcCallback<AggregationProtosServer.AggregationResponse> done ) {
 		FilterList filterList = null;
-		DataAdapter dataAdapter = null;
+		DataTypeAdapter dataAdapter = null;
 		Short internalAdapterId = null;
 		AggregationProtosServer.AggregationResponse response = null;
 		ByteString value = ByteString.EMPTY;
@@ -193,7 +193,7 @@ public class AggregationEndpoint extends
 
 			if (request.hasAdapter()) {
 				final byte[] adapterBytes = request.getAdapter().toByteArray();
-				dataAdapter = (DataAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
+				dataAdapter = (DataTypeAdapter) URLClassloaderUtils.fromBinary(adapterBytes);
 			}
 			else if (request.hasInternalAdapterId()) {
 				final byte[] adapterIdBytes = request.getInternalAdapterId().toByteArray();
@@ -252,7 +252,7 @@ public class AggregationEndpoint extends
 	private Mergeable getValue(
 			final Aggregation aggregation,
 			final Filter filter,
-			final DataAdapter dataAdapter,
+			final DataTypeAdapter dataAdapter,
 			final Short internalAdapterId,
 			final HBaseDistributableFilter hdFilter,
 			final boolean blockCaching,

@@ -26,7 +26,7 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;

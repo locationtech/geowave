@@ -22,15 +22,15 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
@@ -124,7 +124,7 @@ public class GeowaveBasicURLIngestIT extends
 						bboxStat.getMinY(),
 						bboxStat.getMaxY());
 				final Geometry spatialFilter = factory.toGeometry(env);
-				final Query query = new SpatialQuery(
+				final QueryConstraints query = new SpatialQuery(
 						spatialFilter);
 				final int resultCount = testQuery(
 						adapter,
@@ -156,8 +156,8 @@ public class GeowaveBasicURLIngestIT extends
 	}
 
 	private int testQuery(
-			final DataAdapter<?> adapter,
-			final Query query )
+			final DataTypeAdapter<?> adapter,
+			final QueryConstraints query )
 			throws Exception {
 		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStore.createDataStore();
 

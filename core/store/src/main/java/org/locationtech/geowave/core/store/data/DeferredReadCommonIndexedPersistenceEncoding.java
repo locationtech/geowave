@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -58,7 +58,7 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 
 	@Override
 	public void convertUnknownValues(
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final CommonIndexModel model ) {
 		if (unreadData != null) {
 			final List<FlattenedFieldInfo> fields = unreadData.finishRead();

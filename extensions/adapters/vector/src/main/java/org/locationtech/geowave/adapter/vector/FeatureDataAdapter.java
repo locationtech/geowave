@@ -29,11 +29,12 @@ import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -44,9 +45,9 @@ import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
@@ -890,7 +891,7 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> createDataStatistics(
+	public InternalDataStatistics<SimpleFeature> createDataStatistics(
 			final ByteArrayId statisticsId ) {
 		return statsManager.createDataStatistics(statisticsId);
 	}
@@ -898,7 +899,7 @@ public class FeatureDataAdapter extends
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<SimpleFeature> adapter,
+			final DataTypeAdapter<SimpleFeature> adapter,
 			final ByteArrayId statisticsId ) {
 		return statsManager.getVisibilityHandler(
 				indexModel,

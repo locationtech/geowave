@@ -20,8 +20,8 @@ import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeCache;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeLookupFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

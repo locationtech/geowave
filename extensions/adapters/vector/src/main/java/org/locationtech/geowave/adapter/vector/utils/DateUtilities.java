@@ -18,9 +18,9 @@ import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 
 public class DateUtilities
@@ -78,7 +78,7 @@ public class DateUtilities
 
 			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(startField);
 
-			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
+			InternalDataStatistics<?> timeStat = statisticsStore.getDataStatistics(
 					internalAdapterId,
 					timeStatsId,
 					null);
@@ -108,7 +108,7 @@ public class DateUtilities
 			// Look up the time range stat for this adapter
 			ByteArrayId timeStatsId = FeatureTimeRangeStatistics.composeId(timeField);
 
-			DataStatistics<?> timeStat = statisticsStore.getDataStatistics(
+			InternalDataStatistics<?> timeStat = statisticsStore.getDataStatistics(
 					internalAdapterId,
 					timeStatsId,
 					null);

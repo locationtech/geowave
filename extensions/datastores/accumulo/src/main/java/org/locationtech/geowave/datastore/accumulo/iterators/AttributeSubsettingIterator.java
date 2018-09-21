@@ -30,7 +30,7 @@ import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
@@ -202,7 +202,7 @@ public class AttributeSubsettingIterator extends
 	 */
 	public static void setFieldIds(
 			final IteratorSetting setting,
-			final DataAdapter<?> adapterAssociatedWithFieldIds,
+			final DataTypeAdapter<?> adapterAssociatedWithFieldIds,
 			final List<String> fieldIds,
 			final CommonIndexModel indexModel ) {
 		final byte[] fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(

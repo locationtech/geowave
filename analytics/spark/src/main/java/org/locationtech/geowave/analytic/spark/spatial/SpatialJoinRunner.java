@@ -35,6 +35,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.slf4j.Logger;
@@ -264,7 +265,7 @@ public class SpatialJoinRunner implements
 			InternalAdapterStore internalAdapterStore,
 			IndexStore indexStore )
 			throws IOException {
-		QueryOptions adapterOptions;
+		QueryOptionsInt adapterOptions;
 
 		// If no adapterId provided by user grab first adapterId
 		// available.

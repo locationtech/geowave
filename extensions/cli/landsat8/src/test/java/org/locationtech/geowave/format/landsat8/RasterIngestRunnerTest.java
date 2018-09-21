@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.format.landsat8.Landsat8BasicCommandLineOptions;
 import org.locationtech.geowave.format.landsat8.Landsat8DownloadCommandLineOptions;
 import org.locationtech.geowave.format.landsat8.Landsat8RasterIngestCommandLineOptions;

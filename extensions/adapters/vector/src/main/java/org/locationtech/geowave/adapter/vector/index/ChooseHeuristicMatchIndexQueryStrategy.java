@@ -19,9 +19,9 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.query.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.opengis.feature.simple.SimpleFeature;
 
 /**
@@ -45,7 +45,7 @@ public class ChooseHeuristicMatchIndexQueryStrategy implements
 
 	@Override
 	public CloseableIterator<Index> getIndices(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats,
 			final BasicQuery query,
 			final Index[] indices,
 			final Map<QueryHint, Object> hints ) {

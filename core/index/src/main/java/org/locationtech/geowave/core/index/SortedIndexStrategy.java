@@ -14,7 +14,7 @@ package org.locationtech.geowave.core.index;
  * Interface which defines an index strategy.
  *
  */
-public interface SortedIndexStrategy<QueryRangeType extends QueryConstraints, EntryRangeType> extends
+public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType> extends
 		IndexStrategy
 {
 	/**

@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -39,20 +39,20 @@ public class KafkaIngestRunData implements
 	private final DataStore dataStore;
 
 	public KafkaIngestRunData(
-			final List<DataAdapter<?>> adapters,
+			final List<DataTypeAdapter<?>> adapters,
 			final DataStore dataStore ) {
 		this.dataStore = dataStore;
 		adapterCache = new MemoryAdapterStore(
-				adapters.toArray(new DataAdapter[adapters.size()]));
+				adapters.toArray(new DataTypeAdapter[adapters.size()]));
 	}
 
-	public DataAdapter<?> getDataAdapter(
+	public DataTypeAdapter<?> getDataAdapter(
 			final GeoWaveData<?> data ) {
 		return data.getAdapter(adapterCache);
 	}
 
 	public synchronized IndexWriter getIndexWriter(
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final Index... requiredIndices )
 			throws MismatchedIndexToAdapterMapping {
 		IndexWriter indexWriter = adapterIdToWriterCache.get(adapter.getAdapterId());

@@ -24,7 +24,7 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 
 public class BaseDataStoreTest
 {

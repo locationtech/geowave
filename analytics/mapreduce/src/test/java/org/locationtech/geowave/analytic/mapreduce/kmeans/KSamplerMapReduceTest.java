@@ -45,7 +45,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -119,7 +119,7 @@ public class KSamplerMapReduceTest
 		final KSamplerMapReduce.SampleReducer<TestObject> reducer = new KSamplerMapReduce.SampleReducer<TestObject>();
 		mapDriver = MapDriver.newMapDriver(mapper);
 		reduceDriver = ReduceDriver.newReduceDriver(reducer);
-		final DataAdapter<?> adapter = AnalyticFeature.createGeometryFeatureAdapter(
+		final DataTypeAdapter<?> adapter = AnalyticFeature.createGeometryFeatureAdapter(
 				"altoids",
 				new String[] {},
 				"http://geowave.test.net",

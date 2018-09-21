@@ -29,7 +29,7 @@ import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
@@ -231,7 +231,7 @@ public class RDDUtils
 	private static void writeToGeoWave(SparkContext sc,
 	                                    Index index,
 	                                    DataStorePluginOptions outputStoreOptions,
-	                                    DataAdapter adapter,
+	                                    DataTypeAdapter adapter,
 	                                    JavaRDD<SimpleFeature> inputRDD) throws IOException{
 
 	    //setup the configuration and the output format

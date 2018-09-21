@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 
 /**
@@ -68,11 +68,11 @@ public class HadoopWritableSerializationTool
 	public InternalDataAdapter<?> getInternalAdapter(
 			final short internalAdapterId ) {
 		return new InternalDataAdapterWrapper(
-				(DataAdapter) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
+				(DataTypeAdapter) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
 				internalAdapterId);
 	}
 
-	public DataAdapter<?> getAdapter(
+	public DataTypeAdapter<?> getAdapter(
 			final ByteArrayId adapterId ) {
 		return adapterStore.getAdapter(adapterId);
 	}
@@ -87,7 +87,7 @@ public class HadoopWritableSerializationTool
 
 		HadoopWritableSerializer<Object, Writable> serializer = serializers.get(adapterId);
 		if (serializer == null) {
-			DataAdapter<?> adapter;
+			DataTypeAdapter<?> adapter;
 
 			HadoopDataAdapter<Object, Writable> hadoopAdapter = null;
 			if (((adapterStore != null) && ((adapter = adapterStore.getAdapter(adapterId)) != null))) {

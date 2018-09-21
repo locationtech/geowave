@@ -56,9 +56,9 @@ import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfi
 import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryAdapter;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
@@ -70,7 +70,7 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -81,8 +81,8 @@ import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.locationtech.geowave.core.store.index.numeric.NumericGreaterThanConstraint;
 import org.locationtech.geowave.core.store.index.temporal.TemporalQueryConstraint;
 import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
@@ -255,7 +255,7 @@ public class SecondaryIndexIT
 		}
 
 		// test delete
-		final Query deleteQuery = new DataIdQuery(
+		final QueryConstraints deleteQuery = new DataIdQuery(
 				new ByteArrayId(
 						expectedDataId));
 		final QueryOptions queryOptions = new QueryOptions(

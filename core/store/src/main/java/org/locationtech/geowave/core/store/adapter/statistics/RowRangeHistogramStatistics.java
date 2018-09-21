@@ -22,7 +22,6 @@ import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericH
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 import net.sf.json.JSONArray;
@@ -83,7 +82,7 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
+	public InternalDataStatistics<T> duplicate() {
 		final Pair<ByteArrayId, ByteArrayId> pair = decomposeIndexAndPartitionFromId(statisticsId);
 		return new RowRangeHistogramStatistics<T>(
 				internalDataAdapterId,

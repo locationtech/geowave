@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.filter.Filter;
 
@@ -68,7 +68,7 @@ public interface GeoWaveTransaction
 
 	public String composeVisibility();
 
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics();
+	public Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> getDataStatistics();
 
 	public CloseableIterator<SimpleFeature> interweaveTransaction(
 			final Integer limit,

@@ -19,7 +19,7 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Mutation;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
@@ -28,7 +28,7 @@ import org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter;
 
 /**
  *
- * Given a {@link DataAdapter} and an {@link Index}, this class handles the
+ * Given a {@link DataTypeAdapter} and an {@link Index}, this class handles the
  * creation of Geowave-formatted [Key,Value] pairs.
  *
  * The intent is that this class will be used within the Mapper of a MapReduce

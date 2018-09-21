@@ -73,7 +73,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
@@ -538,7 +538,7 @@ public class HBaseOperations implements
 			deleter = createDeleter(
 					indexId,
 					additionalAuthorizations);
-			DataAdapter<?> adapter = null;
+			DataTypeAdapter<?> adapter = null;
 			Index index = null;
 			try (final CloseableIterator<GeoWaveMetadata> it = createMetadataReader(
 					MetadataType.ADAPTER).query(
@@ -551,7 +551,7 @@ public class HBaseOperations implements
 					return false;
 				}
 				final GeoWaveMetadata adapterMd = it.next();
-				adapter = (DataAdapter<?>) URLClassloaderUtils.fromBinary(adapterMd.getValue());
+				adapter = (DataTypeAdapter<?>) URLClassloaderUtils.fromBinary(adapterMd.getValue());
 			}
 			try (final CloseableIterator<GeoWaveMetadata> it = createMetadataReader(
 					MetadataType.INDEX).query(

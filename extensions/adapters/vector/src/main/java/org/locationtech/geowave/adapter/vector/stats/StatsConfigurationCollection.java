@@ -19,7 +19,7 @@ import java.util.Map.Entry;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;

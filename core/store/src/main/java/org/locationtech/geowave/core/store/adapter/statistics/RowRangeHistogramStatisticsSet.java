@@ -19,7 +19,6 @@ import java.util.Map.Entry;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 /**
@@ -102,9 +101,9 @@ public class RowRangeHistogramStatisticsSet<T> extends
 	}
 
 	@Override
-	public DataStatistics<T>[] getStatisticsSet() {
+	public InternalDataStatistics<T>[] getStatisticsSet() {
 		return histogramPerPartition.values().toArray(
-				new DataStatistics[histogramPerPartition.size()]);
+				new InternalDataStatistics[histogramPerPartition.size()]);
 	}
 
 	protected static ByteArrayId getPartitionKey(

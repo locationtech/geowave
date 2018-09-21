@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.avro.GenericAvroSerializer;
 import org.locationtech.geowave.core.ingest.index.IndexProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -135,14 +135,14 @@ public class IngestFromKafkaDriver
 			final List<String> queue ) {
 		try {
 			for (Entry<String, AvroFormatPlugin<?, ?>> pluginProvider : pluginProviders.entrySet()) {
-				final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
+				final List<DataTypeAdapter<?>> adapters = new ArrayList<DataTypeAdapter<?>>();
 
 				AvroFormatPlugin<?, ?> avroFormatPlugin = null;
 				try {
 					avroFormatPlugin = pluginProvider.getValue();
 
 					final IngestPluginBase<?, ?> ingestWithAvroPlugin = avroFormatPlugin.getIngestWithAvroPlugin();
-					final DataAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
+					final DataTypeAdapter<?>[] dataAdapters = ingestWithAvroPlugin.getDataAdapters(ingestOptions
 							.getVisibility());
 					adapters.addAll(Arrays.asList(dataAdapters));
 					final KafkaIngestRunData runData = new KafkaIngestRunData(
@@ -356,7 +356,7 @@ public class IngestFromKafkaDriver
 				ingestOptions.getVisibility())) {
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
-				final DataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+				final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
 				if (adapter == null) {
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;

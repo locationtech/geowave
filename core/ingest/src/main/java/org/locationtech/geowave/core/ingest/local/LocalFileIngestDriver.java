@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.ingest.IngestUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -78,7 +78,7 @@ public class LocalFileIngestDriver extends
 			File configFile ) {
 		// first collect the local file ingest plugins
 		final Map<String, LocalFileIngestPlugin<?>> localFileIngestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
-		final List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
+		final List<DataTypeAdapter<?>> adapters = new ArrayList<DataTypeAdapter<?>>();
 		for (Entry<String, LocalFileIngestPlugin<?>> pluginEntry : ingestPlugins.entrySet()) {
 
 			if (!IngestUtils.checkIndexesAgainstProvider(
@@ -257,7 +257,7 @@ public class LocalFileIngestDriver extends
 			while (geowaveDataIt.hasNext()) {
 				final GeoWaveData<?> geowaveData = (GeoWaveData<?>) geowaveDataIt.next();
 				try {
-					final DataAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
+					final DataTypeAdapter adapter = ingestRunData.getDataAdapter(geowaveData);
 					if (adapter == null) {
 						LOGGER.warn(String.format(
 								"Adapter not found for [%s] file [%s]",
@@ -314,7 +314,7 @@ public class LocalFileIngestDriver extends
 
 	private long ingestData(
 			GeoWaveData<?> geowaveData,
-			DataAdapter adapter,
+			DataTypeAdapter adapter,
 			LocalIngestRunData runData,
 			Map<ByteArrayId, Index> specifiedPrimaryIndexes,
 			Map<ByteArrayId, Index> requiredIndexMap,

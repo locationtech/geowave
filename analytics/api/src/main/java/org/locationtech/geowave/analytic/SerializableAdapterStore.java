@@ -16,7 +16,7 @@ import java.io.Serializable;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,13 +63,13 @@ public class SerializableAdapterStore implements
 
 	@Override
 	public void addAdapter(
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		getAdapterStore().addAdapter(
 				adapter);
 	}
 
 	@Override
-	public DataAdapter<?> getAdapter(
+	public DataTypeAdapter<?> getAdapter(
 			final ByteArrayId adapterId ) {
 		return getAdapterStore().getAdapter(
 				adapterId);
@@ -83,7 +83,7 @@ public class SerializableAdapterStore implements
 	}
 
 	@Override
-	public CloseableIterator<DataAdapter<?>> getAdapters() {
+	public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
 		return getAdapterStore().getAdapters();
 	}
 

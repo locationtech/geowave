@@ -14,14 +14,14 @@ import java.util.Arrays;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.adapter.statistics.EmptyStatisticVisibility;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatisticsSet;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
@@ -69,7 +69,7 @@ public class DataStoreStatisticsProvider<T> implements
 	}
 
 	@Override
-	public DataStatistics<T> createDataStatistics(
+	public InternalDataStatistics<T> createDataStatistics(
 			final ByteArrayId statisticsType ) {
 		if (statisticsType.equals(RowRangeHistogramStatistics.STATS_TYPE)) {
 			return new RowRangeHistogramStatisticsSet(
@@ -103,7 +103,8 @@ public class DataStoreStatisticsProvider<T> implements
 					index.getId());
 		}
 		if (adapter.getAdapter() instanceof StatisticsProvider) {
-			DataStatistics<T> stats = ((StatisticsProvider) adapter.getAdapter()).createDataStatistics(statisticsType);
+			InternalDataStatistics<T> stats = ((StatisticsProvider) adapter.getAdapter())
+					.createDataStatistics(statisticsType);
 			if (stats != null) {
 				stats.setInternalDataAdapterId(adapter.getInternalAdapterId());
 				return stats;
@@ -116,7 +117,7 @@ public class DataStoreStatisticsProvider<T> implements
 	@Override
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final ByteArrayId statisticsId ) {
 		return (adapter instanceof StatisticsProvider) ? ((StatisticsProvider) adapter).getVisibilityHandler(
 				index.getIndexModel(),

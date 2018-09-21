@@ -21,11 +21,11 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
@@ -40,7 +40,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 		Mapper<LongWritable, Text, Key, Value>
 {
 
-	private final DataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+	private final DataTypeAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 			GeonamesSimpleFeatureType.getInstance());
 	private final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 	private final VisibilityWriter<SimpleFeature> visibilityWriter = new UniformVisibilityWriter<SimpleFeature>(

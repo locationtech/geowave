@@ -39,7 +39,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.slf4j.Logger;
@@ -49,8 +49,8 @@ import com.google.common.base.Function;
 import com.google.common.collect.Iterators;
 
 /**
- * This class uses the {@link DataAdapter} to decode the dimension fields to be
- * indexed. Although seemingly more flexible than the
+ * This class uses the {@link DataTypeAdapter} to decode the dimension fields to
+ * be indexed. Although seemingly more flexible than the
  * {@link OrthodromicDistancePartitioner}, handling different types of data
  * entries, the assumption is that each object decode by the adapter provides
  * the fields required according to the supplied model.
@@ -116,7 +116,7 @@ public class AdapterBasedPartitioner extends
 		final NumericDataHolder numericDataHolder = new NumericDataHolder();
 
 		@SuppressWarnings("unchecked")
-		final DataAdapter<Object> adapter = (DataAdapter<Object>) adapterStore.getAdapter(entry.adapterId);
+		final DataTypeAdapter<Object> adapter = (DataTypeAdapter<Object>) adapterStore.getAdapter(entry.adapterId);
 		if (adapter == null) {
 			LOGGER.error(
 					"Unable to find an adapter for id {}",
@@ -300,14 +300,14 @@ public class AdapterBasedPartitioner extends
 
 		@Override
 		public void addAdapter(
-				final DataAdapter<?> adapter ) {
+				final DataTypeAdapter<?> adapter ) {
 			adapterStore.addAdapter(new InternalDataAdapterWrapper(
-					(DataAdapter) adapter,
+					(DataTypeAdapter) adapter,
 					internalAdapterStore.addAdapterId(adapter.getAdapterId())));
 		}
 
 		@Override
-		public DataAdapter<?> getAdapter(
+		public DataTypeAdapter<?> getAdapter(
 				final ByteArrayId adapterId ) {
 			return adapterStore.getAdapter(internalAdapterStore.getInternalAdapterId(adapterId));
 		}
@@ -319,16 +319,16 @@ public class AdapterBasedPartitioner extends
 		}
 
 		@Override
-		public CloseableIterator<DataAdapter<?>> getAdapters() {
+		public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
 			final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-			return new CloseableIteratorWrapper<DataAdapter<?>>(
+			return new CloseableIteratorWrapper<DataTypeAdapter<?>>(
 					it,
 					Iterators.transform(
 							it,
-							new Function<InternalDataAdapter<?>, DataAdapter<?>>() {
+							new Function<InternalDataAdapter<?>, DataTypeAdapter<?>>() {
 
 								@Override
-								public DataAdapter<?> apply(
+								public DataTypeAdapter<?> apply(
 										final InternalDataAdapter<?> input ) {
 									return input.getAdapter();
 								}

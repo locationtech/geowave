@@ -24,15 +24,15 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
@@ -67,7 +67,7 @@ public class QueryOptionsIT
 			-84.3900,
 			33.7550);
 
-	private final Query spatialQuery = new SpatialQuery(
+	private final QueryConstraints spatialQuery = new SpatialQuery(
 			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 					GUADALAJARA,
 					ATLANTA)));
@@ -194,7 +194,7 @@ public class QueryOptionsIT
 	@SuppressWarnings("unchecked")
 	private void ingestSampleData(
 			final SimpleFeatureBuilder builder,
-			final DataAdapter<?> adapter )
+			final DataTypeAdapter<?> adapter )
 			throws IOException {
 		try (@SuppressWarnings("rawtypes")
 		IndexWriter writer = dataStoreOptions.createDataStore().createWriter(

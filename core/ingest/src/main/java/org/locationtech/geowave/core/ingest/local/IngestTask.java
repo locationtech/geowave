@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
@@ -127,7 +127,7 @@ public class IngestTask implements
 					continue;
 				}
 
-				final DataAdapter adapter = runData.getDataAdapter(geowaveData);
+				final DataTypeAdapter adapter = runData.getDataAdapter(geowaveData);
 				if (adapter == null) {
 					LOGGER.warn(String.format(
 							"Adapter not found for [%s] worker [%s]",
@@ -183,7 +183,7 @@ public class IngestTask implements
 
 	private long ingestData(
 			GeoWaveData<?> geowaveData,
-			DataAdapter adapter )
+			DataTypeAdapter adapter )
 			throws Exception {
 
 		ByteArrayId adapterId = adapter.getAdapterId();

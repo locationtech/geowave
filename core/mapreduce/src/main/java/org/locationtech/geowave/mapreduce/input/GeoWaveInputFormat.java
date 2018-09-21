@@ -27,13 +27,14 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
@@ -177,9 +178,9 @@ public class GeoWaveInputFormat<T> extends
 			// instead. It will fail, due to the 'null', if the query options
 			// does not
 			// contain the adapters
-			List<DataAdapter<Object>> adapters = queryOptions.getAdapters();
+			List<DataTypeAdapter<Object>> adapters = queryOptions.getAdapters();
 			if (adapters != null && !adapters.isEmpty()) {
-				for (final DataAdapter<?> adapter : adapters) {
+				for (final DataTypeAdapter<?> adapter : adapters) {
 					// Also store for use the mapper and reducers
 					JobContextAdapterStore.addDataAdapter(
 							config,
@@ -199,7 +200,7 @@ public class GeoWaveInputFormat<T> extends
 				queryOptions);
 	}
 
-	protected static QueryOptions getQueryOptions(
+	protected static QueryOptionsInt getQueryOptions(
 			final JobContext context ) {
 		final QueryOptions options = GeoWaveInputConfigurator.getQueryOptions(
 				CLASS,

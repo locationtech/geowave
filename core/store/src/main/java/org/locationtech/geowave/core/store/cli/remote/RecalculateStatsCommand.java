@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.StatsCompositionTool;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
@@ -96,7 +96,7 @@ public class RecalculateStatsCommand extends
 									(Integer) null,
 									statsTool,
 									authorizations),
-							(Query) null)) {
+							(QueryConstraints) null)) {
 						while (entryIt.hasNext()) {
 							entryIt.next();
 						}

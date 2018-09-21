@@ -12,8 +12,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 /**
@@ -29,11 +28,11 @@ public interface StatisticsProvider<T>
 {
 	public ByteArrayId[] getSupportedStatisticsTypes();
 
-	public DataStatistics<T> createDataStatistics(
+	public InternalDataStatistics<T> createDataStatistics(
 			ByteArrayId statisticsId );
 
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			CommonIndexModel indexModel,
-			DataAdapter<T> adapter,
+			DataTypeAdapter<T> adapter,
 			ByteArrayId statisticsId );
 }

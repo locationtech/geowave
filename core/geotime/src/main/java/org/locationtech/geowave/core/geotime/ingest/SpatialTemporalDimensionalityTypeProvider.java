@@ -14,7 +14,6 @@ import java.util.Locale;
 
 import org.apache.commons.lang3.StringUtils;
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
@@ -27,6 +26,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;

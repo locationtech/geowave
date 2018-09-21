@@ -27,14 +27,14 @@ public interface IndexWriter<T> extends
 	 * @return
 	 * @throws IOException
 	 */
-	public InsertionIds write(
+	InsertionIds write(
 			final T entry );
 
-	public InsertionIds write(
+	InsertionIds write(
 			final T entry,
 			final VisibilityWriter<T> fieldVisibilityWriter );
 
-	public Index[] getIndices();
+	Index[] getIndices();
 
-	public void flush();
+	void flush();
 }

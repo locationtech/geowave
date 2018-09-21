@@ -12,7 +12,7 @@ package org.locationtech.geowave.adapter.vector.index;
 
 import java.util.Set;
 
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

@@ -24,7 +24,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
@@ -293,7 +293,7 @@ public class HBaseDistributableFilter extends
 	}
 
 	public IndexedAdapterPersistenceEncoding getAdapterEncoding(
-			final DataAdapter dataAdapter ) {
+			final DataTypeAdapter dataAdapter ) {
 		final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
 		if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 			((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -321,7 +321,7 @@ public class HBaseDistributableFilter extends
 
 	// Called by the aggregation endpoint, after filtering the current row
 	public Object decodeRow(
-			final DataAdapter dataAdapter ) {
+			final DataTypeAdapter dataAdapter ) {
 		return dataAdapter.decode(
 				getAdapterEncoding(dataAdapter),
 				new PrimaryIndex(

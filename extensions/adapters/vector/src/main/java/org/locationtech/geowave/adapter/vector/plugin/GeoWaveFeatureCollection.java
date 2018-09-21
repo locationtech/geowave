@@ -32,13 +32,17 @@ import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
@@ -82,7 +86,7 @@ public class GeoWaveFeatureCollection extends
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
 			if (statsMap.containsKey(CountDataStatistics.STATS_TYPE)) {
@@ -123,7 +127,7 @@ public class GeoWaveFeatureCollection extends
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
 			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader
@@ -402,7 +406,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final InternalDataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						minVisitor.setValue(reader.convertToType(
 								attr,
@@ -434,7 +438,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final InternalDataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						maxVisitor.setValue(reader.convertToType(
 								attr,

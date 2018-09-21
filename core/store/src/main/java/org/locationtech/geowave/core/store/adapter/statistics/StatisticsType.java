@@ -1,7 +1,6 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 
 /**
  * This is a marker class extending ByteArrayId that additionally provides type
@@ -10,7 +9,7 @@ import org.locationtech.geowave.core.store.api.DataStatistics;
  * @param <R>
  *            The type of statistic
  */
-public class StatisticsType<R extends DataStatistics<?>> extends
+public class StatisticsType<R> extends
 		ByteArrayId
 {
 	private static final long serialVersionUID = 1L;

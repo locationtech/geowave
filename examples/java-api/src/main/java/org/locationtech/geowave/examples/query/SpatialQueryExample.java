@@ -16,9 +16,6 @@ import java.util.List;
 
 import org.apache.accumulo.core.client.AccumuloException;
 import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.core.client.Connector;
-import org.apache.accumulo.core.client.mock.MockInstance;
-import org.apache.accumulo.core.client.security.tokens.PasswordToken;
 
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -26,21 +23,16 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.jts.JTSFactoryFinder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.QueryOptions;
-import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
-import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -64,11 +56,7 @@ public class SpatialQueryExample
 {
 	private static Logger log = LoggerFactory.getLogger(SpatialQueryExample.class);
 
-	// We'll use GeoWave's VectorDataStore, which allows to run CQL rich queries
 	private static DataStore dataStore;
-	// We need the AccumuloAdapterStore, which keeps a registry of adapter-ids,
-	// used to be able to query specific "tables" or "types" of features.
-	private static AdapterStore adapterStore;
 
 	public static void main(
 			final String[] args )
@@ -79,34 +67,11 @@ public class SpatialQueryExample
 			IOException {
 		final SpatialQueryExample example = new SpatialQueryExample();
 		log.info("Setting up datastores");
-		SpatialQueryExample.setupDataStores();
+		dataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
 		log.info("Running point query examples");
 		example.runPointExamples();
 		log.info("Running polygon query examples");
 		example.runPolygonExamples();
-	}
-
-	private static void setupDataStores()
-			throws AccumuloSecurityException,
-			AccumuloException {
-		// Initialize VectorDataStore and AccumuloAdapterStore
-		final MockInstance instance = new MockInstance();
-		// For the MockInstance we can user "user" - "password" as our
-		// connection tokens
-		final Connector connector = instance.getConnector(
-				"user",
-				new PasswordToken(
-						"password"));
-		final AccumuloOptions options = new AccumuloOptions();
-		final AccumuloOperations operations = new AccumuloOperations(
-				connector,
-				options);
-		dataStore = new AccumuloDataStore(
-				operations,
-				options);
-		adapterStore = new AdapterStoreImpl(
-				operations,
-				options);
 	}
 
 	/**
@@ -119,10 +84,7 @@ public class SpatialQueryExample
 			CQLException,
 			IOException {
 		ingestPointData();
-		pointQueryCase1();
-		pointQueryCase2();
-		pointQueryCase3();
-		pointQueryCase4();
+		pointQuery();
 	}
 
 	private void ingestPointData() {
@@ -136,11 +98,10 @@ public class SpatialQueryExample
 			final FeatureDataAdapter adapter,
 			final Index index,
 			final List<SimpleFeature> features ) {
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		try (IndexWriter<SimpleFeature> indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
 			for (final SimpleFeature sf : features) {
-				//
 				indexWriter.write(sf);
 
 			}
@@ -328,64 +289,9 @@ public class SpatialQueryExample
 	}
 
 	/**
-	 * This query will search all points using the world's Bounding Box
-	 */
-	private void pointQueryCase1()
-			throws ParseException,
-			IOException {
-		log.info("Running Point Query Case 1");
-		// First, we need to obtain the adapter for the SimpleFeature we want to
-		// query.
-		// We'll query basic-feature in this example.
-		// Obtain adapter for our "basic-feature" type
-		final ByteArrayId bfAdId = new ByteArrayId(
-				"basic-feature");
-		final FeatureDataAdapter bfAdapter = (FeatureDataAdapter) adapterStore.getAdapter(bfAdId);
-
-		// Define the geometry to query. We'll find all points that fall inside
-		// that geometry
-		final String queryPolygonDefinition = "POLYGON (( " + "-180 -90, " + "-180 90, " + "180 90, " + "180 -90, "
-				+ "-180 -90" + "))";
-		final Geometry queryPolygon = new WKTReader(
-				JTSFactoryFinder.getGeometryFactory()).read(queryPolygonDefinition);
-
-		// Perform the query.Parameters are
-		/**
-		 * 1- Adapter previously obtained from the feature name. 2- Default
-		 * spatial index. 3- A SpatialQuery, which takes the query geometry -
-		 * aka Bounding box 4- Filters. For this example, no filter is used. 5-
-		 * Limit. Same as standard SQL limit. 0 is no limits. 6- Accumulo
-		 * authorizations. For our mock instances, "root" works. In a real
-		 * Accumulo setting, whatever authorization is associated to the user in
-		 * question.
-		 */
-
-		final QueryOptions options = new QueryOptions(
-				bfAdapter,
-				new SpatialIndexBuilder().createIndex());
-		options.setAuthorizations(new String[] {
-			"root"
-		});
-		int count = 0;
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				options,
-				new SpatialQuery(
-						queryPolygon))) {
-
-			while (iterator.hasNext()) {
-				final SimpleFeature sf = iterator.next();
-				log.info("Obtained SimpleFeature " + sf.getName().toString() + " - " + sf.getAttribute("filter"));
-				count++;
-				System.out.println("Query match: " + iterator.next().getID());
-			}
-			log.info("Should have obtained 2 features. -> " + (count == 2));
-		}
-	}
-
-	/**
 	 * This query will use a specific Bounding Box, and will find only 1 point.
 	 */
-	private void pointQueryCase2()
+	private void pointQuery()
 			throws ParseException,
 			IOException {
 		log.info("Running Point Query Case 2");
@@ -395,7 +301,6 @@ public class SpatialQueryExample
 		// Obtain adapter for our "complex-feature" type
 		final ByteArrayId bfAdId = new ByteArrayId(
 				"complex-feature");
-		final FeatureDataAdapter bfAdapter = (FeatureDataAdapter) adapterStore.getAdapter(bfAdId);
 
 		// Define the geometry to query. We'll find all points that fall inside
 		// that geometry.
@@ -411,138 +316,25 @@ public class SpatialQueryExample
 		 * 1- Adapter previously obtained from the feature name. 2- Default
 		 * spatial index. 3- A SpatialQuery, which takes the query geometry -
 		 * aka Bounding box 4- Filters. For this example, no filter is used. 5-
-		 * Limit. Same as standard SQL limit. 0 is no limits. 6- Accumulo
-		 * authorizations. For our mock instances, "root" works. In a real
-		 * Accumulo setting, whatever authorization is associated to the user in
-		 * question.
-		 */
-		final QueryOptions options = new QueryOptions(
-				bfAdapter,
-				new SpatialIndexBuilder().createIndex(),
-				new String[] {
-					"root"
-				});
-
-		int count = 0;
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				options,
-				new SpatialQuery(
-						queryPolygon))) {
-
-			while (iterator.hasNext()) {
-				final SimpleFeature sf = iterator.next();
-				log.info("Obtained SimpleFeature " + sf.getName().toString() + " - " + sf.getAttribute("filter"));
-				count++;
-				System.out.println("Query match: " + sf.getID());
-			}
-			log.info("Should have obtained 1 feature. -> " + (count == 1));
-		}
-	}
-
-	/**
-	 * This query will use the world's Bounding Box together with a CQL filter.
-	 */
-	private void pointQueryCase3()
-			throws ParseException,
-			CQLException,
-			IOException {
-		log.info("Running Point Query Case 3");
-		// First, we need to obtain the adapter for the SimpleFeature we want to
-		// query.
-		// We'll query basic-feature in this example.
-		// Obtain adapter for our "basic-feature" type
-		final ByteArrayId bfAdId = new ByteArrayId(
-				"basic-feature");
-		final FeatureDataAdapter bfAdapter = (FeatureDataAdapter) adapterStore.getAdapter(bfAdId);
-
-		final String CQLFilter = "filter = 'Basic-Stadium'";
-		// Perform the query.Parameters are
-		/**
-		 * 1- Adapter previously obtained from the feature name. 2- Default
-		 * spatial index. 3- A SpatialQuery, which takes the query geometry -
-		 * aka Bounding box 4- Filters. For this example, we reduce all returned
-		 * points (2) by using a filter. 5- Limit. Same as standard SQL limit. 0
-		 * is no limits. 6- Accumulo authorizations. For our mock instances,
-		 * "root" works. In a real Accumulo setting, whatever authorization is
+		 * Limit. Same as standard SQL limit. 0 is no limits. 6- authorizations.
+		 * For our example, "root" works. In a real , whatever authorization is
 		 * associated to the user in question.
 		 */
-		final QueryOptions options = new QueryOptions(
-				bfAdapter,
-				new SpatialIndexBuilder().createIndex(),
-				new String[] {
-					"root"
-				});
 
 		int count = 0;
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				options,
-				CQLQuery.createOptimalQuery(
-						CQLFilter,
-						bfAdapter,
-						options.getIndex()))) {
+		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(VectorQueryBuilder
+				.newBuilder()
+				.addDataId(
+						bfAdId)
+				.indexId(
+						new ByteArrayId(
+								"SPATIAL_IDX"))
+				.addAuthorization(
+						"root")
+				.spatialConstraint(
+						queryPolygon)
+				.build())) {
 
-			// Our query would have found 2 points based only on the Bounding
-			// Box, but using the
-			// filter to match a particular attribute will reduce our result set
-			// size to 1
-			while (iterator.hasNext()) {
-				final SimpleFeature sf = iterator.next();
-				log.info("Obtained SimpleFeature " + sf.getName().toString() + " - " + sf.getAttribute("filter"));
-				count++;
-				System.out.println("Query match: " + sf.getID());
-			}
-			log.info("Should have obtained 1 feature. " + (count == 1));
-		}
-
-	}
-
-	/**
-	 * This query will use the world's Bounding Box together with a more complex
-	 * CQL filter.
-	 */
-	private void pointQueryCase4()
-			throws ParseException,
-			CQLException,
-			IOException {
-		log.info("Running Point Query Case 4");
-		// First, we need to obtain the adapter for the SimpleFeature we want to
-		// query.
-		// We'll query complex-feature in this example.
-		// Obtain adapter for our "complex-feature" type
-		final ByteArrayId bfAdId = new ByteArrayId(
-				"complex-feature");
-		final FeatureDataAdapter bfAdapter = (FeatureDataAdapter) adapterStore.getAdapter(bfAdId);
-
-		// This CQL query will yield a single point - Complex-LA
-		final String CQLFilter = "latitude > 25 AND longitude < -118";
-		// Perform the query.Parameters are
-		/**
-		 * 1- Adapter previously obtained from the feature name. 2- Default
-		 * spatial index. 3- A SpatialQuery, which takes the query geometry -
-		 * aka Bounding box 4- Filters. For this example, we reduce all returned
-		 * points (2) by using a filter. 5- Limit. Same as standard SQL limit. 0
-		 * is no limits. 6- Accumulo authorizations. For our mock instances,
-		 * "root" works. In a real Accumulo setting, whatever authorization is
-		 * associated to the user in question.
-		 */
-		final QueryOptions options = new QueryOptions(
-				bfAdapter,
-				new SpatialIndexBuilder().createIndex(),
-				new String[] {
-					"root"
-				});
-		int count = 0;
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				options,
-				CQLQuery.createOptimalQuery(
-						CQLFilter,
-						bfAdapter,
-						options.getIndex()))) {
-
-			// Our query would have found 2 points based only on the Bounding
-			// Box, but using the
-			// filter to match a particular attribute will reduce our result set
-			// size to 1
 			while (iterator.hasNext()) {
 				final SimpleFeature sf = iterator.next();
 				log.info("Obtained SimpleFeature " + sf.getName().toString() + " - " + sf.getAttribute("filter"));
@@ -562,7 +354,7 @@ public class SpatialQueryExample
 			throws ParseException,
 			IOException {
 		ingestPolygonFeature();
-		polygonQueryCase1();
+		polygonQuery();
 	}
 
 	private void ingestPolygonFeature()
@@ -634,7 +426,7 @@ public class SpatialQueryExample
 	/**
 	 * This query will find a polygon/polygon intersection, returning one match.
 	 */
-	private void polygonQueryCase1()
+	private void polygonQuery()
 			throws ParseException,
 			IOException {
 		log.info("Running Point Query Case 4");
@@ -644,8 +436,6 @@ public class SpatialQueryExample
 		// Obtain adapter for our "polygon-feature" type
 		final ByteArrayId bfAdId = new ByteArrayId(
 				"polygon-feature");
-		final FeatureDataAdapter bfAdapter = (FeatureDataAdapter) adapterStore.getAdapter(bfAdId);
-
 		// Define the geometry to query. We'll find all polygons that intersect
 		// with this geometry.
 		final String queryPolygonDefinition = "POLYGON (( " + "-80.4037857055664 25.81596330265488, "
@@ -659,24 +449,25 @@ public class SpatialQueryExample
 		/**
 		 * 1- Adapter previously obtained from the feature name. 2- Default
 		 * spatial index. 3- A SpatialQuery, which takes the query geometry -
-		 * aka Bounding box 4- Filters. For this example, we don't use filters
-		 * 5- Limit. Same as standard SQL limit. 0 is no limits. 6- Accumulo
-		 * authorizations. For our mock instances, "root" works. In a real
-		 * Accumulo setting, whatever authorization is associated to the user in
-		 * question.
+		 * aka Bounding box 4- Filters. For this example, no filter is used. 5-
+		 * Limit. Same as standard SQL limit. 0 is no limits. 6- authorizations.
+		 * For our example, "root" works. In a real , whatever authorization is
+		 * associated to the user in question.
 		 */
 
-		final QueryOptions options = new QueryOptions(
-				bfAdapter,
-				new SpatialIndexBuilder().createIndex(),
-				new String[] {
-					"root"
-				});
 		int count = 0;
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				options,
-				new SpatialQuery(
-						queryPolygon))) {
+		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(VectorQueryBuilder
+				.newBuilder()
+				.addDataId(
+						bfAdId)
+				.indexId(
+						new ByteArrayId(
+								"SPATIAL_IDX"))
+				.addAuthorization(
+						"root")
+				.spatialConstraint(
+						queryPolygon)
+				.build())) {
 
 			while (iterator.hasNext()) {
 				final SimpleFeature sf = iterator.next();

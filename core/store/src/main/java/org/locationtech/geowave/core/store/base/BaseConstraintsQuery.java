@@ -30,9 +30,9 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
@@ -72,7 +72,7 @@ public class BaseConstraintsQuery extends
 	public BaseConstraintsQuery(
 			final List<Short> adapterIds,
 			final Index index,
-			final Query query,
+			final QueryConstraints query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,

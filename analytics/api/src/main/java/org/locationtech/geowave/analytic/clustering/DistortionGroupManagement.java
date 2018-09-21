@@ -32,10 +32,10 @@ import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -136,7 +136,7 @@ public class DistortionGroupManagement
 	}
 
 	public static class BatchIdQuery implements
-			Query
+			QueryConstraints
 	{
 		String batchId;
 
@@ -363,7 +363,7 @@ public class DistortionGroupManagement
 	}
 
 	public static class DistortionDataAdapter implements
-			DataAdapter<DistortionEntry>
+			DataTypeAdapter<DistortionEntry>
 	{
 		public final static ByteArrayId ADAPTER_ID = new ByteArrayId(
 				"distortion");

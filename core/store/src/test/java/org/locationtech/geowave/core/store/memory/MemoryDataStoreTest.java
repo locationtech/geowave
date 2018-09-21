@@ -32,13 +32,13 @@ import org.locationtech.geowave.core.store.adapter.MockComponents;
 import org.locationtech.geowave.core.store.adapter.MockComponents.IntegerRangeDataStatistics;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -47,7 +47,7 @@ import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MemoryDataStoreTest
@@ -68,7 +68,7 @@ public class MemoryDataStoreTest
 				reqOptions);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
 				reqOptions);
-		final DataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
+		final DataTypeAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
@@ -152,7 +152,7 @@ public class MemoryDataStoreTest
 			assertFalse(itemIt.hasNext());
 		}
 
-		final Iterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
+		final Iterator<InternalDataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
 		assertTrue(checkStats(
 				statsIt,
 				2,
@@ -242,7 +242,7 @@ public class MemoryDataStoreTest
 				opts);
 		final DataStatisticsStore statsStore = storeFamily.getDataStatisticsStoreFactory().createStore(
 				opts);
-		final DataAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
+		final DataTypeAdapter<Integer> adapter = new MockComponents.MockAbstractDataAdapter();
 
 		final VisibilityWriter<Integer> visWriter = new VisibilityWriter<Integer>() {
 			@Override
@@ -327,7 +327,7 @@ public class MemoryDataStoreTest
 			assertFalse(itemIt.hasNext());
 		}
 
-		final Iterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
+		final Iterator<InternalDataStatistics<?>> statsIt = statsStore.getAllDataStatistics();
 		assertTrue(checkStats(
 				statsIt,
 				2,
@@ -445,11 +445,11 @@ public class MemoryDataStoreTest
 	}
 
 	private boolean checkStats(
-			final Iterator<DataStatistics<?>> statIt,
+			final Iterator<InternalDataStatistics<?>> statIt,
 			final int count,
 			final NumericRange range ) {
 		while (statIt.hasNext()) {
-			final DataStatistics<Integer> stat = (DataStatistics<Integer>) statIt.next();
+			final InternalDataStatistics<Integer> stat = (InternalDataStatistics<Integer>) statIt.next();
 			if ((stat instanceof CountDataStatistics) && (((CountDataStatistics) stat).getCount() != count)) {
 				return false;
 			}
@@ -492,7 +492,7 @@ public class MemoryDataStoreTest
 	}
 
 	private class TestQuery implements
-			Query
+			QueryConstraints
 	{
 
 		final double min, max;

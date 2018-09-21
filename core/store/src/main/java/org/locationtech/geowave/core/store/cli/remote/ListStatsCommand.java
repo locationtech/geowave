@@ -24,9 +24,9 @@ import org.locationtech.geowave.core.cli.exceptions.TargetNotFoundException;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StatsCommandLineOptions;
 import org.slf4j.Logger;
@@ -85,7 +85,7 @@ public class ListStatsCommand extends
 
 		final StringBuilder builder = new StringBuilder();
 
-		try (CloseableIterator<DataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
+		try (CloseableIterator<InternalDataStatistics<?>> statsIt = statsStore.getAllDataStatistics(authorizations)) {
 			if (statsOptions.getJsonFormatFlag()) {
 				final JSONArray resultsArray = new JSONArray();
 				final JSONObject outputObject = new JSONObject();
@@ -96,7 +96,7 @@ public class ListStatsCommand extends
 							"adapter",
 							adapter.getAdapterId().getString());
 					while (statsIt.hasNext()) {
-						final DataStatistics<?> stats = statsIt.next();
+						final InternalDataStatistics<?> stats = statsIt.next();
 						if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
 							continue;
 						}
@@ -116,14 +116,14 @@ public class ListStatsCommand extends
 			// Output as strings
 			else {
 				while (statsIt.hasNext()) {
-					final DataStatistics<?> stats = statsIt.next();
+					final InternalDataStatistics<?> stats = statsIt.next();
 					if (stats.getInternalDataAdapterId() != adapter.getInternalAdapterId()) {
 						continue;
 					}
 					builder.append("[");
 					builder.append(String.format(
 							"%1$-20s",
-							stats.getStatisticsId().getString()));
+							stats.getStatisticsType().getString()));
 					builder.append("] ");
 					builder.append(stats.toString());
 					builder.append("\n");

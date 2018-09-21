@@ -16,7 +16,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
 public class CassandraStatisticsIterator implements
@@ -49,8 +49,8 @@ public class CassandraStatisticsIterator implements
 				currentStatistics = statEntry;
 			}
 			else {
-				if (statEntry.getStatisticsId().equals(
-						currentStatistics.getStatisticsId()) && statEntry.getInternalDataAdapterId().equals(
+				if (statEntry.getStatisticsType().equals(
+						currentStatistics.getStatisticsType()) && statEntry.getInternalDataAdapterId().equals(
 						currentStatistics.getInternalDataAdapterId())) {
 					currentStatistics.merge(statEntry);
 				}
@@ -70,7 +70,7 @@ public class CassandraStatisticsIterator implements
 
 		if (stats != null) {
 			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
-			stats.setStatisticsId(new ByteArrayId(
+			stats.setStatisticsType(new ByteArrayId(
 					entry.getPrimaryId()));
 		}
 
@@ -80,7 +80,7 @@ public class CassandraStatisticsIterator implements
 	protected GeoWaveMetadata statsToMetadata(
 			final DataStatistics<?> stats ) {
 		return new GeoWaveMetadata(
-				stats.getStatisticsId().getBytes(),
+				stats.getStatisticsType().getBytes(),
 				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));

@@ -10,6 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.examples.ingest;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -18,12 +19,18 @@ import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -31,11 +38,69 @@ import com.vividsolutions.jts.geom.Geometry;
 public class SimpleIngest
 {
 	public static final String FEATURE_NAME = "GridPoint";
+	private static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
+
+	public static void main(
+			final String[] args ) {
+		final SimpleIngest si = new SimpleIngest();
+		DataStore geowaveDataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
+
+		si.writeExampleData(geowaveDataStore);
+		System.out.println("Finished ingesting data");
+	}
+
+	/***
+	 * Here we will change the ingest mechanism to use a producer/consumer
+	 * pattern
+	 */
+	protected void writeExampleData(
+			final DataStore geowaveDataStore ) {
+
+		// In order to store data we need to determine the type of data store
+		final SimpleFeatureType point = createPointFeatureType();
+
+		// This a factory class that builds simple feature objects based on the
+		// type passed
+		final SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(
+				point);
+
+		// This is an adapter, that is needed to describe how to persist the
+		// data type passed
+		final GeotoolsFeatureDataAdapter adapter = createDataAdapter(point);
+
+		// This describes how to index the data
+		final Index index = createSpatialIndex();
+
+		// make sure to close the index writer (a try-with-resources block such
+		// as this automatically closes the resource when exiting the block)
+		try (IndexWriter<SimpleFeature> indexWriter = geowaveDataStore.createWriter(
+				adapter,
+				index)) {
+			// build a grid of points across the globe at each whole
+			// lattitude/longitude intersection
+
+			for (final SimpleFeature sft : getGriddedFeatures(
+					pointBuilder,
+					1000)) {
+				indexWriter.write(sft);
+			}
+		}
+		catch (final IOException e) {
+			log.warn(
+					"Unable to close index writer",
+					e);
+		}
+	}
 
 	public static List<SimpleFeature> getGriddedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
 			final int firstFeatureId ) {
 
+		// features require a featureID - this should be uniqiue per data type
+		// adapter ID
+		// (i.e. writing a new feature with the same feature id for the same
+		// data type adapter will
+		// overwrite the existing feature)
 		int featureId = firstFeatureId;
 		final List<SimpleFeature> feats = new ArrayList<>();
 		for (int longitude = -180; longitude <= 180; longitude += 5) {

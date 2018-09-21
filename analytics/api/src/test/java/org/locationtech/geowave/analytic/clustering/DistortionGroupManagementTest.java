@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -62,7 +62,7 @@ public class DistortionGroupManagementTest
 	final DataStorePluginOptions storePluginOptions;
 
 	private <T> void ingest(
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final Index index,
 			final T entry )
 			throws IOException {

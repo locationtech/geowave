@@ -23,8 +23,8 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 
 import com.vividsolutions.jts.geom.Envelope;
 

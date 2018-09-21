@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
 
@@ -30,7 +30,7 @@ public class CassandraDeleter implements
 	@Override
 	public void delete(
 			final GeoWaveRow row,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		operations.deleteRow(
 				tableName,
 				row);

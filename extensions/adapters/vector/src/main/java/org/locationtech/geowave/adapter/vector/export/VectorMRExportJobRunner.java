@@ -25,21 +25,21 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 import org.geotools.filter.text.cql2.CQLException;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
+import org.locationtech.geowave.core.geotime.store.query.CQLQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.slf4j.Logger;
@@ -97,10 +97,10 @@ public class VectorMRExportJobRunner extends
 		if ((adapterIds != null) && !adapterIds.isEmpty()) {
 			options.setAdapters(Lists.transform(
 					adapterIds,
-					new Function<String, DataAdapter<?>>() {
+					new Function<String, DataTypeAdapter<?>>() {
 
 						@Override
-						public DataAdapter<?> apply(
+						public DataTypeAdapter<?> apply(
 								final String input ) {
 							Short internalAdpaterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 									input));

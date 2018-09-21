@@ -26,10 +26,11 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat.GeoWaveRecordWriter;
@@ -112,7 +113,7 @@ public class BaseMapReduceDataStore<T> extends
 	@Override
 	public List<InputSplit> getSplits(
 			final DistributableQuery query,
-			final QueryOptions queryOptions,
+			final QueryOptionsInt queryOptions,
 			final TransientAdapterStore adapterStore,
 			final AdapterIndexMappingStore aimStore,
 			final DataStatisticsStore statsStore,

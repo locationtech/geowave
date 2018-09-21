@@ -14,18 +14,18 @@ import java.util.Map;
 
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
+import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialTemporalQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataStatistics;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -36,7 +36,7 @@ public class QueryIndexHelper
 {
 
 	private static TemporalRange getStatsRange(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final AttributeDescriptor attr ) {
 		final TemporalRange timeRange = new TemporalRange();
 		if (attr != null) {
@@ -60,7 +60,7 @@ public class QueryIndexHelper
 	 * @return
 	 */
 	public static TemporalConstraintsSet clipIndexedTemporalConstraints(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final TimeDescriptors timeDescriptors,
 			final TemporalConstraintsSet constraintsSet ) {
 		// TODO: if query range doesn't intersect with the stats, it seems the
@@ -114,39 +114,6 @@ public class QueryIndexHelper
 	}
 
 	/**
-	 * Compose temporal constraints given the constraint set and the descriptors
-	 * for the index.
-	 *
-	 * @param timeDescriptors
-	 * @param constraintsSet
-	 * @return null if the constraints does not have the fields required by the
-	 *         time descriptors
-	 */
-	public static TemporalConstraints composeRangeTemporalConstraints(
-			final TimeDescriptors timeDescriptors,
-			final TemporalConstraintsSet constraintsSet ) {
-
-		if ((timeDescriptors.getEndRange() != null) && (timeDescriptors.getStartRange() != null)) {
-			final String ename = timeDescriptors.getEndRange().getLocalName();
-			final String sname = timeDescriptors.getStartRange().getLocalName();
-
-			if (constraintsSet.hasConstraintsForRange(
-					sname,
-					ename)) {
-				return constraintsSet.getConstraintsForRange(
-						sname,
-						ename);
-			}
-
-		}
-		else if ((timeDescriptors.getTime() != null)
-				&& constraintsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
-			return constraintsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
-		}
-		return new TemporalConstraints();
-	}
-
-	/**
 	 * Clip the provided bounded box with the statistics for the index
 	 *
 	 * @param featureType
@@ -157,7 +124,7 @@ public class QueryIndexHelper
 	public static Geometry clipIndexedBBOXConstraints(
 			final SimpleFeatureType featureType,
 			final Geometry bbox,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap ) {
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap ) {
 
 		final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
 
@@ -179,7 +146,7 @@ public class QueryIndexHelper
 
 	public static ConstraintSet getTimeConstraintsFromIndex(
 			final TimeDescriptors timeDescriptors,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats ) {
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats ) {
 
 		if ((timeDescriptors.getEndRange() != null) || (timeDescriptors.getStartRange() != null)) {
 			final FeatureTimeRangeStatistics endRange = (timeDescriptors.getEndRange() != null) ? ((FeatureTimeRangeStatistics) stats
@@ -218,32 +185,12 @@ public class QueryIndexHelper
 
 	public static ConstraintSet getBBOXIndexConstraintsFromIndex(
 			final SimpleFeatureType featureType,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap ) {
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap ) {
 		final String geoAttrName = featureType.getGeometryDescriptor().getLocalName();
 		final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(geoAttrName);
 		final BoundingBoxDataStatistics<SimpleFeature> bboxStats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap
 				.get(statId);
 		return (bboxStats != null) ? bboxStats.getConstraints() : new ConstraintSet();
-	}
-
-	public static TemporalConstraints getTemporalConstraintsForDescriptors(
-			final TimeDescriptors timeDescriptors,
-			final TemporalConstraintsSet timeBoundsSet ) {
-		if ((timeBoundsSet == null) || timeBoundsSet.isEmpty()) {
-			return new TemporalConstraints();
-		}
-
-		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
-			return composeRangeTemporalConstraints(
-					timeDescriptors,
-					timeBoundsSet);
-		}
-		else if ((timeDescriptors.getTime() != null)
-				&& timeBoundsSet.hasConstraintsFor(timeDescriptors.getTime().getLocalName())) {
-			return timeBoundsSet.getConstraintsFor(timeDescriptors.getTime().getLocalName());
-		}
-
-		return new TemporalConstraints();
 	}
 
 	/**
@@ -260,7 +207,7 @@ public class QueryIndexHelper
 	public static Constraints composeTimeConstraints(
 			final SimpleFeatureType featureType,
 			final TimeDescriptors timeDescriptors,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final TemporalConstraintsSet timeBoundsSet ) {
 
 		final TemporalConstraints timeBounds = getTemporalConstraintsForDescriptors(
@@ -288,7 +235,7 @@ public class QueryIndexHelper
 	public static Constraints composeTimeBoundedConstraints(
 			final SimpleFeatureType featureType,
 			final TimeDescriptors timeDescriptors,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final TemporalConstraintsSet timeBoundsSet ) {
 
 		if ((timeBoundsSet == null) || timeBoundsSet.isEmpty() || !timeDescriptors.hasTime()) {
@@ -327,7 +274,7 @@ public class QueryIndexHelper
 	 */
 	public static GeoConstraintsWrapper composeGeometricConstraints(
 			final SimpleFeatureType featureType,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final Geometry jtsBounds ) {
 		if (jtsBounds == null) {
 			return new GeoConstraintsWrapper(
@@ -365,7 +312,7 @@ public class QueryIndexHelper
 	public static Constraints composeConstraints(
 			final SimpleFeatureType featureType,
 			final TimeDescriptors timeDescriptors,
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBoundsSet ) {
 

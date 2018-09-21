@@ -21,7 +21,7 @@ import org.HdrHistogram.Histogram;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -79,11 +79,11 @@ public class FeatureNumericHistogramStatistics extends
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return decomposeNameFromId(getStatisticsType());
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature> duplicate() {
 		return new FeatureNumericHistogramStatistics(
 				internalDataAdapterId,
 				getFieldName());
@@ -377,7 +377,7 @@ public class FeatureNumericHistogramStatistics extends
 		private static final long serialVersionUID = 6309383518148391565L;
 
 		@Override
-		public DataStatistics<SimpleFeature> create(
+		public InternalDataStatistics<SimpleFeature> create(
 				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureNumericHistogramStatistics(

@@ -23,17 +23,17 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.TimeUtils;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -234,7 +234,7 @@ public class FeatureDataUtils
 		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
 		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
+		final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
@@ -274,7 +274,7 @@ public class FeatureDataUtils
 		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
 		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
+		final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
@@ -295,7 +295,7 @@ public class FeatureDataUtils
 		final PersistentAdapterStore adapterStore = dataStore.createAdapterStore();
 		final InternalAdapterStore internalAdapterStore = dataStore.createInternalAdapterStore();
 
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
+		final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 				internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
 
 		if ((adapter != null) && (adapter instanceof GeotoolsFeatureDataAdapter)) {
@@ -333,7 +333,7 @@ public class FeatureDataUtils
 		int featureAdapters = 0;
 
 		while (adapterIt.hasNext()) {
-			final DataAdapter<?> adapter = adapterIt.next().getAdapter();
+			final DataTypeAdapter<?> adapter = adapterIt.next().getAdapter();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapters++;
 			}
@@ -349,7 +349,7 @@ public class FeatureDataUtils
 		final CloseableIterator<InternalDataAdapter<?>> adapterIt = dataStore.createAdapterStore().getAdapters();
 
 		while (adapterIt.hasNext()) {
-			final DataAdapter<?> adapter = adapterIt.next().getAdapter();
+			final DataTypeAdapter<?> adapter = adapterIt.next().getAdapter();
 			if (adapter instanceof GeotoolsFeatureDataAdapter) {
 				featureAdapterIds.add(adapter.getAdapterId());
 			}

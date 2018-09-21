@@ -14,7 +14,7 @@ import java.util.Date;
 
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 import com.vividsolutions.jts.geom.LineString;

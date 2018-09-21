@@ -13,7 +13,7 @@ package org.locationtech.geowave.mapreduce;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -21,13 +21,13 @@ import com.google.common.collect.Lists;
 public class MapReduceUtils
 {
 	public static List<ByteArrayId> idsFromAdapters(
-			List<DataAdapter<Object>> adapters ) {
+			List<DataTypeAdapter<Object>> adapters ) {
 		return Lists.transform(
 				adapters,
-				new Function<DataAdapter<Object>, ByteArrayId>() {
+				new Function<DataTypeAdapter<Object>, ByteArrayId>() {
 					@Override
 					public ByteArrayId apply(
-							final DataAdapter<Object> adapter ) {
+							final DataTypeAdapter<Object> adapter ) {
 						return adapter == null ? new ByteArrayId() : adapter.getAdapterId();
 					}
 				});

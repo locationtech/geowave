@@ -12,7 +12,6 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 
 /**
  * This is responsible for persisting data statistics (either in memory or to
@@ -31,7 +30,7 @@ public interface DataStatisticsStore
 	 * 
 	 */
 	public void setStatistics(
-			DataStatistics<?> statistics );
+			InternalDataStatistics<?> statistics );
 
 	/**
 	 * Add the statistics to the store, overwriting existing data statistics
@@ -41,7 +40,7 @@ public interface DataStatisticsStore
 	 *            the data statistics
 	 */
 	public void incorporateStatistics(
-			DataStatistics<?> statistics );
+			InternalDataStatistics<?> statistics );
 
 	/**
 	 * Get all data statistics from the store by a data adapter ID
@@ -51,7 +50,7 @@ public interface DataStatisticsStore
 	 * @return the list of statistics for the given adapter, empty if it doesn't
 	 *         exist
 	 */
-	public CloseableIterator<DataStatistics<?>> getDataStatistics(
+	public CloseableIterator<InternalDataStatistics<?>> getDataStatistics(
 			short internalAdapterId,
 			String... authorizations );
 
@@ -60,7 +59,7 @@ public interface DataStatisticsStore
 	 * 
 	 * @return the list of all statistics
 	 */
-	public CloseableIterator<DataStatistics<?>> getAllDataStatistics(
+	public CloseableIterator<InternalDataStatistics<?>> getAllDataStatistics(
 			String... authorizations );
 
 	/**
@@ -73,7 +72,7 @@ public interface DataStatisticsStore
 	 *            the statistics ID for the requested statistics
 	 * @return the persisted statistics value
 	 */
-	public DataStatistics<?> getDataStatistics(
+	public InternalDataStatistics<?> getDataStatistics(
 			short internalAdapterId,
 			ByteArrayId statisticsId,
 			String... authorizations );

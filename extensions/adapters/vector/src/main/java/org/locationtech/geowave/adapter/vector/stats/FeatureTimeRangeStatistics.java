@@ -17,7 +17,7 @@ import java.util.TimeZone;
 import org.locationtech.geowave.core.geotime.store.statistics.TimeRangeDataStatistics;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 
 public class FeatureTimeRangeStatistics extends
@@ -53,7 +53,7 @@ public class FeatureTimeRangeStatistics extends
 
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return decomposeNameFromId(getStatisticsType());
 	}
 
 	public Date getMaxTime() {
@@ -93,7 +93,7 @@ public class FeatureTimeRangeStatistics extends
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature> duplicate() {
 		return new FeatureTimeRangeStatistics(
 				internalDataAdapterId,
 				getFieldName());

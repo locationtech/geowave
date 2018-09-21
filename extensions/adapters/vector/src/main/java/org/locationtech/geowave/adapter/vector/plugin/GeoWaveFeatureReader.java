@@ -40,29 +40,29 @@ import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.transform.ProjectiveTransform;
 import org.geotools.renderer.lite.RendererUtilities;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderAggregation;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
 import org.locationtech.geowave.adapter.vector.stats.FeatureStatistic;
 import org.locationtech.geowave.adapter.vector.util.QueryIndexHelper;
-import org.locationtech.geowave.core.geotime.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
+import org.locationtech.geowave.core.geotime.store.query.CQLQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
 import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CountResult;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -181,7 +181,7 @@ public class GeoWaveFeatureReader implements
 	}
 
 	private BasicQuery getQuery(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap,
 			final Geometry jtsBounds,
 			final TemporalConstraintsSet timeBounds ) {
 		final Constraints timeConstraints = QueryIndexHelper.composeTimeBoundedConstraints(
@@ -213,7 +213,7 @@ public class GeoWaveFeatureReader implements
 			final QueryIssuer issuer ) {
 
 		final List<CloseableIterator<SimpleFeature>> results = new ArrayList<>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
 
 		final BasicQuery query = getQuery(
 				statsMap,
@@ -652,11 +652,11 @@ public class GeoWaveFeatureReader implements
 
 	}
 
-	protected List<DataStatistics<SimpleFeature>> getStatsFor(
+	protected List<InternalDataStatistics<SimpleFeature>> getStatsFor(
 			final String name ) {
-		final List<DataStatistics<SimpleFeature>> stats = new LinkedList<>();
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
-		for (final Map.Entry<ByteArrayId, DataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
+		final List<InternalDataStatistics<SimpleFeature>> stats = new LinkedList<>();
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> statsMap = transaction.getDataStatistics();
+		for (final Map.Entry<ByteArrayId, InternalDataStatistics<SimpleFeature>> stat : statsMap.entrySet()) {
 			if ((stat.getValue() instanceof FeatureStatistic)
 					&& ((FeatureStatistic) stat.getValue()).getFieldName().endsWith(
 							name)) {

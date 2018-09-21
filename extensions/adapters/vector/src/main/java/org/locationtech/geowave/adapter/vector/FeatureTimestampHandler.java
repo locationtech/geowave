@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector;
 
-import org.locationtech.geowave.core.geotime.TimeUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.Timestamp;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.data.PersistentValue;

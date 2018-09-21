@@ -26,7 +26,7 @@ import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.service.grpc.protobuf.AddIndexGroupCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc;

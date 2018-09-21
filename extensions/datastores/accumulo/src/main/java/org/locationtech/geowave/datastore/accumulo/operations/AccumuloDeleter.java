@@ -18,7 +18,7 @@ import org.apache.accumulo.core.client.MutationsRejectedException;
 import org.apache.accumulo.core.client.TableNotFoundException;
 import org.apache.accumulo.core.data.Range;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.Deleter;
@@ -51,7 +51,7 @@ public class AccumuloDeleter implements
 	@Override
 	public synchronized void delete(
 			final GeoWaveRow row,
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		final List<Range> rowRanges = new ArrayList<Range>();
 		if (isAltIndex) {
 			rowRanges.add(Range.exact(new Text(

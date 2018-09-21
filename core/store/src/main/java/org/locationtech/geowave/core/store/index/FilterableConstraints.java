@@ -11,11 +11,11 @@
 package org.locationtech.geowave.core.store.index;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.QueryConstraints;
+import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 
 public interface FilterableConstraints extends
-		QueryConstraints
+		IndexConstraints
 {
 
 	public ByteArrayId getFieldId();

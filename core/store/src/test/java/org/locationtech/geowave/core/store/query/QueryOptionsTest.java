@@ -37,9 +37,10 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.base.BaseQueryOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.IndexStore;
@@ -70,7 +71,7 @@ public class QueryOptionsTest
 	@Test
 	public void testGetAdaptersWithMinimalSetOfIndices()
 			throws IOException {
-		final QueryOptions ops = new QueryOptions();
+		final QueryOptionsInt ops = new QueryOptions();
 		final Index index1 = new PrimaryIndex(
 				new MockComponents.MockIndexStrategy(),
 				new MockComponents.TestIndexModel(
@@ -349,10 +350,10 @@ public class QueryOptionsTest
 
 			@Override
 			public void addAdapter(
-					final DataAdapter<?> adapter ) {}
+					final DataTypeAdapter<?> adapter ) {}
 
 			@Override
-			public DataAdapter<?> getAdapter(
+			public DataTypeAdapter<?> getAdapter(
 					final ByteArrayId adapterId ) {
 				return new MockComponents.MockAbstractDataAdapter(
 						adapterId);
@@ -365,7 +366,7 @@ public class QueryOptionsTest
 			}
 
 			@Override
-			public CloseableIterator<DataAdapter<?>> getAdapters() {
+			public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
 				return new CloseableIterator.Wrapper(
 						Collections.emptyListIterator());
 			}

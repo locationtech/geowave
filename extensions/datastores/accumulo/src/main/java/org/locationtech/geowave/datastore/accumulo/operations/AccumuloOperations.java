@@ -72,7 +72,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
@@ -1098,7 +1098,7 @@ public class AccumuloOperations implements
 					&& (params.getAggregation().getLeft() != null)) {
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary((DataAdapter<?>) params
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary((DataTypeAdapter<?>) params
 								.getAggregation()
 								.getLeft())));
 			}
@@ -1192,7 +1192,7 @@ public class AccumuloOperations implements
 			final ScannerBase scanner ) {
 		if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
 			final List<String> fieldIds = (List<String>) params.getFieldSubsets().getLeft();
-			final DataAdapter<?> associatedAdapter = (DataAdapter<?>) params.getFieldSubsets().getRight();
+			final DataTypeAdapter<?> associatedAdapter = (DataTypeAdapter<?>) params.getFieldSubsets().getRight();
 			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
 				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
 

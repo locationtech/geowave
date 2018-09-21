@@ -14,13 +14,12 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 
 import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 abstract public class AbstractDataStatistics<T> implements
-		DataStatistics<T>
+		InternalDataStatistics<T>
 {
 	protected static final ByteArrayId STATS_SEPARATOR = new ByteArrayId(
 			"_");
@@ -37,7 +36,7 @@ abstract public class AbstractDataStatistics<T> implements
 	protected ByteArrayId statisticsId;
 
 	@Override
-	public void setStatisticsId(
+	public void setStatisticsType(
 			final ByteArrayId statisticsId ) {
 		this.statisticsId = statisticsId;
 	}
@@ -74,7 +73,7 @@ abstract public class AbstractDataStatistics<T> implements
 	}
 
 	@Override
-	public ByteArrayId getStatisticsId() {
+	public ByteArrayId getStatisticsType() {
 		return statisticsId;
 	}
 
@@ -118,8 +117,8 @@ abstract public class AbstractDataStatistics<T> implements
 	}
 
 	@SuppressWarnings("unchecked")
-	public DataStatistics<T> duplicate() {
-		DataStatistics<T> newStats;
+	public InternalDataStatistics<T> duplicate() {
+		InternalDataStatistics<T> newStats;
 		try {
 			newStats = this.getClass().newInstance();
 		}

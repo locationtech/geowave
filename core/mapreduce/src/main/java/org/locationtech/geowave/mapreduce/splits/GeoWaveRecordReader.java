@@ -43,7 +43,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;

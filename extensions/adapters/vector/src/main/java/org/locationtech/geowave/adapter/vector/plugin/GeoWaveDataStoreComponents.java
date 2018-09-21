@@ -15,17 +15,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.index.IndexQueryStrategySPI.QueryHint;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
@@ -34,8 +34,8 @@ import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.opengis.feature.simple.SimpleFeature;
 import org.spark_project.guava.collect.Maps;
 
@@ -104,7 +104,7 @@ public class GeoWaveDataStoreComponents
 	}
 
 	public CloseableIterator<Index> getIndices(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+			final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats,
 			final BasicQuery query ) {
 		final GeoWaveGTDataStore gtStore = getGTstore();
 		final Map<QueryHint, Object> queryHints = Maps.newHashMap();

@@ -31,10 +31,10 @@ import org.locationtech.geowave.analytic.param.ExtractParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.ParameterHelper;
 import org.locationtech.geowave.analytic.param.InputParameters.Input;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.api.QueryOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;

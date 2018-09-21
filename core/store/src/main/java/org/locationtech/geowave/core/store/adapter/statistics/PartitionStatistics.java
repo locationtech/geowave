@@ -17,7 +17,6 @@ import java.util.Set;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.api.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 import net.sf.json.JSONArray;
@@ -58,7 +57,7 @@ public class PartitionStatistics<T> extends
 	}
 
 	@Override
-	public DataStatistics<T> duplicate() {
+	public InternalDataStatistics<T> duplicate() {
 		return new PartitionStatistics<T>(
 				internalDataAdapterId,
 				decomposeIndexIdFromId(statisticsId)); // indexId

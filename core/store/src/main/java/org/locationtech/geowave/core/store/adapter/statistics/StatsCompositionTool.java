@@ -18,8 +18,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
-import org.locationtech.geowave.core.store.api.DataAdapter;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
@@ -58,7 +57,7 @@ public class StatsCompositionTool<T> implements
 			final DataStoreStatisticsProvider<T> statisticsProvider,
 			final DataStatisticsStore statisticsStore,
 			final Index index,
-			final DataAdapter<T> adapter ) {
+			final DataTypeAdapter<T> adapter ) {
 		this.statisticsStore = statisticsStore;
 		this.init(
 				index,
@@ -68,7 +67,7 @@ public class StatsCompositionTool<T> implements
 
 	private void init(
 			final Index index,
-			final DataAdapter<T> adapter,
+			final DataTypeAdapter<T> adapter,
 			final DataStoreStatisticsProvider<T> statisticsProvider ) {
 		final ByteArrayId[] statisticsIds = statisticsProvider.getSupportedStatisticsTypes();
 		statisticsBuilders = new ArrayList<DataStatisticsBuilder<T>>(
@@ -142,8 +141,8 @@ public class StatsCompositionTool<T> implements
 
 		synchronized (MUTEX) {
 			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
-				for (final DataStatistics<T> s : statistics) {
+				final Collection<InternalDataStatistics<T>> statistics = builder.getStatistics();
+				for (final InternalDataStatistics<T> s : statistics) {
 					// using a set and simply checking instanceof this is the
 					// simplest approach to enable per partition statistics
 					// within the current design
@@ -154,7 +153,7 @@ public class StatsCompositionTool<T> implements
 					// which is used by the stats manager within a feature data
 					// adapter etc.
 					if (s instanceof DataStatisticsSet) {
-						for (final DataStatistics<T> statInSet : ((DataStatisticsSet) s).getStatisticsSet()) {
+						for (final InternalDataStatistics<T> statInSet : ((DataStatisticsSet) s).getStatisticsSet()) {
 							statisticsStore.incorporateStatistics(statInSet);
 						}
 					}
@@ -177,7 +176,7 @@ public class StatsCompositionTool<T> implements
 
 		synchronized (MUTEX) {
 			for (final DataStatisticsBuilder<T> builder : statisticsBuilders) {
-				final Collection<DataStatistics<T>> statistics = builder.getStatistics();
+				final Collection<InternalDataStatistics<T>> statistics = builder.getStatistics();
 				statistics.clear();
 			}
 		}

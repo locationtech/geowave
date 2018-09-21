@@ -27,7 +27,7 @@ import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryOptions;
@@ -124,7 +124,7 @@ public class RasterTileResizeJobRunner extends
 		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
 		final short internalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
 				rasterResizeOptions.getInputCoverageName()));
-		final DataAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
+		final DataTypeAdapter adapter = inputStoreOptions.createAdapterStore().getAdapter(
 				internalAdapterId).getAdapter();
 
 		if (adapter == null) {

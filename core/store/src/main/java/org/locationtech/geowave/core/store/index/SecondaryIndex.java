@@ -11,11 +11,11 @@
 package org.locationtech.geowave.core.store.index;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.QueryConstraints;
+import org.locationtech.geowave.core.index.IndexConstraints;
 import org.locationtech.geowave.core.index.SortedIndexStrategy;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
-public interface SecondaryIndex<QueryRangeType extends QueryConstraints, EntryRangeType> extends
+public interface SecondaryIndex<QueryRangeType extends IndexConstraints, EntryRangeType> extends
 		Persistable
 {
 	public ByteArrayId getId();

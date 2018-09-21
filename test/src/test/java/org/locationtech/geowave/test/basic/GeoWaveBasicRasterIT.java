@@ -29,7 +29,7 @@ import org.locationtech.geowave.adapter.raster.adapter.ServerMergeableRasterTile
 import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
 import org.locationtech.geowave.adapter.raster.adapter.merge.SimpleAbstractMergeStrategy;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import org.locationtech.geowave.core.geotime.store.query.api.IndexOnlySpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;

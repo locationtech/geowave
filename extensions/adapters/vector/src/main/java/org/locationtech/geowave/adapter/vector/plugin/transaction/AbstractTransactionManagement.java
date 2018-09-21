@@ -15,13 +15,13 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.api.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.opengis.feature.simple.SimpleFeature;
 
 public abstract class AbstractTransactionManagement implements
@@ -38,20 +38,20 @@ public abstract class AbstractTransactionManagement implements
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public Map<ByteArrayId, DataStatistics<SimpleFeature>> getDataStatistics() {
-		final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats = new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>();
+	public Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> getDataStatistics() {
+		final Map<ByteArrayId, InternalDataStatistics<SimpleFeature>> stats = new HashMap<ByteArrayId, InternalDataStatistics<SimpleFeature>>();
 		final GeotoolsFeatureDataAdapter adapter = components.getAdapter();
 		short internalAdapterId = components.getGTstore().getInternalAdapterStore().getInternalAdapterId(
 				adapter.getAdapterId());
 
-		try (CloseableIterator<DataStatistics<?>> it = components.getStatsStore().getDataStatistics(
+		try (CloseableIterator<InternalDataStatistics<?>> it = components.getStatsStore().getDataStatistics(
 				internalAdapterId,
 				composeAuthorizations())) {
 			while (it.hasNext()) {
-				final DataStatistics<?> stat = it.next();
+				final InternalDataStatistics<?> stat = it.next();
 				stats.put(
-						stat.getStatisticsId(),
-						(DataStatistics<SimpleFeature>) stat);
+						stat.getStatisticsType(),
+						(InternalDataStatistics<SimpleFeature>) stat);
 			}
 
 		}

@@ -31,7 +31,7 @@ import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinit
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
 import org.locationtech.geowave.cli.osm.types.generated.MemberType;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.opengis.feature.simple.SimpleFeature;

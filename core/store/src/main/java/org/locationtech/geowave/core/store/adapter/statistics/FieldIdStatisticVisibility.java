@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -31,7 +31,7 @@ public class FieldIdStatisticVisibility<T> implements
 	public FieldIdStatisticVisibility(
 			final ByteArrayId fieldId,
 			final CommonIndexModel model,
-			final DataAdapter adapter ) {
+			final DataTypeAdapter adapter ) {
 		this.bitPosition = adapter.getPositionOfOrderedField(
 				model,
 				fieldId);

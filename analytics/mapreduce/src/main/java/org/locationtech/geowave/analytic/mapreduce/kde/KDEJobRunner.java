@@ -38,23 +38,23 @@ import org.geotools.filter.text.ecql.ECQL;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.operations.ResizeCommand;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
 import org.locationtech.geowave.analytic.mapreduce.operations.KdeCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
@@ -271,7 +271,7 @@ public class KDEJobRunner extends
 		short internalAdapterId = inputDataStoreOptions.createInternalAdapterStore().getInternalAdapterId(
 				new ByteArrayId(
 						kdeCommandLineOptions.getFeatureType()));
-		final DataAdapter<?> adapter = adapterStore.getAdapter(
+		final DataTypeAdapter<?> adapter = adapterStore.getAdapter(
 				internalAdapterId).getAdapter();
 
 		final QueryOptions queryOptions = new QueryOptions(
@@ -566,7 +566,7 @@ public class KDEJobRunner extends
 			final String coverageName,
 			final Index index )
 			throws Exception {
-		final DataAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
+		final DataTypeAdapter<?> adapter = RasterUtils.createDataAdapterTypeDouble(
 				coverageName,
 				KDEReducer.NUM_BANDS,
 				TILE_SIZE,
@@ -584,7 +584,7 @@ public class KDEJobRunner extends
 	protected void setup(
 			final Job job,
 			final String namespace,
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final Index index )
 			throws IOException,
 			MismatchedIndexToAdapterMapping {

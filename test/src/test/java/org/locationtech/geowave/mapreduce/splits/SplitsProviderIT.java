@@ -22,18 +22,19 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.store.query.api.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
 import org.locationtech.geowave.core.store.api.QueryOptions;
+import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.Reader;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.mapreduce.MapReduceMemoryDataStore;
 import org.locationtech.geowave.mapreduce.MapReduceMemoryOperations;
@@ -294,7 +295,7 @@ public class SplitsProviderIT extends
 		// get splits and create reader for each RangeLocationPair, then summing
 		// up the rows for each split
 
-		final QueryOptions queryOptions = new QueryOptions(
+		final QueryOptionsInt queryOptions = new QueryOptions(
 				dataStoreInfo.adapter.getAdapterId(),
 				dataStoreInfo.index.getId());
 

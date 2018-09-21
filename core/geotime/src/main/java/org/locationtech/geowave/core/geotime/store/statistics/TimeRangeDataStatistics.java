@@ -64,7 +64,7 @@ abstract public class TimeRangeDataStatistics<T> extends
 				store.getAdapterId(internalDataAdapterId));
 		jo.put(
 				"statisticsID",
-				getStatisticsId().getString());
+				getStatisticsType().getString());
 
 		if (!isSet()) {
 			jo.put(

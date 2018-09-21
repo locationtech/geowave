@@ -20,7 +20,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -170,7 +170,7 @@ public class BitmaskUtils
 	public static byte[] generateFieldSubsetBitmask(
 			final CommonIndexModel indexModel,
 			final List<ByteArrayId> fieldIds,
-			final DataAdapter<?> adapterAssociatedWithFieldIds ) {
+			final DataTypeAdapter<?> adapterAssociatedWithFieldIds ) {
 		final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 
 		// dimension fields must also be included

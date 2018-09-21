@@ -80,7 +80,7 @@ import org.geotools.resources.image.ImageUtilities;
 import org.geotools.util.NumberRange;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.opengis.coverage.SampleDimension;
