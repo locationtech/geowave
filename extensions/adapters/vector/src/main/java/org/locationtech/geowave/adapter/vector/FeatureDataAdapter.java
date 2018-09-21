@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector;
 
-import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -698,6 +697,9 @@ public class FeatureDataAdapter extends
 				+ typeNameBytes.length + namespaceBytes.length + attrBytes.length + axisBytes.length
 				+ secondaryIndexBytes.length + 25);
 
+		// TODO we will mess with serialization but "version" is definitely
+		// better done by simply registering a different persistable constructor
+		// and this should go away
 		buf.put(VERSION);
 		buf.putInt(typeNameBytes.length);
 		buf.putInt(indexCrsBytes.length);
@@ -735,8 +737,10 @@ public class FeatureDataAdapter extends
 		}
 		// deserialize the feature type
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		// for now...do a gentle migration
-		final byte versionId = buf.get();
+		// TODO we will mess with serialization but "version" is definitely
+		// better done by simply registering a different persistable constructor
+		// and this should go away
+		buf.get();
 		final byte[] typeNameBytes = new byte[buf.getInt()];
 
 		final byte[] indexCrsBytes = new byte[buf.getInt()];
@@ -760,8 +764,6 @@ public class FeatureDataAdapter extends
 
 		// 21 bytes is the 7 four byte length fields and one byte for the
 		// version
-		// TODO: DONTMAINTAIN! Don't maintain after 1.0. This was specifically
-		// made to support GeoWave 0.9.6 - 0.9.7 data
 		final byte[] secondaryIndexBytes = new byte[bytes.length - axisBytes.length - typeNameBytes.length
 				- indexCrsBytes.length - namespaceBytes.length - attrBytes.length - encodedTypeBytes.length - 25];
 		buf.get(secondaryIndexBytes);
