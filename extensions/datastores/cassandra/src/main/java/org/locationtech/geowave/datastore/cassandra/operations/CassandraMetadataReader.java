@@ -46,7 +46,9 @@ public class CassandraMetadataReader implements
 		final String tableName = operations.getMetadataTableName(metadataType);
 		String[] selectedColumns = getSelectedColumns(query);
 		if (MetadataType.STATS.equals(metadataType)) {
-			selectedColumns =  Arrays.append(selectedColumns, CassandraMetadataWriter.VISIBILITY_KEY);
+			selectedColumns = Arrays.append(
+					selectedColumns,
+					CassandraMetadataWriter.VISIBILITY_KEY);
 		}
 		final Select select = operations.getSelect(
 				tableName,
@@ -82,18 +84,23 @@ public class CassandraMetadataReader implements
 												ByteBuffer.class).array(),
 										useSecondaryId(query) ? query.getSecondaryId() : result.get(
 												CassandraMetadataWriter.SECONDARY_ID_KEY,
-												ByteBuffer.class).array(),getVisibility(result),
+												ByteBuffer.class).array(),
+										getVisibility(result),
 										result.get(
 												CassandraMetadataWriter.VALUE_KEY,
 												ByteBuffer.class).array());
 							}
 						}));
 		return MetadataType.STATS.equals(metadataType) ? new StatisticsRowIterator(
-				retVal,query.getAuthorizations()) : retVal;
+				retVal,
+				query.getAuthorizations()) : retVal;
 	}
-	private byte[] getVisibility(Row result) {
-		if(MetadataType.STATS.equals(metadataType)) {
-			ByteBuffer buf = result.get(CassandraMetadataWriter.VISIBILITY_KEY,
+
+	private byte[] getVisibility(
+			Row result ) {
+		if (MetadataType.STATS.equals(metadataType)) {
+			ByteBuffer buf = result.get(
+					CassandraMetadataWriter.VISIBILITY_KEY,
 					ByteBuffer.class);
 			if (buf != null) {
 				return buf.array();

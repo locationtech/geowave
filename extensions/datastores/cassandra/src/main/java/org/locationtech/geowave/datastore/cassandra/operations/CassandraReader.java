@@ -82,8 +82,8 @@ public class CassandraReader<T> implements
 						.apply((Iterator<GeoWaveRow>) (Iterator<? extends GeoWaveRow>) new GeoWaveRowMergingIterator<CassandraRow>(
 								Iterators.filter(
 										results,
-										readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
-												authorizations) : Predicates.alwaysTrue()))));
+										new ClientVisibilityFilter(
+												authorizations)))));
 	}
 
 	protected void initScanner() {
@@ -96,8 +96,8 @@ public class CassandraReader<T> implements
 					readerParams.getAdapterIds(),
 					ranges,
 					rowTransformer,
-					readerParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
-							authorizations) : Predicates.alwaysTrue()).results();
+					new ClientVisibilityFilter(
+							authorizations)).results();
 		}
 		else {
 			// TODO figure out the query select by adapter IDs here
@@ -147,8 +147,8 @@ public class CassandraReader<T> implements
 				adapterIds,
 				Collections.singleton(partitionRange),
 				rowTransformer,
-				recordReaderParams.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
-						authorizations) : Predicates.alwaysTrue()).results();
+				new ClientVisibilityFilter(
+						authorizations)).results();
 	}
 
 	@Override

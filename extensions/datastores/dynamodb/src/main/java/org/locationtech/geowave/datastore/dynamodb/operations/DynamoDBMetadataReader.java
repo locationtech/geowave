@@ -130,7 +130,7 @@ public class DynamoDBMetadataReader implements
 							}
 						}));
 	}
-	
+
 	private static CloseableIterator<GeoWaveMetadata> getStatisticsIterator(
 			final Iterator<Map<String, AttributeValue>> resultIterator,
 			String... authorizations) {
@@ -141,5 +141,4 @@ public class DynamoDBMetadataReader implements
 								DynamoDBUtils.getVisibility(result),
 								DynamoDBUtils.getValue(result)))), authorizations);
 	}
-
 }

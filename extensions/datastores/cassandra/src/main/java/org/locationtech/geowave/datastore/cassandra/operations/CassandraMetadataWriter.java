@@ -59,9 +59,9 @@ public class CassandraMetadataWriter implements
 					TIMESTAMP_ID_KEY,
 					QueryBuilder.now());
 			if (metadata.getVisibility() != null && metadata.getVisibility().length > 0) {
-			insert.value(
-					VISIBILITY_KEY,
-					ByteBuffer.wrap(metadata.getVisibility()));
+				insert.value(
+						VISIBILITY_KEY,
+						ByteBuffer.wrap(metadata.getVisibility()));
 			}
 		}
 		insert.value(

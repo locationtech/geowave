@@ -25,7 +25,6 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.util.VisibilityExpression;
 

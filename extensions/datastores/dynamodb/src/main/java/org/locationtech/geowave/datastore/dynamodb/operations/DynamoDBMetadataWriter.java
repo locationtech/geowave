@@ -57,7 +57,7 @@ public class DynamoDBMetadataWriter implements
 				map.put(
 						DynamoDBOperations.METADATA_VISIBILITY_KEY,
 						new AttributeValue().withB(ByteBuffer.wrap(metadata.getVisibility())));
-				}
+			}
 		}
 
 		map.put(
