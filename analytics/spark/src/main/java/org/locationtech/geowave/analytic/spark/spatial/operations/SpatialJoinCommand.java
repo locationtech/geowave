@@ -154,7 +154,7 @@ public class SpatialJoinCommand extends
 
 		// Finally call run to execute the join
 		runner.run();
-
+		runner.close();
 		return null;
 	}
 

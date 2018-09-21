@@ -456,7 +456,7 @@ public class GeoWaveGrpcTestClient
 				"4").setMapReduceHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setMapReduceJobtrackerHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setOutputHdfsOutputPath(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "_out").setMapReduceHdfsBaseDir(
+				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "/GrpcNearestNeighbor").setMapReduceHdfsBaseDir(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).build();
 		analyticMapreduceBlockingStub.nearestNeighborCommand(request);
 		return true;
@@ -1038,7 +1038,7 @@ public class GeoWaveGrpcTestClient
 				extensions).setFormats(
 				"gpx").setAppName(
 				"CoreGeoWaveSparkITs").setMaster(
-				"local").setHost(
+				"local[*]").setHost(
 				"localhost").setNumExecutors(
 				1).setNumCores(
 				1).build();
@@ -1159,7 +1159,7 @@ public class GeoWaveGrpcTestClient
 						true)
 				// optional
 				.setCqlFilter(
-						"none")
+						GeoWaveGrpcTestUtils.cqlSpatialQuery)
 				.setMinSplits(
 						1)
 				.setMaxSplits(
