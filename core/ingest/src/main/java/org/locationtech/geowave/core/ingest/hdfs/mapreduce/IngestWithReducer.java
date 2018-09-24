@@ -16,9 +16,9 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.ingest.DataAdapterProvider;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 
 /**
  * This interface is used by the IngestFromHdfsPlugin to implement ingestion

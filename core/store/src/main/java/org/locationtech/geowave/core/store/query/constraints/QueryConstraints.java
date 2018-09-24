@@ -8,11 +8,12 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.api;
+package org.locationtech.geowave.core.store.query.constraints;
 
 import java.util.List;
 
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**

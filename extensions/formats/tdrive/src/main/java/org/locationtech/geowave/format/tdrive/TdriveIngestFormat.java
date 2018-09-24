@@ -12,7 +12,7 @@ package org.locationtech.geowave.format.tdrive;
 
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 /**
  * This represents an ingest format plugin provider for GPX data. It will
@@ -24,7 +24,7 @@ public class TdriveIngestFormat extends
 {
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<TdrivePoint> newPluginInstance(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return new TdriveIngestPlugin();
 	}
 

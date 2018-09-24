@@ -12,7 +12,8 @@ package org.locationtech.geowave.core.ingest.spi;
 
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 
 /**
  * This interface can be injected and automatically discovered using SPI to
@@ -39,7 +40,7 @@ public interface IngestFormatPluginProviderSpi<I, O>
 	 *             If ingesting intermediate data from HDFS is not supported
 	 */
 	public IngestFromHdfsPlugin<I, O> createIngestFromHdfsPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException;
 
 	/**
@@ -54,7 +55,7 @@ public interface IngestFormatPluginProviderSpi<I, O>
 	 *             supported
 	 */
 	public LocalFileIngestPlugin<O> createLocalFileIngestPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException;
 
 	/**
@@ -75,7 +76,7 @@ public interface IngestFormatPluginProviderSpi<I, O>
 	 * 
 	 * @return The ingest format's option provider or null for no custom options
 	 */
-	public IngestFormatOptionProvider createOptionsInstances();
+	public IngestFormatOptions createOptionsInstances();
 
 	/**
 	 * This is a user-friendly full description of the data format that this
@@ -97,6 +98,6 @@ public interface IngestFormatPluginProviderSpi<I, O>
 	 *             ingesting using map-reduce or kafka will not be supported)
 	 */
 	public AvroFormatPlugin<I, O> createAvroFormatPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException;
 }

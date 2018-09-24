@@ -41,6 +41,7 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.adapter.DataAdapterTypeId;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
@@ -124,7 +125,6 @@ public class FeatureDataAdapter extends
 		SecondaryIndexDataAdapter<SimpleFeature>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
-
 	// the original coordinate system will always be represented internally by
 	// the persisted type
 	private SimpleFeatureType persistedFeatureType;

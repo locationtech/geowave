@@ -48,6 +48,8 @@ public class SimpleIngest
 		si.writeExampleData(geowaveDataStore);
 		System.out.println("Finished ingesting data");
 	}
+	
+	
 
 	/***
 	 * Here we will change the ingest mechanism to use a producer/consumer

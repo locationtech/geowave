@@ -26,7 +26,7 @@ public class CountDataStatistics<T> extends
 		AbstractDataStatistics<T> implements
 		DeleteCallback<T, GeoWaveRow>
 {
-	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+	public final static ByteArrayId STATS_TYPE = new StatisticsType<Long>(
 			"COUNT_DATA");
 
 	private long count = Long.MIN_VALUE;

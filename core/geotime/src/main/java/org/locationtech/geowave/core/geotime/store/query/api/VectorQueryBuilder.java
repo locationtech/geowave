@@ -2,6 +2,9 @@ package org.locationtech.geowave.core.geotime.store.query.api;
 
 import java.util.Date;
 
+import javax.annotation.Nullable;
+
+import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
@@ -9,7 +12,7 @@ import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.api.QueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
@@ -34,26 +37,26 @@ public interface VectorQueryBuilder extends
 
 	@Override
 	VectorQueryBuilder indexId(
-			ByteArrayId indexId );
+			String indexId );
 
 	@Override
 	VectorQueryBuilder allTypes();
 
 	@Override
 	VectorQueryBuilder addTypeId(
-			ByteArrayId typeId );
+			String typeId );
 
 	@Override
-	VectorQueryBuilder typeIds(
-			ByteArrayId[] typeIds );
+	VectorQueryBuilder setTypeIds(
+			String[] typeIds );
 
 	@Override
 	VectorQueryBuilder addType(
 			DataTypeAdapter<SimpleFeature> type );
 
 	@Override
-	VectorQueryBuilder types(
-			DataTypeAdapter<SimpleFeature> types );
+	VectorQueryBuilder setTypes(
+			DataTypeAdapter<SimpleFeature>[] types );
 
 	@Override
 	VectorQueryBuilder subsetFields(
@@ -68,7 +71,7 @@ public interface VectorQueryBuilder extends
 			String authorization );
 
 	@Override
-	VectorQueryBuilder authorizations(
+	VectorQueryBuilder setAuthorizations(
 			String[] authorizations );
 
 	@Override
@@ -94,8 +97,8 @@ public interface VectorQueryBuilder extends
 			ByteArrayId dataId );
 
 	@Override
-	VectorQueryBuilder dataIds(
-			ByteArrayId[] dataIds );
+	VectorQueryBuilder setDataIds(
+			String[] dataIds );
 
 	@Override
 	VectorQueryBuilder prefix(
@@ -152,12 +155,15 @@ public interface VectorQueryBuilder extends
 
 	// we can always support open-ended time using beginning of epoch as default
 	// start and some end of time such as max long as default end
-	VectorQueryBuilder start(
-			Date startTime );
+	VectorQueryBuilder addTimeRange(
+			@Nullable Date startTime, @Nullable Date endTime );
 
-	VectorQueryBuilder end(
-			Date startTime );
+	VectorQueryBuilder addTimeRange(
+			TemporalConstraints timeRange);
 
+	VectorQueryBuilder setTimeRanges(
+			TemporalConstraints[] timeRanges);
+	
 	// these cql expressions should always attempt to use
 	// CQLQuery.createOptimalQuery() which requires adapter and index
 	VectorQueryBuilder cqlConstraint(

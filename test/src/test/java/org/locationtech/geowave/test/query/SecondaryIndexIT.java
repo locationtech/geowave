@@ -70,7 +70,6 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.api.IndexWriter;
-import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -83,6 +82,7 @@ import org.locationtech.geowave.core.store.index.temporal.TemporalQueryConstrain
 import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
 import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;

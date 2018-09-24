@@ -14,7 +14,7 @@ import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureInges
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 /**
  * This represents an ingest format plugin provider for GDELT data. It will
@@ -29,7 +29,7 @@ public class GDELTIngestFormat extends
 
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return new GDELTIngestPlugin(
 				dataSchemaOptionProvider);
 	}

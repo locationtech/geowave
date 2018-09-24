@@ -28,7 +28,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.gpx.GPXConsumer;
 import org.locationtech.geowave.types.HelperClass;
 import org.locationtech.geowave.types.ValidateObject;

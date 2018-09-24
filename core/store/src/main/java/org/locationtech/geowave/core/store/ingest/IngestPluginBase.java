@@ -8,9 +8,8 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.ingest;
+package org.locationtech.geowave.core.store.ingest;
 
-import java.net.URL;
 import java.util.Collection;
 
 import org.locationtech.geowave.core.index.ByteArrayId;

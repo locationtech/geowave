@@ -10,6 +10,10 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.api;
 
+import java.net.URL;
+
+import javax.annotation.Nullable;
+
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
@@ -36,6 +40,23 @@ public interface DataStore
 	 */
 	public <T> IndexWriter<T> createWriter(
 			DataTypeAdapter<T> dataTypeAdapter,
+			Index... index )
+			throws MismatchedIndexToAdapterMapping;
+	
+	/**
+	 * Returns an index writer to perform batched write operations
+	 * 
+	 * @param dataTypeAdapter
+	 *            The adapter that describes the data written to the set of
+	 *            indices.
+	 * @param index
+	 *            The configuration information for the primary index to use.
+	 * @return Returns the index writer which can be used for batch write
+	 *         operations
+	 */
+	public <T> void ingest(
+			URL url,
+			@Nullable IngestOptions<T> options,
 			Index... index )
 			throws MismatchedIndexToAdapterMapping;
 
@@ -103,7 +124,7 @@ public interface DataStore
 	 *         is no longer needed.
 	 */
 	Statistics<?>[] getStatistics(
-			ByteArrayId dataTypeId,
+			@Nullable ByteArrayId dataTypeId,
 			String... authorizations );
 
 	/**
@@ -143,5 +164,5 @@ public interface DataStore
 	 * @return An array of the indices for a given data type.
 	 */
 	Index[] getIndices(
-			ByteArrayId dataTypeId );
+			@Nullable ByteArrayId dataTypeId );
 }

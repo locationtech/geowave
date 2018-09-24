@@ -15,7 +15,6 @@ import java.util.List;
 
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class EverythingQuery implements

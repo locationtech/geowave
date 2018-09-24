@@ -1,6 +1,7 @@
 package org.locationtech.geowave.core.store.api;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;

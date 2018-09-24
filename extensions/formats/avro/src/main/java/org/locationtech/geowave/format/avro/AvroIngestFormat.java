@@ -13,7 +13,7 @@ package org.locationtech.geowave.format.avro;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 /**
  * This represents an ingest format plugin provider for Avro data that matches
@@ -26,7 +26,7 @@ public class AvroIngestFormat extends
 {
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<AvroSimpleFeatureCollection> newPluginInstance(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		return new AvroIngestPlugin();
 	}
 

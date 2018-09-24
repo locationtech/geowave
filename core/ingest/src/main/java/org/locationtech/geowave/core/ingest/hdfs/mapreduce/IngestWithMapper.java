@@ -11,7 +11,7 @@
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 
 /**
  * This interface is used by the IngestFromHdfsPlugin to implement ingestion

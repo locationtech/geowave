@@ -19,7 +19,7 @@ import java.util.ServiceLoader;
 
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStrategy;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,7 +27,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.converters.DoubleConverter;
 
 public class RasterOptionProvider implements
-		IngestFormatOptionProvider
+		IngestFormatOptions
 {
 	// for now, default to no merging
 	private static final RasterTileMergeStrategy DEFAULT_MERGE_STRATEGY = null;

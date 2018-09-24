@@ -1,6 +1,5 @@
 package org.locationtech.geowave.core.store.api;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 
 public interface Statistics<R>
@@ -9,5 +8,5 @@ public interface Statistics<R>
 
 	StatisticsType<R> getType();
 
-	ByteArrayId getDataTypeId();
+	String getDataTypeId();
 }

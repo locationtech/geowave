@@ -11,7 +11,7 @@
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
 import org.locationtech.geowave.core.ingest.avro.AvroSchemaProvider;
-import org.locationtech.geowave.core.ingest.index.IndexProvider;
+import org.locationtech.geowave.core.store.ingest.IndexProvider;
 
 /**
  * This is the main plugin interface for ingesting intermediate data into

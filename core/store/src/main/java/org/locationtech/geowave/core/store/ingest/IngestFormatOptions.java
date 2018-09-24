@@ -8,25 +8,12 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.ingest.local;
-
-import java.io.File;
-import java.net.URL;
-
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
-import org.locationtech.geowave.core.ingest.index.IndexProvider;
+package org.locationtech.geowave.core.store.ingest;
 
 /**
- * This is the primary plugin for directly ingesting data to GeoWave from local
- * files. It will write any GeoWaveData that is emitted for any supported file.
- * 
- * 
- * @param <O>
- *            The type of data to write to GeoWave
+ * This interface is strictly for implementation purposes, and doesn't actually
+ * provide any interface.
  */
-public interface LocalFileIngestPlugin<O> extends
-		LocalPluginBase,
-		IngestPluginBase<URL, O>,
-		IndexProvider
+public interface IngestFormatOptions
 {
 }
