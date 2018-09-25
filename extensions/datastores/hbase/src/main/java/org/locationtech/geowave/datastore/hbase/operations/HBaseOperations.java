@@ -79,12 +79,14 @@ import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.Writer;
@@ -253,7 +255,9 @@ public class HBaseOperations implements
 			throws IOException {
 		synchronized (ADMIN_MUTEX) {
 			try (Admin admin = conn.getAdmin()) {
-				if (!admin.tableExists(tableName)) {
+				if (!admin
+						.tableExists(
+								tableName)) {
 					final HTableDescriptor desc = new HTableDescriptor(
 							tableName);
 
@@ -262,23 +266,40 @@ public class HBaseOperations implements
 					for (final Pair<GeoWaveColumnFamily, Boolean> columnFamilyAndVersioning : columnFamiliesAndVersioningPairs) {
 						final HColumnDescriptor column = columnFamilyAndVersioning.getLeft().toColumnDescriptor();
 						if (!columnFamilyAndVersioning.getRight()) {
-							column.setMaxVersions(Integer.MAX_VALUE);
+							column
+									.setMaxVersions(
+											Integer.MAX_VALUE);
 						}
-						desc.addFamily(column);
+						desc
+								.addFamily(
+										column);
 
-						cfSet.add(columnFamilyAndVersioning.getLeft());
+						cfSet
+								.add(
+										columnFamilyAndVersioning.getLeft());
 					}
 
-					cfCache.put(
-							tableName,
-							cfSet);
+					cfCache
+							.put(
+									tableName,
+									cfSet);
 
 					try {
 						if (!preSplits.isEmpty()) {
-							admin.createTable(desc, preSplits.stream().map(id -> id.getBytes()).toArray(i -> new byte[i][]));
+							admin
+									.createTable(
+											desc,
+											preSplits
+													.stream()
+													.map(
+															id -> id.getBytes())
+													.toArray(
+															i -> new byte[i][]));
 						}
 						else {
-							admin.createTable(desc);
+							admin
+									.createTable(
+											desc);
 						}
 					}
 					catch (final Exception e) {
@@ -299,17 +320,19 @@ public class HBaseOperations implements
 			final boolean enableVersioning,
 			final TableName tableName )
 			throws IOException {
-		createTable(preSplits,
+		createTable(
+				preSplits,
 				Arrays
 						.stream(
 								columnFamilies)
 						.map(
-								cf -> ImmutablePair.of(
-										cf,
-										enableVersioning))
+								cf -> ImmutablePair
+										.of(
+												cf,
+												enableVersioning))
 						.toArray(
 								Pair[]::new),
-						columnFamilyFactory,
+				columnFamilyFactory,
 				tableName);
 	}
 
@@ -532,7 +555,7 @@ public class HBaseOperations implements
 			final ByteArrayId indexId,
 			final Short adapterId,
 			final String... additionalAuthorizations ) {
-		Deleter deleter = null;
+		RowDeleter deleter = null;
 		Iterable<Result> scanner = null;
 		try {
 			deleter = createDeleter(
@@ -572,11 +595,9 @@ public class HBaseOperations implements
 					scan,
 					indexId.getString());
 			for (final Result result : scanner) {
-				deleter.delete(
-						new HBaseRow(
-								result,
-								index.getIndexStrategy().getPartitionKeyLength()),
-						adapter);
+				deleter.delete(new HBaseRow(
+						result,
+						index.getIndexStrategy().getPartitionKeyLength()));
 			}
 			return true;
 		}
@@ -1030,14 +1051,20 @@ public class HBaseOperations implements
 				this);
 	}
 
-	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
-			final String... authorizations )
-			throws Exception {
-		final TableName tableName = getTableName(indexId.getString());
-		return new HBaseDeleter(
-				getBufferedMutator(tableName));
+			final String... authorizations ) {
+		try {
+			final TableName tableName = getTableName(indexId.getString());
+			return new HBaseDeleter(
+					getBufferedMutator(tableName));
+		}
+		catch (IOException ioe) {
+			LOGGER.error(
+					"Error creating deleter",
+					ioe);
+		}
+		return null;
 	}
 
 	public BufferedMutator getBufferedMutator(
@@ -1458,11 +1485,15 @@ public class HBaseOperations implements
 						.append(
 								".")
 						.append(
-								HBaseUtils.writeTableNameAsConfigSafe(namespace))
+								HBaseUtils
+										.writeTableNameAsConfigSafe(
+												namespace))
 						.append(
 								".")
 						.append(
-								HBaseUtils.writeTableNameAsConfigSafe(qualifier))
+								HBaseUtils
+										.writeTableNameAsConfigSafe(
+												qualifier))
 						.append(
 								".")
 						.append(
@@ -1471,28 +1502,40 @@ public class HBaseOperations implements
 								".")
 						.toString();
 
-		desc.setConfiguration(
-				basePrefix + ServerSideOperationUtils.SERVER_OP_CLASS_KEY,
-				ByteArrayUtils.byteArrayToString(
-						URLClassloaderUtils.toClassId(
-								operationClassName)));
-		desc.setConfiguration(
-				basePrefix + ServerSideOperationUtils.SERVER_OP_PRIORITY_KEY,
-				Integer.toString(
-						priority));
+		desc
+				.setConfiguration(
+						basePrefix + ServerSideOperationUtils.SERVER_OP_CLASS_KEY,
+						ByteArrayUtils
+								.byteArrayToString(
+										URLClassloaderUtils
+												.toClassId(
+														operationClassName)));
+		desc
+				.setConfiguration(
+						basePrefix + ServerSideOperationUtils.SERVER_OP_PRIORITY_KEY,
+						Integer
+								.toString(
+										priority));
 
-		desc.setConfiguration(
-				basePrefix + ServerSideOperationUtils.SERVER_OP_SCOPES_KEY,
-				scopes.stream().map(
-						ServerOpScope::name).collect(
-								Collectors.joining(
-										",")));
-		final String optionsPrefix = String.format(
-				basePrefix + ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX + ".");
+		desc
+				.setConfiguration(
+						basePrefix + ServerSideOperationUtils.SERVER_OP_SCOPES_KEY,
+						scopes
+								.stream()
+								.map(
+										ServerOpScope::name)
+								.collect(
+										Collectors
+												.joining(
+														",")));
+		final String optionsPrefix = String
+				.format(
+						basePrefix + ServerSideOperationUtils.SERVER_OP_OPTIONS_PREFIX + ".");
 		for (final Entry<String, String> e : properties.entrySet()) {
-			desc.setConfiguration(
-					optionsPrefix + e.getKey(),
-					e.getValue());
+			desc
+					.setConfiguration(
+							optionsPrefix + e.getKey(),
+							e.getValue());
 		}
 	}
 
@@ -1676,5 +1719,19 @@ public class HBaseOperations implements
 				options.isServerSideLibraryEnabled(),
 				getTableName(index.getId().getString()));
 		return true;
+	}
+
+	@Override
+	public <T> Deleter<T> createDeleter(
+			ReaderParams<T> readerParams ) {
+		final RowDeleter rowDeleter = createDeleter(
+				readerParams.getIndex().getId(),
+				readerParams.getAdditionalAuthorizations());
+		if (rowDeleter != null) {
+			return new QueryAndDeleteByRow<>(
+					rowDeleter,
+					createReader(readerParams));
+		}
+		return new QueryAndDeleteByRow<>();
 	}
 }

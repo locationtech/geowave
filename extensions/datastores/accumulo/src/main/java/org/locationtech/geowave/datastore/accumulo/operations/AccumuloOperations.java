@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -63,8 +63,8 @@ import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
@@ -72,7 +72,6 @@ import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -82,16 +81,18 @@ import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.Writer;
 import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
+import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.core.store.server.ServerOpHelper;
 import org.locationtech.geowave.core.store.server.ServerSideOperations;
-import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.core.store.util.DataAdapterAndIndexCache;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
@@ -269,7 +270,7 @@ public class AccumuloOperations implements
 		this.tableNamespace = tableNamespace;
 		this.connector = connector;
 		this.options = options;
-		locGrpCache = new HashMap<String, Long>();
+		locGrpCache = new HashMap<>();
 		cacheTimeoutMillis = TimeUnit.DAYS.toMillis(1);
 	}
 
@@ -301,7 +302,7 @@ public class AccumuloOperations implements
 
 	@Override
 	public boolean createIndex(
-			PrimaryIndex index )
+			final PrimaryIndex index )
 			throws IOException {
 		return createTable(
 				index.getId().getString(),
@@ -499,7 +500,7 @@ public class AccumuloOperations implements
 					tableName,
 					authorizations);
 			if ((columnFamily != null) && !columnFamily.isEmpty()) {
-				if ((columnQualifier != null) && columnQualifier.length != 0) {
+				if ((columnQualifier != null) && (columnQualifier.length != 0)) {
 					deleter.fetchColumn(
 							new Text(
 									columnFamily),
@@ -511,8 +512,8 @@ public class AccumuloOperations implements
 							columnFamily));
 				}
 			}
-			final Set<ByteArrayId> removeSet = new HashSet<ByteArrayId>();
-			final List<Range> rowRanges = new ArrayList<Range>();
+			final Set<ByteArrayId> removeSet = new HashSet<>();
+			final List<Range> rowRanges = new ArrayList<>();
 			for (final ByteArrayId rowId : rowIds) {
 				rowRanges.add(Range.exact(new Text(
 						rowId.getBytes())));
@@ -606,7 +607,7 @@ public class AccumuloOperations implements
 			final Map<String, Set<Text>> localityGroups = connector.tableOperations().getLocalityGroups(
 					qName);
 
-			final Set<Text> groupSet = new HashSet<Text>();
+			final Set<Text> groupSet = new HashSet<>();
 
 			groupSet.add(new Text(
 					localityGroup));
@@ -667,11 +668,11 @@ public class AccumuloOperations implements
 		else {
 			user = clientUser;
 		}
-		final Set<String> unensuredAuths = new HashSet<String>();
+		final Set<String> unensuredAuths = new HashSet<>();
 		Set<String> ensuredAuths = ensuredAuthorizationCache.get(user);
 		if (ensuredAuths == null) {
 			unensuredAuths.addAll(Arrays.asList(authorizations));
-			ensuredAuths = new HashSet<String>();
+			ensuredAuths = new HashSet<>();
 			ensuredAuthorizationCache.put(
 					user,
 					ensuredAuths);
@@ -687,7 +688,7 @@ public class AccumuloOperations implements
 			try {
 				Authorizations auths = connector.securityOperations().getUserAuthorizations(
 						user);
-				final List<byte[]> newSet = new ArrayList<byte[]>();
+				final List<byte[]> newSet = new ArrayList<>();
 				for (final String auth : unensuredAuths) {
 					if (!auths.contains(auth)) {
 						newSet.add(auth.getBytes(StringUtils.UTF8_CHARSET));
@@ -765,7 +766,7 @@ public class AccumuloOperations implements
 							existingPartitions);
 				}
 				if (!existingPartitions.contains(partition)) {
-					final SortedSet<Text> partitionKeys = new TreeSet<Text>();
+					final SortedSet<Text> partitionKeys = new TreeSet<>();
 					partitionKeys.add(new Text(
 							partition.getBytes()));
 					connector.tableOperations().addSplits(
@@ -1098,11 +1099,9 @@ public class AccumuloOperations implements
 					&& (params.getAggregation().getLeft() != null)) {
 				iteratorSettings.addOption(
 						AggregationIterator.ADAPTER_OPTION_NAME,
-						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary((DataAdapter<?>) params
-								.getAggregation()
-								.getLeft())));
+						ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(params.getAggregation().getLeft())));
 			}
-			final Aggregation aggr = (Aggregation) params.getAggregation().getRight();
+			final Aggregation aggr = params.getAggregation().getRight();
 			iteratorSettings.addOption(
 					AggregationIterator.AGGREGATION_OPTION_NAME,
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toClassId(aggr)));
@@ -1191,8 +1190,8 @@ public class AccumuloOperations implements
 			final BaseReaderParams<T> params,
 			final ScannerBase scanner ) {
 		if ((params.getFieldSubsets() != null) && !params.isAggregation()) {
-			final List<String> fieldIds = (List<String>) params.getFieldSubsets().getLeft();
-			final DataAdapter<?> associatedAdapter = (DataAdapter<?>) params.getFieldSubsets().getRight();
+			final List<String> fieldIds = params.getFieldSubsets().getLeft();
+			final DataAdapter<?> associatedAdapter = params.getFieldSubsets().getRight();
 			if ((fieldIds != null) && (!fieldIds.isEmpty()) && (associatedAdapter != null)) {
 				final IteratorSetting iteratorSetting = AttributeSubsettingIterator.getIteratorSetting();
 
@@ -1237,9 +1236,9 @@ public class AccumuloOperations implements
 				scanner,
 				options);
 
-		return new AccumuloReader<T>(
+		return new AccumuloReader<>(
 				scanner,
-				(GeoWaveRowIteratorTransformer<T>) params.getRowTransformer(),
+				params.getRowTransformer(),
 				params.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				params.isMixedVisibility() && !params.isServersideAggregation(),
 				params.isClientsideRowMerging(),
@@ -1320,28 +1319,32 @@ public class AccumuloOperations implements
 				readerParams,
 				scanner,
 				options);
-		return new AccumuloReader<T>(
+		return new AccumuloReader<>(
 				scanner,
-				(GeoWaveRowIteratorTransformer<T>) readerParams.getRowTransformer(),
+				readerParams.getRowTransformer(),
 				readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
 				false,
 				false);
 	}
 
-	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
-			final String... authorizations )
-			throws Exception {
-		return new AccumuloDeleter(
-				createBatchDeleter(
-						indexId.getString(),
-						authorizations),
-				indexId.getString().endsWith(
-						"ALT_INDEX_TABLE")); // TODO: GEOWAVE-1018, incorporate
-												// more robust secondary index
-												// deletion/bookkeeping methods
+			final String... authorizations ) {
+		try {
+			return new AccumuloDeleter(
+					createBatchDeleter(
+							indexId.getString(),
+							authorizations),
+					false);
+		}
+		catch (final TableNotFoundException e) {
+			LOGGER.error(
+					"Unable to create deleter",
+					e);
+			return null;
+		}
+
 	}
 
 	@Override
@@ -1464,8 +1467,8 @@ public class AccumuloOperations implements
 
 	@Override
 	public boolean mergeStats(
-			DataStatisticsStore statsStore,
-			InternalAdapterStore internalAdapterStore ) {
+			final DataStatisticsStore statsStore,
+			final InternalAdapterStore internalAdapterStore ) {
 		if (options.isServerSideLibraryEnabled()) {
 			return compactTable(AbstractGeoWavePersistence.METADATA_TABLE);
 		}
@@ -1758,5 +1761,19 @@ public class AccumuloOperations implements
 					e);
 		}
 		return null;
+	}
+
+	@Override
+	public <T> Deleter<T> createDeleter(
+			final ReaderParams<T> readerParams ) {
+		final RowDeleter rowDeleter = createDeleter(
+				readerParams.getIndex().getId(),
+				readerParams.getAdditionalAuthorizations());
+		if (rowDeleter != null) {
+			return new QueryAndDeleteByRow<>(
+					rowDeleter,
+					createReader(readerParams));
+		}
+		return new QueryAndDeleteByRow<>();
 	}
 }

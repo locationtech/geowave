@@ -154,6 +154,12 @@ public class BaseQueryOptions
 		}
 	}
 
+	public boolean isAllAdapters() {
+		// TODO what about field ID subsetting and aggregation which implicitly
+		// filters by adapter
+		return ((adapterIds == null) || adapterIds.isEmpty());
+	}
+
 	/**
 	 * Return the set of adapter/index associations. If the adapters are not
 	 * provided, then look up all of them. If the index is not provided, then

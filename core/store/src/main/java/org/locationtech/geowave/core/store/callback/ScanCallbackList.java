@@ -27,6 +27,11 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements
 		this.callbacks = callbacks;
 	}
 
+	public void addScanCallback(
+			ScanCallback<T, R> callback ) {
+		callbacks.add(callback);
+	}
+
 	@Override
 	public void entryScanned(
 			final T entry,

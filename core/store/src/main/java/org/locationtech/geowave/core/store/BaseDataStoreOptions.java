@@ -27,11 +27,6 @@ public class BaseDataStoreOptions implements
 	@Parameter(names = "--createTable", hidden = true, arity = 1)
 	protected boolean createTable = true;
 
-	// TODO GEOWAVE-1018 the secondaryIndexDataStore isn't implemented so this
-	// "alt index" option should not be used at the moment
-	@Parameter(names = "--useAltIndex", hidden = true, arity = 1)
-	protected boolean useAltIndex = false;
-
 	@Parameter(names = "--enableBlockCache", hidden = true, arity = 1)
 	protected boolean enableBlockCache = true;
 
@@ -82,16 +77,6 @@ public class BaseDataStoreOptions implements
 	public void setCreateTable(
 			final boolean createTable ) {
 		this.createTable = createTable;
-	}
-
-	@Override
-	public boolean isUseAltIndex() {
-		return useAltIndex;
-	}
-
-	public void setUseAltIndex(
-			final boolean useAltIndex ) {
-		this.useAltIndex = useAltIndex;
 	}
 
 	@Override

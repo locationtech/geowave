@@ -27,11 +27,13 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.Writer;
@@ -343,11 +345,9 @@ public class DynamoDBOperations implements
 				this);
 	}
 
-	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
-			final String... authorizations )
-			throws Exception {
+			final String... authorizations ) {
 		return new DynamoDBDeleter(
 				this,
 				getQualifiedTableName(indexId.getString()));
@@ -395,5 +395,15 @@ public class DynamoDBOperations implements
 			PrimaryIndex index )
 			throws IOException {
 		return createTable(getQualifiedTableName(index.getId().getString()));
+	}
+
+	@Override
+	public <T> Deleter<T> createDeleter(
+			ReaderParams<T> readerParams ) {
+		return new QueryAndDeleteByRow<>(
+				createDeleter(
+						readerParams.getIndex().getId(),
+						readerParams.getAdditionalAuthorizations()),
+				createReader(readerParams));
 	}
 }

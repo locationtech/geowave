@@ -510,8 +510,6 @@ public class AccumuloOptionsTest
 		final WritableDataAdapter<TestGeometry> adapter0 = new TestGeometryAdapter();
 		final WritableDataAdapter<TestGeometry> adapter1 = new AnotherAdapter();
 
-		accumuloOptions.setUseAltIndex(true);
-
 		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter0,
 				index)) {

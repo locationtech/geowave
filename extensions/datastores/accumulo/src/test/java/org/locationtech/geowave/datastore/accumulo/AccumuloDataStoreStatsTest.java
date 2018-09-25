@@ -201,21 +201,9 @@ public class AccumuloDataStoreStatsTest
 	};
 
 	@Test
-	public void testWithOutAltIndex()
+	public void test()
 			throws IOException {
 		accumuloOptions.setCreateTable(true);
-		accumuloOptions.setUseAltIndex(false);
-		accumuloOptions.setPersistDataStatistics(true);
-		runtest();
-	}
-
-	// TODO for now Alt index is not being used so this test should be
-	// re-eneabled when it is
-	// @Test
-	public void testWithAltIndex()
-			throws IOException {
-		accumuloOptions.setCreateTable(true);
-		accumuloOptions.setUseAltIndex(true);
 		accumuloOptions.setPersistDataStatistics(true);
 		runtest();
 	}

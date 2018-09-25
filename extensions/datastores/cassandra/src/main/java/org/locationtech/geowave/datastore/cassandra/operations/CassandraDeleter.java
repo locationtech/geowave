@@ -10,12 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.cassandra.operations;
 
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 
 public class CassandraDeleter implements
-		Deleter
+		RowDeleter
 {
 	private final CassandraOperations operations;
 	private final String tableName;
@@ -29,8 +28,7 @@ public class CassandraDeleter implements
 
 	@Override
 	public void delete(
-			final GeoWaveRow row,
-			final DataAdapter<?> adapter ) {
+			final GeoWaveRow row ) {
 		operations.deleteRow(
 				tableName,
 				row);

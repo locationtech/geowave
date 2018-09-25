@@ -143,17 +143,6 @@ public class BigTableOptions extends
 		}
 
 		@Override
-		public boolean isUseAltIndex() {
-			return additionalOptions.isUseAltIndex();
-		}
-
-		@Override
-		public void setUseAltIndex(
-				final boolean useAltIndex ) {
-			additionalOptions.setUseAltIndex(useAltIndex);
-		}
-
-		@Override
 		public boolean isEnableBlockCache() {
 			return additionalOptions.isEnableBlockCache();
 		}
