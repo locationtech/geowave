@@ -13,6 +13,7 @@ package org.locationtech.geowave.core.store.callback;
 import java.io.Closeable;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
@@ -21,6 +22,7 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements
 		Closeable
 {
 	private final List<ScanCallback<T, R>> callbacks;
+	private ReentrantLock lock;
 
 	public ScanCallbackList(
 			final List<ScanCallback<T, R>> callbacks ) {
@@ -30,12 +32,26 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements
 	public void addScanCallback(
 			ScanCallback<T, R> callback ) {
 		callbacks.add(callback);
+		if (lock != null) {
+			lock.unlock();
+		}
+	}
+
+	public void waitUntilCallbackAdded() {
+		// this waits until a callback is added before allowing entryScanned()
+		// calls to proceed
+		this.lock = new ReentrantLock();
+		this.lock.lock();
 	}
 
 	@Override
 	public void entryScanned(
 			final T entry,
 			final R rows ) {
+		if (lock != null) {
+			lock.lock();
+			lock = null;
+		}
 		for (final ScanCallback<T, R> callback : callbacks) {
 			callback.entryScanned(
 					entry,

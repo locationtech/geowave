@@ -133,6 +133,7 @@ abstract class BaseQuery
 				rowTransformer,
 				getAdditionalAuthorizations());
 		if (delete) {
+			scanCallback.waitUntilCallbackAdded();
 			Deleter<C> deleter = operations.createDeleter(readerParams);
 			scanCallback.addScanCallback((ScanCallback) deleter);
 			return deleter;
