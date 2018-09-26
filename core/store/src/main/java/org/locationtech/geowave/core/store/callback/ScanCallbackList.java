@@ -23,6 +23,7 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements
 {
 	private final List<ScanCallback<T, R>> callbacks;
 	private ReentrantLock lock;
+	private static Object MUTEX = new Object();
 
 	public ScanCallbackList(
 			final List<ScanCallback<T, R>> callbacks ) {
@@ -49,8 +50,12 @@ public class ScanCallbackList<T, R extends GeoWaveRow> implements
 			final T entry,
 			final R rows ) {
 		if (lock != null) {
-			lock.lock();
-			lock = null;
+			synchronized (MUTEX) {
+				if (lock != null) {
+					lock.lock();
+					lock = null;
+				}
+			}
 		}
 		for (final ScanCallback<T, R> callback : callbacks) {
 			callback.entryScanned(

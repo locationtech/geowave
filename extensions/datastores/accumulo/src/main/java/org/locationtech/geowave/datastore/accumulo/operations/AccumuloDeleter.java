@@ -23,6 +23,7 @@ public class AccumuloDeleter<T> extends
 
 	public AccumuloDeleter(
 			final BatchDeleter scanner,
+			final GeoWaveRowIteratorTransformer<T> transformer,
 			final int partitionKeyLength,
 			final boolean wholeRowEncoding,
 			final boolean clientSideRowMerging,
@@ -31,7 +32,7 @@ public class AccumuloDeleter<T> extends
 		// ReaderParams<T> readerParams ) {
 		super(
 				scanner,
-				(GeoWaveRowIteratorTransformer) GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+				transformer,
 				partitionKeyLength,
 				wholeRowEncoding,
 				clientSideRowMerging,

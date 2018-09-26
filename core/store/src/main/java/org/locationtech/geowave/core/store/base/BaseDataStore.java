@@ -17,11 +17,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
@@ -29,7 +28,6 @@ import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -54,7 +52,6 @@ import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexW
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.query.AdapterQuery;
 import org.locationtech.geowave.core.store.query.EverythingQuery;
 import org.locationtech.geowave.core.store.query.InsertionIdQuery;
@@ -262,6 +259,9 @@ public class BaseDataStore implements
 					indexStore);
 			for (Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
 				final List<Short> adapterIdsToQuery = new ArrayList<>();
+				// this only needs to be done once per index, not once per
+				// adapter
+				boolean queriedAllAdaptersByPrefix = false;
 				for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
 					if (delete) {
 						final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
@@ -305,15 +305,18 @@ public class BaseDataStore implements
 						continue;
 					}
 					else if (sanitizedQuery instanceof PrefixIdQuery) {
-						final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) sanitizedQuery;
-						results.add(queryRowPrefix(
-								indexAdapterPair.getLeft(),
-								prefixIdQuery.getPartitionKey(),
-								prefixIdQuery.getSortKeyPrefix(),
-								sanitizedQueryOptions,
-								tempAdapterStore,
-								adapterIdsToQuery,
-								delete));
+						if (!queriedAllAdaptersByPrefix) {
+							final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) sanitizedQuery;
+							results.add(queryRowPrefix(
+									indexAdapterPair.getLeft(),
+									prefixIdQuery.getPartitionKey(),
+									prefixIdQuery.getSortKeyPrefix(),
+									sanitizedQueryOptions,
+									indexAdapterPair.getRight(),
+									tempAdapterStore,
+									delete));
+							queriedAllAdaptersByPrefix = true;
+						}
 						continue;
 					}
 					adapterIdsToQuery.add(adapter.getInternalAdapterId());
@@ -511,9 +514,10 @@ public class BaseDataStore implements
 			final ByteArrayId partitionKey,
 			final ByteArrayId sortPrefix,
 			final BaseQueryOptions sanitizedQueryOptions,
+			List<InternalDataAdapter<?>> adapters,
 			final PersistentAdapterStore tempAdapterStore,
-			final List<Short> adapterIdsToQuery,
 			final boolean delete ) {
+		Set<Short> adapterIds = adapters.stream().map(a -> a.getInternalAdapterId()).collect(Collectors.toSet());
 		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<Object>(
 				index,
 				partitionKey,
@@ -521,12 +525,12 @@ public class BaseDataStore implements
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
 				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
 						index,
-						adapterIdsToQuery,
+						adapterIds,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
 				FieldVisibilityCount.getVisibilityCounts(
 						index,
-						adapterIdsToQuery,
+						adapterIds,
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());

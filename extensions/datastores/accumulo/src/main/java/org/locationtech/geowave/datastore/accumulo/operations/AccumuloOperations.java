@@ -1779,10 +1779,18 @@ public class AccumuloOperations implements
 		final ScannerBase scanner = getScanner(
 				readerParams,
 				true);
-		if (scanner == null) {
-			// currently this shouldn't happen, but in the future this could be
-			// used to imply that range or bulk delete is unnecessary and we
+		if (readerParams.isMixedVisibility() || scanner == null) {
+			// currently scanner shouldn't be null, but in the future this could
+			// be used to imply that range or bulk delete is unnecessary and we
 			// instead simply delete by row ID
+
+			// however it has been discovered the batch deletion doesn't work
+			// with Accumulo's WholeRowIterator so if there are mixed
+			// visibilities, meaning a single row with varying visibilities for
+			// different fields we would not be assured we are properly
+			// combining the visibilities of a single row without
+			// WholeRowIterator so therefore we need to backup to using the
+			// slower delete by row technique
 			final RowDeleter rowDeleter = createDeleter(
 					readerParams.getIndex().getId(),
 					readerParams.getAdditionalAuthorizations());
@@ -1798,10 +1806,18 @@ public class AccumuloOperations implements
 				readerParams,
 				scanner,
 				options);
+		// removing the "novalue" iterator means the batch deleter will return
+		// values which is essential to maintaining stats
 
+		// this is applicable to accumulo versions < 1.9
 		scanner.removeScanIterator(BatchDeleter.class.getName() + ".NOVALUE");
+		// this is applicable to accumulo versions >= 1.9
+		scanner.removeScanIterator(BatchDeleter.class.getName().replaceAll(
+				"[.]",
+				"_") + "_NOVALUE");
 		return new AccumuloDeleter<>(
 				(BatchDeleter) scanner,
+				readerParams.getRowTransformer(),
 				readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
 				readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
 				readerParams.isClientsideRowMerging(),
