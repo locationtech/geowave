@@ -994,12 +994,13 @@ public class AccumuloOperations implements
 	}
 
 	protected <T> ScannerBase getScanner(
-			final ReaderParams<T> params ) {
+			final ReaderParams<T> params,
+			boolean delete ) {
 		final List<ByteArrayRange> ranges = params.getQueryRanges().getCompositeQueryRanges();
 		final String tableName = StringUtils.stringFromBinary(params.getIndex().getId().getBytes());
 		ScannerBase scanner;
 		try {
-			if (!params.isAggregation() && (ranges != null) && (ranges.size() == 1)) {
+			if (!params.isAggregation() && (ranges != null) && (ranges.size() == 1) && !delete) {
 				if (!options.isServerSideLibraryEnabled()) {
 					scanner = createClientScanner(
 							tableName,
@@ -1027,10 +1028,18 @@ public class AccumuloOperations implements
 				}
 			}
 			else {
-				scanner = createBatchScanner(
-						tableName,
-						params.getAdditionalAuthorizations());
-				((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+				if (delete) {
+					scanner = createBatchDeleter(
+							tableName,
+							params.getAdditionalAuthorizations());
+					((BatchDeleter) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+				}
+				else {
+					scanner = createBatchScanner(
+							tableName,
+							params.getAdditionalAuthorizations());
+					((BatchScanner) scanner).setRanges(AccumuloUtils.byteArrayRangesToAccumuloRanges(ranges));
+				}
 			}
 			if (params.getMaxResolutionSubsamplingPerDimension() != null) {
 				if (params.getMaxResolutionSubsamplingPerDimension().length != params
@@ -1229,7 +1238,9 @@ public class AccumuloOperations implements
 	@Override
 	public <T> Reader<T> createReader(
 			final ReaderParams<T> params ) {
-		final ScannerBase scanner = getScanner(params);
+		final ScannerBase scanner = getScanner(
+				params,
+				false);
 
 		addConstraintsScanIteratorSettings(
 				params,
@@ -1332,11 +1343,10 @@ public class AccumuloOperations implements
 			final ByteArrayId indexId,
 			final String... authorizations ) {
 		try {
-			return new AccumuloDeleter(
+			return new AccumuloRowDeleter(
 					createBatchDeleter(
 							indexId.getString(),
-							authorizations),
-					false);
+							authorizations));
 		}
 		catch (final TableNotFoundException e) {
 			LOGGER.error(
@@ -1344,7 +1354,6 @@ public class AccumuloOperations implements
 					e);
 			return null;
 		}
-
 	}
 
 	@Override
@@ -1766,14 +1775,36 @@ public class AccumuloOperations implements
 	@Override
 	public <T> Deleter<T> createDeleter(
 			final ReaderParams<T> readerParams ) {
-		final RowDeleter rowDeleter = createDeleter(
-				readerParams.getIndex().getId(),
-				readerParams.getAdditionalAuthorizations());
-		if (rowDeleter != null) {
-			return new QueryAndDeleteByRow<>(
-					rowDeleter,
-					createReader(readerParams));
+
+		final ScannerBase scanner = getScanner(
+				readerParams,
+				true);
+		if (scanner == null) {
+			// currently this shouldn't happen, but in the future this could be
+			// used to imply that range or bulk delete is unnecessary and we
+			// instead simply delete by row ID
+			final RowDeleter rowDeleter = createDeleter(
+					readerParams.getIndex().getId(),
+					readerParams.getAdditionalAuthorizations());
+			if (rowDeleter != null) {
+				return new QueryAndDeleteByRow<>(
+						rowDeleter,
+						createReader(readerParams));
+			}
+			return new QueryAndDeleteByRow<>();
 		}
-		return new QueryAndDeleteByRow<>();
+
+		addConstraintsScanIteratorSettings(
+				readerParams,
+				scanner,
+				options);
+
+		scanner.removeScanIterator(BatchDeleter.class.getName() + ".NOVALUE");
+		return new AccumuloDeleter<>(
+				(BatchDeleter) scanner,
+				readerParams.getIndex().getIndexStrategy().getPartitionKeyLength(),
+				readerParams.isMixedVisibility() && !readerParams.isServersideAggregation(),
+				readerParams.isClientsideRowMerging(),
+				true);
 	}
 }

@@ -2,12 +2,10 @@ package org.locationtech.geowave.core.store.operations;
 
 import java.util.NoSuchElementException;
 
-import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public class QueryAndDeleteByRow<T> implements
-		Deleter<T>,
-		ScanCallback<T, GeoWaveRow>
+		Deleter<T>
 {
 	private final RowDeleter rowDeleter;
 	private final Reader<T> reader;

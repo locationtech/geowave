@@ -252,11 +252,15 @@ public class BaseDataStore implements
 			// keep a list of adapters that have been queried, to only load an
 			// adapter to be queried once
 			final Set<Short> queriedAdapters = new HashSet<Short>();
-			for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
-					.getAdaptersWithMinimalSetOfIndices(
+			final List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> indexAdapterPairList = delete ? sanitizedQueryOptions
+					.getIndicesForAdapters(
 							tempAdapterStore,
 							indexMappingStore,
-							indexStore)) {
+							indexStore) : sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
+					tempAdapterStore,
+					indexMappingStore,
+					indexStore);
+			for (Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
 				final List<Short> adapterIdsToQuery = new ArrayList<>();
 				for (final InternalDataAdapter adapter : indexAdapterPair.getRight()) {
 					if (delete) {

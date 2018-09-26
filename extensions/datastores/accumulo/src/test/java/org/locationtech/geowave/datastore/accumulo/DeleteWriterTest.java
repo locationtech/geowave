@@ -79,7 +79,6 @@ public class DeleteWriterTest
 	private AccumuloOperations operations;
 	private DataStore mockDataStore;
 	private InsertionIds rowIds1;
-	private InsertionIds rowIds2;
 	private InsertionIds rowIds3;
 	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
@@ -196,7 +195,7 @@ public class DeleteWriterTest
 					}),
 					"test_line_1"));
 
-			rowIds2 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
+			indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createLineString(new Coordinate[] {
 						new Coordinate(
 								43.444,
