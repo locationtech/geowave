@@ -221,15 +221,15 @@ public class KMeansRunner
 		kmeansOpts.setMaxSplits(maxSplits);
 		kmeansOpts.setQuery(query);
 		kmeansOpts.setQueryOptions(queryOptions);
-		
-		LOGGER.debug("Loading RDD from datastore...");
+
+		LOGGER.warn("Loading RDD from datastore...");
 		GeoWaveRDD kmeansRDD = GeoWaveRDDLoader.loadRDD(
 				session.sparkContext(),
 				inputDataStore,
 				kmeansOpts);
 
 		// Retrieve the input centroids
-		LOGGER.debug("Retrieving input centroids from RDD...");
+		LOGGER.warn("Retrieving input centroids from RDD...");
 		centroidVectors = RDDUtils.rddFeatureVectors(
 				kmeansRDD,
 				timeField,
@@ -247,24 +247,27 @@ public class KMeansRunner
 		}
 
 		// Run KMeans
-		LOGGER.debug("Running KMeans algorithm...");
+		LOGGER.warn("Running KMeans algorithm...");
 		outputModel = kmeans.run(centroidVectors.rdd());
 
-		LOGGER.debug("Writing results to output store...");
+		LOGGER.warn("Writing results to output store...");
 		writeToOutputStore();
-		LOGGER.debug("Results successfully written!");
+		LOGGER.warn("Results successfully written!");
 	}
 
 	public void writeToOutputStore() {
 		if (outputDataStore != null) {
 			// output cluster centroids (and hulls) to output datastore
+			LOGGER.warn("Outputting cluster centroids...");
 			KMeansUtils.writeClusterCentroids(
 					outputModel,
 					outputDataStore,
 					centroidTypeName,
 					scaledRange);
 
-			if (isGenerateHulls()) {
+			if (isGenerateHulls()) 
+			{
+				LOGGER.warn("Outputting cluster hulls...");
 				KMeansUtils.writeClusterHulls(
 						centroidVectors,
 						outputModel,
