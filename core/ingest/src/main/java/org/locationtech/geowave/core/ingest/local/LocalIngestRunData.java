@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
@@ -81,7 +81,7 @@ public class LocalIngestRunData implements
 		}
 	}
 
-	private final KeyedObjectPool<AdapterIdKeyWithIndices, IndexWriter> indexWriterPool;
+	private final KeyedObjectPool<AdapterIdKeyWithIndices, Writer> indexWriterPool;
 
 	private final TransientAdapterStore adapterStore;
 	private final DataStore dataStore;
@@ -115,7 +115,7 @@ public class LocalIngestRunData implements
 	 * @return
 	 * @throws Exception
 	 */
-	public IndexWriter getIndexWriter(
+	public Writer getIndexWriter(
 			final ByteArrayId adapterId,
 			List<Index> indices )
 			throws Exception {
@@ -134,7 +134,7 @@ public class LocalIngestRunData implements
 	 */
 	public void releaseIndexWriter(
 			final ByteArrayId adapterId,
-			final IndexWriter writer )
+			final Writer writer )
 			throws Exception {
 		indexWriterPool.returnObject(
 				new AdapterIdKeyWithIndices(
@@ -154,11 +154,11 @@ public class LocalIngestRunData implements
 	 * return new instances of an index writer for a given primary index.
 	 */
 	public class IndexWriterFactory extends
-			BaseKeyedPooledObjectFactory<AdapterIdKeyWithIndices, IndexWriter>
+			BaseKeyedPooledObjectFactory<AdapterIdKeyWithIndices, Writer>
 	{
 
 		@Override
-		public IndexWriter<?> create(
+		public Writer<?> create(
 				final AdapterIdKeyWithIndices adapterWithIndices )
 				throws Exception {
 			return dataStore.createWriter(
@@ -169,7 +169,7 @@ public class LocalIngestRunData implements
 		@Override
 		public void destroyObject(
 				final AdapterIdKeyWithIndices key,
-				final PooledObject<IndexWriter> p )
+				final PooledObject<Writer> p )
 				throws Exception {
 			super.destroyObject(
 					key,
@@ -178,9 +178,9 @@ public class LocalIngestRunData implements
 		}
 
 		@Override
-		public PooledObject<IndexWriter> wrap(
-				final IndexWriter writer ) {
-			return new DefaultPooledObject<IndexWriter>(
+		public PooledObject<Writer> wrap(
+				final Writer writer ) {
+			return new DefaultPooledObject<Writer>(
 					writer);
 		}
 	}

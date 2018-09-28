@@ -23,7 +23,7 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveEmptyTr
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransactionState;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;

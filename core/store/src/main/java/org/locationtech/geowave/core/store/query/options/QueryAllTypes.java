@@ -1,8 +1,14 @@
 package org.locationtech.geowave.core.store.query.options;
 
-public class QueryAllTypes<T> implements
-		DataTypeQueryOptions<T>
+public class QueryAllTypes<T> extends
+		FilterByTypeQueryOptions<T>
 {
+	public QueryAllTypes(
+			final String[] typeNames ) {
+		super(
+				null);
+	}
+
 	@Override
 	public byte[] toBinary() {
 		return new byte[] {};
@@ -10,6 +16,6 @@ public class QueryAllTypes<T> implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {}
+			final byte[] bytes ) {}
 
 }

@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -86,7 +86,7 @@ abstract class BaseFilteredIndexQuery extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition ) {
-		final Reader<?> reader = getReader(
+		final RowReader<?> reader = getReader(
 				datastoreOperations,
 				options,
 				adapterStore,
@@ -114,7 +114,7 @@ abstract class BaseFilteredIndexQuery extends
 	}
 
 	@Override
-	protected <C> Reader<C> getReader(
+	protected <C> RowReader<C> getReader(
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,

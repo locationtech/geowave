@@ -20,12 +20,12 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -75,7 +75,7 @@ public class SimpleIngest
 
 		// make sure to close the index writer (a try-with-resources block such
 		// as this automatically closes the resource when exiting the block)
-		try (IndexWriter<SimpleFeature> indexWriter = geowaveDataStore.createWriter(
+		try (Writer<SimpleFeature> indexWriter = geowaveDataStore.createWriter(
 				adapter,
 				index)) {
 			// build a grid of points across the globe at each whole

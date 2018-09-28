@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
@@ -247,7 +247,7 @@ public class LocalFileIngestDriver extends
 
 		int count = 0;
 		long dbWriteMs = 0L;
-		Map<ByteArrayId, IndexWriter> indexWriters = new HashMap<ByteArrayId, IndexWriter>();
+		Map<ByteArrayId, Writer> indexWriters = new HashMap<ByteArrayId, Writer>();
 
 		// Read files until EOF from the command line.
 		try (CloseableIterator<?> geowaveDataIt = plugin.toGeoWaveData(
@@ -295,7 +295,7 @@ public class LocalFileIngestDriver extends
 		}
 		finally {
 			// Clean up index writers
-			for (Entry<ByteArrayId, IndexWriter> writerEntry : indexWriters.entrySet()) {
+			for (Entry<ByteArrayId, Writer> writerEntry : indexWriters.entrySet()) {
 				try {
 					ingestRunData.releaseIndexWriter(
 							writerEntry.getKey(),
@@ -319,13 +319,13 @@ public class LocalFileIngestDriver extends
 			LocalIngestRunData runData,
 			Map<ByteArrayId, Index> specifiedPrimaryIndexes,
 			Map<ByteArrayId, Index> requiredIndexMap,
-			Map<ByteArrayId, IndexWriter> indexWriters )
+			Map<ByteArrayId, Writer> indexWriters )
 			throws Exception {
 
 		try {
 			ByteArrayId adapterId = adapter.getAdapterId();
 			// Write the data to the data store.
-			IndexWriter writer = indexWriters.get(adapterId);
+			Writer writer = indexWriters.get(adapterId);
 
 			if (writer == null) {
 				List<Index> indices = new ArrayList<Index>();

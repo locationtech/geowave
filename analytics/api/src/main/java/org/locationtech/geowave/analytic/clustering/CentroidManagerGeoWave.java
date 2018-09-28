@@ -51,14 +51,14 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.CQLQuery;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
@@ -511,7 +511,7 @@ public class CentroidManagerGeoWave<T> implements
 		try (final CloseableIterator<T> it = getRawCentroids(
 				fromBatchId,
 				groupID)) {
-			try (final IndexWriter indexWriter = dataStore.createWriter(
+			try (final Writer indexWriter = dataStore.createWriter(
 					adapter,
 					index)) {
 				while (it.hasNext()) {

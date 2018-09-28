@@ -11,13 +11,13 @@
 package org.locationtech.geowave.mapreduce;
 
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
 
 public interface MapReduceDataStoreOperations extends
 		DataStoreOperations
 {
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			RecordReaderParams<T> readerParams );
 
 }

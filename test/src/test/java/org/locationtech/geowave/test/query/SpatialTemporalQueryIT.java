@@ -48,7 +48,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
@@ -172,7 +172,7 @@ public class SpatialTemporalQueryIT
 				timeStampAdapter.getFeatureType());
 		final SimpleFeatureBuilder featureTimeRangeBuilder = new SimpleFeatureBuilder(
 				timeRangeAdapter.getFeatureType());
-		final IndexWriter timeWriters = dataStore.createWriter(
+		final Writer timeWriters = dataStore.createWriter(
 				timeStampAdapter,
 				YEAR_INDEX,
 				MONTH_INDEX,
@@ -180,7 +180,7 @@ public class SpatialTemporalQueryIT
 		// time ranges for days isn't tested so we don't have to deal with
 		// ingesting into the day index, the multi-year test case (requiring
 		// 1000+ partitions)
-		final IndexWriter rangeWriters = dataStore.createWriter(
+		final Writer rangeWriters = dataStore.createWriter(
 				timeRangeAdapter,
 				YEAR_INDEX,
 				MONTH_INDEX);
@@ -384,17 +384,17 @@ public class SpatialTemporalQueryIT
 	}
 
 	private static void write(
-			final IndexWriter[] writers,
+			final Writer[] writers,
 			final SimpleFeature feature )
 			throws IOException {
-		for (final IndexWriter writer : writers) {
+		for (final Writer writer : writers) {
 			writer.write(feature);
 		}
 	}
 
 	private static void ingestTimeRangeData(
 			final Calendar cal,
-			final IndexWriter writer,
+			final Writer writer,
 			final SimpleFeatureBuilder featureTimeRangeBuilder,
 			final int min,
 			final int max,

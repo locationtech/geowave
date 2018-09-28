@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -139,7 +139,7 @@ public class CQLQueryExample
 
 		System.out.println("Ingesting canned data...");
 
-		try (IndexWriter<SimpleFeature> indexWriter = dataStore.createWriter(
+		try (Writer<SimpleFeature> indexWriter = dataStore.createWriter(
 				ADAPTER,
 				index)) {
 			for (final SimpleFeature sf : points) {

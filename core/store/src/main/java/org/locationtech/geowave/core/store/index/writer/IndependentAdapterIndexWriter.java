@@ -20,21 +20,21 @@ import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 
 public class IndependentAdapterIndexWriter<T> implements
-		IndexWriter<T>
+		Writer<T>
 {
 
 	final IndexDependentDataAdapter<T> adapter;
 	final Index index;
-	final IndexWriter<T> writer;
+	final Writer<T> writer;
 
 	public IndependentAdapterIndexWriter(
 			IndexDependentDataAdapter<T> adapter,
 			Index index,
-			IndexWriter<T> writer ) {
+			Writer<T> writer ) {
 		super();
 		this.writer = writer;
 		this.index = index;

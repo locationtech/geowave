@@ -33,7 +33,7 @@ import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;

@@ -27,14 +27,14 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBClientPool;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBOptions;
@@ -198,7 +198,7 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public Writer createWriter(
+	public RowWriter createWriter(
 			final Index index,
 			short internalAdapterId ) {
 		final String qName = getQualifiedTableName(index.getId().getString());
@@ -328,7 +328,7 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final ReaderParams<T> readerParams ) {
 		return new DynamoDBReader<T>(
 				readerParams,
@@ -336,7 +336,7 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final RecordReaderParams<T> recordReaderParams ) {
 		return new DynamoDBReader<T>(
 				recordReaderParams,
@@ -344,7 +344,7 @@ public class DynamoDBOperations implements
 	}
 
 	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
 			final String... authorizations )
 			throws Exception {

@@ -8,7 +8,7 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.geotime.store.query.api;
+package org.locationtech.geowave.core.geotime.store;
 
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
@@ -25,4 +25,5 @@ public interface GeotoolsFeatureDataAdapter extends
 	public TimeDescriptors getTimeDescriptors();
 
 	public boolean hasTemporalConstraints();
+	
 }

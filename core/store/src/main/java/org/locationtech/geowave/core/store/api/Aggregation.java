@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.api;
 
-import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public interface Aggregation<P extends Persistable, R, T> extends

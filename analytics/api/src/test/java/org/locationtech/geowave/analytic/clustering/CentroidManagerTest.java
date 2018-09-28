@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeature;
@@ -57,7 +57,7 @@ public class CentroidManagerTest
 			final Index index,
 			final SimpleFeature feature )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				index)) {
 			writer.write(feature);

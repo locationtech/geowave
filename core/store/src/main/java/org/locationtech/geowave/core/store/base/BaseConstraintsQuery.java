@@ -39,7 +39,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
@@ -203,7 +203,7 @@ public class BaseConstraintsQuery extends
 								.warn("Aggregating results when duplicates exist in the table may result in duplicate aggregation");
 					}
 				}
-				try (final Reader<GeoWaveRow> reader = getReader(
+				try (final RowReader<GeoWaveRow> reader = getReader(
 						datastoreOperations,
 						options,
 						adapterStore,

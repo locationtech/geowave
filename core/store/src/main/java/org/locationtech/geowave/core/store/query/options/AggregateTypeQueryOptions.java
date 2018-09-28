@@ -3,25 +3,24 @@ package org.locationtech.geowave.core.store.query.options;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public class AggregateTypeQueryOptions<P extends Persistable, R extends Mergeable, T> implements
 		DataTypeQueryOptions<R>
 {
-	private DataTypeAdapter<T> adapter;
+	private String typeName;
 	private Aggregation<P, R, T> aggregation;
 
 	protected AggregateTypeQueryOptions() {}
 
 	public AggregateTypeQueryOptions(
-			DataTypeAdapter<T> adapter,
+			String typeName,
 			Aggregation<P, R, T> aggregation ) {
-		this.adapter = adapter;
+		this.typeName = typeName;
 		this.aggregation = aggregation;
 	}
 
-	public DataTypeAdapter<T> getType() {
-		return adapter;
+	public String getTypeName() {
+		return typeName;
 	}
 
 	public Aggregation<P, R, T> getAggregation() {

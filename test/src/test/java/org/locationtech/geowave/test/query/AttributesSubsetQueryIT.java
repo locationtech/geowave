@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -288,7 +288,7 @@ public class AttributesSubsetQueryIT extends
 
 		LOGGER.info("Ingesting canned data...");
 
-		try (IndexWriter writer = dataStore.createDataStore().createWriter(
+		try (Writer writer = dataStore.createDataStore().createWriter(
 				dataAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (final SimpleFeature sf : buildCityDataSet()) {

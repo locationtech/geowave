@@ -12,10 +12,10 @@ package org.locationtech.geowave.datastore.cassandra.operations;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 
 public class CassandraDeleter implements
-		Deleter
+		RowDeleter
 {
 	private final CassandraOperations operations;
 	private final String tableName;

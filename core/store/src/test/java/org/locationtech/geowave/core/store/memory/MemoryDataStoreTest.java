@@ -37,7 +37,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -79,7 +79,7 @@ public class MemoryDataStoreTest
 			}
 		};
 
-		try (final IndexWriter indexWriter = dataStore.createWriter(
+		try (final Writer indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
 
@@ -253,7 +253,7 @@ public class MemoryDataStoreTest
 			}
 		};
 
-		try (final IndexWriter indexWriter = dataStore.createWriter(
+		try (final Writer indexWriter = dataStore.createWriter(
 				adapter,
 				index1,
 				index2)) {

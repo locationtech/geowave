@@ -21,7 +21,7 @@ import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
 
@@ -41,7 +41,7 @@ import java.util.NoSuchElementException;
 public class InputFormatIteratorWrapper<T> implements
 		Iterator<Entry<GeoWaveInputKey, T>>
 {
-	private final Reader<GeoWaveRow> reader;
+	private final RowReader<GeoWaveRow> reader;
 	private final QueryFilter queryFilter;
 	private final HadoopWritableSerializationTool serializationTool;
 	private final boolean isOutputWritable;
@@ -49,7 +49,7 @@ public class InputFormatIteratorWrapper<T> implements
 	private final Index index;
 
 	public InputFormatIteratorWrapper(
-			final Reader<GeoWaveRow> reader,
+			final RowReader<GeoWaveRow> reader,
 			final QueryFilter queryFilter,
 			final TransientAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,

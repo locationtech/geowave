@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
@@ -40,7 +40,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class CassandraReader<T> implements
-		Reader<T>
+		RowReader<T>
 {
 	private final ReaderParams<T> readerParams;
 	private final RecordReaderParams<T> recordReaderParams;

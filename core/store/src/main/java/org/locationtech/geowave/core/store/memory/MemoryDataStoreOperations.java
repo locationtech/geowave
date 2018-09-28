@@ -55,15 +55,15 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 
 import com.google.common.base.Function;
@@ -125,7 +125,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public Writer createWriter(
+	public RowWriter createWriter(
 			final Index index,
 			final short adapterId ) {
 		return new MyIndexWriter<>(
@@ -133,7 +133,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
 			final String... authorizations )
 			throws Exception {
@@ -155,7 +155,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final ReaderParams<T> readerParams ) {
 		final SortedSet<MemoryStoreEntry> internalData = storeData.get(readerParams.getIndex().getId());
 		int counter = 0;
@@ -288,7 +288,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	private static class MyIndexReader<T> implements
-			Reader<T>
+			RowReader<T>
 	{
 		private final Iterator<T> it;
 
@@ -315,7 +315,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	private class MyIndexWriter<T> implements
-			Writer
+			RowWriter
 	{
 		final ByteArrayId indexId;
 
@@ -372,7 +372,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	private class MyIndexDeleter implements
-			Deleter
+			RowDeleter
 	{
 		private final ByteArrayId indexId;
 		private final String[] authorizations;

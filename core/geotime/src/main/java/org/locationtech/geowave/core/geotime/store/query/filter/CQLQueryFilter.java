@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 
 import org.geotools.filter.text.ecql.ECQL;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.FilterToCQLTool;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;

@@ -38,7 +38,7 @@ import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
@@ -104,7 +104,7 @@ public class WebMercatorRasterTest
 		bounds /= 32.0;
 		for (double xTile = 0; xTile < xTiles; xTile++) {
 			for (double yTile = 0; yTile < yTiles; yTile++) {
-				try (IndexWriter<GridCoverage> writer = dataStore.createWriter(
+				try (Writer<GridCoverage> writer = dataStore.createWriter(
 						adapter,
 						index)) {
 					final WritableRaster raster = RasterUtils.createRasterTypeDouble(

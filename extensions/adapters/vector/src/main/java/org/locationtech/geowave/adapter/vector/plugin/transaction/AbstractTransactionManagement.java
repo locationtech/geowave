@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.locationtech.geowave.adapter.vector.plugin.GeoWaveDataStoreComponents;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;

@@ -52,7 +52,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramS
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.PersistentValue;
@@ -243,7 +243,7 @@ public class AccumuloDataStoreStatsTest
 					33)
 		});
 		ByteArrayId partitionKey = null;
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			partitionKey = indexWriter.write(
@@ -549,7 +549,7 @@ public class AccumuloDataStoreStatsTest
 				"bbb");
 		assertNull(countStats);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			indexWriter.write(new TestGeometry(

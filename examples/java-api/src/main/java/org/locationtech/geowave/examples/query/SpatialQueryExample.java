@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataStoreFactory;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -98,7 +98,7 @@ public class SpatialQueryExample
 			final FeatureDataAdapter adapter,
 			final Index index,
 			final List<SimpleFeature> features ) {
-		try (IndexWriter<SimpleFeature> indexWriter = dataStore.createWriter(
+		try (Writer<SimpleFeature> indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
 			for (final SimpleFeature sf : features) {

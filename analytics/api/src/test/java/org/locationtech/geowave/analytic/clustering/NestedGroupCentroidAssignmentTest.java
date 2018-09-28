@@ -39,7 +39,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -61,7 +61,7 @@ public class NestedGroupCentroidAssignmentTest
 			final Index index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				index)) {
 			writer.write(entry);

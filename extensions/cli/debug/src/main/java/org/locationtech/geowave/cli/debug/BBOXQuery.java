@@ -14,8 +14,8 @@ import java.io.IOException;
 
 import org.apache.commons.lang3.time.StopWatch;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;

@@ -51,7 +51,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStor
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -175,7 +175,7 @@ public class DeleteWriterTest
 		adapter = new TestGeometryAdapter();
 		final GeometryFactory factory = new GeometryFactory();
 
-		try (IndexWriter indexWriter = mockDataStore.createWriter(
+		try (Writer indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			rowIds1 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(

@@ -30,7 +30,7 @@ import org.locationtech.geowave.adapter.vector.export.VectorLocalExportOptions;
 import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;

@@ -18,10 +18,10 @@ import java.util.List;
 
 import org.geotools.filter.text.cql2.CQL;
 import org.geotools.filter.text.cql2.CQLException;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.filter.CQLQueryFilter;
 import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;

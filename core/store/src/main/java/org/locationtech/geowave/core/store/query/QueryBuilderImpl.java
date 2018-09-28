@@ -1,267 +1,73 @@
 package org.locationtech.geowave.core.store.query;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.api.Aggregation;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
-import org.locationtech.geowave.core.store.api.Index;
+import org.apache.commons.lang.ArrayUtils;
 import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
-import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
-import org.locationtech.geowave.core.index.IndexConstraints;
+import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
 
-public class QueryBuilderImpl<T> implements
-		QueryBuilder<T>
+public class QueryBuilderImpl<T, R extends QueryBuilder<T, R>> extends
+		BaseQueryBuilderImpl<T, Query<T>, R> implements
+		QueryBuilder<T, R>
 {
+	protected String[] typeNames = new String[0];
+	protected String[] fieldNames = null;
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#allIndicies()
-	 */
 	@Override
-	public QueryBuilder<T> allIndicies() {
-		return this;
+	public R allTypes() {
+		this.typeNames = new String[0];
+		return (R) this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#index(org.locationtech
-	 * .geowave.core.store.api.Index)
-	 */
 	@Override
-	public QueryBuilder<T> index(
-			Index index ) {
-		return this;
+	public R addTypeName(
+			final String typeName ) {
+		ArrayUtils
+				.add(
+						typeNames,
+						typeName);
+		return (R) this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#index(org.locationtech
-	 * .geowave.core.index.ByteArrayId)
-	 */
 	@Override
-	public QueryBuilder<T> index(
-			ByteArrayId index ) {
-		return this;
+	public R setTypeNames(
+			final String[] typeNames ) {
+		this.typeNames = typeNames;
+		return (R) this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#allTypes()
-	 */
 	@Override
-	public QueryBuilder<T> allTypes() {
-		return this;
+	public R subsetFields(
+			final String typeName,
+			final String... fieldNames ) {
+		this.typeNames = new String[] {
+			typeName
+		};
+		this.fieldNames = fieldNames;
+		return (R) this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#addTypeId(org.
-	 * locationtech.geowave.core.index.ByteArrayId)
-	 */
 	@Override
-	public QueryBuilder<T> addTypeId(
-			ByteArrayId typeId ) {
-		return this;
+	public R allFields() {
+		this.fieldNames = null;
+		return (R) this;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#typeIds(org.locationtech
-	 * .geowave.core.index.ByteArrayId[])
-	 */
-	@Override
-	public QueryBuilder<T> typeIds(
-			ByteArrayId[] typeIds ) {
-		return this;
+	protected FilterByTypeQueryOptions<T> newFilterByTypeQueryOptions() {
+		return typeNames.length == 1 ? new FilterByTypeQueryOptions<>(
+				typeNames[0],
+				fieldNames)
+				: new FilterByTypeQueryOptions<>(
+						typeNames);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#addType(org.locationtech
-	 * .geowave.core.store.api.DataTypeAdapter)
-	 */
-	@Override
-	public QueryBuilder<T> addType(
-			DataTypeAdapter<T> type ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#types(org.locationtech
-	 * .geowave.core.store.api.DataTypeAdapter)
-	 */
-	@Override
-	public QueryBuilder<T> types(
-			DataTypeAdapter<T> types ) {
-		return this;
-	}
-
-	// is it clear that this overrides the type options above?
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#aggregate(org.
-	 * locationtech.geowave.core.store.api.DataTypeAdapter,
-	 * org.locationtech.geowave.core.store.api.Aggregation)
-	 */
-	@Override
-	public <T extends Mergeable> QueryBuilder<T> aggregate(
-			DataTypeAdapter<?> type,
-			Aggregation<?, T, ?> aggregation ) {
-		return (QueryBuilder<T>) this;
-	}
-
-	// is it clear that this overrides the type options above?
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#subsetFields(org
-	 * .locationtech.geowave.core.store.api.DataTypeAdapter, java.lang.String[])
-	 */
-	@Override
-	public QueryBuilder<T> subsetFields(
-			DataTypeAdapter<T> type,
-			String[] fieldIds ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#allFields()
-	 */
-	@Override
-	public QueryBuilder<T> allFields() {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#addAuthorization
-	 * (java.lang.String)
-	 */
-	@Override
-	public QueryBuilder<T> addAuthorization(
-			String authorization ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#authorizations(java
-	 * .lang.String[])
-	 */
-	@Override
-	public QueryBuilder<T> authorizations(
-			String[] authorizations ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#subsampling(double
-	 * [])
-	 */
-	@Override
-	public QueryBuilder<T> subsampling(
-			double[] maxResolutionPerDimension ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#noLimit()
-	 */
-	@Override
-	public QueryBuilder<T> noLimit() {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#limit(int)
-	 */
-	@Override
-	public QueryBuilder<T> limit(
-			int limit ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#maxRanges(int)
-	 */
-	@Override
-	public QueryBuilder<T> maxRanges(
-			int maxRangeDecomposition ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#noMaxRanges()
-	 */
-	@Override
-	public QueryBuilder<T> noMaxRanges() {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see
-	 * org.locationtech.geowave.core.store.api.QueryBuilder#constraints(org.
-	 * locationtech.geowave.core.store.api.QueryConstraints)
-	 */
-	@Override
-	public QueryBuilder<T> constraints(
-			QueryConstraints constraints ) {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#noConstraints()
-	 */
-	@Override
-	public QueryBuilder<T> noConstraints() {
-		return this;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.locationtech.geowave.core.store.api.QueryBuilder#build()
-	 */
 	@Override
 	public Query<T> build() {
-		return null;
+		return new Query<>(
+				newCommonQueryOptions(),
+				newFilterByTypeQueryOptions(),
+				new QuerySingleIndex(
+						indexName),
+				constraints);
 	}
 }

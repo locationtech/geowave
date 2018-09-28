@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
@@ -341,7 +341,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				raster1,
 				raster2,
 				tileSize);
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				TestUtils.createCustomCRSPrimaryIndex())) {
 			writer.write(createCoverageTypeDouble(
@@ -407,7 +407,7 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		basicAdapter.getMetadata().put(
 				"test-key",
 				"test-value");
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				mergeStrategyOverriddenAdapter,
 				// TestUtils.DEFAULT_SPATIAL_INDEX
 				TestUtils.createCustomCRSPrimaryIndex())) {

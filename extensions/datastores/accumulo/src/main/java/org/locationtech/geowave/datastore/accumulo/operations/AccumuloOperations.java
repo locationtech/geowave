@@ -78,14 +78,14 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
 import org.locationtech.geowave.core.store.server.RowMergingAdapterOptionProvider;
@@ -1228,7 +1228,7 @@ public class AccumuloOperations implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final ReaderParams<T> params ) {
 		final ScannerBase scanner = getScanner(params);
 
@@ -1313,7 +1313,7 @@ public class AccumuloOperations implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final RecordReaderParams<T> readerParams ) {
 		final ScannerBase scanner = getScanner(readerParams);
 		addConstraintsScanIteratorSettings(
@@ -1330,7 +1330,7 @@ public class AccumuloOperations implements
 	}
 
 	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
 			final String... authorizations )
 			throws Exception {
@@ -1345,7 +1345,7 @@ public class AccumuloOperations implements
 	}
 
 	@Override
-	public Writer createWriter(
+	public RowWriter createWriter(
 			final Index index,
 			final short internalAdapterId ) {
 		final String tableName = index.getId().getString();

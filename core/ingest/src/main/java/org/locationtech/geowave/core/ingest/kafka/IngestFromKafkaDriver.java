@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
@@ -326,7 +326,7 @@ public class IngestFromKafkaDriver
 		IngestPluginBase<T, ?> ingestPlugin = plugin.getIngestWithAvroPlugin();
 		IndexProvider indexProvider = plugin;
 
-		final Map<ByteArrayId, IndexWriter> writerMap = new HashMap<ByteArrayId, IndexWriter>();
+		final Map<ByteArrayId, Writer> writerMap = new HashMap<ByteArrayId, Writer>();
 		final Map<ByteArrayId, Index> indexMap = new HashMap<ByteArrayId, Index>();
 
 		for (IndexPluginOptions indexOption : indexOptions) {
@@ -361,7 +361,7 @@ public class IngestFromKafkaDriver
 					LOGGER.warn("Adapter not found for " + geowaveData.getValue());
 					continue;
 				}
-				IndexWriter indexWriter = writerMap.get(adapter.getAdapterId());
+				Writer indexWriter = writerMap.get(adapter.getAdapterId());
 				if (indexWriter == null) {
 					List<Index> indexList = new ArrayList<Index>();
 					for (final ByteArrayId indexId : geowaveData.getIndexIds()) {

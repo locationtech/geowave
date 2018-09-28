@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -39,8 +39,8 @@ public class VectorIngestRunner extends
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RasterIngestRunner.class);
 	protected final List<String> parameters;
-	private IndexWriter bandWriter;
-	private IndexWriter sceneWriter;
+	private Writer bandWriter;
+	private Writer sceneWriter;
 
 	private SimpleFeatureType sceneType;
 
@@ -163,7 +163,7 @@ public class VectorIngestRunner extends
 	public static void writeScene(
 			final SimpleFeatureType sceneType,
 			final SimpleFeature firstBandOfScene,
-			final IndexWriter sceneWriter ) {
+			final Writer sceneWriter ) {
 		final SimpleFeatureBuilder bldr = new SimpleFeatureBuilder(
 				sceneType);
 		String fid = null;

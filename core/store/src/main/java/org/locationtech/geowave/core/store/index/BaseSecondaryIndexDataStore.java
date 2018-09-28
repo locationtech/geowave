@@ -19,7 +19,7 @@ import java.util.Map;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.filter.DistributableFilterList;
 import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseSecondaryIndexDataStore.class);
-	protected final Map<String, Writer> writerCache = new HashMap<>();
+	protected final Map<String, RowWriter> writerCache = new HashMap<>();
 	protected final static byte[] EMPTY_VALUE = new byte[0];
 
 	public BaseSecondaryIndexDataStore() {}
@@ -47,7 +47,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final ByteArrayId primarySortKey,
 			final ByteArrayId attributeVisibility ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexId);
 			if (writer != null) {
 				writer.write(buildJoinMutation(
 						indexedAttributeValue.getBytes(),
@@ -75,7 +75,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final ByteArrayId dataId,
 			final GeoWaveValue... values ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexId);
 			if (writer != null) {
 				for (final GeoWaveValue v : values) {
 					writer.write(buildMutation(
@@ -123,7 +123,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final ByteArrayId primaryIndexRowId,
 			final ByteArrayId attributeVisibility ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexId);
 			if (writer != null) {
 				writer.write(buildJoinDeleteMutation(
 						indexedAttributeValue.getBytes(),
@@ -149,7 +149,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final ByteArrayId dataId,
 			final GeoWaveValue... values ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexId);
 			if (writer != null) {
 				for (final GeoWaveValue v : values) {
 					writer.write(buildFullDeleteMutation(
@@ -176,7 +176,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 
 	@Override
 	public void close() {
-		for (final Writer writer : writerCache.values()) {
+		for (final RowWriter writer : writerCache.values()) {
 			try {
 				writer.close();
 			}
@@ -230,7 +230,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final byte[] fieldId )
 			throws IOException;
 
-	protected abstract Writer getWriter(
+	protected abstract RowWriter getWriter(
 			ByteArrayId secondaryIndexId );
 
 }

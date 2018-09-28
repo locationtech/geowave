@@ -38,7 +38,7 @@ import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToA
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -264,7 +264,7 @@ public class GeoWaveOutputFormat extends
 	public static class GeoWaveRecordWriter extends
 			RecordWriter<GeoWaveOutputKey<Object>, Object>
 	{
-		private final Map<ByteArrayId, IndexWriter<?>> adapterIdToIndexWriterCache = new HashMap<>();
+		private final Map<ByteArrayId, Writer<?>> adapterIdToIndexWriterCache = new HashMap<>();
 		private final TransientAdapterStore adapterStore;
 		private final IndexStore indexStore;
 		private final DataStore dataStore;
@@ -304,7 +304,7 @@ public class GeoWaveOutputFormat extends
 
 			final DataTypeAdapter<?> adapter = ingestKey.getAdapter(adapterStore);
 			if (adapter != null) {
-				final IndexWriter indexWriter = getIndexWriter(
+				final Writer indexWriter = getIndexWriter(
 						adapter,
 						ingestKey.getIndexIds());
 				if (indexWriter != null) {
@@ -333,11 +333,11 @@ public class GeoWaveOutputFormat extends
 			}
 		}
 
-		private synchronized IndexWriter<?> getIndexWriter(
+		private synchronized Writer<?> getIndexWriter(
 				final DataTypeAdapter<?> adapter,
 				final Collection<ByteArrayId> indexIds )
 				throws MismatchedIndexToAdapterMapping {
-			IndexWriter<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
+			Writer<?> writer = adapterIdToIndexWriterCache.get(adapter.getAdapterId());
 			if (writer == null) {
 				final List<Index> indices = new ArrayList<>();
 				for (final ByteArrayId indexId : indexIds) {
@@ -367,7 +367,7 @@ public class GeoWaveOutputFormat extends
 				final TaskAttemptContext attempt )
 				throws IOException,
 				InterruptedException {
-			for (final IndexWriter<?> indexWriter : adapterIdToIndexWriterCache.values()) {
+			for (final Writer<?> indexWriter : adapterIdToIndexWriterCache.values()) {
 				indexWriter.close();
 			}
 		}

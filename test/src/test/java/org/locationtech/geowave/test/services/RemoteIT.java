@@ -20,11 +20,11 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.service.client.ConfigServiceClient;
@@ -103,7 +103,7 @@ public class RemoteIT
 				features.size()));
 		int ingestedFeatures = 0;
 		final int featuresPer5Percent = features.size() / 20;
-		try (IndexWriter writer = ds.createWriter(
+		try (Writer writer = ds.createWriter(
 				fda,
 				idx)) {
 			for (final SimpleFeature feat : features) {

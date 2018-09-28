@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
@@ -197,7 +197,7 @@ public class QueryOptionsIT
 			final DataTypeAdapter<?> adapter )
 			throws IOException {
 		try (@SuppressWarnings("rawtypes")
-		IndexWriter writer = dataStoreOptions.createDataStore().createWriter(
+		Writer writer = dataStoreOptions.createDataStore().createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (final SimpleFeature sf : buildCityDataSet(builder)) {

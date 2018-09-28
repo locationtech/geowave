@@ -18,16 +18,16 @@ import java.util.List;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 
 public class IndexCompositeWriter<T> implements
-		IndexWriter<T>
+		Writer<T>
 {
-	final IndexWriter<T>[] writers;
+	final Writer<T>[] writers;
 
 	public IndexCompositeWriter(
-			final IndexWriter<T>[] writers ) {
+			final Writer<T>[] writers ) {
 		super();
 		this.writers = writers;
 	}
@@ -35,7 +35,7 @@ public class IndexCompositeWriter<T> implements
 	@Override
 	public void close()
 			throws IOException {
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			indexWriter.close();
 		}
 	}
@@ -45,7 +45,7 @@ public class IndexCompositeWriter<T> implements
 			final T entry ) {
 		final List<SinglePartitionInsertionIds> ids = new ArrayList<SinglePartitionInsertionIds>();
 
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			final InsertionIds i = indexWriter.write(entry);
 			ids.addAll(i.getPartitionKeys());
 		}
@@ -58,7 +58,7 @@ public class IndexCompositeWriter<T> implements
 			final T entry,
 			final VisibilityWriter<T> fieldVisibilityWriter ) {
 		final List<SinglePartitionInsertionIds> ids = new ArrayList<SinglePartitionInsertionIds>();
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			final InsertionIds i = indexWriter.write(
 					entry,
 					fieldVisibilityWriter);
@@ -71,7 +71,7 @@ public class IndexCompositeWriter<T> implements
 	@Override
 	public Index[] getIndices() {
 		final List<Index> ids = new ArrayList<Index>();
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			ids.addAll(Arrays.asList(indexWriter.getIndices()));
 		}
 		return ids.toArray(new Index[ids.size()]);
@@ -79,7 +79,7 @@ public class IndexCompositeWriter<T> implements
 
 	@Override
 	public void flush() {
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			indexWriter.flush();
 		}
 	}

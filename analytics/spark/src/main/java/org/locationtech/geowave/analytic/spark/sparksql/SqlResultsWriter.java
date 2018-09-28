@@ -29,7 +29,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -79,7 +79,7 @@ public class SqlResultsWriter
 		final DataStore featureStore = outputDataStore.createDataStore();
 		final Index featureIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
-		try (IndexWriter writer = featureStore.createWriter(
+		try (Writer writer = featureStore.createWriter(
 				featureAdapter,
 				featureIndex)) {
 

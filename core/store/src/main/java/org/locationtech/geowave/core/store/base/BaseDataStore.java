@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
@@ -55,7 +55,7 @@ import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexW
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
 import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
 import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
@@ -123,7 +123,7 @@ public class BaseDataStore implements
 	}
 
 	@Override
-	public <T> IndexWriter<T> createWriter(
+	public <T> Writer<T> createWriter(
 			final DataTypeAdapter<T> adapter,
 			final Index... indices )
 			throws MismatchedIndexToAdapterMapping {
@@ -137,7 +137,7 @@ public class BaseDataStore implements
 				internalAdapter.getInternalAdapterId(),
 				indices));
 
-		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
+		final Writer<T>[] writers = new Writer[indices.length];
 
 		int i = 0;
 		for (final Index index : indices) {
@@ -404,7 +404,7 @@ public class BaseDataStore implements
 		// adapter to be queried
 		// once
 		final Set<Short> queriedAdapters = new HashSet<>();
-		Deleter idxDeleter = null, altIdxDeleter = null;
+		RowDeleter idxDeleter = null, altIdxDeleter = null;
 		try {
 			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 					.getIndicesForAdapters(
@@ -444,8 +444,8 @@ public class BaseDataStore implements
 								queryOptions.getAuthorizations());
 						continue;
 					}
-					final Deleter internalIdxDeleter = idxDeleter;
-					final Deleter internalAltIdxDeleter = altIdxDeleter;
+					final RowDeleter internalIdxDeleter = idxDeleter;
+					final RowDeleter internalAltIdxDeleter = altIdxDeleter;
 					final ScanCallback<Object, GeoWaveRow> callback = new ScanCallback<Object, GeoWaveRow>() {
 						@Override
 						public void entryScanned(
@@ -729,7 +729,7 @@ public class BaseDataStore implements
 				sanitizedQueryOptions.getMaxRangeDecomposition());
 	}
 
-	protected <T> IndexWriter<T> createIndexWriter(
+	protected <T> Writer<T> createIndexWriter(
 			final InternalDataAdapter<T> adapter,
 			final Index index,
 			final DataStoreOperations baseOperations,

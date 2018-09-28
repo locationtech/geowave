@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
@@ -174,7 +174,7 @@ public class GeoWaveVisibilityIT extends
 				raster2,
 				tileSize);
 
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			// Write the first raster w/ vis info
@@ -574,7 +574,7 @@ public class GeoWaveVisibilityIT extends
 				raster2,
 				tileSize);
 
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			// Write the first raster w/ vis info
@@ -760,7 +760,7 @@ public class GeoWaveVisibilityIT extends
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				getType());
 		final DataStore store = dataStoreOptions.createDataStore();
-		try (IndexWriter writer = store.createWriter(
+		try (Writer writer = store.createWriter(
 				adapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			for (int i = 0; i < TOTAL_FEATURES; i++) {

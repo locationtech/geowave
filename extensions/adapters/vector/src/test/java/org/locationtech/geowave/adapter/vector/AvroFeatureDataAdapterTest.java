@@ -45,7 +45,7 @@ import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
@@ -129,7 +129,7 @@ public class AvroFeatureDataAdapterTest
 
 		final Index index = new SpatialIndexBuilder().createIndex();
 		adapter.init(index);
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		try (Writer indexWriter = dataStore.createWriter(
 				adapter,
 				index)) {
 			for (final SimpleFeature sf : data) {

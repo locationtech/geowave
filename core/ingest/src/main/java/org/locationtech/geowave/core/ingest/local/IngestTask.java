@@ -22,7 +22,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
@@ -46,7 +46,7 @@ public class IngestTask implements
 	private volatile boolean isTerminated = false;
 	private volatile boolean isFinished = false;
 
-	private Map<ByteArrayId, IndexWriter> indexWriters;
+	private Map<ByteArrayId, Writer> indexWriters;
 	private Map<ByteArrayId, AdapterToIndexMapping> adapterMappings;
 
 	public IngestTask(
@@ -61,7 +61,7 @@ public class IngestTask implements
 		this.requiredIndexMap = requiredIndexMap;
 		this.readQueue = queue;
 
-		this.indexWriters = new HashMap<ByteArrayId, IndexWriter>();
+		this.indexWriters = new HashMap<ByteArrayId, Writer>();
 		this.adapterMappings = new HashMap<ByteArrayId, AdapterToIndexMapping>();
 	}
 
@@ -156,7 +156,7 @@ public class IngestTask implements
 		}
 		finally {
 			// Clean up index writers
-			for (Entry<ByteArrayId, IndexWriter> writerEntry : indexWriters.entrySet()) {
+			for (Entry<ByteArrayId, Writer> writerEntry : indexWriters.entrySet()) {
 				try {
 					runData.releaseIndexWriter(
 							writerEntry.getKey(),
@@ -188,7 +188,7 @@ public class IngestTask implements
 
 		ByteArrayId adapterId = adapter.getAdapterId();
 		// Write the data to the data store.
-		IndexWriter writer = indexWriters.get(adapterId);
+		Writer writer = indexWriters.get(adapterId);
 
 		if (writer == null) {
 			List<Index> indices = new ArrayList<Index>();

@@ -66,7 +66,7 @@ public interface DataStoreOperations
 	 * @throws TableNotFoundException
 	 *             The table does not exist in this Accumulo instance
 	 */
-	public Writer createWriter(
+	public RowWriter createWriter(
 			Index index,
 			short internalAdapterId );
 
@@ -79,10 +79,10 @@ public interface DataStoreOperations
 	public MetadataDeleter createMetadataDeleter(
 			MetadataType metadataType );
 
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			ReaderParams<T> readerParams );
 
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			ByteArrayId indexId,
 			String... authorizations )
 			throws Exception;

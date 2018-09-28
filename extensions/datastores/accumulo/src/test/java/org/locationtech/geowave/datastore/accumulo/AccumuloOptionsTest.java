@@ -46,7 +46,7 @@ import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -158,7 +158,7 @@ public class AccumuloOptionsTest
 		accumuloOptions.setCreateTable(false);
 		accumuloOptions.setPersistIndex(false);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final List<ByteArrayId> rowIds = indexWriter.write(
@@ -183,7 +183,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setCreateTable(true);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId1 = indexWriter.write(
@@ -231,7 +231,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setPersistIndex(true);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId2 = indexWriter.write(
@@ -278,7 +278,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseLocalityGroups(false);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId1 = indexWriter.write(
@@ -322,7 +322,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseLocalityGroups(true);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId2 = indexWriter.write(
@@ -374,7 +374,7 @@ public class AccumuloOptionsTest
 		final DataTypeAdapter<TestGeometry> adapter = new TestGeometryAdapter();
 		accumuloOptions.setPersistAdapter(false);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId1 = indexWriter.write(
@@ -396,7 +396,7 @@ public class AccumuloOptionsTest
 
 		}
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId1 = indexWriter.write(
@@ -441,7 +441,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setPersistAdapter(true);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId2 = indexWriter.write(
@@ -512,7 +512,7 @@ public class AccumuloOptionsTest
 
 		accumuloOptions.setUseAltIndex(true);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter0,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId0 = indexWriter.write(
@@ -522,7 +522,7 @@ public class AccumuloOptionsTest
 									32)),
 							"test_pt_0")).getFirstPartitionAndSortKeyPair();
 		}
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter1,
 				index)) {
 			final Pair<ByteArrayId, ByteArrayId> rowId0 = indexWriter.write(
@@ -616,7 +616,7 @@ public class AccumuloOptionsTest
 				0,
 				count);
 
-		try (IndexWriter<TestGeometry> indexWriter = mockDataStore.createWriter(
+		try (Writer<TestGeometry> indexWriter = mockDataStore.createWriter(
 				adapter0,
 				index)) {
 			indexWriter.write(

@@ -41,7 +41,7 @@ import org.locationtech.geowave.core.store.base.BaseQueryOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.core.store.query.filter.FilterList;
@@ -238,7 +238,7 @@ public class GeoWaveRecordReader<T> extends
 		final QueryFilter singleFilter = ((queryFilters == null) || queryFilters.isEmpty()) ? null : queryFilters
 				.size() == 1 ? queryFilters.get(0) : new FilterList<QueryFilter>(
 				queryFilters);
-		final Reader reader = operations.createReader(new RecordReaderParams(
+		final RowReader reader = operations.createReader(new RecordReaderParams(
 				index,
 				new AdapterStoreWrapper(
 						adapterStore,

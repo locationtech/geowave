@@ -18,7 +18,7 @@ import java.util.Set;
 import org.locationtech.geowave.adapter.vector.index.IndexQueryStrategySPI.QueryHint;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatis
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
@@ -160,7 +160,7 @@ public class GeoWaveDataStoreComponents
 				new GlobalVisibilityHandler(
 						transaction.composeVisibility()));
 
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		try (Writer indexWriter = dataStore.createWriter(
 				adapter,
 				adapterIndices)) {
 			while (featureIt.hasNext()) {
@@ -183,7 +183,7 @@ public class GeoWaveDataStoreComponents
 				new GlobalVisibilityHandler(
 						transaction.composeVisibility()));
 
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		try (Writer indexWriter = dataStore.createWriter(
 				adapter,
 				adapterIndices)) {
 			indexWriter.write(

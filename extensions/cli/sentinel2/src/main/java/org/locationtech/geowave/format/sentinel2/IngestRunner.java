@@ -19,7 +19,7 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -43,8 +43,8 @@ public class IngestRunner extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(IngestRunner.class);
 
-	private IndexWriter<SimpleFeature> bandWriter;
-	private IndexWriter<SimpleFeature> sceneWriter;
+	private Writer<SimpleFeature> bandWriter;
+	private Writer<SimpleFeature> sceneWriter;
 	private final VectorOverrideCommandLineOptions vectorOverrideOptions;
 	private SimpleFeatureType sceneType;
 

@@ -40,7 +40,7 @@ import org.locationtech.geowave.core.store.index.BaseSecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -81,7 +81,7 @@ public class AccumuloSecondaryIndexDataStore extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Writer getWriter(
+	protected RowWriter getWriter(
 			final ByteArrayId secondaryIndexId ) {
 		// final String secondaryIndexName = secondaryIndexId.getString();
 		// if (writerCache.containsKey(secondaryIndexName)) {

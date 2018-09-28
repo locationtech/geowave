@@ -20,12 +20,12 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HBaseDeleter implements
-		Deleter
+		RowDeleter
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(HBaseDeleter.class);
 	private final BufferedMutator deleter;

@@ -1,10 +1,12 @@
 package org.locationtech.geowave.core.store.query.options;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-
-public class QueryAllIndices implements
-		IndexQueryOptions
+public class QueryAllIndices extends QuerySingleIndex
 {
+
+	public QueryAllIndices( ) {
+		super(
+				null);
+	}
 
 	@Override
 	public byte[] toBinary() {

@@ -79,15 +79,15 @@ import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
 import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.server.BasicOptionProvider;
@@ -532,7 +532,7 @@ public class HBaseOperations implements
 			final ByteArrayId indexId,
 			final Short adapterId,
 			final String... additionalAuthorizations ) {
-		Deleter deleter = null;
+		RowDeleter deleter = null;
 		Iterable<Result> scanner = null;
 		try {
 			deleter = createDeleter(
@@ -907,7 +907,7 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public Writer createWriter(
+	public RowWriter createWriter(
 			final Index index,
 			final short internalAdapterId ) {
 		ByteArrayId indexId = index.getId();
@@ -1013,7 +1013,7 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final ReaderParams<T> readerParams ) {
 		final HBaseReader<T> hbaseReader = new HBaseReader<T>(
 				readerParams,
@@ -1023,7 +1023,7 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			final RecordReaderParams<T> recordReaderParams ) {
 		return new HBaseReader<T>(
 				recordReaderParams,
@@ -1031,7 +1031,7 @@ public class HBaseOperations implements
 	}
 
 	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
 			final String... authorizations )
 			throws Exception {

@@ -15,7 +15,7 @@ import java.util.Map.Entry;
 
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.datastore.dynamodb.DynamoDBRow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +25,7 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
 
 public class DynamoDBDeleter implements
-		Deleter
+		RowDeleter
 {
 	private static Logger LOGGER = LoggerFactory.getLogger(DynamoDBDeleter.class);
 

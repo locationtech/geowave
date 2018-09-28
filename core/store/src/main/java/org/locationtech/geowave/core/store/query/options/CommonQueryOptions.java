@@ -1,26 +1,62 @@
 package org.locationtech.geowave.core.store.query.options;
 
-public interface CommonQueryOptions
+import org.locationtech.geowave.core.index.persist.Persistable;
+
+public class CommonQueryOptions implements
+		Persistable
 {
-	public double[] getMaxResolutionSubsamplingPerDimension();
+	private final double[] maxResolutionSubsamplingPerDimension;
+	private final Integer maxRangeDecomposition;
+	private final Integer limit;
+	private final String[] authorizations;
 
-	/**
-	 *
-	 * @return the max range decomposition to use when computing query ranges
-	 */
-	public Integer getMaxRangeDecomposition();
+	public CommonQueryOptions(
+			final Integer limit,
+			final String... authorizations ) {
+		this(
+				null,
+				null,
+				limit,
+				authorizations);
+	}
 
-	/**
-	 *
-	 * @return Limit the number of data items to return
-	 */
-	public Integer getLimit();
+	public CommonQueryOptions(
+			final double[] maxResolutionSubsamplingPerDimension,
+			final String... authorizations ) {
+		this(
+				maxResolutionSubsamplingPerDimension,
+				null,
+				null,
+				authorizations);
 
-	/**
-	 *
-	 * @return authorizations to apply to the query in addition to the
-	 *         authorizations assigned to the data store as a whole.
-	 */
-	public String[] getAuthorizations();
+	}
+
+	public CommonQueryOptions(
+			final double[] maxResolutionSubsamplingPerDimension,
+			final Integer maxRangeDecomposition,
+			final Integer limit,
+			final String... authorizations ) {
+		super();
+		this.maxResolutionSubsamplingPerDimension = maxResolutionSubsamplingPerDimension;
+		this.maxRangeDecomposition = maxRangeDecomposition;
+		this.limit = limit;
+		this.authorizations = authorizations;
+	}
+
+	public double[] getMaxResolutionSubsamplingPerDimension() {
+		return maxResolutionSubsamplingPerDimension;
+	}
+
+	public Integer getMaxRangeDecomposition() {
+		return maxRangeDecomposition;
+	}
+
+	public Integer getLimit() {
+		return limit;
+	}
+
+	public String[] getAuthorizations() {
+		return authorizations;
+	}
 
 }

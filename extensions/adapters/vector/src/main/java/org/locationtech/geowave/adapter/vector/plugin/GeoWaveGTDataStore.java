@@ -37,10 +37,10 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAl
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;

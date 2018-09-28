@@ -1,27 +1,17 @@
 package org.locationtech.geowave.core.store.query.options;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.Index;
-
 public class QuerySingleIndex implements
 		IndexQueryOptions
 {
-	private ByteArrayId indexId;
-	private Index index;
+	private final String indexName;
 
 	public QuerySingleIndex(
-			ByteArrayId indexId,
-			Index index ) {
-		this.indexId = indexId;
-		this.index = index;
+			final String indexName ) {
+		this.indexName = indexName;
 	}
 
-	public ByteArrayId getIndexId() {
-		return indexId;
-	}
-
-	public Index getIndex() {
-		return index;
+	public String getIndexName() {
+		return indexName;
 	}
 
 	@Override
@@ -32,7 +22,7 @@ public class QuerySingleIndex implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		// TODO Auto-generated method stub
 
 	}

@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -109,7 +109,7 @@ public class AccumuloRangeQueryTest
 		index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		adapter = new TestGeometryAdapter();
 
-		try (IndexWriter writer = mockDataStore.createWriter(
+		try (Writer writer = mockDataStore.createWriter(
 				adapter,
 				index)) {
 			writer.write(testdata);

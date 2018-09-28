@@ -1,32 +1,36 @@
 package org.locationtech.geowave.core.store.query.options;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class FilterByTypeQueryOptions<T> implements
-		DataTypeQueryOptions<T>
+		Persistable
 {
-	private ByteArrayId[] dataTypeAdapterIds;
-	private DataTypeAdapter<T>[] dataTypeAdapters;
+	private String[] typeNames;
+	private String[] fieldIds;
 
 	protected FilterByTypeQueryOptions() {}
 
 	public FilterByTypeQueryOptions(
-			ByteArrayId[] dataTypeAdapterIds ) {
-		this.dataTypeAdapterIds = dataTypeAdapterIds;
+			final String[] typeNames ) {
+		this.typeNames = typeNames;
 	}
 
 	public FilterByTypeQueryOptions(
-			DataTypeAdapter<T>[] dataTypeAdapters ) {
-		this.dataTypeAdapters = dataTypeAdapters;
+			final String typeName,
+			final String... fieldIds ) {
+		super();
+		typeNames = new String[] {
+			typeName
+		};
+		this.fieldIds = fieldIds;
 	}
 
-	public ByteArrayId[] getDataTypeAdapterIds() {
-		return dataTypeAdapterIds;
+	public String[] getTypeNames() {
+		return typeNames;
 	}
 
-	public DataTypeAdapter<T>[] getDataTypeAdapters() {
-		return dataTypeAdapters;
+	public String[] getFieldIds() {
+		return fieldIds;
 	}
 
 	@Override
@@ -37,7 +41,7 @@ public class FilterByTypeQueryOptions<T> implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		// TODO Auto-generated method stub
 
 	}

@@ -8,33 +8,15 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.core.store.api;
+package org.locationtech.geowave.core.store.operations;
 
-import java.io.Closeable;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.data.VisibilityWriter;
-
-public interface IndexWriter<T> extends
-		Closeable
+public interface RowDeleter extends
+		AutoCloseable
 {
-	/**
-	 * Write the entry using the index writer's configure field visibility
-	 * writer.
-	 * 
-	 * @param writableAdapter
-	 * @param entry
-	 * @return
-	 * @throws IOException
-	 */
-	InsertionIds write(
-			final T entry );
-
-	InsertionIds write(
-			final T entry,
-			final VisibilityWriter<T> fieldVisibilityWriter );
-
-	Index[] getIndices();
-
-	void flush();
+	public void delete(
+			GeoWaveRow row,
+			DataTypeAdapter<?> adapter );
 }

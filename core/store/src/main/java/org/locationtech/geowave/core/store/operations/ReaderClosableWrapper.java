@@ -18,10 +18,10 @@ public class ReaderClosableWrapper implements
 		Closeable
 {
 	private final static Logger LOGGER = Logger.getLogger(ReaderClosableWrapper.class);
-	private final Reader reader;
+	private final RowReader reader;
 
 	public ReaderClosableWrapper(
-			final Reader reader ) {
+			final RowReader reader ) {
 		this.reader = reader;
 	}
 

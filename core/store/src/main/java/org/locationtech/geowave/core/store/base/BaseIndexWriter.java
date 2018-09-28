@@ -19,26 +19,26 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.IntermediaryWriteEntryInfo.FieldInfo;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 class BaseIndexWriter<T> implements
-		IndexWriter<T>
+		Writer<T>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseIndexWriter.class);
 	protected final Index index;
 	protected final DataStoreOperations operations;
 	protected final DataStoreOptions options;
 	protected final IngestCallback<T> callback;
-	protected Writer writer;
+	protected RowWriter writer;
 
 	protected final InternalDataAdapter<T> adapter;
 	final Closeable closable;

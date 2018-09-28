@@ -52,7 +52,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -211,7 +211,7 @@ public class KMeansDistortionMapReduceTest
 			final Index index,
 			final SimpleFeature feature )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				index)) {
 			writer.write(feature);

@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.query.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.query.filter.QueryFilter;
@@ -83,7 +83,7 @@ abstract class BaseQuery
 		this.authorizations = authorizations;
 	}
 
-	protected <C> Reader<C> getReader(
+	protected <C> RowReader<C> getReader(
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,

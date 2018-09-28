@@ -56,7 +56,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.ClearCommand;
@@ -598,7 +598,7 @@ public class KDEJobRunner extends
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				index);
-		final IndexWriter writer = outputDataStoreOptions.createDataStore().createWriter(
+		final Writer writer = outputDataStoreOptions.createDataStore().createWriter(
 				adapter,
 				index);
 		writer.close();

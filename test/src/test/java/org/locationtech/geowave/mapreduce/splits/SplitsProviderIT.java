@@ -22,18 +22,18 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.api.QueryOptionsInt;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
 import org.locationtech.geowave.mapreduce.MapReduceMemoryDataStore;
@@ -233,7 +233,7 @@ public class SplitsProviderIT extends
 		final Index idx = SimpleIngest.createSpatialIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
-		try (final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
+		try (final Writer<SimpleFeature> writer = dataStore.createWriter(
 				fda,
 				idx)) {
 
@@ -353,7 +353,7 @@ public class SplitsProviderIT extends
 								null,
 								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 								null);
-						try (Reader<?> reader = mapReduceMemoryOps.createReader(readerParams)) {
+						try (RowReader<?> reader = mapReduceMemoryOps.createReader(readerParams)) {
 							while (reader.hasNext()) {
 								reader.next();
 								countPerSplit++;
@@ -387,7 +387,7 @@ public class SplitsProviderIT extends
 
 	public static void createUniformFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
@@ -419,7 +419,7 @@ public class SplitsProviderIT extends
 
 	public static void createBimodalFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
@@ -482,7 +482,7 @@ public class SplitsProviderIT extends
 
 	public static void createSkewedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;

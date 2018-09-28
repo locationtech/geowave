@@ -31,7 +31,7 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransforme
 import org.locationtech.geowave.core.store.entities.GeoWaveRowMergingIterator;
 import org.locationtech.geowave.core.store.operations.BaseReaderParams;
 import org.locationtech.geowave.core.store.operations.ParallelDecoder;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.SimpleParallelDecoder;
 import org.locationtech.geowave.core.store.query.filter.ClientVisibilityFilter;
@@ -60,7 +60,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class DynamoDBReader<T> implements
-		Reader<T>
+		RowReader<T>
 {
 	private static final boolean ASYNC = false;
 	private final ReaderParams<T> readerParams;

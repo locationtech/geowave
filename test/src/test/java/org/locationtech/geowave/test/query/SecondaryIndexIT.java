@@ -69,7 +69,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -435,7 +435,7 @@ public class SecondaryIndexIT
 		index = TestUtils.DEFAULT_SPATIAL_INDEX;
 		dataAdapter.init(index);
 		try (@SuppressWarnings("unchecked")
-		final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
+		final Writer<SimpleFeature> writer = dataStore.createWriter(
 				dataAdapter,
 				index)) {
 			for (final SimpleFeature aFeature : features) {

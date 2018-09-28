@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
@@ -90,7 +90,7 @@ public class RasterIngestRunner extends
 	protected List<SimpleFeature> lastSceneBands = new ArrayList<SimpleFeature>();
 	protected SimpleFeature lastScene = null;
 	protected Template coverageNameTemplate;
-	protected final Map<String, IndexWriter<?>> writerCache = new HashMap<String, IndexWriter<?>>();
+	protected final Map<String, Writer<?>> writerCache = new HashMap<String, Writer<?>>();
 
 	protected String[] bandsIngested;
 	protected DataStore store = null;
@@ -182,7 +182,7 @@ public class RasterIngestRunner extends
 			super.runInternal(params);
 		}
 		finally {
-			for (final IndexWriter<?> writer : writerCache.values()) {
+			for (final Writer<?> writer : writerCache.values()) {
 				if (writer != null) {
 					try {
 						writer.close();
@@ -340,7 +340,7 @@ public class RasterIngestRunner extends
 				final GridCoverageReader reader = bandData.reader;
 				final double nodataValue = bandData.nodataValue;
 
-				IndexWriter writer = writerCache.get(coverageName);
+				Writer writer = writerCache.get(coverageName);
 				final GridCoverage2D nextCov = coverage;
 
 				if (writer == null) {
@@ -454,7 +454,7 @@ public class RasterIngestRunner extends
 				// we are sorting by band name to ensure a consistent order for
 				// bands
 				final TreeMap<String, RasterBandData> sceneData = new TreeMap<String, RasterBandData>();
-				IndexWriter writer;
+				Writer writer;
 
 				// get coverage info, ensuring that all coverage names are the
 				// same

@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
@@ -124,7 +124,7 @@ public class PolygonDataIdQueryIT extends
 	public void ingestSampleData()
 			throws IOException {
 		try (@SuppressWarnings("unchecked")
-		IndexWriter writer = dataStore.createDataStore().createWriter(
+		Writer writer = dataStore.createDataStore().createWriter(
 				dataAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(buildSimpleFeature(

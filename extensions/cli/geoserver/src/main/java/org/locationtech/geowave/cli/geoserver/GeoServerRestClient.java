@@ -70,7 +70,7 @@ import org.locationtech.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption
 import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.locationtech.geowave.core.cli.utils.FileUtils;
-import org.locationtech.geowave.core.geotime.store.query.api.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;

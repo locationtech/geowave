@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderClosableWrapper;
 import org.locationtech.geowave.core.store.util.NativeEntryTransformer;
 
@@ -56,7 +56,7 @@ abstract class AbstractBaseRowQuery<T> extends
 			final PersistentAdapterStore adapterStore,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition ) {
-		Reader<T> reader = getReader(
+		RowReader<T> reader = getReader(
 				operations,
 				options,
 				adapterStore,

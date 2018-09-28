@@ -14,7 +14,8 @@ import java.net.URL;
 
 import javax.annotation.Nullable;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
@@ -26,23 +27,7 @@ import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
  * 
  */
 public interface DataStore
-{
-	/**
-	 * Returns an index writer to perform batched write operations
-	 * 
-	 * @param dataTypeAdapter
-	 *            The adapter that describes the data written to the set of
-	 *            indices.
-	 * @param index
-	 *            The configuration information for the primary index to use.
-	 * @return Returns the index writer which can be used for batch write
-	 *         operations
-	 */
-	public <T> IndexWriter<T> createWriter(
-			DataTypeAdapter<T> dataTypeAdapter,
-			Index... index )
-			throws MismatchedIndexToAdapterMapping;
-	
+{	
 	/**
 	 * Returns an index writer to perform batched write operations
 	 * 
@@ -79,6 +64,12 @@ public interface DataStore
 	public <T> CloseableIterator<T> query(
 			final Query<T> query );
 
+	
+
+	//TODO javadocs
+	public <P extends Persistable, R extends Mergeable, T> R aggregate(
+			final AggregationQuery<P,R,T> query );
+	
 /**
 	 * Delete all data in this data store that matches the query parameter
 	 * within the index described by the index passed in and matches the adapter
@@ -124,7 +115,7 @@ public interface DataStore
 	 *         is no longer needed.
 	 */
 	Statistics<?>[] getStatistics(
-			@Nullable ByteArrayId dataTypeId,
+			@Nullable String typeName,
 			String... authorizations );
 
 	/**
@@ -132,7 +123,7 @@ public interface DataStore
 	 * provided. If adapter ID is null, it will return all statistics in this
 	 * data store.
 	 * 
-	 * @param dataTypeId
+	 * @param dataTypeAdapterName
 	 *            The Adapter to get the accumulated statistics for all the data
 	 *            that has been ingested. If null, it will return all data
 	 *            statistics.
@@ -145,7 +136,7 @@ public interface DataStore
 	 *         is no longer needed.
 	 */
 	<R> R getStatisticsResult(
-			ByteArrayId dataTypeId,
+			String typeName,
 			StatisticsType<R> statisticsType,
 			String... authorizations );
 
@@ -164,5 +155,16 @@ public interface DataStore
 	 * @return An array of the indices for a given data type.
 	 */
 	Index[] getIndices(
-			@Nullable ByteArrayId dataTypeId );
+			@Nullable String typeName );
+	
+	void copy(Query<?> query, DataStore other);
+	
+	void addIndex(String typeName, Index ...indices);
+	
+	<T> void addType(DataTypeAdapter<T> dataTypeAdapter);
+	/**
+	 * Returns an index writer to perform batched write operations for the given typename
+	 * 
+	 */
+	public <T> Writer<T> createWriter(String typeName);
 }

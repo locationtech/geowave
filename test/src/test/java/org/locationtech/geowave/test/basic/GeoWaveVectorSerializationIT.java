@@ -33,7 +33,7 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.api.QueryOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.query.constraints.DistributableQuery;
@@ -217,7 +217,7 @@ public class GeoWaveVectorSerializationIT extends
 		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStore.createDataStore();
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
-		try (IndexWriter writer = geowaveStore.createWriter(
+		try (Writer writer = geowaveStore.createWriter(
 				serAdapter,
 				TestUtils.DEFAULT_SPATIAL_INDEX)) {
 			writer.write(sf);

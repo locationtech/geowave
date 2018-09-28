@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
-import org.locationtech.geowave.core.store.api.IndexWriter;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 import org.opengis.feature.type.GeometryType;
@@ -188,7 +188,7 @@ public class GeometryDataSetGenerator
 						0).getFeatureType());
 
 		LOGGER.info("Writing " + featureData.size() + " records to " + adapter.getFeatureType().getTypeName());
-		try (IndexWriter writer = dataStore.createWriter(
+		try (Writer writer = dataStore.createWriter(
 				adapter,
 				index)) {
 			for (final SimpleFeature feature : featureData) {
