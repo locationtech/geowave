@@ -446,18 +446,31 @@ public class GeoWaveGrpcTestClient
 	public boolean nearestNeighborCommand() {
 		ArrayList<String> adapters = new ArrayList<String>();
 		adapters.add(GeoWaveGrpcTestUtils.adapterId);
-		NearestNeighborCommandParameters request = NearestNeighborCommandParameters.newBuilder().addParameters(
-				GeoWaveGrpcTestUtils.storeName).addAllAdapterIds(
-				adapters).setExtractQuery(
-				GeoWaveGrpcTestUtils.wktSpatialQuery).setExtractMinInputSplit(
-				"2").setExtractMaxInputSplit(
-				"6").setPartitionMaxDistance(
-				"10").setOutputReducerCount(
-				"4").setMapReduceHdfsHostPort(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setMapReduceJobtrackerHostPort(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setOutputHdfsOutputPath(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "_out").setMapReduceHdfsBaseDir(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).build();
+		NearestNeighborCommandParameters request = NearestNeighborCommandParameters
+				.newBuilder()
+				.addParameters(
+						GeoWaveGrpcTestUtils.storeName)
+				.addAllAdapterIds(
+						adapters)
+				.setExtractQuery(
+						GeoWaveGrpcTestUtils.wktSpatialQuery)
+				.setExtractMinInputSplit(
+						"2")
+				.setExtractMaxInputSplit(
+						"6")
+				.setPartitionMaxDistance(
+						"10")
+				.setOutputReducerCount(
+						"4")
+				.setMapReduceHdfsHostPort(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs())
+				.setMapReduceJobtrackerHostPort(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker())
+				.setOutputHdfsOutputPath(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "/GrpcNearestNeighbor")
+				.setMapReduceHdfsBaseDir(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory())
+				.build();
 		analyticMapreduceBlockingStub.nearestNeighborCommand(request);
 		return true;
 	}
@@ -1038,7 +1051,7 @@ public class GeoWaveGrpcTestClient
 				extensions).setFormats(
 				"gpx").setAppName(
 				"CoreGeoWaveSparkITs").setMaster(
-				"local").setHost(
+				"local[*]").setHost(
 				"localhost").setNumExecutors(
 				1).setNumCores(
 				1).build();
@@ -1159,7 +1172,7 @@ public class GeoWaveGrpcTestClient
 						true)
 				// optional
 				.setCqlFilter(
-						"none")
+						GeoWaveGrpcTestUtils.cqlSpatialQuery)
 				.setMinSplits(
 						1)
 				.setMaxSplits(

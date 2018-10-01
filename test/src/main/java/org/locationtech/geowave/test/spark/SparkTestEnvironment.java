@@ -26,7 +26,6 @@ public class SparkTestEnvironment implements
 
 	private static SparkTestEnvironment singletonInstance = null;
 	protected SparkSession defaultSession = null;
-	protected SparkContext defaultContext = null;
 
 	public static synchronized SparkTestEnvironment getInstance() {
 		if (singletonInstance == null) {
@@ -47,7 +46,6 @@ public class SparkTestEnvironment implements
 				LOGGER.error("Unable to create default spark session for tests");
 				return;
 			}
-			defaultContext = defaultSession.sparkContext();
 		}
 	}
 
@@ -55,7 +53,6 @@ public class SparkTestEnvironment implements
 	public void tearDown()
 			throws Exception {
 		if (defaultSession != null) {
-			defaultContext = null;
 			defaultSession.close();
 			defaultSession = null;
 		}
@@ -69,9 +66,4 @@ public class SparkTestEnvironment implements
 	public SparkSession getDefaultSession() {
 		return defaultSession;
 	}
-
-	public SparkContext getDefaultContext() {
-		return defaultContext;
-	}
-
 }

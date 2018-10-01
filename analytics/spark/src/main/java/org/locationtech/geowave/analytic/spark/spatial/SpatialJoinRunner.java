@@ -122,6 +122,13 @@ public class SpatialJoinRunner implements
 		writeResultsToNewAdapter();
 	}
 
+	public void close() {
+		if (session != null) {
+			session.close();
+			session = null;
+		}
+	}
+
 	private PrimaryIndex[] getIndicesForAdapter(
 			DataStorePluginOptions storeOptions,
 			ByteArrayId adapterId,

@@ -90,8 +90,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	public void testCreateDataFrame()
 			throws Exception {
 		// Set up Spark
-		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
+		SparkContext context = session.sparkContext();
 
 		// ingest test points
 		TestUtils.testLocalIngest(

@@ -31,6 +31,7 @@ public class HBaseMiniClusterClassLoader extends
 	private static final String[] CLASS_PREFIX_EXEMPTIONS = new String[] {
 		// Java standard library:
 		"com.sun.",
+		"sun.",
 		"java.",
 		"javax.",
 		"org.ietf",

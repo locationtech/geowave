@@ -148,6 +148,7 @@ public class SparkSqlCommand extends
 					sparkSqlOptions.getCsvOutputFile());
 
 		}
+		sqlRunner.close();
 		return null;
 	}
 
