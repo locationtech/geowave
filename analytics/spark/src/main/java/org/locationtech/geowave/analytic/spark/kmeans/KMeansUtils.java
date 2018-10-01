@@ -162,10 +162,13 @@ public class KMeansUtils
 			final DataStorePluginOptions outputDataStore,
 			final String hullAdapterName,
 			final boolean computeMetadata ) {
+		
+		LOGGER.warn("Kmeans hull generation: grouping by index");
 		final JavaPairRDD<Integer, Iterable<Vector>> groupByRdd = KMeansHullGenerator.groupByIndex(
 				inputCentroids,
 				clusterModel);
 
+		LOGGER.warn("Kmeans hull generation: generating hulls rdd");
 		final JavaPairRDD<Integer, Geometry> hullRdd = KMeansHullGenerator.generateHullsRDD(groupByRdd);
 
 		final SimpleFeatureTypeBuilder typeBuilder = new SimpleFeatureTypeBuilder();
@@ -222,10 +225,12 @@ public class KMeansUtils
 
 		PolygonAreaCalculator polyCalc = (computeMetadata ? new PolygonAreaCalculator() : null);
 
+		LOGGER.warn("Creating hull index writer...");
 		try (IndexWriter writer = featureStore.createWriter(
 				featureAdapter,
 				featureIndex)) {
 
+			LOGGER.warn("Getting hulls from rdd...");
 			for (final Tuple2<Integer, Geometry> hull : hullRdd.collect()) {
 				Integer index = hull._1;
 				Geometry geom = hull._2;
@@ -243,6 +248,7 @@ public class KMeansUtils
 				double density = 0.0;
 
 				if (computeMetadata) {
+					LOGGER.warn("computing metadata for hull...");
 					for (Iterable<Vector> points : groupByRdd.lookup(index)) {
 						Vector[] pointVec = Iterables.toArray(
 								points,
@@ -274,10 +280,14 @@ public class KMeansUtils
 						"Density",
 						density);
 
+				LOGGER.warn("building simple feature for hull...");
 				final SimpleFeature sf = sfBuilder.buildFeature("Hull-" + index);
 
+				LOGGER.warn("writing the hull feature...");
 				writer.write(sf);
+				LOGGER.warn("feature write complete...");
 			}
+			LOGGER.warn("all hulls written...");
 		}
 		catch (final MismatchedIndexToAdapterMapping e) {
 			LOGGER.error(
