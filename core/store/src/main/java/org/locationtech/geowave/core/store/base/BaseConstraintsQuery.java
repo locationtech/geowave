@@ -171,7 +171,8 @@ public class BaseConstraintsQuery extends
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
-			final Integer queryMaxRangeDecomposition ) {
+			final Integer queryMaxRangeDecomposition,
+			boolean delete ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
 				// Aggregate client-side
@@ -181,7 +182,8 @@ public class BaseConstraintsQuery extends
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
 						limit,
-						queryMaxRangeDecomposition);
+						queryMaxRangeDecomposition,
+						false);
 				return BaseDataStoreUtils.aggregate(
 						it,
 						(Aggregation<?, ?, Object>) aggregation.getValue());
@@ -210,7 +212,8 @@ public class BaseConstraintsQuery extends
 						maxResolutionSubsamplingPerDimension,
 						limit,
 						queryMaxRangeDecomposition,
-						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)) {
+						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
+						false)) {
 					Mergeable mergedAggregationResult = null;
 					if ((reader == null) || !reader.hasNext()) {
 						return new CloseableIterator.Empty();
@@ -248,7 +251,8 @@ public class BaseConstraintsQuery extends
 				adapterStore,
 				maxResolutionSubsamplingPerDimension,
 				limit,
-				queryMaxRangeDecomposition);
+				queryMaxRangeDecomposition,
+				delete);
 	}
 
 	@Override

@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.NoSuchElementException;
 
+import org.apache.accumulo.core.client.BatchDeleter;
 import org.apache.accumulo.core.client.ScannerBase;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
@@ -40,7 +41,7 @@ public class AccumuloReader<T> implements
 		Reader<T>
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloReader.class);
-	private final ScannerBase scanner;
+	protected final ScannerBase scanner;
 	private final Iterator<Entry<Key, Value>> baseIter;
 	private ParallelDecoder<T> parallelDecoder = null;
 	private final Iterator<T> iterator;

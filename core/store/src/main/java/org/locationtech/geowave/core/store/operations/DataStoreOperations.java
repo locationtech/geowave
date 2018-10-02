@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
@@ -82,10 +81,8 @@ public interface DataStoreOperations
 	public <T> Reader<T> createReader(
 			ReaderParams<T> readerParams );
 
-	public Deleter createDeleter(
-			ByteArrayId indexId,
-			String... authorizations )
-			throws Exception;
+	public <T> Deleter<T> createDeleter(
+			ReaderParams<T> readerParams );
 
 	public boolean mergeData(
 			final PrimaryIndex index,

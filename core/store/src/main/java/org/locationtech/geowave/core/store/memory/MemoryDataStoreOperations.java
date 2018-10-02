@@ -56,11 +56,13 @@ import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.RowDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
 import org.locationtech.geowave.core.store.operations.MetadataWriter;
+import org.locationtech.geowave.core.store.operations.QueryAndDeleteByRow;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.operations.Writer;
@@ -132,11 +134,9 @@ public class MemoryDataStoreOperations implements
 				index.getId());
 	}
 
-	@Override
-	public Deleter createDeleter(
+	public RowDeleter createDeleter(
 			final ByteArrayId indexId,
-			final String... authorizations )
-			throws Exception {
+			final String... authorizations ) {
 		return new MyIndexDeleter(
 				indexId,
 				authorizations);
@@ -296,7 +296,12 @@ public class MemoryDataStoreOperations implements
 				final Iterator<MemoryStoreEntry> it,
 				final GeoWaveRowIteratorTransformer<T> rowTransformer ) {
 			super();
-			this.it = rowTransformer.apply(Iterators.transform(it, e -> e.row));
+			this.it = rowTransformer
+					.apply(
+							Iterators
+									.transform(
+											it,
+											e -> e.row));
 		}
 
 		@Override
@@ -372,7 +377,7 @@ public class MemoryDataStoreOperations implements
 	}
 
 	private class MyIndexDeleter implements
-			Deleter
+			RowDeleter
 	{
 		private final ByteArrayId indexId;
 		private final String[] authorizations;
@@ -390,8 +395,7 @@ public class MemoryDataStoreOperations implements
 
 		@Override
 		public void delete(
-				final GeoWaveRow row,
-				final DataAdapter<?> adapter ) {
+				final GeoWaveRow row ) {
 			final MemoryStoreEntry entry = new MemoryStoreEntry(
 					row);
 			if (isAuthorized(
@@ -903,5 +907,15 @@ public class MemoryDataStoreOperations implements
 			final MetadataType type )
 			throws IOException {
 		return true;
+	}
+
+	@Override
+	public <T> Deleter<T> createDeleter(
+			ReaderParams<T> readerParams ) {
+		return new QueryAndDeleteByRow<>(
+				createDeleter(
+						readerParams.getIndex().getId(),
+						readerParams.getAdditionalAuthorizations()),
+				createReader(readerParams));
 	}
 }

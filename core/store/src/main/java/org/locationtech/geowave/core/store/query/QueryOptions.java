@@ -340,10 +340,6 @@ public class QueryOptions implements
 		this.limit = limit;
 	}
 
-	public boolean isAllAdapters() {
-		return ((adapterIds == null) || adapterIds.isEmpty());
-	}
-
 	/**
 	 *
 	 * @return authorizations to apply to the query in addition to the

@@ -12,6 +12,7 @@ package org.locationtech.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,7 +198,7 @@ public class FieldVisibilityCount<T> extends
 
 	public static FieldVisibilityCount getVisibilityCounts(
 			final PrimaryIndex index,
-			final List<Short> adapterIdsToQuery,
+			final Collection<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		FieldVisibilityCount combinedVisibilityCount = null;

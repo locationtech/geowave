@@ -18,7 +18,6 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.filter.DataIdQueryFilter;
 import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class DataIdQuery implements

@@ -15,8 +15,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
@@ -152,6 +154,12 @@ public class BaseQueryOptions
 						}
 					});
 		}
+	}
+
+	public boolean isAllAdapters() {
+		// TODO what about field ID subsetting and aggregation which implicitly
+		// filters by adapter
+		return ((adapterIds == null) || adapterIds.isEmpty());
 	}
 
 	/**
@@ -414,13 +422,13 @@ public class BaseQueryOptions
 		return fieldIdsAdapterPair;
 	}
 
-	public List<Short> getValidInternalAdapterIds(
+	public Set<Short> getValidInternalAdapterIds(
 			final InternalAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore )
 			throws IOException {
 		// Grab the list of adapter ids, either from the query (if included),
 		// Or the whole list from the adapter store...
-		final List<Short> adapterIds = getAdapterIds(adapterStore);
+		final Set<Short> adapterIds = getAdapterIds(adapterStore);
 
 		// Then for each adapter, verify that it exists in the index-adapter
 		// mapping
@@ -436,9 +444,9 @@ public class BaseQueryOptions
 		return adapterIds;
 	}
 
-	public List<Short> getAdapterIds(
+	public Set<Short> getAdapterIds(
 			final InternalAdapterStore adapterStore ) {
-		final List<Short> ids = new ArrayList<>();
+		final Set<Short> ids = new HashSet<>();
 		if ((adapterIds == null) || adapterIds.isEmpty()) {
 			try (CloseableIterator<Short> it = adapterStore.getInternalAdapterIds()) {
 				while (it.hasNext()) {

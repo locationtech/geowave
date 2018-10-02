@@ -8,27 +8,13 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.datastore.accumulo;
+package org.locationtech.geowave.core.store.operations;
 
-import java.io.IOException;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.junit.Before;
-
-public class DeleteWriterAltIndexTest extends
-		DeleteWriterTest
+public interface RowDeleter extends
+		AutoCloseable
 {
-
-	@Before
-	public void setUp()
-			throws IOException,
-			InterruptedException,
-			AccumuloException,
-			AccumuloSecurityException {
-
-		options.setUseAltIndex(true);
-		super.setUp();
-
-	}
+	public void delete(
+			GeoWaveRow row );
 }

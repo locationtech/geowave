@@ -10,12 +10,16 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.base;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
+import org.locationtech.geowave.core.store.callback.ScanCallbackList;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
@@ -33,7 +37,6 @@ abstract class AbstractBaseRowQuery<T> extends
 		BaseQuery
 {
 	private static final Logger LOGGER = Logger.getLogger(AbstractBaseRowQuery.class);
-	protected final ScanCallback<T, ?> scanCallback;
 
 	public AbstractBaseRowQuery(
 			final PrimaryIndex index,
@@ -43,10 +46,10 @@ abstract class AbstractBaseRowQuery<T> extends
 			final FieldVisibilityCount visibilityCounts ) {
 		super(
 				index,
+				scanCallback,
 				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
-		this.scanCallback = scanCallback;
 	}
 
 	public CloseableIterator<T> query(
@@ -55,7 +58,8 @@ abstract class AbstractBaseRowQuery<T> extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final PersistentAdapterStore adapterStore,
 			final Integer limit,
-			final Integer queryMaxRangeDecomposition ) {
+			final Integer queryMaxRangeDecomposition,
+			boolean delete ) {
 		Reader<T> reader = getReader(
 				operations,
 				options,
@@ -67,10 +71,11 @@ abstract class AbstractBaseRowQuery<T> extends
 						adapterStore,
 						index,
 						getClientFilter(options),
-						scanCallback,
+						(ScanCallback<T, ?>) scanCallback,
 						getFieldBitmask(),
 						maxResolutionSubsamplingPerDimension,
-						!isCommonIndexAggregation()));
+						!isCommonIndexAggregation()),
+				delete);
 		return new CloseableIteratorWrapper<T>(
 				new ReaderClosableWrapper(
 						reader),

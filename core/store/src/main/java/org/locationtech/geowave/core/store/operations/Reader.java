@@ -12,8 +12,6 @@ package org.locationtech.geowave.core.store.operations;
 
 import java.util.Iterator;
 
-import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-
 public interface Reader<T> extends
 		AutoCloseable,
 		Iterator<T>

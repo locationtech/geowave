@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.base;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,6 +32,7 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
+import org.locationtech.geowave.core.store.callback.ScanCallbackList;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -51,7 +53,6 @@ abstract class BaseFilteredIndexQuery extends
 {
 	protected List<QueryFilter> clientFilters;
 	private final static Logger LOGGER = Logger.getLogger(BaseFilteredIndexQuery.class);
-	protected final ScanCallback<?, ?> scanCallback;
 
 	public BaseFilteredIndexQuery(
 			final List<Short> adapterIds,
@@ -65,10 +66,10 @@ abstract class BaseFilteredIndexQuery extends
 				adapterIds,
 				index,
 				fieldIdsAdapterPair,
+				scanCallback,
 				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
-		this.scanCallback = scanCallback;
 	}
 
 	protected List<QueryFilter> getClientFilters() {
@@ -85,7 +86,8 @@ abstract class BaseFilteredIndexQuery extends
 			final PersistentAdapterStore adapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
-			final Integer queryMaxRangeDecomposition ) {
+			final Integer queryMaxRangeDecomposition,
+			boolean delete ) {
 		final Reader<?> reader = getReader(
 				datastoreOperations,
 				options,
@@ -97,7 +99,8 @@ abstract class BaseFilteredIndexQuery extends
 						options,
 						adapterStore,
 						maxResolutionSubsamplingPerDimension,
-						!isCommonIndexAggregation()));
+						!isCommonIndexAggregation()),
+				delete);
 		if (reader == null) {
 			return new CloseableIterator.Empty();
 		}
@@ -121,7 +124,8 @@ abstract class BaseFilteredIndexQuery extends
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition,
-			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
+			final GeoWaveRowIteratorTransformer<C> rowTransformer,
+			boolean delete ) {
 		boolean exists = false;
 		try {
 			exists = datastoreOperations.indexExists(index.getId());
@@ -143,7 +147,8 @@ abstract class BaseFilteredIndexQuery extends
 				maxResolutionSubsamplingPerDimension,
 				limit,
 				queryMaxRangeDecomposition,
-				rowTransformer);
+				rowTransformer,
+				delete);
 	}
 
 	protected Map<Short, RowMergingDataAdapter> getMergingAdapters(

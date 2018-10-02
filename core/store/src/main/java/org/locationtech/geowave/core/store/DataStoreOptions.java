@@ -12,8 +12,6 @@ package org.locationtech.geowave.core.store;
 
 public interface DataStoreOptions
 {
-	public boolean isUseAltIndex();
-
 	public boolean isPersistIndex();
 
 	public boolean isPersistAdapter();

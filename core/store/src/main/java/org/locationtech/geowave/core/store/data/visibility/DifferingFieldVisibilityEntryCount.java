@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.data.visibility;
 
 import java.nio.ByteBuffer;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
@@ -146,7 +147,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 
 	public static DifferingFieldVisibilityEntryCount getVisibilityCounts(
 			final PrimaryIndex index,
-			final List<Short> adapterIdsToQuery,
+			final Collection<Short> adapterIdsToQuery,
 			final DataStatisticsStore statisticsStore,
 			final String... authorizations ) {
 		DifferingFieldVisibilityEntryCount combinedVisibilityCount = null;

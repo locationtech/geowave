@@ -11,6 +11,7 @@
 package org.locationtech.geowave.core.store.base;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -21,11 +22,11 @@ import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.callback.ScanCallback;
+import org.locationtech.geowave.core.store.callback.ScanCallbackList;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -34,6 +35,7 @@ import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
+import org.locationtech.geowave.core.store.operations.Deleter;
 import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
@@ -53,9 +55,11 @@ abstract class BaseQuery
 	protected final DifferingFieldVisibilityEntryCount differingVisibilityCounts;
 	protected final FieldVisibilityCount visibilityCounts;
 	protected final String[] authorizations;
+	protected final ScanCallbackList<?, ?> scanCallback;
 
 	public BaseQuery(
 			final PrimaryIndex index,
+			final ScanCallback<?, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
 			FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
@@ -63,6 +67,7 @@ abstract class BaseQuery
 				null,
 				index,
 				null,
+				scanCallback,
 				differingVisibilityCounts,
 				visibilityCounts,
 				authorizations);
@@ -72,6 +77,7 @@ abstract class BaseQuery
 			final List<Short> adapterIds,
 			final PrimaryIndex index,
 			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
+			final ScanCallback<?, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
 			FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
@@ -81,6 +87,13 @@ abstract class BaseQuery
 		this.differingVisibilityCounts = differingVisibilityCounts;
 		this.visibilityCounts = visibilityCounts;
 		this.authorizations = authorizations;
+
+		List<ScanCallback<?, ?>> callbacks = new ArrayList<>();
+		if (scanCallback != null) {
+			callbacks.add(scanCallback);
+		}
+		this.scanCallback = (ScanCallbackList) new ScanCallbackList(
+				callbacks);
 	}
 
 	protected <C> Reader<C> getReader(
@@ -90,7 +103,8 @@ abstract class BaseQuery
 			final double[] maxResolutionSubsamplingPerDimension,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition,
-			final GeoWaveRowIteratorTransformer<C> rowTransformer ) {
+			final GeoWaveRowIteratorTransformer<C> rowTransformer,
+			boolean delete ) {
 		final int maxRangeDecomposition;
 		if (queryMaxRangeDecomposition != null) {
 			maxRangeDecomposition = queryMaxRangeDecomposition;
@@ -99,7 +113,7 @@ abstract class BaseQuery
 			maxRangeDecomposition = isAggregation() ? options.getAggregationMaxRangeDecomposition() : options
 					.getMaxRangeDecomposition();
 		}
-		return operations.createReader(new ReaderParams<C>(
+		ReaderParams<C> readerParams = new ReaderParams<C>(
 				index,
 				adapterStore,
 				adapterIds,
@@ -117,7 +131,14 @@ abstract class BaseQuery
 				getCoordinateRanges(),
 				getConstraints(),
 				rowTransformer,
-				getAdditionalAuthorizations()));
+				getAdditionalAuthorizations());
+		if (delete) {
+			scanCallback.waitUntilCallbackAdded();
+			Deleter<C> deleter = operations.createDeleter(readerParams);
+			scanCallback.addScanCallback((ScanCallback) deleter);
+			return deleter;
+		}
+		return operations.createReader(readerParams);
 	}
 
 	public boolean isRowMerging(
