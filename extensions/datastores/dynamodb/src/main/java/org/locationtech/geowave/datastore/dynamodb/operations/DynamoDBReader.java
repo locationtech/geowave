@@ -102,8 +102,8 @@ public class DynamoDBReader<T> implements
 	private void processAuthorizations(
 			final String[] authorizations,
 			BaseReaderParams<T> params ) {
-		visibilityFilter = params.isAuthorizationsLimiting() ? new ClientVisibilityFilter(
-				Sets.newHashSet(authorizations)) : Predicates.alwaysTrue();
+		visibilityFilter = new ClientVisibilityFilter(
+				Sets.newHashSet(authorizations));
 	}
 
 	protected void initScanner() {

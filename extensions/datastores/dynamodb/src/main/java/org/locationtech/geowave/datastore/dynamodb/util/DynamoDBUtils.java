@@ -48,6 +48,15 @@ public class DynamoDBUtils
 		return null;
 	}
 
+	public static byte[] getVisibility(
+			final Map<String, AttributeValue> map ) {
+		final AttributeValue v = map.get(DynamoDBOperations.METADATA_VISIBILITY_KEY);
+		if (v != null) {
+			return v.getB().array();
+		}
+		return null;
+	}
+
 	public static byte[] getValue(
 			final Map<String, AttributeValue> map ) {
 		final AttributeValue v = map.get(DynamoDBOperations.METADATA_VALUE_KEY);

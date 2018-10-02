@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,11 +12,13 @@ package org.locationtech.geowave.datastore.cassandra.operations;
 
 import java.nio.ByteBuffer;
 
+import org.bouncycastle.util.Arrays;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
@@ -42,10 +44,15 @@ public class CassandraMetadataReader implements
 	public CloseableIterator<GeoWaveMetadata> query(
 			final MetadataQuery query ) {
 		final String tableName = operations.getMetadataTableName(metadataType);
-		// TODO need to merge stats
+		String[] selectedColumns = getSelectedColumns(query);
+		if (MetadataType.STATS.equals(metadataType)) {
+			selectedColumns = Arrays.append(
+					selectedColumns,
+					CassandraMetadataWriter.VISIBILITY_KEY);
+		}
 		final Select select = operations.getSelect(
 				tableName,
-				getSelectedColumns(query));
+				selectedColumns);
 		if (query.hasPrimaryId()) {
 			final Where where = select.where(QueryBuilder.eq(
 					CassandraMetadataWriter.PRIMARY_ID_KEY,
@@ -78,14 +85,28 @@ public class CassandraMetadataReader implements
 										useSecondaryId(query) ? query.getSecondaryId() : result.get(
 												CassandraMetadataWriter.SECONDARY_ID_KEY,
 												ByteBuffer.class).array(),
-										null,
+										getVisibility(result),
 										result.get(
 												CassandraMetadataWriter.VALUE_KEY,
 												ByteBuffer.class).array());
 							}
 						}));
-		return MetadataType.STATS.equals(metadataType) ? new CassandraStatisticsIterator(
-				retVal) : retVal;
+		return MetadataType.STATS.equals(metadataType) ? new StatisticsRowIterator(
+				retVal,
+				query.getAuthorizations()) : retVal;
+	}
+
+	private byte[] getVisibility(
+			Row result ) {
+		if (MetadataType.STATS.equals(metadataType)) {
+			ByteBuffer buf = result.get(
+					CassandraMetadataWriter.VISIBILITY_KEY,
+					ByteBuffer.class);
+			if (buf != null) {
+				return buf.array();
+			}
+		}
+		return null;
 	}
 
 	private String[] getSelectedColumns(

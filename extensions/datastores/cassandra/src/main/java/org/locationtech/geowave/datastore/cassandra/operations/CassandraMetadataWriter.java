@@ -25,6 +25,7 @@ public class CassandraMetadataWriter implements
 	protected static final String SECONDARY_ID_KEY = "S";
 	// serves as unique ID for instances where primary+secondary are repeated
 	protected static final String TIMESTAMP_ID_KEY = "T";
+	protected static final String VISIBILITY_KEY = "A";
 	protected static final String VALUE_KEY = "V";
 
 	private final CassandraOperations operations;
@@ -57,6 +58,11 @@ public class CassandraMetadataWriter implements
 			insert.value(
 					TIMESTAMP_ID_KEY,
 					QueryBuilder.now());
+			if (metadata.getVisibility() != null && metadata.getVisibility().length > 0) {
+				insert.value(
+						VISIBILITY_KEY,
+						ByteBuffer.wrap(metadata.getVisibility()));
+			}
 		}
 		insert.value(
 				VALUE_KEY,

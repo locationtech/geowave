@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -8,29 +8,71 @@
  *  Version 2.0 which accompanies this distribution and is available at
  *  http://www.apache.org/licenses/LICENSE-2.0.txt
  ******************************************************************************/
-package org.locationtech.geowave.datastore.dynamodb.util;
+package org.locationtech.geowave.core.store.util;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Iterators;
 
-public class DynamoDBStatisticsIterator implements
+public class StatisticsRowIterator implements
 		CloseableIterator<GeoWaveMetadata>
 {
-	final private Iterator<Map<String, AttributeValue>> it;
+	final private CloseableIterator<GeoWaveMetadata> it;
 	private DataStatistics<?> nextVal = null;
 
-	public DynamoDBStatisticsIterator(
-			final Iterator<Map<String, AttributeValue>> resultIterator ) {
-		it = resultIterator;
+	public StatisticsRowIterator(
+			final CloseableIterator<GeoWaveMetadata> resultIterator,
+			final String... authorizations ) {
+		if ((authorizations != null) && (authorizations.length > 0)) {
+			final Set<String> authorizationsSet = new HashSet<>(
+					Arrays.asList(authorizations));
+			it = new CloseableIteratorWrapper<>(
+					resultIterator,
+					Iterators.filter(
+							resultIterator,
+							new Predicate<GeoWaveMetadata>() {
+								@Override
+								public boolean apply(
+										final GeoWaveMetadata input ) {
+									String visibility = "";
+									if (input.getVisibility() != null) {
+										visibility = StringUtils.stringFromBinary(input.getVisibility());
+									}
+									return VisibilityExpression.evaluate(
+											visibility,
+											authorizationsSet);
+								}
+							}));
+		}
+		else {
+			it = new CloseableIteratorWrapper<>(
+					resultIterator,
+					Iterators.filter(
+							resultIterator,
+							new Predicate<GeoWaveMetadata>() {
+								@Override
+								public boolean apply(
+										final GeoWaveMetadata input ) {
+									// we don't have any authorizations
+									// so this row cannot have any
+									// visibilities
+									return (input.getVisibility() == null) || (input.getVisibility().length == 0);
+								}
+							}));
+		}
 	}
 
 	@Override
@@ -44,7 +86,7 @@ public class DynamoDBStatisticsIterator implements
 
 		nextVal = null;
 		while (it.hasNext()) {
-			final Map<String, AttributeValue> row = it.next();
+			final GeoWaveMetadata row = it.next();
 
 			final DataStatistics<?> statEntry = entryToValue(row);
 
@@ -67,19 +109,14 @@ public class DynamoDBStatisticsIterator implements
 		return statsToMetadata(currentStatistics);
 	}
 
-	@Override
-	public void close() {
-		// Close is a no-op for dynamodb client
-	}
-
 	protected DataStatistics<?> entryToValue(
-			final Map<String, AttributeValue> entry ) {
-		final DataStatistics<?> stats = (DataStatistics<?>) PersistenceUtils.fromBinary(DynamoDBUtils.getValue(entry));
+			final GeoWaveMetadata entry ) {
+		final DataStatistics<?> stats = (DataStatistics<?>) PersistenceUtils.fromBinary(entry.getValue());
 
 		if (stats != null) {
-			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(DynamoDBUtils.getSecondaryId(entry)));
+			stats.setInternalDataAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
 			stats.setStatisticsId(new ByteArrayId(
-					DynamoDBUtils.getPrimaryId(entry)));
+					entry.getPrimaryId()));
 		}
 
 		return stats;
@@ -92,5 +129,11 @@ public class DynamoDBStatisticsIterator implements
 				ByteArrayUtils.shortToByteArray(stats.getInternalDataAdapterId()),
 				null,
 				PersistenceUtils.toBinary(stats));
+	}
+
+	@Override
+	public void close()
+			throws IOException {
+		it.close();
 	}
 }

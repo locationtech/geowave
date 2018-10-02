@@ -53,6 +53,11 @@ public class DynamoDBMetadataWriter implements
 			map.put(
 					DynamoDBOperations.METADATA_SECONDARY_ID_KEY,
 					new AttributeValue().withB(ByteBuffer.wrap(metadata.getSecondaryId())));
+			if (metadata.getVisibility() != null && metadata.getVisibility().length > 0) {
+				map.put(
+						DynamoDBOperations.METADATA_VISIBILITY_KEY,
+						new AttributeValue().withB(ByteBuffer.wrap(metadata.getVisibility())));
+			}
 		}
 
 		map.put(

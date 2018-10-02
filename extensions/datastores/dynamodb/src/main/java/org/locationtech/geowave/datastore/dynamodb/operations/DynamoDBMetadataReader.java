@@ -11,22 +11,20 @@
 package org.locationtech.geowave.datastore.dynamodb.operations;
 
 import java.nio.ByteBuffer;
+import java.util.Iterator;
 import java.util.Map;
 
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
 import org.locationtech.geowave.core.store.operations.MetadataReader;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBStatisticsIterator;
+import org.locationtech.geowave.core.store.util.StatisticsRowIterator;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils;
 import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedQuery;
 import org.locationtech.geowave.datastore.dynamodb.util.LazyPaginatedScan;
 import org.locationtech.geowave.datastore.dynamodb.util.DynamoDBUtils.NoopClosableIteratorWrapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.amazonaws.services.dynamodbv2.model.AttributeValue;
 import com.amazonaws.services.dynamodbv2.model.ComparisonOperator;
@@ -74,29 +72,22 @@ public class DynamoDBMetadataReader implements
 					queryRequest);
 
 			if (metadataType == MetadataType.STATS) {
-				return new DynamoDBStatisticsIterator(
+				return getStatisticsIterator(
 						new LazyPaginatedQuery(
 								queryResult,
 								queryRequest,
-								operations.getClient()));
+								operations.getClient()), query.getAuthorizations());
 			}
 
 			return new CloseableIteratorWrapper<>(
 					new NoopClosableIteratorWrapper(),
 					Iterators.transform(
-							queryResult.getItems().iterator(),
-							new com.google.common.base.Function<Map<String, AttributeValue>, GeoWaveMetadata>() {
-								@Override
-								public GeoWaveMetadata apply(
-										final Map<String, AttributeValue> result ) {
-
-									return new GeoWaveMetadata(
+							queryResult.getItems().iterator(),				
+							 result -> new GeoWaveMetadata(
 											DynamoDBUtils.getPrimaryId(result),
 											DynamoDBUtils.getSecondaryId(result),
 											null,
-											DynamoDBUtils.getValue(result));
-								}
-							}));
+											DynamoDBUtils.getValue(result))));
 
 		}
 
@@ -115,11 +106,11 @@ public class DynamoDBMetadataReader implements
 				scan);
 
 		if (metadataType == MetadataType.STATS) {
-			return new DynamoDBStatisticsIterator(
+			return getStatisticsIterator(
 					new LazyPaginatedScan(
 							scanResult,
 							scan,
-							operations.getClient()));
+							operations.getClient()), query.getAuthorizations());
 		}
 
 		return new CloseableIteratorWrapper<>(
@@ -140,4 +131,14 @@ public class DynamoDBMetadataReader implements
 						}));
 	}
 
+	private static CloseableIterator<GeoWaveMetadata> getStatisticsIterator(
+			final Iterator<Map<String, AttributeValue>> resultIterator,
+			String... authorizations) {
+		return new StatisticsRowIterator(
+				new CloseableIterator.Wrapper<GeoWaveMetadata>(Iterators.transform(resultIterator,result -> new GeoWaveMetadata(
+								DynamoDBUtils.getPrimaryId(result),
+								DynamoDBUtils.getSecondaryId(result),
+								DynamoDBUtils.getVisibility(result),
+								DynamoDBUtils.getValue(result)))), authorizations);
+	}
 }
