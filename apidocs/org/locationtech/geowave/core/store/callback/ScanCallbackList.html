@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10};
+var methods = {"i0":10,"i1":10,"i2":10,"i3":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -153,15 +153,23 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 </tr>
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#close--">close</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#addScanCallback-org.locationtech.geowave.core.store.callback.ScanCallback-">addScanCallback</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a>&gt;&nbsp;callback)</code>&nbsp;</td>
 </tr>
 <tr id="i1" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#close--">close</a></span>()</code>&nbsp;</td>
+</tr>
+<tr id="i2" class="altColor">
 <td class="colFirst"><code>void</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#entryScanned-T-R-">entryScanned</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>&nbsp;entry,
             <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a>&nbsp;rows)</code>
 <div class="block">This will be called after an entry is successfully scanned with the row
  IDs that were used.</div>
 </td>
+</tr>
+<tr id="i3" class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html#waitUntilCallbackAdded--">waitUntilCallbackAdded</a></span>()</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -202,6 +210,24 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/callba
 <!--   -->
 </a>
 <h3>Method Detail</h3>
+<a name="addScanCallback-org.locationtech.geowave.core.store.callback.ScanCallback-">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>addScanCallback</h4>
+<pre>public&nbsp;void&nbsp;addScanCallback(<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallbackList.html" title="type parameter in ScanCallbackList">R</a>&gt;&nbsp;callback)</pre>
+</li>
+</ul>
+<a name="waitUntilCallbackAdded--">
+<!--   -->
+</a>
+<ul class="blockList">
+<li class="blockList">
+<h4>waitUntilCallbackAdded</h4>
+<pre>public&nbsp;void&nbsp;waitUntilCallbackAdded()</pre>
+</li>
+</ul>
 <a name="entryScanned-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
 </a><a name="entryScanned-T-R-">

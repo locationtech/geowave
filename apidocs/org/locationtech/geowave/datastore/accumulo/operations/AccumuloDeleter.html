@@ -18,7 +18,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":10,"i1":10,"i2":10};
+var methods = {"i0":10,"i1":10};
 var tabs = {65535:["t0","All Methods"],2:["t2","Instance Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -75,7 +75,7 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.accumulo.operations.AccumuloReader">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
@@ -93,14 +93,19 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.datastore.accumulo.operations</div>
-<h2 title="Class AccumuloDeleter" class="title">Class AccumuloDeleter</h2>
+<h2 title="Class AccumuloDeleter" class="title">Class AccumuloDeleter&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.locationtech.geowave.datastore.accumulo.operations.AccumuloDeleter</li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">org.locationtech.geowave.datastore.accumulo.operations.AccumuloReader</a>&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
+<li>org.locationtech.geowave.datastore.accumulo.operations.AccumuloDeleter&lt;T&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,19 +114,34 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">AccumuloDeleter</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a></pre>
+<pre>public class <span class="typeNameLabel">AccumuloDeleter&lt;T&gt;</span>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloReader</a>&lt;T&gt;
+implements <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- =========== FIELD SUMMARY =========== -->
+<ul class="blockList">
+<li class="blockList"><a name="field.summary">
+<!--   -->
+</a>
+<h3>Field Summary</h3>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.datastore.accumulo.operations.AccumuloReader">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.datastore.accumulo.operations.<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloReader</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#scanner">scanner</a></code></li>
+</ul>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -134,8 +154,12 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html#AccumuloDeleter-org.apache.accumulo.core.client.BatchDeleter-boolean-">AccumuloDeleter</a></span>(org.apache.accumulo.core.client.BatchDeleter&nbsp;deleter,
-               boolean&nbsp;isAltIndex)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html#AccumuloDeleter-org.apache.accumulo.core.client.BatchDeleter-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">AccumuloDeleter</a></span>(org.apache.accumulo.core.client.BatchDeleter&nbsp;scanner,
+               <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&gt;&nbsp;transformer,
+               int&nbsp;partitionKeyLength,
+               boolean&nbsp;wholeRowEncoding,
+               boolean&nbsp;clientSideRowMerging,
+               boolean&nbsp;parallel)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -158,20 +182,33 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html#delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.DataAdapter-">delete</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
-      <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</code>&nbsp;</td>
-</tr>
-<tr id="i2" class="altColor">
-<td class="colFirst"><code>org.apache.accumulo.core.client.BatchDeleter</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html#getDeleter--">getDeleter</a></span>()</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html#entryScanned-T-org.locationtech.geowave.core.store.entities.GeoWaveRow-">entryScanned</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&nbsp;entry,
+            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>
+<div class="block">This will be called after an entry is successfully scanned with the row
+ IDs that were used.</div>
+</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.accumulo.operations.AccumuloReader">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.accumulo.operations.<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloReader</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#hasNext--">hasNext</a>, <a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#next--">next</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.util.Iterator">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#forEachRemaining-java.util.function.Consumer-" title="class or interface in java.util">forEachRemaining</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code></li>
 </ul>
 </li>
 </ul>
@@ -187,14 +224,18 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="AccumuloDeleter-org.apache.accumulo.core.client.BatchDeleter-boolean-">
+<a name="AccumuloDeleter-org.apache.accumulo.core.client.BatchDeleter-org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer-int-boolean-boolean-boolean-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>AccumuloDeleter</h4>
-<pre>public&nbsp;AccumuloDeleter(org.apache.accumulo.core.client.BatchDeleter&nbsp;deleter,
-                       boolean&nbsp;isAltIndex)</pre>
+<pre>public&nbsp;AccumuloDeleter(org.apache.accumulo.core.client.BatchDeleter&nbsp;scanner,
+                       <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRowIteratorTransformer.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRowIteratorTransformer</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&gt;&nbsp;transformer,
+                       int&nbsp;partitionKeyLength,
+                       boolean&nbsp;wholeRowEncoding,
+                       boolean&nbsp;clientSideRowMerging,
+                       boolean&nbsp;parallel)</pre>
 </li>
 </ul>
 </li>
@@ -211,33 +252,43 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()</pre>
+<pre>public&nbsp;void&nbsp;close()
+           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html#close--">close</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloReader.html" title="class in org.locationtech.geowave.datastore.accumulo.operations">AccumuloReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="getDeleter--">
+<a name="entryScanned-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
-</a>
-<ul class="blockList">
-<li class="blockList">
-<h4>getDeleter</h4>
-<pre>public&nbsp;org.apache.accumulo.core.client.BatchDeleter&nbsp;getDeleter()</pre>
-</li>
-</ul>
-<a name="delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.DataAdapter-">
+</a><a name="entryScanned-T-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>delete</h4>
-<pre>public&nbsp;void&nbsp;delete(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row,
-                   <a href="../../../../../../org/locationtech/geowave/core/store/adapter/DataAdapter.html" title="interface in org.locationtech.geowave.core.store.adapter">DataAdapter</a>&lt;?&gt;&nbsp;adapter)</pre>
+<h4>entryScanned</h4>
+<pre>public&nbsp;void&nbsp;entryScanned(<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>&nbsp;entry,
+                         <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">ScanCallback</a></code></span></div>
+<div class="block">This will be called after an entry is successfully scanned with the row
+ IDs that were used. Deduplication, if performed, occurs prior to calling
+ this method.
+
+ Without or without de-duplication, row ids are not consolidate, thus each
+ entry only contains one row id. If the entry is not de-dupped, then the
+ entry this method is called for each duplicate, each with a different row
+ id.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html#delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-org.locationtech.geowave.core.store.adapter.DataAdapter-">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">entryScanned</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/accumulo/operations/AccumuloDeleter.html" title="type parameter in AccumuloDeleter">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>row</code> - the raw row scanned from the table for this entry</dd>
 </dl>
 </li>
 </ul>
@@ -295,7 +346,7 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li>Field&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.accumulo.operations.AccumuloReader">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
