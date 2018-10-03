@@ -138,7 +138,6 @@
 							<target>
 								<replace token="com.google.protobuf." value="org.apache.hadoop.hbase.shaded.com.google.protobuf." dir="src/main/java">
 									<include name="**/*ProtosClient.java" />
-									<exclude name="**/*HBaseBulkDeleteProtosClient.java" />
 								</replace>
 								<delete>
 									<fileset dir="target/protobuf" includes="*.proto" />
