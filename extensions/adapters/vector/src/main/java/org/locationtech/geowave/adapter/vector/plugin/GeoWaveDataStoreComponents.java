@@ -63,7 +63,9 @@ public class GeoWaveDataStoreComponents
 		this.indexStore = indexStore;
 		this.dataStatisticsStore = dataStatisticsStore;
 		this.gtStore = gtStore;
-		adapterIndices = gtStore.getIndicesForAdapter(adapter);
+		adapterIndices = gtStore.getIndicesForAdapter(
+				adapter,
+				false);
 		this.transactionAllocator = transactionAllocator;
 	}
 
@@ -106,16 +108,24 @@ public class GeoWaveDataStoreComponents
 
 	public CloseableIterator<Index<?, ?>> getIndices(
 			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
-			final BasicQuery query ) {
+			final BasicQuery query,
+			final boolean spatialOnly ) {
 		GeoWaveGTDataStore gtStore = getGTstore();
 		Map<QueryHint, Object> queryHints = Maps.newHashMap();
 		queryHints.put(
 				QueryHint.MAX_RANGE_DECOMPOSITION,
 				gtStore.getDataStoreOptions().getMaxRangeDecomposition());
+		PrimaryIndex[] indices = gtStore.getIndicesForAdapter(
+				adapter,
+				spatialOnly);
+		if (spatialOnly && indices.length == 0) {
+			throw new UnsupportedOperationException(
+					"Query required spatial index, but none were found.");
+		}
 		return gtStore.getIndexQueryStrategy().getIndices(
 				stats,
 				query,
-				gtStore.getIndicesForAdapter(adapter),
+				indices,
 				queryHints);
 	}
 

@@ -110,9 +110,10 @@ public class GeoServerIngestIT
 			URISyntaxException {
 		final DataStore ds = dataStorePluginOptions.createDataStore();
 		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
+		final PrimaryIndex spatialIdx = SimpleIngest.createSpatialIndex();
+		final PrimaryIndex spatialTemporalIdx = SimpleIngest.createSpatialTemporalIndex();
 		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
-		final List<SimpleFeature> features = SimpleIngest.getGriddedFeatures(
+		final List<SimpleFeature> features = SimpleIngest.getGriddedTemporalFeatures(
 				new SimpleFeatureBuilder(
 						sft),
 				8675309);
@@ -123,7 +124,8 @@ public class GeoServerIngestIT
 		final int featuresPer5Percent = features.size() / 20;
 		try (IndexWriter writer = ds.createWriter(
 				fda,
-				idx)) {
+				spatialIdx,
+				spatialTemporalIdx)) {
 			for (final SimpleFeature feat : features) {
 				writer.write(feat);
 				ingestedFeatures++;
@@ -210,6 +212,7 @@ public class GeoServerIngestIT
 				920,
 				360,
 				null);
+
 		BufferedImage ref = null;
 
 		final String geoserverVersion = (System.getProperty("geoserver.version") != null) ? System
@@ -261,6 +264,7 @@ public class GeoServerIngestIT
 				920,
 				360,
 				null);
+
 		TestUtils.testTileAgainstReference(
 				biSubsamplingWithExpectedError,
 				ref,
@@ -277,6 +281,7 @@ public class GeoServerIngestIT
 				920,
 				360,
 				null);
+
 		TestUtils.testTileAgainstReference(
 				biSubsamplingWithLotsOfError,
 				ref,
@@ -341,7 +346,9 @@ public class GeoServerIngestIT
 				"width",
 				String.valueOf(width)).setParameter(
 				"height",
-				String.valueOf(height));
+				String.valueOf(height)).setParameter(
+				"cql_filter",
+				"TimeStamp DURING 1997-01-01T00:00:00.000Z/1998-01-01T00:00:00.000Z");
 
 		final HttpGet command = new HttpGet(
 				builder.build());

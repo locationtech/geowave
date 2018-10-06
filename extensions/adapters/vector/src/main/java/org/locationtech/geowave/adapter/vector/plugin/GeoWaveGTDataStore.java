@@ -36,6 +36,7 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.MemoryTransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityManagementHelper;
+import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
@@ -43,6 +44,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStore;
@@ -65,6 +67,8 @@ import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.Name;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Lists;
 
 public class GeoWaveGTDataStore extends
 		ContentDataStore
@@ -152,11 +156,29 @@ public class GeoWaveGTDataStore extends
 		return dataStatisticsStore;
 	}
 
+	private PrimaryIndex[] filterIndices(
+			PrimaryIndex[] unfiltered,
+			boolean spatialOnly ) {
+		if (spatialOnly) {
+			List<PrimaryIndex> filtered = Lists.newArrayList();
+			for (int i = 0; i < unfiltered.length; i++) {
+				if (SpatialDimensionalityTypeProvider.isSpatial(unfiltered[i])) {
+					filtered.add(unfiltered[i]);
+				}
+			}
+			return filtered.toArray(new PrimaryIndex[filtered.size()]);
+		}
+		return unfiltered;
+	}
+
 	protected PrimaryIndex[] getIndicesForAdapter(
-			final GeotoolsFeatureDataAdapter adapter ) {
+			final GeotoolsFeatureDataAdapter adapter,
+			final boolean spatialOnly ) {
 		PrimaryIndex[] currentSelections = preferredIndexes.get(adapter.getFeatureType().getName().toString());
 		if (currentSelections != null) {
-			return currentSelections;
+			return filterIndices(
+					currentSelections,
+					spatialOnly);
 		}
 
 		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
@@ -172,7 +194,9 @@ public class GeoWaveGTDataStore extends
 		preferredIndexes.put(
 				adapter.getFeatureType().getName().toString(),
 				currentSelections);
-		return currentSelections;
+		return filterIndices(
+				currentSelections,
+				spatialOnly);
 	}
 
 	@Override

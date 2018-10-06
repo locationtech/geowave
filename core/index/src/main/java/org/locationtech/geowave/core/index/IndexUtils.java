@@ -175,39 +175,40 @@ public class IndexUtils
 	public static byte[] getNextRowForSkip(
 			final byte[] row,
 			final int bitPosition ) {
-		final int cardinality = bitPosition + 1;
-		final byte[] rowCopy = new byte[(int) Math.ceil(cardinality / 8.0)];
+		// Calculate the number of full bytes affected by the bit position
+		int numBytes = bitPosition / 8;
 
+		// Calculate the number of bits used in the last byte
+		final int extraBits = bitPosition % 8;
+
+		// If there was a remainder, add 1 to the number of bytes
+		if (extraBits > 0) {
+			numBytes++;
+		}
+
+		// Copy affected bytes
+		final byte[] rowCopy = new byte[numBytes];
 		System.arraycopy(
 				row,
 				0,
 				rowCopy,
 				0,
 				rowCopy.length);
+		int lastByte = rowCopy.length - 1;
 
-		// number of bits not used in the last byte
-		int remainder = (8 - (cardinality % 8));
-		if (remainder == 8) {
-			remainder = 0;
-		}
+		// Turn on all bits after the bit position
+		rowCopy[lastByte] |= 0xFF >> (extraBits + 1);
 
-		final int numIncrements = (int) Math.pow(
-				2,
-				remainder);
-
-		if (remainder > 0) {
-			for (int i = 0; i < remainder; i++) {
-				rowCopy[rowCopy.length - 1] |= (1 << (i));
+		// Increment the bit represented by the bit position
+		for (int i = lastByte; i >= 0; i--) {
+			rowCopy[i]++;
+			if (rowCopy[i] != 0) {
+				// Turn on all bits after the bit position
+				rowCopy[lastByte] |= 0xFF >> (extraBits + 1);
+				return rowCopy;
 			}
 		}
-
-		for (int i = 0; i < numIncrements; i++) {
-			if (!ByteArrayUtils.increment(rowCopy)) {
-				return null;
-			}
-		}
-
-		return rowCopy;
+		return null;
 	}
 
 	private static final double[] getBitsPerDimension(

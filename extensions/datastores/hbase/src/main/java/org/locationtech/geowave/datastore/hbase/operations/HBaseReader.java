@@ -191,10 +191,6 @@ public class HBaseReader<T> implements
 		}
 
 		if (operations.isServerSideLibraryEnabled()) {
-			addSkipFilter(
-					recordReaderParams,
-					filterList);
-
 			// Add distributable filters if requested, this has to be last
 			// in the filter list for the dedupe filter to work correctly
 
@@ -208,6 +204,10 @@ public class HBaseReader<T> implements
 						recordReaderParams,
 						filterList);
 			}
+			
+			addSkipFilter(
+					recordReaderParams,
+					filterList);
 		}
 
 		setLimit(
@@ -248,10 +248,6 @@ public class HBaseReader<T> implements
 		final FilterList filterList = new FilterList();
 
 		if (operations.isServerSideLibraryEnabled()) {
-			addSkipFilter(
-					readerParams,
-					filterList);
-
 			// Add distributable filters if requested, this has to be last
 			// in the filter list for the dedupe filter to work correctly
 
@@ -265,6 +261,10 @@ public class HBaseReader<T> implements
 						readerParams,
 						filterList);
 			}
+			
+			addSkipFilter(
+					readerParams,
+					filterList);
 		}
 
 		setLimit(

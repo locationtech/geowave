@@ -221,9 +221,16 @@ public class GeoWaveFeatureReader implements
 				jtsBounds,
 				timeBounds);
 
+		boolean spatialOnly = false;
+		if (this.query.getHints().containsKey(
+				SubsampleProcess.SUBSAMPLE_ENABLED) && (Boolean) this.query.getHints().get(
+				SubsampleProcess.SUBSAMPLE_ENABLED)) {
+			spatialOnly = true;
+		}
 		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
 				statsMap,
-				query)) {
+				query,
+				spatialOnly)) {
 			while (indexIt.hasNext()) {
 				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
 
