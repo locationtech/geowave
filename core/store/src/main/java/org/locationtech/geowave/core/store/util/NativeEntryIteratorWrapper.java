@@ -72,6 +72,10 @@ public class NativeEntryIteratorWrapper<T> extends
 						scanCallback,
 						fieldSubsetBitmask,
 						decodePersistenceEncoding);
+
+				if (decodedRow != null) {
+					incrementSkipRow(row);
+				}
 			}
 			catch (AdapterException e) {
 				adapterValid = false;
@@ -88,8 +92,6 @@ public class NativeEntryIteratorWrapper<T> extends
 				GeoWaveKey.getCompositeId(row))) > 0))) {
 			return false;
 		}
-
-		incrementSkipRow(row);
 
 		return true;
 	}
