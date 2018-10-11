@@ -259,6 +259,19 @@
 <!--   -->
 </a>
 <h3>Uses of <a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a> in <a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/package-summary.html">org.locationtech.geowave.datastore.hbase.operations</a></h3>
+<table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing fields, and an explanation">
+<caption><span>Fields in <a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/package-summary.html">org.locationtech.geowave.datastore.hbase.operations</a> declared as <a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a></span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Field and Description</th>
+</tr>
+<tbody>
+<tr class="altColor">
+<td class="colFirst"><code>protected <a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;</code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseReader.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#readerParams">readerParams</a></span></code>&nbsp;</td>
+</tr>
+</tbody>
+</table>
 <table class="useSummary" border="0" cellpadding="3" cellspacing="0" summary="Use table, listing methods, and an explanation">
 <caption><span>Methods in <a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/package-summary.html">org.locationtech.geowave.datastore.hbase.operations</a> with parameters of type <a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a></span><span class="tabEnd">&nbsp;</span></caption>
 <tr>
@@ -271,10 +284,14 @@
 <td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#aggregateServerSide-org.locationtech.geowave.core.store.operations.ReaderParams-">aggregateServerSide</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
 <tr class="rowColor">
+<td class="colFirst"><code>void</code></td>
+<td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#bulkDelete-org.locationtech.geowave.core.store.operations.ReaderParams-">bulkDelete</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&nbsp;readerParams)</code>&nbsp;</td>
+</tr>
+<tr class="altColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createDeleter-org.locationtech.geowave.core.store.operations.ReaderParams-">createDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>&lt;T&gt;&nbsp;<a href="../../../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;T&gt;</code></td>
 <td class="colLast"><span class="typeNameLabel">HBaseOperations.</span><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html#createReader-org.locationtech.geowave.core.store.operations.ReaderParams-">createReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;T&gt;&nbsp;readerParams)</code>&nbsp;</td>
 </tr>
@@ -287,6 +304,10 @@
 </tr>
 <tbody>
 <tr class="altColor">
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#HBaseDeleter-org.locationtech.geowave.core.store.operations.ReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseDeleter</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&gt;&nbsp;readerParams,
+            <a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
+</tr>
+<tr class="rowColor">
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#HBaseReader-org.locationtech.geowave.core.store.operations.ReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseReader</a></span>(<a href="../../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="type parameter in HBaseReader">T</a>&gt;&nbsp;readerParams,
            <a href="../../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>

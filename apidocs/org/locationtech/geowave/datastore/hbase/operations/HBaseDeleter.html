@@ -75,13 +75,13 @@ var activeTableTab = "activeTableTab";
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.hbase.operations.HBaseReader">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
@@ -93,14 +93,19 @@ var activeTableTab = "activeTableTab";
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
 <div class="subTitle">org.locationtech.geowave.datastore.hbase.operations</div>
-<h2 title="Class HBaseDeleter" class="title">Class HBaseDeleter</h2>
+<h2 title="Class HBaseDeleter" class="title">Class HBaseDeleter&lt;T&gt;</h2>
 </div>
 <div class="contentContainer">
 <ul class="inheritance">
 <li><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">java.lang.Object</a></li>
 <li>
 <ul class="inheritance">
-<li>org.locationtech.geowave.datastore.hbase.operations.HBaseDeleter</li>
+<li><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="class in org.locationtech.geowave.datastore.hbase.operations">org.locationtech.geowave.datastore.hbase.operations.HBaseReader</a>&lt;T&gt;</li>
+<li>
+<ul class="inheritance">
+<li>org.locationtech.geowave.datastore.hbase.operations.HBaseDeleter&lt;T&gt;</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -109,13 +114,13 @@ var activeTableTab = "activeTableTab";
 <li class="blockList">
 <dl>
 <dt>All Implemented Interfaces:</dt>
-<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></dd>
+<dd><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;T,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;, <a href="../../../../../../org/locationtech/geowave/core/store/operations/Reader.html" title="interface in org.locationtech.geowave.core.store.operations">Reader</a>&lt;T&gt;</dd>
 </dl>
 <hr>
 <br>
-<pre>public class <span class="typeNameLabel">HBaseDeleter</span>
-extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a>
-implements <a href="../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></pre>
+<pre>public class <span class="typeNameLabel">HBaseDeleter&lt;T&gt;</span>
+extends <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseReader</a>&lt;T&gt;
+implements <a href="../../../../../../org/locationtech/geowave/core/store/operations/Deleter.html" title="interface in org.locationtech.geowave.core.store.operations">Deleter</a>&lt;T&gt;</pre>
 </li>
 </ul>
 </div>
@@ -128,17 +133,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <!--   -->
 </a>
 <h3>Field Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Field Summary table, listing fields, and an explanation">
-<caption><span>Fields</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Field and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>protected <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#duplicateRowTracker">duplicateRowTracker</a></span></code>&nbsp;</td>
-</tr>
-</table>
+<ul class="blockList">
+<li class="blockList"><a name="fields.inherited.from.class.org.locationtech.geowave.datastore.hbase.operations.HBaseReader">
+<!--   -->
+</a>
+<h3>Fields inherited from class&nbsp;org.locationtech.geowave.datastore.hbase.operations.<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseReader</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#operations">operations</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#readerParams">readerParams</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#scanner">scanner</a></code></li>
+</ul>
 </li>
 </ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
@@ -153,7 +154,8 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <th class="colOne" scope="col">Constructor and Description</th>
 </tr>
 <tr class="altColor">
-<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#HBaseDeleter-org.apache.hadoop.hbase.client.BufferedMutator-">HBaseDeleter</a></span>(org.apache.hadoop.hbase.client.BufferedMutator&nbsp;deleter)</code>&nbsp;</td>
+<td class="colOne"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#HBaseDeleter-org.locationtech.geowave.core.store.operations.ReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">HBaseDeleter</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&gt;&nbsp;readerParams,
+            <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</code>&nbsp;</td>
 </tr>
 </table>
 </li>
@@ -176,15 +178,33 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 </tr>
 <tr id="i1" class="rowColor">
 <td class="colFirst"><code>void</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-">delete</a></span>(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html#entryScanned-T-org.locationtech.geowave.core.store.entities.GeoWaveRow-">entryScanned</a></span>(<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&nbsp;entry,
+            <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</code>
+<div class="block">This will be called after an entry is successfully scanned with the row
+ IDs that were used.</div>
+</td>
 </tr>
 </table>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.org.locationtech.geowave.datastore.hbase.operations.HBaseReader">
+<!--   -->
+</a>
+<h3>Methods inherited from class&nbsp;org.locationtech.geowave.datastore.hbase.operations.<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseReader</a></h3>
+<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#getMultiScanner-org.apache.hadoop.hbase.filter.FilterList-">getMultiScanner</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#hasNext--">hasNext</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#initRecordScanner--">initRecordScanner</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#initScanner--">initScanner</a>, <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#next--">next</a></code></li>
+</ul>
 <ul class="blockList">
 <li class="blockList"><a name="methods.inherited.from.class.java.lang.Object">
 <!--   -->
 </a>
 <h3>Methods inherited from class&nbsp;java.lang.<a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true" title="class or interface in java.lang">Object</a></h3>
 <code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#clone--" title="class or interface in java.lang">clone</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#equals-java.lang.Object-" title="class or interface in java.lang">equals</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#finalize--" title="class or interface in java.lang">finalize</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#getClass--" title="class or interface in java.lang">getClass</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#hashCode--" title="class or interface in java.lang">hashCode</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notify--" title="class or interface in java.lang">notify</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#notifyAll--" title="class or interface in java.lang">notifyAll</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#toString--" title="class or interface in java.lang">toString</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait--" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-" title="class or interface in java.lang">wait</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?is-external=true#wait-long-int-" title="class or interface in java.lang">wait</a></code></li>
+</ul>
+<ul class="blockList">
+<li class="blockList"><a name="methods.inherited.from.class.java.util.Iterator">
+<!--   -->
+</a>
+<h3>Methods inherited from interface&nbsp;java.util.<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true" title="class or interface in java.util">Iterator</a></h3>
+<code><a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#forEachRemaining-java.util.function.Consumer-" title="class or interface in java.util">forEachRemaining</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#hasNext--" title="class or interface in java.util">hasNext</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#next--" title="class or interface in java.util">next</a>, <a href="http://docs.oracle.com/javase/7/docs/api/java/util/Iterator.html?is-external=true#remove--" title="class or interface in java.util">remove</a></code></li>
 </ul>
 </li>
 </ul>
@@ -194,36 +214,20 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <div class="details">
 <ul class="blockList">
 <li class="blockList">
-<!-- ============ FIELD DETAIL =========== -->
-<ul class="blockList">
-<li class="blockList"><a name="field.detail">
-<!--   -->
-</a>
-<h3>Field Detail</h3>
-<a name="duplicateRowTracker">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>duplicateRowTracker</h4>
-<pre>protected&nbsp;<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Set.html?is-external=true" title="class or interface in java.util">Set</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>&gt; duplicateRowTracker</pre>
-</li>
-</ul>
-</li>
-</ul>
 <!-- ========= CONSTRUCTOR DETAIL ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.detail">
 <!--   -->
 </a>
 <h3>Constructor Detail</h3>
-<a name="HBaseDeleter-org.apache.hadoop.hbase.client.BufferedMutator-">
+<a name="HBaseDeleter-org.locationtech.geowave.core.store.operations.ReaderParams-org.locationtech.geowave.datastore.hbase.operations.HBaseOperations-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
 <h4>HBaseDeleter</h4>
-<pre>public&nbsp;HBaseDeleter(org.apache.hadoop.hbase.client.BufferedMutator&nbsp;deleter)</pre>
+<pre>public&nbsp;HBaseDeleter(<a href="../../../../../../org/locationtech/geowave/core/store/operations/ReaderParams.html" title="class in org.locationtech.geowave.core.store.operations">ReaderParams</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&gt;&nbsp;readerParams,
+                    <a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseOperations.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseOperations</a>&nbsp;operations)</pre>
 </li>
 </ul>
 </li>
@@ -240,23 +244,43 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="blockList">
 <li class="blockList">
 <h4>close</h4>
-<pre>public&nbsp;void&nbsp;close()</pre>
+<pre>public&nbsp;void&nbsp;close()
+           throws <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></pre>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
 <dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true#close--" title="class or interface in java.lang">close</a></code>&nbsp;in interface&nbsp;<code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/AutoCloseable.html?is-external=true" title="class or interface in java.lang">AutoCloseable</a></code></dd>
+<dt><span class="overrideSpecifyLabel">Overrides:</span></dt>
+<dd><code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html#close--">close</a></code>&nbsp;in class&nbsp;<code><a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseReader.html" title="class in org.locationtech.geowave.datastore.hbase.operations">HBaseReader</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&gt;</code></dd>
+<dt><span class="throwsLabel">Throws:</span></dt>
+<dd><code><a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Exception.html?is-external=true" title="class or interface in java.lang">Exception</a></code></dd>
 </dl>
 </li>
 </ul>
-<a name="delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
+<a name="entryScanned-java.lang.Object-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
+<!--   -->
+</a><a name="entryScanned-T-org.locationtech.geowave.core.store.entities.GeoWaveRow-">
 <!--   -->
 </a>
 <ul class="blockListLast">
 <li class="blockList">
-<h4>delete</h4>
-<pre>public&nbsp;void&nbsp;delete(<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+<h4>entryScanned</h4>
+<pre>public&nbsp;void&nbsp;entryScanned(<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>&nbsp;entry,
+                         <a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&nbsp;row)</pre>
+<div class="block"><span class="descfrmTypeLabel">Description copied from interface:&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">ScanCallback</a></code></span></div>
+<div class="block">This will be called after an entry is successfully scanned with the row
+ IDs that were used. Deduplication, if performed, occurs prior to calling
+ this method.
+
+ Without or without de-duplication, row ids are not consolidate, thus each
+ entry only contains one row id. If the entry is not de-dupped, then the
+ entry this method is called for each duplicate, each with a different row
+ id.</div>
 <dl>
 <dt><span class="overrideSpecifyLabel">Specified by:</span></dt>
-<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html#delete-org.locationtech.geowave.core.store.entities.GeoWaveRow-">delete</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/operations/RowDeleter.html" title="interface in org.locationtech.geowave.core.store.operations">RowDeleter</a></code></dd>
+<dd><code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html#entryScanned-T-R-">entryScanned</a></code>&nbsp;in interface&nbsp;<code><a href="../../../../../../org/locationtech/geowave/core/store/callback/ScanCallback.html" title="interface in org.locationtech.geowave.core.store.callback">ScanCallback</a>&lt;<a href="../../../../../../org/locationtech/geowave/datastore/hbase/operations/HBaseDeleter.html" title="type parameter in HBaseDeleter">T</a>,<a href="../../../../../../org/locationtech/geowave/core/store/entities/GeoWaveRow.html" title="interface in org.locationtech.geowave.core.store.entities">GeoWaveRow</a>&gt;</code></dd>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>entry</code> - the entry that was ingested</dd>
+<dd><code>row</code> - the raw row scanned from the table for this entry</dd>
 </dl>
 </li>
 </ul>
@@ -314,13 +338,13 @@ implements <a href="../../../../../../org/locationtech/geowave/core/store/operat
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
 <li>Nested&nbsp;|&nbsp;</li>
-<li><a href="#field.summary">Field</a>&nbsp;|&nbsp;</li>
+<li><a href="#fields.inherited.from.class.org.locationtech.geowave.datastore.hbase.operations.HBaseReader">Field</a>&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
 </ul>
 <ul class="subNavList">
 <li>Detail:&nbsp;</li>
-<li><a href="#field.detail">Field</a>&nbsp;|&nbsp;</li>
+<li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.detail">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.detail">Method</a></li>
 </ul>
