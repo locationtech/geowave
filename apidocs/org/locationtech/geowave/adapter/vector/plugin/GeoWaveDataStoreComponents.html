@@ -173,8 +173,9 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 </tr>
 <tr id="i5" class="rowColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getIndices-java.util.Map-org.locationtech.geowave.core.store.query.BasicQuery-">getIndices</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
-          <a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a>&nbsp;query)</code>&nbsp;</td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../../org/locationtech/geowave/adapter/vector/plugin/GeoWaveDataStoreComponents.html#getIndices-java.util.Map-org.locationtech.geowave.core.store.query.BasicQuery-boolean-">getIndices</a></span>(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
+          <a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a>&nbsp;query,
+          boolean&nbsp;spatialOnly)</code>&nbsp;</td>
 </tr>
 <tr id="i6" class="altColor">
 <td class="colFirst"><code><a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a></code></td>
@@ -320,14 +321,15 @@ extends <a href="http://docs.oracle.com/javase/7/docs/api/java/lang/Object.html?
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatisticsStore.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatisticsStore</a>&nbsp;getStatsStore()</pre>
 </li>
 </ul>
-<a name="getIndices-java.util.Map-org.locationtech.geowave.core.store.query.BasicQuery-">
+<a name="getIndices-java.util.Map-org.locationtech.geowave.core.store.query.BasicQuery-boolean-">
 <!--   -->
 </a>
 <ul class="blockList">
 <li class="blockList">
 <h4>getIndices</h4>
 <pre>public&nbsp;<a href="../../../../../../org/locationtech/geowave/core/store/CloseableIterator.html" title="interface in org.locationtech.geowave.core.store">CloseableIterator</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/store/index/Index.html" title="interface in org.locationtech.geowave.core.store.index">Index</a>&lt;?,?&gt;&gt;&nbsp;getIndices(<a href="http://docs.oracle.com/javase/7/docs/api/java/util/Map.html?is-external=true" title="class or interface in java.util">Map</a>&lt;<a href="../../../../../../org/locationtech/geowave/core/index/ByteArrayId.html" title="class in org.locationtech.geowave.core.index">ByteArrayId</a>,<a href="../../../../../../org/locationtech/geowave/core/store/adapter/statistics/DataStatistics.html" title="interface in org.locationtech.geowave.core.store.adapter.statistics">DataStatistics</a>&lt;org.opengis.feature.simple.SimpleFeature&gt;&gt;&nbsp;stats,
-                                                <a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a>&nbsp;query)</pre>
+                                                <a href="../../../../../../org/locationtech/geowave/core/store/query/BasicQuery.html" title="class in org.locationtech.geowave.core.store.query">BasicQuery</a>&nbsp;query,
+                                                boolean&nbsp;spatialOnly)</pre>
 </li>
 </ul>
 <a name="remove-org.opengis.feature.simple.SimpleFeature-org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransaction-">
