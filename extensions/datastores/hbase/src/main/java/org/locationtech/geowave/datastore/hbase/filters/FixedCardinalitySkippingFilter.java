@@ -25,14 +25,22 @@ public class FixedCardinalitySkippingFilter extends
 {
 	private Integer bitPosition;
 	private byte[] nextRow = null;
+	private byte[] rowCompare = null;
 	private ReturnCode returnCode;
 	private boolean init = false;
+	private Cell nextCell = null;
 
 	public FixedCardinalitySkippingFilter() {}
 
 	public FixedCardinalitySkippingFilter(
 			final Integer bitPosition ) {
 		this.bitPosition = bitPosition;
+	}
+
+	@Override
+	public Cell getNextCellHint(
+			final Cell cell ) {
+		return nextCell;
 	}
 
 	@Override
@@ -43,13 +51,14 @@ public class FixedCardinalitySkippingFilter extends
 		if (!init) {
 			init = true;
 			getNextRowKey(cell);
+			rowCompare = new byte[nextRow.length];
 		}
 
 		// Compare current row w/ next row
 		returnCode = checkNextRow(cell);
 
 		// If we're at or past the next row, advance it
-		if (returnCode != ReturnCode.SKIP) {
+		if (returnCode != ReturnCode.SEEK_NEXT_USING_HINT) {
 			getNextRowKey(cell);
 		}
 
@@ -60,23 +69,23 @@ public class FixedCardinalitySkippingFilter extends
 			final Cell cell ) {
 		final byte[] row = CellUtil.cloneRow(cell);
 
-		final byte[] rowCopy = new byte[nextRow.length];
-
 		System.arraycopy(
 				row,
 				0,
-				rowCopy,
+				rowCompare,
 				0,
-				rowCopy.length);
+				rowCompare.length);
 
 		final int cmp = Bytes.compareTo(
-				rowCopy,
+				rowCompare,
 				nextRow);
 
 		if (cmp < 0) {
-			return ReturnCode.SKIP;
+			nextCell = CellUtil.createCell(nextRow);
+			return ReturnCode.SEEK_NEXT_USING_HINT;
 		}
 		else {
+			nextCell = null;
 			return ReturnCode.INCLUDE;
 		}
 	}

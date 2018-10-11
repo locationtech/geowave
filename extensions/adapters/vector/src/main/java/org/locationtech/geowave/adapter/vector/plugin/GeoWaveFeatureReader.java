@@ -20,6 +20,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
@@ -75,7 +76,9 @@ import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.MathTransform2D;
 import org.opengis.referencing.operation.TransformException;
 
+import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Sets;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -221,9 +224,16 @@ public class GeoWaveFeatureReader implements
 				jtsBounds,
 				timeBounds);
 
+		boolean spatialOnly = false;
+		if (this.query.getHints().containsKey(
+				SubsampleProcess.SUBSAMPLE_ENABLED) && (Boolean) this.query.getHints().get(
+				SubsampleProcess.SUBSAMPLE_ENABLED)) {
+			spatialOnly = true;
+		}
 		try (CloseableIterator<Index<?, ?>> indexIt = getComponents().getIndices(
 				statsMap,
-				query)) {
+				query,
+				spatialOnly)) {
 			while (indexIt.hasNext()) {
 				final PrimaryIndex index = (PrimaryIndex) indexIt.next();
 
@@ -775,6 +785,20 @@ public class GeoWaveFeatureReader implements
 		if (query == null) {
 			return Collections.emptyList();
 		}
-		return Arrays.asList(query.getPropertyNames());
+		Set<String> properties = Sets.newHashSet(query.getPropertyNames());
+		if (query.getFilter() != null && !components.getGTstore().getDataStoreOptions().isServerSideLibraryEnabled()) {
+			final ExtractAttributesFilter attributesVisitor = new ExtractAttributesFilter();
+			final Object obj = query.getFilter().accept(
+					attributesVisitor,
+					null);
+
+			if ((obj != null) && (obj instanceof Collection)) {
+				for (String prop : (Collection<String>) obj) {
+					properties.add(prop);
+				}
+			}
+
+		}
+		return Lists.newArrayList(properties);
 	}
 }

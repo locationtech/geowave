@@ -216,7 +216,10 @@ abstract class BaseFilteredIndexQuery extends
 						clientFilter,
 						scanCallback,
 						getFieldBitmask(),
-						maxResolutionSubsamplingPerDimension,
+						// Don't do client side subsampling if server side is
+						// enabled.
+						(options != null && options.isServerSideLibraryEnabled()) ? null
+								: maxResolutionSubsamplingPerDimension,
 						decodePersistenceEncoding);
 			}
 
