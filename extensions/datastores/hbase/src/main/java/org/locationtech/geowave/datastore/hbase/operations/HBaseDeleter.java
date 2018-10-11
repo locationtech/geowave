@@ -10,73 +10,43 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.hbase.operations;
 
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.Set;
-
-import org.apache.hadoop.hbase.client.BufferedMutator;
-import org.apache.hadoop.hbase.client.Delete;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.operations.RowDeleter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.locationtech.geowave.core.store.operations.Deleter;
+import org.locationtech.geowave.core.store.operations.ReaderParams;
+import org.locationtech.geowave.datastore.hbase.coprocessors.protobuf.HBaseBulkDeleteProtosClient;
 
-public class HBaseDeleter implements
-		RowDeleter
+public class HBaseDeleter<T> extends
+		HBaseReader<T> implements
+		Deleter<T>
 {
-	private static Logger LOGGER = LoggerFactory.getLogger(HBaseDeleter.class);
-	private final BufferedMutator deleter;
-	protected Set<ByteArrayId> duplicateRowTracker = new HashSet<>();
+	private boolean closed = false;
+	private static final HBaseBulkDeleteProtosClient.BulkDeleteRequest.BulkDeleteType DELETE_TYPE = HBaseBulkDeleteProtosClient.BulkDeleteRequest.BulkDeleteType.ROW;
 
 	public HBaseDeleter(
-			final BufferedMutator deleter ) {
-		this.deleter = deleter;
+			final ReaderParams<T> readerParams,
+			final HBaseOperations operations ) {
+		super(
+				readerParams,
+				operations);
 	}
 
 	@Override
-	public void close() {
-		try {
-			if (deleter != null) {
-				deleter.close();
-			}
+	public void close()
+			throws Exception {
+		if (!closed) {
+			// make sure delete is only called once
+			operations.bulkDelete(readerParams);
+
+			closed = true;
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to close BufferedMutator",
-					e);
-		}
+		super.close();
 	}
 
 	@Override
-	public void delete(
-			final GeoWaveRow row ) {
+	public void entryScanned(
+			T entry,
+			GeoWaveRow row ) {
 
-		byte[] rowBytes = GeoWaveKey.getCompositeId(row);
-		final Delete delete = new Delete(
-				rowBytes);
-		// we use a hashset of row IDs so that we can retain multiple versions
-		// (otherwise timestamps will be applied on the server side in
-		// batches and if the same row exists within a batch we will not
-		// retain multiple versions)
-		try {
-			synchronized (duplicateRowTracker) {
-				final ByteArrayId rowId = new ByteArrayId(
-						rowBytes);
-				if (!duplicateRowTracker.add(rowId)) {
-					deleter.flush();
-					duplicateRowTracker.clear();
-					duplicateRowTracker.add(rowId);
-				}
-			}
-			deleter.mutate(delete);
-		}
-		catch (IOException e) {
-			LOGGER.warn(
-					"Unable to delete row",
-					e);
-		}
 	}
+
 }

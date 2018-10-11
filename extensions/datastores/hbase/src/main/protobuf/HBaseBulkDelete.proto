@@ -1,0 +1,35 @@
+option java_package = "org.locationtech.geowave.datastore.hbase.coprocessors.protobuf";
+option java_outer_classname = "HBaseBulkDeleteProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message BulkDeleteRequest {
+  required BulkDeleteType deleteType = 1;
+  optional bytes rangeFilter = 2;
+  optional bytes filter = 3;
+  optional bytes model = 4;
+  optional bytes adapterIds = 5;
+  optional bytes numericIndexStrategyFilter = 6;
+  optional bool blockCaching = 7;
+  optional int32 cacheSize = 8;
+  required uint32 rowBatchSize = 9;
+  optional uint64 timestamp = 10;
+
+   enum BulkDeleteType {
+    ROW = 0;
+    FAMILY = 1;
+    COLUMN = 2;
+    VERSION = 3;
+  }
+}
+
+message BulkDeleteResponse {
+  required uint64 rowsDeleted = 1;
+  optional uint64 versionsDeleted = 2;
+}
+
+service BulkDeleteService {
+  rpc delete(BulkDeleteRequest)
+    returns (BulkDeleteResponse);
+}

@@ -59,14 +59,14 @@ public class HBaseReader<T> implements
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseReader.class);
 
-	private final ReaderParams<T> readerParams;
+	protected final ReaderParams<T> readerParams;
 	private final RecordReaderParams<T> recordReaderParams;
-	private final HBaseOperations operations;
+	protected final HBaseOperations operations;
 	private final boolean clientSideRowMerging;
 	private final GeoWaveRowIteratorTransformer<T> rowTransformer;
 	private final Provider<Scan> scanProvider;
 
-	private Closeable scanner = null;
+	protected Closeable scanner = null;
 	private Iterator<T> scanIt;
 
 	private final boolean wholeRowEncoding;
