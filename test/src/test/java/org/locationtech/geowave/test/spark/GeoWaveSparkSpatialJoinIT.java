@@ -102,7 +102,7 @@ public class GeoWaveSparkSpatialJoinIT extends
 			throws Exception {
 
 		session = SparkTestEnvironment.getInstance().getDefaultSession();
-		context = SparkTestEnvironment.getInstance().getDefaultContext();
+		context = session.sparkContext();
 		GeomFunctionRegistry.registerGeometryFunctions(session);
 		LOGGER.debug("Testing DataStore Type: " + dataStore.getType());
 		long mark = System.currentTimeMillis();

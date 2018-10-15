@@ -100,7 +100,6 @@ public class GeoWaveJavaSparkKMeansIT
 	@Test
 	public void testKMeansRunner()
 			throws Exception {
-		SparkContext context = SparkTestEnvironment.getInstance().getDefaultContext();
 
 		// Load data
 		TestUtils.testLocalIngest(
@@ -114,7 +113,7 @@ public class GeoWaveJavaSparkKMeansIT
 		// Create the runner
 		long mark = System.currentTimeMillis();
 		final KMeansRunner runner = new KMeansRunner();
-		runner.setJavaSparkContext(JavaSparkContext.fromSparkContext(context));
+		runner.setSparkSession(SparkTestEnvironment.getInstance().defaultSession);
 		runner.setInputDataStore(inputDataStore);
 		runner.setAdapterId(adapterId);
 		runner.setCqlFilter(CQL_FILTER);
