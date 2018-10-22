@@ -55,6 +55,12 @@ import org.apache.hadoop.hbase.client.coprocessor.Batch;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
+import org.apache.hadoop.hbase.protobuf.generated.AdminProtos.GetRegionInfoResponse.CompactionState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.ImmutableSet;
+import com.google.common.collect.Lists;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
 import org.locationtech.geowave.core.index.ByteArray;
@@ -842,18 +848,22 @@ public class HBaseOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		// simply compact the table,
-		// NOTE: this is an asynchronous operations and this does not block and
-		// wait for the table to be fully compacted, which may be a long-running
-		// distributed process, but this is primarily used for efficiency not
-		// correctness so it seems ok to just let it compact in the background
-		// but we can consider blocking and waiting for completion
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async ) {
 		if (options.isServerSideLibraryEnabled()) {
+			TableName tableName = getTableName(index.getName());
 			try (Admin admin = conn.getAdmin()) {
-				admin.compact(getTableName(index.getName()));
+				admin.compact(tableName);
+				if (!async) {
+					// wait for table compaction to finish
+					while (!admin.getCompactionState(
+							tableName).equals(
+							CompactionState.NONE)) {
+						Thread.sleep(100);
+					}
+				}
 			}
-			catch (final IOException e) {
+			catch (final Exception e) {
 				LOGGER.error(
 						"Cannot compact table '" + index.getName() + "'",
 						e);
@@ -864,7 +874,8 @@ public class HBaseOperations implements
 			return DataStoreUtils.mergeData(
 					index,
 					adapterStore,
-					adapterIndexMappingStore);
+					adapterIndexMappingStore,
+					async);
 		}
 		return true;
 	}

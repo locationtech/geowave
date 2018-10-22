@@ -352,12 +352,14 @@ public class DynamoDBOperations implements
 	@Override
 	public boolean mergeData(
 			final Index index,
-			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+			PersistentAdapterStore adapterStore,
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async ) {
 		return DataStoreUtils.mergeData(
 				index,
 				adapterStore,
-				adapterIndexMappingStore);
+				adapterIndexMappingStore,
+				async);
 	}
 
 	@Override

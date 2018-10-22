@@ -1476,15 +1476,19 @@ public class AccumuloOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async ) {
 		if (options.isServerSideLibraryEnabled()) {
-			return compactTable(index.getName());
+			return compactTable(
+					index.getName(),
+					async);
 		}
 		else {
 			return DataStoreUtils.mergeData(
 					index,
 					adapterStore,
-					adapterIndexMappingStore);
+					adapterIndexMappingStore,
+					async);
 		}
 	}
 
@@ -1493,7 +1497,9 @@ public class AccumuloOperations implements
 			final DataStatisticsStore statsStore,
 			final InternalAdapterStore internalAdapterStore ) {
 		if (options.isServerSideLibraryEnabled()) {
-			return compactTable(AbstractGeoWavePersistence.METADATA_TABLE);
+			return compactTable(
+					AbstractGeoWavePersistence.METADATA_TABLE,
+					false);
 		}
 		else {
 			return DataStoreUtils.mergeStats(
@@ -1503,7 +1509,8 @@ public class AccumuloOperations implements
 	}
 
 	public boolean compactTable(
-			final String unqualifiedTableName ) {
+			final String unqualifiedTableName,
+			final boolean async ) {
 		final String tableName = getQualifiedTableName(unqualifiedTableName);
 		try {
 			LOGGER.info("Compacting table '" + tableName + "'");
@@ -1512,8 +1519,13 @@ public class AccumuloOperations implements
 					null,
 					null,
 					true,
-					true);
-			LOGGER.info("Successfully compacted table '" + tableName + "'");
+					!async);
+			if (async) {
+				LOGGER.info("Successfully started compaction for table '" + tableName + "'");
+			}
+			else {
+				LOGGER.info("Successfully compacted table '" + tableName + "'");
+			}
 		}
 		catch (AccumuloSecurityException | TableNotFoundException | AccumuloException e) {
 			LOGGER.error(

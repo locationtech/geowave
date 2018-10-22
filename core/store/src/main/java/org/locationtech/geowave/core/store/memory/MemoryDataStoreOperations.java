@@ -878,13 +878,15 @@ public class MemoryDataStoreOperations implements
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async ) {
 		// considering memory data store is for test purposes, this
 		// implementation is unnecessary
 		return DataStoreUtils.mergeData(
 				index,
 				adapterStore,
-				adapterIndexMappingStore);
+				adapterIndexMappingStore,
+				async);
 	}
 
 	@Override

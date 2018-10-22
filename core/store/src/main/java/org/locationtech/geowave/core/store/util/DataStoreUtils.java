@@ -492,7 +492,8 @@ public class DataStoreUtils
 	public static boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore ) {
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async ) {
 		return false;
 	}
 }

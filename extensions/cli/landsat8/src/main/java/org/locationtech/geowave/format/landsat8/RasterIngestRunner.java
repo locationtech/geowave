@@ -387,8 +387,10 @@ public class RasterIngestRunner extends
 				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
 						index,
 						dataStorePluginOptions.createAdapterStore(),
-						dataStorePluginOptions.createAdapterIndexMappingStore())) {
-					System.out.println("Successfully merged overlapping tiles within index '" + index.getName() + "'");
+						dataStorePluginOptions.createAdapterIndexMappingStore(),
+						false)) {
+					System.out.println("Successfully merged overlapping tiles within index '"
+							+ index.getName() + "'");
 				}
 				else {
 					System.err.println("Unable to merge overlapping landsat8 tiles in index '" + index.getName() + "'");

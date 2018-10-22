@@ -40,6 +40,12 @@ public class MergeDataCommand extends
 		DefaultOperation implements
 		Command
 {
+	@Parameter(names = {
+		"-a",
+		"--async"
+	}, required = false, description = "Merge data asynchronously if possible.")
+	private boolean async = false;
+
 	@Parameter(description = "<storename> <indexname>")
 	private List<String> parameters = new ArrayList<String>();
 
@@ -89,7 +95,8 @@ public class MergeDataCommand extends
 			if (!operations.mergeData(
 					index,
 					adapterStore,
-					adapterIndexMappingStore)) {
+					adapterIndexMappingStore,
+					async)) {
 				JCommander.getConsole().println(
 						"Unable to merge data within index '" + index.getName() + "'");
 			}

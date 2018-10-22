@@ -90,7 +90,8 @@ public interface DataStoreOperations
 	public boolean mergeData(
 			final Index index,
 			final PersistentAdapterStore adapterStore,
-			final AdapterIndexMappingStore adapterIndexMappingStore );
+			final AdapterIndexMappingStore adapterIndexMappingStore,
+			final boolean async );
 
 	public boolean mergeStats(
 			DataStatisticsStore statsStore,
