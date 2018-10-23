@@ -4,7 +4,7 @@
 
 == GeoWave Quickstart Guide Raster Demo image:geowave-icon-logo-cropped.png[width="28%"]
 
-In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands filter the set images to select ones that meet our given parameters, and the ingest command
+In the Raster Demo, the Geowave Service creates a mosaic image from a set of raster images. The analyze commands prints out the metadata of available imagery matching your criteria to select ones that meet parameters of interest, and the ingest command
 downloads those images and combines them to create a mosaic.
 
 === Set-Up Environment Variables
@@ -116,7 +116,7 @@ We're going to project this data over the Web Mercator Coordinate Reference Syst
 geowave config addindex -t spatial spatial -c EPSG:3857
 ----
 
-. Filter the dataset by calling analyze. 
+. Show available data by calling analyze. 
 +
 In this example we look for Band 8 images that are in Berlin.
 +
