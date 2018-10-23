@@ -16,7 +16,10 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobID;
+import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -273,7 +276,9 @@ public class SplitsProviderIT extends
 					stats,
 					ias,
 					is,
-					null,
+					new JobContextImpl(
+							new Configuration(),
+							new JobID()),
 					minSplits,
 					maxSplits);
 		}
@@ -315,8 +320,7 @@ public class SplitsProviderIT extends
 								p.getRange(),
 								null,
 								null,
-								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
-								null);
+								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
 						try (RowReader<?> reader = ops.createReader(readerParams)) {
 							while (reader.hasNext()) {
 								reader.next();
