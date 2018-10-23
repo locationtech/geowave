@@ -14,7 +14,6 @@ import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Level;
@@ -55,7 +54,6 @@ import org.slf4j.LoggerFactory;
 @Environments({
 	Environment.MAP_REDUCE,
 	Environment.KAFKA,
-	Environment.SPARK
 })
 @GeoWaveTestStore(value = {
 	GeoWaveStoreType.ACCUMULO,
@@ -69,7 +67,6 @@ public class GeoWaveGrpcIT extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveGrpcIT.class);
 	private static File configFile = null;
-	private static GeoWaveGrpcServer server = null;
 	private static GeoWaveGrpcTestClient client = null;
 
 	protected DataStorePluginOptions dataStore;
@@ -503,7 +500,6 @@ public class GeoWaveGrpcIT extends
 		grpcCmdOpts.setNonBlocking(true);
 		startCmd.setCommandOptions(grpcCmdOpts);
 		startCmd.execute(operationParams);
-		server = GeoWaveGrpcServer.getInstance();
 
 		// fire up the client
 		client = new GeoWaveGrpcTestClient(

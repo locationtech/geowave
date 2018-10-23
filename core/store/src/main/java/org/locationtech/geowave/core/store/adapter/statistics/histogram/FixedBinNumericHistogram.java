@@ -31,6 +31,8 @@ package org.locationtech.geowave.core.store.adapter.statistics.histogram;
 import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.core.index.FloatCompareUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * * Fixed number of bins for a histogram. Unless configured, the range will
@@ -47,11 +49,12 @@ import org.locationtech.geowave.core.index.FloatCompareUtils;
 public class FixedBinNumericHistogram implements
 		NumericHistogram
 {
+	private static final Logger LOGGER = LoggerFactory.getLogger(FixedBinNumericHistogram.class.getName());
 
 	private long count[] = new long[32];
 	private long totalCount = 0;
 	private double minValue = Double.MAX_VALUE;
-	private double maxValue = Double.MIN_VALUE;
+	private double maxValue = -Double.MAX_VALUE;
 	private boolean constrainedRange = false;
 
 	/**
@@ -74,6 +77,10 @@ public class FixedBinNumericHistogram implements
 			final double minValue,
 			final double maxValue ) {
 		count = new long[bins];
+		if (Double.isInfinite(minValue) || Double.isInfinite(maxValue)) {
+			throw new IllegalArgumentException(
+					"Histogram cannot use infinity as min or max value");
+		}
 		this.minValue = minValue;
 		this.maxValue = maxValue;
 		constrainedRange = true;
@@ -192,12 +199,20 @@ public class FixedBinNumericHistogram implements
 		final double newMaxValue = Math.max(
 				maxValue,
 				myTypeOfHist.maxValue);
-		this.redistribute(
-				newMinValue,
-				newMaxValue);
-		myTypeOfHist.redistribute(
-				newMinValue,
-				newMaxValue);
+		try {
+			this.redistribute(
+					newMinValue,
+					newMaxValue);
+			myTypeOfHist.redistribute(
+					newMinValue,
+					newMaxValue);
+		}
+		catch (final IllegalArgumentException e) {
+			LOGGER.error(
+					"Failed to redistribute values during merge",
+					e);
+		}
+
 		for (int i = 0; i < count.length; i++) {
 			count[i] += myTypeOfHist.count[i];
 		}
@@ -294,16 +309,30 @@ public class FixedBinNumericHistogram implements
 		}
 		else {
 			if (num < minValue) {
-				redistribute(
-						num,
-						maxValue);
+				try {
+					redistribute(
+							num,
+							maxValue);
+				}
+				catch (final IllegalArgumentException e) {
+					LOGGER.error(
+							"Failed to redistribute values during add",
+							e);
+				}
 				minValue = num;
 
 			}
 			else if (num > maxValue) {
-				redistribute(
-						minValue,
-						num);
+				try {
+					redistribute(
+							minValue,
+							num);
+				}
+				catch (final IllegalArgumentException e) {
+					LOGGER.error(
+							"Failed to redistribute values during add",
+							e);
+				}
 				maxValue = num;
 			}
 			final double range = maxValue - minValue;
@@ -319,7 +348,8 @@ public class FixedBinNumericHistogram implements
 
 	private void redistribute(
 			final double newMinValue,
-			final double newMaxValue ) {
+			final double newMaxValue )
+			throws IllegalArgumentException {
 		redistribute(
 				new long[count.length],
 				newMinValue,
@@ -330,6 +360,17 @@ public class FixedBinNumericHistogram implements
 			final long[] newCount,
 			final double newMinValue,
 			final double newMaxValue ) {
+
+		if (Double.isInfinite(minValue) || Double.isInfinite(maxValue)) {
+			throw new IllegalArgumentException(
+					"Histogram cannot redistribute with min or max value set to infinity");
+		}
+
+		if (Double.isInfinite(newMinValue) || Double.isInfinite(newMaxValue)) {
+			throw new IllegalArgumentException(
+					"Histogram cannot redistribute with new min or max value set to infinity");
+		}
+
 		final double perBinSize = binSize();
 		final double newRange = (newMaxValue - newMinValue);
 		final double newPerBinsSize = newRange / count.length;

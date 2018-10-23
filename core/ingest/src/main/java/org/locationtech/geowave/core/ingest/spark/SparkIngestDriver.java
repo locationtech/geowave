@@ -104,35 +104,8 @@ public class SparkIngestDriver implements
 		int numPartitions;
 		Path inputPath;
 		String s3EndpointUrl = null;
-
-		if (jsc == null) {
-			String jar = "";
-			try {
-				jar = SparkIngestDriver.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
-			}
-			catch (final URISyntaxException e) {
-				LOGGER.error(
-						"Unable to set jar location in spark configuration",
-						e);
-			}
-
-			session = SparkSession
-					.builder()
-					.appName(
-							sparkOptions.getAppName())
-					.master(
-							sparkOptions.getMaster())
-					.config(
-							"spark.driver.host",
-							sparkOptions.getHost())
-					.config(
-							"spark.jars",
-							jar)
-					.getOrCreate();
-
-			jsc = new JavaSparkContext(
-					session.sparkContext());
-		}
+		
+		
 		boolean isS3 = basePath.startsWith(
 				"s3://");
 		boolean isHDFS = !isS3 && (basePath.startsWith(
@@ -162,9 +135,6 @@ public class SparkIngestDriver implements
 		else {
 			LOGGER.warn(
 					"Spark ingest support only S3 or HDFS as input location");
-			close(
-					jsc,
-					session);
 			return false;
 		}
 
@@ -172,9 +142,6 @@ public class SparkIngestDriver implements
 				inputPath))) {
 			LOGGER.error(
 					"Error in accessing Input path " + basePath);
-			close(
-					jsc,
-					session);
 			return false;
 		}
 
@@ -210,16 +177,40 @@ public class SparkIngestDriver implements
 		else {
 			numCores = sparkOptions.getNumCores();
 		}
-
-		jsc.sc().conf().set(
-				"spark.executor.instances",
-				Integer.toString(
-						numExecutors));
-		jsc.sc().conf().set(
-				"spark.executor.cores",
-				Integer.toString(
-						numCores));
 		numPartitions = numExecutors * numCores * 2;
+
+		if (session == null) {
+			String jar = "";
+			try {
+				jar = SparkIngestDriver.class.getProtectionDomain().getCodeSource().getLocation().toURI().getPath();
+			}
+			catch (final URISyntaxException e) {
+				LOGGER.error(
+						"Unable to set jar location in spark configuration",
+						e);
+			}
+
+			session = SparkSession
+					.builder()
+					.appName(
+							sparkOptions.getAppName())
+					.master(
+							sparkOptions.getMaster())
+					.config(
+							"spark.driver.host",
+							sparkOptions.getHost())
+					.config(
+							"spark.jars",
+							jar)
+					.config("spark.executor.instances",Integer.toString(
+							numExecutors))
+					.config("spark.executor.cores",Integer.toString(
+							numCores))
+					.getOrCreate();
+
+			jsc = JavaSparkContext.fromSparkContext(
+					session.sparkContext());
+		}
 
 		JavaRDD<URI> fileRDD = jsc.parallelize(
 				Lists.transform(
@@ -279,15 +270,9 @@ public class SparkIngestDriver implements
 								uri);
 					});
 		}
-
-		if (jsc != null) {
-			close(
-					jsc,
-					session);
-		}
-
+	
+		close(session);
 		return true;
-
 	}
 
 	public void processInput(
@@ -408,13 +393,7 @@ public class SparkIngestDriver implements
 	}
 
 	public void close(
-			JavaSparkContext jsc,
 			SparkSession session ) {
-		if (jsc != null) {
-			jsc.close();
-			jsc = null;
-		}
-
 		if (session != null) {
 			session.close();
 			session = null;

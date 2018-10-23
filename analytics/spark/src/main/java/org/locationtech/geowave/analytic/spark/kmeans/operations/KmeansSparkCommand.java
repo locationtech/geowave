@@ -137,11 +137,13 @@ public class KmeansSparkCommand extends
 		runner.setOutputDataStore(outputDataStore);
 		try {
 			runner.run();
-
 		}
 		catch (final IOException e) {
 			throw new RuntimeException(
 					"Failed to execute: " + e.getMessage());
+		}
+		finally {
+			runner.close();
 		}
 
 		return null;
