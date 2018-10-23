@@ -34,7 +34,7 @@ public class CombineStatsCommand extends
 		Command
 {
 
-	@Parameter(description = "<storename>")
+	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
@@ -49,7 +49,7 @@ public class CombineStatsCommand extends
 		// Ensure we have all the required arguments
 		if (parameters.size() != 1) {
 			throw new ParameterException(
-					"Requires arguments: <storename>");
+					"Requires arguments: <store name>");
 		}
 
 		final String inputStoreName = parameters.get(0);

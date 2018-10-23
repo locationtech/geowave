@@ -19,8 +19,6 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
@@ -32,9 +30,6 @@ import com.beust.jcommander.Parameters;
 public class ListTypesCommand extends
 		ServiceEnabledCommand<String>
 {
-
-	private static final Logger LOGGER = LoggerFactory.getLogger(RecalculateStatsCommand.class);
-
 	@Parameter(description = "<store name>")
 	private List<String> parameters = new ArrayList<>();
 

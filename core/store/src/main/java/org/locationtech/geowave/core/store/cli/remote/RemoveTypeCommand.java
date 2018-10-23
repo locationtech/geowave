@@ -34,7 +34,7 @@ public class RemoveTypeCommand extends
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(RemoveTypeCommand.class);
 
-	@Parameter(description = "<store name> <type name>")
+	@Parameter(description = "<store name> <datatype name>")
 	private List<String> parameters = new ArrayList<>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
