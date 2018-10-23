@@ -510,9 +510,12 @@ public class DataStoreUtils
 			final PersistentAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
-		RowDeleter deleter = operations.createRowDeleter(index.getName());
+		final RowDeleter deleter = operations.createRowDeleter(
+				index.getName(),
+				adapterStore,
+				internalAdapterStore);
 		try {
-			final Map<Short, RowMergingDataAdapter> mergingAdapters = new HashMap<Short, RowMergingDataAdapter>();
+			final Map<Short, InternalDataAdapter> mergingAdapters = new HashMap<>();
 
 			try (CloseableIterator<InternalDataAdapter<?>> adapters = adapterStore.getAdapters()) {
 				while (adapters.hasNext()) {
@@ -521,33 +524,30 @@ public class DataStoreUtils
 							&& (((RowMergingDataAdapter) adapter.getAdapter()).getTransform() != null)) {
 						mergingAdapters.put(
 								adapter.getAdapterId(),
-								(RowMergingDataAdapter) adapter.getAdapter());
+								adapter);
 					}
 				}
 			}
 
-			final ReaderParamsBuilder<GeoWaveRow> paramsBuilder = new ReaderParamsBuilder<GeoWaveRow>(
+			final ReaderParamsBuilder<GeoWaveRow> paramsBuilder = new ReaderParamsBuilder<>(
 					index,
 					adapterStore,
 					internalAdapterStore,
-					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)
-							.isClientsideRowMerging(
-									true)
-							.maxRangeDecomposition(
-									options.getMaxRangeDecomposition());
+					GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
+					true).maxRangeDecomposition(
+					options.getMaxRangeDecomposition());
 
 			final short[] adapterIds = new short[1];
 
-			for (Entry<Short, RowMergingDataAdapter> adapter : mergingAdapters.entrySet()) {
+			for (final Entry<Short, InternalDataAdapter> adapter : mergingAdapters.entrySet()) {
 				adapterIds[0] = adapter.getKey();
 				paramsBuilder.adapterIds(adapterIds);
 
 				try (RowWriter writer = operations.createWriter(
 						index,
-						adapter.getValue().getTypeName(),
-						adapter.getKey());
+						adapter.getValue());
 						RowReader<GeoWaveRow> reader = operations.createReader(paramsBuilder.build())) {
-					RewritingMergingEntryIterator<?> iterator = new RewritingMergingEntryIterator(
+					final RewritingMergingEntryIterator<?> iterator = new RewritingMergingEntryIterator(
 							adapterStore,
 							index,
 							reader,
@@ -558,7 +558,7 @@ public class DataStoreUtils
 						iterator.next();
 					}
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					LOGGER.error(
 							"Exception occurred while merging data.",
 							e);
@@ -571,7 +571,7 @@ public class DataStoreUtils
 			try {
 				deleter.close();
 			}
-			catch (Exception e) {
+			catch (final Exception e) {
 				LOGGER.warn(
 						"Exception occurred when closing deleter.",
 						e);

@@ -35,6 +35,11 @@ public class RemoveStatCommand extends
 	@Parameter(description = "<store name> <datatype name> <stat type>")
 	private List<String> parameters = new ArrayList<>();
 
+	@Parameter(names = {
+		"--fieldName"
+	}, description = "If the statistic is maintained per field, optionally provide a field name")
+	private String fieldName = "";
+
 	private String statType = null;
 
 	@Override
@@ -56,6 +61,7 @@ public class RemoveStatCommand extends
 
 		if (!statStore.removeStatistics(
 				adapter.getAdapterId(),
+				fieldName,
 				new BaseStatisticsType<>(
 						statType),
 				authorizations)) {

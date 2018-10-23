@@ -78,7 +78,8 @@ public class DBScanIT extends
 	@GeoWaveTestStore(value = {
 		GeoWaveStoreType.ACCUMULO,
 		GeoWaveStoreType.BIGTABLE,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

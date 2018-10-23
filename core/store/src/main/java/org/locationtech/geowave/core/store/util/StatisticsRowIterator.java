@@ -19,10 +19,9 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.StatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
+import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterators;
@@ -112,24 +111,25 @@ public class StatisticsRowIterator implements
 
 	protected InternalDataStatistics<?, ?, ?> entryToValue(
 			final GeoWaveMetadata entry ) {
-		final InternalDataStatistics<?, ?, ?> stats = (InternalDataStatistics<?, ?, ?>) PersistenceUtils
+		final InternalDataStatistics<?, ?, ?> basicStats = (InternalDataStatistics<?, ?, ?>) PersistenceUtils
 				.fromBinary(entry.getValue());
-
-		if (stats != null) {
-			stats.setAdapterId(ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
-			stats.setType((StatisticsType) new BaseStatisticsType(
-					entry.getPrimaryId()));
+		if (basicStats != null) {
+			DataStatisticsStoreImpl.setFields(
+					entry,
+					basicStats,
+					ByteArrayUtils.byteArrayToShort(entry.getSecondaryId()));
 		}
-
-		return stats;
+		return basicStats;
 	}
 
 	protected GeoWaveMetadata statsToMetadata(
 			final InternalDataStatistics<?, ?, ?> stats ) {
 		return new GeoWaveMetadata(
-				stats.getType().getBytes(),
+				DataStatisticsStoreImpl.getPrimaryId(
+						stats.getType(),
+						stats.getExtendedId()).getBytes(),
 				ByteArrayUtils.shortToByteArray(stats.getAdapterId()),
-				null,
+				stats.getVisibility(),
 				PersistenceUtils.toBinary(stats));
 	}
 

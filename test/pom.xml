@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<artifactId>geowave-parent</artifactId>
@@ -187,6 +189,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.locationtech.geowave</groupId>
+			<artifactId>geowave-datastore-redis</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.locationtech.geowave</groupId>
 			<artifactId>geowave-example</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -334,6 +341,11 @@
 					<artifactId>hibernate-validator</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.kstyrc</groupId>
+			<artifactId>embedded-redis</artifactId>
+			<version>0.6</version>
 		</dependency>
 		<dependency>
 			<groupId>org.apache.hadoop</groupId>
@@ -605,22 +617,30 @@
 						<configuration>
 							<tasks xmlns:jacoco="antlib:org.jacoco.ant">
 								<mkdir dir="${project.reporting.outputDirectory}" />
-								<taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml" classpathref="maven.plugin.classpath" />
+								<taskdef uri="antlib:org.jacoco.ant"
+									resource="org/jacoco/ant/antlib.xml"
+									classpathref="maven.plugin.classpath" />
 								<jacoco:report>
 									<executiondata>
-										<fileset dir="../" includes="**/coverage-reports/*.exec" />
+										<fileset dir="../"
+											includes="**/coverage-reports/*.exec" />
 									</executiondata>
 
 									<structure name="GeoWave">
 										<classfiles>
-											<fileset dir="../" includes="**/target/classes/**,**/target/munged/classes/**" excludes="**/accumulo/target/classes/**" />
+											<fileset dir="../"
+												includes="**/target/classes/**,**/target/munged/classes/**"
+												excludes="**/accumulo/target/classes/**" />
 										</classfiles>
 										<sourcefiles>
-											<fileset dir="../" includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**" excludes="**/accumulo/target/src/main/java/**" />
+											<fileset dir="../"
+												includes="**/src/main/java/**,**/src/main/scala/**,**/target/munged/main/**"
+												excludes="**/accumulo/target/src/main/java/**" />
 										</sourcefiles>
 									</structure>
 
-									<xml destfile="${project.reporting.outputDirectory}/jacoco.xml" />
+									<xml
+										destfile="${project.reporting.outputDirectory}/jacoco.xml" />
 								</jacoco:report>
 							</tasks>
 						</configuration>
@@ -650,6 +670,7 @@
 						<sourceDirectory>../extensions/datastores/bigtable/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/cassandra/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/datastores/dynamodb/src/main/java</sourceDirectory>
+						<sourceDirectory>../extensions/datastores/redis/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/auth/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/vector/src/main/java</sourceDirectory>
 						<sourceDirectory>../extensions/adapters/raster/src/main/java</sourceDirectory>
@@ -746,6 +767,13 @@
 			<properties>
 				<skipITs>false</skipITs>
 				<testStoreType>DYNAMODB</testStoreType>
+			</properties>
+		</profile>
+		<profile>
+			<id>redis-it</id>
+			<properties>
+				<skipITs>false</skipITs>
+				<testStoreType>REDIS</testStoreType>
 			</properties>
 		</profile>
 		<profile>

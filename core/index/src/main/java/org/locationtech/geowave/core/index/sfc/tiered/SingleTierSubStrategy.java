@@ -32,7 +32,6 @@ import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
-import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.SpaceFillingCurve;
 import org.locationtech.geowave.core.index.sfc.binned.BinnedSFCUtils;

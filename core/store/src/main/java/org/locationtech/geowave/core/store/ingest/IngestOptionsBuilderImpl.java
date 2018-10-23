@@ -59,10 +59,9 @@ public class IngestOptionsBuilderImpl<T> implements
 	@Override
 	public Builder<T> addExtension(
 			final String fileExtension ) {
-		fileExtensions = ArrayUtils
-				.add(
-						fileExtensions,
-						fileExtension);
+		fileExtensions = ArrayUtils.add(
+				fileExtensions,
+				fileExtension);
 		return this;
 	}
 

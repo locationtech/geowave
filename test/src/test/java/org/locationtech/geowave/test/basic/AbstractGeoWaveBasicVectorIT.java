@@ -82,6 +82,8 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.Geometry;
 
+import edu.emory.mathcs.backport.java.util.Arrays;
+
 abstract public class AbstractGeoWaveBasicVectorIT extends
 		AbstractGeoWaveIT
 {
@@ -511,6 +513,9 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		LOGGER.warn(deletedFeatures + " features bulk deleted.");
 		LOGGER.warn(remainingFeatures + " features not deleted.");
 
+		Assert.assertTrue(
+				"Unable to delete all features in bulk delete, there are " + remainingFeatures + " not deleted",
+				remainingFeatures == 0);
 		// Now for the final check, query everything again
 		queryResults = geowaveStore.query(QueryBuilder.newBuilder().indexName(
 				index.getName()).build());
@@ -656,15 +661,14 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 										.getType()
 										.getString()
 										.startsWith(
-												"FEATURE_BBOX"))) {
+												"BOUNDING_BOX"))) {
 									continue;
 								}
 							}
 
 							Assert.assertNotNull(actualStats);
 							// if the stats are the same, their binary
-							// serialization
-							// should be the same
+							// serialization should be the same
 							Assert.assertArrayEquals(
 									actualStats.toString() + " = " + expectedStat.toString(),
 									expectedStat.toBinary(),

@@ -19,6 +19,7 @@
 		<module>datastores/bigtable</module>
 		<module>datastores/cassandra</module>
 		<module>datastores/dynamodb</module>
+		<module>datastores/redis</module>
 		<module>formats/geolife</module>
 		<module>formats/geotools-raster</module>
 		<module>formats/geotools-vector</module>

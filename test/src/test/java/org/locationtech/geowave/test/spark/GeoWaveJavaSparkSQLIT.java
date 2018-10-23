@@ -55,7 +55,8 @@ public class GeoWaveJavaSparkSQLIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.DYNAMODB,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStore;
 

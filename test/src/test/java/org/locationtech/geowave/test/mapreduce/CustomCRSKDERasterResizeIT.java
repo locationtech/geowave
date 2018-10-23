@@ -71,7 +71,8 @@ import org.opengis.coverage.grid.GridCoverage;
 @GeoWaveTestStore({
 	GeoWaveStoreType.ACCUMULO,
 	GeoWaveStoreType.BIGTABLE,
-	GeoWaveStoreType.HBASE
+	GeoWaveStoreType.HBASE,
+	GeoWaveStoreType.REDIS
 })
 public class CustomCRSKDERasterResizeIT
 {

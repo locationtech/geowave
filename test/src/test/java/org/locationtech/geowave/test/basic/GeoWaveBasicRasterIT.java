@@ -69,7 +69,8 @@ public class GeoWaveBasicRasterIT extends
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.CASSANDRA,
 		GeoWaveStoreType.DYNAMODB,
-		GeoWaveStoreType.HBASE
+		GeoWaveStoreType.HBASE,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -127,7 +128,7 @@ public class GeoWaveBasicRasterIT extends
 				numBands,
 				numRasters,
 				new SummingMergeStrategy());
-		
+
 		// Verify correct results
 		queryGeneralPurpose(
 				coverageName,
@@ -149,25 +150,23 @@ public class GeoWaveBasicRasterIT extends
 				TestUtils.DEFAULT_SPATIAL_INDEX,
 				adapterStore,
 				internalAdapterStore,
-				GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER)
-						.isClientsideRowMerging(
-								true)
-						.adapterIds(
-								adapterIds)
-						.build();
-		try(RowReader<GeoWaveRow> reader = operations.createReader(params)) {
+				GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER).isClientsideRowMerging(
+				true).adapterIds(
+				adapterIds).build();
+		try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {
 			assertTrue(reader.hasNext());
-	
+
 			GeoWaveRow row = reader.next();
-	
+
 			// Assert that the values for the row are not merged.
-			// If server side libraries are enabled, the merging will be done there.
+			// If server side libraries are enabled, the merging will be done
+			// there.
 			if (!dataStoreOptions.getFactoryOptions().getStoreOptions().isServerSideLibraryEnabled()) {
 				assertEquals(
 						numRasters,
 						row.getFieldValues().length);
 			}
-	
+
 			assertFalse(reader.hasNext());
 		}
 
@@ -180,16 +179,16 @@ public class GeoWaveBasicRasterIT extends
 				dataStoreOptions.createAdapterIndexMappingStore());
 
 		// Make sure the row was merged
-		try(RowReader<GeoWaveRow> reader = operations.createReader(params)) {
+		try (RowReader<GeoWaveRow> reader = operations.createReader(params)) {
 			assertTrue(reader.hasNext());
-	
+
 			GeoWaveRow row = reader.next();
-	
+
 			// Assert that the values for the row are merged.
 			assertEquals(
 					1,
 					row.getFieldValues().length);
-	
+
 			assertFalse(reader.hasNext());
 		}
 

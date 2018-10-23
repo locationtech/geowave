@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,8 +15,6 @@ import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite.SuiteClasses;
 import org.locationtech.geowave.mapreduce.splits.SplitsProviderIT;
-import org.locationtech.geowave.test.GeoWaveITRunner;
-import org.locationtech.geowave.test.GeoWaveITSuiteRunner;
 import org.locationtech.geowave.test.basic.GeoWaveBasicCustomCRSRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicRasterIT;
 import org.locationtech.geowave.test.basic.GeoWaveBasicSpatialTemporalVectorIT;
@@ -56,8 +54,9 @@ import org.locationtech.geowave.test.spark.GeoWaveSparkSpatialJoinIT;
 	GeoWaveVectorSerializationIT.class,
 	BasicKafkaIT.class,
 	BasicMapReduceIT.class,
-	// for now tests are taking too long in travis and landsatIT is a long test
-	// LandsatIT.class,
+	// // for now tests are taking too long in travis and landsatIT is a long
+	// test
+	// // LandsatIT.class,
 	CustomCRSLandsatIT.class,
 	GeoWaveBasicRasterIT.class,
 	GeoWaveBasicCustomCRSRasterIT.class,

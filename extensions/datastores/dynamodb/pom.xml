@@ -11,11 +11,6 @@
 	<description>Geowave Data Store on Amazon DynamoDB</description>
 	<dependencies>
 		<dependency>
-			<groupId>org.locationtech.geowave</groupId>
-			<artifactId>geowave-core-geotime</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>org.apache.commons</groupId>
 			<artifactId>commons-collections4</artifactId>
 			<version>4.1</version>

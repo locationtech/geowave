@@ -20,17 +20,12 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
-import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
-import org.locationtech.geowave.core.index.ByteArray;
-import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableSet;
@@ -40,8 +35,6 @@ import com.google.common.collect.Sets;
 @SuppressWarnings("rawtypes")
 public class HBaseUtils
 {
-	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseUtils.class);
-
 	public static String getQualifiedTableName(
 			final String tableNamespace,
 			final String unqualifiedTableName ) {

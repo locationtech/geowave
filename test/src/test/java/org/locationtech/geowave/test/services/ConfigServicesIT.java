@@ -50,7 +50,8 @@ public class ConfigServicesIT
 		GeoWaveStoreType.BIGTABLE,
 		GeoWaveStoreType.HBASE,
 		GeoWaveStoreType.CASSANDRA,
-		GeoWaveStoreType.DYNAMODB
+		GeoWaveStoreType.DYNAMODB,
+		GeoWaveStoreType.REDIS
 	})
 	protected DataStorePluginOptions dataStorePluginOptions;
 

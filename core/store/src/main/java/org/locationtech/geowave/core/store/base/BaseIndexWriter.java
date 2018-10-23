@@ -172,8 +172,7 @@ class BaseIndexWriter<T> implements
 			try {
 				writer = operations.createWriter(
 						index,
-						adapter.getTypeName(),
-						adapter.getAdapterId());
+						adapter);
 			}
 			catch (final Exception e) {
 				LOGGER.error(

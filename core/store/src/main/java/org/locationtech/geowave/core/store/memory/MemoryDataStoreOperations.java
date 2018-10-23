@@ -39,6 +39,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
@@ -122,6 +123,7 @@ public class MemoryDataStoreOperations implements
 	@Override
 	public boolean deleteAll(
 			final String tableName,
+			final String typeName,
 			final Short internalAdapterId,
 			final String... additionalAuthorizations ) {
 		return false;
@@ -137,14 +139,16 @@ public class MemoryDataStoreOperations implements
 	@Override
 	public RowWriter createWriter(
 			final Index index,
-			final String typeName,
-			final short adapterId ) {
+			final InternalDataAdapter<?> adapter ) {
 		return new MyIndexWriter<>(
 				index.getName());
 	}
 
+	@Override
 	public RowDeleter createRowDeleter(
 			final String indexName,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final String... authorizations ) {
 		return new MyIndexDeleter(
 				indexName,
@@ -934,6 +938,8 @@ public class MemoryDataStoreOperations implements
 		return new QueryAndDeleteByRow<>(
 				createRowDeleter(
 						readerParams.getIndex().getName(),
+						readerParams.getAdapterStore(),
+						readerParams.getInternalAdapterStore(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));
 	}

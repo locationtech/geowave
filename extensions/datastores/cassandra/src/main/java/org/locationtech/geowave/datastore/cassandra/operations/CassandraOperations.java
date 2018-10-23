@@ -29,6 +29,7 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -48,8 +49,8 @@ import org.locationtech.geowave.core.store.operations.RowWriter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow;
 import org.locationtech.geowave.datastore.cassandra.CassandraRow.CassandraField;
-import org.locationtech.geowave.datastore.cassandra.operations.config.CassandraOptions;
-import org.locationtech.geowave.datastore.cassandra.operations.config.CassandraRequiredOptions;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraOptions;
+import org.locationtech.geowave.datastore.cassandra.config.CassandraRequiredOptions;
 import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool;
 import org.locationtech.geowave.datastore.cassandra.util.KeyspaceStatePool.KeyspaceState;
 import org.locationtech.geowave.datastore.cassandra.util.SessionPool;
@@ -483,6 +484,7 @@ public class CassandraOperations implements
 	@Override
 	public boolean deleteAll(
 			final String indexName,
+			final String typeName,
 			final Short adapterId,
 			final String... additionalAuthorizations ) {
 		return false;
@@ -498,8 +500,7 @@ public class CassandraOperations implements
 	@Override
 	public RowWriter createWriter(
 			final Index index,
-			final String typeName,
-			final short internalAdapterId ) {
+			InternalDataAdapter<?> adapter ) {
 		createTable(index.getName());
 		return new CassandraWriter(
 				index.getName(),
@@ -603,6 +604,8 @@ public class CassandraOperations implements
 	@Override
 	public RowDeleter createRowDeleter(
 			final String indexName,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final String... authorizations ) {
 		return new CassandraDeleter(
 				this,
@@ -667,6 +670,8 @@ public class CassandraOperations implements
 		return new QueryAndDeleteByRow<>(
 				createRowDeleter(
 						readerParams.getIndex().getName(),
+						readerParams.getAdapterStore(),
+						readerParams.getInternalAdapterStore(),
 						readerParams.getAdditionalAuthorizations()),
 				createReader(readerParams));
 	}

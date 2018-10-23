@@ -115,9 +115,8 @@ public abstract class DBScanClusterList implements
 
 	protected List<ByteArray> getIds(
 			boolean allowUpdates ) {
-		if (ids == null || ids == Collections.<ByteArray> emptyList())
-			ids = allowUpdates ? new ArrayList<ByteArray>(
-					4) : Collections.<ByteArray> emptyList();
+		if (ids == null || ids == Collections.<ByteArray> emptyList()) ids = allowUpdates ? new ArrayList<ByteArray>(
+				4) : Collections.<ByteArray> emptyList();
 		return ids;
 	}
 

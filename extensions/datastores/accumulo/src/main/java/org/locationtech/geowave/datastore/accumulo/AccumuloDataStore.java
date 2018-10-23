@@ -56,7 +56,7 @@ public class AccumuloDataStore extends
 	public AccumuloDataStore(
 			final AccumuloOperations accumuloOperations,
 			final AccumuloOptions accumuloOptions ) {
-		this(
+		super(
 				new IndexStoreImpl(
 						accumuloOperations,
 						accumuloOptions),
@@ -66,57 +66,16 @@ public class AccumuloDataStore extends
 				new DataStatisticsStoreImpl(
 						accumuloOperations,
 						accumuloOptions),
-				new AccumuloSecondaryIndexDataStore(
+				new AdapterIndexMappingStoreImpl(
 						accumuloOperations,
 						accumuloOptions),
-				new AdapterIndexMappingStoreImpl(
+				new AccumuloSecondaryIndexDataStore(
 						accumuloOperations,
 						accumuloOptions),
 				accumuloOperations,
 				accumuloOptions,
 				new InternalAdapterStoreImpl(
 						accumuloOperations));
-	}
-
-	public AccumuloDataStore(
-			final IndexStore indexStore,
-			final PersistentAdapterStore adapterStore,
-			final DataStatisticsStore statisticsStore,
-			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
-			final AdapterIndexMappingStore indexMappingStore,
-			final AccumuloOperations accumuloOperations,
-			final InternalAdapterStore adapterMappingStore ) {
-		this(
-				indexStore,
-				adapterStore,
-				statisticsStore,
-				secondaryIndexDataStore,
-				indexMappingStore,
-				accumuloOperations,
-				new AccumuloOptions(),
-				adapterMappingStore);
-	}
-
-	public AccumuloDataStore(
-			final IndexStore indexStore,
-			final PersistentAdapterStore adapterStore,
-			final DataStatisticsStore statisticsStore,
-			final AccumuloSecondaryIndexDataStore secondaryIndexDataStore,
-			final AdapterIndexMappingStore indexMappingStore,
-			final AccumuloOperations accumuloOperations,
-			final AccumuloOptions accumuloOptions,
-			final InternalAdapterStore adapterMappingStore ) {
-		super(
-				indexStore,
-				adapterStore,
-				statisticsStore,
-				indexMappingStore,
-				secondaryIndexDataStore,
-				accumuloOperations,
-				accumuloOptions,
-				adapterMappingStore);
-
-		secondaryIndexDataStore.setDataStore(this);
 	}
 
 	@Override
