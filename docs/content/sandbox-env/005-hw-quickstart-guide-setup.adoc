@@ -4,7 +4,7 @@
 
 == Setting Up the Environment
 
-The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/0.9.7/VirtualBox_HDP_Geowave_Sandbox_0.9.7.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
+The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/${project.version}/VirtualBox_HDP_Geowave_Sandbox_${project.version}.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
 
 === Setting up the VirtualBox Image
 
@@ -14,7 +14,7 @@ The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/0.9
 
 image::sandbox/import-appliance.png[scaledwidth="100%",alt="select emr"]
 
-- Click on the folder icon, and navigate to _VirtualBox_HDP_GeoWave_Sandbox_0.9.6.ova_ (the image that you downloaded).
+- Click on the folder icon, and navigate to _VirtualBox_HDP_GeoWave_Sandbox_${project.version}.ova_ (the image that you downloaded).
 
 - Select "Next" and then "Import"
   * This should take a couple of minutes
