@@ -50,7 +50,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		KdeCommand cmd = new KdeCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -90,7 +90,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		DBScanCommand cmd = new DBScanCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -122,7 +122,7 @@ public class GeoWaveGrpcAnalyticMapreduceService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		NearestNeighborCommand cmd = new NearestNeighborCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

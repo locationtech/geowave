@@ -59,7 +59,7 @@ public class GeoWaveGrpcCoreStoreService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		RemoveTypeCommand cmd = new RemoveTypeCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -93,7 +93,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		RemoveStoreCommand cmd = new RemoveStoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -128,7 +128,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		ListTypesCommand cmd = new ListTypesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -162,7 +162,7 @@ public class GeoWaveGrpcCoreStoreService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		CalculateStatCommand cmd = new CalculateStatCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -196,7 +196,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		RemoveIndexGroupCommand cmd = new RemoveIndexGroupCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -230,7 +230,7 @@ public class GeoWaveGrpcCoreStoreService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		RecalculateStatsCommand cmd = new RecalculateStatsCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -264,7 +264,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		ListStatsCommand cmd = new ListStatsCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -299,7 +299,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		ListIndicesCommand cmd = new ListIndicesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -333,7 +333,7 @@ public class GeoWaveGrpcCoreStoreService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		ClearCommand cmd = new ClearCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -367,7 +367,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		VersionCommand cmd = new VersionCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -401,7 +401,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		AddIndexGroupCommand cmd = new AddIndexGroupCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -436,7 +436,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		RemoveIndexCommand cmd = new RemoveIndexCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -471,7 +471,7 @@ public class GeoWaveGrpcCoreStoreService extends
 
 		RemoveStatCommand cmd = new RemoveStatCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

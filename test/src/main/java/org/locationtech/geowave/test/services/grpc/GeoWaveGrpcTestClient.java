@@ -442,18 +442,31 @@ public class GeoWaveGrpcTestClient
 	public boolean nearestNeighborCommand() {
 		final ArrayList<String> types = new ArrayList<>();
 		types.add(GeoWaveGrpcTestUtils.typeName);
-		final NearestNeighborCommandParameters request = NearestNeighborCommandParameters.newBuilder().addParameters(
-				GeoWaveGrpcTestUtils.storeName).addAllTypeNames(
-				types).setExtractQuery(
-				GeoWaveGrpcTestUtils.wktSpatialQuery).setExtractMinInputSplit(
-				"2").setExtractMaxInputSplit(
-				"6").setPartitionMaxDistance(
-				"10").setOutputReducerCount(
-				"4").setMapReduceHdfsHostPort(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setMapReduceJobtrackerHostPort(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setOutputHdfsOutputPath(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "/GrpcNearestNeighbor").setMapReduceHdfsBaseDir(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).build();
+		final NearestNeighborCommandParameters request = NearestNeighborCommandParameters
+				.newBuilder()
+				.addParameters(
+						GeoWaveGrpcTestUtils.storeName)
+				.addAllTypeNames(
+						types)
+				.setExtractQuery(
+						GeoWaveGrpcTestUtils.wktSpatialQuery)
+				.setExtractMinInputSplit(
+						"2")
+				.setExtractMaxInputSplit(
+						"6")
+				.setPartitionMaxDistance(
+						"10")
+				.setOutputReducerCount(
+						"4")
+				.setMapReduceHdfsHostPort(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs())
+				.setMapReduceJobtrackerHostPort(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker())
+				.setOutputHdfsOutputPath(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory() + "/GrpcNearestNeighbor")
+				.setMapReduceHdfsBaseDir(
+						GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory())
+				.build();
 		analyticMapreduceBlockingStub.nearestNeighborCommand(request);
 		return true;
 	}

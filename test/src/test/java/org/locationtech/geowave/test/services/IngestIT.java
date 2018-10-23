@@ -224,13 +224,6 @@ public class IngestIT
 				r,
 				50);
 
-		r = ingestServiceClient.localToKafka("/nonexistent-directory");
-		assertFinalIngestStatus(
-				"Should fail to complete ingest",
-				"ERROR",
-				r,
-				50);
-
 		r = ingestServiceClient.kafkaToGW(
 				"nonexistent-store",
 				spatialIndex,
@@ -305,18 +298,6 @@ public class IngestIT
 				"COMPLETE",
 				r,
 				500);
-
-		r = ingestServiceClient.localToHdfs(
-				OSM_GPX_INPUT_DIR,
-				"/nonexistent-directory",
-				null,
-				"gpx");
-		assertFinalIngestStatus(
-				"Should fail to ingest for nonexistent directory",
-				"ERROR",
-				r,
-				500);
-
 	}
 
 	// combined testing of commands localToMrGW and mrToGW into one test as

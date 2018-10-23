@@ -143,7 +143,6 @@ public class FeatureDataAdapter extends
 	// should change this anytime the serialized image changes. Stay negative.
 	// so 0xa0, 0xa1, 0xa2 etc.
 	final static byte VERSION = (byte) 0xa3;
-	private boolean constructorInitOnly = true;
 
 	// -----------------------------------------------------------------------------------
 	// -----------------------------------------------------------------------------------
@@ -264,20 +263,15 @@ public class FeatureDataAdapter extends
 						featureType,
 						defaultVisibilityManagement));
 		setFeatureType(featureType);
-		// initCRS(null);
 	}
 
 	@Override
 	public boolean init(
 			final Index... indices )
 			throws RuntimeException {
-		// TODO get projection here, make sure if multiple indices are given
-		// that they match
-
 		String indexCrsCode = reprojectedFeatureType == null ? null : GeometryUtils.getCrsCode(reprojectedFeatureType
 				.getCoordinateReferenceSystem());
 		for (final Index primaryindx : indices) {
-
 			// for first iteration
 			if (indexCrsCode == null) {
 				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
@@ -295,14 +289,14 @@ public class FeatureDataAdapter extends
 						throw new RuntimeException(
 								"Multiple indices with different CRS is not supported");
 					}
-					else {
-						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
-							LOGGER.error("Multiple indices with different CRS is not supported");
-							throw new RuntimeException(
-									"Multiple indices with different CRS is not supported");
-						}
-
+				}
+				else {
+					if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
 					}
+
 				}
 			}
 		}
