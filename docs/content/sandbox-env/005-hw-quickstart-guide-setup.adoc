@@ -4,7 +4,7 @@
 
 == Setting Up the Environment
 
-The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/current/VirtualBox_HDP_Geowave_Sandbox_current.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
+The virtual image provided for this demo https://s3.amazonaws.com/geowave-vm/${project.version}/VirtualBox_HDP_Geowave_Sandbox_${project.version}.ova[can be found here]. The image is a very large file (~15 GB) so make sure that you give yourself enough time to download it and that your machine has enough room to store it.
 
 === Setting up the VirtualBox Image
 
