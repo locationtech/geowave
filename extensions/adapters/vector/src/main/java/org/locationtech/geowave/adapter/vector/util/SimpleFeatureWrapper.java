@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.opengis.feature.GeometryAttribute;
 import org.opengis.feature.IllegalAttributeException;
 import org.opengis.feature.Property;
@@ -29,12 +29,12 @@ public class SimpleFeatureWrapper implements
 		SimpleFeature
 {
 	private final SimpleFeature simpleFeature;
-	private final ByteArrayId insertionId;
+	private final ByteArray insertionId;
 	private final int subStratIdx;
 
 	public SimpleFeatureWrapper(
 			final SimpleFeature simpleFeature,
-			final ByteArrayId insertionId,
+			final ByteArray insertionId,
 			final int subStratIdx ) {
 		this.simpleFeature = simpleFeature;
 		this.insertionId = insertionId;
@@ -45,7 +45,7 @@ public class SimpleFeatureWrapper implements
 		return simpleFeature;
 	}
 
-	public ByteArrayId getInsertionId() {
+	public ByteArray getInsertionId() {
 		return insertionId;
 	}
 

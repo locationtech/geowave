@@ -21,7 +21,7 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.ingest.GeoWaveData;

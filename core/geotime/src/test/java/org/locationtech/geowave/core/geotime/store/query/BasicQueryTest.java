@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalit
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
@@ -58,11 +58,11 @@ public class BasicQueryTest
 
 		return new CommonIndexedPersistenceEncoding(
 				(short) 1,
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
 				1,
 				commonData,

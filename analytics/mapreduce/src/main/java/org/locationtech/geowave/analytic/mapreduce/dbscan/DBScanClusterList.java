@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.locationtech.geowave.analytic.GeometryHullTool;
 import org.locationtech.geowave.analytic.nn.DistanceProfile;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +48,9 @@ public abstract class DBScanClusterList implements
 	// internal state
 	protected Geometry clusterGeo = null;
 	protected int itemCount = 1;
-	private Set<ByteArrayId> linkedClusters = null;
-	private List<ByteArrayId> ids = null;
-	private ByteArrayId id;
+	private Set<ByteArray> linkedClusters = null;
+	private List<ByteArray> ids = null;
+	private ByteArray id;
 
 	// global configuration...to save memory...passing this stuff around.
 	private static GeometryHullTool connectGeometryTool = new GeometryHullTool();
@@ -58,7 +58,7 @@ public abstract class DBScanClusterList implements
 
 	// global state
 	// ID to cluster.
-	protected final Map<ByteArrayId, Cluster> index;
+	protected final Map<ByteArray, Cluster> index;
 
 	public static GeometryHullTool getHullTool() {
 		return connectGeometryTool;
@@ -72,8 +72,8 @@ public abstract class DBScanClusterList implements
 	public DBScanClusterList(
 			final Geometry clusterGeo,
 			final int itemCount,
-			final ByteArrayId centerId,
-			final Map<ByteArrayId, Cluster> index ) {
+			final ByteArray centerId,
+			final Map<ByteArray, Cluster> index ) {
 		super();
 		this.clusterGeo = clusterGeo;
 		this.itemCount = itemCount;
@@ -82,14 +82,14 @@ public abstract class DBScanClusterList implements
 	}
 
 	protected abstract long addAndFetchCount(
-			final ByteArrayId newId,
+			final ByteArray newId,
 			final ClusterItem newInstance,
 			final DistanceProfile<?> distanceProfile );
 
 	@Override
 	public final boolean add(
 			final DistanceProfile<?> distanceProfile,
-			final ByteArrayId newId,
+			final ByteArray newId,
 			final ClusterItem newInstance ) {
 
 		LOGGER.trace(
@@ -113,18 +113,18 @@ public abstract class DBScanClusterList implements
 		return true;
 	}
 
-	protected List<ByteArrayId> getIds(
+	protected List<ByteArray> getIds(
 			boolean allowUpdates ) {
-		if (ids == null || ids == Collections.<ByteArrayId> emptyList())
-			ids = allowUpdates ? new ArrayList<ByteArrayId>(
-					4) : Collections.<ByteArrayId> emptyList();
+		if (ids == null || ids == Collections.<ByteArray> emptyList())
+			ids = allowUpdates ? new ArrayList<ByteArray>(
+					4) : Collections.<ByteArray> emptyList();
 		return ids;
 	}
 
-	protected Set<ByteArrayId> getLinkedClusters(
+	protected Set<ByteArray> getLinkedClusters(
 			boolean allowUpdates ) {
-		if (linkedClusters == null || linkedClusters == Collections.<ByteArrayId> emptySet())
-			linkedClusters = allowUpdates ? new HashSet<ByteArrayId>() : Collections.<ByteArrayId> emptySet();
+		if (linkedClusters == null || linkedClusters == Collections.<ByteArray> emptySet())
+			linkedClusters = allowUpdates ? new HashSet<ByteArray>() : Collections.<ByteArray> emptySet();
 		return linkedClusters;
 	}
 
@@ -149,7 +149,7 @@ public abstract class DBScanClusterList implements
 
 	@Override
 	public void invalidate() {
-		for (ByteArrayId linkedId : getLinkedClusters(true)) {
+		for (ByteArray linkedId : getLinkedClusters(true)) {
 			Cluster linkedCluster = index.get(linkedId);
 			if (linkedCluster != null && linkedCluster != this && linkedCluster instanceof DBScanClusterList) {
 				((DBScanClusterList) linkedCluster).getLinkedClusters(
@@ -166,7 +166,7 @@ public abstract class DBScanClusterList implements
 
 	@Override
 	public InferType infer(
-			final ByteArrayId id,
+			final ByteArray id,
 			final ClusterItem value ) {
 		final Cluster cluster = index.get(id);
 		if (cluster == this || getLinkedClusters(
@@ -176,8 +176,8 @@ public abstract class DBScanClusterList implements
 	}
 
 	@Override
-	public Iterator<Entry<ByteArrayId, ClusterItem>> iterator() {
-		return Collections.<Entry<ByteArrayId, ClusterItem>> emptyList().iterator();
+	public Iterator<Entry<ByteArray, ClusterItem>> iterator() {
+		return Collections.<Entry<ByteArray, ClusterItem>> emptyList().iterator();
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public abstract class DBScanClusterList implements
 					this);
 
 			if (cluster instanceof DBScanClusterList) {
-				for (ByteArrayId id : ((DBScanClusterList) cluster).getIds(false)) {
+				for (ByteArray id : ((DBScanClusterList) cluster).getIds(false)) {
 					index.put(
 							id,
 							this);
@@ -310,14 +310,14 @@ public abstract class DBScanClusterList implements
 	}
 
 	@Override
-	public ByteArrayId getId() {
+	public ByteArray getId() {
 		return id;
 	}
 
 	protected abstract Geometry compress();
 
 	@Override
-	public Set<ByteArrayId> getLinkedClusters() {
+	public Set<ByteArray> getLinkedClusters() {
 		return getLinkedClusters(false);
 	}
 
@@ -378,7 +378,7 @@ public abstract class DBScanClusterList implements
 			final Set<Cluster> readyClusters,
 			final DBScanClusterList cluster,
 			final boolean deleteNonLinks ) {
-		for (final ByteArrayId linkedClusterId : cluster.getLinkedClusters()) {
+		for (final ByteArray linkedClusterId : cluster.getLinkedClusters()) {
 			final Cluster linkedCluster = index.get(linkedClusterId);
 			if (readyClusters.add(linkedCluster) && linkedCluster.size() >= mergeSize) {
 				buildClusterLists(

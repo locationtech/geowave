@@ -16,7 +16,7 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -32,11 +32,11 @@ public class PartitionStatisticsTest
 	private GeoWaveKey genKey(
 			final long id ) {
 		final InsertionIds insertionIds = new InsertionIds(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {
 							(byte) (counter++ % 32)
 						}),
-				Arrays.asList(new ByteArrayId(
+				Arrays.asList(new ByteArray(
 						String.format(
 								"\12%5h",
 								base + id) + "20030f89")));
@@ -68,7 +68,7 @@ public class PartitionStatisticsTest
 				stats.getPartitionKeys().size());
 		for (byte i = 0; i < 32; i++) {
 			Assert.assertTrue(stats.getPartitionKeys().contains(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {
 								i
 							})));

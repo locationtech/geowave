@@ -24,7 +24,7 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
@@ -220,11 +220,11 @@ public class QueryFilterIterator extends
 				partitionKeyLength);
 		return new DeferredReadCommonIndexedPersistenceEncoding(
 				rowId.getAdapterId(),
-				new ByteArrayId(
+				new ByteArray(
 						rowId.getDataId()),
-				new ByteArrayId(
+				new ByteArray(
 						rowId.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						rowId.getSortKey()),
 				rowId.getNumberOfDuplicates(),
 				commonData,

@@ -16,7 +16,7 @@ import org.apache.accumulo.core.client.Scanner;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.locationtech.geowave.core.store.util.SecondaryIndexEntryIteratorWrapper;
@@ -27,7 +27,7 @@ import org.slf4j.LoggerFactory;
  * To be used when dealing with a 'JOIN' secondary index type
  */
 public class AccumuloSecondaryIndexJoinEntryIteratorWrapper<T> extends
-		SecondaryIndexEntryIteratorWrapper<T, Pair<String, ByteArrayId>>
+		SecondaryIndexEntryIteratorWrapper<T, Pair<String, ByteArray>>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(AccumuloSecondaryIndexJoinEntryIteratorWrapper.class);
 	private final Scanner scanner;
@@ -43,7 +43,7 @@ public class AccumuloSecondaryIndexJoinEntryIteratorWrapper<T> extends
 
 	@SuppressWarnings("unchecked")
 	@Override
-	protected Pair<String, ByteArrayId> decodeRow(
+	protected Pair<String, ByteArray> decodeRow(
 			final Object row ) {
 		Entry<Key, Value> entry = null;
 		try {

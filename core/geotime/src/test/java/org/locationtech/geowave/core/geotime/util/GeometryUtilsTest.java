@@ -24,7 +24,7 @@ import org.junit.Test;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -330,13 +330,13 @@ public class GeometryUtilsTest
 
 		@Override
 		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getQueryPartitionKeys(
+		public Set<ByteArray> getQueryPartitionKeys(
 				final MultiDimensionalNumericData queryData,
 				final IndexMetaData... hints ) {
 			return null;
@@ -344,8 +344,8 @@ public class GeometryUtilsTest
 
 		@Override
 		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
@@ -355,14 +355,14 @@ public class GeometryUtilsTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getInsertionPartitionKeys(
+		public Set<ByteArray> getInsertionPartitionKeys(
 				MultiDimensionalNumericData insertionData ) {
 			// TODO Auto-generated method stub
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getPredefinedSplits() {
+		public Set<ByteArray> getPredefinedSplits() {
 			// TODO Auto-generated method stub
 			return null;
 		}

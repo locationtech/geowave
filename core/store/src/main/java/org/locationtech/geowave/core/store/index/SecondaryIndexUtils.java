@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 
@@ -66,8 +66,8 @@ public class SecondaryIndexUtils
 	 * @return byte array for use as a column qualifier
 	 */
 	public static byte[] constructColumnQualifier(
-			final ByteArrayId partOne,
-			final ByteArrayId partTwo ) {
+			final ByteArray partOne,
+			final ByteArray partTwo ) {
 		Preconditions.checkNotNull(
 				partOne,
 				"partOne cannot be null");
@@ -103,9 +103,9 @@ public class SecondaryIndexUtils
 	 *            a composite column qualifier
 	 * @return primary index row id
 	 */
-	public static ByteArrayId getPrimaryRowId(
+	public static ByteArray getPrimaryRowId(
 			final byte[] cq ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.splitVariableLengthArrays(
 						cq).getRight());
 	}
@@ -120,7 +120,7 @@ public class SecondaryIndexUtils
 	 */
 	public static String getDataId(
 			final byte[] cq ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.splitVariableLengthArrays(
 						cq).getRight()).getString();
 	}

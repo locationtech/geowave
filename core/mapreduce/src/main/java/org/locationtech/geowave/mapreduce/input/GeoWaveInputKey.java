@@ -19,7 +19,7 @@ import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.api.Index;
@@ -40,7 +40,7 @@ public class GeoWaveInputKey implements
 	 */
 	private static final long serialVersionUID = 1L;
 	protected Short internalAdapterId;
-	private ByteArrayId dataId;
+	private ByteArray dataId;
 	private transient org.locationtech.geowave.core.store.entities.GeoWaveKey key;
 
 	public GeoWaveInputKey() {
@@ -58,7 +58,7 @@ public class GeoWaveInputKey implements
 
 	public GeoWaveInputKey(
 			final short internalAdapterId,
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		this.internalAdapterId = internalAdapterId;
 		this.dataId = dataId;
 	}
@@ -69,7 +69,7 @@ public class GeoWaveInputKey implements
 			final String indexName ) {
 		this.internalAdapterId = internalAdapterId;
 		if (key.getNumberOfDuplicates() > 0) {
-			dataId = new ByteArrayId(
+			dataId = new ByteArray(
 					key.getDataId());
 		}
 		else {
@@ -77,7 +77,7 @@ public class GeoWaveInputKey implements
 			// ID with the index ID concatenated with the insertion
 			// ID to gaurantee uniqueness and effectively disable
 			// aggregating by only the data ID
-			dataId = new ByteArrayId(
+			dataId = new ByteArray(
 					Bytes.concat(
 							indexName == null ? new byte[0] : StringUtils.stringToBinary(indexName),
 							key.getPartitionKey() == null ? new byte[0] : key.getPartitionKey(),
@@ -128,11 +128,11 @@ public class GeoWaveInputKey implements
 	}
 
 	public void setDataId(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		this.dataId = dataId;
 	}
 
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return dataId;
 	}
 
@@ -210,7 +210,7 @@ public class GeoWaveInputKey implements
 		final int dataIdLength = input.readInt();
 		final byte[] dataIdBytes = new byte[dataIdLength];
 		input.readFully(dataIdBytes);
-		dataId = new ByteArrayId(
+		dataId = new ByteArray(
 				dataIdBytes);
 	}
 

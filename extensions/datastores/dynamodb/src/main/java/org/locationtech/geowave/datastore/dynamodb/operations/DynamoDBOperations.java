@@ -17,7 +17,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -121,10 +121,10 @@ public class DynamoDBOperations implements
 			final String... additionalAuthorizations ) {
 		final String qName = getQualifiedTableName(tableName);
 		final Short adapterIdObj = ByteArrayUtils.byteArrayToShort(adapterId);
-		final Set<ByteArrayId> dataIdsSet = new HashSet<>(
+		final Set<ByteArray> dataIdsSet = new HashSet<>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
-			dataIdsSet.add(new ByteArrayId(
+			dataIdsSet.add(new ByteArray(
 					dataIds[i]));
 		}
 		final ScanRequest request = new ScanRequest(
@@ -144,7 +144,7 @@ public class DynamoDBOperations implements
 					@Override
 					public boolean apply(
 							final DynamoDBRow input ) {
-						return dataIdsSet.contains(new ByteArrayId(
+						return dataIdsSet.contains(new ByteArray(
 								input.getDataId())) && Short.valueOf(
 								input.getAdapterId()).equals(
 								adapterIdObj);

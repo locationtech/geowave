@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.BitSet;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
@@ -513,9 +513,9 @@ public class XZOrderSFC implements
 					g - length + 1))) - 1L) / ((long) (nthPowerOfTwo - 1)));
 		}
 		return new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						min),
-				new ByteArrayId(
+				new ByteArray(
 						max));
 	}
 

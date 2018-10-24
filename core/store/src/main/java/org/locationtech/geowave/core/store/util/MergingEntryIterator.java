@@ -17,7 +17,7 @@ import java.util.Map;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
@@ -120,7 +120,7 @@ public class MergingEntryIterator<T> extends
 		for (GeoWaveValue fieldValue : singleRow.getFieldValues()) {
 			final Mergeable mergeable = rowTransform.getRowAsMergeableObject(
 					singleRow.getAdapterId(),
-					new ByteArrayId(
+					new ByteArray(
 							fieldValue.getFieldMask()),
 					fieldValue.getValue());
 

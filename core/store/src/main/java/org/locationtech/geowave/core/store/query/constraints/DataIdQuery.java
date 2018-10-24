@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.DataIdQueryFilter;
@@ -26,23 +26,23 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public class DataIdQuery implements
 		QueryConstraints
 {
-	private ByteArrayId[] dataIds;
+	private ByteArray[] dataIds;
 
 	public DataIdQuery() {}
 
 	public DataIdQuery(
-			final ByteArrayId dataId ) {
-		dataIds = new ByteArrayId[] {
+			final ByteArray dataId ) {
+		dataIds = new ByteArray[] {
 			dataId
 		};
 	}
 
 	public DataIdQuery(
-			final ByteArrayId[] dataIds ) {
+			final ByteArray[] dataIds ) {
 		this.dataIds = dataIds;
 	}
 
-	public ByteArrayId[] getDataIds() {
+	public ByteArray[] getDataIds() {
 		return dataIds;
 	}
 
@@ -92,12 +92,12 @@ public class DataIdQuery implements
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
 		final int length = buf.getInt();
-		final ByteArrayId[] dataIds = new ByteArrayId[length];
+		final ByteArray[] dataIds = new ByteArray[length];
 		for (int i = 0; i < length; i++) {
 			final int iLength = buf.getInt();
 			final byte[] dataIdBinary = new byte[iLength];
 			buf.get(dataIdBinary);
-			dataIds[i] = new ByteArrayId(
+			dataIds[i] = new ByteArray(
 					dataIdBinary);
 		}
 		this.dataIds = dataIds;

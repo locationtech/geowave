@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.PrefixIdQueryFilter;
@@ -24,23 +24,23 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public class PrefixIdQuery implements
 		QueryConstraints
 {
-	private ByteArrayId sortKeyPrefix;
-	private ByteArrayId partitionKey;
+	private ByteArray sortKeyPrefix;
+	private ByteArray partitionKey;
 
 	public PrefixIdQuery() {}
 
 	public PrefixIdQuery(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKeyPrefix ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKeyPrefix ) {
 		this.partitionKey = partitionKey;
 		this.sortKeyPrefix = sortKeyPrefix;
 	}
 
-	public ByteArrayId getPartitionKey() {
+	public ByteArray getPartitionKey() {
 		return partitionKey;
 	}
 
-	public ByteArrayId getSortKeyPrefix() {
+	public ByteArray getSortKeyPrefix() {
 		return sortKeyPrefix;
 	}
 
@@ -92,7 +92,7 @@ public class PrefixIdQuery implements
 		}
 		else {
 			buf.get(partitionKeyBinary);
-			partitionKey = new ByteArrayId(
+			partitionKey = new ByteArray(
 					partitionKeyBinary);
 		}
 		final byte[] sortKeyPrefixBinary = new byte[bytes.length - 4 - partitionKeyBinary.length];
@@ -101,7 +101,7 @@ public class PrefixIdQuery implements
 		}
 		else {
 			buf.get(sortKeyPrefixBinary);
-			sortKeyPrefix = new ByteArrayId(
+			sortKeyPrefix = new ByteArray(
 					sortKeyPrefixBinary);
 		}
 	}

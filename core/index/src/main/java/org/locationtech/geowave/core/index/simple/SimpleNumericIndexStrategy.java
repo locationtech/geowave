@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -102,10 +102,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 			final int maxEstimatedRangeDecomposition,
 			final IndexMetaData... hints ) {
 		final T min = cast(indexedRange.getMinValuesPerDimension()[0]);
-		final ByteArrayId start = new ByteArrayId(
+		final ByteArray start = new ByteArray(
 				lexicoder.toByteArray(min));
 		final T max = cast(Math.ceil(indexedRange.getMaxValuesPerDimension()[0]));
-		final ByteArrayId end = new ByteArrayId(
+		final ByteArray end = new ByteArray(
 				lexicoder.toByteArray(max));
 		final ByteArrayRange range = new ByteArrayRange(
 				start,
@@ -146,10 +146,10 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 			final int maxEstimatedDuplicateIds ) {
 		final long min = (long) indexedData.getMinValuesPerDimension()[0];
 		final long max = (long) Math.ceil(indexedData.getMaxValuesPerDimension()[0]);
-		final List<ByteArrayId> insertionIds = new ArrayList<>(
+		final List<ByteArray> insertionIds = new ArrayList<>(
 				(int) (max - min) + 1);
 		for (long i = min; i <= max; i++) {
-			insertionIds.add(new ByteArrayId(
+			insertionIds.add(new ByteArray(
 					lexicoder.toByteArray(cast(i))));
 		}
 		return new InsertionIds(
@@ -163,8 +163,8 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		final long value = Long.class.cast(lexicoder.fromByteArray(sortKey.getBytes()));
 		final NumericData[] dataPerDimension = new NumericData[] {
 			new NumericValue(
@@ -176,8 +176,8 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return new MultiDimensionalCoordinates(
 				null,
 				new Coordinate[] {
@@ -258,20 +258,20 @@ public abstract class SimpleNumericIndexStrategy<T extends Number> implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return null;
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return null;
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return Collections.EMPTY_SET;
 	}
 

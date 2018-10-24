@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
@@ -45,9 +45,9 @@ public class CommonIndexedPersistenceEncoding extends
 
 	public CommonIndexedPersistenceEncoding(
 			final short internalAdapterId,
-			final ByteArrayId dataId,
-			final ByteArrayId insertionPartitionKey,
-			final ByteArrayId insertionSortKey,
+			final ByteArray dataId,
+			final ByteArray insertionPartitionKey,
+			final ByteArray insertionSortKey,
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
@@ -75,15 +75,15 @@ public class CommonIndexedPersistenceEncoding extends
 		final InsertionIds untrimmedResult = index.getIndexStrategy().getInsertionIds(
 				boxRangeData);
 		for (final SinglePartitionInsertionIds insertionId : untrimmedResult.getPartitionKeys()) {
-			final ByteArrayId partitionKey = insertionId.getPartitionKey();
+			final ByteArray partitionKey = insertionId.getPartitionKey();
 			final int size = insertionId.getSortKeys().size();
 			if (size > 3) {
 				// need at least 4 quadrants in a quadtree to create a
 				// concave shape where the mbr overlaps an area that the
 				// underlying polygon doesn't
-				final Iterator<ByteArrayId> it = insertionId.getSortKeys().iterator();
+				final Iterator<ByteArray> it = insertionId.getSortKeys().iterator();
 				while (it.hasNext()) {
-					final ByteArrayId sortKey = it.next();
+					final ByteArray sortKey = it.next();
 					// final MultiDimensionalNumericData md =
 					// correctForNormalizationError(index.getIndexStrategy().getRangeForId(insertionId));
 					// used to check the result of the index strategy

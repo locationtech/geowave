@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.util;
 
 import java.util.Iterator;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.AdapterException;
@@ -29,7 +29,7 @@ public class NativeEntryIteratorWrapper<T> extends
 	private final byte[] fieldSubsetBitmask;
 	private final boolean decodePersistenceEncoding;
 	private Integer bitPosition = null;
-	private ByteArrayId skipUntilRow;
+	private ByteArray skipUntilRow;
 	private boolean reachedEnd = false;
 	private boolean adapterValid = true;
 
@@ -88,7 +88,7 @@ public class NativeEntryIteratorWrapper<T> extends
 
 	private boolean passesSkipFilter(
 			final GeoWaveRow row ) {
-		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArrayId(
+		if ((reachedEnd == true) || ((skipUntilRow != null) && (skipUntilRow.compareTo(new ByteArray(
 				GeoWaveKey.getCompositeId(row))) > 0))) {
 			return false;
 		}
@@ -107,7 +107,7 @@ public class NativeEntryIteratorWrapper<T> extends
 				reachedEnd = true;
 			}
 			else {
-				skipUntilRow = new ByteArrayId(
+				skipUntilRow = new ByteArray(
 						nextRow);
 			}
 		}

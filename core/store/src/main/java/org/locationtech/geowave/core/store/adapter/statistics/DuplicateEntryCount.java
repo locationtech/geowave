@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.HashSet;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.Index;
@@ -98,7 +98,7 @@ public class DuplicateEntryCount<T> extends
 	 * This is expensive, but necessary since there may be duplicates
 	 */
 	// TODO entryDeleted should only be called once with all duplicates
-	private transient HashSet<ByteArrayId> ids = new HashSet<>();
+	private transient HashSet<ByteArray> ids = new HashSet<>();
 
 	@Override
 	public void entryDeleted(
@@ -106,7 +106,7 @@ public class DuplicateEntryCount<T> extends
 			final GeoWaveRow... kvs ) {
 		if (kvs.length > 0) {
 			if (entryHasDuplicates(kvs[0])) {
-				if (ids.add(new ByteArrayId(
+				if (ids.add(new ByteArray(
 						kvs[0].getDataId()))) {
 					entriesWithDuplicates--;
 				}

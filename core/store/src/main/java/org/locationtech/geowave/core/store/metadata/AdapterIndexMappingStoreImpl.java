@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.metadata;
 import java.util.Arrays;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.DataStoreOptions;
@@ -55,15 +55,15 @@ public class AdapterIndexMappingStoreImpl extends
 	public boolean mappingExists(
 			final AdapterToIndexMapping persistedObject ) {
 		return objectExists(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId())),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final AdapterToIndexMapping persistedObject ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId()));
 	}
 
@@ -72,7 +72,7 @@ public class AdapterIndexMappingStoreImpl extends
 			final short adapterId ) {
 
 		final AdapterToIndexMapping mapping = super.internalGetObject(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(adapterId)),
 				null,
 				false,
@@ -85,7 +85,7 @@ public class AdapterIndexMappingStoreImpl extends
 	@Override
 	public void addAdapterIndexMapping(
 			final AdapterToIndexMapping mapping ) {
-		final ByteArrayId adapterId = new ByteArrayId(
+		final ByteArray adapterId = new ByteArray(
 				ByteArrayUtils
 						.shortToByteArray(
 								mapping.getAdapterId()));
@@ -137,7 +137,7 @@ public class AdapterIndexMappingStoreImpl extends
 	@Override
 	public void remove(
 			final short internalAdapterId ) {
-		super.remove(new ByteArrayId(
+		super.remove(new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId)));
 	}
 }

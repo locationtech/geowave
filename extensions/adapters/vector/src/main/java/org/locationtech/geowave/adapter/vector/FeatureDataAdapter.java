@@ -35,7 +35,7 @@ import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
 import org.locationtech.geowave.core.geotime.util.TimeUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
@@ -807,9 +807,9 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId getDataId(
+	public ByteArray getDataId(
 			final SimpleFeature entry ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				StringUtils.stringToBinary(entry.getID()));
 	}
 

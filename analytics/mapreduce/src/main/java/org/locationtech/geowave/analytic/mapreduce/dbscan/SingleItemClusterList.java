@@ -20,7 +20,7 @@ import org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItemDistanceFn.
 import org.locationtech.geowave.analytic.nn.DistanceProfile;
 import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.analytic.nn.NeighborListFactory;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -42,10 +42,10 @@ public class SingleItemClusterList extends
 	private Set<Coordinate> clusterPoints = null;
 
 	public SingleItemClusterList(
-			final ByteArrayId centerId,
+			final ByteArray centerId,
 			final ClusterItem center,
 			final NeighborListFactory<ClusterItem> factory,
-			final Map<ByteArrayId, Cluster> index ) {
+			final Map<ByteArray, Cluster> index ) {
 		super(
 				center.getGeometry() instanceof Point || center.isCompressed() ? center.getGeometry() : null,
 				(int) center.getCount(),
@@ -79,7 +79,7 @@ public class SingleItemClusterList extends
 
 	@Override
 	protected long addAndFetchCount(
-			final ByteArrayId id,
+			final ByteArray id,
 			final ClusterItem newInstance,
 			final DistanceProfile<?> distanceProfile ) {
 		final ClusterProfileContext context = (ClusterProfileContext) distanceProfile.getContext();
@@ -175,16 +175,16 @@ public class SingleItemClusterList extends
 	public static class SingleItemClusterListFactory implements
 			NeighborListFactory<ClusterItem>
 	{
-		private final Map<ByteArrayId, Cluster> index;
+		private final Map<ByteArray, Cluster> index;
 
 		public SingleItemClusterListFactory(
-				final Map<ByteArrayId, Cluster> index ) {
+				final Map<ByteArray, Cluster> index ) {
 			super();
 			this.index = index;
 		}
 
 		public NeighborList<ClusterItem> buildNeighborList(
-				final ByteArrayId centerId,
+				final ByteArray centerId,
 				final ClusterItem center ) {
 			Cluster list = index.get(centerId);
 			if (list == null) {

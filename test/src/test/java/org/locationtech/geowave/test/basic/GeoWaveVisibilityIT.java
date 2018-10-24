@@ -30,7 +30,7 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeS
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
@@ -824,15 +824,15 @@ public class GeoWaveVisibilityIT extends
 							final int switchValue = (fieldValueInt / 2) % 4;
 							switch (switchValue) {
 								case 0:
-									return new ByteArrayId(
+									return new ByteArray(
 											"a").getBytes();
 
 								case 1:
-									return new ByteArrayId(
+									return new ByteArray(
 											"b").getBytes();
 
 								case 2:
-									return new ByteArrayId(
+									return new ByteArray(
 											"c").getBytes();
 
 								case 3:
@@ -858,7 +858,7 @@ public class GeoWaveVisibilityIT extends
 							final GridCoverage rowValue,
 							final String fieldId,
 							final Object fieldValue ) {
-						return new ByteArrayId(
+						return new ByteArray(
 								visExpression).getBytes();
 					}
 

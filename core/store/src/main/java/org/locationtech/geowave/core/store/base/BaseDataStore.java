@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -593,8 +593,8 @@ public class BaseDataStore implements
 
 	protected CloseableIterator<Object> queryRowPrefix(
 			final Index index,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortPrefix,
+			final ByteArray partitionKey,
+			final ByteArray sortPrefix,
 			final BaseQueryOptions sanitizedQueryOptions,
 			final List<InternalDataAdapter<?>> adapters,
 			final PersistentAdapterStore tempAdapterStore,

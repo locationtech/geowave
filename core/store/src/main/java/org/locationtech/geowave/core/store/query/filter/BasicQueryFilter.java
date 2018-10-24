@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -174,7 +174,7 @@ public class BasicQueryFilter implements
 		}
 	};
 
-	protected Map<ByteArrayId, List<MultiDimensionalNumericData>> binnedConstraints;
+	protected Map<ByteArray, List<MultiDimensionalNumericData>> binnedConstraints;
 	protected NumericDimensionField<?>[] dimensionFields;
 	// this is referenced for serialization purposes only
 	protected MultiDimensionalNumericData constraints;
@@ -205,13 +205,13 @@ public class BasicQueryFilter implements
 			final NumericDimensionField<?>[] dimensionFields ) {
 		this.dimensionFields = dimensionFields;
 
-		binnedConstraints = new HashMap<ByteArrayId, List<MultiDimensionalNumericData>>();
+		binnedConstraints = new HashMap<ByteArray, List<MultiDimensionalNumericData>>();
 		this.constraints = constraints;
 		final List<BinnedNumericDataset> queries = BinnedNumericDataset.applyBins(
 				constraints,
 				dimensionFields);
 		for (final BinnedNumericDataset q : queries) {
-			final ByteArrayId binId = new ByteArrayId(
+			final ByteArray binId = new ByteArray(
 					q.getBinId());
 			List<MultiDimensionalNumericData> ranges = binnedConstraints.get(binId);
 			if (ranges == null) {
@@ -252,7 +252,7 @@ public class BasicQueryFilter implements
 				dimensionFields);
 		// check that at least one data range overlaps at least one query range
 		for (final BinnedNumericDataset dataRange : dataRanges) {
-			final List<MultiDimensionalNumericData> queries = binnedConstraints.get(new ByteArrayId(
+			final List<MultiDimensionalNumericData> queries = binnedConstraints.get(new ByteArray(
 					dataRange.getBinId()));
 			if (queries != null) {
 				for (final MultiDimensionalNumericData query : queries) {

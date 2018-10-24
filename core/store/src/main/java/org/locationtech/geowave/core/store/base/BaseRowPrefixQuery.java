@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
@@ -35,8 +35,8 @@ class BaseRowPrefixQuery<T> extends
 
 	public BaseRowPrefixQuery(
 			final Index index,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKeyPrefix,
+			final ByteArray partitionKey,
+			final ByteArray sortKeyPrefix,
 			final ScanCallback<T, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
 			final FieldVisibilityCount visibilityCounts,

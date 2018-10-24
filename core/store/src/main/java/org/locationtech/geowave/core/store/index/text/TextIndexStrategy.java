@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.index.text;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
@@ -68,7 +68,7 @@ public class TextIndexStrategy implements
 	public InsertionIds getInsertionIds(
 			final String indexedData ) {
 		return new InsertionIds(
-				Collections.singletonList(new ByteArrayId(
+				Collections.singletonList(new ByteArray(
 						indexedData)));
 	}
 
@@ -81,8 +81,8 @@ public class TextIndexStrategy implements
 
 	@Override
 	public String getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return sortKey.getString();
 	}
 }

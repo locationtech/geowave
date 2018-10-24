@@ -27,7 +27,7 @@ import java.util.UUID;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
@@ -192,7 +192,7 @@ public class MemoryDataStoreOperations implements
 										r.getStart()),
 								new MemoryStoreEntry(
 										p.getPartitionKey(),
-										new ByteArrayId(
+										new ByteArray(
 												r.getStart().getNextPrefix())));
 					}
 					else {
@@ -257,11 +257,11 @@ public class MemoryDataStoreOperations implements
 											readerParams.getIndex().getIndexModel(),
 											new DeferredReadCommonIndexedPersistenceEncoding(
 													input.getRow().getAdapterId(),
-													new ByteArrayId(
+													new ByteArray(
 															input.getRow().getDataId()),
-													new ByteArrayId(
+													new ByteArray(
 															input.getRow().getPartitionKey()),
-													new ByteArrayId(
+													new ByteArray(
 															input.getRow().getSortKey()),
 													input.getRow().getNumberOfDuplicates(),
 													commonData,
@@ -417,8 +417,8 @@ public class MemoryDataStoreOperations implements
 		private final GeoWaveRow row;
 
 		public MemoryStoreEntry(
-				final ByteArrayId comparisonPartitionKey,
-				final ByteArrayId comparisonSortKey ) {
+				final ByteArray comparisonPartitionKey,
+				final ByteArray comparisonSortKey ) {
 			row = new GeoWaveRowImpl(
 					new GeoWaveKeyImpl(
 							new byte[] {
@@ -697,7 +697,7 @@ public class MemoryDataStoreOperations implements
 				(byte) 0xFF,
 			};
 		}
-		return new ByteArrayId(
+		return new ByteArray(
 				bytes).getNextPrefix();
 	}
 

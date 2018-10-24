@@ -13,6 +13,21 @@ package org.locationtech.geowave.core.store.api;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
+/**
+ * An Aggregation function that mathematically represents any commutative monoid
+ * (ie. a function that is both commutative and associative). For some data
+ * stores Aggregations will be run distributed on the server within the scope of
+ * iterating through the results for maximum efficiency. A third party
+ * Aggregation can be used, but if serverside processing is enabled, the third
+ * party Aggregation implementation must also be on the server classpath.
+ *
+ * @param <P>
+ *            input type for the aggregation
+ * @param <R>
+ *            result type for the aggregation
+ * @param <T>
+ *            data type of the entries for the aggregation
+ */
 public interface Aggregation<P extends Persistable, R, T> extends
 		Persistable
 {
@@ -44,6 +59,13 @@ public interface Aggregation<P extends Persistable, R, T> extends
 	 */
 	R getResult();
 
+	/**
+	 * this is responsible for reducing 2 results to a single result by
+	 *
+	 * @param result1
+	 * @param result2
+	 * @return
+	 */
 	default R merge(
 			final R result1,
 			final R result2 ) {
@@ -63,9 +85,23 @@ public interface Aggregation<P extends Persistable, R, T> extends
 		return null;
 	}
 
+	/**
+	 * This is responsible for writing the result to binary
+	 *
+	 * @param result
+	 *            the result value
+	 * @return the binary representing this value
+	 */
 	byte[] resultToBinary(
 			R result );
 
+	/**
+	 * This is responsible for reading the result from binary
+	 *
+	 * @param binary
+	 *            the binary representing this result
+	 * @return the result value
+	 */
 	R resultFromBinary(
 			byte[] binary );
 

@@ -12,10 +12,10 @@ package org.locationtech.geowave.analytic.nn;
 
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public interface NeighborList<NNTYPE> extends
-		Iterable<Entry<ByteArrayId, NNTYPE>>
+		Iterable<Entry<ByteArray, NNTYPE>>
 {
 	public enum InferType {
 		NONE,
@@ -31,7 +31,7 @@ public interface NeighborList<NNTYPE> extends
 	 */
 	public boolean add(
 			DistanceProfile<?> distanceProfile,
-			ByteArrayId id,
+			ByteArray id,
 			NNTYPE value );
 
 	/**
@@ -41,7 +41,7 @@ public interface NeighborList<NNTYPE> extends
 	 * @return
 	 */
 	public InferType infer(
-			final ByteArrayId id,
+			final ByteArray id,
 			final NNTYPE value );
 
 	/**

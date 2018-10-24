@@ -15,10 +15,10 @@ import java.util.Set;
 public interface PartitionIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType> extends
 		IndexStrategy
 {
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			EntryRangeType insertionData );
 
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			QueryRangeType queryData,
 			IndexMetaData... hints );
 
@@ -30,6 +30,6 @@ public interface PartitionIndexStrategy<QueryRangeType extends IndexConstraints,
 	 */
 	public int getPartitionKeyLength();
 
-	public Set<ByteArrayId> getPredefinedSplits();
+	public Set<ByteArray> getPredefinedSplits();
 
 }

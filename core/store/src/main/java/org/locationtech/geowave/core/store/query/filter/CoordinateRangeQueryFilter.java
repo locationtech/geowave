@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.query.filter;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
@@ -58,8 +58,8 @@ public class CoordinateRangeQueryFilter implements
 	}
 
 	private boolean inBounds(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(
 				partitionKey,
 				sortKey);

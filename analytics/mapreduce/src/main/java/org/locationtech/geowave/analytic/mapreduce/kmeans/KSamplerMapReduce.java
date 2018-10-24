@@ -35,7 +35,7 @@ import org.locationtech.geowave.analytic.sample.function.RandomSamplingRankFunct
 import org.locationtech.geowave.analytic.sample.function.SamplingRankFunction;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputReducer;
@@ -159,7 +159,7 @@ public class KSamplerMapReduce
 					(T) value);
 			if (rank > 0.0000000001) {
 				final AnalyticItemWrapper<Object> wrapper = itemWrapperFactory.create(value);
-				outputKey.setDataId(new ByteArrayId(
+				outputKey.setDataId(new ByteArray(
 						keyManager.putData(
 								nestedGroupCentroidAssigner.getGroupForLevel(wrapper),
 								1.0 - rank, // sorts in

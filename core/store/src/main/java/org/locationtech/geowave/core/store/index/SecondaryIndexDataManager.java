@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.api.Index;
@@ -92,12 +92,12 @@ public class SecondaryIndexDataManager<T> implements
 			final InsertionIds secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
 					fieldValue);
 			// loop insertionIds
-			for (final ByteArrayId insertionId : secondaryIndexInsertionIds.getCompositeInsertionIds()) {
-				final ByteArrayId dataId = new ByteArrayId(
+			for (final ByteArray insertionId : secondaryIndexInsertionIds.getCompositeInsertionIds()) {
+				final ByteArray dataId = new ByteArray(
 						kvs[0].getDataId());
 				switch (secondaryIndex.getSecondaryIndexType()) {
 					case JOIN:
-						final Pair<ByteArrayId, ByteArrayId> firstPartitionAndSortKey = primaryIndexInsertionIds
+						final Pair<ByteArray, ByteArray> firstPartitionAndSortKey = primaryIndexInsertionIds
 								.getFirstPartitionAndSortKeyPair();
 						if (delete) {
 							secondaryIndexStore.storeJoinEntry(
@@ -108,7 +108,7 @@ public class SecondaryIndexDataManager<T> implements
 									primaryIndexName,
 									firstPartitionAndSortKey.getLeft(),
 									firstPartitionAndSortKey.getRight(),
-									new ByteArrayId(
+									new ByteArray(
 											visibility));
 						}
 						else {
@@ -120,7 +120,7 @@ public class SecondaryIndexDataManager<T> implements
 									primaryIndexName,
 									firstPartitionAndSortKey.getLeft(),
 									firstPartitionAndSortKey.getRight(),
-									new ByteArrayId(
+									new ByteArray(
 											visibility));
 						}
 						break;

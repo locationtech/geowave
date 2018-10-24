@@ -15,7 +15,7 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -30,7 +30,7 @@ public class RowHistogramDataStatisticsTest
 	private GeoWaveKey genKey(
 			final long id ) {
 		final InsertionIds insertionIds = new InsertionIds(
-				Arrays.asList(new ByteArrayId(
+				Arrays.asList(new ByteArray(
 						String.format(
 								"\12%5h",
 								base + id) + "20030f89")));

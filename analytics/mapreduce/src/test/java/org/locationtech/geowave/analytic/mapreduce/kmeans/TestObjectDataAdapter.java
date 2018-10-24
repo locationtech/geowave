@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
@@ -128,9 +128,9 @@ public class TestObjectDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId getDataId(
+	public ByteArray getDataId(
 			final TestObject entry ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				entry.id);
 	}
 
@@ -202,7 +202,7 @@ public class TestObjectDataAdapter extends
 
 			@Override
 			public TestObject buildRow(
-					final ByteArrayId dataId ) {
+					final ByteArray dataId ) {
 				return new TestObject(
 						geom,
 						id,

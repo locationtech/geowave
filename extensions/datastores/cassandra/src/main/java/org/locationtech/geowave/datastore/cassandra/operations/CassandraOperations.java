@@ -21,7 +21,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.BaseDataStoreOptions;
@@ -374,10 +374,10 @@ public class CassandraOperations implements
 			final byte[][] dataIds,
 			final Short internalAdapterId,
 			final String... additionalAuthorizations ) {
-		final Set<ByteArrayId> dataIdsSet = new HashSet<>(
+		final Set<ByteArray> dataIdsSet = new HashSet<>(
 				dataIds.length);
 		for (int i = 0; i < dataIds.length; i++) {
-			dataIdsSet.add(new ByteArrayId(
+			dataIdsSet.add(new ByteArray(
 					dataIds[i]));
 		}
 		final CloseableIterator<CassandraRow> everything = executeQuery(QueryBuilder.select().from(
@@ -392,7 +392,7 @@ public class CassandraOperations implements
 							@Override
 							public boolean apply(
 									final GeoWaveRow input ) {
-								return dataIdsSet.contains(new ByteArrayId(
+								return dataIdsSet.contains(new ByteArray(
 										input.getDataId())) && (input.getAdapterId() == internalAdapterId);
 							}
 						}));
@@ -439,11 +439,11 @@ public class CassandraOperations implements
 	};
 
 	public static class ByteArrayIdToByteBuffer implements
-			Function<ByteArrayId, ByteBuffer>
+			Function<ByteArray, ByteBuffer>
 	{
 		@Override
 		public ByteBuffer apply(
-				final ByteArrayId input ) {
+				final ByteArray input ) {
 			return ByteBuffer.wrap(input.getBytes());
 		}
 	}

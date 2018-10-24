@@ -15,7 +15,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -68,7 +68,7 @@ public class DataStatisticsStoreImpl extends
 				MAX_ENTRIES).expireAfterWrite(
 				STATISTICS_CACHE_TIMEOUT,
 				TimeUnit.MILLISECONDS);
-		cache = cacheBuilder.<ByteArrayId, Map<String, InternalDataStatistics<?, ?, ?>>> build();
+		cache = cacheBuilder.<ByteArray, Map<String, InternalDataStatistics<?, ?, ?>>> build();
 	}
 
 	private String getCombinedAuths(
@@ -100,11 +100,11 @@ public class DataStatisticsStoreImpl extends
 	@SuppressWarnings("unchecked")
 	@Override
 	protected void addObjectToCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final InternalDataStatistics<?, ?, ?> object,
 			final String... authorizations ) {
-		final ByteArrayId combinedId = getCombinedId(
+		final ByteArray combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 
@@ -125,10 +125,10 @@ public class DataStatisticsStoreImpl extends
 	@SuppressWarnings("unchecked")
 	@Override
 	protected Object getObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
-		final ByteArrayId combinedId = getCombinedId(
+		final ByteArray combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 		final Map<String, InternalDataStatistics<?, ?, ?>> cached = (Map<String, InternalDataStatistics<?, ?, ?>>) cache
@@ -139,9 +139,9 @@ public class DataStatisticsStoreImpl extends
 		return null;
 	}
 
-	protected ByteArrayId shortToByteArrayId(
+	protected ByteArray shortToByteArrayId(
 			final short internalAdapterId ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId));
 	}
 
@@ -163,10 +163,10 @@ public class DataStatisticsStoreImpl extends
 
 	protected CloseableIterator<InternalDataStatistics<?, ?, ?>> internalGetDataStatistics(
 			final Short adapterId,
-			final ByteArrayId primaryId,
+			final ByteArray primaryId,
 			final String... authorizations ) {
 
-		final ByteArrayId secondaryId = adapterId == null ? null : shortToByteArrayId(adapterId);
+		final ByteArray secondaryId = adapterId == null ? null : shortToByteArrayId(adapterId);
 		final Object cacheResult = getObjectFromCache(
 				primaryId,
 				secondaryId,
@@ -223,18 +223,18 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final InternalDataStatistics<?, ?, ?> persistedObject ) {
 		return getPrimaryId(
 				persistedObject.getType(),
 				persistedObject.getExtendedId());
 	}
 
-	protected static ByteArrayId getPrimaryId(
+	protected static ByteArray getPrimaryId(
 			final StatisticsType<?, ?> type,
 			final String extendedId ) {
 		if ((extendedId != null) && (extendedId.length() > 0)) {
-			return new ByteArrayId(
+			return new ByteArray(
 					Bytes.concat(
 							type.getBytes(),
 							new byte[] {
@@ -246,7 +246,7 @@ public class DataStatisticsStoreImpl extends
 	}
 
 	@Override
-	protected ByteArrayId getSecondaryId(
+	protected ByteArray getSecondaryId(
 			final InternalDataStatistics<?, ?, ?> persistedObject ) {
 		return shortToByteArrayId(persistedObject.getAdapterId());
 	}

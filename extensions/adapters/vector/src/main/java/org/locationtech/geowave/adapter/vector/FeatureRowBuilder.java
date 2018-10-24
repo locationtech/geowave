@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -39,7 +39,7 @@ public class FeatureRowBuilder implements
 
 	@Override
 	public SimpleFeature buildRow(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		return builder.buildFeature(dataId.getString());
 	}
 

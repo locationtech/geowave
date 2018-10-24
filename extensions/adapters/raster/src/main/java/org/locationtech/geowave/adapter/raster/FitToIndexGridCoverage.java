@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.opengis.coverage.CannotEvaluateException;
 import org.opengis.coverage.PointOutsideCoverageException;
 import org.opengis.coverage.SampleDimension;
@@ -35,8 +35,8 @@ public class FitToIndexGridCoverage implements
 		GridCoverage
 {
 	private final GridCoverage gridCoverage;
-	private final ByteArrayId partitionKey;
-	private final ByteArrayId sortKey;
+	private final ByteArray partitionKey;
+	private final ByteArray sortKey;
 	private final Resolution resolution;
 	private final Envelope originalEnvelope;
 	private final Geometry footprintWorldGeometry;
@@ -45,8 +45,8 @@ public class FitToIndexGridCoverage implements
 
 	public FitToIndexGridCoverage(
 			final GridCoverage gridCoverage,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
 			final Resolution resolution,
 			final Envelope originalEnvelope,
 			final Geometry footprintWorldGeometry,
@@ -74,11 +74,11 @@ public class FitToIndexGridCoverage implements
 		return footprintScreenGeometry;
 	}
 
-	public ByteArrayId getPartitionKey() {
+	public ByteArray getPartitionKey() {
 		return partitionKey;
 	}
 
-	public ByteArrayId getSortKey() {
+	public ByteArray getSortKey() {
 		return sortKey;
 	}
 

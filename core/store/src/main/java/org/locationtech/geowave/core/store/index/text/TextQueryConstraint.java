@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.text;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -65,9 +65,9 @@ public class TextQueryConstraint implements
 		// TODO case sensitivity
 		return new QueryRanges(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								matchValue),
-						new ByteArrayId(
+						new ByteArray(
 								matchValue)));
 	}
 

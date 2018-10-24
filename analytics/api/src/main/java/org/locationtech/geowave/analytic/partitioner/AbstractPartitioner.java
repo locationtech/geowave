@@ -30,7 +30,7 @@ import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters.Partition;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -124,7 +124,7 @@ public abstract class AbstractPartitioner<T> implements
 		final InsertionIds primaryIds = getIndex().getIndexStrategy().getInsertionIds(
 				numericData.primary);
 		for (final SinglePartitionInsertionIds partitionInsertionIds : primaryIds.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+			for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 				callback.partitionWith(new PartitionData(
 						partitionInsertionIds.getPartitionKey(),
 						sortKey,
@@ -136,7 +136,7 @@ public abstract class AbstractPartitioner<T> implements
 			final InsertionIds expansionIds = getIndex().getIndexStrategy().getInsertionIds(
 					expansionData);
 			for (final SinglePartitionInsertionIds partitionInsertionIds : expansionIds.getPartitionKeys()) {
-				for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+				for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 					callback.partitionWith(new PartitionData(
 							partitionInsertionIds.getPartitionKey(),
 							sortKey,
@@ -167,7 +167,7 @@ public abstract class AbstractPartitioner<T> implements
 			final InsertionIds insertionIds,
 			final boolean isPrimary ) {
 		for (final SinglePartitionInsertionIds partitionInsertionIds : insertionIds.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+			for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 				masterList.add(new PartitionData(
 						partitionInsertionIds.getPartitionKey(),
 						sortKey,

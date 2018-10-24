@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.metadata;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -73,21 +73,21 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	protected void buildCache() {
 		final CacheBuilder<Object, Object> cacheBuilder = CacheBuilder.newBuilder().maximumSize(
 				MAX_ENTRIES);
-		this.cache = cacheBuilder.<ByteArrayId, T> build();
+		this.cache = cacheBuilder.<ByteArray, T> build();
 	}
 
 	protected MetadataType getType() {
 		return type;
 	}
 
-	protected ByteArrayId getSecondaryId(
+	protected ByteArray getSecondaryId(
 			final T persistedObject ) {
 		// this is the default implementation, if the persistence store requires
 		// secondary indices, it needs to override this method
 		return null;
 	}
 
-	abstract protected ByteArrayId getPrimaryId(
+	abstract protected ByteArray getPrimaryId(
 			final T persistedObject );
 
 	public void removeAll() {
@@ -97,12 +97,12 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		cache.invalidateAll();
 	}
 
-	protected ByteArrayId getCombinedId(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
+	protected ByteArray getCombinedId(
+			final ByteArray primaryId,
+			final ByteArray secondaryId ) {
 		// the secondaryId is optional so check for null
 		if (secondaryId != null) {
-			return new ByteArrayId(
+			return new ByteArray(
 					primaryId.getString() + "_" + secondaryId.getString());
 		}
 		return primaryId;
@@ -110,11 +110,11 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 	@SuppressWarnings("unchecked")
 	protected void addObjectToCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final T object,
 			final String... authorizations ) {
-		final ByteArrayId combinedId = getCombinedId(
+		final ByteArray combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 		cache.put(
@@ -123,19 +123,19 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected Object getObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
-		final ByteArrayId combinedId = getCombinedId(
+		final ByteArray combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 		return cache.getIfPresent(combinedId);
 	}
 
 	protected boolean deleteObjectFromCache(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId ) {
-		final ByteArrayId combinedId = getCombinedId(
+			final ByteArray primaryId,
+			final ByteArray secondaryId ) {
+		final ByteArray combinedId = getCombinedId(
 				primaryId,
 				secondaryId);
 		if (combinedId != null) {
@@ -149,7 +149,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	public void remove(
-			final ByteArrayId adapterId ) {
+			final ByteArray adapterId ) {
 		deleteObject(
 				adapterId,
 				null);
@@ -157,8 +157,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected boolean deleteObject(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		if (deleteObjects(
 				primaryId,
@@ -194,8 +194,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected void addObject(
-			final ByteArrayId id,
-			final ByteArrayId secondaryId,
+			final ByteArray id,
+			final ByteArray secondaryId,
 			final T object ) {
 		addObjectToCache(
 				id,
@@ -225,7 +225,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected CloseableIterator<T> getAllObjectsWithSecondaryId(
-			final ByteArrayId secondaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		return internalGetObjects(new MetadataQuery(
 				null,
@@ -234,8 +234,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected T getObject(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		return internalGetObject(
 				primaryId,
@@ -246,8 +246,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 
 	@SuppressWarnings("unchecked")
 	protected T internalGetObject(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final boolean warnIfNotExists,
 			final String... authorizations ) {
 		final Object cacheResult = getObjectFromCache(
@@ -297,8 +297,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected boolean objectExists(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		return internalGetObject(
 				primaryId,
@@ -347,9 +347,9 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 		final T result = fromValue(entry);
 		if (result != null) {
 			addObjectToCache(
-					new ByteArrayId(
+					new ByteArray(
 							entry.getPrimaryId()),
-					entry.getSecondaryId() == null ? null : new ByteArrayId(
+					entry.getSecondaryId() == null ? null : new ByteArray(
 							entry.getSecondaryId()),
 					result,
 					authorizations);
@@ -358,7 +358,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	public boolean deleteObjects(
-			final ByteArrayId secondaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		return deleteObjects(
 				null,
@@ -367,8 +367,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	public boolean deleteObjects(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final String... authorizations ) {
 		return deleteObjects(
 				primaryId,
@@ -380,8 +380,8 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 	}
 
 	protected static boolean deleteObjects(
-			final ByteArrayId primaryId,
-			final ByteArrayId secondaryId,
+			final ByteArray primaryId,
+			final ByteArray secondaryId,
 			final DataStoreOperations operations,
 			final MetadataType type,
 			final AbstractGeoWavePersistence cacheDeleter,
@@ -418,7 +418,7 @@ public abstract class AbstractGeoWavePersistence<T extends Persistable>
 					final GeoWaveMetadata entry = it.next();
 					if (cacheDeleter != null) {
 						cacheDeleter.deleteObjectFromCache(
-								new ByteArrayId(
+								new ByteArray(
 										entry.getPrimaryId()),
 								secondaryId);
 					}

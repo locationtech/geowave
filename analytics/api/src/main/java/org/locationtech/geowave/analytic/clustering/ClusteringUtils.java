@@ -26,7 +26,7 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -57,7 +57,7 @@ public class ClusteringUtils
 				sampleDataNamespaceURI,
 				CLUSTERING_CRS);
 
-		final ByteArrayId dbId = new ByteArrayId(
+		final ByteArray dbId = new ByteArray(
 				sampleDataTypeId);
 		if (!adapterStore.adapterExists(dbId)) {
 			adapterStore.addAdapter(adapter);

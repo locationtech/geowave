@@ -22,8 +22,8 @@ import java.util.List;
 public class ByteArrayRange implements
 		Comparable<ByteArrayRange>
 {
-	protected ByteArrayId start;
-	protected ByteArrayId end;
+	protected ByteArray start;
+	protected ByteArray end;
 	protected boolean singleValue;
 
 	/***
@@ -34,8 +34,8 @@ public class ByteArrayRange implements
 	 *            end of unit interval
 	 */
 	public ByteArrayRange(
-			final ByteArrayId start,
-			final ByteArrayId end ) {
+			final ByteArray start,
+			final ByteArray end ) {
 		this(
 				start,
 				end,
@@ -50,24 +50,24 @@ public class ByteArrayRange implements
 	 *            end of unit interval
 	 */
 	public ByteArrayRange(
-			final ByteArrayId start,
-			final ByteArrayId end,
+			final ByteArray start,
+			final ByteArray end,
 			final boolean singleValue ) {
 		this.start = start;
 		this.end = end;
 		this.singleValue = singleValue;
 	}
 
-	public ByteArrayId getStart() {
+	public ByteArray getStart() {
 		return start;
 	}
 
-	public ByteArrayId getEnd() {
+	public ByteArray getEnd() {
 		return end;
 	}
 
-	public ByteArrayId getEndAsNextPrefix() {
-		return new ByteArrayId(
+	public ByteArray getEndAsNextPrefix() {
+		return new ByteArray(
 				end.getNextPrefix());
 	}
 

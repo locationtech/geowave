@@ -23,7 +23,7 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -77,7 +77,7 @@ public class SplitsProvider
 			throws IOException,
 			InterruptedException {
 
-		final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<>();
+		final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<>();
 
 		final List<InputSplit> retVal = new ArrayList<>();
 		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<>();
@@ -173,7 +173,7 @@ public class SplitsProvider
 			final DataStoreOperations operations,
 			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -215,8 +215,8 @@ public class SplitsProvider
 
 			// Try to get ranges from histogram statistics
 			if (statistics != null) {
-				final Set<ByteArrayId> partitionKeys = statistics.getPartitionKeys();
-				for (final ByteArrayId partitionKey : partitionKeys) {
+				final Set<ByteArray> partitionKeys = statistics.getPartitionKeys();
+				for (final ByteArray partitionKey : partitionKeys) {
 					final GeoWaveRowRange gwRange = new GeoWaveRowRange(
 							partitionKey.getBytes(),
 							null,
@@ -263,7 +263,7 @@ public class SplitsProvider
 								adapterStore,
 								statsStore,
 								statsCache,
-								new ByteArrayId(
+								new ByteArray(
 										gwRange.getPartitionKey()),
 								authorizations),
 						gwRange);
@@ -315,8 +315,8 @@ public class SplitsProvider
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
-			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
-			final ByteArrayId partitionKey,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
+			final ByteArray partitionKey,
 			final String[] authorizations )
 			throws IOException {
 		RowRangeHistogramStatistics<?> rangeStats = statsCache.get(Pair.of(
@@ -371,7 +371,7 @@ public class SplitsProvider
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore store,
-			final ByteArrayId partitionKey,
+			final ByteArray partitionKey,
 			final String[] authorizations ) {
 		RowRangeHistogramStatistics<?> singleStats = null;
 
@@ -411,7 +411,7 @@ public class SplitsProvider
 			final DataStatisticsStore store,
 			final String[] authorizations ) {
 		PartitionStatistics<?> singleStats = null;
-		final StatisticsQuery<Set<ByteArrayId>> statsQuery = StatisticsQueryBuilder
+		final StatisticsQuery<Set<ByteArray>> statsQuery = StatisticsQueryBuilder
 				.newBuilder()
 				.factory()
 				.partitions()
@@ -657,9 +657,9 @@ public class SplitsProvider
 			final byte[] endKey = (range.getEndSortKey() == null) ? null : range.getEndSortKey();
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 		else {
@@ -667,15 +667,15 @@ public class SplitsProvider
 					range.getPartitionKey(),
 					range.getStartSortKey());
 
-			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
+			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArray.getNextPrefix(range.getPartitionKey())
 					: ArrayUtils.addAll(
 							range.getPartitionKey(),
 							range.getEndSortKey());
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 	}

@@ -25,7 +25,7 @@ import org.apache.hadoop.mapreduce.OutputFormat;
 import org.apache.hadoop.mapreduce.RecordWriter;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.lib.output.NullOutputFormat;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
@@ -253,7 +253,7 @@ public class GeoWaveOutputFormat extends
 			final TaskAttemptContext context )
 			throws IOException,
 			InterruptedException {
-		return new NullOutputFormat<ByteArrayId, Object>().getOutputCommitter(context);
+		return new NullOutputFormat<ByteArray, Object>().getOutputCommitter(context);
 	}
 
 	/**

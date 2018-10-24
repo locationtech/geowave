@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.index.numeric;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -70,7 +70,7 @@ public class NumberRangeFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId value = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
+		final ByteArray value = (ByteArray) persistenceEncoding.getCommonData().getValue(
 				fieldName);
 		if (value != null) {
 			final double val = Lexicoders.DOUBLE.fromByteArray(value.getBytes());

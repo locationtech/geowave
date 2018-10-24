@@ -33,7 +33,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
@@ -230,7 +230,7 @@ public class AccumuloDataStoreStatsTest
 					24,
 					33)
 		});
-		ByteArrayId partitionKey = null;
+		ByteArray partitionKey = null;
 		mockDataStore.addType(
 				adapter,
 				index);
@@ -242,7 +242,7 @@ public class AccumuloDataStoreStatsTest
 									32)),
 							"test_pt"),
 					visWriterAAA).getPartitionKeys().iterator().next().getPartitionKey();
-			ByteArrayId testPartitionKey = indexWriter.write(
+			ByteArray testPartitionKey = indexWriter.write(
 					new TestGeometry(
 							factory.createPoint(new Coordinate(
 									26,
@@ -349,7 +349,7 @@ public class AccumuloDataStoreStatsTest
 							"aaa"
 						}).constraints(
 						new DataIdQuery(
-								new ByteArrayId(
+								new ByteArray(
 										"test_pt_2".getBytes(StringUtils.getGeoWaveCharset())))).build(),
 				new ScanCallback<TestGeometry, GeoWaveRow>() {
 
@@ -393,7 +393,7 @@ public class AccumuloDataStoreStatsTest
 					"aaa"
 				}).constraints(
 				new DataIdQuery(
-						new ByteArrayId(
+						new ByteArray(
 								"test_pt".getBytes(StringUtils.getGeoWaveCharset())))).build());
 
 		try (CloseableIterator<?> it1 = mockDataStore.query(QueryBuilder.newBuilder().addTypeName(
@@ -673,9 +673,9 @@ public class AccumuloDataStoreStatsTest
 		}
 
 		@Override
-		public ByteArrayId getDataId(
+		public ByteArray getDataId(
 				final TestGeometry entry ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					entry.id);
 		}
 
@@ -726,7 +726,7 @@ public class AccumuloDataStoreStatsTest
 
 				@Override
 				public TestGeometry buildRow(
-						final ByteArrayId dataId ) {
+						final ByteArray dataId ) {
 					return new TestGeometry(
 							geom,
 							id);

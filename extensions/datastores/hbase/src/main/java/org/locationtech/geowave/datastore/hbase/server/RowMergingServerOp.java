@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -39,7 +39,7 @@ public class RowMergingServerOp extends
 			final byte[] bytes ) {
 		return rowTransform.getRowAsMergeableObject(
 				ByteArrayUtils.shortFromString(StringUtils.stringFromBinary(CellUtil.cloneFamily(cell))),
-				new ByteArrayId(
+				new ByteArray(
 						CellUtil.cloneQualifier(cell)),
 				bytes);
 	}

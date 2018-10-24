@@ -18,7 +18,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.RowFilter;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -68,15 +68,15 @@ public class SecondaryIndexQueryFilterIterator extends
 				final Value value = rowIterator.getTopValue();
 				final String cq = StringUtils.stringFromBinary(key.getColumnQualifierData().getBackingArray());
 				if (!cq.equals(primaryIndexId)) {
-					final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding = new IndexedPersistenceEncoding<ByteArrayId>(
+					final IndexedPersistenceEncoding<ByteArray> persistenceEncoding = new IndexedPersistenceEncoding<ByteArray>(
 							null, // not needed
 							null, // not needed
 							null, // not needed
 							null, // not needed
 							0, // not needed
-							new PersistentDataset<ByteArrayId>(
+							new PersistentDataset<ByteArray>(
 									StringUtils.stringFromBinary(key.getColumnQualifierData().getBackingArray()),
-									new ByteArrayId(
+									new ByteArray(
 											value.get())),
 							null);
 					if (filter.accept(

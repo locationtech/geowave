@@ -26,7 +26,7 @@ import org.apache.accumulo.core.data.impl.KeyExtent;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
@@ -60,7 +60,7 @@ public class AccumuloSplitsProvider extends
 			final DataStoreOperations operations,
 			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -178,7 +178,7 @@ public class AccumuloSplitsProvider extends
 									adapterStore,
 									statsStore,
 									statsCache,
-									new ByteArrayId(
+									new ByteArray(
 											rowRange.getPartitionKey()),
 									authorizations),
 							rowRange);
@@ -248,7 +248,7 @@ public class AccumuloSplitsProvider extends
 									range.getStartSortKey())),
 					range.isStartSortKeyInclusive(),
 					(range.getEndSortKey() == null) ? new Text(
-							new ByteArrayId(
+							new ByteArray(
 									range.getPartitionKey()).getNextPrefix()) : new Text(
 							ArrayUtils.addAll(
 									range.getPartitionKey(),

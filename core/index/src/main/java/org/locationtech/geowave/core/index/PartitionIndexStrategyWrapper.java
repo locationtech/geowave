@@ -63,8 +63,8 @@ public class PartitionIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -93,8 +93,8 @@ public class PartitionIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return new MultiDimensionalCoordinates();
 	}
 
@@ -121,13 +121,13 @@ public class PartitionIndexStrategyWrapper implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return partitionIndexStrategy.getInsertionPartitionKeys(insertionData);
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return partitionIndexStrategy.getQueryPartitionKeys(
@@ -136,7 +136,7 @@ public class PartitionIndexStrategyWrapper implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return partitionIndexStrategy.getPredefinedSplits();
 	}
 }

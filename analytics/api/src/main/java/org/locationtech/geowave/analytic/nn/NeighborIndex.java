@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic.nn;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * Maintain an association between an ID of any item and its neighbors, as they
@@ -25,7 +25,7 @@ import org.locationtech.geowave.core.index.ByteArrayId;
  */
 public class NeighborIndex<NNTYPE>
 {
-	private final Map<ByteArrayId, NeighborList<NNTYPE>> index = new HashMap<ByteArrayId, NeighborList<NNTYPE>>();
+	private final Map<ByteArray, NeighborList<NNTYPE>> index = new HashMap<ByteArray, NeighborList<NNTYPE>>();
 	private final NeighborListFactory<NNTYPE> listFactory;
 
 	private final NullList<NNTYPE> nullList = new NullList<NNTYPE>();
@@ -50,7 +50,7 @@ public class NeighborIndex<NNTYPE>
 	 * @return
 	 */
 	public NeighborList<NNTYPE> init(
-			ByteArrayId id,
+			ByteArray id,
 			NNTYPE value ) {
 		NeighborList<NNTYPE> neighbors = index.get(id);
 		if (neighbors == null) {
@@ -66,9 +66,9 @@ public class NeighborIndex<NNTYPE>
 
 	public void add(
 			final DistanceProfile<?> distanceProfile,
-			ByteArrayId centerId,
+			ByteArray centerId,
 			NNTYPE centerValue,
-			ByteArrayId neighborId,
+			ByteArray neighborId,
 			NNTYPE neighborValue,
 			final boolean addReciprical ) {
 		this.addToList(
@@ -88,7 +88,7 @@ public class NeighborIndex<NNTYPE>
 	}
 
 	public void empty(
-			final ByteArrayId id ) {
+			final ByteArray id ) {
 		index.put(
 				id,
 				nullList);
@@ -96,9 +96,9 @@ public class NeighborIndex<NNTYPE>
 
 	private void addToList(
 			final DistanceProfile<?> distanceProfile,
-			ByteArrayId centerId,
+			ByteArray centerId,
 			NNTYPE centerValue,
-			ByteArrayId neighborId,
+			ByteArray neighborId,
 			NNTYPE neighborValue ) {
 		NeighborList<NNTYPE> neighbors = index.get(centerId);
 		if (neighbors == null) {

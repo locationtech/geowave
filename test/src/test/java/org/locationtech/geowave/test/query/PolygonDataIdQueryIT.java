@@ -26,7 +26,7 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -81,7 +81,7 @@ public class PolygonDataIdQueryIT extends
 						dataAdapter.getTypeName()).indexName(
 						TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
 						new DataIdQuery(
-								new ByteArrayId(
+								new ByteArray(
 										StringUtils.stringToBinary(DATA_ID)))).build());
 		int numResults = 0;
 		while (matches.hasNext()) {

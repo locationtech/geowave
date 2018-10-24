@@ -12,13 +12,13 @@ package org.locationtech.geowave.core.store;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 
 public class AdapterMapping implements
 		Persistable
 {
-	private ByteArrayId adapterId;
+	private ByteArray adapterId;
 	private short internalAdapterId;
 
 	public AdapterMapping() {
@@ -26,14 +26,14 @@ public class AdapterMapping implements
 	}
 
 	public AdapterMapping(
-			ByteArrayId adapterId,
+			ByteArray adapterId,
 			short internalAdapterId ) {
 		super();
 		this.adapterId = adapterId;
 		this.internalAdapterId = internalAdapterId;
 	}
 
-	public ByteArrayId getAdapterId() {
+	public ByteArray getAdapterId() {
 		return adapterId;
 	}
 
@@ -80,7 +80,7 @@ public class AdapterMapping implements
 		buf.getShort(internalAdapterId);
 		final byte[] adapterIdBytes = new byte[bytes.length - 2];
 		buf.get(adapterIdBytes);
-		this.adapterId = new ByteArrayId(
+		this.adapterId = new ByteArray(
 				adapterIdBytes);
 	}
 }

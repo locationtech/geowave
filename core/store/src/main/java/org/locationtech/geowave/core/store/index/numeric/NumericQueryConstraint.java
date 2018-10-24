@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.numeric;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
@@ -81,9 +81,9 @@ public class NumericQueryConstraint implements
 	public QueryRanges getQueryRanges() {
 		return new QueryRanges(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue())),
-						new ByteArrayId(
+						new ByteArray(
 								NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue()))));
 	}
 

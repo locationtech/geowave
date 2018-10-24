@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -57,7 +57,7 @@ public class RoundRobinKeyIndexStrategy implements
 		PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>
 {
 
-	private final List<ByteArrayId> keys = new ArrayList<ByteArrayId>();
+	private final List<ByteArray> keys = new ArrayList<ByteArray>();
 	public int position = 0;
 
 	/**
@@ -79,7 +79,7 @@ public class RoundRobinKeyIndexStrategy implements
 			final ByteBuffer buf = ByteBuffer.allocate(4);
 			for (int i = 0; i < size; i++) {
 				buf.putInt(i);
-				final ByteArrayId id = new ByteArrayId(
+				final ByteArray id = new ByteArray(
 						Arrays.copyOf(
 								buf.array(),
 								4));
@@ -89,7 +89,7 @@ public class RoundRobinKeyIndexStrategy implements
 		}
 		else {
 			for (int i = 0; i < size; i++) {
-				final ByteArrayId id = new ByteArrayId(
+				final ByteArray id = new ByteArray(
 						new byte[] {
 							(byte) i
 						});
@@ -118,7 +118,7 @@ public class RoundRobinKeyIndexStrategy implements
 		init(buf.getInt());
 	}
 
-	public Set<ByteArrayId> getPartitionKeys() {
+	public Set<ByteArray> getPartitionKeys() {
 		return Sets.newHashSet(keys);
 	}
 
@@ -137,21 +137,21 @@ public class RoundRobinKeyIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		position = (position + 1) % keys.size();
 		return Collections.singleton(keys.get(position));
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return getPartitionKeys();
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return getPartitionKeys();
 	}
 }

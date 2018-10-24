@@ -17,7 +17,7 @@ import java.util.Set;
 import org.apache.hadoop.hbase.client.BufferedMutator;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -31,7 +31,7 @@ public class HBaseMetadataWriter implements
 	private static final Logger LOGGER = LoggerFactory.getLogger(HBaseMetadataWriter.class);
 
 	private final BufferedMutator writer;
-	protected Set<ByteArrayId> duplicateRowTracker = new HashSet<>();
+	protected Set<ByteArray> duplicateRowTracker = new HashSet<>();
 	private final byte[] metadataTypeBytes;
 
 	public HBaseMetadataWriter(
@@ -79,7 +79,7 @@ public class HBaseMetadataWriter implements
 
 		try {
 			synchronized (duplicateRowTracker) {
-				final ByteArrayId primaryId = new ByteArrayId(
+				final ByteArray primaryId = new ByteArray(
 						metadata.getPrimaryId());
 				if (!duplicateRowTracker.add(primaryId)) {
 					writer.flush();

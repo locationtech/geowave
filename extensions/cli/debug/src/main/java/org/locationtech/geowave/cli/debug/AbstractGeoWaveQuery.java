@@ -20,7 +20,7 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.converters.GeoWaveBaseConverter;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -110,7 +110,7 @@ abstract public class AbstractGeoWaveQuery extends
 			boolean debug );
 
 	public static class StringToByteArrayConverter extends
-			GeoWaveBaseConverter<ByteArrayId>
+			GeoWaveBaseConverter<ByteArray>
 	{
 		public StringToByteArrayConverter(
 				final String optionName ) {
@@ -119,9 +119,9 @@ abstract public class AbstractGeoWaveQuery extends
 		}
 
 		@Override
-		public ByteArrayId convert(
+		public ByteArray convert(
 				final String value ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					value);
 		}
 	}

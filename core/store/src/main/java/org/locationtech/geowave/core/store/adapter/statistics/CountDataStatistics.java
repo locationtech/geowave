@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import java.nio.ByteBuffer;
 import java.util.HashSet;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -90,14 +90,14 @@ public class CountDataStatistics<T> extends
 	 * This is expensive, but necessary since there may be duplicates
 	 */
 	// TODO entryDeleted should only be called once with all duplicates
-	private transient HashSet<ByteArrayId> ids = new HashSet<>();
+	private transient HashSet<ByteArray> ids = new HashSet<>();
 
 	@Override
 	public void entryDeleted(
 			final T entry,
 			final GeoWaveRow... kv ) {
 		if (kv.length > 0) {
-			if (ids.add(new ByteArrayId(
+			if (ids.add(new ByteArray(
 					kv[0].getDataId()))) {
 				if (!isSet()) {
 					count = 0;

@@ -57,7 +57,7 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
 import org.apache.hadoop.hbase.shaded.com.google.protobuf.ByteString;
 import org.locationtech.geowave.core.cli.VersionUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
@@ -145,7 +145,7 @@ public class HBaseOperations implements
 	private final String tableNamespace;
 	private final boolean schemaUpdateEnabled;
 	private final HashMap<String, List<String>> coprocessorCache = new HashMap<>();
-	private final Map<TableName, Set<ByteArrayId>> partitionCache = new HashMap<>();
+	private final Map<TableName, Set<ByteArray>> partitionCache = new HashMap<>();
 	private final HashMap<TableName, Set<GeoWaveColumnFamily>> cfCache = new HashMap<>();
 
 	private final HBaseOptions options;
@@ -257,7 +257,7 @@ public class HBaseOperations implements
 	}
 
 	protected void createTable(
-			final Set<ByteArrayId> preSplits,
+			final Set<ByteArray> preSplits,
 			final Pair<GeoWaveColumnFamily, Boolean>[] columnFamiliesAndVersioningPairs,
 			final GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final TableName tableName )
@@ -323,7 +323,7 @@ public class HBaseOperations implements
 	}
 
 	protected void createTable(
-			final Set<ByteArrayId> preSplits,
+			final Set<ByteArray> preSplits,
 			final GeoWaveColumnFamily[] columnFamilies,
 			final GeoWaveColumnFamilyFactory columnFamilyFactory,
 			final boolean enableVersioning,
@@ -907,7 +907,7 @@ public class HBaseOperations implements
 	}
 
 	public void createTable(
-			final Set<ByteArrayId> preSplits,
+			final Set<ByteArray> preSplits,
 			final String indexName,
 			final boolean enableVersioning,
 			final short internalAdapterId ) {
@@ -1499,8 +1499,8 @@ public class HBaseOperations implements
 
 	private ByteArrayRange getSingleRange(
 			final List<ByteArrayRange> ranges ) {
-		ByteArrayId start = null;
-		ByteArrayId end = null;
+		ByteArray start = null;
+		ByteArray end = null;
 
 		for (final ByteArrayRange range : ranges) {
 			if ((start == null) || (range.getStart().compareTo(
@@ -1517,13 +1517,13 @@ public class HBaseOperations implements
 				end);
 	}
 
-	public List<ByteArrayId> getTableRegions(
+	public List<ByteArray> getTableRegions(
 			final String tableNameStr ) {
-		final ArrayList<ByteArrayId> regionIdList = Lists.newArrayList();
+		final ArrayList<ByteArray> regionIdList = Lists.newArrayList();
 
 		try (final RegionLocator locator = getRegionLocator(tableNameStr)) {
 			for (final HRegionLocation regionLocation : locator.getAllRegionLocations()) {
-				regionIdList.add(new ByteArrayId(
+				regionIdList.add(new ByteArray(
 						regionLocation.getRegionInfo().getRegionName()));
 			}
 		}

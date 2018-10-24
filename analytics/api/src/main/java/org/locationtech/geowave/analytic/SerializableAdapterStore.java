@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;

@@ -30,7 +30,7 @@ import org.apache.hadoop.hbase.filter.MultiRowRangeFilter;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.hadoop.hbase.util.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
@@ -158,7 +158,7 @@ public class HBaseParallelDecoder<T> extends
 							partial = true;
 						}
 						if (!regionInfo.containsRow(stopRow)) {
-							stopRow = new ByteArrayId(
+							stopRow = new ByteArray(
 									regionInfo.getEndKey()).getNextPrefix();
 							partial = true;
 						}

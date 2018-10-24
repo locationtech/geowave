@@ -19,7 +19,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -36,12 +36,12 @@ import org.locationtech.geowave.core.store.util.VisibilityExpression;
 import com.google.common.collect.Sets;
 
 public class FieldVisibilityCount<T> extends
-		AbstractDataStatistics<T, Map<ByteArrayId, Long>, IndexStatisticsQueryBuilder<Map<ByteArrayId, Long>>> implements
+		AbstractDataStatistics<T, Map<ByteArray, Long>, IndexStatisticsQueryBuilder<Map<ByteArray, Long>>> implements
 		DeleteCallback<T, GeoWaveRow>
 {
-	public static final IndexStatisticsType<Map<ByteArrayId, Long>> STATS_TYPE = new IndexStatisticsType<>(
+	public static final IndexStatisticsType<Map<ByteArray, Long>> STATS_TYPE = new IndexStatisticsType<>(
 			"FIELD_VISIBILITY_COUNT");
-	private final Map<ByteArrayId, Long> countsPerVisibility;
+	private final Map<ByteArray, Long> countsPerVisibility;
 
 	public FieldVisibilityCount() {
 		super();
@@ -51,7 +51,7 @@ public class FieldVisibilityCount<T> extends
 	private FieldVisibilityCount(
 			final short internalDataAdapterId,
 			final String indexName,
-			final Map<ByteArrayId, Long> countsPerVisibility ) {
+			final Map<ByteArray, Long> countsPerVisibility ) {
 		super(
 				internalDataAdapterId,
 				STATS_TYPE,
@@ -72,7 +72,7 @@ public class FieldVisibilityCount<T> extends
 	public byte[] toBinary() {
 		int bufferSize = 4;
 		final List<byte[]> serializedCounts = new ArrayList<>();
-		for (final Entry<ByteArrayId, Long> entry : countsPerVisibility.entrySet()) {
+		for (final Entry<ByteArray, Long> entry : countsPerVisibility.entrySet()) {
 			if (entry.getValue() != 0) {
 				final byte[] key = entry.getKey().getBytes();
 				final ByteBuffer buf = ByteBuffer.allocate(key.length + 12);
@@ -93,7 +93,7 @@ public class FieldVisibilityCount<T> extends
 	}
 
 	@Override
-	public InternalDataStatistics<T, Map<ByteArrayId, Long>, IndexStatisticsQueryBuilder<Map<ByteArrayId, Long>>> duplicate() {
+	public InternalDataStatistics<T, Map<ByteArray, Long>, IndexStatisticsQueryBuilder<Map<ByteArray, Long>>> duplicate() {
 		return new FieldVisibilityCount<>(
 				adapterId,
 				extendedId,
@@ -113,7 +113,7 @@ public class FieldVisibilityCount<T> extends
 			final long count = buf.getLong();
 			if (count != 0) {
 				countsPerVisibility.put(
-						new ByteArrayId(
+						new ByteArray(
 								id),
 						count);
 			}
@@ -135,10 +135,10 @@ public class FieldVisibilityCount<T> extends
 		for (final GeoWaveRow row : kvs) {
 			final GeoWaveValue[] values = row.getFieldValues();
 			for (final GeoWaveValue v : values) {
-				ByteArrayId visibility = new ByteArrayId(
+				ByteArray visibility = new ByteArray(
 						new byte[] {});
 				if (v.getVisibility() != null) {
-					visibility = new ByteArrayId(
+					visibility = new ByteArray(
 							v.getVisibility());
 				}
 				Long count = countsPerVisibility.get(visibility);
@@ -164,7 +164,7 @@ public class FieldVisibilityCount<T> extends
 	public boolean isAuthorizationsLimiting(
 			final String... authorizations ) {
 		final Set<String> set = Sets.newHashSet(authorizations);
-		for (final Entry<ByteArrayId, Long> vis : countsPerVisibility.entrySet()) {
+		for (final Entry<ByteArray, Long> vis : countsPerVisibility.entrySet()) {
 			if ((vis.getValue() > 0) && (vis.getKey() != null) && (vis.getKey().getBytes().length > 0)
 					&& !VisibilityExpression.evaluate(
 							vis.getKey().getString(),
@@ -179,8 +179,8 @@ public class FieldVisibilityCount<T> extends
 	public void merge(
 			final Mergeable merge ) {
 		if ((merge != null) && (merge instanceof FieldVisibilityCount)) {
-			final Map<ByteArrayId, Long> otherCounts = ((FieldVisibilityCount) merge).countsPerVisibility;
-			for (final Entry<ByteArrayId, Long> entry : otherCounts.entrySet()) {
+			final Map<ByteArray, Long> otherCounts = ((FieldVisibilityCount) merge).countsPerVisibility;
+			for (final Entry<ByteArray, Long> entry : otherCounts.entrySet()) {
 				Long count = countsPerVisibility.get(entry.getKey());
 				if (count == null) {
 					count = 0L;
@@ -221,7 +221,7 @@ public class FieldVisibilityCount<T> extends
 	}
 
 	@Override
-	public Map<ByteArrayId, Long> getResult() {
+	public Map<ByteArray, Long> getResult() {
 		return countsPerVisibility;
 	}
 
@@ -233,7 +233,7 @@ public class FieldVisibilityCount<T> extends
 	@Override
 	protected Object resultsValue() {
 		final Map<String, Object> retVal = new HashMap<>();
-		for (final Entry<ByteArrayId, Long> entry : countsPerVisibility.entrySet()) {
+		for (final Entry<ByteArray, Long> entry : countsPerVisibility.entrySet()) {
 			retVal.put(
 					entry.getKey().getString(),
 					entry.getValue());

@@ -12,7 +12,7 @@ package org.locationtech.geowave.adapter.vector;
 
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -32,7 +32,7 @@ public class AvroAttributeRowBuilder implements
 
 	@Override
 	public SimpleFeature buildRow(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		final SimpleFeature sf = (SimpleFeature) object;
 		return sf;
 	}

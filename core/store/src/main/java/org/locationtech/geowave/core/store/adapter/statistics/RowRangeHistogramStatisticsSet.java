@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -32,12 +32,12 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
  *            The type of the row to keep statistics on
  */
 public class RowRangeHistogramStatisticsSet<T> extends
-		AbstractDataStatistics<T, Map<ByteArrayId, RowRangeHistogramStatistics<T>>, IndexStatisticsQueryBuilder<Map<ByteArrayId, RowRangeHistogramStatistics<T>>>> implements
-		DataStatisticsSet<T, Map<ByteArrayId, RowRangeHistogramStatistics<T>>, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>, IndexStatisticsQueryBuilder<Map<ByteArrayId, RowRangeHistogramStatistics<T>>>>
+		AbstractDataStatistics<T, Map<ByteArray, RowRangeHistogramStatistics<T>>, IndexStatisticsQueryBuilder<Map<ByteArray, RowRangeHistogramStatistics<T>>>> implements
+		DataStatisticsSet<T, Map<ByteArray, RowRangeHistogramStatistics<T>>, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>, IndexStatisticsQueryBuilder<Map<ByteArray, RowRangeHistogramStatistics<T>>>>
 {
-	public static final IndexStatisticsType<Map<ByteArrayId, RowRangeHistogramStatistics<?>>> STATS_TYPE = new IndexStatisticsType<>(
+	public static final IndexStatisticsType<Map<ByteArray, RowRangeHistogramStatistics<?>>> STATS_TYPE = new IndexStatisticsType<>(
 			RowRangeHistogramStatistics.STATS_TYPE.getString());
-	private final Map<ByteArrayId, RowRangeHistogramStatistics<T>> histogramPerPartition = new HashMap<>();
+	private final Map<ByteArray, RowRangeHistogramStatistics<T>> histogramPerPartition = new HashMap<>();
 
 	public RowRangeHistogramStatisticsSet() {
 		super();
@@ -53,7 +53,7 @@ public class RowRangeHistogramStatisticsSet<T> extends
 	}
 
 	private synchronized RowRangeHistogramStatistics<T> getPartitionStatistic(
-			final ByteArrayId partitionKey ) {
+			final ByteArray partitionKey ) {
 		RowRangeHistogramStatistics<T> histogram = histogramPerPartition.get(partitionKey);
 		if (histogram == null) {
 			histogram = new RowRangeHistogramStatistics<>(
@@ -108,14 +108,14 @@ public class RowRangeHistogramStatisticsSet<T> extends
 				new InternalDataStatistics[histogramPerPartition.size()]);
 	}
 
-	protected static ByteArrayId getPartitionKey(
+	protected static ByteArray getPartitionKey(
 			final byte[] partitionBytes ) {
-		return ((partitionBytes == null) || (partitionBytes.length == 0)) ? null : new ByteArrayId(
+		return ((partitionBytes == null) || (partitionBytes.length == 0)) ? null : new ByteArray(
 				partitionBytes);
 	}
 
 	@Override
-	public Map<ByteArrayId, RowRangeHistogramStatistics<T>> getResult() {
+	public Map<ByteArray, RowRangeHistogramStatistics<T>> getResult() {
 		return histogramPerPartition;
 	}
 

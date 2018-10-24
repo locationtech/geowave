@@ -16,7 +16,7 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -117,7 +117,7 @@ public class AccumuloWriter implements
 		final byte[] partition = row.getPartitionKey();
 		if ((partition != null) && (partition.length > 0)) {
 			operations.ensurePartition(
-					new ByteArrayId(
+					new ByteArray(
 							partition),
 					tableName);
 		}

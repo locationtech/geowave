@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -63,7 +63,7 @@ public class AdapterStoreImpl extends
 			return null;
 		}
 		return getObject(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(internalAdapterId)),
 				null);
 	}
@@ -91,15 +91,15 @@ public class AdapterStoreImpl extends
 			return false;
 		}
 		return objectExists(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(internalAdapterId)),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final InternalDataAdapter<?> persistedObject ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId()));
 	}
 
@@ -115,7 +115,7 @@ public class AdapterStoreImpl extends
 			LOGGER.warn("Cannot remove adapter for null internal ID");
 			return;
 		}
-		remove(new ByteArrayId(
+		remove(new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId)));
 	}
 }

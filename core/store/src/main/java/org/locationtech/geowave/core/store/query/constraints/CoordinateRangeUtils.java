@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.query.constraints;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -141,14 +141,14 @@ public class CoordinateRangeUtils
 	private static class MultiRangeLookup implements
 			RangeCache
 	{
-		private final Map<ByteArrayId, MultiDimensionalBinLookup> multiDimensionalIdToRangeMap;
+		private final Map<ByteArray, MultiDimensionalBinLookup> multiDimensionalIdToRangeMap;
 
 		public MultiRangeLookup(
 				final MultiDimensionalCoordinateRanges[] coordinateRanges ) {
 			multiDimensionalIdToRangeMap = new HashMap<>();
 			for (final MultiDimensionalCoordinateRanges r : coordinateRanges) {
 				multiDimensionalIdToRangeMap.put(
-						new ByteArrayId(
+						new ByteArray(
 								r.getMultiDimensionalId()),
 						new MultiDimensionalBinLookup(
 								r));
@@ -158,7 +158,7 @@ public class CoordinateRangeUtils
 		@Override
 		public boolean inBounds(
 				final MultiDimensionalCoordinates coordinates ) {
-			final MultiDimensionalBinLookup binLookup = multiDimensionalIdToRangeMap.get(new ByteArrayId(
+			final MultiDimensionalBinLookup binLookup = multiDimensionalIdToRangeMap.get(new ByteArray(
 					coordinates.getMultiDimensionalId()));
 			if (binLookup == null) {
 				return false;
@@ -249,14 +249,14 @@ public class CoordinateRangeUtils
 	private static class MultiBinLookup implements
 			RangeByBinIdCache
 	{
-		private final Map<ByteArrayId, CoordinateRange> binIdToRangeMap;
+		private final Map<ByteArray, CoordinateRange> binIdToRangeMap;
 
 		public MultiBinLookup(
 				final CoordinateRange[] coordinateRanges ) {
 			binIdToRangeMap = new HashMap<>();
 			for (final CoordinateRange r : coordinateRanges) {
 				binIdToRangeMap.put(
-						new ByteArrayId(
+						new ByteArray(
 								r.getBinId()),
 						r);
 			}
@@ -265,7 +265,7 @@ public class CoordinateRangeUtils
 		@Override
 		public boolean inBounds(
 				final Coordinate coordinate ) {
-			final CoordinateRange range = binIdToRangeMap.get(new ByteArrayId(
+			final CoordinateRange range = binIdToRangeMap.get(new ByteArray(
 					coordinate.getBinId()));
 			if (range == null) {
 				return false;

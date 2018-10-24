@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
@@ -42,7 +42,7 @@ public class RowRangeHistogramStatistics<T> extends
 
 	public RowRangeHistogramStatistics(
 			final String indexName,
-			final ByteArrayId partitionKey ) {
+			final ByteArray partitionKey ) {
 		this(
 				null,
 				indexName,
@@ -52,7 +52,7 @@ public class RowRangeHistogramStatistics<T> extends
 	public RowRangeHistogramStatistics(
 			final Short internalDataAdapterId,
 			final String indexName,
-			final ByteArrayId partitionKey ) {
+			final ByteArray partitionKey ) {
 		super(
 				internalDataAdapterId,
 				STATS_TYPE,
@@ -68,7 +68,7 @@ public class RowRangeHistogramStatistics<T> extends
 
 	@Override
 	public InternalDataStatistics<T, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>> duplicate() {
-		final Pair<String, ByteArrayId> pair = PartitionStatisticsQueryBuilder
+		final Pair<String, ByteArray> pair = PartitionStatisticsQueryBuilder
 				.decomposeIndexAndPartitionFromId(extendedId);
 		return new RowRangeHistogramStatistics<>(
 				adapterId,
@@ -170,7 +170,7 @@ public class RowRangeHistogramStatistics<T> extends
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		final Pair<String, ByteArrayId> indexAndPartition = PartitionStatisticsQueryBuilder
+		final Pair<String, ByteArray> indexAndPartition = PartitionStatisticsQueryBuilder
 				.decomposeIndexAndPartitionFromId(extendedId);
 		buffer.append(
 				"histogram[index=").append(
@@ -207,7 +207,7 @@ public class RowRangeHistogramStatistics<T> extends
 
 	@Override
 	protected Object resultsValue() {
-		final Pair<String, ByteArrayId> indexAndPartition = PartitionStatisticsQueryBuilder
+		final Pair<String, ByteArray> indexAndPartition = PartitionStatisticsQueryBuilder
 				.decomposeIndexAndPartitionFromId(extendedId);
 		final Map<String, Object> retVal = new HashMap<>();
 		retVal.put(

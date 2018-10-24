@@ -23,7 +23,7 @@ import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -161,12 +161,12 @@ public class CQLDelete extends
 	}
 
 	public static class StringToByteArrayConverter implements
-			IStringConverter<ByteArrayId>
+			IStringConverter<ByteArray>
 	{
 		@Override
-		public ByteArrayId convert(
+		public ByteArray convert(
 				final String value ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					value);
 		}
 	}

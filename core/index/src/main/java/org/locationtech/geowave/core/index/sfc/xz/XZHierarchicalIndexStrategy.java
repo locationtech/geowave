@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -227,13 +227,13 @@ public class XZHierarchicalIndexStrategy implements
 				final byte[] xzId = xzCurve.getId(values);
 
 				partitionIds.add(new SinglePartitionInsertionIds(
-						new ByteArrayId(
+						new ByteArray(
 								ByteArrayUtils.combineArrays(
 										new byte[] {
 											xzCurveMultiDimensionalId
 										},
 										range.getBinId())),
-						new ByteArrayId(
+						new ByteArray(
 								xzId)));
 			}
 		}
@@ -251,8 +251,8 @@ public class XZHierarchicalIndexStrategy implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		// select curve based on first byte
 		final byte first = partitionKey.getBytes()[0];
 		if (first == pointCurveMultiDimensionalId) {
@@ -367,8 +367,8 @@ public class XZHierarchicalIndexStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 
 		// select curve based on first byte
 		final byte first = partitionKey.getBytes()[0];
@@ -555,7 +555,7 @@ public class XZHierarchicalIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return IndexUtils.getInsertionPartitionKeys(
 				this,
@@ -563,7 +563,7 @@ public class XZHierarchicalIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return IndexUtils.getQueryPartitionKeys(
@@ -573,7 +573,7 @@ public class XZHierarchicalIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return Collections.EMPTY_SET;
 	}
 }

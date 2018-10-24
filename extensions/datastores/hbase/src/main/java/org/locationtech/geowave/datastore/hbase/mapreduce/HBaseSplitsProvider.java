@@ -27,7 +27,7 @@ import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.HRegionLocation;
 import org.apache.hadoop.hbase.client.RegionLocator;
 import org.apache.hadoop.hbase.util.Bytes;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -59,7 +59,7 @@ public class HBaseSplitsProvider extends
 			final DataStoreOperations operations,
 			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
@@ -120,10 +120,10 @@ public class HBaseSplitsProvider extends
 			if (statistics != null) {
 				ranges = new ArrayList();
 
-				ByteArrayId prevKey = new ByteArrayId(
+				ByteArray prevKey = new ByteArray(
 						HConstants.EMPTY_BYTE_ARRAY);
 
-				for (final ByteArrayId partitionKey : statistics.getPartitionKeys()) {
+				for (final ByteArray partitionKey : statistics.getPartitionKeys()) {
 					final ByteArrayRange range = new ByteArrayRange(
 							prevKey,
 							partitionKey);
@@ -135,7 +135,7 @@ public class HBaseSplitsProvider extends
 
 				ranges.add(new ByteArrayRange(
 						prevKey,
-						new ByteArrayId(
+						new ByteArray(
 								HConstants.EMPTY_BYTE_ARRAY)));
 
 				binRanges(
@@ -179,7 +179,7 @@ public class HBaseSplitsProvider extends
 									adapterStore,
 									statsStore,
 									statsCache,
-									new ByteArrayId(
+									new ByteArray(
 											gwRange.getPartitionKey()),
 									authorizations),
 							gwRange);
@@ -232,9 +232,9 @@ public class HBaseSplitsProvider extends
 			}
 
 			final ByteArrayRange regionRange = new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							regionInfo.getStartKey()),
-					new ByteArrayId(
+					new ByteArray(
 							regionInfo.getEndKey()));
 			rangeList.add(regionRange);
 		}
@@ -283,14 +283,14 @@ public class HBaseSplitsProvider extends
 			}
 			else {
 				final ByteArrayRange thisRange = new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								startKey),
-						new ByteArrayId(
+						new ByteArray(
 								endKey));
 				final ByteArrayRange regionRange = new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								regionInfo.getStartKey()),
-						new ByteArrayId(
+						new ByteArray(
 								regionInfo.getEndKey()));
 
 				final ByteArrayRange overlappingRange = thisRange.intersection(regionRange);
@@ -301,9 +301,9 @@ public class HBaseSplitsProvider extends
 				i.remove();
 
 				i.add(new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								regionInfo.getEndKey()),
-						new ByteArrayId(
+						new ByteArray(
 								endKey)));
 			}
 		}
@@ -318,14 +318,14 @@ public class HBaseSplitsProvider extends
 			final GeoWaveRowRange thisRange,
 			final GeoWaveRowRange otherRange ) {
 		final ByteArrayRange thisByteArrayRange = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						thisRange.getStartSortKey()),
-				new ByteArrayId(
+				new ByteArray(
 						thisRange.getEndSortKey()));
 		final ByteArrayRange otherByteArrayRange = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						otherRange.getStartSortKey()),
-				new ByteArrayId(
+				new ByteArray(
 						otherRange.getEndSortKey()));
 
 		final ByteArrayRange overlappingRange = thisByteArrayRange.intersection(otherByteArrayRange);
@@ -347,9 +347,9 @@ public class HBaseSplitsProvider extends
 			final byte[] endKey = (range.getEndSortKey() == null) ? HConstants.EMPTY_BYTE_ARRAY : range.getEndSortKey();
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 		else {
@@ -357,15 +357,15 @@ public class HBaseSplitsProvider extends
 					range.getPartitionKey(),
 					range.getStartSortKey());
 
-			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
+			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArray.getNextPrefix(range.getPartitionKey())
 					: ArrayUtils.addAll(
 							range.getPartitionKey(),
 							range.getEndSortKey());
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 	}

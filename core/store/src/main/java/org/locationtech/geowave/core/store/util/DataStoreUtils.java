@@ -24,7 +24,7 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.UUID;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
@@ -181,22 +181,22 @@ public class DataStoreUtils
 
 	public static InsertionIds keysToInsertionIds(
 			final GeoWaveKey... geoWaveKeys ) {
-		final Map<ByteArrayId, List<ByteArrayId>> sortKeysPerPartition = new HashMap<>();
+		final Map<ByteArray, List<ByteArray>> sortKeysPerPartition = new HashMap<>();
 		for (final GeoWaveKey key : geoWaveKeys) {
-			final ByteArrayId partitionKey = new ByteArrayId(
+			final ByteArray partitionKey = new ByteArray(
 					key.getPartitionKey());
-			List<ByteArrayId> sortKeys = sortKeysPerPartition.get(partitionKey);
+			List<ByteArray> sortKeys = sortKeysPerPartition.get(partitionKey);
 			if (sortKeys == null) {
 				sortKeys = new ArrayList<>();
 				sortKeysPerPartition.put(
 						partitionKey,
 						sortKeys);
 			}
-			sortKeys.add(new ByteArrayId(
+			sortKeys.add(new ByteArray(
 					key.getSortKey()));
 		}
 		final Set<SinglePartitionInsertionIds> insertionIds = new HashSet<>();
-		for (final Entry<ByteArrayId, List<ByteArrayId>> e : sortKeysPerPartition.entrySet()) {
+		for (final Entry<ByteArray, List<ByteArray>> e : sortKeysPerPartition.entrySet()) {
 			insertionIds.add(new SinglePartitionInsertionIds(
 					e.getKey(),
 					e.getValue()));
@@ -364,7 +364,7 @@ public class DataStoreUtils
 			if (targetIndexStrategy != null) {
 				// at least use the prefix of a substrategy if chosen
 				return new QueryRanges(
-						Collections.singleton(new ByteArrayId(
+						Collections.singleton(new ByteArray(
 								targetIndexStrategy.getPrefix())));
 			}
 			return new QueryRanges(); // implies in negative and
@@ -391,7 +391,7 @@ public class DataStoreUtils
 				+ unqualifiedTableName;
 	}
 
-	public static ByteArrayId ensureUniqueId(
+	public static ByteArray ensureUniqueId(
 			final byte[] id,
 			final boolean hasMetadata ) {
 
@@ -441,7 +441,7 @@ public class DataStoreUtils
 			buf.put(metadata);
 		}
 
-		return new ByteArrayId(
+		return new ByteArray(
 				buf.array());
 	}
 

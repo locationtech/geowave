@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * This class models all of the necessary information for persisting data in the
@@ -24,15 +24,15 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 public class IndexedPersistenceEncoding<T> extends
 		PersistenceEncoding<T>
 {
-	private final ByteArrayId insertionPartitionKey;
-	private final ByteArrayId insertionSortKey;
+	private final ByteArray insertionPartitionKey;
+	private final ByteArray insertionSortKey;
 	private final int duplicateCount;
 
 	public IndexedPersistenceEncoding(
 			final Short internalAdapterId,
-			final ByteArrayId dataId,
-			final ByteArrayId insertionPartitionKey,
-			final ByteArrayId insertionSortKey,
+			final ByteArray dataId,
+			final ByteArray insertionPartitionKey,
+			final ByteArray insertionSortKey,
 			final int duplicateCount,
 			final PersistentDataset<T> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
@@ -51,7 +51,7 @@ public class IndexedPersistenceEncoding<T> extends
 	 *
 	 * @return the insertion partition key
 	 */
-	public ByteArrayId getInsertionPartitionKey() {
+	public ByteArray getInsertionPartitionKey() {
 		return insertionPartitionKey;
 	}
 
@@ -60,7 +60,7 @@ public class IndexedPersistenceEncoding<T> extends
 	 *
 	 * @return the insertion sort key
 	 */
-	public ByteArrayId getInsertionSortKey() {
+	public ByteArray getInsertionSortKey() {
 		return insertionSortKey;
 	}
 

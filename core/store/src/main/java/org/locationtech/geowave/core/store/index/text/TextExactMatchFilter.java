@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.index.text;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -56,7 +56,7 @@ public class TextExactMatchFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId stringBytes = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
+		final ByteArray stringBytes = (ByteArray) persistenceEncoding.getCommonData().getValue(
 				fieldName);
 		if (stringBytes != null) {
 			final String value = stringBytes.getString();

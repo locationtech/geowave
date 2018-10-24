@@ -20,7 +20,7 @@ import org.locationtech.geowave.adapter.vector.plugin.transaction.GeoWaveTransac
 import org.locationtech.geowave.adapter.vector.plugin.transaction.TransactionsAllocator;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
@@ -141,7 +141,7 @@ public class GeoWaveDataStoreComponents
 				transaction.composeAuthorizations()).addTypeName(
 				adapter.getTypeName()).constraints(
 				bldr.constraintsFactory().dataIds(
-						new ByteArrayId[] {
+						new ByteArray[] {
 							adapter.getDataId(feature)
 						})).build());
 	}
@@ -157,8 +157,8 @@ public class GeoWaveDataStoreComponents
 				transaction.composeAuthorizations()).addTypeName(
 				adapter.getTypeName()).constraints(
 				bldr.constraintsFactory().dataIds(
-						new ByteArrayId[] {
-							new ByteArrayId(
+						new ByteArray[] {
+							new ByteArray(
 									StringUtils.stringToBinary(fid))
 						})).build());
 

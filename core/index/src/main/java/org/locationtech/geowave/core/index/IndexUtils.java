@@ -242,7 +242,7 @@ public class IndexUtils
 		return Math.log(v) / Math.log(2);
 	}
 
-	public static Set<ByteArrayId> getQueryPartitionKeys(
+	public static Set<ByteArray> getQueryPartitionKeys(
 			final NumericIndexStrategy strategy,
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
@@ -251,9 +251,9 @@ public class IndexUtils
 				hints);
 		return Sets.newHashSet(Collections2.transform(
 				queryRanges.getPartitionQueryRanges(),
-				new Function<SinglePartitionQueryRanges, ByteArrayId>() {
+				new Function<SinglePartitionQueryRanges, ByteArray>() {
 					@Override
-					public ByteArrayId apply(
+					public ByteArray apply(
 							@Nonnull
 							final SinglePartitionQueryRanges input ) {
 						return input.getPartitionKey();
@@ -261,15 +261,15 @@ public class IndexUtils
 				}));
 	}
 
-	public static Set<ByteArrayId> getInsertionPartitionKeys(
+	public static Set<ByteArray> getInsertionPartitionKeys(
 			final NumericIndexStrategy strategy,
 			final MultiDimensionalNumericData insertionData ) {
 		final InsertionIds insertionIds = strategy.getInsertionIds(insertionData);
 		return Sets.newHashSet(Collections2.transform(
 				insertionIds.getPartitionKeys(),
-				new Function<SinglePartitionInsertionIds, ByteArrayId>() {
+				new Function<SinglePartitionInsertionIds, ByteArray>() {
 					@Override
-					public ByteArrayId apply(
+					public ByteArray apply(
 							@Nonnull
 							final SinglePartitionInsertionIds input ) {
 						return input.getPartitionKey();

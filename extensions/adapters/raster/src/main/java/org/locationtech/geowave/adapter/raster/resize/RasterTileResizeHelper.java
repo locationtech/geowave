@@ -19,7 +19,7 @@ import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
@@ -115,9 +115,9 @@ public class RasterTileResizeHelper
 			final Pair<byte[], byte[]> pair = key.getPartitionAndSortKey(index);
 			mergedCoverage = newAdapter.getCoverageFromRasterTile(
 					mergedTile,
-					pair == null ? null : new ByteArrayId(
+					pair == null ? null : new ByteArray(
 							pair.getLeft()),
-					pair == null ? null : new ByteArrayId(
+					pair == null ? null : new ByteArray(
 							pair.getRight()),
 					index);
 		}
@@ -128,7 +128,7 @@ public class RasterTileResizeHelper
 		return newAdapterId;
 	}
 
-	public ByteArrayId getNewDataId(
+	public ByteArray getNewDataId(
 			final GridCoverage coverage ) {
 		return newAdapter.getDataId(coverage);
 	}

@@ -20,7 +20,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
@@ -276,11 +276,11 @@ public class HBaseDistributableFilter extends
 
 		return new DeferredReadCommonIndexedPersistenceEncoding(
 				rowKey.getAdapterId(),
-				new ByteArrayId(
+				new ByteArray(
 						rowKey.getDataId()),
-				new ByteArrayId(
+				new ByteArray(
 						rowKey.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						rowKey.getSortKey()),
 				rowKey.getNumberOfDuplicates(),
 				commonData,

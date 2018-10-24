@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -169,8 +169,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return parentStrategies.get(
 				0).getRangeForId(
 				partitionKey,
@@ -241,8 +241,8 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return parentStrategies.get(
 				0).getCoordinatesPerDimension(
 				partitionKey,
@@ -260,7 +260,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return parentStrategies.get(
 				0).getInsertionPartitionKeys(
@@ -268,7 +268,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return parentStrategies.get(
@@ -278,7 +278,7 @@ public class CompoundHierarchicalIndexStrategyWrapper implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return parentStrategies.get(
 				0).getPredefinedSplits();
 	}

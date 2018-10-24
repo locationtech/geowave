@@ -18,7 +18,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
@@ -30,11 +30,11 @@ import org.locationtech.geowave.core.store.entities.GeoWaveRow;
  *            The type of the row to keep statistics on
  */
 public class PartitionStatistics<T> extends
-		AbstractDataStatistics<T, Set<ByteArrayId>, IndexStatisticsQueryBuilder<Set<ByteArrayId>>>
+		AbstractDataStatistics<T, Set<ByteArray>, IndexStatisticsQueryBuilder<Set<ByteArray>>>
 {
-	public static final IndexStatisticsType<Set<ByteArrayId>> STATS_TYPE = new IndexStatisticsType<>(
+	public static final IndexStatisticsType<Set<ByteArray>> STATS_TYPE = new IndexStatisticsType<>(
 			"PARTITIONS");
-	private Set<ByteArrayId> partitions = new HashSet<>();
+	private Set<ByteArray> partitions = new HashSet<>();
 
 	public PartitionStatistics() {
 		super();
@@ -50,13 +50,13 @@ public class PartitionStatistics<T> extends
 	}
 
 	@Override
-	public InternalDataStatistics<T, Set<ByteArrayId>, IndexStatisticsQueryBuilder<Set<ByteArrayId>>> duplicate() {
+	public InternalDataStatistics<T, Set<ByteArray>, IndexStatisticsQueryBuilder<Set<ByteArray>>> duplicate() {
 		return new PartitionStatistics<>(
 				adapterId,
 				extendedId); // indexId
 	}
 
-	public Set<ByteArrayId> getPartitionKeys() {
+	public Set<ByteArray> getPartitionKeys() {
 		return partitions;
 	}
 
@@ -73,11 +73,11 @@ public class PartitionStatistics<T> extends
 		if (!partitions.isEmpty()) {
 			// we know each partition is constant size, so start with the size
 			// of the partition keys
-			final ByteArrayId first = partitions.iterator().next();
+			final ByteArray first = partitions.iterator().next();
 			if ((first != null) && (first.getBytes() != null)) {
 				final ByteBuffer buffer = super.binaryBuffer((first.getBytes().length * partitions.size()) + 1);
 				buffer.put((byte) first.getBytes().length);
-				for (final ByteArrayId e : partitions) {
+				for (final ByteArray e : partitions) {
 					buffer.put(e.getBytes());
 				}
 				return buffer.array();
@@ -99,7 +99,7 @@ public class PartitionStatistics<T> extends
 				for (int i = 0; i < numPartitions; i++) {
 					final byte[] partition = new byte[partitionKeySize];
 					buffer.get(partition);
-					partitions.add(new ByteArrayId(
+					partitions.add(new ByteArray(
 							partition));
 				}
 			}
@@ -121,14 +121,14 @@ public class PartitionStatistics<T> extends
 		}
 	}
 
-	protected static ByteArrayId getPartitionKey(
+	protected static ByteArray getPartitionKey(
 			final byte[] partitionBytes ) {
-		return ((partitionBytes == null) || (partitionBytes.length == 0)) ? null : new ByteArrayId(
+		return ((partitionBytes == null) || (partitionBytes.length == 0)) ? null : new ByteArray(
 				partitionBytes);
 	}
 
 	protected void add(
-			final ByteArrayId partition ) {
+			final ByteArray partition ) {
 		partitions.add(partition);
 	}
 
@@ -141,7 +141,7 @@ public class PartitionStatistics<T> extends
 				")").append(
 				"=");
 		if (!partitions.isEmpty()) {
-			for (final ByteArrayId p : partitions) {
+			for (final ByteArray p : partitions) {
 				if ((p == null) || (p.getBytes() == null)) {
 					buffer.append("null,");
 				}
@@ -160,7 +160,7 @@ public class PartitionStatistics<T> extends
 	}
 
 	@Override
-	public Set<ByteArrayId> getResult() {
+	public Set<ByteArray> getResult() {
 		return partitions;
 	}
 
@@ -176,7 +176,7 @@ public class PartitionStatistics<T> extends
 	@Override
 	protected Object resultsValue() {
 		final Collection<Map<String, String>> partitionsArray = new ArrayList<>();
-		for (final ByteArrayId p : partitions) {
+		for (final ByteArray p : partitions) {
 			final Map<String, String> partition = new HashMap<>();
 
 			if ((p == null) || (p.getBytes() == null)) {

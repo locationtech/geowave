@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.bouncycastle.util.Arrays;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -130,12 +130,12 @@ public class CassandraReader<T> implements
 				: new short[0];
 
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();
-		final ByteArrayId startKey = range.isInfiniteStartSortKey() ? null : new ByteArrayId(
+		final ByteArray startKey = range.isInfiniteStartSortKey() ? null : new ByteArray(
 				range.getStartSortKey());
-		final ByteArrayId stopKey = range.isInfiniteStopSortKey() ? null : new ByteArrayId(
+		final ByteArray stopKey = range.isInfiniteStopSortKey() ? null : new ByteArray(
 				range.getEndSortKey());
 		final SinglePartitionQueryRanges partitionRange = new SinglePartitionQueryRanges(
-				new ByteArrayId(
+				new ByteArray(
 						range.getPartitionKey()),
 				Collections.singleton(new ByteArrayRange(
 						startKey,

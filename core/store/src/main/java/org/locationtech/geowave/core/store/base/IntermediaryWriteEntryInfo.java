@@ -14,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.IntFunction;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
@@ -78,7 +78,7 @@ class IntermediaryWriteEntryInfo
 
 	@Override
 	public String toString() {
-		return new ByteArrayId(
+		return new ByteArray(
 				dataId).getString();
 	}
 

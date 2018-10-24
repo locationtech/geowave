@@ -42,7 +42,7 @@ import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
@@ -189,22 +189,22 @@ public class NNMapReduceTest
 
 		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
 		inputKey1.setInternalAdapterId(internalAdapterId);
-		inputKey1.setDataId(new ByteArrayId(
+		inputKey1.setDataId(new ByteArray(
 				feature1.getID()));
 
 		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
 		inputKey2.setInternalAdapterId(internalAdapterId);
-		inputKey2.setDataId(new ByteArrayId(
+		inputKey2.setDataId(new ByteArray(
 				feature2.getID()));
 
 		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
 		inputKey3.setInternalAdapterId(internalAdapterId);
-		inputKey3.setDataId(new ByteArrayId(
+		inputKey3.setDataId(new ByteArray(
 				feature4.getID()));
 
 		final GeoWaveInputKey inputKey4 = new GeoWaveInputKey();
 		inputKey4.setInternalAdapterId(internalAdapterId);
-		inputKey4.setDataId(new ByteArrayId(
+		inputKey4.setDataId(new ByteArray(
 				feature4.getID()));
 
 		mapDriver.addInput(
@@ -306,30 +306,30 @@ public class NNMapReduceTest
 		final PartitionDataWritable writable2 = new PartitionDataWritable();
 
 		writable1.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abc"),
 				true));
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abc"),
 				false));
 
 		assertTrue(writable1.compareTo(writable2) == 0);
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abd"),
 				false));
 		assertTrue(writable1.compareTo(writable2) < 0);
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abd"),
 				true));
 		assertTrue(writable1.compareTo(writable2) < 0);

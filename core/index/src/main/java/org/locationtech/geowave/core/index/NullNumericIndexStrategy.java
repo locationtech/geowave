@@ -92,8 +92,8 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		// a null return here should be interpreted as negative to positive
 		// infinite
 		return null;
@@ -107,8 +107,8 @@ public class NullNumericIndexStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		// there are no dimensions so return an empty array
 		return new MultiDimensionalCoordinates();
 	}
@@ -118,8 +118,8 @@ public class NullNumericIndexStrategy implements
 			final MultiDimensionalNumericData indexedData,
 			final int maxDuplicateInsertionIds ) {
 		// return a single empty sort key as the ID
-		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
-		retVal.add(new ByteArrayId(
+		final List<ByteArray> retVal = new ArrayList<ByteArray>();
+		retVal.add(new ByteArray(
 				new byte[] {}));
 		return new InsertionIds(
 				null,
@@ -146,20 +146,20 @@ public class NullNumericIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return null;
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return null;
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return Collections.EMPTY_SET;
 	}
 

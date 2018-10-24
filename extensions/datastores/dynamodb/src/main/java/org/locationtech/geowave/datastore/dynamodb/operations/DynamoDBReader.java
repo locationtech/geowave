@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.bouncycastle.util.Arrays;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
@@ -159,9 +159,9 @@ public class DynamoDBReader<T> implements
 
 		final GeoWaveRowRange range = recordReaderParams.getRowRange();
 		for (final Short adapterId : adapterIds) {
-			final ByteArrayId startKey = range.isInfiniteStartSortKey() ? null : new ByteArrayId(
+			final ByteArray startKey = range.isInfiniteStartSortKey() ? null : new ByteArray(
 					range.getStartSortKey());
-			final ByteArrayId stopKey = range.isInfiniteStopSortKey() ? null : new ByteArrayId(
+			final ByteArray stopKey = range.isInfiniteStopSortKey() ? null : new ByteArray(
 					range.getEndSortKey());
 			requests.add(getQuery(
 					tableName,
@@ -329,7 +329,7 @@ public class DynamoDBReader<T> implements
 					tableName);
 
 			final byte[] start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-			final byte[] end = new ByteArrayId(
+			final byte[] end = new ByteArray(
 					start).getNextPrefix();
 			singleAdapterQuery.addKeyConditionsEntry(
 					DynamoDBRow.GW_RANGE_KEY,
@@ -359,7 +359,7 @@ public class DynamoDBReader<T> implements
 						new AttributeValue().withB(ByteBuffer.wrap(partitionId))));
 		if (sortRange == null) {
 			start = ByteArrayUtils.shortToByteArray(internalAdapterId);
-			end = new ByteArrayId(
+			end = new ByteArray(
 					start).getNextPrefix();
 		}
 		else if (sortRange.isSingleValue()) {
@@ -380,7 +380,7 @@ public class DynamoDBReader<T> implements
 						DynamoDBUtils.encodeSortableBase64(sortRange.getStart().getBytes()));
 			}
 			if (sortRange.getEnd() == null) {
-				end = new ByteArrayId(
+				end = new ByteArray(
 						ByteArrayUtils.shortToByteArray(internalAdapterId)).getNextPrefix();
 			}
 			else {
@@ -404,7 +404,7 @@ public class DynamoDBReader<T> implements
 			short[] adapterIds,
 			final InternalAdapterStore adapterStore ) {
 		final List<QueryRequest> retVal = new ArrayList<>();
-		final ByteArrayId partitionKey = r.getPartitionKey();
+		final ByteArray partitionKey = r.getPartitionKey();
 		final byte[] partitionId = ((partitionKey == null) || (partitionKey.getBytes().length == 0))
 				? DynamoDBWriter.EMPTY_PARTITION_KEY
 				: partitionKey.getBytes();

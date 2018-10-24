@@ -34,7 +34,7 @@ import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
@@ -226,7 +226,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 	public static class DuplicateCountAggregation implements
 			CommonIndexAggregation<Persistable, DuplicateCount>
 	{
-		private final Set<ByteArrayId> visitedDataIds = new HashSet<>();
+		private final Set<ByteArray> visitedDataIds = new HashSet<>();
 		long count = 0;
 
 		@Override
@@ -262,7 +262,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 				final DuplicateCount result1,
 				final DuplicateCount result2 ) {
 			int dupes = 0;
-			for (final ByteArrayId d : result1.visitedDataIds) {
+			for (final ByteArray d : result1.visitedDataIds) {
 				if (result2.visitedDataIds.contains(d)) {
 					dupes++;
 				}
@@ -287,7 +287,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 		public byte[] resultToBinary(
 				final DuplicateCount result ) {
 			int bufferSize = 12;
-			for (final ByteArrayId visited : visitedDataIds) {
+			for (final ByteArray visited : visitedDataIds) {
 				bufferSize += 4;
 				bufferSize += visited.getBytes().length;
 			}
@@ -295,7 +295,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 			buffer.putLong(count);
 			buffer.putInt(visitedDataIds.size());
 
-			for (final ByteArrayId visited : visitedDataIds) {
+			for (final ByteArray visited : visitedDataIds) {
 				buffer.putInt(visited.getBytes().length);
 				buffer.put(visited.getBytes());
 			}
@@ -308,12 +308,12 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 			final ByteBuffer buffer = ByteBuffer.wrap(binary);
 			final long count = buffer.getLong();
 			final int size = buffer.getInt();
-			final Set<ByteArrayId> visitedDataIds = new HashSet<>(
+			final Set<ByteArray> visitedDataIds = new HashSet<>(
 					size);
 			for (int i = 0; i < size; i++) {
 				final byte[] dataId = new byte[buffer.getInt()];
 				buffer.get(dataId);
-				visitedDataIds.add(new ByteArrayId(
+				visitedDataIds.add(new ByteArray(
 						dataId));
 			}
 			return new DuplicateCount(
@@ -335,7 +335,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 	public static class DuplicateCount
 	{
 		private long count;
-		private Set<ByteArrayId> visitedDataIds = new HashSet<>();
+		private Set<ByteArray> visitedDataIds = new HashSet<>();
 
 		public DuplicateCount() {
 			super();
@@ -343,7 +343,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 
 		public DuplicateCount(
 				final long count,
-				final Set<ByteArrayId> visitedDataIds ) {
+				final Set<ByteArray> visitedDataIds ) {
 			this.count = count;
 			this.visitedDataIds = visitedDataIds;
 		}
@@ -379,7 +379,7 @@ abstract public class AbstractGeoWaveBasicVectorIT extends
 
 		// Delete it by data ID
 		if (testFeature != null) {
-			final ByteArrayId dataId = new ByteArrayId(
+			final ByteArray dataId = new ByteArray(
 					testFeature.getID());
 
 			if (geowaveStore.delete(QueryBuilder.newBuilder().addTypeName(

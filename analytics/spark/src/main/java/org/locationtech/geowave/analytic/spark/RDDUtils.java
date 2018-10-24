@@ -24,7 +24,7 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.geotools.geometry.jts.JTS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
@@ -195,12 +195,12 @@ public class RDDUtils
 			Geometry geom,
 			NumericIndexStrategy index ) {
 		for (final SinglePartitionInsertionIds insertionId : rawIds.getPartitionKeys()) {
-			final ByteArrayId partitionKey = insertionId.getPartitionKey();
+			final ByteArray partitionKey = insertionId.getPartitionKey();
 			final int size = insertionId.getSortKeys().size();
 			if (size > 3) {
-				final Iterator<ByteArrayId> it = insertionId.getSortKeys().iterator();
+				final Iterator<ByteArray> it = insertionId.getSortKeys().iterator();
 				while (it.hasNext()) {
-					final ByteArrayId sortKey = it.next();
+					final ByteArray sortKey = it.next();
 					MultiDimensionalNumericData keyTile = index.getRangeForId(
 							partitionKey,
 							sortKey);

@@ -7,6 +7,12 @@ import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 
+/**
+ * A QueryBuilder for vector (SimpleFeature) data. This should be preferred as
+ * the mechanism for constructing a query in all cases when working with
+ * SimpleFeature data.
+ *
+ */
 public interface VectorQueryBuilder extends
 		QueryBuilder<SimpleFeature, VectorQueryBuilder>,
 		BaseVectorQueryBuilder<SimpleFeature, Query<SimpleFeature>, VectorQueryBuilder>

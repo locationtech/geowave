@@ -23,7 +23,7 @@ import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 
 /**
@@ -88,32 +88,32 @@ public interface Partitioner<T> extends
 		 */
 		private static final long serialVersionUID = 1L;
 
-		private ByteArrayId partitionKey;
-		private ByteArrayId sortKey;
-		private ByteArrayId groupId = null;
+		private ByteArray partitionKey;
+		private ByteArray sortKey;
+		private ByteArray groupId = null;
 		private boolean isPrimary;
 
-		public ByteArrayId getPartitionKey() {
+		public ByteArray getPartitionKey() {
 			return partitionKey;
 		}
 
-		public ByteArrayId getSortKey() {
+		public ByteArray getSortKey() {
 			return sortKey;
 		}
 
-		public ByteArrayId getCompositeKey() {
-			return new ByteArrayId(
+		public ByteArray getCompositeKey() {
+			return new ByteArray(
 					ByteArrayUtils.combineArrays(
 							partitionKey.getBytes(),
 							sortKey.getBytes()));
 		}
 
-		public ByteArrayId getGroupId() {
+		public ByteArray getGroupId() {
 			return groupId;
 		}
 
 		public void setGroupId(
-				final ByteArrayId groupId ) {
+				final ByteArray groupId ) {
 			this.groupId = groupId;
 		}
 
@@ -124,8 +124,8 @@ public interface Partitioner<T> extends
 		public PartitionData() {}
 
 		public PartitionData(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey,
+				final ByteArray partitionKey,
+				final ByteArray sortKey,
 				final boolean primary ) {
 			super();
 			this.partitionKey = partitionKey;
@@ -188,19 +188,19 @@ public interface Partitioner<T> extends
 			final int partitionKeySize = dInput.readInt();
 			final byte[] partitionKeyBytes = new byte[partitionKeySize];
 			dInput.readFully(partitionKeyBytes);
-			partitionKey = new ByteArrayId(
+			partitionKey = new ByteArray(
 					partitionKeyBytes);
 			final int sortKeySize = dInput.readInt();
 			final byte[] sortKeyBytes = new byte[sortKeySize];
 			dInput.readFully(sortKeyBytes);
-			sortKey = new ByteArrayId(
+			sortKey = new ByteArray(
 					sortKeyBytes);
 
 			final int groupIdSize = dInput.readInt();
 			if (groupIdSize > 0) {
 				final byte[] groupIdIdBytes = new byte[groupIdSize];
 				dInput.readFully(groupIdIdBytes);
-				groupId = new ByteArrayId(
+				groupId = new ByteArray(
 						groupIdIdBytes);
 			}
 

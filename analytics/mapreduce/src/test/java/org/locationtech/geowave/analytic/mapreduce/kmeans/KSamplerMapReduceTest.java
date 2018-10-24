@@ -41,7 +41,7 @@ import org.locationtech.geowave.analytic.sample.function.SamplingRankFunction;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -288,7 +288,7 @@ public class KSamplerMapReduceTest
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
 		inputKey.setInternalAdapterId(internalAdapterId);
-		inputKey.setDataId(new ByteArrayId(
+		inputKey.setDataId(new ByteArray(
 				"abc".getBytes()));
 
 		final ObjectWritable ow = new ObjectWritable();
@@ -308,7 +308,7 @@ public class KSamplerMapReduceTest
 		keyBuf.put("1".getBytes());
 		keyBuf.putInt(3);
 		keyBuf.put(inputKey.getDataId().getBytes());
-		outputKey.setDataId(new ByteArrayId(
+		outputKey.setDataId(new ByteArray(
 				keyBuf.array()));
 
 		mapDriver.withInput(
@@ -350,7 +350,7 @@ public class KSamplerMapReduceTest
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
 		inputKey.setInternalAdapterId(internalAdapterId);
-		inputKey.setDataId(new ByteArrayId(
+		inputKey.setDataId(new ByteArray(
 				"abc".getBytes()));
 
 		final ObjectWritable ow = new ObjectWritable();
@@ -368,7 +368,7 @@ public class KSamplerMapReduceTest
 		keyBuf.putDouble(0.0);
 		keyBuf.putInt(3);
 		keyBuf.put(inputKey.getDataId().getBytes());
-		outputKey.setDataId(new ByteArrayId(
+		outputKey.setDataId(new ByteArray(
 				keyBuf.array()));
 
 		mapDriver.withInput(
@@ -426,7 +426,7 @@ public class KSamplerMapReduceTest
 		keyBuf.putDouble(0.5);
 		keyBuf.putInt(3);
 		keyBuf.put("111".getBytes());
-		inputKey1.setDataId(new ByteArrayId(
+		inputKey1.setDataId(new ByteArray(
 				keyBuf.array()));
 
 		keyBuf = ByteBuffer.allocate(64);
@@ -435,7 +435,7 @@ public class KSamplerMapReduceTest
 		keyBuf.putDouble(0.6);
 		keyBuf.putInt(3);
 		keyBuf.put("111".getBytes());
-		inputKey2.setDataId(new ByteArrayId(
+		inputKey2.setDataId(new ByteArray(
 				keyBuf.array()));
 
 		keyBuf = ByteBuffer.allocate(64);
@@ -444,7 +444,7 @@ public class KSamplerMapReduceTest
 		keyBuf.putDouble(0.7);
 		keyBuf.putInt(3);
 		keyBuf.put("111".getBytes());
-		inputKey3.setDataId(new ByteArrayId(
+		inputKey3.setDataId(new ByteArray(
 				keyBuf.array()));
 
 		reduceDriver.addInput(

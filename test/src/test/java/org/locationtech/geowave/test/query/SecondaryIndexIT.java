@@ -59,7 +59,7 @@ import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -114,7 +114,7 @@ public class SecondaryIndexIT
 	private DataStore dataStore;
 	private SecondaryIndexDataStore secondaryDataStore;
 	private InternalAdapterStore internalAdapterStore;
-	private final List<ByteArrayId> allIndexIds = new ArrayList<>();
+	private final List<ByteArray> allIndexIds = new ArrayList<>();
 	private final List<String> allDataIds = new ArrayList<>();
 	private int numAttributes;
 	private List<SecondaryIndexImpl<SimpleFeature>> allSecondaryIndices;
@@ -256,7 +256,7 @@ public class SecondaryIndexIT
 
 		// test delete
 		final QueryConstraints deleteQuery = new DataIdQuery(
-				new ByteArrayId(
+				new ByteArray(
 						expectedDataId));
 		dataStore.delete(QueryBuilder.newBuilder().addTypeName(
 				dataAdapter.getTypeName()).indexName(
@@ -306,7 +306,7 @@ public class SecondaryIndexIT
 	private static final String TEXT_PARTIAL_FIELD = "stringField3";
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd-MM-yyyy");
-	private static final ByteArrayId GEOMETRY_FIELD_ID = new ByteArrayId(
+	private static final ByteArray GEOMETRY_FIELD_ID = new ByteArray(
 			GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME.getBytes());
 	private static final String[] DEFAULT_AUTHORIZATIONS = new String[] {};
 	private static final Authorizations DEFAULT_ACCUMULO_AUTHORIZATIONS = new Authorizations(
@@ -535,7 +535,7 @@ public class SecondaryIndexIT
 
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
@@ -558,7 +558,7 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
@@ -567,7 +567,7 @@ public class SecondaryIndexIT
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
@@ -603,7 +603,7 @@ public class SecondaryIndexIT
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
@@ -654,7 +654,7 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
@@ -748,7 +748,7 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(

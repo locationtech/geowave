@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 public class PersistenceEncoding<T>
 {
 	private Short internalAdapterId;
-	private final ByteArrayId dataId;
+	private final ByteArray dataId;
 	protected final PersistentDataset<T> commonData;
 	private final PersistentDataset<byte[]> unknownData;
 	protected final static Logger LOGGER = LoggerFactory.getLogger(PersistenceEncoding.class);
@@ -34,7 +34,7 @@ public class PersistenceEncoding<T>
 
 	public PersistenceEncoding(
 			final Short internalAdapterId,
-			final ByteArrayId dataId,
+			final ByteArray dataId,
 			final PersistentDataset<T> commonData,
 			final PersistentDataset<byte[]> unknownData ) {
 		this.internalAdapterId = internalAdapterId;
@@ -76,7 +76,7 @@ public class PersistenceEncoding<T>
 	 * 
 	 * @return the data ID
 	 */
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return dataId;
 	}
 

@@ -33,7 +33,7 @@ import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputReducer;
@@ -118,7 +118,7 @@ public class ConvexHullMapReduce
 			@SuppressWarnings("unchecked")
 			final AnalyticItemWrapper<T> wrapper = itemWrapperFactory.create((T) value);
 			outputKey.setInternalAdapterId(key.getInternalAdapterId());
-			outputKey.setDataId(new ByteArrayId(
+			outputKey.setDataId(new ByteArray(
 					StringUtils.stringToBinary(nestedGroupCentroidAssigner.getGroupForLevel(wrapper))));
 			outputKey.setGeoWaveKey(key.getGeoWaveKey());
 			context.write(

@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic.mapreduce.dbscan;
 import java.util.Set;
 
 import org.locationtech.geowave.analytic.nn.NeighborList;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -23,12 +23,12 @@ public interface Cluster extends
 	public void merge(
 			Cluster cluster );
 
-	public ByteArrayId getId();
+	public ByteArray getId();
 
 	/*
 	 * Return the cluster to which this cluster is linked
 	 */
-	public Set<ByteArrayId> getLinkedClusters();
+	public Set<ByteArray> getLinkedClusters();
 
 	public int currentLinkSetSize();
 

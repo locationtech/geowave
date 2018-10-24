@@ -32,7 +32,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
@@ -113,7 +113,7 @@ public class PersistenceEncodingTest
 				start,
 				end,
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -141,7 +141,7 @@ public class PersistenceEncodingTest
 				start,
 				end,
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -188,7 +188,7 @@ public class PersistenceEncodingTest
 				new Date(
 						352771200000l),
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -220,7 +220,7 @@ public class PersistenceEncodingTest
 				start,
 				end,
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -243,7 +243,7 @@ public class PersistenceEncodingTest
 				start,
 				end,
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -271,7 +271,7 @@ public class PersistenceEncodingTest
 				start,
 				end,
 				"g1");
-		final List<ByteArrayId> ids = adapter.encode(
+		final List<ByteArray> ids = adapter.encode(
 				entry,
 				model).getInsertionIds(
 				index).getCompositeInsertionIds();
@@ -388,9 +388,9 @@ public class PersistenceEncodingTest
 		}
 
 		@Override
-		public ByteArrayId getDataId(
+		public ByteArray getDataId(
 				final GeoObj entry ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					entry.id.getBytes());
 		}
 
@@ -475,7 +475,7 @@ public class PersistenceEncodingTest
 
 				@Override
 				public GeoObj buildRow(
-						final ByteArrayId dataId ) {
+						final ByteArray dataId ) {
 					return new GeoObj(
 							geom,
 							stime,

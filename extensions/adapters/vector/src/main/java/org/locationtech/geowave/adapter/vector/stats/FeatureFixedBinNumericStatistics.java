@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Date;
 
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;

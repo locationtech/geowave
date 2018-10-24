@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
@@ -63,7 +63,7 @@ public class BinnedSFCUtils
 					binnedQuery.getBinId());
 
 			queryRanges.add(new SinglePartitionQueryRanges(
-					new ByteArrayId(
+					new ByteArray(
 							tierAndBinId),
 					Arrays.asList(rangeDecomp.getRanges())));
 		}
@@ -127,9 +127,9 @@ public class BinnedSFCUtils
 			}
 			if (singleId != null) {
 				return new SinglePartitionInsertionIds(
-						new ByteArrayId(
+						new ByteArray(
 								tierAndBinId),
-						new ByteArrayId(
+						new ByteArray(
 								singleId));
 			}
 		}

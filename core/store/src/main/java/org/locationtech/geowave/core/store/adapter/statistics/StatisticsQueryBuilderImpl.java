@@ -3,7 +3,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 import java.util.Set;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
 import org.locationtech.geowave.core.store.api.StatisticsQuery;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
@@ -78,7 +78,7 @@ public class StatisticsQueryBuilderImpl<R, B extends StatisticsQueryBuilder<R, B
 		}
 
 		@Override
-		public IndexStatisticsQueryBuilder<Set<ByteArrayId>> partitions() {
+		public IndexStatisticsQueryBuilder<Set<ByteArray>> partitions() {
 			return PartitionStatistics.STATS_TYPE.newBuilder();
 		}
 	}

@@ -58,7 +58,7 @@ import org.apache.accumulo.core.security.Authorizations;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.IndexUtils;
@@ -148,7 +148,7 @@ public class AccumuloOperations implements
 	private long cacheTimeoutMillis;
 	private String password;
 	private final Map<String, Set<String>> ensuredAuthorizationCache = new HashMap<>();
-	private final Map<String, Set<ByteArrayId>> ensuredPartitionCache = new HashMap<>();
+	private final Map<String, Set<ByteArray>> ensuredPartitionCache = new HashMap<>();
 	private final AccumuloOptions options;
 
 	/**
@@ -445,7 +445,7 @@ public class AccumuloOperations implements
 
 	public boolean delete(
 			final String tableName,
-			final ByteArrayId rowId,
+			final ByteArray rowId,
 			final String columnFamily,
 			final byte[] columnQualifier,
 			final String... additionalAuthorizations ) {
@@ -488,7 +488,7 @@ public class AccumuloOperations implements
 
 	public boolean delete(
 			final String tableName,
-			final List<ByteArrayId> rowIds,
+			final List<ByteArray> rowIds,
 			final String columnFamily,
 			final byte[] columnQualifier,
 			final String... authorizations ) {
@@ -512,12 +512,12 @@ public class AccumuloOperations implements
 							columnFamily));
 				}
 			}
-			final Set<ByteArrayId> removeSet = new HashSet<>();
+			final Set<ByteArray> removeSet = new HashSet<>();
 			final List<Range> rowRanges = new ArrayList<>();
-			for (final ByteArrayId rowId : rowIds) {
+			for (final ByteArray rowId : rowIds) {
 				rowRanges.add(Range.exact(new Text(
 						rowId.getBytes())));
-				removeSet.add(new ByteArrayId(
+				removeSet.add(new ByteArray(
 						rowId.getBytes()));
 			}
 			deleter.setRanges(rowRanges);
@@ -525,7 +525,7 @@ public class AccumuloOperations implements
 			final Iterator<Map.Entry<Key, Value>> iterator = deleter.iterator();
 			while (iterator.hasNext()) {
 				final Entry<Key, Value> entry = iterator.next();
-				removeSet.remove(new ByteArrayId(
+				removeSet.remove(new ByteArray(
 						entry.getKey().getRowData().getBackingArray()));
 			}
 
@@ -747,10 +747,10 @@ public class AccumuloOperations implements
 	}
 
 	public void ensurePartition(
-			final ByteArrayId partition,
+			final ByteArray partition,
 			final String tableName ) {
 		final String qName = getQualifiedTableName(tableName);
-		Set<ByteArrayId> existingPartitions = ensuredPartitionCache.get(qName);
+		Set<ByteArray> existingPartitions = ensuredPartitionCache.get(qName);
 		try {
 			synchronized (ensuredPartitionCache) {
 				if (existingPartitions == null) {
@@ -759,7 +759,7 @@ public class AccumuloOperations implements
 							qName);
 					existingPartitions = new HashSet<>();
 					for (final Text s : splits) {
-						existingPartitions.add(new ByteArrayId(
+						existingPartitions.add(new ByteArray(
 								s.getBytes()));
 					}
 					ensuredPartitionCache.put(

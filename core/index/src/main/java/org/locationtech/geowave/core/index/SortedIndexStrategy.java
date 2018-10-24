@@ -80,7 +80,7 @@ public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, En
 	 *         the start and exclusive on the end for the range
 	 */
 	public EntryRangeType getRangeForId(
-			ByteArrayId partitionKey,
-			ByteArrayId sortKey );
+			ByteArray partitionKey,
+			ByteArray sortKey );
 
 }

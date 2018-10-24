@@ -2,7 +2,7 @@ package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.util.Arrays;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 
@@ -14,7 +14,7 @@ import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
  *            The type of statistic
  */
 abstract public class StatisticsType<R, B extends StatisticsQueryBuilder<R, B>> extends
-		ByteArrayId implements
+		ByteArray implements
 		Persistable
 {
 	private static final long serialVersionUID = 1L;
@@ -39,13 +39,13 @@ abstract public class StatisticsType<R, B extends StatisticsQueryBuilder<R, B>> 
 
 	@Override
 	public byte[] toBinary() {
-		return id;
+		return bytes;
 	}
 
 	@Override
 	public void fromBinary(
 			final byte[] bytes ) {
-		id = bytes;
+		this.bytes = bytes;
 	}
 
 	@Override
@@ -66,7 +66,7 @@ abstract public class StatisticsType<R, B extends StatisticsQueryBuilder<R, B>> 
 		}
 		final StatisticsType<?, ?> other = (StatisticsType<?, ?>) obj;
 		return Arrays.equals(
-				id,
+				bytes,
 				other.getBytes());
 	}
 }

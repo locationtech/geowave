@@ -51,7 +51,7 @@ import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitio
 import org.locationtech.geowave.analytic.partitioner.Partitioner;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionDataCallback;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
@@ -224,7 +224,7 @@ public class NNMapReduce
 			@SuppressWarnings("unchecked")
 			@Override
 			public VALUEIN convert(
-					final ByteArrayId id,
+					final ByteArray id,
 					final Object o ) {
 				return (VALUEIN) o;
 			}
@@ -274,7 +274,7 @@ public class NNMapReduce
 					new CompleteNotifier<VALUEIN>() {
 						@Override
 						public void complete(
-								final ByteArrayId id,
+								final ByteArray id,
 								final VALUEIN value,
 								final NeighborList<VALUEIN> primaryList )
 								throws IOException,
@@ -350,7 +350,7 @@ public class NNMapReduce
 
 		protected abstract void processNeighbors(
 				PartitionData partitionData,
-				ByteArrayId primaryId,
+				ByteArray primaryId,
 				VALUEIN primary,
 				NeighborList<VALUEIN> neighbors,
 				Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT>.Context context,
@@ -451,7 +451,7 @@ public class NNMapReduce
 		@Override
 		protected void processNeighbors(
 				final PartitionData partitionData,
-				final ByteArrayId primaryId,
+				final ByteArray primaryId,
 				final SimpleFeature primary,
 				final NeighborList<SimpleFeature> neighbors,
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, Text, Text>.Context context,
@@ -472,7 +472,7 @@ public class NNMapReduce
 						utfBytes,
 						0,
 						utfBytes.length);
-				for (final Map.Entry<ByteArrayId, SimpleFeature> neighbor : neighbors) {
+				for (final Map.Entry<ByteArray, SimpleFeature> neighbor : neighbors) {
 					if (neighborsText.getLength() > 0) {
 						neighborsText.append(
 								sepBytes,
@@ -622,9 +622,9 @@ public class NNMapReduce
 				throws IOException {}
 
 		private static final List<PartitionData> FixedPartition = Collections.singletonList(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
 				true));
 

@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
@@ -40,13 +40,13 @@ public abstract class BaseSecondaryIndexDataStore implements
 	@Override
 	public void storeJoinEntry(
 			final String secondaryIndexName,
-			final ByteArrayId indexedAttributeValue,
+			final ByteArray indexedAttributeValue,
 			final String typeName,
 			final String indexedAttributeFieldName,
 			final String primaryIndexName,
-			final ByteArrayId primaryPartitionKey,
-			final ByteArrayId primarySortKey,
-			final ByteArrayId attributeVisibility ) {
+			final ByteArray primaryPartitionKey,
+			final ByteArray primarySortKey,
+			final ByteArray attributeVisibility ) {
 		try {
 			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
@@ -70,10 +70,10 @@ public abstract class BaseSecondaryIndexDataStore implements
 	@Override
 	public void storeEntry(
 			final String secondaryIndexName,
-			final ByteArrayId indexedAttributeValue,
+			final ByteArray indexedAttributeValue,
 			final String typeName,
 			final String indexedAttributeFieldName,
-			final ByteArrayId dataId,
+			final ByteArray dataId,
 			final GeoWaveValue... values ) {
 		try {
 			final RowWriter writer = getWriter(secondaryIndexName);
@@ -117,13 +117,13 @@ public abstract class BaseSecondaryIndexDataStore implements
 	@Override
 	public void deleteJoinEntry(
 			final String secondaryIndexName,
-			final ByteArrayId indexedAttributeValue,
+			final ByteArray indexedAttributeValue,
 			final String typeName,
 			final String indexedAttributeFieldName,
 			final String primaryIndexName,
-			final ByteArrayId primaryIndexPartitionKey,
-			final ByteArrayId primaryIndexSortKey,
-			final ByteArrayId attributeVisibility ) {
+			final ByteArray primaryIndexPartitionKey,
+			final ByteArray primaryIndexSortKey,
+			final ByteArray attributeVisibility ) {
 		try {
 			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
@@ -146,10 +146,10 @@ public abstract class BaseSecondaryIndexDataStore implements
 	@Override
 	public void deleteEntry(
 			final String secondaryIndexName,
-			final ByteArrayId indexedAttributeValue,
+			final ByteArray indexedAttributeValue,
 			final String typeName,
 			final String indexedAttributeFieldName,
-			final ByteArrayId dataId,
+			final ByteArray dataId,
 			final GeoWaveValue... values ) {
 		try {
 			final RowWriter writer = getWriter(secondaryIndexName);

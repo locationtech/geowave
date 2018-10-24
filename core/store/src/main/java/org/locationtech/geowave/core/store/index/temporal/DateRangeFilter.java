@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.index.temporal;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
@@ -51,7 +51,7 @@ public class DateRangeFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId dateLongBytes = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
+		final ByteArray dateLongBytes = (ByteArray) persistenceEncoding.getCommonData().getValue(
 				fieldName);
 		if (dateLongBytes != null) {
 			final long dateLong = Lexicoders.LONG.fromByteArray(dateLongBytes.getBytes());

@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.api.Index;

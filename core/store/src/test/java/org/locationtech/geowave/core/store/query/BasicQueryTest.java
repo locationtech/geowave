@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -239,11 +239,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -259,11 +259,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -285,11 +285,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -309,11 +309,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -395,19 +395,19 @@ public class BasicQueryTest
 
 		@Override
 		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getInsertionPartitionKeys(
+		public Set<ByteArray> getInsertionPartitionKeys(
 				final MultiDimensionalNumericData insertionData ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getQueryPartitionKeys(
+		public Set<ByteArray> getQueryPartitionKeys(
 				final MultiDimensionalNumericData queryData,
 				final IndexMetaData... hints ) {
 			return null;
@@ -415,8 +415,8 @@ public class BasicQueryTest
 
 		@Override
 		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
@@ -426,7 +426,7 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getPredefinedSplits() {
+		public Set<ByteArray> getPredefinedSplits() {
 			// TODO Auto-generated method stub
 			return null;
 		}

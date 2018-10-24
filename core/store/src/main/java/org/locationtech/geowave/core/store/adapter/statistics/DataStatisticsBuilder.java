@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.DataStoreStatisticsProvider;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -31,7 +31,7 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
 		ScanCallback<T, GeoWaveRow>
 {
 	private final DataStoreStatisticsProvider<T> statisticsProvider;
-	private final Map<ByteArrayId, InternalDataStatistics<T, R, B>> statisticsMap = new HashMap<>();
+	private final Map<ByteArray, InternalDataStatistics<T, R, B>> statisticsMap = new HashMap<>();
 	private final StatisticsId statisticsId;
 	private final EntryVisibilityHandler<T> visibilityHandler;
 
@@ -52,7 +52,7 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
 	public void entryIngested(
 			final T entry,
 			final GeoWaveRow... kvs ) {
-		final ByteArrayId visibility = new ByteArrayId(
+		final ByteArray visibility = new ByteArray(
 				visibilityHandler.getVisibility(
 						entry,
 						kvs));
@@ -81,7 +81,7 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
 	public void entryDeleted(
 			final T entry,
 			final GeoWaveRow... kv ) {
-		final ByteArrayId visibilityByteArray = new ByteArrayId(
+		final ByteArray visibilityByteArray = new ByteArray(
 				visibilityHandler.getVisibility(
 						entry,
 						kv));
@@ -104,7 +104,7 @@ public class DataStatisticsBuilder<T, R, B extends StatisticsQueryBuilder<R, B>>
 	public void entryScanned(
 			final T entry,
 			final GeoWaveRow kv ) {
-		final ByteArrayId visibility = new ByteArrayId(
+		final ByteArray visibility = new ByteArray(
 				visibilityHandler.getVisibility(
 						entry,
 						kv));

@@ -32,7 +32,7 @@ import javax.annotation.Nullable;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -207,11 +207,11 @@ public class BaseDataStoreUtils
 			final ScanCallback<T, GeoWaveRow> scanCallback ) {
 		final IndexedAdapterPersistenceEncoding encodedRow = new IndexedAdapterPersistenceEncoding(
 				decodePackage.getDataAdapter().getAdapterId(),
-				new ByteArrayId(
+				new ByteArray(
 						row.getDataId()),
-				new ByteArrayId(
+				new ByteArray(
 						row.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						row.getSortKey()),
 				row.getNumberOfDuplicates(),
 				decodePackage.getIndexData(),
@@ -358,7 +358,7 @@ public class BaseDataStoreUtils
 			final CommonIndexModel model,
 			final DataTypeAdapter<?> writableAdapter ) {
 		final List<GeoWaveValue> retVal = new ArrayList<>();
-		final Map<ByteArrayId, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
+		final Map<ByteArray, List<Pair<Integer, FieldInfo<?>>>> vizToFieldMap = new LinkedHashMap<>();
 		boolean sharedVisibility = false;
 		// organize FieldInfos by unique visibility
 		for (final FieldInfo<?> fieldInfo : originalList) {
@@ -371,7 +371,7 @@ public class BaseDataStoreUtils
 						model,
 						fieldInfo.getFieldId());
 			}
-			final ByteArrayId currViz = new ByteArrayId(
+			final ByteArray currViz = new ByteArray(
 					fieldInfo.getVisibility());
 			if (vizToFieldMap.containsKey(currViz)) {
 				sharedVisibility = true;
@@ -404,7 +404,7 @@ public class BaseDataStoreUtils
 			}
 			return bitmaskedValues;
 		}
-		for (final Entry<ByteArrayId, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
+		for (final Entry<ByteArray, List<Pair<Integer, FieldInfo<?>>>> entry : vizToFieldMap.entrySet()) {
 			int totalLength = 0;
 			final SortedSet<Integer> fieldPositions = new TreeSet<>();
 			final List<Pair<Integer, FieldInfo<?>>> fieldInfoList = entry.getValue();

@@ -23,7 +23,7 @@ import java.util.Map;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.Writable;
 import org.locationtech.geowave.analytic.AnalyticItemWrapperFactory;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -272,7 +272,7 @@ public class DistortionGroupManagement
 		}
 
 		private DistortionEntry(
-				final ByteArrayId dataId,
+				final ByteArray dataId,
 				final Double distortionValue ) {
 			final String dataIdStr = StringUtils.stringFromBinary(dataId.getBytes());
 			final String[] split = dataIdStr.split("/");
@@ -294,8 +294,8 @@ public class DistortionGroupManagement
 			return distortionValue;
 		}
 
-		private ByteArrayId getDataId() {
-			return new ByteArrayId(
+		private ByteArray getDataId() {
+			return new ByteArray(
 					batchId + "/" + groupId + "/" + clusterCount);
 		}
 
@@ -393,7 +393,7 @@ public class DistortionGroupManagement
 		}
 
 		@Override
-		public ByteArrayId getDataId(
+		public ByteArray getDataId(
 				final DistortionEntry entry ) {
 			return entry.getDataId();
 		}

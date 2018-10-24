@@ -15,7 +15,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
@@ -28,12 +28,12 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
 public class DedupeFilter implements
 		QueryFilter
 {
-	private final Map<Short, Set<ByteArrayId>> adapterIdToVisitedDataIdMap;
+	private final Map<Short, Set<ByteArray>> adapterIdToVisitedDataIdMap;
 
 	private boolean dedupAcrossIndices = false;
 
 	public DedupeFilter() {
-		adapterIdToVisitedDataIdMap = new HashMap<Short, Set<ByteArrayId>>();
+		adapterIdToVisitedDataIdMap = new HashMap<Short, Set<ByteArray>>();
 	}
 
 	@Override
@@ -53,11 +53,11 @@ public class DedupeFilter implements
 			return true;
 		}
 		final short adapterId = persistenceEncoding.getInternalAdapterId();
-		final ByteArrayId dataId = persistenceEncoding.getDataId();
+		final ByteArray dataId = persistenceEncoding.getDataId();
 		synchronized (adapterIdToVisitedDataIdMap) {
-			Set<ByteArrayId> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
+			Set<ByteArray> visitedDataIds = adapterIdToVisitedDataIdMap.get(adapterId);
 			if (visitedDataIds == null) {
-				visitedDataIds = new HashSet<ByteArrayId>();
+				visitedDataIds = new HashSet<ByteArray>();
 				adapterIdToVisitedDataIdMap.put(
 						adapterId,
 						visitedDataIds);

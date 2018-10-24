@@ -7,17 +7,17 @@ public class StatisticsImpl<R> implements
 {
 	private final R result;
 	private final StatisticsType<R, ?> statsType;
-	private final String statsId;
+	private final String extendedId;
 	private final String dataTypeName;
 
 	public StatisticsImpl(
 			final R result,
 			final StatisticsType<R, ?> statsType,
-			final String statsId,
+			final String extendedId,
 			final String dataTypeName ) {
 		this.result = result;
 		this.statsType = statsType;
-		this.statsId = statsId;
+		this.extendedId = extendedId;
 		this.dataTypeName = dataTypeName;
 	}
 
@@ -27,8 +27,8 @@ public class StatisticsImpl<R> implements
 	}
 
 	@Override
-	public String getId() {
-		return statsId;
+	public String getExtendedId() {
+		return extendedId;
 	}
 
 	@Override

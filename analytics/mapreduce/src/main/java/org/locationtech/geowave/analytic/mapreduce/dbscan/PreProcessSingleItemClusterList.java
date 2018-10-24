@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.analytic.nn.NeighborListFactory;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * 
@@ -30,10 +30,10 @@ public class PreProcessSingleItemClusterList extends
 {
 
 	public PreProcessSingleItemClusterList(
-			ByteArrayId centerId,
+			ByteArray centerId,
 			ClusterItem center,
 			NeighborListFactory<ClusterItem> factory,
-			Map<ByteArrayId, Cluster> index ) {
+			Map<ByteArray, Cluster> index ) {
 		super(
 				centerId,
 				center,
@@ -44,7 +44,7 @@ public class PreProcessSingleItemClusterList extends
 	@Override
 	protected void mergeLinks(
 			final boolean deleteNonLinks ) {
-		for (ByteArrayId id : this.getLinkedClusters()) {
+		for (ByteArray id : this.getLinkedClusters()) {
 			PreProcessSingleItemClusterList other = (PreProcessSingleItemClusterList) index.get(id);
 			final long snapShot = getClusterPoints(
 					false).size();
@@ -65,17 +65,17 @@ public class PreProcessSingleItemClusterList extends
 	public static class PreProcessSingleItemClusterListFactory implements
 			NeighborListFactory<ClusterItem>
 	{
-		private final Map<ByteArrayId, Cluster> index;
+		private final Map<ByteArray, Cluster> index;
 
 		public PreProcessSingleItemClusterListFactory(
-				final Map<ByteArrayId, Cluster> index ) {
+				final Map<ByteArray, Cluster> index ) {
 			super();
 			this.index = index;
 		}
 
 		@Override
 		public NeighborList<ClusterItem> buildNeighborList(
-				final ByteArrayId centerId,
+				final ByteArray centerId,
 				final ClusterItem center ) {
 			Cluster list = index.get(centerId);
 			if (list == null) {

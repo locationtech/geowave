@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.accumulo.operations;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataDeleter;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
@@ -42,7 +42,7 @@ public class AccumuloMetadataDeleter implements
 		// well-defined and it is deleting a single entry at a time
 		return operations.delete(
 				AbstractGeoWavePersistence.METADATA_TABLE,
-				new ByteArrayId(
+				new ByteArray(
 						query.getPrimaryId()),
 				metadataTypeName,
 				query.getSecondaryId() != null ? query.getSecondaryId() : null,

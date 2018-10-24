@@ -26,7 +26,7 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.KeyValue;
 import org.apache.hadoop.hbase.KeyValue.Type;
 import org.apache.hadoop.hbase.client.Scan;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -104,7 +104,7 @@ public class MergingServerOp implements
 						}
 						else if (columnFamilyIds.iterator().next() instanceof ByteArrayColumnId) {
 							familyId = new ByteArrayColumnId(
-									new ByteArrayId(
+									new ByteArray(
 											familyBytes));
 						}
 
@@ -252,7 +252,7 @@ public class MergingServerOp implements
 					public GeowaveColumnId apply(
 							final String input ) {
 						return new ByteArrayColumnId(
-								new ByteArrayId(
+								new ByteArray(
 										input));
 					}
 				}));

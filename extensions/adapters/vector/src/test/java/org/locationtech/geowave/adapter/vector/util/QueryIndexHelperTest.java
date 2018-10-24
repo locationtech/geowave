@@ -42,7 +42,7 @@ import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeSt
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
 import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
@@ -68,7 +68,7 @@ public class QueryIndexHelperTest
 			.createIndex(new SpatialOptions());
 	private static final Index SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
 			.createIndex(new SpatialTemporalOptions());
-	final ByteArrayId dataAdapterId = new ByteArrayId(
+	final ByteArray dataAdapterId = new ByteArray(
 			"123");
 
 	SimpleFeatureType rangeType;

@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.metadata;
 
 import java.util.HashMap;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.api.Index;
@@ -52,15 +52,15 @@ public class IndexStoreImpl extends
 	public Index getIndex(
 			final String indexName ) {
 		return getObject(
-				new ByteArrayId(
+				new ByteArray(
 						indexName),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final Index persistedObject ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				persistedObject.getName());
 	}
 
@@ -68,7 +68,7 @@ public class IndexStoreImpl extends
 	public boolean indexExists(
 			final String indexName ) {
 		return objectExists(
-				new ByteArrayId(
+				new ByteArray(
 						indexName),
 				null);
 	}

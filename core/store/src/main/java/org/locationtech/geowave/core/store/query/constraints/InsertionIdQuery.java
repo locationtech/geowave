@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.query.filter.InsertionIdQueryFilter;
@@ -24,30 +24,30 @@ import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 public class InsertionIdQuery implements
 		QueryConstraints
 {
-	private ByteArrayId partitionKey;
-	private ByteArrayId sortKey;
-	private ByteArrayId dataId;
+	private ByteArray partitionKey;
+	private ByteArray sortKey;
+	private ByteArray dataId;
 
 	public InsertionIdQuery() {}
 
 	public InsertionIdQuery(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
-			final ByteArrayId dataId ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
+			final ByteArray dataId ) {
 		this.partitionKey = partitionKey;
 		this.sortKey = sortKey;
 		this.dataId = dataId;
 	}
 
-	public ByteArrayId getPartitionKey() {
+	public ByteArray getPartitionKey() {
 		return partitionKey;
 	}
 
-	public ByteArrayId getSortKey() {
+	public ByteArray getSortKey() {
 		return sortKey;
 	}
 
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return dataId;
 	}
 
@@ -108,7 +108,7 @@ public class InsertionIdQuery implements
 		}
 		else {
 			buf.get(partitionKeyBinary);
-			partitionKey = new ByteArrayId(
+			partitionKey = new ByteArray(
 					partitionKeyBinary);
 		}
 		final byte[] sortKeyBinary = new byte[buf.getInt()];
@@ -117,7 +117,7 @@ public class InsertionIdQuery implements
 		}
 		else {
 			buf.get(sortKeyBinary);
-			sortKey = new ByteArrayId(
+			sortKey = new ByteArray(
 					sortKeyBinary);
 		}
 		final byte[] dataIdBinary = new byte[bytes.length - 8 - sortKeyBinary.length - partitionKeyBinary.length];
@@ -126,7 +126,7 @@ public class InsertionIdQuery implements
 		}
 		else {
 			buf.get(dataIdBinary);
-			dataId = new ByteArrayId(
+			dataId = new ByteArray(
 					dataIdBinary);
 		}
 	}

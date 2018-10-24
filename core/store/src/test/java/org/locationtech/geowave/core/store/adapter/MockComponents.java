@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.apache.commons.lang3.Range;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Coordinate;
 import org.locationtech.geowave.core.index.CoordinateRange;
 import org.locationtech.geowave.core.index.IndexMetaData;
@@ -143,9 +143,9 @@ public class MockComponents
 		}
 
 		@Override
-		public ByteArrayId getDataId(
+		public ByteArray getDataId(
 				final Integer entry ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					"DataID" + entry.toString());
 		}
 
@@ -213,7 +213,7 @@ public class MockComponents
 
 				@Override
 				public Integer buildRow(
-						final ByteArrayId dataId ) {
+						final ByteArray dataId ) {
 					return new Integer(
 							intValue);
 				}
@@ -645,9 +645,9 @@ public class MockComponents
 		@Override
 		public InsertionIds getInsertionIds(
 				final MultiDimensionalNumericData indexedData ) {
-			final List<ByteArrayId> ids = new ArrayList<>();
+			final List<ByteArray> ids = new ArrayList<>();
 			for (final NumericData data : indexedData.getDataPerDimension()) {
-				ids.add(new ByteArrayId(
+				ids.add(new ByteArray(
 						Double.toString(
 								data.getCentroid()).getBytes()));
 			}
@@ -705,19 +705,19 @@ public class MockComponents
 
 		@Override
 		public MultiDimensionalNumericData getRangeForId(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getInsertionPartitionKeys(
+		public Set<ByteArray> getInsertionPartitionKeys(
 				final MultiDimensionalNumericData insertionData ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getQueryPartitionKeys(
+		public Set<ByteArray> getQueryPartitionKeys(
 				final MultiDimensionalNumericData queryData,
 				final IndexMetaData... hints ) {
 			// TODO Auto-generated method stub
@@ -726,8 +726,8 @@ public class MockComponents
 
 		@Override
 		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				final ByteArrayId partitionKey,
-				final ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return new MultiDimensionalCoordinates(
 					new byte[] {},
 					new Coordinate[] {
@@ -744,7 +744,7 @@ public class MockComponents
 		}
 
 		@Override
-		public Set<ByteArrayId> getPredefinedSplits() {
+		public Set<ByteArray> getPredefinedSplits() {
 			// TODO Auto-generated method stub
 			return null;
 		}

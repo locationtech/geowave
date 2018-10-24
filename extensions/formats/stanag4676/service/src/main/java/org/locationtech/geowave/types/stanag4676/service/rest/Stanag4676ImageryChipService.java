@@ -53,7 +53,7 @@ import org.jcodec.containers.mkv.muxer.MKVMuxer;
 import org.jcodec.containers.mkv.muxer.MKVMuxerTrack;
 import org.jcodec.scale.AWTUtil;
 import org.jcodec.scale.RgbToYuv420p;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -128,7 +128,7 @@ public class Stanag4676ImageryChipService
 				Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
 				bldr.constraintsFactory().prefix(
 						null,
-						new ByteArrayId(
+						new ByteArray(
 								ByteArrayUtils.combineArrays(
 										StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
 										ImageChipUtils.getDataId(
@@ -206,7 +206,7 @@ public class Stanag4676ImageryChipService
 				Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
 				bldr.constraintsFactory().prefix(
 						null,
-						new ByteArrayId(
+						new ByteArray(
 								ByteArrayUtils.combineArrays(
 										StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
 										ImageChipUtils.getTrackDataIdPrefix(

@@ -47,7 +47,7 @@ import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.api.Index;
@@ -245,7 +245,7 @@ public class KMeansDistortionMapReduceTest
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
 		inputKey.setInternalAdapterId(adapterId);
-		inputKey.setDataId(new ByteArrayId(
+		inputKey.setDataId(new ByteArray(
 				"abc".getBytes()));
 
 		final ObjectWritable ow = new ObjectWritable();

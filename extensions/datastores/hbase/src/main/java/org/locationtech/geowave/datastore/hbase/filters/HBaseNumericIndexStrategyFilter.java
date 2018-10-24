@@ -16,7 +16,7 @@ import java.nio.ByteBuffer;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
@@ -107,9 +107,9 @@ public class HBaseNumericIndexStrategyFilter extends
 				cell.getRowOffset(),
 				cell.getRowLength());
 
-		ByteArrayId sortKey = new ByteArrayId(
+		ByteArray sortKey = new ByteArray(
 				cellKey.getSortKey());
-		ByteArrayId partitionKey = new ByteArrayId(
+		ByteArray partitionKey = new ByteArray(
 				cellKey.getPartitionKey());
 
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(

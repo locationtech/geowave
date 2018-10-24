@@ -53,7 +53,7 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypePro
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -303,7 +303,7 @@ public class CentroidManagerGeoWave<T> implements
 						index.getName());
 				dataStore.delete(bldr.constraints(
 						bldr.constraintsFactory().dataIds(
-								new ByteArrayId(
+								new ByteArray(
 										dataId))).build());
 			}
 		}
@@ -425,7 +425,7 @@ public class CentroidManagerGeoWave<T> implements
 				index.getName());
 		try (CloseableIterator<T> it = dataStore.query(bldr.constraints(
 				bldr.constraintsFactory().dataIds(
-						new ByteArrayId(
+						new ByteArray(
 								dataId))).build())) {
 			if (it.hasNext()) {
 				return centroidFactory.create(it.next());

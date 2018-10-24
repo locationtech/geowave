@@ -25,53 +25,53 @@ import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
  * This class is a wrapper around a byte array to ensure equals and hashcode
  * operations use the values of the bytes rather than explicit object identity
  */
-public class ByteArrayId implements
+public class ByteArray implements
 		java.io.Serializable,
-		Comparable<ByteArrayId>
+		Comparable<ByteArray>
 {
 	private static final long serialVersionUID = 1L;
 
 	public static final byte[] EMPTY_BYTE_ARRAY = new byte[0];
 
-	protected byte[] id;
+	protected byte[] bytes;
 	@SuppressFBWarnings("SE_TRANSIENT_FIELD_NOT_RESTORED")
-	protected transient String stringId;
+	protected transient String string;
 
-	public ByteArrayId() {
+	public ByteArray() {
 		this(
 				EMPTY_BYTE_ARRAY);
 	}
 
-	public ByteArrayId(
-			final byte[] id ) {
-		this.id = id;
+	public ByteArray(
+			final byte[] bytes ) {
+		this.bytes = bytes;
 	}
 
-	public ByteArrayId(
-			final String id ) {
-		this.id = StringUtils.stringToBinary(id);
-		stringId = id;
+	public ByteArray(
+			final String string ) {
+		this.bytes = StringUtils.stringToBinary(string);
+		this.string = string;
 	}
 
 	public byte[] getBytes() {
-		return id;
+		return bytes;
 	}
 
 	public byte[] getNextPrefix() {
-		return getNextPrefix(id);
+		return getNextPrefix(bytes);
 	}
 
 	public String getString() {
-		if (stringId == null) {
-			stringId = StringUtils.stringFromBinary(id);
+		if (string == null) {
+			string = StringUtils.stringFromBinary(bytes);
 		}
-		return stringId;
+		return string;
 	}
 
 	public String getHexString() {
 
 		final StringBuffer str = new StringBuffer();
-		for (final byte b : id) {
+		for (final byte b : bytes) {
 			str.append(String.format(
 					"%02X ",
 					b));
@@ -88,7 +88,7 @@ public class ByteArrayId implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = (prime * result) + Arrays.hashCode(id);
+		result = (prime * result) + Arrays.hashCode(bytes);
 		return result;
 	}
 
@@ -104,37 +104,37 @@ public class ByteArrayId implements
 		if (getClass() != obj.getClass()) {
 			return false;
 		}
-		final ByteArrayId other = (ByteArrayId) obj;
+		final ByteArray other = (ByteArray) obj;
 		return Arrays.equals(
-				id,
-				other.id);
+				bytes,
+				other.bytes);
 	}
 
 	public static byte[] toBytes(
-			final ByteArrayId[] ids ) {
+			final ByteArray[] ids ) {
 		int len = 4;
-		for (final ByteArrayId id : ids) {
-			len += (id.id.length + 4);
+		for (final ByteArray id : ids) {
+			len += (id.bytes.length + 4);
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(len);
 		buffer.putInt(ids.length);
-		for (final ByteArrayId id : ids) {
-			buffer.putInt(id.id.length);
-			buffer.put(id.id);
+		for (final ByteArray id : ids) {
+			buffer.putInt(id.bytes.length);
+			buffer.put(id.bytes);
 		}
 		return buffer.array();
 	}
 
-	public static ByteArrayId[] fromBytes(
+	public static ByteArray[] fromBytes(
 			final byte[] idData ) {
 		final ByteBuffer buffer = ByteBuffer.wrap(idData);
 		final int len = buffer.getInt();
-		final ByteArrayId[] result = new ByteArrayId[len];
+		final ByteArray[] result = new ByteArray[len];
 		for (int i = 0; i < len; i++) {
 			final int idSize = buffer.getInt();
 			final byte[] id = new byte[idSize];
 			buffer.get(id);
-			result[i] = new ByteArrayId(
+			result[i] = new ByteArray(
 					id);
 		}
 		return result;
@@ -142,18 +142,18 @@ public class ByteArrayId implements
 
 	@Override
 	public int compareTo(
-			final ByteArrayId o ) {
+			final ByteArray o ) {
 		if (o == null) {
 			return -1;
 		}
-		for (int i = 0, j = 0; (i < id.length) && (j < o.id.length); i++, j++) {
-			final int a = (id[i] & 0xff);
-			final int b = (o.id[j] & 0xff);
+		for (int i = 0, j = 0; (i < bytes.length) && (j < o.bytes.length); i++, j++) {
+			final int a = (bytes[i] & 0xff);
+			final int b = (o.bytes[j] & 0xff);
 			if (a != b) {
 				return a - b;
 			}
 		}
-		return id.length - o.id.length;
+		return bytes.length - o.bytes.length;
 
 	}
 

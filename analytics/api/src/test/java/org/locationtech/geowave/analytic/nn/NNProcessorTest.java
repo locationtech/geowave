@@ -41,7 +41,7 @@ import org.locationtech.geowave.analytic.nn.NNProcessor.CompleteNotifier;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.partitioner.Partitioner;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public class NNProcessorTest
 {
@@ -108,7 +108,7 @@ public class NNProcessorTest
 					public List<org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData> getCubeIdentifiers(
 							final Object entry ) {
 						return Collections.singletonList(new PartitionData(
-								new ByteArrayId(
+								new ByteArray(
 										new byte[] {}),
 								NNProcessorTest.partition((Integer) entry),
 								true));
@@ -139,7 +139,7 @@ public class NNProcessorTest
 				new TypeConverter<Integer>() {
 					@Override
 					public Integer convert(
-							final ByteArrayId id,
+							final ByteArray id,
 							final Object o ) {
 						return (Integer) o;
 					}
@@ -158,9 +158,9 @@ public class NNProcessorTest
 				},
 				200,
 				new PartitionData(
-						new ByteArrayId(
+						new ByteArray(
 								new byte[] {}),
-						new ByteArrayId(
+						new ByteArray(
 								"123"),
 						true));
 	}
@@ -176,12 +176,12 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							final ByteArrayId id,
+							final ByteArray id,
 							final Integer value,
 							final NeighborList<Integer> list )
 							throws IOException,
 							InterruptedException {
-						final Iterator<Entry<ByteArrayId, Integer>> it = list.iterator();
+						final Iterator<Entry<ByteArray, Integer>> it = list.iterator();
 						final List<Integer> expectedResultSet = new ArrayList<Integer>(
 								expectedResults.get(value));
 						assertNotNull(expectedResultSet);
@@ -208,7 +208,7 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							final ByteArrayId id,
+							final ByteArray id,
 							final Integer value,
 							final NeighborList<Integer> list )
 							throws IOException,
@@ -253,7 +253,7 @@ public class NNProcessorTest
 
 					@Override
 					public NeighborList<Integer> buildNeighborList(
-							final ByteArrayId cnterId,
+							final ByteArray cnterId,
 							final Integer center ) {
 						return new DefaultNeighborList<Integer>();
 					}
@@ -263,7 +263,7 @@ public class NNProcessorTest
 
 					@Override
 					public void complete(
-							final ByteArrayId id,
+							final ByteArray id,
 							final Integer value,
 							final NeighborList<Integer> list )
 							throws IOException,
@@ -309,7 +309,7 @@ public class NNProcessorTest
 
 					@Override
 					public NeighborList<Integer> buildNeighborList(
-							final ByteArrayId cnterId,
+							final ByteArray cnterId,
 							final Integer center ) {
 						return new DefaultNeighborList<Integer>();
 					}
@@ -319,9 +319,9 @@ public class NNProcessorTest
 
 	}
 
-	private static ByteArrayId partition(
+	private static ByteArray partition(
 			final Integer v ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				Integer.toString((v.intValue() / 300)));
 	}
 
@@ -330,7 +330,7 @@ public class NNProcessorTest
 			final Integer v )
 			throws IOException {
 		processor.add(
-				new ByteArrayId(
+				new ByteArray(
 						v.toString()),
 				true,
 				v);

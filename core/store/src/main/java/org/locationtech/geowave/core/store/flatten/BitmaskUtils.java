@@ -19,7 +19,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -97,13 +97,13 @@ public class BitmaskUtils
 				Collections.singleton(fieldPosition)));
 	}
 
-	private static LoadingCache<ByteArrayId, List<Integer>> fieldPositionCache = CacheBuilder.newBuilder().maximumSize(
+	private static LoadingCache<ByteArray, List<Integer>> fieldPositionCache = CacheBuilder.newBuilder().maximumSize(
 			100).build(
-			new CacheLoader<ByteArrayId, List<Integer>>() {
+			new CacheLoader<ByteArray, List<Integer>>() {
 
 				@Override
 				public List<Integer> load(
-						ByteArrayId key )
+						ByteArray key )
 						throws Exception {
 					final List<Integer> fieldPositions = new ArrayList<>();
 					int currentByte = 0;
@@ -130,7 +130,7 @@ public class BitmaskUtils
 	 */
 	public static List<Integer> getFieldPositions(
 			final byte[] bitmask ) {
-		return fieldPositionCache.getUnchecked(new ByteArrayId(
+		return fieldPositionCache.getUnchecked(new ByteArray(
 				bitmask));
 	}
 

@@ -33,7 +33,7 @@ import org.apache.accumulo.core.data.Range;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.simple.RoundRobinKeyIndexStrategy;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -228,7 +228,7 @@ public class AccumuloUtils
 				index.getName(),
 				true,
 				true);
-		for (final ByteArrayId p : partitions.getPartitionKeys()) {
+		for (final ByteArray p : partitions.getPartitionKeys()) {
 			operations.ensurePartition(
 					p,
 					index.getName());

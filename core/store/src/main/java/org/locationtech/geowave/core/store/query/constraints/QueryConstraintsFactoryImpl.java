@@ -1,6 +1,6 @@
 package org.locationtech.geowave.core.store.query.constraints;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.store.api.QueryConstraintsFactory;
@@ -14,15 +14,15 @@ public class QueryConstraintsFactoryImpl implements
 
 	@Override
 	public QueryConstraints dataIds(
-			final ByteArrayId[] dataIds ) {
+			final ByteArray[] dataIds ) {
 		return new DataIdQuery(
 				dataIds);
 	}
 
 	@Override
 	public QueryConstraints prefix(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKeyPrefix ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKeyPrefix ) {
 		return new PrefixIdQuery(
 				partitionKey,
 				sortKeyPrefix);

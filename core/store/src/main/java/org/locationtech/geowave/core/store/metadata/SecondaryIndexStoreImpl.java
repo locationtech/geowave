@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
@@ -47,13 +47,13 @@ public class SecondaryIndexStoreImpl implements
 	@Override
 	public void storeJoinEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
 			String primaryIndexName,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility ) {
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility ) {
 		// TODO Auto-generated method stub
 
 	}
@@ -61,10 +61,10 @@ public class SecondaryIndexStoreImpl implements
 	@Override
 	public void storeEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
-			ByteArrayId dataId,
+			ByteArray dataId,
 			GeoWaveValue... originalFields ) {
 		// TODO Auto-generated method stub
 
@@ -73,13 +73,13 @@ public class SecondaryIndexStoreImpl implements
 	@Override
 	public void deleteJoinEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
 			String primaryIndexName,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility ) {
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility ) {
 		// TODO Auto-generated method stub
 
 	}
@@ -87,10 +87,10 @@ public class SecondaryIndexStoreImpl implements
 	@Override
 	public void deleteEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
-			ByteArrayId dataId,
+			ByteArray dataId,
 			GeoWaveValue... originalFields ) {
 		// TODO Auto-generated method stub
 

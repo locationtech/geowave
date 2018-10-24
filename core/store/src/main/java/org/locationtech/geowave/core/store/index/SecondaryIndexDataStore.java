@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.api.DataStore;
@@ -46,13 +46,13 @@ public interface SecondaryIndexDataStore
 	 */
 	public void storeJoinEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
 			String primaryIndexName,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility );
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility );
 
 	/**
 	 * Stores a secondary index entry that will not require a join against the
@@ -67,10 +67,10 @@ public interface SecondaryIndexDataStore
 	 */
 	public void storeEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
-			ByteArrayId dataId,
+			ByteArray dataId,
 			GeoWaveValue... originalFields );
 
 	/**
@@ -94,20 +94,20 @@ public interface SecondaryIndexDataStore
 
 	public void deleteJoinEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
 			String primaryIndexName,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility );
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility );
 
 	public void deleteEntry(
 			String secondaryIndexName,
-			ByteArrayId indexedAttributeValue,
+			ByteArray indexedAttributeValue,
 			String typeName,
 			String indexedAttributeFieldName,
-			ByteArrayId dataId,
+			ByteArray dataId,
 			GeoWaveValue... originalFields );
 
 	public void flush();

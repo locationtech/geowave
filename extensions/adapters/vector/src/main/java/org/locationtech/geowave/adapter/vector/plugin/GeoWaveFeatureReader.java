@@ -53,7 +53,7 @@ import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
 import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils.GeoConstraintsWrapper;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -591,10 +591,10 @@ public class GeoWaveFeatureReader implements
 			final Integer limit ) {
 		if (filter instanceof FidFilterImpl) {
 			final Set<String> fids = ((FidFilterImpl) filter).getIDs();
-			final ByteArrayId[] ids = new ByteArrayId[fids.size()];
+			final ByteArray[] ids = new ByteArray[fids.size()];
 			int i = 0;
 			for (final String fid : fids) {
-				ids[i++] = new ByteArrayId(
+				ids[i++] = new ByteArray(
 						fid);
 			}
 

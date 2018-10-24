@@ -6,6 +6,13 @@ import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
 import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
 import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 
+/**
+ * This represent all the constraints and options available in a geowave query.
+ * Use QueryBuilder or one of its extensions to construct this object.
+ *
+ * @param <T>
+ *            the type of data being retrieved
+ */
 public class Query<T> extends
 		BaseQuery<T, FilterByTypeQueryOptions<T>>
 {
@@ -15,8 +22,8 @@ public class Query<T> extends
 	}
 
 	/**
-	 * This is better built through QueryBuilder.
-	 * 
+	 * This is better built through QueryBuilder or one of its extensions.
+	 *
 	 * @param commonQueryOptions
 	 * @param dataTypeQueryOptions
 	 * @param indexQueryOptions

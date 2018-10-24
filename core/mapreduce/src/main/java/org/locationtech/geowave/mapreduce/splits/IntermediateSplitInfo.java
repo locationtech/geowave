@@ -23,7 +23,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
@@ -99,10 +99,10 @@ public class IntermediateSplitInfo implements
 			final String location = rangeLocationPair.getLocation();
 			final boolean startKeyInclusive = true;
 			final boolean endKeyInclusive = false;
-			if (((start != null) && (new ByteArrayId(
-					start).compareTo(new ByteArrayId(
-					splitKey)) >= 0)) || ((end != null) && (new ByteArrayId(
-					end).compareTo(new ByteArrayId(
+			if (((start != null) && (new ByteArray(
+					start).compareTo(new ByteArray(
+					splitKey)) >= 0)) || ((end != null) && (new ByteArray(
+					end).compareTo(new ByteArray(
 					splitKey)) <= 0))) {
 				splitKey = SplitsProvider.getMidpoint(rangeLocationPair.getRange());
 				if (splitKey == null) {
@@ -225,7 +225,7 @@ public class IntermediateSplitInfo implements
 	 * @return the new split.
 	 */
 	synchronized IntermediateSplitInfo split(
-			final Map<Pair<Index, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache ) {
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache ) {
 		// generically you'd want the split to be as limiting to total
 		// locations as possible and then as limiting as possible to total
 		// indices, but in this case split() is only called when all ranges
@@ -262,7 +262,7 @@ public class IntermediateSplitInfo implements
 				final IndexRangeLocation newSplit = next.split(
 						statsCache.get(Pair.of(
 								next.index,
-								new ByteArrayId(
+								new ByteArray(
 										next.rangeLocationPair.getRange().getPartitionKey()))),
 						currentCardinality,
 						targetCardinality);

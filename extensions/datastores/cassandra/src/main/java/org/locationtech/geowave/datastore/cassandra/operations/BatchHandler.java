@@ -16,7 +16,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 import com.datastax.driver.core.BatchStatement;
@@ -29,7 +29,7 @@ public class BatchHandler
 {
 	protected final Session session;
 	private Type type = Type.UNLOGGED;
-	protected final Map<ByteArrayId, BatchStatement> batches = new HashMap<>();
+	protected final Map<ByteArray, BatchStatement> batches = new HashMap<>();
 
 	public BatchHandler(
 			final Session session ) {
@@ -39,7 +39,7 @@ public class BatchHandler
 	protected BatchStatement addStatement(
 			final GeoWaveRow row,
 			final Statement statement ) {
-		ByteArrayId partition = new ByteArrayId(
+		ByteArray partition = new ByteArray(
 				row.getPartitionKey());
 		BatchStatement tokenBatch = batches.get(partition);
 

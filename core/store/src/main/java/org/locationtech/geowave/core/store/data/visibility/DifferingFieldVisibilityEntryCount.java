@@ -14,7 +14,7 @@ import java.nio.ByteBuffer;
 import java.util.Collection;
 import java.util.HashSet;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
@@ -95,7 +95,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 			final GeoWaveRow... kvs ) {
 		for (final GeoWaveRow kv : kvs) {
 			if (entryHasDifferentVisibilities(kv)) {
-				if (ids.add(new ByteArrayId(
+				if (ids.add(new ByteArray(
 						kvs[0].getDataId()))) {
 					entriesWithDifferingFieldVisibilities++;
 				}
@@ -107,7 +107,7 @@ public class DifferingFieldVisibilityEntryCount<T> extends
 	 * This is expensive, but necessary since there may be duplicates
 	 */
 	// TODO entryDeleted should only be called once with all duplicates
-	private transient HashSet<ByteArrayId> ids = new HashSet<>();
+	private transient HashSet<ByteArray> ids = new HashSet<>();
 
 	@Override
 	public void entryDeleted(

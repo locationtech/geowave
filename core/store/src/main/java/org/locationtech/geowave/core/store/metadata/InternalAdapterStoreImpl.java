@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.metadata;
 import java.io.IOException;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -58,9 +58,9 @@ public class InternalAdapterStoreImpl implements
 		1
 	};
 
-	private static final ByteArrayId INTERNAL_TO_EXTERNAL_BYTEARRAYID = new ByteArrayId(
+	private static final ByteArray INTERNAL_TO_EXTERNAL_BYTEARRAYID = new ByteArray(
 			INTERNAL_TO_EXTERNAL_ID);
-	private static final ByteArrayId EXTERNAL_TO_INTERNAL_BYTEARRAYID = new ByteArrayId(
+	private static final ByteArray EXTERNAL_TO_INTERNAL_BYTEARRAYID = new ByteArray(
 			EXTERNAL_TO_INTERNAL_ID);
 	private final DataStoreOperations operations;
 
@@ -243,7 +243,7 @@ public class InternalAdapterStoreImpl implements
 		boolean externalDeleted = false;
 		if (typeName != null) {
 			externalDeleted = AbstractGeoWavePersistence.deleteObjects(
-					new ByteArrayId(
+					new ByteArray(
 							typeName),
 					EXTERNAL_TO_INTERNAL_BYTEARRAYID,
 					operations,
@@ -254,7 +254,7 @@ public class InternalAdapterStoreImpl implements
 		boolean internalDeleted = false;
 		if (internalAdapterId != null) {
 			internalDeleted = AbstractGeoWavePersistence.deleteObjects(
-					new ByteArrayId(
+					new ByteArray(
 							ByteArrayUtils.shortToByteArray(internalAdapterId)),
 					INTERNAL_TO_EXTERNAL_BYTEARRAYID,
 					operations,

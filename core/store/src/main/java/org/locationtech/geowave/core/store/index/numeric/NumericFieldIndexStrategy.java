@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.store.index.numeric;
 import java.util.Collections;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
@@ -65,7 +65,7 @@ public class NumericFieldIndexStrategy implements
 			final Number indexedData ) {
 		return new InsertionIds(
 				null,
-				Collections.singletonList(new ByteArrayId(
+				Collections.singletonList(new ByteArray(
 						toIndexByte(indexedData))));
 	}
 
@@ -88,8 +88,8 @@ public class NumericFieldIndexStrategy implements
 
 	@Override
 	public Number getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return Lexicoders.DOUBLE.fromByteArray(sortKey.getBytes());
 	}
 }

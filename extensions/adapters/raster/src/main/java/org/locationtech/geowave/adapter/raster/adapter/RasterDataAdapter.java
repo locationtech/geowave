@@ -92,7 +92,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
 import org.locationtech.geowave.core.geotime.util.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
@@ -663,7 +663,7 @@ public class RasterDataAdapter implements
 				final SubStrategy pyramidLevel ) {
 			// get all pairs of partition/sort keys for insertionIds that
 			// represent the original bounds at this pyramid level
-			final Iterator<Pair<ByteArrayId, ByteArrayId>> insertionIds = pyramidLevel
+			final Iterator<Pair<ByteArray, ByteArray>> insertionIds = pyramidLevel
 					.getIndexStrategy()
 					.getInsertionIds(
 							originalBounds)
@@ -688,7 +688,7 @@ public class RasterDataAdapter implements
 
 				@Override
 				public GridCoverage next() {
-					Pair<ByteArrayId, ByteArrayId> insertionId = insertionIds.next();
+					Pair<ByteArray, ByteArray> insertionId = insertionIds.next();
 					if (insertionId == null) {
 						return null;
 					}
@@ -984,9 +984,9 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public ByteArrayId getDataId(
+	public ByteArray getDataId(
 			final GridCoverage entry ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				new byte[] {});
 	}
 
@@ -1008,8 +1008,8 @@ public class RasterDataAdapter implements
 
 	public GridCoverage getCoverageFromRasterTile(
 			final RasterTile rasterTile,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
 			final Index index ) {
 		final MultiDimensionalNumericData indexRange = index.getIndexStrategy().getRangeForId(
 				partitionKey,
@@ -1302,7 +1302,7 @@ public class RasterDataAdapter implements
 		final AdapterPersistenceEncoding encoding;
 		if (entry instanceof FitToIndexGridCoverage) {
 			encoding = new FitToIndexPersistenceEncoding(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
 					adapterExtendedData,
@@ -1313,7 +1313,7 @@ public class RasterDataAdapter implements
 			// this shouldn't happen
 			LOGGER.warn("Grid coverage is not fit to the index");
 			encoding = new AdapterPersistenceEncoding(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
 					adapterExtendedData);

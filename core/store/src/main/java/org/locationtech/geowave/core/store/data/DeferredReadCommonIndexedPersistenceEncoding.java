@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.data;
 
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -35,9 +35,9 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 
 	public DeferredReadCommonIndexedPersistenceEncoding(
 			final short adapterId,
-			final ByteArrayId dataId,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
+			final ByteArray dataId,
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
