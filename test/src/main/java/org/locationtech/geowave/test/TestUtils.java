@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -43,13 +43,13 @@ import org.geotools.referencing.CRS;
 import org.junit.Assert;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.ingest.local.LocalInputCommandLineOptions;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.ingest.operations.LocalToGeowaveCommand;
@@ -57,6 +57,8 @@ import org.locationtech.geowave.core.ingest.operations.options.IngestFormatPlugi
 import org.locationtech.geowave.core.ingest.spark.SparkCommandLineOptions;
 import org.locationtech.geowave.core.ingest.spark.SparkIngestDriver;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.config.AddIndexCommand;
 import org.locationtech.geowave.core.store.cli.config.AddStoreCommand;
 import org.locationtech.geowave.core.store.cli.remote.ListStatsCommand;
@@ -64,8 +66,7 @@ import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOpt
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.geometry.MismatchedDimensionException;
 import org.opengis.referencing.FactoryException;
@@ -114,8 +115,8 @@ public class TestUtils
 	public static final String TEST_RESOURCE_PACKAGE = "org/locationtech/geowave/test/";
 	public static final String TEST_CASE_BASE = "data/";
 
-	public static final PrimaryIndex DEFAULT_SPATIAL_INDEX = new SpatialIndexBuilder().createIndex();
-	public static final PrimaryIndex DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalIndexBuilder().createIndex();
+	public static final Index DEFAULT_SPATIAL_INDEX = new SpatialIndexBuilder().createIndex();
+	public static final Index DEFAULT_SPATIAL_TEMPORAL_INDEX = new SpatialTemporalIndexBuilder().createIndex();
 	// CRS for Web Mercator
 	public static String CUSTOM_CRSCODE = "EPSG:3857";
 
@@ -138,11 +139,11 @@ public class TestUtils
 		}
 	}
 
-	public static PrimaryIndex createCustomCRSPrimaryIndex() {
-		SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
-		SpatialOptions so = sdp.createOptions();
+	public static Index createCustomCRSPrimaryIndex() {
+		final SpatialDimensionalityTypeProvider sdp = new SpatialDimensionalityTypeProvider();
+		final SpatialOptions so = sdp.createOptions();
 		so.setCrs(CUSTOM_CRSCODE);
-		PrimaryIndex primaryIndex = sdp.createPrimaryIndex(so);
+		final Index primaryIndex = sdp.createIndex(so);
 		return primaryIndex;
 	}
 
@@ -191,8 +192,7 @@ public class TestUtils
 	public static void deleteAll(
 			final DataStorePluginOptions dataStore ) {
 		dataStore.createDataStore().delete(
-				new QueryOptions(),
-				null);
+				QueryBuilder.newBuilder().build());
 	}
 
 	public static void testLocalIngest(
@@ -230,7 +230,7 @@ public class TestUtils
 		// Indexes
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
-		final List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+		final List<IndexPluginOptions> indexOptions = new ArrayList<>(
 				indexTypes.length);
 		for (final String indexType : indexTypes) {
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
@@ -240,17 +240,17 @@ public class TestUtils
 			}
 			indexOptions.add(indexOption);
 		}
-		File configFile = File.createTempFile(
+		final File configFile = File.createTempFile(
 				"test_stats",
 				null);
-		ManualOperationParams params = new ManualOperationParams();
+		final ManualOperationParams params = new ManualOperationParams();
 
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		StringBuilder indexParam = new StringBuilder();
+		final StringBuilder indexParam = new StringBuilder();
 		for (int i = 0; i < indexOptions.size(); i++) {
-			AddIndexCommand addIndex = new AddIndexCommand();
+			final AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters("test-index" + i);
 			addIndex.setPluginOptions(indexOptions.get(i));
 			addIndex.execute(params);
@@ -265,7 +265,7 @@ public class TestUtils
 				indexParam.toString());
 		localIngester.setThreads(nthreads);
 
-		AddStoreCommand addStore = new AddStoreCommand();
+		final AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test-store");
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(params);
@@ -293,7 +293,7 @@ public class TestUtils
 		// Indexes
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
-		final List<IndexPluginOptions> indexOptions = new ArrayList<IndexPluginOptions>(
+		final List<IndexPluginOptions> indexOptions = new ArrayList<>(
 				indexTypes.length);
 		for (final String indexType : indexTypes) {
 			final IndexPluginOptions indexOption = new IndexPluginOptions();
@@ -301,17 +301,17 @@ public class TestUtils
 			indexOptions.add(indexOption);
 		}
 
-		File configFile = File.createTempFile(
+		final File configFile = File.createTempFile(
 				"test_s3_local_ingest",
 				null);
-		ManualOperationParams operationParams = new ManualOperationParams();
+		final ManualOperationParams operationParams = new ManualOperationParams();
 		operationParams.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
 
-		StringBuilder indexParam = new StringBuilder();
+		final StringBuilder indexParam = new StringBuilder();
 		for (int i = 0; i < indexOptions.size(); i++) {
-			AddIndexCommand addIndex = new AddIndexCommand();
+			final AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters("test-index" + i);
 			addIndex.setPluginOptions(indexOptions.get(i));
 			addIndex.execute(operationParams);
@@ -331,7 +331,7 @@ public class TestUtils
 				indexParam.toString());
 		localIngester.setThreads(nthreads);
 
-		AddStoreCommand addStore = new AddStoreCommand();
+		final AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test-store");
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(operationParams);
@@ -368,10 +368,10 @@ public class TestUtils
 
 		// Indexes
 		final String indexes = dimensionalityType.getDimensionalityArg();
-		File configFile = File.createTempFile(
+		final File configFile = File.createTempFile(
 				"test_spark_ingest",
 				null);
-		ManualOperationParams operationParams = new ManualOperationParams();
+		final ManualOperationParams operationParams = new ManualOperationParams();
 		operationParams.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
@@ -380,34 +380,34 @@ public class TestUtils
 		configS3.setS3UrlParameter(s3Url);
 		configS3.execute(operationParams);
 
-		LocalInputCommandLineOptions localOptions = new LocalInputCommandLineOptions();
+		final LocalInputCommandLineOptions localOptions = new LocalInputCommandLineOptions();
 		localOptions.setFormats(format);
 
-		SparkCommandLineOptions sparkOptions = new SparkCommandLineOptions();
+		final SparkCommandLineOptions sparkOptions = new SparkCommandLineOptions();
 		sparkOptions.setAppName("SparkIngestTest");
 		sparkOptions.setMaster("local");
 		sparkOptions.setHost("localhost");
 
 		// Create the command and execute.
 		final SparkIngestDriver sparkIngester = new SparkIngestDriver();
-		Properties props = new Properties();
+		final Properties props = new Properties();
 		dataStore.save(
 				props,
 				DataStorePluginOptions.getStoreNamespace("test"));
-		AddStoreCommand addStore = new AddStoreCommand();
+		final AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test");
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(operationParams);
 
 		final String[] indexTypes = dimensionalityType.getDimensionalityArg().split(
 				",");
-		for (String indexType : indexTypes) {
-			IndexPluginOptions pluginOptions = new IndexPluginOptions();
+		for (final String indexType : indexTypes) {
+			final IndexPluginOptions pluginOptions = new IndexPluginOptions();
 			pluginOptions.selectPlugin(indexType);
 			pluginOptions.save(
 					props,
 					IndexPluginOptions.getIndexNamespace(indexType));
-			AddIndexCommand addIndex = new AddIndexCommand();
+			final AddIndexCommand addIndex = new AddIndexCommand();
 			addIndex.setParameters(indexType);
 			addIndex.setPluginOptions(pluginOptions);
 			addIndex.execute(operationParams);
@@ -437,15 +437,15 @@ public class TestUtils
 				"test",
 				null);
 
-		File configFile = File.createTempFile(
+		final File configFile = File.createTempFile(
 				"test_stats",
 				null);
-		ManualOperationParams params = new ManualOperationParams();
+		final ManualOperationParams params = new ManualOperationParams();
 
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				configFile);
-		AddStoreCommand addStore = new AddStoreCommand();
+		final AddStoreCommand addStore = new AddStoreCommand();
 		addStore.setParameters("test");
 		addStore.setPluginOptions(dataStore);
 		addStore.execute(params);
@@ -483,7 +483,7 @@ public class TestUtils
 	public static ExpectedResults getExpectedResults(
 			final CloseableIterator<?> results )
 			throws IOException {
-		final Set<Long> hashedCentroids = new HashSet<Long>();
+		final Set<Long> hashedCentroids = new HashSet<>();
 		int expectedResultCount = 0;
 		try {
 			while (results.hasNext()) {
@@ -512,7 +512,7 @@ public class TestUtils
 	}
 
 	public static MathTransform transformFromCrs(
-			CoordinateReferenceSystem crs ) {
+			final CoordinateReferenceSystem crs ) {
 		MathTransform mathTransform = null;
 		if (crs != null) {
 			try {
@@ -532,13 +532,13 @@ public class TestUtils
 
 	public static ExpectedResults getExpectedResults(
 			final URL[] expectedResultsResources,
-			CoordinateReferenceSystem crs )
+			final CoordinateReferenceSystem crs )
 			throws IOException {
-		final Map<String, Object> map = new HashMap<String, Object>();
+		final Map<String, Object> map = new HashMap<>();
 		DataStore dataStore = null;
-		final Set<Long> hashedCentroids = new HashSet<Long>();
+		final Set<Long> hashedCentroids = new HashSet<>();
 		int expectedResultCount = 0;
-		MathTransform mathTransform = transformFromCrs(crs);
+		final MathTransform mathTransform = transformFromCrs(crs);
 		for (final URL expectedResultsResource : expectedResultsResources) {
 			map.put(
 					"url",
@@ -561,7 +561,7 @@ public class TestUtils
 				featureIterator = expectedResults.features();
 				while (featureIterator.hasNext()) {
 					final SimpleFeature feature = featureIterator.next();
-					Geometry geometry = (Geometry) feature.getDefaultGeometry();
+					final Geometry geometry = (Geometry) feature.getDefaultGeometry();
 					final long centroid = hashCentroid(mathTransform != null ? JTS.transform(
 							geometry,
 							mathTransform) : geometry);
@@ -586,7 +586,7 @@ public class TestUtils
 				expectedResultCount);
 	}
 
-	public static DistributableQuery resourceToQuery(
+	public static QueryConstraints resourceToQuery(
 			final URL filterResource )
 			throws IOException {
 		return featureToQuery(resourceToFeature(filterResource));
@@ -595,7 +595,7 @@ public class TestUtils
 	public static SimpleFeature resourceToFeature(
 			final URL filterResource )
 			throws IOException {
-		final Map<String, Object> map = new HashMap<String, Object>();
+		final Map<String, Object> map = new HashMap<>();
 		DataStore dataStore = null;
 		map.put(
 				"url",
@@ -627,7 +627,7 @@ public class TestUtils
 		return savedFilter;
 	}
 
-	protected static DistributableQuery featureToQuery(
+	protected static QueryConstraints featureToQuery(
 			final SimpleFeature savedFilter ) {
 		final Geometry filterGeometry = (Geometry) savedFilter.getDefaultGeometry();
 		final Object startObj = savedFilter.getAttribute(TEST_FILTER_START_TIME_ATTRIBUTE_NAME);
@@ -680,15 +680,15 @@ public class TestUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param testName
 	 *            Name of the test that we are starting.
 	 */
 	public static void printStartOfTest(
-			Logger LOGGER,
-			String testName ) {
+			final Logger LOGGER,
+			final String testName ) {
 		// Format
-		String paddedName = StringUtils.center(
+		final String paddedName = StringUtils.center(
 				"STARTING " + testName,
 				37);
 		// Print
@@ -700,23 +700,23 @@ public class TestUtils
 	}
 
 	/**
-	 * 
+	 *
 	 * @param testName
 	 *            Name of the test that we are starting.
 	 * @param startMillis
 	 *            The time (millis) that the test started.
 	 */
 	public static void printEndOfTest(
-			Logger LOGGER,
-			String testName,
-			long startMillis ) {
+			final Logger LOGGER,
+			final String testName,
+			final long startMillis ) {
 		// Get Elapsed Time
-		double elapsedS = (System.currentTimeMillis() - startMillis) / 1000.;
+		final double elapsedS = (System.currentTimeMillis() - startMillis) / 1000.;
 		// Format
-		String paddedName = StringUtils.center(
+		final String paddedName = StringUtils.center(
 				"FINISHED " + testName,
 				37);
-		String paddedElapsed = StringUtils.center(
+		final String paddedElapsed = StringUtils.center(
 				elapsedS + "s elapsed.",
 				37);
 		// Print
@@ -1019,8 +1019,8 @@ public class TestUtils
 
 	@Deprecated
 	public static void assert200(
-			String msg,
-			int responseCode ) {
+			final String msg,
+			final int responseCode ) {
 		Assert.assertEquals(
 				msg,
 				200,
@@ -1029,8 +1029,8 @@ public class TestUtils
 
 	@Deprecated
 	public static void assert400(
-			String msg,
-			int responseCode ) {
+			final String msg,
+			final int responseCode ) {
 		Assert.assertEquals(
 				msg,
 				400,
@@ -1039,8 +1039,8 @@ public class TestUtils
 
 	@Deprecated
 	public static void assert404(
-			String msg,
-			int responseCode ) {
+			final String msg,
+			final int responseCode ) {
 		Assert.assertEquals(
 				msg,
 				404,
@@ -1050,7 +1050,7 @@ public class TestUtils
 	/**
 	 * Asserts that the response has the expected Status Code. The assertion
 	 * message is formatted to include the provided string.
-	 * 
+	 *
 	 * @param msg
 	 *            String message to include in the assertion message.
 	 * @param expectedCode
@@ -1059,10 +1059,10 @@ public class TestUtils
 	 *            The Response object on which .getStatus() will be performed.
 	 */
 	public static void assertStatusCode(
-			String msg,
-			int expectedCode,
-			Response response ) {
-		String assertionMsg = msg + String.format(
+			final String msg,
+			final int expectedCode,
+			final Response response ) {
+		final String assertionMsg = msg + String.format(
 				": A %s response code should be received",
 				expectedCode);
 		Assert.assertEquals(
@@ -1074,7 +1074,7 @@ public class TestUtils
 	/**
 	 * Asserts that the response has the expected Status Code. The assertion
 	 * message automatically formatted.
-	 * 
+	 *
 	 * @param expectedCode
 	 *            Integer HTTP Status code to expect from the response.
 	 * @param response
@@ -1082,8 +1082,8 @@ public class TestUtils
 	 */
 	// Overload method with option to automatically generate assertion message.
 	public static void assertStatusCode(
-			int expectedCode,
-			Response response ) {
+			final int expectedCode,
+			final Response response ) {
 		assertStatusCode(
 				"REST call",
 				expectedCode,

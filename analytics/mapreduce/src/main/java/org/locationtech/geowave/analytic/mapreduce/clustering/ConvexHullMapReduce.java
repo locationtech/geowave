@@ -33,7 +33,7 @@ import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputReducer;
@@ -118,7 +118,7 @@ public class ConvexHullMapReduce
 			@SuppressWarnings("unchecked")
 			final AnalyticItemWrapper<T> wrapper = itemWrapperFactory.create((T) value);
 			outputKey.setInternalAdapterId(key.getInternalAdapterId());
-			outputKey.setDataId(new ByteArrayId(
+			outputKey.setDataId(new ByteArray(
 					StringUtils.stringToBinary(nestedGroupCentroidAssigner.getGroupForLevel(wrapper))));
 			outputKey.setGeoWaveKey(key.getGeoWaveKey());
 			context.write(
@@ -173,7 +173,7 @@ public class ConvexHullMapReduce
 	{
 
 		private CentroidManager<T> centroidManager;
-		private List<ByteArrayId> indexIds;
+		private String[] indexNames;
 		private FeatureDataAdapter outputAdapter;
 		private Projection<T> projectionFunction;
 		/*
@@ -245,8 +245,8 @@ public class ConvexHullMapReduce
 			// new center
 			context.write(
 					new GeoWaveOutputKey(
-							outputAdapter.getAdapterId(),
-							indexIds),
+							outputAdapter.getTypeName(),
+							indexNames),
 					newPolygonFeature);
 		}
 
@@ -323,14 +323,11 @@ public class ConvexHullMapReduce
 							BasicFeatureTypes.DEFAULT_NAMESPACE),
 					ClusteringUtils.CLUSTERING_CRS);
 
-			indexIds = new ArrayList<ByteArrayId>();
-			indexIds.add(new ByteArrayId(
-					StringUtils.stringToBinary(config.getString(
-							HullParameters.Hull.INDEX_ID,
-							new SpatialDimensionalityTypeProvider.SpatialIndexBuilder()
-									.createIndex()
-									.getId()
-									.getString()))));
+			indexNames = new String[] {
+				config.getString(
+						HullParameters.Hull.INDEX_NAME,
+						new SpatialDimensionalityTypeProvider.SpatialIndexBuilder().createIndex().getName())
+			};
 
 		}
 	}

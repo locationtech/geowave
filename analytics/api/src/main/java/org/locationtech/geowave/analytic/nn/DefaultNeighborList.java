@@ -15,17 +15,17 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public class DefaultNeighborList<NNTYPE> implements
 		NeighborList<NNTYPE>
 {
-	private final Map<ByteArrayId, NNTYPE> list = new HashMap<ByteArrayId, NNTYPE>();
+	private final Map<ByteArray, NNTYPE> list = new HashMap<ByteArray, NNTYPE>();
 
 	@Override
 	public boolean add(
 			final DistanceProfile<?> distanceProfile,
-			final ByteArrayId id,
+			final ByteArray id,
 			final NNTYPE value ) {
 		if (infer(
 				id,
@@ -41,7 +41,7 @@ public class DefaultNeighborList<NNTYPE> implements
 
 	@Override
 	public InferType infer(
-			final ByteArrayId id,
+			final ByteArray id,
 			final NNTYPE value ) {
 		if (list.containsKey(id)) {
 			return InferType.SKIP;
@@ -55,7 +55,7 @@ public class DefaultNeighborList<NNTYPE> implements
 	}
 
 	@Override
-	public Iterator<Entry<ByteArrayId, NNTYPE>> iterator() {
+	public Iterator<Entry<ByteArray, NNTYPE>> iterator() {
 		return list.entrySet().iterator();
 	}
 
@@ -69,7 +69,7 @@ public class DefaultNeighborList<NNTYPE> implements
 	{
 		@Override
 		public NeighborList<NNTYPE> buildNeighborList(
-				final ByteArrayId centerId,
+				final ByteArray centerId,
 				final NNTYPE center ) {
 			return new DefaultNeighborList<NNTYPE>();
 		}
@@ -81,7 +81,7 @@ public class DefaultNeighborList<NNTYPE> implements
 	}
 
 	public NNTYPE get(
-			final ByteArrayId key ) {
+			final ByteArray key ) {
 		return list.get(key);
 	}
 

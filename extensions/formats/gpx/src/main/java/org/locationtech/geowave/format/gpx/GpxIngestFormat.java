@@ -14,7 +14,7 @@ import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureInges
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import org.locationtech.geowave.adapter.vector.ingest.GeometrySimpOptionProvider;
 import org.locationtech.geowave.adapter.vector.ingest.SimpleFeatureIngestOptions;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 import com.beust.jcommander.ParametersDelegate;
 
@@ -30,7 +30,7 @@ public class GpxIngestFormat extends
 
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<GpxTrack> newPluginInstance(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		GpxIngestPlugin plugin = new GpxIngestPlugin();
 		plugin.setExtentOptionProvider(extentOptProvider);
 		return plugin;

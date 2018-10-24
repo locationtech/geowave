@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,18 +10,15 @@
  ******************************************************************************/
 package org.locationtech.geowave.cli.debug;
 
-import java.io.IOException;
-
 import org.apache.commons.lang3.time.StopWatch;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorAggregationQueryBuilder;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
-import org.locationtech.geowave.core.store.query.aggregate.CountResult;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +63,7 @@ public class BBOXQuery extends
 		"--useAggregation",
 		"-agg"
 	}, description = "Compute count on the server side")
-	private Boolean useAggregation = Boolean.FALSE;
+	private final Boolean useAggregation = Boolean.FALSE;
 
 	private Geometry geom;
 
@@ -81,8 +78,8 @@ public class BBOXQuery extends
 	@Override
 	protected long runQuery(
 			final GeotoolsFeatureDataAdapter adapter,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexId,
+			final String typeName,
+			final String indexName,
 			final DataStore dataStore,
 			final boolean debug ) {
 		final StopWatch stopWatch = new StopWatch();
@@ -91,55 +88,51 @@ public class BBOXQuery extends
 
 		long count = 0;
 		if (useAggregation) {
-			final QueryOptions options = new QueryOptions(
-					adapterId,
-					indexId);
-			options.setAggregation(
-					new CountAggregation(),
-					adapter);
-			try (final CloseableIterator<Object> it = dataStore.query(
-					options,
-					new SpatialQuery(
-							geom))) {
-				final CountResult result = ((CountResult) (it.next()));
-				if (result != null) {
-					count += result.getCount();
-				}
+
+			final VectorAggregationQueryBuilder<Persistable, Long> bldr = (VectorAggregationQueryBuilder) VectorAggregationQueryBuilder
+					.newBuilder()
+					.count(
+							typeName)
+					.indexName(
+							indexName);
+			final Long countResult = dataStore.aggregate(bldr.constraints(
+					bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+							geom).build()).build());
+
+			if (countResult != null) {
+				count += countResult;
 			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to read result",
-						e);
-			}
+
 		}
 		else {
+			final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
+					typeName).indexName(
+					indexName);
 			stopWatch.start();
 
-			final CloseableIterator<Object> it = dataStore.query(
-					new QueryOptions(
-							adapterId,
-							indexId),
-					new SpatialQuery(
-							geom));
+			try (final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.constraints(
+					bldr.constraintsFactory().spatialTemporalConstraints().spatialConstraints(
+							geom).build()).build())) {
 
-			stopWatch.stop();
-			System.out.println("Ran BBOX query in " + stopWatch.toString());
+				stopWatch.stop();
+				System.out.println("Ran BBOX query in " + stopWatch.toString());
 
-			stopWatch.reset();
-			stopWatch.start();
+				stopWatch.reset();
+				stopWatch.start();
 
-			while (it.hasNext()) {
-				if (debug) {
-					System.out.println(it.next());
+				while (it.hasNext()) {
+					if (debug) {
+						System.out.println(it.next());
+					}
+					else {
+						it.next();
+					}
+					count++;
 				}
-				else {
-					it.next();
-				}
-				count++;
+
+				stopWatch.stop();
+				System.out.println("BBOX query results iteration took " + stopWatch.toString());
 			}
-
-			stopWatch.stop();
-			System.out.println("BBOX query results iteration took " + stopWatch.toString());
 		}
 		return count;
 	}

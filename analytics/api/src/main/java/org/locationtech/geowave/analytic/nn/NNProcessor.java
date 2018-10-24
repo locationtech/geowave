@@ -21,7 +21,7 @@ import org.locationtech.geowave.analytic.nn.NeighborList.InferType;
 import org.locationtech.geowave.analytic.partitioner.Partitioner;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionDataCallback;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,10 +64,10 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	protected static final Logger LOGGER = LoggerFactory.getLogger(NNProcessor.class);
 
 	final Map<PartitionData, PartitionData> uniqueSetOfPartitions = new HashMap<PartitionData, PartitionData>();
-	final Map<PartitionData, Set<ByteArrayId>> partitionsToIds = new HashMap<PartitionData, Set<ByteArrayId>>();
-	final Map<ByteArrayId, Set<PartitionData>> idsToPartition = new HashMap<ByteArrayId, Set<PartitionData>>();
-	final Map<ByteArrayId, STORE_VALUE> primaries = new HashMap<ByteArrayId, STORE_VALUE>();
-	final Map<ByteArrayId, STORE_VALUE> others = new HashMap<ByteArrayId, STORE_VALUE>();
+	final Map<PartitionData, Set<ByteArray>> partitionsToIds = new HashMap<PartitionData, Set<ByteArray>>();
+	final Map<ByteArray, Set<PartitionData>> idsToPartition = new HashMap<ByteArray, Set<PartitionData>>();
+	final Map<ByteArray, STORE_VALUE> primaries = new HashMap<ByteArray, STORE_VALUE>();
+	final Map<ByteArray, STORE_VALUE> others = new HashMap<ByteArray, STORE_VALUE>();
 
 	protected final Partitioner<Object> partitioner;
 	protected final TypeConverter<STORE_VALUE> typeConverter;
@@ -82,7 +82,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	/**
 	 * Run State
 	 */
-	protected ByteArrayId startingPoint;
+	protected ByteArray startingPoint;
 	protected NeighborIndex<STORE_VALUE> index;
 
 	public NNProcessor(
@@ -101,7 +101,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 
 	private PartitionData add(
 			final PartitionData pd,
-			final ByteArrayId itemId ) {
+			final ByteArray itemId ) {
 		PartitionData singleton = uniqueSetOfPartitions.get(pd);
 		if (singleton == null) {
 			uniqueSetOfPartitions.put(
@@ -110,9 +110,9 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 			singleton = pd;
 		}
 
-		Set<ByteArrayId> idsSet = partitionsToIds.get(singleton);
+		Set<ByteArray> idsSet = partitionsToIds.get(singleton);
 		if (idsSet == null) {
-			idsSet = new HashSet<ByteArrayId>();
+			idsSet = new HashSet<ByteArray>();
 			partitionsToIds.put(
 					singleton,
 					idsSet);
@@ -138,12 +138,12 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	}
 
 	public void remove(
-			final ByteArrayId id ) {
+			final ByteArray id ) {
 
 		final Set<PartitionData> partitionSet = idsToPartition.remove(id);
 		if (partitionSet != null) {
 			for (PartitionData pd : partitionSet) {
-				final Set<ByteArrayId> idSet = partitionsToIds.get(pd);
+				final Set<ByteArray> idSet = partitionsToIds.get(pd);
 				if (idSet != null) idSet.remove(id);
 			}
 		}
@@ -155,7 +155,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	}
 
 	public void add(
-			final ByteArrayId id,
+			final ByteArray id,
 			final boolean isPrimary,
 			final PARTITION_VALUE partitionValue )
 			throws IOException {
@@ -204,7 +204,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	public interface CompleteNotifier<STORE_VALUE>
 	{
 		public void complete(
-				ByteArrayId id,
+				ByteArray id,
 				STORE_VALUE value,
 				NeighborList<STORE_VALUE> list )
 				throws IOException,
@@ -223,11 +223,11 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 	 */
 	public boolean trimSmallPartitions(
 			int size ) {
-		Iterator<Map.Entry<PartitionData, Set<ByteArrayId>>> it = partitionsToIds.entrySet().iterator();
+		Iterator<Map.Entry<PartitionData, Set<ByteArray>>> it = partitionsToIds.entrySet().iterator();
 		while (it.hasNext()) {
-			final Map.Entry<PartitionData, Set<ByteArrayId>> entry = it.next();
+			final Map.Entry<PartitionData, Set<ByteArray>> entry = it.next();
 			if (entry.getValue().size() < size) {
-				for (ByteArrayId id : entry.getValue()) {
+				for (ByteArray id : entry.getValue()) {
 					final Set<PartitionData> partitionsForId = idsToPartition.get(id);
 					partitionsForId.remove(entry.getKey());
 					if (partitionsForId.isEmpty()) {
@@ -256,9 +256,9 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 				listFactory);
 
 		double farthestDistance = 0;
-		ByteArrayId farthestNeighbor = null;
-		ByteArrayId nextStart = startingPoint;
-		final Set<ByteArrayId> inspectionSet = new HashSet<ByteArrayId>();
+		ByteArray farthestNeighbor = null;
+		ByteArray nextStart = startingPoint;
+		final Set<ByteArray> inspectionSet = new HashSet<ByteArray>();
 		inspectionSet.addAll(primaries.keySet());
 
 		if (inspectionSet.size() > 0 && nextStart == null) {
@@ -270,7 +270,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 			farthestDistance = 0;
 			final Set<PartitionData> partition = idsToPartition.get(nextStart);
 			final STORE_VALUE primary = primaries.get(nextStart);
-			final ByteArrayId primaryId = nextStart;
+			final ByteArray primaryId = nextStart;
 			nextStart = null;
 			farthestNeighbor = null;
 			if (LOGGER.isTraceEnabled()) LOGGER.trace("processing " + primaryId);
@@ -285,7 +285,7 @@ public class NNProcessor<PARTITION_VALUE, STORE_VALUE>
 					primary);
 
 			for (PartitionData pd : partition) {
-				for (ByteArrayId neighborId : partitionsToIds.get(pd)) {
+				for (ByteArray neighborId : partitionsToIds.get(pd)) {
 					if (neighborId.equals(primaryId)) continue;
 					boolean isAPrimary = true;
 					STORE_VALUE neighbor = primaries.get(neighborId);

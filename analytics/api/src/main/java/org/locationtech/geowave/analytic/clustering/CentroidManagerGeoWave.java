@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -37,14 +37,12 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.geotools.filter.FilterFactoryImpl;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.analytic.AnalyticFeature;
+import org.locationtech.geowave.analytic.AnalyticFeature.ClusterFeatureAttribute;
 import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 import org.locationtech.geowave.analytic.AnalyticItemWrapperFactory;
 import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.ScopedJobConfiguration;
-import org.locationtech.geowave.analytic.AnalyticFeature.ClusterFeatureAttribute;
 import org.locationtech.geowave.analytic.clustering.exception.MatchingCentroidNotFoundException;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
@@ -53,15 +51,16 @@ import org.locationtech.geowave.analytic.param.StoreParameters;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -128,7 +127,7 @@ public class CentroidManagerGeoWave<T> implements
 		GlobalParameters.Global.BATCH_ID,
 		CentroidParameters.Centroid.DATA_TYPE_ID,
 		CentroidParameters.Centroid.DATA_NAMESPACE_URI,
-		CentroidParameters.Centroid.INDEX_ID,
+		CentroidParameters.Centroid.INDEX_NAME,
 		CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 		CentroidParameters.Centroid.ZOOM_LEVEL
 	};
@@ -141,7 +140,7 @@ public class CentroidManagerGeoWave<T> implements
 
 	private DataStore dataStore;
 	private IndexStore indexStore;
-	private PrimaryIndex index;
+	private Index index;
 
 	public CentroidManagerGeoWave(
 			final DataStore dataStore,
@@ -150,7 +149,7 @@ public class CentroidManagerGeoWave<T> implements
 			final AnalyticItemWrapperFactory<T> centroidFactory,
 			final String centroidDataTypeId,
 			final short centroidInternalAdapterId,
-			final String indexId,
+			final String indexName,
 			final String batchId,
 			final int level ) {
 		this.centroidFactory = centroidFactory;
@@ -159,8 +158,7 @@ public class CentroidManagerGeoWave<T> implements
 		this.dataStore = dataStore;
 		this.indexStore = indexStore;
 		this.centroidDataTypeId = centroidDataTypeId;
-		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				indexId));
+		index = indexStore.getIndex(indexName);
 		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
 				centroidInternalAdapterId).getAdapter();
 	}
@@ -242,10 +240,10 @@ public class CentroidManagerGeoWave<T> implements
 				GlobalParameters.Global.BATCH_ID,
 				Long.toString(Calendar.getInstance().getTime().getTime()));
 
-		final String indexId = scopedJob.getString(
-				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString());
+		final String indexName = scopedJob.getString(
+				CentroidParameters.Centroid.INDEX_NAME,
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName());
 		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				context,
 				scope,
@@ -253,13 +251,11 @@ public class CentroidManagerGeoWave<T> implements
 
 		dataStore = store.getDataStoreOptions().createDataStore();
 		indexStore = store.getDataStoreOptions().createIndexStore();
-		index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				indexId));
+		index = indexStore.getIndex(indexName);
 		final PersistentAdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 		adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
-				store.getDataStoreOptions().createInternalAdapterStore().getInternalAdapterId(
-						new ByteArrayId(
-								centroidDataTypeId))).getAdapter();
+				store.getDataStoreOptions().createInternalAdapterStore().getAdapterId(
+						centroidDataTypeId)).getAdapter();
 	}
 
 	/**
@@ -300,18 +296,15 @@ public class CentroidManagerGeoWave<T> implements
 	public void delete(
 			final String[] dataIds )
 			throws IOException {
-		final ByteArrayId adapterId = new ByteArrayId(
-				centroidDataTypeId);
 		for (final String dataId : dataIds) {
-
 			if (dataId != null) {
-				dataStore.delete(
-						new QueryOptions(
-								adapterId,
-								index.getId()),
-						new DataIdQuery(
-								new ByteArrayId(
-										dataId)));
+				final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder().addTypeName(
+						centroidDataTypeId).indexName(
+						index.getName());
+				dataStore.delete(bldr.constraints(
+						bldr.constraintsFactory().dataIds(
+								new ByteArray(
+										dataId))).build());
 			}
 		}
 	}
@@ -319,7 +312,7 @@ public class CentroidManagerGeoWave<T> implements
 	@Override
 	public List<String> getAllCentroidGroups()
 			throws IOException {
-		final List<String> groups = new ArrayList<String>();
+		final List<String> groups = new ArrayList<>();
 		final CloseableIterator<T> it = getRawCentroids(
 				this.batchId,
 				null);
@@ -394,7 +387,7 @@ public class CentroidManagerGeoWave<T> implements
 			final String batchID,
 			final String groupID )
 			throws IOException {
-		final List<AnalyticItemWrapper<T>> centroids = new ArrayList<AnalyticItemWrapper<T>>();
+		final List<AnalyticItemWrapper<T>> centroids = new ArrayList<>();
 		try {
 
 			CloseableIterator<T> it = null;
@@ -410,14 +403,7 @@ public class CentroidManagerGeoWave<T> implements
 			}
 			finally {
 				if (it != null) {
-					try {
-						it.close();
-					}
-					catch (final IOException e) {
-						LOGGER.warn(
-								"Unable to close the iterator",
-								e);
-					}
+					it.close();
 				}
 			}
 
@@ -434,23 +420,16 @@ public class CentroidManagerGeoWave<T> implements
 	@SuppressWarnings("unchecked")
 	public AnalyticItemWrapper<T> getCentroid(
 			final String dataId ) {
-		final ByteArrayId adapterId = new ByteArrayId(
-				centroidDataTypeId);
-		try (CloseableIterator<T> it = dataStore.query(
-				new QueryOptions(
-						adapterId,
-						index.getId()),
-				new DataIdQuery(
-						new ByteArrayId(
-								dataId)))) {
+		final QueryBuilder<T, ?> bldr = (QueryBuilder<T, ?>) QueryBuilder.newBuilder().addTypeName(
+				centroidDataTypeId).indexName(
+				index.getName());
+		try (CloseableIterator<T> it = dataStore.query(bldr.constraints(
+				bldr.constraintsFactory().dataIds(
+						new ByteArray(
+								dataId))).build())) {
 			if (it.hasNext()) {
 				return centroidFactory.create(it.next());
 			}
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Failed to fined centroid " + dataId.toString(),
-					e);
 		}
 		return null;
 	}
@@ -492,14 +471,12 @@ public class CentroidManagerGeoWave<T> implements
 							false),
 					batchIdFilter);
 		}
-		return (CloseableIterator<T>) dataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
-				new CQLQuery(
-						null,
-						finalFilter,
-						adapter));
+		final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName());
+		return (CloseableIterator<T>) dataStore.query(bldr.constraints(
+				bldr.constraintsFactory().filterConstraints(
+						finalFilter)).build());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -511,9 +488,10 @@ public class CentroidManagerGeoWave<T> implements
 		try (final CloseableIterator<T> it = getRawCentroids(
 				fromBatchId,
 				groupID)) {
-			try (final IndexWriter indexWriter = dataStore.createWriter(
+			dataStore.addType(
 					adapter,
-					index)) {
+					index);
+			try (final Writer indexWriter = dataStore.createWriter(adapter.getTypeName())) {
 				while (it.hasNext()) {
 					final AnalyticItemWrapper<T> item = centroidFactory.create(it.next());
 					item.setBatchID(this.batchId);
@@ -567,8 +545,8 @@ public class CentroidManagerGeoWave<T> implements
 	}
 
 	@Override
-	public ByteArrayId getIndexId() {
-		return index.getId();
+	public String getIndexName() {
+		return index.getName();
 	}
 
 	public String getBatchId() {
@@ -766,7 +744,7 @@ public class CentroidManagerGeoWave<T> implements
 		// File shp = new File(parentDir + "/" + this.batchId + ".shp");
 		// File shx = new File(parentDir + "/" + this.batchId + ".shx");
 		final ShapefileDataStoreFactory dataStoreFactory = new ShapefileDataStoreFactory();
-		final Map<String, Serializable> params = new HashMap<String, Serializable>();
+		final Map<String, Serializable> params = new HashMap<>();
 		try {
 			params.put(
 					"url",
@@ -832,8 +810,7 @@ public class CentroidManagerGeoWave<T> implements
 	}
 
 	@Override
-	public ByteArrayId getDataTypeId() {
-		return new ByteArrayId(
-				this.centroidDataTypeId);
+	public String getDataTypeName() {
+		return this.centroidDataTypeId;
 	}
 }

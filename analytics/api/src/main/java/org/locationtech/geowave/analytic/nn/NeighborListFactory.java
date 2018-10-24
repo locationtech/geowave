@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.nn;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public interface NeighborListFactory<NNTYPE>
 {
 	public NeighborList<NNTYPE> buildNeighborList(
-			ByteArrayId cnterId,
+			ByteArray cnterId,
 			NNTYPE center );
 }

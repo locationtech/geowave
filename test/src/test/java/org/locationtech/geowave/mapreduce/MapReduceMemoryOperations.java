@@ -15,12 +15,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedSet;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.SinglePartitionQueryRanges;
 import org.locationtech.geowave.core.store.memory.MemoryDataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
 import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
@@ -32,24 +32,24 @@ public class MapReduceMemoryOperations extends
 		MapReduceDataStoreOperations
 {
 
-	private final Map<ByteArrayId, SortedSet<MemoryStoreEntry>> storeData = Collections
-			.synchronizedMap(new HashMap<ByteArrayId, SortedSet<MemoryStoreEntry>>());
+	private final Map<ByteArray, SortedSet<MemoryStoreEntry>> storeData = Collections
+			.synchronizedMap(new HashMap<ByteArray, SortedSet<MemoryStoreEntry>>());
 
 	@Override
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			RecordReaderParams<T> readerParams ) {
 
-		ByteArrayId partitionKey = new ByteArrayId(
+		ByteArray partitionKey = new ByteArray(
 				readerParams.getRowRange().getPartitionKey() == null ? new byte[0] : readerParams
 						.getRowRange()
 						.getPartitionKey());
 
 		ByteArrayRange sortRange = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						readerParams.getRowRange().getStartSortKey() == null ? new byte[0] : readerParams
 								.getRowRange()
 								.getStartSortKey()),
-				new ByteArrayId(
+				new ByteArray(
 						readerParams.getRowRange().getEndSortKey() == null ? new byte[0] : readerParams
 								.getRowRange()
 								.getEndSortKey()));
@@ -57,7 +57,8 @@ public class MapReduceMemoryOperations extends
 		return createReader((ReaderParams) new ReaderParams(
 				readerParams.getIndex(),
 				readerParams.getAdapterStore(),
-				Lists.newArrayList(readerParams.getAdapterIds()),
+				readerParams.getInternalAdapterStore(),
+				readerParams.getAdapterIds(),
 				readerParams.getMaxResolutionSubsamplingPerDimension(),
 				readerParams.getAggregation(),
 				readerParams.getFieldSubsets(),

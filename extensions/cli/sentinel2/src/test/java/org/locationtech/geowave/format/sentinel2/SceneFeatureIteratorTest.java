@@ -25,7 +25,7 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.geometry.DirectPosition2D;
 import org.geotools.geometry.Envelope2D;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.format.sentinel2.SceneFeatureIterator;
 import org.locationtech.geowave.format.sentinel2.Sentinel2ImageryProvider;
 import org.opengis.feature.simple.SimpleFeature;

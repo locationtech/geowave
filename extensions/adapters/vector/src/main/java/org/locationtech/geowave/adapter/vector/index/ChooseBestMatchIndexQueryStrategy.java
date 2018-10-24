@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,21 +10,21 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.vector.index;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.index.IndexUtils;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
@@ -42,20 +42,20 @@ public class ChooseBestMatchIndexQueryStrategy implements
 	}
 
 	@Override
-	public CloseableIterator<Index<?, ?>> getIndices(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+	public CloseableIterator<Index> getIndices(
+			final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
 			final BasicQuery query,
-			final PrimaryIndex[] indices,
+			final Index[] indices,
 			final Map<QueryHint, Object> hints ) {
-		return new CloseableIterator<Index<?, ?>>() {
-			PrimaryIndex nextIdx = null;
+		return new CloseableIterator<Index>() {
+			Index nextIdx = null;
 			boolean done = false;
 			int i = 0;
 
 			@Override
 			public boolean hasNext() {
 				long min = Long.MAX_VALUE;
-				PrimaryIndex bestIdx = null;
+				Index bestIdx = null;
 
 				while (!done && (i < indices.length)) {
 					nextIdx = indices[i++];
@@ -64,13 +64,20 @@ public class ChooseBestMatchIndexQueryStrategy implements
 					}
 					final List<MultiDimensionalNumericData> constraints = query.getIndexConstraints(nextIdx);
 					boolean containsRowRangeHistograms = false;
-					for (final ByteArrayId statsId : stats.keySet()) {
+
+					final StatisticsQuery<NumericHistogram> query = VectorStatisticsQueryBuilder
+							.newBuilder()
+							.factory()
+							.rowHistogram()
+							.indexName(
+									nextIdx.getName())
+							.build();
+					for (final StatisticsId statsId : stats.keySet()) {
 						// find out if any partition histograms exist for this
 						// index ID by checking the prefix
-						if (statsId.getString().startsWith(
-								RowRangeHistogramStatistics.composeId(
-										nextIdx.getId(),
-										null).getString())) {
+						if (statsId.getType().equals(
+								query.getStatsType()) && statsId.getExtendedId().startsWith(
+								query.getExtendedId())) {
 							containsRowRangeHistograms = true;
 							break;
 						}
@@ -100,6 +107,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 						final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 								constraints,
 								nextIdx.getIndexStrategy(),
+								null,
 								maxRangeDecomposition);
 						final long temp = DataStoreUtils.cardinality(
 								nextIdx,
@@ -118,12 +126,12 @@ public class ChooseBestMatchIndexQueryStrategy implements
 			}
 
 			@Override
-			public Index<?, ?> next()
+			public Index next()
 					throws NoSuchElementException {
 				if (nextIdx == null) {
 					throw new NoSuchElementException();
 				}
-				final Index<?, ?> returnVal = nextIdx;
+				final Index returnVal = nextIdx;
 				nextIdx = null;
 				return returnVal;
 			}
@@ -132,8 +140,7 @@ public class ChooseBestMatchIndexQueryStrategy implements
 			public void remove() {}
 
 			@Override
-			public void close()
-					throws IOException {}
+			public void close() {}
 		};
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -18,14 +18,13 @@ import java.util.Map.Entry;
 import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,7 +37,7 @@ public class AccumuloSecondaryIndexUtils
 	/**
 	 * Decodes an Accumulo key-value pair from the result of a secondary index
 	 * scan back into the original type using the given data adapter
-	 * 
+	 *
 	 * @param key
 	 * @param value
 	 * @param adapter
@@ -49,7 +48,7 @@ public class AccumuloSecondaryIndexUtils
 			final Key key,
 			final Value value,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		Map<Key, Value> rowMapping;
 		try {
 			rowMapping = WholeRowIterator.decodeRow(
@@ -60,26 +59,26 @@ public class AccumuloSecondaryIndexUtils
 			LOGGER.error("Could not decode row from iterator. Ensure whole row iterators are being used.");
 			return null;
 		}
-		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<CommonIndexValue>();
-		final PersistentDataset<Object> extendedData = new PersistentDataset<Object>();
-		final PersistentDataset<byte[]> unknownData = new PersistentDataset<byte[]>();
-		ByteArrayId dataId = null;
-		Map<ByteArrayId, byte[]> fieldIdToValueMap = new HashMap<>();
+		final PersistentDataset<CommonIndexValue> commonData = new PersistentDataset<>();
+		final PersistentDataset<Object> extendedData = new PersistentDataset<>();
+		final PersistentDataset<byte[]> unknownData = new PersistentDataset<>();
+		ByteArray dataId = null;
+		final Map<String, byte[]> fieldIdToValueMap = new HashMap<>();
 		for (final Entry<Key, Value> entry : rowMapping.entrySet()) {
 			final byte[] cqBytes = entry.getKey().getColumnQualifierData().getBackingArray();
 			final String dataIdString = SecondaryIndexUtils.getDataId(cqBytes);
 			if (dataId == null) {
-				dataId = new ByteArrayId(
+				dataId = new ByteArray(
 						dataIdString);
 			}
-			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cqBytes);
+			final String fieldId = SecondaryIndexUtils.getFieldName(cqBytes);
 			final byte[] fieldValue = entry.getValue().get();
 			fieldIdToValueMap.put(
 					fieldId,
 					fieldValue);
 		}
-		for (final Entry<ByteArrayId, byte[]> entry : fieldIdToValueMap.entrySet()) {
-			final ByteArrayId fieldId = entry.getKey();
+		for (final Entry<String, byte[]> entry : fieldIdToValueMap.entrySet()) {
+			final String fieldId = entry.getKey();
 			final byte[] fieldValueBytes = entry.getValue();
 			final FieldReader<? extends CommonIndexValue> indexFieldReader = index.getIndexModel().getReader(
 					fieldId);
@@ -105,7 +104,7 @@ public class AccumuloSecondaryIndexUtils
 			}
 		}
 		final IndexedAdapterPersistenceEncoding encodedData = new IndexedAdapterPersistenceEncoding(
-				adapter.getInternalAdapterId(),
+				adapter.getAdapterId(),
 				dataId,
 				null,
 				null,

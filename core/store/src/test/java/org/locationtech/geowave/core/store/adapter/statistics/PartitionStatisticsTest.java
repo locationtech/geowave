@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,9 +16,8 @@ import java.util.Arrays;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -33,11 +32,11 @@ public class PartitionStatisticsTest
 	private GeoWaveKey genKey(
 			final long id ) {
 		final InsertionIds insertionIds = new InsertionIds(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {
 							(byte) (counter++ % 32)
 						}),
-				Arrays.asList(new ByteArrayId(
+				Arrays.asList(new ByteArray(
 						String.format(
 								"\12%5h",
 								base + id) + "20030f89")));
@@ -49,10 +48,9 @@ public class PartitionStatisticsTest
 
 	@Test
 	public void testIngest() {
-		final PartitionStatistics<Integer> stats = new PartitionStatistics<Integer>(
+		final PartitionStatistics<Integer> stats = new PartitionStatistics<>(
 				(short) 20030,
-				new ByteArrayId(
-						"20030"));
+				"20030");
 
 		for (long i = 0; i < 10000; i++) {
 			final GeoWaveRow row = new GeoWaveRowImpl(
@@ -70,7 +68,7 @@ public class PartitionStatisticsTest
 				stats.getPartitionKeys().size());
 		for (byte i = 0; i < 32; i++) {
 			Assert.assertTrue(stats.getPartitionKeys().contains(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {
 								i
 							})));

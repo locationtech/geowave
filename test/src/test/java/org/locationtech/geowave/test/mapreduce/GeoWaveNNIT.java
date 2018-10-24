@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,8 +19,6 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.SequenceFile;
 import org.apache.hadoop.io.SequenceFile.Reader;
 import org.apache.hadoop.io.Text;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.crs.DefaultGeographicCRS;
@@ -45,18 +43,19 @@ import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.partitioner.OrthodromicDistancePartitioner;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.store.DataStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -79,6 +78,7 @@ public class GeoWaveNNIT extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(GeoWaveNNIT.class);
 	private static long startMillis;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStorePluginOptions;
 	}
@@ -144,7 +144,7 @@ public class GeoWaveNNIT extends
 	}
 
 	private void runNN(
-			final DistributableQuery query )
+			final QueryConstraints query )
 			throws Exception {
 
 		final NNJobRunner jobRunner = new NNJobRunner();
@@ -198,7 +198,8 @@ public class GeoWaveNNIT extends
 							InputParameters.Input.INPUT_FORMAT
 						},
 						new Object[] {
-							query,
+							QueryBuilder.newBuilder().constraints(
+									query).build(),
 							Integer.toString(MapReduceTestUtils.MIN_INPUT_SPLITS),
 							Integer.toString(MapReduceTestUtils.MAX_INPUT_SPLITS),
 							0.2,

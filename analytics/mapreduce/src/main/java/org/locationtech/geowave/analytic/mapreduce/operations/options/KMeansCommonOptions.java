@@ -36,7 +36,7 @@ public class KMeansCommonOptions
 	}, description = "Centroid Exractor Class implements org.locationtech.geowave.analytics.extract.CentroidExtractor")
 	private String centroidExtractorClass;
 
-	@CentroidParameter(CentroidParameters.Centroid.INDEX_ID)
+	@CentroidParameter(CentroidParameters.Centroid.INDEX_NAME)
 	@Parameter(names = {
 		"-cid",
 		"--centroidIndexId"
@@ -148,7 +148,7 @@ public class KMeansCommonOptions
 	}, description = "Data Type ID for a centroid item")
 	private String hullDataTypeId;
 
-	@HullParameter(HullParameters.Hull.INDEX_ID)
+	@HullParameter(HullParameters.Hull.INDEX_NAME)
 	@Parameter(names = {
 		"-hid",
 		"--hullIndexId"

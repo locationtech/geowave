@@ -10,8 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.spi;
 
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeOptions;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 
@@ -40,7 +40,7 @@ public class TestDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex(
+	public Index createIndex(
 			DimensionalityTypeOptions options ) {
 		return null;
 	}

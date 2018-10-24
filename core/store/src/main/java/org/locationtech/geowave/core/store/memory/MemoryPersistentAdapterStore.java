@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
@@ -47,7 +47,7 @@ public class MemoryPersistentAdapterStore implements
 		adapterMap = Collections.synchronizedMap(new HashMap<Short, InternalDataAdapter<?>>());
 		for (final InternalDataAdapter<?> adapter : adapters) {
 			adapterMap.put(
-					adapter.getInternalAdapterId(),
+					adapter.getAdapterId(),
 					adapter);
 		}
 	}
@@ -56,7 +56,7 @@ public class MemoryPersistentAdapterStore implements
 	public void addAdapter(
 			final InternalDataAdapter<?> InternalDataadapter ) {
 		adapterMap.put(
-				InternalDataadapter.getInternalAdapterId(),
+				InternalDataadapter.getAdapterId(),
 				InternalDataadapter);
 	}
 

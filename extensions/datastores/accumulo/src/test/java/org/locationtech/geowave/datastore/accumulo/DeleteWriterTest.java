@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,8 +11,8 @@
 package org.locationtech.geowave.datastore.accumulo;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,29 +39,28 @@ import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.base.BaseDataStore;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.InsertionIdQuery;
-import org.locationtech.geowave.core.store.query.PrefixIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometry;
 import org.locationtech.geowave.datastore.accumulo.AccumuloDataStoreStatsTest.TestGeometryAdapter;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -81,12 +80,12 @@ public class DeleteWriterTest
 	private DataStore mockDataStore;
 	private InsertionIds rowIds1;
 	private InsertionIds rowIds3;
-	private WritableDataAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
+	private DataTypeAdapter<AccumuloDataStoreStatsTest.TestGeometry> adapter;
 	private DataStatisticsStore statsStore;
 	InternalAdapterStore internalAdapterStore;
 	protected AccumuloOptions options = new AccumuloOptions();
 
-	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+	private static final CommonIndexModel MODEL = new SpatialDimensionalityTypeProvider().createIndex(
 			new SpatialOptions()).getIndexModel();
 
 	private static final NumericDimensionDefinition[] SPATIAL_DIMENSIONS = new NumericDimensionDefinition[] {
@@ -105,7 +104,7 @@ public class DeleteWriterTest
 	final SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"yyyy-MM-dd HH:mm:ss.S");
 
-	private static final PrimaryIndex index = new PrimaryIndex(
+	private static final Index index = new PrimaryIndex(
 			STRATEGY,
 			MODEL);
 
@@ -175,10 +174,10 @@ public class DeleteWriterTest
 
 		adapter = new TestGeometryAdapter();
 		final GeometryFactory factory = new GeometryFactory();
-
-		try (IndexWriter indexWriter = mockDataStore.createWriter(
+		mockDataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer indexWriter = mockDataStore.createWriter(adapter.getTypeName())) {
 			rowIds1 = indexWriter.write(new AccumuloDataStoreStatsTest.TestGeometry(
 					factory.createLineString(new Coordinate[] {
 						new Coordinate(
@@ -278,48 +277,45 @@ public class DeleteWriterTest
 	@Test
 	public void testDeleteByInsertionId()
 			throws IOException {
-		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
+		final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				3,
 				countStats.getCount());
 		assertTrue(rowIds1.getSize() > 1);
 
-		final Pair<ByteArrayId, ByteArrayId> key = rowIds1.getFirstPartitionAndSortKeyPair();
-		try (final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
+		final Pair<ByteArray, ByteArray> key = rowIds1.getFirstPartitionAndSortKeyPair();
+		try (final CloseableIterator it1 = mockDataStore.query(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new InsertionIdQuery(
 						key.getLeft(),
 						key.getRight(),
-						new ByteArrayId(
-								"test_line_1")))) {
+						new ByteArray(
+								"test_line_1"))).build())) {
 			assertTrue(it1.hasNext());
 		}
-		assertTrue(mockDataStore.delete(
-				new QueryOptions(
-						adapter,
-						index),
+		assertTrue(mockDataStore.delete(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new DataIdQuery(
-						new ByteArrayId(
-								"test_pt_1"))));
-		try (final CloseableIterator it2 = mockDataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
+						new ByteArray(
+								"test_pt_1"))).build()));
+		try (final CloseableIterator it2 = mockDataStore.query(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new InsertionIdQuery(
 						key.getLeft(),
 						key.getRight(),
-						new ByteArrayId(
-								"test_pt_1")))) {
+						new ByteArray(
+								"test_pt_1"))).build())) {
 			assertTrue(!it2.hasNext());
 		}
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				2,
 				countStats.getCount());
@@ -328,10 +324,10 @@ public class DeleteWriterTest
 	@Test
 	public void testDeleteBySpatialConstraint()
 			throws IOException {
-		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
+		final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				3,
 				countStats.getCount());
@@ -341,25 +337,22 @@ public class DeleteWriterTest
 						-77,
 						38,
 						39)));
-		try (final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(),
-				spatialQuery)) {
+		try (final CloseableIterator it1 = mockDataStore.query(QueryBuilder.newBuilder().constraints(
+				spatialQuery).build())) {
 			assertTrue(it1.hasNext());
 			assertTrue(adapter.getDataId(
 					(TestGeometry) it1.next()).getString().equals(
 					"test_pt_1"));
 		}
-		assertTrue(mockDataStore.delete(
-				new QueryOptions(),
-				spatialQuery));
-		try (final CloseableIterator it2 = mockDataStore.query(
-				new QueryOptions(),
-				spatialQuery)) {
+		assertTrue(mockDataStore.delete(QueryBuilder.newBuilder().constraints(
+				spatialQuery).build()));
+		try (final CloseableIterator it2 = mockDataStore.query(QueryBuilder.newBuilder().constraints(
+				spatialQuery).build())) {
 			assertTrue(!it2.hasNext());
 		}
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				2,
 				countStats.getCount());
@@ -368,14 +361,14 @@ public class DeleteWriterTest
 	@Test
 	public void testDeleteByPrefixId()
 			throws IOException {
-		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
+		final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				3,
 				countStats.getCount());
-		final Pair<ByteArrayId, ByteArrayId> rowId3 = rowIds3.getFirstPartitionAndSortKeyPair();
+		final Pair<ByteArray, ByteArray> rowId3 = rowIds3.getFirstPartitionAndSortKeyPair();
 		// just take the first half of the row ID as the prefix
 		final byte[] rowId3Prefix = Arrays.copyOf(
 				rowId3.getRight().getBytes(),
@@ -383,28 +376,25 @@ public class DeleteWriterTest
 
 		final PrefixIdQuery prefixIdQuery = new PrefixIdQuery(
 				rowId3.getLeft(),
-				new ByteArrayId(
+				new ByteArray(
 						rowId3Prefix));
-		try (final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(),
-				prefixIdQuery)) {
+		try (final CloseableIterator it1 = mockDataStore.query(QueryBuilder.newBuilder().constraints(
+				prefixIdQuery).build())) {
 			assertTrue(it1.hasNext());
 			assertTrue(adapter.getDataId(
 					(TestGeometry) it1.next()).getString().equals(
 					"test_pt_1"));
 			assertFalse(it1.hasNext());
 		}
-		assertTrue(mockDataStore.delete(
-				new QueryOptions(),
-				prefixIdQuery));
-		try (final CloseableIterator it2 = mockDataStore.query(
-				new QueryOptions(),
-				prefixIdQuery)) {
+		assertTrue(mockDataStore.delete(QueryBuilder.newBuilder().constraints(
+				prefixIdQuery).build()));
+		try (final CloseableIterator it2 = mockDataStore.query(QueryBuilder.newBuilder().constraints(
+				prefixIdQuery).build())) {
 			assertTrue(!it2.hasNext());
 		}
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				2,
 				countStats.getCount());
@@ -413,43 +403,40 @@ public class DeleteWriterTest
 	@Test
 	public void testDeleteByDataId()
 			throws IOException {
-		short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
+		final short internalAdapterId = internalAdapterStore.getAdapterId(adapter.getTypeName());
 		CountDataStatistics countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 		assertEquals(
 				3,
 				countStats.getCount());
 		assertTrue(rowIds1.getSize() > 1);
-		try (final CloseableIterator it1 = mockDataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
+		try (final CloseableIterator it1 = mockDataStore.query(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new DataIdQuery(
-						new ByteArrayId(
-								"test_pt_1")))) {
+						new ByteArray(
+								"test_pt_1"))).build())) {
 			assertTrue(it1.hasNext());
 		}
-		assertTrue(((BaseDataStore) mockDataStore).delete(
-				new QueryOptions(
-						adapter,
-						index),
+		assertTrue(((BaseDataStore) mockDataStore).delete(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new DataIdQuery(
-						new ByteArrayId(
-								"test_pt_1"))));
-		try (final CloseableIterator it2 = mockDataStore.query(
-				new QueryOptions(
-						adapter,
-						index),
+						new ByteArray(
+								"test_pt_1"))).build()));
+		try (final CloseableIterator it2 = mockDataStore.query(QueryBuilder.newBuilder().addTypeName(
+				adapter.getTypeName()).indexName(
+				index.getName()).constraints(
 				new DataIdQuery(
-						new ByteArrayId(
-								"test_pt_1")))) {
+						new ByteArray(
+								"test_pt_1"))).build())) {
 
 			assertTrue(!it2.hasNext());
 		}
 		countStats = (CountDataStatistics) statsStore.getDataStatistics(
 				internalAdapterId,
-				CountDataStatistics.STATS_TYPE);
+				CountDataStatistics.STATS_TYPE).next();
 
 		assertEquals(
 				2,

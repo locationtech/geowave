@@ -14,10 +14,10 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * This is used internally to translate DataStore rows into native objects
@@ -32,7 +32,7 @@ public abstract class EntryIteratorWrapper<T> implements
 		Iterator<T>
 {
 	protected final AdapterStore adapterStore;
-	protected final PrimaryIndex index;
+	protected final Index index;
 	protected final Iterator<GeoWaveRow> scannerIt;
 	protected final QueryFilter clientFilter;
 	protected final ScanCallback<T, ? extends GeoWaveRow> scanCallback;
@@ -41,7 +41,7 @@ public abstract class EntryIteratorWrapper<T> implements
 
 	public EntryIteratorWrapper(
 			final AdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, ? extends GeoWaveRow> scanCallback ) {
@@ -77,7 +77,7 @@ public abstract class EntryIteratorWrapper<T> implements
 	protected abstract T decodeRow(
 			final GeoWaveRow row,
 			final QueryFilter clientFilter,
-			final PrimaryIndex index );
+			final Index index );
 
 	@Override
 	public boolean hasNext() {

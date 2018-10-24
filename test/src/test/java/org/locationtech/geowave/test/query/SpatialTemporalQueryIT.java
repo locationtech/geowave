@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -42,18 +42,18 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
 import org.locationtech.geowave.core.geotime.store.query.SpatialTemporalQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.PartitionStrategy;
-import org.locationtech.geowave.core.store.index.Index;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -82,15 +82,15 @@ public class SpatialTemporalQueryIT
 	private static final int MULTI_MONTH_YEAR = 2000;
 	private static final int MULTI_YEAR_MIN = 1980;
 	private static final int MULTI_YEAR_MAX = 1995;
-	private static final PrimaryIndex DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index DAY_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.ROUND_ROBIN).setNumPartitions(
 			10).setPeriodicity(
 			Unit.DAY).createIndex();
-	private static final PrimaryIndex MONTH_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index MONTH_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.HASH).setNumPartitions(
 			100).setPeriodicity(
 			Unit.MONTH).createIndex();
-	private static final PrimaryIndex YEAR_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
+	private static final Index YEAR_INDEX = new SpatialTemporalIndexBuilder().setPartitionStrategy(
 			PartitionStrategy.HASH).setNumPartitions(
 			10).setPeriodicity(
 			Unit.YEAR).createIndex();
@@ -98,7 +98,7 @@ public class SpatialTemporalQueryIT
 	private FeatureDataAdapter timeRangeAdapter;
 	private DataStore dataStore;
 	private GeoWaveGTDataStore geowaveGtDataStore;
-	private PrimaryIndex currentGeotoolsIndex;
+	private Index currentGeotoolsIndex;
 
 	protected DataStorePluginOptions dataStoreOptions;
 
@@ -173,18 +173,20 @@ public class SpatialTemporalQueryIT
 				timeStampAdapter.getFeatureType());
 		final SimpleFeatureBuilder featureTimeRangeBuilder = new SimpleFeatureBuilder(
 				timeRangeAdapter.getFeatureType());
-		final IndexWriter timeWriters = dataStore.createWriter(
+		dataStore.addType(
 				timeStampAdapter,
 				YEAR_INDEX,
 				MONTH_INDEX,
 				DAY_INDEX);
+		final Writer timeWriters = dataStore.createWriter(timeStampAdapter.getTypeName());
 		// time ranges for days isn't tested so we don't have to deal with
 		// ingesting into the day index, the multi-year test case (requiring
 		// 1000+ partitions)
-		final IndexWriter rangeWriters = dataStore.createWriter(
+		dataStore.addType(
 				timeRangeAdapter,
 				YEAR_INDEX,
 				MONTH_INDEX);
+		final Writer rangeWriters = dataStore.createWriter(timeRangeAdapter.getTypeName());
 
 		try {
 			for (int day = cal.getActualMinimum(Calendar.DAY_OF_MONTH); day <= cal
@@ -305,18 +307,18 @@ public class SpatialTemporalQueryIT
 						return new IndexQueryStrategySPI() {
 
 							@Override
-							public CloseableIterator<Index<?, ?>> getIndices(
-									final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+							public CloseableIterator<Index> getIndices(
+									final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
 									final BasicQuery query,
-									final PrimaryIndex[] indices,
+									final Index[] indices,
 									final Map<QueryHint, Object> hints ) {
-								return new CloseableIteratorWrapper<Index<?, ?>>(
+								return new CloseableIteratorWrapper<>(
 										new Closeable() {
 											@Override
 											public void close()
 													throws IOException {}
 										},
-										(Iterator) Collections.singleton(
+										Collections.singleton(
 												currentGeotoolsIndex).iterator());
 							}
 						};
@@ -385,17 +387,17 @@ public class SpatialTemporalQueryIT
 	}
 
 	private static void write(
-			final IndexWriter[] writers,
+			final Writer[] writers,
 			final SimpleFeature feature )
 			throws IOException {
-		for (final IndexWriter writer : writers) {
+		for (final Writer writer : writers) {
 			writer.write(feature);
 		}
 	}
 
 	private static void ingestTimeRangeData(
 			final Calendar cal,
-			final IndexWriter writer,
+			final Writer writer,
 			final SimpleFeatureBuilder featureTimeRangeBuilder,
 			final int min,
 			final int max,
@@ -449,11 +451,13 @@ public class SpatialTemporalQueryIT
 			final int field,
 			final int min,
 			final int max,
-			final QueryOptions options,
+			final VectorQueryBuilder bldr,
 			final String name )
 			throws IOException,
 			CQLException {
-		options.setAdapter(timeStampAdapter);
+		bldr.setTypeNames(new String[] {
+			timeStampAdapter.getTypeName()
+		});
 		cal.set(
 				field,
 				min);
@@ -465,7 +469,7 @@ public class SpatialTemporalQueryIT
 		Date endOfQuery = cal.getTime();
 
 		testQueryMultipleBinsGivenDateRange(
-				options,
+				bldr,
 				name,
 				min,
 				midPoint,
@@ -481,7 +485,7 @@ public class SpatialTemporalQueryIT
 		endOfQuery = cal.getTime();
 
 		testQueryMultipleBinsGivenDateRange(
-				options,
+				bldr,
 				name,
 				midPoint,
 				max,
@@ -490,7 +494,7 @@ public class SpatialTemporalQueryIT
 	}
 
 	private void testQueryMultipleBinsGivenDateRange(
-			final QueryOptions options,
+			final VectorQueryBuilder bldr,
 			final String name,
 			final int minExpectedResult,
 			final int maxExpectedResult,
@@ -498,24 +502,24 @@ public class SpatialTemporalQueryIT
 			final Date endOfQuery )
 			throws CQLException,
 			IOException {
-		final Set<String> fidExpectedResults = new HashSet<String>(
+		final Set<String> fidExpectedResults = new HashSet<>(
 				(maxExpectedResult - minExpectedResult) + 1);
 		for (int i = minExpectedResult; i <= maxExpectedResult; i++) {
 			fidExpectedResults.add(name + ":" + i);
 		}
 		testQueryGivenDateRange(
-				options,
+				bldr,
 				name,
 				fidExpectedResults,
 				startOfQuery,
 				endOfQuery,
-				timeStampAdapter.getAdapterId().getString(),
+				timeStampAdapter.getTypeName(),
 				"timestamp",
 				"timestamp");
 	}
 
 	private void testQueryGivenDateRange(
-			final QueryOptions options,
+			final VectorQueryBuilder bldr,
 			final String name,
 			final Set<String> fidExpectedResults,
 			final Date startOfQuery,
@@ -528,9 +532,8 @@ public class SpatialTemporalQueryIT
 		final String cqlPredicate = "BBOX(\"geo\",-1,-1,1,1) AND \"" + startTimeAttribute + "\" <= '"
 				+ CQL_DATE_FORMAT.format(endOfQuery) + "' AND \"" + endTimeAttribute + "\" >= '"
 				+ CQL_DATE_FORMAT.format(startOfQuery) + "'";
-		final Set<String> fidResults = new HashSet<String>();
-		try (CloseableIterator<SimpleFeature> it = dataStore.query(
-				options,
+		final Set<String> fidResults = new HashSet<>();
+		try (CloseableIterator<SimpleFeature> it = (CloseableIterator) dataStore.query(bldr.constraints(
 				new SpatialTemporalQuery(
 						startOfQuery,
 						endOfQuery,
@@ -538,7 +541,7 @@ public class SpatialTemporalQueryIT
 								-1,
 								1,
 								-1,
-								1))))) {
+								1)))).build())) {
 			while (it.hasNext()) {
 				final SimpleFeature feature = it.next();
 				fidResults.add(feature.getID());
@@ -549,7 +552,7 @@ public class SpatialTemporalQueryIT
 				fidExpectedResults,
 				fidResults);
 
-		final Set<String> geotoolsFidResults = new HashSet<String>();
+		final Set<String> geotoolsFidResults = new HashSet<>();
 		// now make sure geotools results match
 		try (final SimpleFeatureIterator features = geowaveGtDataStore.getFeatureSource(
 				adapterId).getFeatures(
@@ -586,8 +589,8 @@ public class SpatialTemporalQueryIT
 	public void testQueryMultipleBinsDay()
 			throws IOException,
 			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(DAY_INDEX);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(DAY_INDEX.getName());
 		currentGeotoolsIndex = DAY_INDEX;
 		final Calendar cal = getInitialDayCalendar();
 		testQueryMultipleBins(
@@ -595,7 +598,7 @@ public class SpatialTemporalQueryIT
 				Calendar.DAY_OF_MONTH,
 				cal.getActualMinimum(Calendar.DAY_OF_MONTH),
 				cal.getActualMaximum(Calendar.DAY_OF_MONTH),
-				options,
+				bldr,
 				"day");
 	}
 
@@ -603,8 +606,8 @@ public class SpatialTemporalQueryIT
 	public void testQueryMultipleBinsMonth()
 			throws IOException,
 			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(MONTH_INDEX);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(MONTH_INDEX.getName());
 		currentGeotoolsIndex = MONTH_INDEX;
 		final Calendar cal = getInitialMonthCalendar();
 		testQueryMultipleBins(
@@ -612,7 +615,7 @@ public class SpatialTemporalQueryIT
 				Calendar.MONTH,
 				cal.getActualMinimum(Calendar.MONTH),
 				cal.getActualMaximum(Calendar.MONTH),
-				options,
+				bldr,
 				"month");
 
 	}
@@ -621,8 +624,8 @@ public class SpatialTemporalQueryIT
 	public void testQueryMultipleBinsYear()
 			throws IOException,
 			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(YEAR_INDEX);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(YEAR_INDEX.getName());
 		currentGeotoolsIndex = YEAR_INDEX;
 		final Calendar cal = getInitialYearCalendar();
 
@@ -631,7 +634,7 @@ public class SpatialTemporalQueryIT
 				Calendar.YEAR,
 				MULTI_YEAR_MIN,
 				MULTI_YEAR_MAX,
-				options,
+				bldr,
 				"year");
 	}
 
@@ -640,7 +643,7 @@ public class SpatialTemporalQueryIT
 			final int field,
 			final int min,
 			final int max,
-			final QueryOptions options,
+			final VectorQueryBuilder bldr,
 			final String name )
 			throws IOException,
 			CQLException {
@@ -653,17 +656,17 @@ public class SpatialTemporalQueryIT
 				field,
 				midPoint - 1);
 		Date endOfQuery = cal.getTime();
-		Set<String> fidExpectedResults = new HashSet<String>();
+		Set<String> fidExpectedResults = new HashSet<>();
 		fidExpectedResults.add(name + ":fullrange");
 		fidExpectedResults.add(name + ":firsthalfrange");
 
 		testQueryGivenDateRange(
-				options,
+				bldr,
 				name,
 				fidExpectedResults,
 				startOfQuery,
 				endOfQuery,
-				timeRangeAdapter.getAdapterId().getString(),
+				timeRangeAdapter.getTypeName(),
 				"startTime",
 				"endTime");
 
@@ -675,17 +678,17 @@ public class SpatialTemporalQueryIT
 				field,
 				max);
 		endOfQuery = cal.getTime();
-		fidExpectedResults = new HashSet<String>();
+		fidExpectedResults = new HashSet<>();
 		fidExpectedResults.add(name + ":fullrange");
 		fidExpectedResults.add(name + ":secondhalfrange");
 
 		testQueryGivenDateRange(
-				options,
+				bldr,
 				name,
 				fidExpectedResults,
 				startOfQuery,
 				endOfQuery,
-				timeRangeAdapter.getAdapterId().getString(),
+				timeRangeAdapter.getTypeName(),
 				"startTime",
 				"endTime");
 
@@ -702,12 +705,12 @@ public class SpatialTemporalQueryIT
 		fidExpectedResults.add(name + ":firsthalfrange");
 		fidExpectedResults.add(name + ":secondhalfrange");
 		testQueryGivenDateRange(
-				options,
+				bldr,
 				name,
 				fidExpectedResults,
 				startOfQuery,
 				endOfQuery,
-				timeRangeAdapter.getAdapterId().getString(),
+				timeRangeAdapter.getTypeName(),
 				"startTime",
 				"endTime");
 	}
@@ -716,17 +719,19 @@ public class SpatialTemporalQueryIT
 	public void testTimeRangeAcrossBinsMonth()
 			throws IOException,
 			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(MONTH_INDEX);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(MONTH_INDEX.getName());
 		currentGeotoolsIndex = MONTH_INDEX;
-		options.setAdapter(timeRangeAdapter);
+		bldr.setTypeNames(new String[] {
+			timeRangeAdapter.getTypeName()
+		});
 		final Calendar cal = getInitialMonthCalendar();
 		testTimeRangeAcrossBins(
 				cal,
 				Calendar.MONTH,
 				cal.getActualMinimum(Calendar.MONTH),
 				cal.getActualMaximum(Calendar.MONTH),
-				options,
+				bldr,
 				"month");
 	}
 
@@ -734,17 +739,19 @@ public class SpatialTemporalQueryIT
 	public void testTimeRangeAcrossBinsYear()
 			throws IOException,
 			CQLException {
-		final QueryOptions options = new QueryOptions();
-		options.setIndex(YEAR_INDEX);
+		VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		bldr.indexName(YEAR_INDEX.getName());
 		currentGeotoolsIndex = YEAR_INDEX;
-		options.setAdapter(timeRangeAdapter);
+		bldr.setTypeNames(new String[] {
+			timeRangeAdapter.getTypeName()
+		});
 		final Calendar cal = getInitialYearCalendar();
 		testTimeRangeAcrossBins(
 				cal,
 				Calendar.YEAR,
 				MULTI_YEAR_MIN,
 				MULTI_YEAR_MAX,
-				options,
+				bldr,
 				"year");
 
 	}

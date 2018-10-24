@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.dimension;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -62,8 +62,8 @@ abstract public class ArrayField<T extends CommonIndexValue> implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return elementField.getFieldId();
+	public String getFieldName() {
+		return elementField.getFieldName();
 	}
 
 	@Override

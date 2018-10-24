@@ -10,11 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.numeric;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * A class based on FilterableConstraints that uses numeric values and includes
@@ -25,20 +25,20 @@ import org.locationtech.geowave.core.store.index.FilterableConstraints;
 public class NumericQueryConstraint implements
 		FilterableConstraints
 {
-	protected final ByteArrayId fieldId;
+	protected final String fieldName;
 	protected Number lowerValue;
 	protected Number upperValue;
 	protected boolean inclusiveLow;
 	protected boolean inclusiveHigh;
 
 	public NumericQueryConstraint(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final Number lowerValue,
 			final Number upperValue,
 			final boolean inclusiveLow,
 			final boolean inclusiveHigh ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.lowerValue = lowerValue;
 		this.upperValue = upperValue;
 		this.inclusiveHigh = inclusiveHigh;
@@ -46,8 +46,8 @@ public class NumericQueryConstraint implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	@Override
@@ -69,9 +69,9 @@ public class NumericQueryConstraint implements
 	}
 
 	@Override
-	public DistributableQueryFilter getFilter() {
+	public QueryFilter getFilter() {
 		return new NumberRangeFilter(
-				fieldId,
+				fieldName,
 				lowerValue,
 				upperValue,
 				inclusiveLow,
@@ -81,9 +81,9 @@ public class NumericQueryConstraint implements
 	public QueryRanges getQueryRanges() {
 		return new QueryRanges(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								NumericFieldIndexStrategy.toIndexByte(lowerValue.doubleValue())),
-						new ByteArrayId(
+						new ByteArray(
 								NumericFieldIndexStrategy.toIndexByte(upperValue.doubleValue()))));
 	}
 
@@ -104,7 +104,7 @@ public class NumericQueryConstraint implements
 	@Override
 	public FilterableConstraints intersect(
 			final FilterableConstraints other ) {
-		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldId.equals(fieldId)) {
+		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldName.equals(fieldName)) {
 			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) other);
 
 			final boolean lowEquals = lowerValue.equals(otherNumeric.lowerValue);
@@ -123,7 +123,7 @@ public class NumericQueryConstraint implements
 					: (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh);
 
 			return new NumericQueryConstraint(
-					fieldId,
+					fieldName,
 					newMin,
 					newMax,
 					newIncLow,
@@ -149,7 +149,7 @@ public class NumericQueryConstraint implements
 	@Override
 	public FilterableConstraints union(
 			final FilterableConstraints other ) {
-		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldId.equals(fieldId)) {
+		if ((other instanceof NumericQueryConstraint) && ((NumericQueryConstraint) other).fieldName.equals(fieldName)) {
 			final NumericQueryConstraint otherNumeric = ((NumericQueryConstraint) other);
 
 			final boolean lowEquals = lowerValue.equals(otherNumeric.lowerValue);
@@ -169,7 +169,7 @@ public class NumericQueryConstraint implements
 					: (replaceMax ? otherNumeric.inclusiveHigh : inclusiveHigh);
 
 			return new NumericQueryConstraint(
-					fieldId,
+					fieldName,
 					newMin,
 					newMax,
 					newIncLow,

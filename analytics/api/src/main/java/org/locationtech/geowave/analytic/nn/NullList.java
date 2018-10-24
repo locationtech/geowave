@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public class NullList<NNTYPE> implements
 		NeighborList<NNTYPE>
@@ -23,14 +23,14 @@ public class NullList<NNTYPE> implements
 	@Override
 	public boolean add(
 			final DistanceProfile<?> distanceProfile,
-			final ByteArrayId id,
+			final ByteArray id,
 			final NNTYPE value ) {
 		return false;
 	}
 
 	@Override
 	public InferType infer(
-			final ByteArrayId id,
+			final ByteArray id,
 			final NNTYPE value ) {
 		return InferType.SKIP;
 	}
@@ -41,7 +41,7 @@ public class NullList<NNTYPE> implements
 	}
 
 	@Override
-	public Iterator<Entry<ByteArrayId, NNTYPE>> iterator() {
+	public Iterator<Entry<ByteArray, NNTYPE>> iterator() {
 		return Collections.emptyIterator();
 	}
 

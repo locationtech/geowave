@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,79 +10,169 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.statistics;
 
+import java.nio.ByteBuffer;
+import java.time.Instant;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.NumericRangeDataStatistics;
-
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
+import org.locationtech.geowave.core.index.Mergeable;
+import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
+import org.locationtech.geowave.core.store.entities.GeoWaveRow;
+import org.threeten.extra.Interval;
 
 abstract public class TimeRangeDataStatistics<T> extends
-		NumericRangeDataStatistics<T>
+		AbstractDataStatistics<T, Interval, FieldStatisticsQueryBuilder<Interval>>
 {
-	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+
+	public final static FieldStatisticsType<Interval> STATS_TYPE = new FieldStatisticsType<>(
 			"TIME_RANGE");
+	private long min = Long.MAX_VALUE;
+	private long max = Long.MIN_VALUE;
 
 	protected TimeRangeDataStatistics() {
 		super();
 	}
 
 	public TimeRangeDataStatistics(
-			final Short internalAdapterId,
-			final String fieldId ) {
+			final Short internalDataAdapterId,
+			final String fieldName ) {
 		super(
-				internalAdapterId,
-				composeId(
-						STATS_TYPE.getString(),
-						fieldId));
+				internalDataAdapterId,
+				STATS_TYPE,
+				fieldName);
+	}
+
+	public boolean isSet() {
+		if ((min == Long.MAX_VALUE) && (max == Long.MIN_VALUE)) {
+			return false;
+		}
+		return true;
 	}
 
 	public TemporalRange asTemporalRange() {
 		return new TemporalRange(
 				new Date(
-						(long) this.getMin()),
+						getMin()),
 				new Date(
-						(long) this.getMax()));
+						getMax()));
 	}
 
-	/**
-	 * Convert Time Range statistics to a JSON object
-	 */
+	public long getMin() {
+		return min;
+	}
 
-	public JSONObject toJSONObject(
-			InternalAdapterStore store )
-			throws JSONException {
-		JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
-		jo.put(
-				"statisticsID",
-				getStatisticsId().getString());
+	public long getMax() {
+		return max;
+	}
 
-		if (!isSet()) {
-			jo.put(
-					"range",
-					"No Values");
+	public long getRange() {
+		return max - min;
+	}
+
+	@Override
+	public byte[] toBinary() {
+		final ByteBuffer buffer = super.binaryBuffer(16);
+		buffer.putLong(min);
+		buffer.putLong(max);
+		return buffer.array();
+	}
+
+	@Override
+	public void fromBinary(
+			final byte[] bytes ) {
+		final ByteBuffer buffer = super.binaryBuffer(bytes);
+		min = buffer.getLong();
+		max = buffer.getLong();
+	}
+
+	@Override
+	public void entryIngested(
+			final T entry,
+			final GeoWaveRow... kvs ) {
+		final Interval range = getInterval(entry);
+		if (range != null) {
+			min = Math.min(
+					min,
+					range.getStart().toEpochMilli());
+			max = Math.max(
+					max,
+					range.getEnd().toEpochMilli());
+		}
+	}
+
+	abstract protected Interval getInterval(
+			final T entry );
+
+	@Override
+	public void merge(
+			final Mergeable statistics ) {
+		if ((statistics != null) && (statistics instanceof TimeRangeDataStatistics)) {
+			final TimeRangeDataStatistics<T> stats = (TimeRangeDataStatistics<T>) statistics;
+			if (stats.isSet()) {
+				min = Math.min(
+						min,
+						stats.getMin());
+				max = Math.max(
+						max,
+						stats.getMax());
+			}
+		}
+	}
+
+	@Override
+	public String toString() {
+		final StringBuffer buffer = new StringBuffer();
+		buffer.append(
+				"range[adapterId=").append(
+				super.getAdapterId());
+		if (isSet()) {
+			buffer.append(
+					", min=").append(
+					getMin());
+			buffer.append(
+					", max=").append(
+					getMax());
 		}
 		else {
-			jo.put(
-					"range_min",
-					new Date(
-							(long) this.getMin()));
-			jo.put(
-					"range_max",
-					new Date(
-							(long) this.getMax()));
+			buffer.append(", No Values");
 		}
-
-		return jo;
+		buffer.append("]");
+		return buffer.toString();
 	}
 
+	@Override
+	protected String resultsName() {
+		return "range";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		if (isSet()) {
+			final Map<String, Long> map = new HashMap<>();
+			map.put(
+					"min",
+					min);
+			map.put(
+					"max",
+					max);
+			return map;
+		}
+		else {
+			return "undefined";
+		}
+	}
+
+	@Override
+	public Interval getResult() {
+		if (isSet()) {
+			return Interval.of(
+					Instant.ofEpochMilli(min),
+					Instant.ofEpochMilli(max));
+		}
+		return null;
+	}
 }

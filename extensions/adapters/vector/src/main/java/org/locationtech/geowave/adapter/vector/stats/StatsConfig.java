@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,7 +13,7 @@ package org.locationtech.geowave.adapter.vector.stats;
 import java.io.Serializable;
 
 import org.locationtech.geowave.core.index.persist.Persistable;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -22,7 +22,7 @@ public interface StatsConfig<T> extends
 		Serializable,
 		Persistable
 {
-	DataStatistics<T> create(
+	InternalDataStatistics<T, ?, ?> create(
 			Short internalDataAdapterId,
 			final String fieldName );
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,11 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.format.geotools.raster;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,8 +20,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.commons.io.FilenameUtils;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.io.AbstractGridFormat;
@@ -34,16 +30,17 @@ import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This plugin is used for ingesting any GeoTools supported file data store from
@@ -135,7 +132,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	@Override
 	public CloseableIterator<GeoWaveData<GridCoverage>> toGeoWaveData(
 			final URL input,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 		final AbstractGridFormat format = prioritizedFindFormat(input);
 		if (format == null) {
@@ -170,7 +167,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 		try {
 			final GridCoverage2D coverage = reader.read(null);
 			if (coverage != null) {
-				final Map<String, String> metadata = new HashMap<String, String>();
+				final Map<String, String> metadata = new HashMap<>();
 				final String coverageName = coverage.getName().toString();
 				try {
 					// wrapping with try-catch block because often the reader
@@ -192,7 +189,7 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 							"Unable to find metadata from coverage reader",
 							e);
 				}
-				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<GeoWaveData<GridCoverage>>();
+				final List<GeoWaveData<GridCoverage>> coverages = new ArrayList<>();
 
 				if (optionProvider.isSeparateBands() && (coverage.getNumSampleDimensions() > 1)) {
 					final String baseName = optionProvider.getCoverageName() != null ? optionProvider.getCoverageName()
@@ -213,9 +210,9 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 								new double[][] {
 									nodata[b]
 								});
-						coverages.add(new GeoWaveData<GridCoverage>(
+						coverages.add(new GeoWaveData<>(
 								adapter,
-								primaryIndexIds,
+								indexNames,
 								coverage));
 					}
 				}
@@ -229,18 +226,24 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 							optionProvider.isBuildPyramid(),
 							optionProvider.isBuildHistogram(),
 							optionProvider.getNodata(coverage.getNumSampleDimensions()));
-					coverages.add(new GeoWaveData<GridCoverage>(
+					coverages.add(new GeoWaveData<>(
 							adapter,
-							primaryIndexIds,
+							indexNames,
 							coverage));
 				}
 				return new Wrapper(
 						coverages.iterator()) {
 
 					@Override
-					public void close()
-							throws IOException {
-						reader.dispose();
+					public void close() {
+						try {
+							reader.dispose();
+						}
+						catch (final IOException e) {
+							LOGGER.warn(
+									"unable to dispose of reader resources",
+									e);
+						}
 					}
 				};
 			}
@@ -260,14 +263,14 @@ public class GeoToolsRasterDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public WritableDataAdapter<GridCoverage>[] getDataAdapters(
+	public DataTypeAdapter<GridCoverage>[] getDataAdapters(
 			final String globalVisibility ) {
-		return new WritableDataAdapter[] {};
+		return new DataTypeAdapter[] {};
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,27 +22,25 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.index.ChooseLocalityPreservingQueryStrategy;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
-import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
+import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
+import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.NullIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
 import org.opengis.feature.simple.SimpleFeature;
 
 import com.beust.jcommander.internal.Maps;
@@ -55,12 +53,12 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	private static final double HOUSE = 0.005;
 	private static final double BLOCK = 0.07;
 	private static final double CITY = 1.25;
-	final PrimaryIndex IMAGE_CHIP_INDEX1 = new NullIndex(
+	final Index IMAGE_CHIP_INDEX1 = new NullIndex(
 			"IMAGERY_CHIPS1");
-	final PrimaryIndex IMAGE_CHIP_INDEX2 = new NullIndex(
+	final Index IMAGE_CHIP_INDEX2 = new NullIndex(
 			"IMAGERY_CHIPS2");
 
-	protected final List<PrimaryIndex> indices = Arrays.asList(
+	protected final List<Index> indices = Arrays.asList(
 			IMAGE_CHIP_INDEX1,
 			new SpatialTemporalIndexBuilder().setNumPartitions(
 					5).setBias(
@@ -77,8 +75,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseTemporalWithoutStatsHouseHour() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								HOUSE,
@@ -88,8 +86,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						1).getId(),
-				it.next().getId());
+						1).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -98,8 +96,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseSpatialWithoutStatsHouseDay() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								HOUSE,
@@ -109,8 +107,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
-				it.next().getId());
+						3).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -119,8 +117,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseSpatialWithoutStatsHouseWeek() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								HOUSE,
@@ -130,8 +128,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
-				it.next().getId());
+						3).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -140,8 +138,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseTemporalWithoutStatsBlockHour() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								BLOCK,
@@ -151,8 +149,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						1).getId(),
-				it.next().getId());
+						1).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -161,8 +159,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseSpatialWithoutStatsBlockDay() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								BLOCK,
@@ -172,8 +170,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
-				it.next().getId());
+						3).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -182,8 +180,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseSpatialWithoutStatsBlockWeek() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								BLOCK,
@@ -193,8 +191,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
-				it.next().getId());
+						3).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -203,8 +201,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseTemporalWithoutStatsCityHour() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								CITY,
@@ -214,8 +212,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						1).getId(),
-				it.next().getId());
+						1).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -224,8 +222,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseTemporalWithoutStatsCityDay() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								CITY,
@@ -235,8 +233,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						1).getId(),
-				it.next().getId());
+						1).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
@@ -245,8 +243,8 @@ public class ChooseLocalityPreservingQueryStrategyTest
 	public void testChooseSpatialWithoutStatsCityWeek() {
 		final ChooseLocalityPreservingQueryStrategy strategy = new ChooseLocalityPreservingQueryStrategy();
 
-		final Iterator<Index<?, ?>> it = getIndices(
-				new HashMap<ByteArrayId, DataStatistics<SimpleFeature>>(),
+		final Iterator<Index> it = getIndices(
+				new HashMap<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>>(),
 				new BasicQuery(
 						createConstraints(
 								CITY,
@@ -256,20 +254,20 @@ public class ChooseLocalityPreservingQueryStrategyTest
 		assertTrue(it.hasNext());
 		assertEquals(
 				indices.get(
-						3).getId(),
-				it.next().getId());
+						3).getName(),
+				it.next().getName());
 		assertFalse(it.hasNext());
 
 	}
 
-	public Iterator<Index<?, ?>> getIndices(
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> stats,
+	public Iterator<Index> getIndices(
+			final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> stats,
 			final BasicQuery query,
 			final ChooseLocalityPreservingQueryStrategy strategy ) {
 		return strategy.getIndices(
 				stats,
 				query,
-				indices.toArray(new PrimaryIndex[indices.size()]),
+				indices.toArray(new Index[indices.size()]),
 				Maps.newHashMap());
 	}
 

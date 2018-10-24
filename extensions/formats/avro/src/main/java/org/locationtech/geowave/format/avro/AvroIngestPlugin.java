@@ -27,15 +27,15 @@ import org.locationtech.geowave.adapter.vector.avro.FeatureDefinition;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -128,9 +128,15 @@ public class AvroIngestPlugin extends
 				}
 
 				@Override
-				public void close()
-						throws IOException {
-					reader.close();
+				public void close() {
+					try {
+						reader.close();
+					}
+					catch (IOException e) {
+						LOGGER.warn(
+								"Unable to close file '" + input.getPath() + "'",
+								e);
+					}
 				}
 
 			};
@@ -164,7 +170,7 @@ public class AvroIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final AvroSimpleFeatureCollection featureCollection,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 		final FeatureDefinition featureDefinition = featureCollection.getFeatureType();
 		final List<GeoWaveData<SimpleFeature>> retVal = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -183,7 +189,7 @@ public class AvroIngestPlugin extends
 							attributeValues);
 					retVal.add(new GeoWaveData<SimpleFeature>(
 							adapter,
-							primaryIndexIds,
+							indexNames,
 							simpleFeature));
 				}
 				catch (final Exception e) {
@@ -203,8 +209,8 @@ public class AvroIngestPlugin extends
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	public static class IngestAvroFeaturesFromHdfs extends

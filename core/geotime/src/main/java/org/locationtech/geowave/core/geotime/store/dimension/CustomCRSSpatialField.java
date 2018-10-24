@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,9 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.geotime.store.dimension;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 
@@ -25,15 +23,15 @@ public class CustomCRSSpatialField extends
 			final CustomCRSSpatialDimension baseDefinition ) {
 		this(
 				baseDefinition,
-				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
+				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	public CustomCRSSpatialField(
 			final NumericDimensionDefinition baseDefinition,
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		super(
 				baseDefinition,
-				fieldId);
+				fieldName);
 	}
 
 	@Override

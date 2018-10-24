@@ -32,8 +32,8 @@ public interface NumericIndexStrategy extends
 	 *         associated bin ID if that dimension is continuous
 	 */
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			ByteArrayId partitionKey,
-			ByteArrayId sortKey );
+			ByteArray partitionKey,
+			ByteArray sortKey );
 
 	/**
 	 * Return an integer coordinate range in each dimension for the given data

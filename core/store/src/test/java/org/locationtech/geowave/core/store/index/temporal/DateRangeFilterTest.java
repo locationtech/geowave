@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -36,15 +36,14 @@ public class DateRangeFilterTest
 		final Date start = new Date();
 		final Date end = new Date();
 		final DateRangeFilter filter = new DateRangeFilter(
-				new ByteArrayId(
-						StringUtils.stringToBinary("myAttribute")),
+				"myAttribute",
 				start,
 				end,
 				false,
 				false);
 		final byte[] filterBytes = PersistenceUtils.toBinary(filter);
 		final DateRangeFilter deserializedFilter = (DateRangeFilter) PersistenceUtils.fromBinary(filterBytes);
-		Assert.assertTrue(filter.fieldId.equals(deserializedFilter.fieldId));
+		Assert.assertTrue(filter.fieldName.equals(deserializedFilter.fieldName));
 		Assert.assertTrue(filter.start.equals(deserializedFilter.start));
 		Assert.assertTrue(filter.end.equals(deserializedFilter.end));
 		Assert.assertTrue(filter.inclusiveLow == deserializedFilter.inclusiveLow);
@@ -55,24 +54,22 @@ public class DateRangeFilterTest
 	public void testAccept()
 			throws ParseException {
 		final DateRangeFilter filter = new DateRangeFilter(
-				new ByteArrayId(
-						StringUtils.stringToBinary("myAttribute")),
+				"myAttribute",
 				format.parse("01-01-2014 11:01:01"),
 				format.parse("12-31-2014 11:01:01"),
 				true,
 				true);
 
 		// should match because date is in range
-		final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding = new IndexedPersistenceEncoding<ByteArrayId>(
+		final IndexedPersistenceEncoding<ByteArray> persistenceEncoding = new IndexedPersistenceEncoding<ByteArray>(
 				null,
 				null,
 				null,
 				null,
 				0,
-				new PersistentDataset<ByteArrayId>(
-						new ByteArrayId(
-								"myAttribute"),
-						new ByteArrayId(
+				new PersistentDataset<ByteArray>(
+						"myAttribute",
+						new ByteArray(
 								TemporalIndexStrategy.toIndexByte(format.parse("06-01-2014 11:01:01")))),
 				null);
 
@@ -81,16 +78,15 @@ public class DateRangeFilterTest
 				persistenceEncoding));
 
 		// should not match because date is out of range
-		final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding2 = new IndexedPersistenceEncoding<ByteArrayId>(
+		final IndexedPersistenceEncoding<ByteArray> persistenceEncoding2 = new IndexedPersistenceEncoding<ByteArray>(
 				null,
 				null,
 				null,
 				null,
 				0,
-				new PersistentDataset<ByteArrayId>(
-						new ByteArrayId(
-								"myAttribute"),
-						new ByteArrayId(
+				new PersistentDataset<ByteArray>(
+						"myAttribute",
+						new ByteArray(
 								Lexicoders.LONG.toByteArray(format.parse(
 										"01-01-2015 11:01:01").getTime()))),
 				null);
@@ -100,16 +96,15 @@ public class DateRangeFilterTest
 				persistenceEncoding2));
 
 		// should not match because of attribute mismatch
-		final IndexedPersistenceEncoding<ByteArrayId> persistenceEncoding3 = new IndexedPersistenceEncoding<ByteArrayId>(
+		final IndexedPersistenceEncoding<ByteArray> persistenceEncoding3 = new IndexedPersistenceEncoding<ByteArray>(
 				null,
 				null,
 				null,
 				null,
 				0,
-				new PersistentDataset<ByteArrayId>(
-						new ByteArrayId(
-								"mismatch"),
-						new ByteArrayId(
+				new PersistentDataset<ByteArray>(
+						"mismatch",
+						new ByteArray(
 								Lexicoders.LONG.toByteArray(format.parse(
 										"06-01-2014 11:01:01").getTime()))),
 				null);

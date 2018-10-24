@@ -17,20 +17,20 @@ import java.util.Map.Entry;
 import org.locationtech.geowave.analytic.nn.DistanceProfile;
 import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.analytic.nn.NeighborListFactory;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public class ClusterNeighborList implements
 		NeighborList<ClusterItem>
 {
-	private final ByteArrayId id;
-	final Map<ByteArrayId, Cluster> index;
+	private final ByteArray id;
+	final Map<ByteArray, Cluster> index;
 	final NeighborListFactory<ClusterItem> factory;
 
 	public ClusterNeighborList(
-			final ByteArrayId centerId,
+			final ByteArray centerId,
 			final ClusterItem center,
 			final NeighborListFactory<ClusterItem> factory,
-			final Map<ByteArrayId, Cluster> index ) {
+			final Map<ByteArray, Cluster> index ) {
 		super();
 		this.index = index;
 		this.id = centerId;
@@ -51,14 +51,14 @@ public class ClusterNeighborList implements
 	}
 
 	@Override
-	public Iterator<Entry<ByteArrayId, ClusterItem>> iterator() {
+	public Iterator<Entry<ByteArray, ClusterItem>> iterator() {
 		return getCluster().iterator();
 	}
 
 	@Override
 	public boolean add(
 			DistanceProfile<?> distanceProfile,
-			final ByteArrayId id,
+			final ByteArray id,
 			final ClusterItem value ) {
 		Cluster cluster = index.get(id);
 		if (cluster == null) {
@@ -77,7 +77,7 @@ public class ClusterNeighborList implements
 
 	@Override
 	public InferType infer(
-			final ByteArrayId id,
+			final ByteArray id,
 			final ClusterItem value ) {
 		return getCluster().infer(
 				id,
@@ -103,24 +103,24 @@ public class ClusterNeighborList implements
 	public static class ClusterNeighborListFactory implements
 			NeighborListFactory<ClusterItem>
 	{
-		final Map<ByteArrayId, Cluster> index;
+		final Map<ByteArray, Cluster> index;
 		final NeighborListFactory<ClusterItem> factory;
 
 		public ClusterNeighborListFactory(
 				NeighborListFactory<ClusterItem> factory,
-				Map<ByteArrayId, Cluster> index ) {
+				Map<ByteArray, Cluster> index ) {
 			super();
 			this.index = index;
 			this.factory = factory;
 		}
 
-		public Map<ByteArrayId, Cluster> getIndex() {
+		public Map<ByteArray, Cluster> getIndex() {
 			return index;
 		}
 
 		@Override
 		public NeighborList<ClusterItem> buildNeighborList(
-				ByteArrayId centerId,
+				ByteArray centerId,
 				ClusterItem center ) {
 			return new ClusterNeighborList(
 					centerId,

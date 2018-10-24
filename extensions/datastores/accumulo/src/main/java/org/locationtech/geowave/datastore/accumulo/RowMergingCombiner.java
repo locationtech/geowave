@@ -17,7 +17,7 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
@@ -35,7 +35,7 @@ public class RowMergingCombiner extends
 			final byte[] binary ) {
 		return rowTransform.getRowAsMergeableObject(
 				ByteArrayUtils.shortFromString(key.getColumnFamily().toString()),
-				new ByteArrayId(
+				new ByteArray(
 						key.getColumnQualifier().getBytes()),
 				binary);
 	}

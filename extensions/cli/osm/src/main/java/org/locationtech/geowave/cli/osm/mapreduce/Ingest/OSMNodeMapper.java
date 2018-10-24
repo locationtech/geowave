@@ -116,8 +116,7 @@ public class OSMNodeMapper extends
 			put(
 					m,
 					Schema.CF.NODE,
-					kvp.getKey().toString().getBytes(
-							Constants.CHARSET),
+					kvp.getKey(),
 					kvp.getValue().toString());
 		}
 		context.write(

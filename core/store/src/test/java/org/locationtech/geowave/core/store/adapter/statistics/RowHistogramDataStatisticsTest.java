@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,9 +15,8 @@ import static org.junit.Assert.assertEquals;
 import java.util.Arrays;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -31,7 +30,7 @@ public class RowHistogramDataStatisticsTest
 	private GeoWaveKey genKey(
 			final long id ) {
 		final InsertionIds insertionIds = new InsertionIds(
-				Arrays.asList(new ByteArrayId(
+				Arrays.asList(new ByteArray(
 						String.format(
 								"\12%5h",
 								base + id) + "20030f89")));
@@ -43,10 +42,9 @@ public class RowHistogramDataStatisticsTest
 
 	@Test
 	public void testIngest() {
-		final RowRangeHistogramStatistics<Integer> stats = new RowRangeHistogramStatistics<Integer>(
+		final RowRangeHistogramStatistics<Integer> stats = new RowRangeHistogramStatistics<>(
 				(short) -1,
-				new ByteArrayId(
-						"20030"),
+				"20030",
 				null);
 
 		for (long i = 0; i < 10000; i++) {
@@ -78,9 +76,8 @@ public class RowHistogramDataStatisticsTest
 						5000).getSortKey()),
 				0.04);
 
-		final RowRangeHistogramStatistics<Integer> stats2 = new RowRangeHistogramStatistics<Integer>(
-				new ByteArrayId(
-						"20030"),
+		final RowRangeHistogramStatistics<Integer> stats2 = new RowRangeHistogramStatistics<>(
+				"20030",
 				null);
 
 		for (long j = 10000; j < 20000; j++) {

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,7 +11,6 @@
 package org.locationtech.geowave.core.geotime.ingest;
 
 import org.geotools.referencing.CRS;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStrategy.Unit;
@@ -25,17 +24,17 @@ import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.LatitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.LongitudeField;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.xz.XZHierarchicalIndexFactory;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions.BaseIndexBuilder;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.spi.DimensionalityTypeProviderSpi;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
@@ -101,12 +100,12 @@ public class SpatialDimensionalityTypeProvider implements
 	}
 
 	@Override
-	public PrimaryIndex createPrimaryIndex(
-			SpatialOptions options ) {
-		return internalCreatePrimaryIndex(options);
+	public Index createIndex(
+			final SpatialOptions options ) {
+		return internalCreateIndex(options);
 	}
 
-	private static PrimaryIndex internalCreatePrimaryIndex(
+	private static Index internalCreateIndex(
 			final SpatialOptions options ) {
 		NumericDimensionDefinition[] dimensions;
 		boolean isDefaultCRS;
@@ -114,7 +113,8 @@ public class SpatialDimensionalityTypeProvider implements
 		NumericDimensionField<?>[] fields = null;
 		NumericDimensionField<?>[] fields_temporal = null;
 
-		if (options.crs == null || options.crs.isEmpty() || options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
+		if ((options.crs == null) || options.crs.isEmpty()
+				|| options.crs.equalsIgnoreCase(GeometryUtils.DEFAULT_CRS_STR)) {
 			dimensions = SPATIAL_DIMENSIONS;
 			fields = SPATIAL_FIELDS;
 			isDefaultCRS = true;
@@ -122,7 +122,7 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 		else {
 			decodeCRS(options.crs);
-			CoordinateSystem cs = decodeCRS(
+			final CoordinateSystem cs = decodeCRS(
 					options.crs).getCoordinateSystem();
 			isDefaultCRS = false;
 			crsCode = options.crs;
@@ -130,7 +130,7 @@ public class SpatialDimensionalityTypeProvider implements
 			if (options.storeTime) {
 				fields_temporal = new NumericDimensionField[dimensions.length + 1];
 				for (int d = 0; d < dimensions.length; d++) {
-					CoordinateSystemAxis csa = cs.getAxis(d);
+					final CoordinateSystemAxis csa = cs.getAxis(d);
 					if (!isUnbounded(csa)) {
 						dimensions[d] = new CustomCRSBoundedSpatialDimension(
 								(byte) d,
@@ -153,7 +153,7 @@ public class SpatialDimensionalityTypeProvider implements
 			else {
 				fields = new NumericDimensionField[dimensions.length];
 				for (int d = 0; d < dimensions.length; d++) {
-					CoordinateSystemAxis csa = cs.getAxis(d);
+					final CoordinateSystemAxis csa = cs.getAxis(d);
 					if (!isUnbounded(csa)) {
 						dimensions[d] = new CustomCRSBoundedSpatialDimension(
 								(byte) d,
@@ -195,29 +195,29 @@ public class SpatialDimensionalityTypeProvider implements
 					crsCode);
 		}
 
-		return new CustomIdIndex(
+		return new CustomNameIndex(
 				XZHierarchicalIndexFactory.createFullIncrementalTieredStrategy(
 						dimensions,
 						new int[] {
 							// TODO this is only valid for 2D coordinate
-							// systems, again consider the possibility of being
+							// systems, again consider the possibility
+							// of being
 							// flexible enough to handle n-dimensions
 							LONGITUDE_BITS,
 							LATITUDE_BITS
 						},
 						SFCType.HILBERT),
 				indexModel,
-				new ByteArrayId(
-						// TODO append CRS code to ID if its overridden
-						isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
-								: (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) + "_"
-										+ crsCode.substring(crsCode.indexOf(":") + 1)));
+				// TODO append CRS code to ID if its overridden
+				isDefaultCRS ? (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID)
+						: (options.storeTime ? DEFAULT_SPATIAL_ID + "_TIME" : DEFAULT_SPATIAL_ID) + "_"
+								+ crsCode.substring(crsCode.indexOf(":") + 1));
 	}
 
 	private static boolean isUnbounded(
-			CoordinateSystemAxis csa ) {
-		double min = csa.getMinimumValue();
-		double max = csa.getMaximumValue();
+			final CoordinateSystemAxis csa ) {
+		final double min = csa.getMinimumValue();
+		final double max = csa.getMaximumValue();
 
 		if (!Double.isFinite(max) || !Double.isFinite(min)) {
 			return true;
@@ -226,7 +226,7 @@ public class SpatialDimensionalityTypeProvider implements
 	}
 
 	public static CoordinateReferenceSystem decodeCRS(
-			String crsCode ) {
+			final String crsCode ) {
 
 		CoordinateReferenceSystem crs = null;
 		try {
@@ -277,13 +277,13 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 
 		@Override
-		public PrimaryIndex createIndex() {
-			return createIndex(internalCreatePrimaryIndex(options));
+		public Index createIndex() {
+			return createIndex(internalCreateIndex(options));
 		}
 	}
 
 	public static boolean isSpatial(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		if (index == null) {
 			return false;
 		}
@@ -302,11 +302,12 @@ public class SpatialDimensionalityTypeProvider implements
 		}
 		boolean hasLat = false, hasLon = false;
 		for (final NumericDimensionDefinition definition : dimensions) {
-			if (definition instanceof LatitudeDefinition || definition instanceof CustomCRSUnboundedSpatialDimensionY) {
+			if ((definition instanceof LatitudeDefinition)
+					|| (definition instanceof CustomCRSUnboundedSpatialDimensionY)) {
 				hasLat = true;
 			}
-			else if (definition instanceof LongitudeDefinition
-					|| definition instanceof CustomCRSUnboundedSpatialDimensionX) {
+			else if ((definition instanceof LongitudeDefinition)
+					|| (definition instanceof CustomCRSUnboundedSpatialDimensionX)) {
 				hasLon = true;
 			}
 		}

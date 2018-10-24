@@ -10,9 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.CloseableIterator;
-
 /**
  * This is responsible for persisting adapter/Internal Adapter mappings (either
  * in memory or to disk depending on the implementation).
@@ -20,15 +17,15 @@ import org.locationtech.geowave.core.store.CloseableIterator;
 public interface InternalAdapterStore
 {
 
-	public CloseableIterator<ByteArrayId> getAdapterIds();
+	public String[] getTypeNames();
 
-	public CloseableIterator<Short> getInternalAdapterIds();
+	public short[] getAdapterIds();
 
-	public ByteArrayId getAdapterId(
-			short internalAdapterId );
+	public String getTypeName(
+			short adapterId );
 
-	public Short getInternalAdapterId(
-			ByteArrayId adapterId );
+	public Short getAdapterId(
+			String typeName );
 
 	/**
 	 * If an adapter is already associated with an internal Adapter returns
@@ -39,8 +36,8 @@ public interface InternalAdapterStore
 	 *            the adapter
 	 * @return the internal ID
 	 */
-	public short addAdapterId(
-			ByteArrayId adapterId );
+	public short addTypeName(
+			String typeName );
 
 	/**
 	 * Adapter Id to Internal Adapter Id mappings are maintain without regard to
@@ -49,10 +46,10 @@ public interface InternalAdapterStore
 	 * @param adapterId
 	 */
 	public boolean remove(
-			ByteArrayId adapterId );
+			String typeName );
 
 	public boolean remove(
-			short internalAdapterId );
+			short adapterId );
 
 	public void removeAll();
 }

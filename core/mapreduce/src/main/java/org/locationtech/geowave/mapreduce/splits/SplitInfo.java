@@ -17,11 +17,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 
 public class SplitInfo
 {
-	private PrimaryIndex index;
+	private Index index;
 	private List<RangeLocationPair> rangeLocationPairs;
 	private boolean mixedVisibility = true;
 	private boolean authorizationsLimiting = true;
@@ -29,13 +29,13 @@ public class SplitInfo
 	protected SplitInfo() {}
 
 	public SplitInfo(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		this.index = index;
 		rangeLocationPairs = new ArrayList<RangeLocationPair>();
 	}
 
 	public SplitInfo(
-			final PrimaryIndex index,
+			final Index index,
 			final List<RangeLocationPair> rangeLocationPairs ) {
 		super();
 		this.index = index;
@@ -60,7 +60,7 @@ public class SplitInfo
 		this.authorizationsLimiting = authorizationsLimiting;
 	}
 
-	public PrimaryIndex getIndex() {
+	public Index getIndex() {
 		return index;
 	}
 
@@ -74,7 +74,7 @@ public class SplitInfo
 		final int indexLength = in.readInt();
 		final byte[] indexBytes = new byte[indexLength];
 		in.readFully(indexBytes);
-		final PrimaryIndex index = (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
+		final Index index = (Index) PersistenceUtils.fromBinary(indexBytes);
 		final int numRanges = in.readInt();
 		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>(
 				numRanges);

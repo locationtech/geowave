@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.cli.geoserver;
 
-import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_CS;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_ALG;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYMGR_PROVIDER;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_KEYSTORE_FILE;
@@ -25,7 +24,6 @@ import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstant
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PASS;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_PROVIDER;
 import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_SSL_TRUSTSTORE_TYPE;
-import static org.locationtech.geowave.cli.geoserver.constants.GeoServerConstants.GEOSERVER_WORKSPACE;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,17 +63,16 @@ import javax.xml.transform.stream.StreamResult;
 import org.glassfish.jersey.SslConfigurator;
 import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.cli.geoserver.GeoServerAddLayerCommand.AddOption;
 import org.locationtech.geowave.core.cli.operations.config.security.crypto.BaseEncryption;
 import org.locationtech.geowave.core.cli.operations.config.security.utils.SecurityUtils;
 import org.locationtech.geowave.core.cli.utils.FileUtils;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
@@ -96,7 +93,7 @@ public class GeoServerRestClient
 
 	static private class DataAdapterInfo
 	{
-		String adapterId;
+		String typeName;
 		Boolean isRaster;
 	}
 
@@ -110,13 +107,13 @@ public class GeoServerRestClient
 
 	private GeoServerRestClient(
 			final GeoServerConfig config,
-			WebTarget webTarget ) {
+			final WebTarget webTarget ) {
 		this.config = config;
 		this.webTarget = webTarget;
 	}
 
 	public static GeoServerRestClient getInstance(
-			GeoServerConfig config ) {
+			final GeoServerConfig config ) {
 		if (SINGLETON_INSTANCE == null) {
 			SINGLETON_INSTANCE = new GeoServerRestClient(
 					config);
@@ -125,7 +122,7 @@ public class GeoServerRestClient
 	}
 
 	public void setWebTarget(
-			WebTarget webTarget ) {
+			final WebTarget webTarget ) {
 		this.webTarget = webTarget;
 	}
 
@@ -152,13 +149,13 @@ public class GeoServerRestClient
 					client = ClientBuilder.newClient();
 				}
 				else if (url.startsWith("https://")) {
-					SslConfigurator sslConfig = SslConfigurator.newInstance();
+					final SslConfigurator sslConfig = SslConfigurator.newInstance();
 					if (getConfig().getGsConfigProperties() != null) {
 						loadSSLConfigurations(
 								sslConfig,
 								getConfig().getGsConfigProperties());
 					}
-					SSLContext sslContext = sslConfig.createSSLContext();
+					final SSLContext sslContext = sslConfig.createSSLContext();
 
 					HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
 					client = ClientBuilder.newBuilder().sslContext(
@@ -172,7 +169,7 @@ public class GeoServerRestClient
 						webTarget = client.target(new URI(
 								url));
 					}
-					catch (URISyntaxException e) {
+					catch (final URISyntaxException e) {
 						LOGGER.error(
 								"Unable to parse geoserver URL: " + url,
 								e);
@@ -191,7 +188,7 @@ public class GeoServerRestClient
 	 * compared to another, this gives the ability to specify any of the fields.
 	 * If the key is in provided properties file, it will be loaded into the
 	 * GeoServer SSL configuration.
-	 * 
+	 *
 	 * @param sslConfig
 	 *            SSL Configuration object for use when instantiating an HTTPS
 	 *            connection to GeoServer
@@ -200,9 +197,9 @@ public class GeoServerRestClient
 	 *            properties
 	 */
 	private void loadSSLConfigurations(
-			SslConfigurator sslConfig,
-			Properties gsConfigProperties ) {
-		if (gsConfigProperties != null && sslConfig != null) {
+			final SslConfigurator sslConfig,
+			final Properties gsConfigProperties ) {
+		if ((gsConfigProperties != null) && (sslConfig != null)) {
 			// default to TLS for geoserver ssl security protocol
 			sslConfig.securityProtocol(getPropertyValue(
 					gsConfigProperties,
@@ -213,7 +210,7 @@ public class GeoServerRestClient
 			if (gsConfigProperties.containsKey(GEOSERVER_SSL_TRUSTSTORE_FILE)) {
 				// resolve file path - either relative or absolute - then get
 				// the canonical path
-				File trustStoreFile = new File(
+				final File trustStoreFile = new File(
 						getPropertyValue(
 								gsConfigProperties,
 								GEOSERVER_SSL_TRUSTSTORE_FILE));
@@ -221,7 +218,7 @@ public class GeoServerRestClient
 					try {
 						sslConfig.trustStoreFile(trustStoreFile.getCanonicalPath());
 					}
-					catch (IOException e) {
+					catch (final IOException e) {
 						LOGGER.error(
 								"An error occurred loading the truststore at the specified path [" + getPropertyValue(
 										gsConfigProperties,
@@ -263,7 +260,7 @@ public class GeoServerRestClient
 				// HP Fortify "Path Traversal" false positive
 				// What Fortify considers "user input" comes only
 				// from users with OS-level access anyway
-				File keyStoreFile = new File(
+				final File keyStoreFile = new File(
 						FileUtils.formatFilePath(getPropertyValue(
 								gsConfigProperties,
 								GEOSERVER_SSL_KEYSTORE_FILE)));
@@ -271,7 +268,7 @@ public class GeoServerRestClient
 					try {
 						sslConfig.keyStoreFile(keyStoreFile.getCanonicalPath());
 					}
-					catch (IOException e) {
+					catch (final IOException e) {
 						LOGGER.error(
 								"An error occurred loading the keystore at the specified path [" + getPropertyValue(
 										gsConfigProperties,
@@ -342,7 +339,7 @@ public class GeoServerRestClient
 							resourceTokenFile.getCanonicalPath());
 					return configValue;
 				}
-				catch (Exception e) {
+				catch (final Exception e) {
 					LOGGER.error(
 							"An error occurred decrypting password: " + e.getLocalizedMessage(),
 							e);
@@ -370,7 +367,7 @@ public class GeoServerRestClient
 		// retrieve the adapter info list for the store
 		boolean layerAdded = false;
 		int retStatus = -1;
-		StringBuilder buf = new StringBuilder(
+		final StringBuilder buf = new StringBuilder(
 				"{\"adapters\":[");
 		final ArrayList<DataAdapterInfo> adapterInfoList = getStoreAdapterInfo(
 				storeName,
@@ -424,8 +421,8 @@ public class GeoServerRestClient
 							null);
 
 					if (addCsResponse.getStatus() != Status.CREATED.getStatusCode()) {
-						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCsResponse.getStatus()
-								+ ",\"Message\":\"Adding coverage store returned error: "
+						final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":"
+								+ addCsResponse.getStatus() + ",\"Message\":\"Adding coverage store returned error: "
 								+ addCsResponse.readEntity(String.class) + "\"},";
 						buf.append(ret);
 						if (retStatus == -1) {
@@ -441,7 +438,7 @@ public class GeoServerRestClient
 				else if (getCsResponse.getStatus() != Status.OK.getStatusCode()) {
 					// GeoServer get commands will almost always return a 200 or
 					// 404 unless there is a sever error
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getCsResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getCsResponse.getStatus()
 							+ ",\"Message\":\"Checking Existence of coverage store returned error: "
 							+ getCsResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
@@ -458,11 +455,11 @@ public class GeoServerRestClient
 				final Response getCvResponse = getCoverage(
 						workspaceName,
 						cvgStoreName,
-						dataAdapterInfo.adapterId);
+						dataAdapterInfo.typeName);
 				if (getCvResponse.getStatus() == Status.OK.getStatusCode()) {
-					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.typeName + " layer already exists");
 					retStatus = 400;
-					String ret = "{ \"Adapter\":\"" + adapterId
+					final String ret = "{ \"Adapter\":\"" + adapterId
 							+ "\",\"Status\":400,\"Message\":\"Coverage already exists\"},";
 					buf.append(ret);
 					continue;
@@ -472,16 +469,16 @@ public class GeoServerRestClient
 				final Response addCvResponse = addCoverage(
 						workspaceName,
 						cvgStoreName,
-						dataAdapterInfo.adapterId);
+						dataAdapterInfo.typeName);
 				// If any layers get added, we will return a 200
 				if (addCvResponse.getStatus() == Status.CREATED.getStatusCode()) {
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
 							+ ",\"Message\":\"Coverage added successfully\"},";
 					buf.append(ret);
 					layerAdded = true;
 				}
 				else {
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addCvResponse.getStatus()
 							+ ",\"Message\":\"Adding coverage returned error: "
 							+ addCvResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
@@ -507,8 +504,8 @@ public class GeoServerRestClient
 							dataStoreName,
 							storeName);
 					if (addDsResponse.getStatus() != Status.CREATED.getStatusCode()) {
-						String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addDsResponse.getStatus()
-								+ ",\"Message\":\"Adding data store returned error: "
+						final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":"
+								+ addDsResponse.getStatus() + ",\"Message\":\"Adding data store returned error: "
 								+ addDsResponse.readEntity(String.class) + "\"},";
 						buf.append(ret);
 						if (retStatus == -1) {
@@ -523,7 +520,7 @@ public class GeoServerRestClient
 				else if (getDsResponse.getStatus() != Status.OK.getStatusCode()) {
 					// GeoServer get commands will almost always return a 200 or
 					// 404 unless there is a sever error
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getDsResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + getDsResponse.getStatus()
 							+ ",\"Message\":\"Checking Existence of data store returned error: "
 							+ getDsResponse.readEntity(String.class) + "\"},";
 					buf.append(ret);
@@ -536,37 +533,37 @@ public class GeoServerRestClient
 					continue;
 				}
 
-				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.adapterId);
+				LOGGER.debug("Checking for existing feature layer: " + dataAdapterInfo.typeName);
 
 				// See if the feature layer already exists
-				final Response getFlResponse = getFeatureLayer(dataAdapterInfo.adapterId);
+				final Response getFlResponse = getFeatureLayer(dataAdapterInfo.typeName);
 				if (getFlResponse.getStatus() == Status.OK.getStatusCode()) {
-					LOGGER.debug(dataAdapterInfo.adapterId + " layer already exists");
+					LOGGER.debug(dataAdapterInfo.typeName + " layer already exists");
 					retStatus = 400;
-					String ret = "{ \"Adapter\":\"" + adapterId
+					final String ret = "{ \"Adapter\":\"" + adapterId
 							+ "\",\"Status\":400,\"Message\":\"Feature Layer already exists\"},";
 					buf.append(ret);
 					continue;
 				}
 
-				LOGGER.debug("Get feature layer: " + dataAdapterInfo.adapterId + " returned "
+				LOGGER.debug("Get feature layer: " + dataAdapterInfo.typeName + " returned "
 						+ getFlResponse.getStatus());
 
 				// We have a datastore. Add the layer per the adapter ID
 				final Response addFlResponse = addFeatureLayer(
 						workspaceName,
 						dataStoreName,
-						dataAdapterInfo.adapterId,
+						dataAdapterInfo.typeName,
 						defaultStyle);
 				// If any layers get added, we will return a 200
 				if (addFlResponse.getStatus() == Status.CREATED.getStatusCode()) {
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
 							+ ",\"Message\":\"Feature Layer added successfully\"},";
 					buf.append(ret);
 					layerAdded = true;
 				}
 				else {
-					String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
+					final String ret = "{ \"Adapter\":\"" + adapterId + "\",\"Status\":" + addFlResponse.getStatus()
 							+ ",\"Message\":\"Adding data store error: " + addFlResponse.readEntity(String.class)
 							+ "\"},";
 					buf.append(ret);
@@ -593,7 +590,7 @@ public class GeoServerRestClient
 		}
 		else {
 
-			String ret = buf.toString();
+			final String ret = buf.toString();
 			return Response.status(
 					400).entity(
 					ret).build();
@@ -619,7 +616,7 @@ public class GeoServerRestClient
 		for (int i = 0; i < adapterInfoList.size(); i++) {
 			final DataAdapterInfo info = adapterInfoList.get(i);
 
-			buf.append("{'id':'" + info.adapterId + "',");
+			buf.append("{'id':'" + info.typeName + "',");
 			buf.append("'type':'" + (info.isRaster ? "raster" : "vector") + "'}");
 
 			if (i < (adapterInfoList.size() - 1)) {
@@ -898,7 +895,7 @@ public class GeoServerRestClient
 			// holder for simple layer info (when geowaveOnly = false)
 			final JSONArray layerInfoArray = new JSONArray();
 
-			final Map<String, List<String>> namespaceLayersMap = new HashMap<String, List<String>>();
+			final Map<String, List<String>> namespaceLayersMap = new HashMap<>();
 			final Pattern p = Pattern.compile("workspaces/(.*?)/datastores/(.*?)/");
 			for (int i = 0; i < layerArray.size(); i++) {
 				final boolean include = !geowaveOnly && !wsFilter && !dsFilter; // no
@@ -980,7 +977,7 @@ public class GeoServerRestClient
 														name);
 											}
 											else {
-												final ArrayList<String> layers = new ArrayList<String>();
+												final ArrayList<String> layers = new ArrayList<>();
 												layers.add(name);
 												namespaceLayersMap.put(
 														value,
@@ -1175,7 +1172,7 @@ public class GeoServerRestClient
 			final String styleName,
 			final InputStream fileInStream ) {
 
-		Response addStyleResponse = getWebTarget().path(
+		final Response addStyleResponse = getWebTarget().path(
 				"rest/styles").request().post(
 				Entity.entity(
 						"{'style':{'name':'" + styleName + "','filename':'" + styleName + ".sld'}}",
@@ -1688,7 +1685,7 @@ public class GeoServerRestClient
 		// Create the custom geowave url w/ params
 		final StringBuffer buf = new StringBuffer();
 		boolean first = true;
-		for (Entry<String, String> e : geowaveStoreConfig.entrySet()) {
+		for (final Entry<String, String> e : geowaveStoreConfig.entrySet()) {
 			if (!first) {
 				buf.append(";");
 			}
@@ -1735,10 +1732,10 @@ public class GeoServerRestClient
 				storeName,
 				adapterId);
 
-		final ArrayList<String> adapterIdList = new ArrayList<String>();
+		final ArrayList<String> adapterIdList = new ArrayList<>();
 
 		for (final DataAdapterInfo info : adapterInfoList) {
-			adapterIdList.add(info.adapterId);
+			adapterIdList.add(info.typeName);
 		}
 
 		return adapterIdList;
@@ -1751,13 +1748,13 @@ public class GeoServerRestClient
 
 		final AdapterStore adapterStore = dsPlugin.createAdapterStore();
 
-		final ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<DataAdapterInfo>();
+		final ArrayList<DataAdapterInfo> adapterInfoList = new ArrayList<>();
 
 		LOGGER.debug("Adapter list for " + storeName + " with adapterId = " + adapterId + ": ");
 
-		try (final CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters()) {
+		try (final CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters()) {
 			while (it.hasNext()) {
-				final DataAdapter<?> adapter = it.next();
+				final DataTypeAdapter<?> adapter = it.next();
 
 				final DataAdapterInfo info = getAdapterInfo(
 						adapterId,
@@ -1765,59 +1762,53 @@ public class GeoServerRestClient
 
 				if (info != null) {
 					adapterInfoList.add(info);
-					LOGGER.debug("> '" + info.adapterId + "' adapter passed filter");
+					LOGGER.debug("> '" + info.typeName + "' adapter passed filter");
 				}
 			}
 
 		}
-		catch (final IOException e) {
-			LOGGER.error(
-					"Unable to close adapter iterator while looking up coverage names",
-					e);
-		}
-
 		LOGGER.debug("getStoreAdapterInfo(" + storeName + ") got " + adapterInfoList.size() + " ids");
 
 		return adapterInfoList;
 	}
 
 	private DataAdapterInfo getAdapterInfo(
-			final String adapterId,
-			final DataAdapter<?> adapter ) {
-		LOGGER.debug("getAdapterInfo for id = " + adapterId);
+			final String typeName,
+			final DataTypeAdapter<?> adapter ) {
+		LOGGER.debug("getAdapterInfo for id = " + typeName);
 
 		final DataAdapterInfo info = new DataAdapterInfo();
-		info.adapterId = adapter.getAdapterId().getString();
+		info.typeName = adapter.getTypeName();
 		info.isRaster = false;
 
-		if (adapter instanceof RasterDataAdapter
-				|| (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter).getAdapter() instanceof RasterDataAdapter)) {
+		if ((adapter instanceof RasterDataAdapter)
+				|| ((adapter instanceof InternalDataAdapter) && (((InternalDataAdapter) adapter).getAdapter() instanceof RasterDataAdapter))) {
 			info.isRaster = true;
 		}
 
-		LOGGER.debug("> Adapter ID: " + info.adapterId);
+		LOGGER.debug("> Adapter ID: " + info.typeName);
 		LOGGER.debug("> Adapter Type: " + adapter.getClass().getSimpleName());
 
-		if ((adapterId == null) || adapterId.equals(AddOption.ALL.name())) {
+		if ((typeName == null) || typeName.equals(AddOption.ALL.name())) {
 			LOGGER.debug("id is null or all");
 			return info;
 		}
 
-		if (adapterId.equals(adapter.getAdapterId().getString())) {
+		if (typeName.equals(adapter.getTypeName())) {
 			LOGGER.debug("id matches adapter id");
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.RASTER.name())
-				&& (adapter instanceof RasterDataAdapter || (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter)
-						.getAdapter() instanceof RasterDataAdapter))) {
+		if (typeName.equals(AddOption.RASTER.name())
+				&& ((adapter instanceof RasterDataAdapter) || ((adapter instanceof InternalDataAdapter) && (((InternalDataAdapter) adapter)
+						.getAdapter() instanceof RasterDataAdapter)))) {
 			LOGGER.debug("id is all-raster and adapter is raster type");
 			return info;
 		}
 
-		if (adapterId.equals(AddOption.VECTOR.name())
-				&& (adapter instanceof GeotoolsFeatureDataAdapter || (adapter instanceof InternalDataAdapter && ((InternalDataAdapter) adapter)
-						.getAdapter() instanceof GeotoolsFeatureDataAdapter))) {
+		if (typeName.equals(AddOption.VECTOR.name())
+				&& ((adapter instanceof GeotoolsFeatureDataAdapter) || ((adapter instanceof InternalDataAdapter) && (((InternalDataAdapter) adapter)
+						.getAdapter() instanceof GeotoolsFeatureDataAdapter)))) {
 			LOGGER.debug("id is all-vector and adapter is vector type");
 			return info;
 		}

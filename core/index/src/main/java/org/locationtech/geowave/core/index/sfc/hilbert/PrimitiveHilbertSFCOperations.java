@@ -15,7 +15,7 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -400,9 +400,9 @@ public class PrimitiveHilbertSFCOperations implements
 			return new RangeDecomposition(
 					new ByteArrayRange[] {
 						new ByteArrayRange(
-								new ByteArrayId(
+								new ByteArray(
 										new byte[] {}),
-								new ByteArrayId(
+								new ByteArray(
 										new byte[] {}))
 					});
 		}
@@ -433,9 +433,9 @@ public class PrimitiveHilbertSFCOperations implements
 							8).putLong(
 							endValue).array());
 			sfcRanges[i] = new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							start),
-					new ByteArrayId(
+					new ByteArray(
 							end));
 		}
 

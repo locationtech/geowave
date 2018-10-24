@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializationTool;
 
 public class AdapterWithObjectWritable implements
@@ -24,7 +24,7 @@ public class AdapterWithObjectWritable implements
 {
 	private ObjectWritable objectWritable;
 	private Short internalAdapterId = null;
-	private ByteArrayId dataId;
+	private ByteArray dataId;
 
 	public void setObject(
 			final ObjectWritable data ) {
@@ -49,12 +49,12 @@ public class AdapterWithObjectWritable implements
 		this.internalAdapterId = internalAdapterId;
 	}
 
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return dataId;
 	}
 
 	public void setDataId(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		this.dataId = dataId;
 	}
 
@@ -67,7 +67,7 @@ public class AdapterWithObjectWritable implements
 		if (dataIdLength > 0) {
 			final byte[] dataIdBinary = new byte[dataIdLength];
 			input.readFully(dataIdBinary);
-			dataId = new ByteArrayId(
+			dataId = new ByteArray(
 					dataIdBinary);
 		}
 
@@ -99,7 +99,7 @@ public class AdapterWithObjectWritable implements
 			final HadoopWritableSerializationTool serializationTool,
 			final AdapterWithObjectWritable writableToFill,
 			final short internalAdapterId,
-			final ByteArrayId dataId,
+			final ByteArray dataId,
 			final Object entry ) {
 		writableToFill.setInternalAdapterId(internalAdapterId);
 		writableToFill.setDataId(dataId);

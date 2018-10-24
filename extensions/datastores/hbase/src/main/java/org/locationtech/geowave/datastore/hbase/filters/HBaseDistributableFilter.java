@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,24 +20,23 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.flatten.FlattenedDataSet;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
@@ -56,9 +55,9 @@ public class HBaseDistributableFilter extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(HBaseDistributableFilter.class);
 
 	private boolean wholeRowFilter = false;
-	private final List<DistributableQueryFilter> filterList;
+	private final List<QueryFilter> filterList;
 	protected CommonIndexModel model;
-	private List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
+	private List<String> commonIndexFieldIds = new ArrayList<>();
 
 	// CACHED decoded data:
 	private PersistentDataset<CommonIndexValue> commonData;
@@ -68,7 +67,7 @@ public class HBaseDistributableFilter extends
 	private int partitionKeyLength;
 
 	public HBaseDistributableFilter() {
-		filterList = new ArrayList<DistributableQueryFilter>();
+		filterList = new ArrayList<>();
 	}
 
 	public static HBaseDistributableFilter parseFrom(
@@ -76,7 +75,7 @@ public class HBaseDistributableFilter extends
 			throws DeserializationException {
 		final ByteBuffer buf = ByteBuffer.wrap(pbBytes);
 
-		boolean wholeRow = buf.get() == (byte) 1 ? true : false;
+		final boolean wholeRow = buf.get() == (byte) 1 ? true : false;
 
 		final int partitionKeyLength = buf.getInt();
 
@@ -127,8 +126,8 @@ public class HBaseDistributableFilter extends
 			}
 
 			for (final Persistable decodedFilter : decodedFilterList) {
-				if (decodedFilter instanceof DistributableQueryFilter) {
-					filterList.add((DistributableQueryFilter) decodedFilter);
+				if (decodedFilter instanceof QueryFilter) {
+					filterList.add((QueryFilter) decodedFilter);
 				}
 				else {
 					LOGGER.warn("Unrecognized type for decoded filter!" + decodedFilter.getClass().getName());
@@ -149,7 +148,7 @@ public class HBaseDistributableFilter extends
 	}
 
 	public boolean init(
-			final List<DistributableQueryFilter> filterList,
+			final List<QueryFilter> filterList,
 			final CommonIndexModel model,
 			final String[] visList ) {
 		this.filterList.clear();
@@ -163,7 +162,7 @@ public class HBaseDistributableFilter extends
 	}
 
 	public void setWholeRowFilter(
-			boolean wholeRowFilter ) {
+			final boolean wholeRowFilter ) {
 		this.wholeRowFilter = wholeRowFilter;
 	}
 
@@ -181,16 +180,16 @@ public class HBaseDistributableFilter extends
 	 */
 	@Override
 	public void filterRowCells(
-			List<Cell> rowCells )
+			final List<Cell> rowCells )
 			throws IOException {
 		if (!rowCells.isEmpty()) {
-			Iterator<Cell> it = rowCells.iterator();
+			final Iterator<Cell> it = rowCells.iterator();
 
 			GeoWaveKeyImpl rowKey = null;
-			commonData = new PersistentDataset<CommonIndexValue>();
+			commonData = new PersistentDataset<>();
 
 			while (it.hasNext()) {
-				Cell cell = it.next();
+				final Cell cell = it.next();
 
 				// Grab rowkey from first cell
 				if (rowKey == null) {
@@ -206,7 +205,7 @@ public class HBaseDistributableFilter extends
 						commonData);
 			}
 
-			ReturnCode code = applyFilter(rowKey);
+			final ReturnCode code = applyFilter(rowKey);
 
 			if (code == ReturnCode.SKIP) {
 				rowCells.clear();
@@ -226,7 +225,7 @@ public class HBaseDistributableFilter extends
 			return ReturnCode.INCLUDE_AND_NEXT_COL;
 		}
 
-		commonData = new PersistentDataset<CommonIndexValue>();
+		commonData = new PersistentDataset<>();
 
 		unreadData = aggregateFieldData(
 				cell,
@@ -276,12 +275,12 @@ public class HBaseDistributableFilter extends
 			final FlattenedUnreadData unreadData ) {
 
 		return new DeferredReadCommonIndexedPersistenceEncoding(
-				rowKey.getInternalAdapterId(),
-				new ByteArrayId(
+				rowKey.getAdapterId(),
+				new ByteArray(
 						rowKey.getDataId()),
-				new ByteArrayId(
+				new ByteArray(
 						rowKey.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						rowKey.getSortKey()),
 				rowKey.getNumberOfDuplicates(),
 				commonData,
@@ -294,8 +293,8 @@ public class HBaseDistributableFilter extends
 	}
 
 	public IndexedAdapterPersistenceEncoding getAdapterEncoding(
-			final DataAdapter dataAdapter ) {
-		final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
+			final DataTypeAdapter dataAdapter ) {
+		final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<>();
 		if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 			((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
 					dataAdapter,
@@ -322,7 +321,7 @@ public class HBaseDistributableFilter extends
 
 	// Called by the aggregation endpoint, after filtering the current row
 	public Object decodeRow(
-			final DataAdapter dataAdapter ) {
+			final DataTypeAdapter dataAdapter ) {
 		return dataAdapter.decode(
 				getAdapterEncoding(dataAdapter),
 				new PrimaryIndex(
@@ -347,7 +346,7 @@ public class HBaseDistributableFilter extends
 			return false;
 		}
 
-		for (final DistributableQueryFilter filter : filterList) {
+		for (final QueryFilter filter : filterList) {
 			if (!filter.accept(
 					model,
 					encoding)) {
@@ -375,16 +374,16 @@ public class HBaseDistributableFilter extends
 			final int ordinal = fieldInfo.getFieldPosition();
 
 			if (ordinal < commonIndexFieldIds.size()) {
-				final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
-				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
+				final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
+				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldName);
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
 					commonData.addValue(
-							commonIndexFieldId,
+							commonIndexFieldName,
 							fieldValue);
 				}
 				else {
-					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
+					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);
 				}
 			}
 		}
@@ -397,7 +396,7 @@ public class HBaseDistributableFilter extends
 	}
 
 	public void setPartitionKeyLength(
-			int partitionKeyLength ) {
+			final int partitionKeyLength ) {
 		this.partitionKeyLength = partitionKeyLength;
 	}
 }

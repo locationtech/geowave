@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,14 +10,20 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import java.util.Arrays;
+
+import org.apache.commons.lang3.ArrayUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.google.common.collect.Streams;
 
 /**
  * This class will persist Adapter Index Mappings within an Accumulo table for
@@ -35,6 +41,7 @@ public class AdapterIndexMappingStoreImpl extends
 		AbstractGeoWavePersistence<AdapterToIndexMapping> implements
 		AdapterIndexMappingStore
 {
+	private final static Logger LOGGER = LoggerFactory.getLogger(AdapterIndexMappingStoreImpl.class);
 
 	public AdapterIndexMappingStoreImpl(
 			final DataStoreOperations operations,
@@ -48,53 +55,81 @@ public class AdapterIndexMappingStoreImpl extends
 	public boolean mappingExists(
 			final AdapterToIndexMapping persistedObject ) {
 		return objectExists(
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(persistedObject.getInternalAdapterId())),
+				new ByteArray(
+						ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId())),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final AdapterToIndexMapping persistedObject ) {
-		return new ByteArrayId(
-				ByteArrayUtils.shortToByteArray(persistedObject.getInternalAdapterId()));
+		return new ByteArray(
+				ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId()));
 	}
 
 	@Override
 	public AdapterToIndexMapping getIndicesForAdapter(
-			final short internalAdapterId ) {
+			final short adapterId ) {
 
-		final AdapterToIndexMapping mapping = super.getObject(
-				new ByteArrayId(
-						ByteArrayUtils.shortToByteArray(internalAdapterId)),
+		final AdapterToIndexMapping mapping = super.internalGetObject(
+				new ByteArray(
+						ByteArrayUtils.shortToByteArray(adapterId)),
 				null,
+				false,
 				null);
 		return (mapping != null) ? mapping : new AdapterToIndexMapping(
-				internalAdapterId,
-				new ByteArrayId[0]);
+				adapterId,
+				new String[0]);
 	}
 
 	@Override
 	public void addAdapterIndexMapping(
-			final AdapterToIndexMapping mapping )
-			throws MismatchedIndexToAdapterMapping {
-		final ByteArrayId internalAdapterId = new ByteArrayId(
-				ByteArrayUtils.shortToByteArray(mapping.getInternalAdapterId()));
+			final AdapterToIndexMapping mapping ) {
+		final ByteArray adapterId = new ByteArray(
+				ByteArrayUtils
+						.shortToByteArray(
+								mapping.getAdapterId()));
 		if (objectExists(
-				internalAdapterId,
+				adapterId,
 				null)) {
 			final AdapterToIndexMapping oldMapping = super.getObject(
-					internalAdapterId,
+					adapterId,
 					null,
 					null);
-			if (!oldMapping.equals(mapping)) {
-				throw new MismatchedIndexToAdapterMapping(
-						oldMapping); // HPFortify FP: accumulo example stores
-										// hardcoded password
+			if (!oldMapping
+					.equals(
+							mapping)) {
+				// combine the 2 arrays and remove duplicates (get unique set of
+				// index names)
+				final String[] uniqueCombinedIndices = Streams
+						.concat(
+								Arrays
+										.stream(
+												mapping.getIndexNames()),
+								Arrays
+										.stream(
+												oldMapping.getIndexNames()))
+						.distinct()
+						.toArray(
+								size -> new String[size]);
+				if (LOGGER.isInfoEnabled()) {
+					LOGGER
+							.info(
+									"Updating indices for datatype to " + ArrayUtils
+											.toString(
+													uniqueCombinedIndices));
+				}
+				remove(
+						adapterId);
+				addObject(
+						new AdapterToIndexMapping(
+								mapping.getAdapterId(),
+								uniqueCombinedIndices));
 			}
 		}
 		else {
-			addObject(mapping);
+			addObject(
+					mapping);
 		}
 
 	}
@@ -102,7 +137,7 @@ public class AdapterIndexMappingStoreImpl extends
 	@Override
 	public void remove(
 			final short internalAdapterId ) {
-		super.remove(new ByteArrayId(
+		super.remove(new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId)));
 	}
 }

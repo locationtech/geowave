@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,10 +10,10 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.util;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -21,10 +21,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.UUID;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
+import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
@@ -35,12 +38,15 @@ import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -56,12 +62,10 @@ import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadDataSingleRow;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions.HintKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.beust.jcommander.ParameterException;
 import com.google.common.collect.Iterators;
 
 /*
@@ -70,6 +74,12 @@ public class DataStoreUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(DataStoreUtils.class);
 
+	public static HintKey<double[]> MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION = new HintKey<>(
+			double[].class);
+	public static HintKey<Integer> MAX_RANGE_DECOMPOSITION = new HintKey<>(
+			Integer.class);
+	public static HintKey<double[]> TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX = new HintKey<>(
+			double[].class);
 	// we append a 0 byte, 8 bytes of timestamp, and 16 bytes of UUID
 	public final static int UNIQUE_ADDED_BYTES = 1 + 8 + 16;
 	public final static byte UNIQUE_ID_DELIMITER = 0;
@@ -82,17 +92,17 @@ public class DataStoreUtils
 
 	public static final byte[] EMTPY_VISIBILITY = new byte[] {};
 
-	public static DataAdapter getDataAdapter(
+	public static DataTypeAdapter getDataAdapter(
 			final DataStorePluginOptions dataStore,
-			final ByteArrayId adapterId ) {
-		Short internId = dataStore.createInternalAdapterStore().getInternalAdapterId(
-				adapterId);
-		if (internId == null) {
+			final String typeName ) {
+		final Short adapterId = dataStore.createInternalAdapterStore().getAdapterId(
+				typeName);
+		if (adapterId == null) {
 			return null;
 		}
 
-		DataAdapter adapter = dataStore.createAdapterStore().getAdapter(
-				internId);
+		final DataTypeAdapter adapter = dataStore.createAdapterStore().getAdapter(
+				adapterId);
 		if (adapter == null) {
 			return null;
 		}
@@ -105,7 +115,7 @@ public class DataStoreUtils
 			final GeoWaveValue value,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final CommonIndexModel model,
-			final List<ByteArrayId> commonIndexFieldIds ) {
+			final List<String> commonIndexFieldIds ) {
 		final byte[] fieldMask = value.getFieldMask();
 		final byte[] valueBytes = value.getValue();
 		final FlattenedDataSet dataSet = DataStoreUtils.decomposeFlattenedFields(
@@ -118,46 +128,45 @@ public class DataStoreUtils
 		for (final FlattenedFieldInfo fieldInfo : fieldInfos) {
 			final int ordinal = fieldInfo.getFieldPosition();
 			if (ordinal < commonIndexFieldIds.size()) {
-				final ByteArrayId commonIndexFieldId = commonIndexFieldIds.get(ordinal);
-				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldId);
+				final String commonIndexFieldName = commonIndexFieldIds.get(ordinal);
+				final FieldReader<? extends CommonIndexValue> reader = model.getReader(commonIndexFieldName);
 				if (reader != null) {
 					final CommonIndexValue fieldValue = reader.readField(fieldInfo.getValue());
 					fieldValue.setVisibility(value.getVisibility());
 					commonData.addValue(
-							commonIndexFieldId,
+							commonIndexFieldName,
 							fieldValue);
 				}
 				else {
-					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldId.getString());
+					LOGGER.error("Could not find reader for common index field: " + commonIndexFieldName);
 				}
 			}
 		}
 		return dataSet.getFieldsDeferred();
 	}
 
-	public static List<ByteArrayId> getUniqueDimensionFields(
+	public static List<String> getUniqueDimensionFields(
 			final CommonIndexModel model ) {
-		final List<ByteArrayId> dimensionFieldIds = new ArrayList<>();
+		final List<String> dimensionFieldIds = new ArrayList<>();
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : model.getDimensions()) {
-			if (!dimensionFieldIds.contains(dimension.getFieldId())) {
-				dimensionFieldIds.add(dimension.getFieldId());
+			if (!dimensionFieldIds.contains(dimension.getFieldName())) {
+				dimensionFieldIds.add(dimension.getFieldName());
 			}
 		}
 		return dimensionFieldIds;
 	}
 
 	public static <T> long cardinality(
-			final PrimaryIndex index,
-			final Map<ByteArrayId, DataStatistics<T>> stats,
+			final Index index,
+			final Map<StatisticsId, InternalDataStatistics<T, ?, ?>> stats,
 			final QueryRanges queryRanges ) {
 
 		long count = 0;
 		for (final SinglePartitionQueryRanges partitionRange : queryRanges.getPartitionQueryRanges()) {
 			final RowRangeHistogramStatistics rangeStats = (RowRangeHistogramStatistics) stats
-					.get(RowRangeHistogramStatistics.composeId(
-							index.getId(),
-							partitionRange.getPartitionKey() != null ? partitionRange.getPartitionKey()
-									: new ByteArrayId()));
+					.get(StatisticsQueryBuilder.newBuilder().factory().rowHistogram().indexName(
+							index.getName()).partition(
+							partitionRange.getPartitionKey()).build().getId());
 			if (rangeStats == null) {
 				return Long.MAX_VALUE - 1;
 			}
@@ -172,22 +181,22 @@ public class DataStoreUtils
 
 	public static InsertionIds keysToInsertionIds(
 			final GeoWaveKey... geoWaveKeys ) {
-		final Map<ByteArrayId, List<ByteArrayId>> sortKeysPerPartition = new HashMap<>();
+		final Map<ByteArray, List<ByteArray>> sortKeysPerPartition = new HashMap<>();
 		for (final GeoWaveKey key : geoWaveKeys) {
-			final ByteArrayId partitionKey = new ByteArrayId(
+			final ByteArray partitionKey = new ByteArray(
 					key.getPartitionKey());
-			List<ByteArrayId> sortKeys = sortKeysPerPartition.get(partitionKey);
+			List<ByteArray> sortKeys = sortKeysPerPartition.get(partitionKey);
 			if (sortKeys == null) {
 				sortKeys = new ArrayList<>();
 				sortKeysPerPartition.put(
 						partitionKey,
 						sortKeys);
 			}
-			sortKeys.add(new ByteArrayId(
+			sortKeys.add(new ByteArray(
 					key.getSortKey()));
 		}
 		final Set<SinglePartitionInsertionIds> insertionIds = new HashSet<>();
-		for (final Entry<ByteArrayId, List<ByteArrayId>> e : sortKeysPerPartition.entrySet()) {
+		for (final Entry<ByteArray, List<ByteArray>> e : sortKeysPerPartition.entrySet()) {
 			insertionIds.add(new SinglePartitionInsertionIds(
 					e.getKey(),
 					e.getValue()));
@@ -209,7 +218,7 @@ public class DataStoreUtils
 				rowId2.getSortKey())) {
 			return false;
 		}
-		if (rowId1.getInternalAdapterId() != rowId2.getInternalAdapterId()) {
+		if (rowId1.getAdapterId() != rowId2.getAdapterId()) {
 			return false;
 		}
 
@@ -261,7 +270,7 @@ public class DataStoreUtils
 			final byte[] flattenedValue,
 			final byte[] commonVisibility,
 			final int maxFieldPosition ) {
-		final List<FlattenedFieldInfo> fieldInfoList = new LinkedList<FlattenedFieldInfo>();
+		final List<FlattenedFieldInfo> fieldInfoList = new LinkedList<>();
 		final List<Integer> fieldPositions = BitmaskUtils.getFieldPositions(bitmask);
 
 		final boolean sharedVisibility = fieldPositions.size() > 1;
@@ -298,10 +307,66 @@ public class DataStoreUtils
 
 	public static QueryRanges constraintsToQueryRanges(
 			final List<MultiDimensionalNumericData> constraints,
-			final NumericIndexStrategy indexStrategy,
+			NumericIndexStrategy indexStrategy,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex,
 			final int maxRanges,
 			final IndexMetaData... hints ) {
+		SubStrategy targetIndexStrategy = null;
+		if ((targetResolutionPerDimensionForHierarchicalIndex != null)
+				&& (targetResolutionPerDimensionForHierarchicalIndex.length == indexStrategy
+						.getOrderedDimensionDefinitions().length)) {
+			// determine the correct tier to query for the given resolution
+			final HierarchicalNumericIndexStrategy strategy = CompoundHierarchicalIndexStrategyWrapper
+					.findHierarchicalStrategy(indexStrategy);
+			if (strategy != null) {
+				final TreeMap<Double, SubStrategy> sortedStrategies = new TreeMap<>();
+				for (final SubStrategy subStrategy : strategy.getSubStrategies()) {
+					final double[] idRangePerDimension = subStrategy
+							.getIndexStrategy()
+							.getHighestPrecisionIdRangePerDimension();
+					double rangeSum = 0;
+					for (final double range : idRangePerDimension) {
+						rangeSum += range;
+					}
+					// sort by the sum of the range in each dimension
+					sortedStrategies.put(
+							rangeSum,
+							subStrategy);
+				}
+				for (final SubStrategy subStrategy : sortedStrategies.descendingMap().values()) {
+					final double[] highestPrecisionIdRangePerDimension = subStrategy
+							.getIndexStrategy()
+							.getHighestPrecisionIdRangePerDimension();
+					// if the id range is less than or equal to the target
+					// resolution in each dimension, use this substrategy
+					boolean withinTargetResolution = true;
+					for (int d = 0; d < highestPrecisionIdRangePerDimension.length; d++) {
+						if (highestPrecisionIdRangePerDimension[d] > targetResolutionPerDimensionForHierarchicalIndex[d]) {
+							withinTargetResolution = false;
+							break;
+						}
+					}
+					if (withinTargetResolution) {
+						targetIndexStrategy = subStrategy;
+						break;
+					}
+				}
+				if (targetIndexStrategy == null) {
+					// if there is not a substrategy that is within the target
+					// resolution, use the first substrategy (the lowest range
+					// per dimension, which is the highest precision)
+					targetIndexStrategy = sortedStrategies.firstEntry().getValue();
+				}
+				indexStrategy = targetIndexStrategy.getIndexStrategy();
+			}
+		}
 		if ((constraints == null) || constraints.isEmpty()) {
+			if (targetIndexStrategy != null) {
+				// at least use the prefix of a substrategy if chosen
+				return new QueryRanges(
+						Collections.singleton(new ByteArray(
+								targetIndexStrategy.getPrefix())));
+			}
 			return new QueryRanges(); // implies in negative and
 			// positive infinity
 		}
@@ -326,7 +391,7 @@ public class DataStoreUtils
 				+ unqualifiedTableName;
 	}
 
-	public static ByteArrayId ensureUniqueId(
+	public static ByteArray ensureUniqueId(
 			final byte[] id,
 			final boolean hasMetadata ) {
 
@@ -376,7 +441,7 @@ public class DataStoreUtils
 			buf.put(metadata);
 		}
 
-		return new ByteArrayId(
+		return new ByteArray(
 				buf.array());
 	}
 
@@ -407,42 +472,25 @@ public class DataStoreUtils
 			final DataStatisticsStore statsStore,
 			final InternalAdapterStore internalAdapterStore ) {
 		// Get all statistics, remove all statistics, then re-add
-		try (CloseableIterator<Short> it = internalAdapterStore.getInternalAdapterIds()) {
-			while (it.hasNext()) {
-				Short internalAdapterId = it.next();
-				if (internalAdapterId != null) {
-					DataStatistics<?>[] statsArray;
-					try (final CloseableIterator<DataStatistics<?>> stats = statsStore
-							.getDataStatistics(internalAdapterId)) {
-						statsArray = Iterators.toArray(
-								stats,
-								DataStatistics.class);
-					}
-					catch (IOException e) {
-						// wrap in a parameter exception
-						throw new ParameterException(
-								"Unable to combine stats",
-								e);
-					}
-					// Clear all existing stats
-					statsStore.removeAllStatistics(internalAdapterId);
-					for (DataStatistics<?> stats : statsArray) {
-						statsStore.incorporateStatistics(stats);
-					}
-				}
+		for (final short adapterId : internalAdapterStore.getAdapterIds()) {
+			InternalDataStatistics<?, ?, ?>[] statsArray;
+			try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> stats = statsStore
+					.getDataStatistics(adapterId)) {
+				statsArray = Iterators.toArray(
+						stats,
+						InternalDataStatistics.class);
 			}
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"Cannot merge stats on table '" + AbstractGeoWavePersistence.METADATA_TABLE + "'",
-					e);
-			return false;
+			// Clear all existing stats
+			statsStore.removeAllStatistics(adapterId);
+			for (final InternalDataStatistics<?, ?, ?> stats : statsArray) {
+				statsStore.incorporateStatistics(stats);
+			}
 		}
 		return true;
 	}
 
 	public static boolean mergeData(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore ) {
 		return false;

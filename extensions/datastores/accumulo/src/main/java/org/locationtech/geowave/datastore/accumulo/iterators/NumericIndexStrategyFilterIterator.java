@@ -21,15 +21,15 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeCache;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeLookupFactory;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 
@@ -167,9 +167,9 @@ public class NumericIndexStrategyFilterIterator implements
 				row.getBytes(),
 				partitionKeyLength);
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(
-				new ByteArrayId(
+				new ByteArray(
 						key.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						key.getSortKey()));
 		return rangeCache.inBounds(coordinates);
 	}

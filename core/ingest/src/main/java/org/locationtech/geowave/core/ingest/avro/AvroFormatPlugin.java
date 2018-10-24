@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.ingest.avro;
 
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
-import org.locationtech.geowave.core.ingest.index.IndexProvider;
-import org.locationtech.geowave.core.ingest.local.LocalPluginBase;
+import org.locationtech.geowave.core.store.ingest.IndexProvider;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
+import org.locationtech.geowave.core.store.ingest.LocalPluginBase;
 
 /**
  * This is the main plugin interface for reading from a local file system, and

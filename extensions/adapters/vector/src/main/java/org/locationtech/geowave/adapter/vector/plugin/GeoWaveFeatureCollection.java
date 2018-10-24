@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,8 +15,6 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.data.FeatureReader;
 import org.geotools.data.Query;
@@ -29,22 +27,28 @@ import org.geotools.filter.spatial.BBOXImpl;
 import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderOptions;
 import org.locationtech.geowave.adapter.vector.render.DistributedRenderResult;
-import org.locationtech.geowave.adapter.vector.stats.FeatureBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.vector.stats.FeatureNumericRangeStatistics;
-import org.locationtech.geowave.adapter.vector.stats.FeatureTimeRangeStatistics;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorStatisticsQueryBuilder;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.statistics.FeatureTimeRangeStatistics;
+import org.locationtech.geowave.core.geotime.util.ExtractAttributesFilter;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.filter.Filter;
 import org.opengis.geometry.BoundingBox;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -82,11 +86,12 @@ public class GeoWaveFeatureCollection extends
 		if (query.getFilter().equals(
 				Filter.INCLUDE)) {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+			final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
-			if (statsMap.containsKey(CountDataStatistics.STATS_TYPE)) {
-				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(CountDataStatistics.STATS_TYPE);
+			StatisticsId id = CountDataStatistics.STATS_TYPE.newBuilder().build().getId();
+			if (statsMap.containsKey(id)) {
+				final CountDataStatistics stats = (CountDataStatistics) statsMap.get(id);
 				if ((stats != null) && stats.isSet()) {
 					return (int) stats.getCount();
 				}
@@ -123,13 +128,11 @@ public class GeoWaveFeatureCollection extends
 		double minx = Double.MAX_VALUE, maxx = -Double.MAX_VALUE, miny = Double.MAX_VALUE, maxy = -Double.MAX_VALUE;
 		try {
 			// GEOWAVE-60 optimization
-			final Map<ByteArrayId, DataStatistics<SimpleFeature>> statsMap = reader
+			final Map<StatisticsId, InternalDataStatistics<SimpleFeature, ?, ?>> statsMap = reader
 					.getTransaction()
 					.getDataStatistics();
-			final ByteArrayId statId = FeatureBoundingBoxStatistics.composeId(reader
-					.getFeatureType()
-					.getGeometryDescriptor()
-					.getLocalName());
+			final StatisticsId statId = VectorStatisticsQueryBuilder.newBuilder().factory().bbox().fieldName(
+					reader.getFeatureType().getGeometryDescriptor().getLocalName()).build().getId();
 			if (statsMap.containsKey(statId)) {
 				final BoundingBoxDataStatistics<SimpleFeature> stats = (BoundingBoxDataStatistics<SimpleFeature>) statsMap
 						.get(statId);
@@ -348,13 +351,13 @@ public class GeoWaveFeatureCollection extends
 		if (envelope != null) {
 			return new GeometryFactory().toGeometry(envelope);
 		}
-		String geomAtrributeName = reader
+		final String geomAtrributeName = reader
 				.getComponents()
 				.getAdapter()
 				.getFeatureType()
 				.getGeometryDescriptor()
 				.getLocalName();
-		ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
+		final ExtractGeometryFilterVisitorResult geoAndCompareOp = ExtractGeometryFilterVisitor.getConstraints(
 				query.getFilter(),
 				GeometryUtils.getDefaultCRS(),
 				geomAtrributeName);
@@ -402,7 +405,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						minVisitor.setValue(reader.convertToType(
 								attr,
@@ -434,7 +437,7 @@ public class GeoWaveFeatureCollection extends
 					null);
 			int acceptedCount = 0;
 			for (final String attr : attrs) {
-				for (final DataStatistics<SimpleFeature> stat : reader.getStatsFor(attr)) {
+				for (final InternalDataStatistics<SimpleFeature, ?, ?> stat : reader.getStatsFor(attr)) {
 					if (stat instanceof FeatureTimeRangeStatistics) {
 						maxVisitor.setValue(reader.convertToType(
 								attr,
@@ -488,14 +491,7 @@ public class GeoWaveFeatureCollection extends
 	@Override
 	protected void closeIterator(
 			final Iterator<SimpleFeature> close ) {
-		try {
-			featureCursor.close();
-		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to close iterator",
-					e);
-		}
+		featureCursor.close();
 	}
 
 	public Iterator<SimpleFeature> getOpenIterator() {

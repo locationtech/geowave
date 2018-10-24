@@ -24,7 +24,7 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeature;
 import org.locationtech.geowave.adapter.vector.avro.FeatureDefinition;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;

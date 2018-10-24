@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.adapter.raster.adapter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.opengis.coverage.grid.GridCoverage;
 
@@ -20,7 +19,7 @@ public class RasterTileWriter implements
 	@Override
 	public byte[] getVisibility(
 			final GridCoverage rowValue,
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final RasterTile<?> fieldValue ) {
 		return new byte[] {};
 	}

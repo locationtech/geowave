@@ -19,17 +19,17 @@ import org.apache.accumulo.core.data.Key;
 import org.apache.accumulo.core.data.KeyValue;
 import org.apache.accumulo.core.data.Mutation;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.datastore.accumulo.operations.AccumuloWriter;
 
 /**
  *
- * Given a {@link WritableDataAdapter} and an {@link PrimaryIndex}, this class
- * handles the creation of Geowave-formatted [Key,Value] pairs.
+ * Given a {@link DataTypeAdapter} and an {@link Index}, this class handles the
+ * creation of Geowave-formatted [Key,Value] pairs.
  *
  * The intent is that this class will be used within the Mapper of a MapReduce
  * job to generate Keys and Values to be sorted during the shuffle-and-sort
@@ -43,12 +43,12 @@ public class AccumuloKeyValuePairGenerator<T>
 {
 
 	private final InternalDataAdapter<T> adapter;
-	private final PrimaryIndex index;
+	private final Index index;
 	private final VisibilityWriter<T> visibilityWriter;
 
 	public AccumuloKeyValuePairGenerator(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final VisibilityWriter<T> visibilityWriter ) {
 		super();
 		this.adapter = adapter;
@@ -57,7 +57,6 @@ public class AccumuloKeyValuePairGenerator<T>
 	}
 
 	public List<KeyValue> constructKeyValuePairs(
-			final byte[] adapterId,
 			final T entry ) {
 		final List<KeyValue> keyValuePairs = new ArrayList<>();
 		final GeoWaveRow[] rows = BaseDataStoreUtils.getGeoWaveRows(

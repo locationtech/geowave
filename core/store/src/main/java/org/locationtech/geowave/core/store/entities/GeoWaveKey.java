@@ -16,7 +16,7 @@ public interface GeoWaveKey
 {
 	public byte[] getDataId();
 
-	public short getInternalAdapterId();
+	public short getAdapterId();
 
 	public byte[] getSortKey();
 	
@@ -32,7 +32,7 @@ public interface GeoWaveKey
 		buffer.put(
 				key.getSortKey());
 		buffer.putShort(
-				key.getInternalAdapterId());
+				key.getAdapterId());
 		buffer.put(
 				key.getDataId());
 		buffer.putShort((short)

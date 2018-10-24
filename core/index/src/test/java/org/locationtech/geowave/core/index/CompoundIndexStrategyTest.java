@@ -17,7 +17,7 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -101,16 +101,16 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testGetQueryRangesWithMaximumNumberOfRanges() {
-		final Set<ByteArrayId> partitions = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
+		final Set<ByteArray> partitions = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
 		final QueryRanges sfcIndexRanges = sfcIndexStrategy.getQueryRanges(sfcIndexedRange);
 		final List<ByteArrayRange> ranges = new ArrayList<>();
-		for (final ByteArrayId r1 : partitions) {
+		for (final ByteArray r1 : partitions) {
 			for (final ByteArrayRange r2 : sfcIndexRanges.getCompositeQueryRanges()) {
-				final ByteArrayId start = new ByteArrayId(
+				final ByteArray start = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getStart().getBytes()));
-				final ByteArrayId end = new ByteArrayId(
+				final ByteArray end = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getEnd().getBytes()));
@@ -130,19 +130,19 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testGetQueryRanges() {
-		final Set<ByteArrayId> simpleIndexRanges = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
+		final Set<ByteArray> simpleIndexRanges = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
 		final List<ByteArrayRange> sfcIndexRanges = sfcIndexStrategy.getQueryRanges(
 				sfcIndexedRange,
 				8).getCompositeQueryRanges();
 		final List<ByteArrayRange> ranges = new ArrayList<>(
 				simpleIndexRanges.size() * sfcIndexRanges.size());
-		for (final ByteArrayId r1 : simpleIndexRanges) {
+		for (final ByteArray r1 : simpleIndexRanges) {
 			for (final ByteArrayRange r2 : sfcIndexRanges) {
-				final ByteArrayId start = new ByteArrayId(
+				final ByteArray start = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getStart().getBytes()));
-				final ByteArrayId end = new ByteArrayId(
+				final ByteArray end = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getEnd().getBytes()));
@@ -163,23 +163,23 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testGetInsertionIds() {
-		final List<ByteArrayId> ids = new ArrayList<>();
-		final Set<ByteArrayId> ids1 = simpleIndexStrategy.getInsertionPartitionKeys(sfcIndexedRange);
+		final List<ByteArray> ids = new ArrayList<>();
+		final Set<ByteArray> ids1 = simpleIndexStrategy.getInsertionPartitionKeys(sfcIndexedRange);
 		final int maxEstDuplicatesStrategy2 = 8 / ids1.size();
-		final List<ByteArrayId> ids2 = sfcIndexStrategy.getInsertionIds(
+		final List<ByteArray> ids2 = sfcIndexStrategy.getInsertionIds(
 				sfcIndexedRange,
 				maxEstDuplicatesStrategy2).getCompositeInsertionIds();
-		for (final ByteArrayId id1 : ids1) {
-			for (final ByteArrayId id2 : ids2) {
-				ids.add(new ByteArrayId(
+		for (final ByteArray id1 : ids1) {
+			for (final ByteArray id2 : ids2) {
+				ids.add(new ByteArray(
 						ByteArrayUtils.combineArrays(
 								id1.getBytes(),
 								id2.getBytes())));
 			}
 		}
-		final Set<ByteArrayId> testIds = new HashSet<>(
+		final Set<ByteArray> testIds = new HashSet<>(
 				ids);
-		final Set<ByteArrayId> compoundIndexIds = new HashSet<>(
+		final Set<ByteArray> compoundIndexIds = new HashSet<>(
 				compoundIndexStrategy.getInsertionIds(
 						compoundIndexedRange,
 						8).getCompositeInsertionIds());
@@ -190,11 +190,11 @@ public class CompoundIndexStrategyTest
 	@Test
 	public void testGetCoordinatesPerDimension() {
 
-		final ByteArrayId compoundIndexPartitionKey = new ByteArrayId(
+		final ByteArray compoundIndexPartitionKey = new ByteArray(
 				new byte[] {
 					16
 				});
-		final ByteArrayId compoundIndexSortKey = new ByteArrayId(
+		final ByteArray compoundIndexSortKey = new ByteArray(
 				new byte[] {
 					-46,
 					-93,
@@ -221,11 +221,11 @@ public class CompoundIndexStrategyTest
 
 	@Test
 	public void testGetRangeForId() {
-		final ByteArrayId sfcIndexPartitionKey = new ByteArrayId(
+		final ByteArray sfcIndexPartitionKey = new ByteArray(
 				new byte[] {
 					16
 				});
-		final ByteArrayId sfcIndexSortKey = new ByteArrayId(
+		final ByteArray sfcIndexSortKey = new ByteArray(
 				new byte[] {
 					-46,
 					-93,
@@ -269,16 +269,16 @@ public class CompoundIndexStrategyTest
 			imd.insertionIdsAdded(ids);
 		}
 
-		final Set<ByteArrayId> simpleIndexRanges = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
+		final Set<ByteArray> simpleIndexRanges = simpleIndexStrategy.getQueryPartitionKeys(sfcIndexedRange);
 		final QueryRanges sfcIndexRanges = sfcIndexStrategy.getQueryRanges(sfcIndexedRange);
 		final List<ByteArrayRange> ranges = new ArrayList<>();
-		for (final ByteArrayId r1 : simpleIndexRanges) {
+		for (final ByteArray r1 : simpleIndexRanges) {
 			for (final ByteArrayRange r2 : sfcIndexRanges.getCompositeQueryRanges()) {
-				final ByteArrayId start = new ByteArrayId(
+				final ByteArray start = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getStart().getBytes()));
-				final ByteArrayId end = new ByteArrayId(
+				final ByteArray end = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								r1.getBytes(),
 								r2.getEnd().getBytes()));

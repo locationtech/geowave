@@ -43,16 +43,15 @@ public class RemoteServiceClient
 
 	// }
 
-	public Response listAdapter(
+	public Response listTypes(
 			final String store_name ) {
-
-		final Response resp = remoteService.listAdapter(store_name);
+		final Response resp = remoteService.listTypes(store_name);
 		return resp;
 	}
 
-	public Response listIndex(
+	public Response listIndices(
 			final String store_name ) {
-		final Response resp = remoteService.listIndex(store_name);
+		final Response resp = remoteService.listIndices(store_name);
 		return resp;
 	}
 
@@ -75,12 +74,12 @@ public class RemoteServiceClient
 
 	public Response listStats(
 			final String store_name,
-			final String adapterId,
+			final String typeName,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
 		final Response resp = remoteService.listStats(
 				store_name,
-				adapterId,
+				typeName,
 				authorizations,
 				jsonFormatFlag);
 		return resp;
@@ -88,12 +87,12 @@ public class RemoteServiceClient
 
 	public Response calcStat(
 			final String store_name,
-			final String adapterId,
+			final String typeName,
 			final String statId ) {
 
 		return calcStat(
 				store_name,
-				adapterId,
+				typeName,
 				statId,
 				null,
 				null);
@@ -101,15 +100,15 @@ public class RemoteServiceClient
 
 	public Response calcStat(
 			final String store_name,
-			final String adapterId,
-			final String statId,
+			final String typeName,
+			final String statType,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
 
 		final Response resp = remoteService.calcStat(
 				store_name,
-				adapterId,
-				statId,
+				typeName,
+				statType,
 				authorizations,
 				jsonFormatFlag);
 		return resp;
@@ -134,39 +133,39 @@ public class RemoteServiceClient
 
 	public Response recalcStats(
 			final String store_name,
-			final String adapterId,
+			final String typeName,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
 
 		final Response resp = remoteService.recalcStats(
 				store_name,
-				adapterId,
+				typeName,
 				authorizations,
 				jsonFormatFlag);
 		return resp;
 	}
 
-	public Response removeAdapter(
+	public Response removeType(
 			final String store_name,
-			final String adapterId ) {
+			final String typeName ) {
 
-		final Response resp = remoteService.removeAdapter(
+		final Response resp = remoteService.removeType(
 				store_name,
-				adapterId);
+				typeName);
 		return resp;
 	}
 
 	public Response removeStat(
 			final String store_name,
-			final String adapterId,
-			final String statId,
+			final String typeName,
+			final String statType,
 			final String authorizations,
 			final Boolean jsonFormatFlag ) {
 
 		final Response resp = remoteService.removeStat(
 				store_name,
-				adapterId,
-				statId,
+				typeName,
+				statType,
 				authorizations,
 				jsonFormatFlag);
 		return resp;
@@ -174,12 +173,12 @@ public class RemoteServiceClient
 
 	public Response removeStat(
 			final String store_name,
-			final String adapterId,
-			final String statId ) {
+			final String typeName,
+			final String statType ) {
 		return removeStat(
 				store_name,
-				adapterId,
-				statId,
+				typeName,
+				statType,
 				null,
 				null);
 	}

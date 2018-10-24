@@ -19,7 +19,7 @@ import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.sparksql.udf.GeomFunctionRegistry;
 import org.locationtech.geowave.analytic.spark.sparksql.util.SchemaConverter;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -42,10 +42,10 @@ public class SimpleFeatureDataFrame
 
 	public boolean init(
 			final DataStorePluginOptions dataStore,
-			final ByteArrayId adapterId ) {
+			final String typeName ) {
 		featureType = FeatureDataUtils.getFeatureType(
 				dataStore,
-				adapterId);
+				typeName);
 		if (featureType == null) {
 			return false;
 		}

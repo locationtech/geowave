@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
@@ -18,7 +18,7 @@ import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -63,7 +63,7 @@ public class AdapterStoreImpl extends
 			return null;
 		}
 		return getObject(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(internalAdapterId)),
 				null);
 	}
@@ -71,7 +71,7 @@ public class AdapterStoreImpl extends
 	@Override
 	protected InternalDataAdapter<?> fromValue(
 			final GeoWaveMetadata entry ) {
-		final WritableDataAdapter<?> adapter = (WritableDataAdapter<?>) PersistenceUtils.fromBinary(entry.getValue());
+		final DataTypeAdapter<?> adapter = (DataTypeAdapter<?>) PersistenceUtils.fromBinary(entry.getValue());
 		return new InternalDataAdapterWrapper<>(
 				adapter,
 				ByteArrayUtils.byteArrayToShort(entry.getPrimaryId()));
@@ -91,16 +91,16 @@ public class AdapterStoreImpl extends
 			return false;
 		}
 		return objectExists(
-				new ByteArrayId(
+				new ByteArray(
 						ByteArrayUtils.shortToByteArray(internalAdapterId)),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
+	protected ByteArray getPrimaryId(
 			final InternalDataAdapter<?> persistedObject ) {
-		return new ByteArrayId(
-				ByteArrayUtils.shortToByteArray(persistedObject.getInternalAdapterId()));
+		return new ByteArray(
+				ByteArrayUtils.shortToByteArray(persistedObject.getAdapterId()));
 	}
 
 	@Override
@@ -115,7 +115,7 @@ public class AdapterStoreImpl extends
 			LOGGER.warn("Cannot remove adapter for null internal ID");
 			return;
 		}
-		remove(new ByteArrayId(
+		remove(new ByteArray(
 				ByteArrayUtils.shortToByteArray(internalAdapterId)));
 	}
 }

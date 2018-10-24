@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,40 +15,88 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider.SpatialIndexBuilder;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider.SpatialTemporalIndexBuilder;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
-import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
 public class SimpleIngest
 {
-
-	static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
 	public static final String FEATURE_NAME = "GridPoint";
+	private static Logger log = LoggerFactory.getLogger(SimpleIngest.class);
+
+	public static void main(
+			final String[] args ) {
+		final SimpleIngest si = new SimpleIngest();
+		final DataStore geowaveDataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
+
+		si.writeExampleData(geowaveDataStore);
+		System.out.println("Finished ingesting data");
+	}
+
+	/***
+	 * Here we will change the ingest mechanism to use a producer/consumer
+	 * pattern
+	 */
+	protected void writeExampleData(
+			final DataStore geowaveDataStore ) {
+
+		// In order to store data we need to determine the type of data store
+		final SimpleFeatureType point = createPointFeatureType();
+
+		// This a factory class that builds simple feature objects based on the
+		// type passed
+		final SimpleFeatureBuilder pointBuilder = new SimpleFeatureBuilder(
+				point);
+
+		// This is an adapter, that is needed to describe how to persist the
+		// data type passed
+		final GeotoolsFeatureDataAdapter dataTypeAdapter = createDataAdapter(point);
+
+		// This describes how to index the data
+		final Index index = createSpatialIndex();
+		geowaveDataStore.addType(
+				dataTypeAdapter,
+				index);
+		// make sure to close the index writer (a try-with-resources block such
+		// as this automatically closes the resource when exiting the block)
+		try (Writer<SimpleFeature> indexWriter = geowaveDataStore.createWriter(dataTypeAdapter.getTypeName())) {
+			// build a grid of points across the globe at each whole
+			// lattitude/longitude intersection
+
+			for (final SimpleFeature sft : getGriddedFeatures(
+					pointBuilder,
+					1000)) {
+				indexWriter.write(sft);
+			}
+		}
+	}
 
 	public static List<SimpleFeature> getGriddedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
 			final int firstFeatureId ) {
 
+		// features require a featureID - this should be uniqiue per data type
+		// adapter ID
+		// (i.e. writing a new feature with the same feature id for the same
+		// data type adapter will
+		// overwrite the existing feature)
 		int featureId = firstFeatureId;
 		final List<SimpleFeature> feats = new ArrayList<>();
 		for (int longitude = -180; longitude <= 180; longitude += 5) {
@@ -83,12 +131,12 @@ public class SimpleIngest
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
-		Calendar cal = Calendar.getInstance();
+		final Calendar cal = Calendar.getInstance();
 		cal.set(
 				1996,
 				Calendar.JUNE,
 				15);
-		Date[] dates = new Date[3];
+		final Date[] dates = new Date[3];
 		dates[0] = cal.getTime();
 		cal.set(
 				1997,
@@ -133,66 +181,6 @@ public class SimpleIngest
 	}
 
 	/***
-	 * DataStore is essentially the controller that take the accumulo
-	 * information, geowave configuration, and data type, and inserts/queries
-	 * from accumulo
-	 *
-	 * @param instance
-	 *            Accumulo instance configuration
-	 * @return DataStore object for the particular accumulo instance
-	 */
-	protected DataStore getAccumuloGeowaveDataStore(
-			final AccumuloOperations operations,
-			final AccumuloOptions options ) {
-		// GeoWave persists both the index and data adapter to the same accumulo
-		// namespace as the data. The intent here
-		// is that all data is discoverable without configuration/classes stored
-		// outside of the accumulo instance.
-		return new AccumuloDataStore(
-				operations,
-				options);
-	}
-
-	/***
-	 * The class tells geowave about the accumulo instance it should connect to,
-	 * as well as what tables it should create/store it's data in
-	 *
-	 * @param zookeepers
-	 *            Zookeepers associated with the accumulo instance, comma
-	 *            separate
-	 * @param accumuloInstance
-	 *            Accumulo instance name
-	 * @param accumuloUser
-	 *            User geowave should connect to accumulo as
-	 * @param accumuloPass
-	 *            Password for user to connect to accumulo
-	 * @param geowaveNamespace
-	 *            Different than an accumulo namespace (unfortunate naming
-	 *            usage) - this is basically a prefix on the table names geowave
-	 *            uses.
-	 * @return Object encapsulating the accumulo connection information
-	 * @throws AccumuloException
-	 * @throws AccumuloSecurityException
-	 */
-	protected AccumuloOperations getAccumuloOperationsInstance(
-			final String zookeepers,
-			final String accumuloInstance,
-			final String accumuloUser,
-			final String accumuloPass,
-			final String geowaveNamespace,
-			final AccumuloOptions options )
-			throws AccumuloException,
-			AccumuloSecurityException {
-		return new AccumuloOperations(
-				zookeepers,
-				accumuloInstance,
-				accumuloUser,
-				accumuloPass,
-				geowaveNamespace,
-				options);
-	}
-
-	/***
 	 * The dataadapter interface describes how to serialize a data type. Here we
 	 * are using an implementation that understands how to serialize OGC
 	 * SimpleFeature types.
@@ -217,7 +205,7 @@ public class SimpleIngest
 	 *
 	 * @return GeoWave index for a default SPATIAL index
 	 */
-	public static PrimaryIndex createSpatialIndex() {
+	public static Index createSpatialIndex() {
 
 		// Reasonable values for spatial and spatial-temporal are provided
 		// through index builders.
@@ -237,7 +225,7 @@ public class SimpleIngest
 		return new SpatialIndexBuilder().createIndex();
 	}
 
-	public static PrimaryIndex createSpatialTemporalIndex() {
+	public static Index createSpatialTemporalIndex() {
 		return new SpatialTemporalIndexBuilder().createIndex();
 	}
 

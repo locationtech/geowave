@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,31 +20,24 @@ import org.apache.avro.file.DataFileWriter;
 import org.apache.avro.generic.GenericDatumWriter;
 import org.geotools.filter.text.cql2.CQLException;
 import org.locationtech.geowave.adapter.vector.AvroFeatureUtils;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
 import org.locationtech.geowave.adapter.vector.cli.VectorSection;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -61,15 +54,16 @@ public class VectorLocalExportCommand extends
 		Command
 {
 	@Parameter(description = "<store name>")
-	private List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<>();
 
 	@ParametersDelegate
 	private VectorLocalExportOptions options = new VectorLocalExportOptions();
 
 	private DataStorePluginOptions inputStoreOptions = null;
 
+	@Override
 	public void execute(
-			OperationParams params )
+			final OperationParams params )
 			throws IOException,
 			CQLException {
 
@@ -79,11 +73,11 @@ public class VectorLocalExportCommand extends
 					"Requires arguments: <store name>");
 		}
 
-		String storeName = parameters.get(0);
+		final String storeName = parameters.get(0);
 
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
-		StoreLoader inputStoreLoader = new StoreLoader(
+		final File configFile = getGeoWaveConfigFile(params);
+		final StoreLoader inputStoreLoader = new StoreLoader(
 				storeName);
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			throw new ParameterException(
@@ -91,12 +85,12 @@ public class VectorLocalExportCommand extends
 		}
 		inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-		PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
-		IndexStore indexStore = inputStoreOptions.createIndexStore();
-		DataStore dataStore = inputStoreOptions.createDataStore();
-		InternalAdapterStore internaAdapterStore = inputStoreOptions.createInternalAdapterStore();
+		final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
+		final IndexStore indexStore = inputStoreOptions.createIndexStore();
+		final DataStore dataStore = inputStoreOptions.createDataStore();
+		final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
 
-		try (final DataFileWriter<AvroSimpleFeatureCollection> dfw = new DataFileWriter<AvroSimpleFeatureCollection>(
+		try (final DataFileWriter<AvroSimpleFeatureCollection> dfw = new DataFileWriter<>(
 				new GenericDatumWriter<AvroSimpleFeatureCollection>(
 						AvroSimpleFeatureCollection.SCHEMA$))) {
 			dfw.setCodec(CodecFactory.snappyCodec());
@@ -104,20 +98,19 @@ public class VectorLocalExportCommand extends
 					AvroSimpleFeatureCollection.SCHEMA$,
 					options.getOutputFile());
 			// get appropriate feature adapters
-			final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<GeotoolsFeatureDataAdapter>();
-			if ((options.getAdapterIds() != null) && !options.getAdapterIds().isEmpty()) {
-				for (final String adapterId : options.getAdapterIds()) {
-					short internalAdapterId = internaAdapterStore.getInternalAdapterId(new ByteArrayId(
-							adapterId));
-					final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(internalAdapterId);
+			final List<GeotoolsFeatureDataAdapter> featureAdapters = new ArrayList<>();
+			if ((options.getTypeNames() != null) && options.getTypeNames().length > 0) {
+				for (final String typeName : options.getTypeNames()) {
+					final short adapterId = internalAdapterStore.getAdapterId(typeName);
+					final InternalDataAdapter<?> internalDataAdapter = adapterStore.getAdapter(adapterId);
 					if (internalDataAdapter == null) {
 						JCommander.getConsole().println(
-								"Type '" + adapterId + "' not found");
+								"Type '" + typeName + "' not found");
 						continue;
 					}
 					else if (!(internalDataAdapter.getAdapter() instanceof GeotoolsFeatureDataAdapter)) {
 						JCommander.getConsole().println(
-								"Type '" + adapterId + "' does not support vector export. Instance of "
+								"Type '" + typeName + "' does not support vector export. Instance of "
 										+ internalDataAdapter.getAdapter().getClass());
 						continue;
 					}
@@ -138,21 +131,12 @@ public class VectorLocalExportCommand extends
 				JCommander.getConsole().println(
 						"Unable to find any vector data types in store");
 			}
-			PrimaryIndex queryIndex = null;
-			if (options.getIndexId() != null) {
-				final Index index = indexStore.getIndex(new ByteArrayId(
-						options.getIndexId()));
-				if (index == null) {
+			Index queryIndex = null;
+			if (options.getIndexName() != null) {
+				queryIndex = indexStore.getIndex(options.getIndexName());
+				if (queryIndex == null) {
 					JCommander.getConsole().println(
-							"Unable to find index '" + options.getIndexId() + "' in store");
-					return;
-				}
-				if (index instanceof PrimaryIndex) {
-					queryIndex = (PrimaryIndex) index;
-				}
-				else {
-					JCommander.getConsole().println(
-							"Index '" + options.getIndexId() + "' is not a primary index");
+							"Unable to find index '" + options.getIndexName() + "' in store");
 					return;
 				}
 			}
@@ -160,23 +144,18 @@ public class VectorLocalExportCommand extends
 				final SimpleFeatureType sft = adapter.getFeatureType();
 				JCommander.getConsole().println(
 						"Exporting type '" + sft.getTypeName() + "'");
-				final QueryOptions queryOptions = new QueryOptions();
-				if (queryIndex != null) {
-					queryOptions.setIndex(queryIndex);
-				}
-				Query queryConstraints = null;
-				if (options.getCqlFilter() != null) {
-					queryConstraints = CQLQuery.createOptimalQuery(
-							options.getCqlFilter(),
-							adapter,
-							queryIndex,
-							null);
-				}
-				queryOptions.setAdapter(adapter);
+				final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
 
-				final CloseableIterator<Object> it = dataStore.query(
-						queryOptions,
-						queryConstraints);
+				if (options.getIndexName() != null) {
+					bldr.indexName(options.getIndexName());
+				}
+				if (options.getCqlFilter() != null) {
+					bldr.constraints(bldr.constraintsFactory().cqlConstraints(
+							options.getCqlFilter()));
+				}
+				bldr.addTypeName(adapter.getTypeName());
+
+				final CloseableIterator<SimpleFeature> it = dataStore.query(bldr.build());
 				int iteration = 0;
 				while (it.hasNext()) {
 					final AvroSimpleFeatureCollection simpleFeatureCollection = new AvroSimpleFeatureCollection();
@@ -186,7 +165,7 @@ public class VectorLocalExportCommand extends
 							sft,
 							null,
 							""));
-					final List<AttributeValues> avList = new ArrayList<AttributeValues>(
+					final List<AttributeValues> avList = new ArrayList<>(
 							options.getBatchSize());
 					while (it.hasNext() && (avList.size() < options.getBatchSize())) {
 						final Object obj = it.next();
@@ -216,9 +195,9 @@ public class VectorLocalExportCommand extends
 	}
 
 	public void setParameters(
-			String storeName ) {
-		this.parameters = new ArrayList<String>();
-		this.parameters.add(storeName);
+			final String storeName ) {
+		parameters = new ArrayList<>();
+		parameters.add(storeName);
 	}
 
 	public DataStorePluginOptions getInputStoreOptions() {
@@ -226,7 +205,7 @@ public class VectorLocalExportCommand extends
 	}
 
 	public void setOptions(
-			VectorLocalExportOptions options ) {
+			final VectorLocalExportOptions options ) {
 		this.options = options;
 	}
 

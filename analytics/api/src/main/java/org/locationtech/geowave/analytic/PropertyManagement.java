@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,38 +22,34 @@ import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
-import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.PrecisionModel;
-import com.vividsolutions.jts.io.WKTReader;
 
 /**
  * Manage properties used by the Map Reduce environment that are provided
  * through the API (e.g. command). Allow these arguments to be placed an 'args'
  * list for 'main' executables (e.g. ToolRunner).
- * 
+ *
  * The class supports some basic conversions.
- * 
+ *
  * Non-serializable objects: {@link Persistable} instances are converted to and
- * from byte formats. {@link DistributableQuery} is a special case, supporting
- * WKT String. {@link Path} are converted to a from string representation of the
+ * from byte formats. {@link QueryConstraints} is a special case, supporting WKT
+ * String. {@link Path} are converted to a from string representation of the
  * their URI.
- * 
+ *
  * Serializable objects: {@link NumericRange} supports min,max in string
  * representation (e.g. "1.0,2.0")
- * 
- * 
+ *
+ *
  * NOTE: ConfigutationWrapper implementation is scopeless.
- * 
+ *
  * EXPECTED FUTURE WORK: I am bit unsatisfied with the duality of the parameters
  * base class. In one case, in is treated a description for a class value and,
  * in the other case, it is treated as a description for the type of a property
@@ -63,7 +59,7 @@ import com.vividsolutions.jts.io.WKTReader;
  * goal is to uniformly provide feedback to parameters from command line
  * arguments and property files on submission to the manager rather than on
  * extraction from the manager.
- * 
+ *
  */
 public class PropertyManagement implements
 		Serializable
@@ -75,13 +71,12 @@ public class PropertyManagement implements
 	private static final long serialVersionUID = -4186468044516636362L;
 	final static Logger LOGGER = LoggerFactory.getLogger(PropertyManagement.class);
 
-	private final Map<ParameterEnum<?>, Serializable> localProperties = new HashMap<ParameterEnum<?>, Serializable>();
-	private final List<PropertyConverter<?>> converters = new ArrayList<PropertyConverter<?>>();
+	private final Map<ParameterEnum<?>, Serializable> localProperties = new HashMap<>();
+	private final List<PropertyConverter<?>> converters = new ArrayList<>();
 	private PropertyManagement nestProperties = null;
 
 	public PropertyManagement() {
 		converters.add(new QueryConverter());
-		converters.add(new QueryOptionsConverter());
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
@@ -94,7 +89,6 @@ public class PropertyManagement implements
 			final ParameterEnum<?>[] names,
 			final Object[] values ) {
 		this.converters.add(new QueryConverter());
-		this.converters.add(new QueryOptionsConverter());
 		this.converters.add(new PathConverter());
 		this.converters.add(new PersistableConverter());
 		this.converters.add(new DoubleConverter());
@@ -112,7 +106,6 @@ public class PropertyManagement implements
 			final ParameterEnum<?>[] names,
 			final Object[] values ) {
 		converters.add(new QueryConverter());
-		converters.add(new QueryOptionsConverter());
 		converters.add(new PathConverter());
 		converters.add(new PersistableConverter());
 		converters.add(new DoubleConverter());
@@ -184,13 +177,13 @@ public class PropertyManagement implements
 
 	/**
 	 * Does not work for non-serializable data (e.g. Path or Persistable)
-	 * 
+	 *
 	 */
 
 	public synchronized Serializable storeIfEmpty(
 			final ParameterEnum<?> propertyEnum,
 			final Serializable value ) {
-		if (!containsPropertyValue(propertyEnum) && value != null) {
+		if (!containsPropertyValue(propertyEnum) && (value != null)) {
 			LOGGER.info(
 					"Setting parameter : {} to {}",
 					propertyEnum.toString(),
@@ -310,7 +303,7 @@ public class PropertyManagement implements
 	/**
 	 * Returns the value as, without conversion from the properties. Throws an
 	 * exception if a conversion is required to a specific type
-	 * 
+	 *
 	 * @param property
 	 * @return
 	 * @throws Exception
@@ -338,7 +331,7 @@ public class PropertyManagement implements
 	/**
 	 * Returns the value after conversion. Throws an exception if a conversion
 	 * fails.
-	 * 
+	 *
 	 * @param property
 	 * @return
 	 * @throws Exception
@@ -558,26 +551,14 @@ public class PropertyManagement implements
 		return classToValidate;
 	}
 
-	public DistributableQuery getPropertyAsQuery(
-			final ParameterEnum<?> property )
-			throws Exception {
-		final Serializable val = getPropertyValue(property);
-		if (val != null) {
-			return (DistributableQuery) validate(
-					property,
-					new QueryConverter().convert(val));
-		}
-		return null;
-	}
-
-	public QueryOptions getPropertyAsQueryOptions(
+	public Query<?> getPropertyAsQuery(
 			final ParameterEnum property )
 			throws Exception {
 		final Serializable val = getPropertyValue(property);
 		if (val != null) {
-			return (QueryOptions) validate(
+			return (Query) validate(
 					property,
-					new QueryOptionsConverter().convert(val));
+					new QueryConverter().convert(val));
 		}
 		return null;
 	}
@@ -638,11 +619,11 @@ public class PropertyManagement implements
 	/**
 	 * Add to the set of converters used to take a String representation of a
 	 * value and convert it into another serializable form.
-	 * 
+	 *
 	 * This is done if the preferred internal representation does not match that
 	 * of a string. For example, a query is maintained as bytes even though it
 	 * can be provided as a query
-	 * 
+	 *
 	 * @param converter
 	 */
 	public synchronized void addConverter(
@@ -743,92 +724,45 @@ public class PropertyManagement implements
 	}
 
 	public static class QueryConverter implements
-			PropertyConverter<DistributableQuery>
+			PropertyConverter<Query>
 	{
 
 		/**
-		 *
-		 */
+		*
+		*/
 		private static final long serialVersionUID = 1L;
 
 		@Override
 		public Serializable convert(
-				final DistributableQuery ob ) {
+				final Query ob ) {
 			try {
 				return toBytes(ob);
 			}
 			catch (final UnsupportedEncodingException e) {
 				throw new IllegalArgumentException(
 						String.format(
-								"Cannot convert %s to a DistributableQuery: %s",
+								"Cannot convert %s to a Query: %s",
 								ob.toString(),
 								e.getLocalizedMessage()));
 			}
 		}
 
 		@Override
-		public DistributableQuery convert(
+		public Query convert(
 				final Serializable ob )
 				throws Exception {
 			if (ob instanceof byte[]) {
-				return (DistributableQuery) PropertyManagement.fromBytes((byte[]) ob);
+				return (Query) PropertyManagement.fromBytes((byte[]) ob);
 			}
-			final PrecisionModel precision = new PrecisionModel();
-			final GeometryFactory geometryFactory = new GeometryFactory(
-					precision,
-					4326);
-			final WKTReader wktReader = new WKTReader(
-					geometryFactory);
-			return new SpatialQuery(
-					wktReader.read(ob.toString()));
+			else if (ob instanceof Query) {
+				return (Query) ob;
+			}
+			return QueryBuilder.newBuilder().build();
 		}
 
 		@Override
-		public Class<DistributableQuery> baseClass() {
-			return DistributableQuery.class;
-		}
-	}
-
-	public static class QueryOptionsConverter implements
-			PropertyConverter<QueryOptions>
-	{
-
-		/**
- *
- */
-		private static final long serialVersionUID = 1L;
-
-		@Override
-		public Serializable convert(
-				final QueryOptions ob ) {
-			try {
-				return toBytes(ob);
-			}
-			catch (final UnsupportedEncodingException e) {
-				throw new IllegalArgumentException(
-						String.format(
-								"Cannot convert %s to a QueryOptions: %s",
-								ob.toString(),
-								e.getLocalizedMessage()));
-			}
-		}
-
-		@Override
-		public QueryOptions convert(
-				final Serializable ob )
-				throws Exception {
-			if (ob instanceof byte[]) {
-				return (QueryOptions) PropertyManagement.fromBytes((byte[]) ob);
-			}
-			else if (ob instanceof QueryOptions) {
-				return (QueryOptions) ob;
-			}
-			return new QueryOptions();
-		}
-
-		@Override
-		public Class<QueryOptions> baseClass() {
-			return QueryOptions.class;
+		public Class<Query> baseClass() {
+			return Query.class;
 		}
 	}
 
@@ -912,8 +846,8 @@ public class PropertyManagement implements
 			PropertyConverter<Double>
 	{
 		/**
- *
- */
+		*
+		*/
 		private static final long serialVersionUID = 1L;
 
 		@Override

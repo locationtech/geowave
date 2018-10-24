@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,17 +24,16 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.junit.Test;
-import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor;
 import org.locationtech.geowave.analytic.param.BasicParameterHelper;
 import org.locationtech.geowave.analytic.param.ExtractParameters;
+import org.locationtech.geowave.analytic.param.InputParameters.Input;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.ParameterHelper;
-import org.locationtech.geowave.analytic.param.InputParameters.Input;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -97,7 +96,7 @@ public class PropertyManagementTest
 
 		((ParameterEnum<Object>) ExtractParameters.Extract.DIMENSION_EXTRACT_CLASS).getHelper().setValue(
 				pm,
-				(Object) "org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor");
+				"org.locationtech.geowave.analytic.extract.EmptyDimensionExtractor");
 
 		assertEquals(
 				EmptyDimensionExtractor.class,
@@ -144,22 +143,28 @@ public class PropertyManagementTest
 		final PropertyManagement pm = new PropertyManagement();
 		pm.store(
 				ExtractParameters.Extract.QUERY,
-				sq);
-		final DistributableQuery q = pm.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
+				QueryBuilder.newBuilder().constraints(
+						sq).build());
+		final Query q = pm.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 		assertNotNull(q);
-		assertNotNull(((SpatialQuery) q).getQueryGeometry());
+		final QueryConstraints c = q.getQueryConstraints();
+		assertNotNull(c);
+		assertNotNull(((SpatialQuery) c).getQueryGeometry());
 		assertEquals(
 				"POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))",
-				((SpatialQuery) q).getQueryGeometry().toText());
+				((SpatialQuery) c).getQueryGeometry().toText());
 
 		pm.store(
 				ExtractParameters.Extract.QUERY,
 				q);
-		final DistributableQuery q1 = (DistributableQuery) pm.getPropertyAsPersistable(ExtractParameters.Extract.QUERY);
-		assertNotNull(((SpatialQuery) q1).getQueryGeometry());
+		final Query q1 = (Query) pm.getPropertyAsPersistable(ExtractParameters.Extract.QUERY);
+		assertNotNull(q1);
+		final QueryConstraints c1 = q1.getQueryConstraints();
+		assertNotNull(c1);
+		assertNotNull(((SpatialQuery) c1).getQueryGeometry());
 		assertEquals(
 				"POLYGON ((24 33, 28 33, 28 31, 24 31, 24 33))",
-				((SpatialQuery) q1).getQueryGeometry().toText());
+				((SpatialQuery) c1).getQueryGeometry().toText());
 	}
 
 	@Test
@@ -203,6 +208,11 @@ public class PropertyManagementTest
 		@Override
 		public ParameterHelper getHelper() {
 			return new ParameterHelper<NonSerializableExample>() {
+
+				/**
+				 *
+				 */
+				private static final long serialVersionUID = 1L;
 
 				@Override
 				public Class<NonSerializableExample> getBaseClass() {
@@ -290,19 +300,15 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm = new PropertyManagement();
 		pm.store(
-				ExtractParameters.Extract.QUERY_OPTIONS,
-				new QueryOptions(
-						new ByteArrayId(
-								"adapterId"),
-						new ByteArrayId(
-								"indexId")));
+				ExtractParameters.Extract.QUERY,
+				QueryBuilder.newBuilder().addTypeName(
+						"adapterId").indexName(
+						"indexId").build());
 		assertEquals(
-				new QueryOptions(
-						new ByteArrayId(
-								"adapterId"),
-						new ByteArrayId(
-								"indexId")),
-				pm.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
+				QueryBuilder.newBuilder().addTypeName(
+						"adapterId").indexName(
+						"indexId").build(),
+				pm.getPropertyAsQuery(ExtractParameters.Extract.QUERY));
 
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
@@ -321,12 +327,10 @@ public class PropertyManagementTest
 				bis)) {
 			final PropertyManagement pm2 = (PropertyManagement) is.readObject();
 			assertEquals(
-					new QueryOptions(
-							new ByteArrayId(
-									"adapterId"),
-							new ByteArrayId(
-									"indexId")),
-					pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
+					QueryBuilder.newBuilder().addTypeName(
+							"adapterId").indexName(
+							"indexId").build(),
+					pm2.getPropertyAsQuery(ExtractParameters.Extract.QUERY));
 			assertEquals(
 					path1,
 					pm2.getPropertyAsPath(Input.HDFS_INPUT_PATH));
@@ -379,23 +383,19 @@ public class PropertyManagementTest
 			throws Exception {
 		final PropertyManagement pm1 = new PropertyManagement();
 		pm1.store(
-				ExtractParameters.Extract.QUERY_OPTIONS,
-				new QueryOptions(
-						new ByteArrayId(
-								"adapterId"),
-						new ByteArrayId(
-								"indexId")));
+				ExtractParameters.Extract.QUERY,
+				QueryBuilder.newBuilder().addTypeName(
+						"adapterId").indexName(
+						"indexId").build());
 
 		final PropertyManagement pm2 = new PropertyManagement(
 				pm1);
 
 		assertEquals(
-				new QueryOptions(
-						new ByteArrayId(
-								"adapterId"),
-						new ByteArrayId(
-								"indexId")),
-				pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
+				QueryBuilder.newBuilder().addTypeName(
+						"adapterId").indexName(
+						"indexId").build(),
+				pm2.getPropertyAsQuery(ExtractParameters.Extract.QUERY));
 		final Path path1 = new Path(
 				"http://java.sun.com/j2se/1.3/foo");
 		pm2.store(
@@ -413,12 +413,10 @@ public class PropertyManagementTest
 				bis)) {
 			final PropertyManagement pm3 = (PropertyManagement) is.readObject();
 			assertEquals(
-					new QueryOptions(
-							new ByteArrayId(
-									"adapterId"),
-							new ByteArrayId(
-									"indexId")),
-					pm2.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS));
+					QueryBuilder.newBuilder().addTypeName(
+							"adapterId").indexName(
+							"indexId").build(),
+					pm2.getPropertyAsQuery(ExtractParameters.Extract.QUERY));
 			assertEquals(
 					path1,
 					pm3.getPropertyAsPath(Input.HDFS_INPUT_PATH));

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,13 +21,11 @@ import org.locationtech.geowave.analytic.param.annotations.InputParameter;
 import org.locationtech.geowave.analytic.param.annotations.MapReduceParameter;
 import org.locationtech.geowave.analytic.param.annotations.OutputParameter;
 import org.locationtech.geowave.core.cli.annotations.PrefixParameter;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParametersDelegate;
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 public class CommonOptions
 {
@@ -131,7 +129,7 @@ public class CommonOptions
 	}
 
 	public void setCommonDistanceFunctionClass(
-			String commonDistanceFunctionClass ) {
+			final String commonDistanceFunctionClass ) {
 		this.commonDistanceFunctionClass = commonDistanceFunctionClass;
 	}
 
@@ -140,8 +138,8 @@ public class CommonOptions
 	}
 
 	public void setQueryOptions(
-			QueryOptionsCommand extractQueryOptions ) {
-		this.queryOptions = extractQueryOptions;
+			final QueryOptionsCommand extractQueryOptions ) {
+		queryOptions = extractQueryOptions;
 	}
 
 	public String getExtractMaxInputSplit() {
@@ -149,7 +147,7 @@ public class CommonOptions
 	}
 
 	public void setExtractMaxInputSplit(
-			String extractMaxInputSplit ) {
+			final String extractMaxInputSplit ) {
 		this.extractMaxInputSplit = extractMaxInputSplit;
 	}
 
@@ -158,7 +156,7 @@ public class CommonOptions
 	}
 
 	public void setExtractMinInputSplit(
-			String extractMinInputSplit ) {
+			final String extractMinInputSplit ) {
 		this.extractMinInputSplit = extractMinInputSplit;
 	}
 
@@ -167,7 +165,7 @@ public class CommonOptions
 	}
 
 	public void setExtractQuery(
-			String extractQuery ) {
+			final String extractQuery ) {
 		this.extractQuery = extractQuery;
 	}
 
@@ -176,7 +174,7 @@ public class CommonOptions
 	}
 
 	public void setOutputOutputFormat(
-			String outputOutputFormat ) {
+			final String outputOutputFormat ) {
 		this.outputOutputFormat = outputOutputFormat;
 	}
 
@@ -185,7 +183,7 @@ public class CommonOptions
 	}
 
 	public void setOutputReducerCount(
-			String outputReducerCount ) {
+			final String outputReducerCount ) {
 		this.outputReducerCount = outputReducerCount;
 	}
 
@@ -194,7 +192,7 @@ public class CommonOptions
 	}
 
 	public void setInputFormatClass(
-			String inputFormatClass ) {
+			final String inputFormatClass ) {
 		this.inputFormatClass = inputFormatClass;
 	}
 
@@ -203,37 +201,27 @@ public class CommonOptions
 	}
 
 	public void setInputHdfsPath(
-			String inputHdfsPath ) {
+			final String inputHdfsPath ) {
 		this.inputHdfsPath = inputHdfsPath;
 	}
 
 	/**
 	 * Build the query options from the command line arguments.
-	 * 
+	 *
 	 * @return
 	 */
-	public QueryOptions buildQueryOptions() {
-		final QueryOptions options = new QueryOptions();
-		if (queryOptions.getAdapterIds() != null && queryOptions.getAdapterIds().size() > 0)
-			options.setAdapterIds(Lists.transform(
-					queryOptions.getAdapterIds(),
-					new Function<String, ByteArrayId>() {
-						@Override
-						public ByteArrayId apply(
-								String input ) {
-							return new ByteArrayId(
-									input);
-						}
-					}));
+	public Query<?> buildQuery() {
+		final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
+		if ((queryOptions.getTypeNames() != null) && (queryOptions.getTypeNames().length > 0)) {
+			bldr.setTypeNames(queryOptions.getTypeNames());
+		}
 		if (queryOptions.getAuthorizations() != null) {
-			options.setAuthorizations(this.queryOptions.getAuthorizations().toArray(
-					new String[this.queryOptions.getAuthorizations().size()]));
+			bldr.setAuthorizations(queryOptions.getAuthorizations());
 		}
-		if (queryOptions.getIndexId() != null) {
-			options.setIndexId(new ByteArrayId(
-					queryOptions.getIndexId()));
+		if (queryOptions.getIndexName() != null) {
+			bldr.indexName(queryOptions.getIndexName());
 		}
-		return options;
+		return bldr.build();
 	}
 
 	public String getMapReduceConfigFile() {
@@ -241,7 +229,7 @@ public class CommonOptions
 	}
 
 	public void setMapReduceConfigFile(
-			String mapReduceConfigFile ) {
+			final String mapReduceConfigFile ) {
 		this.mapReduceConfigFile = mapReduceConfigFile;
 	}
 
@@ -250,7 +238,7 @@ public class CommonOptions
 	}
 
 	public void setMapReduceHdfsBaseDir(
-			String mapReduceHdfsBaseDir ) {
+			final String mapReduceHdfsBaseDir ) {
 		this.mapReduceHdfsBaseDir = mapReduceHdfsBaseDir;
 	}
 
@@ -259,7 +247,7 @@ public class CommonOptions
 	}
 
 	public void setMapReduceHdfsHostPort(
-			String mapReduceHdfsHostPort ) {
+			final String mapReduceHdfsHostPort ) {
 		this.mapReduceHdfsHostPort = mapReduceHdfsHostPort;
 	}
 
@@ -268,7 +256,7 @@ public class CommonOptions
 	}
 
 	public void setMapReduceJobtrackerHostPort(
-			String mapReduceJobtrackerHostPort ) {
+			final String mapReduceJobtrackerHostPort ) {
 		this.mapReduceJobtrackerHostPort = mapReduceJobtrackerHostPort;
 	}
 
@@ -277,7 +265,7 @@ public class CommonOptions
 	}
 
 	public void setMapReduceYarnResourceManager(
-			String mapReduceYarnResourceManager ) {
+			final String mapReduceYarnResourceManager ) {
 		this.mapReduceYarnResourceManager = mapReduceYarnResourceManager;
 	}
 }

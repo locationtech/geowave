@@ -16,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.DeleteCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
@@ -42,16 +43,16 @@ public class SecondaryIndexDataManager<T> implements
 	private final SecondaryIndexDataAdapter<T> adapter;
 	private final SecondaryIndexDataStore secondaryIndexStore;
 	private final CommonIndexModel primaryIndexModel;
-	private final ByteArrayId primaryIndexId;
+	private final String primaryIndexName;
 
 	public SecondaryIndexDataManager(
 			final SecondaryIndexDataStore secondaryIndexStore,
 			final SecondaryIndexDataAdapter<T> adapter,
-			final PrimaryIndex primaryIndex ) {
+			final Index primaryIndex ) {
 		this.adapter = adapter;
 		this.secondaryIndexStore = secondaryIndexStore;
 		this.primaryIndexModel = primaryIndex.getIndexModel();
-		this.primaryIndexId = primaryIndex.getId();
+		this.primaryIndexName = primaryIndex.getName();
 
 	}
 
@@ -61,11 +62,11 @@ public class SecondaryIndexDataManager<T> implements
 			final GeoWaveRow... kvs ) {
 		// loop secondary indices for adapter
 		final InsertionIds primaryIndexInsertionIds = DataStoreUtils.keysToInsertionIds(kvs);
-		for (final SecondaryIndex<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
-			final ByteArrayId indexedAttributeFieldId = secondaryIndex.getFieldId();
+		for (final SecondaryIndexImpl<T> secondaryIndex : adapter.getSupportedSecondaryIndices()) {
+			final String indexedAttributeFieldName = secondaryIndex.getFieldName();
 			final int position = adapter.getPositionOfOrderedField(
 					primaryIndexModel,
-					indexedAttributeFieldId);
+					indexedAttributeFieldName);
 			Object fieldValue = null;
 			byte[] visibility = null;
 			// find the field value and deserialize it
@@ -80,7 +81,7 @@ public class SecondaryIndexDataManager<T> implements
 							v.getFieldMask(),
 							fieldSubsetBitmask);
 					fieldValue = adapter.getReader(
-							indexedAttributeFieldId).readField(
+							indexedAttributeFieldName).readField(
 							byteValue);
 					visibility = v.getVisibility();
 					break;
@@ -91,43 +92,44 @@ public class SecondaryIndexDataManager<T> implements
 			final InsertionIds secondaryIndexInsertionIds = secondaryIndex.getIndexStrategy().getInsertionIds(
 					fieldValue);
 			// loop insertionIds
-			for (final ByteArrayId insertionId : secondaryIndexInsertionIds.getCompositeInsertionIds()) {
-				final ByteArrayId dataId = new ByteArrayId(
+			for (final ByteArray insertionId : secondaryIndexInsertionIds.getCompositeInsertionIds()) {
+				final ByteArray dataId = new ByteArray(
 						kvs[0].getDataId());
 				switch (secondaryIndex.getSecondaryIndexType()) {
 					case JOIN:
-						final Pair<ByteArrayId, ByteArrayId> firstPartitionAndSortKey = primaryIndexInsertionIds
+						final Pair<ByteArray, ByteArray> firstPartitionAndSortKey = primaryIndexInsertionIds
 								.getFirstPartitionAndSortKeyPair();
 						if (delete) {
 							secondaryIndexStore.storeJoinEntry(
-									secondaryIndex.getId(),
+									secondaryIndex.getName(),
 									insertionId,
-									adapter.getAdapterId(),
-									indexedAttributeFieldId,
-									primaryIndexId,
+									adapter.getTypeName(),
+									indexedAttributeFieldName,
+									primaryIndexName,
 									firstPartitionAndSortKey.getLeft(),
 									firstPartitionAndSortKey.getRight(),
-									new ByteArrayId(
+									new ByteArray(
 											visibility));
 						}
 						else {
 							secondaryIndexStore.deleteJoinEntry(
-									secondaryIndex.getId(),
+									secondaryIndex.getName(),
 									insertionId,
-									adapter.getAdapterId(),
-									indexedAttributeFieldId,
+									adapter.getTypeName(),
+									indexedAttributeFieldName,
+									primaryIndexName,
 									firstPartitionAndSortKey.getLeft(),
 									firstPartitionAndSortKey.getRight(),
-									new ByteArrayId(
+									new ByteArray(
 											visibility));
 						}
 						break;
 					case PARTIAL:
-						final List<ByteArrayId> attributesToStore = secondaryIndex.getPartialFieldIds();
+						final List<String> attributesToStore = secondaryIndex.getPartialFieldNames();
 
 						final byte[] fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(
 								primaryIndexModel,
-								attributesToStore,
+								attributesToStore.toArray(new String[0]),
 								adapter);
 						final List<GeoWaveValue> subsetValues = new ArrayList<>();
 						for (final GeoWaveValue value : kvs[0].getFieldValues()) {
@@ -153,10 +155,10 @@ public class SecondaryIndexDataManager<T> implements
 									byteValue));
 						}
 						secondaryIndexStore.storeEntry(
-								secondaryIndex.getId(),
+								secondaryIndex.getName(),
 								insertionId,
-								adapter.getAdapterId(),
-								indexedAttributeFieldId,
+								adapter.getTypeName(),
+								indexedAttributeFieldName,
 								dataId,
 								subsetValues.toArray(new GeoWaveValue[] {}));
 						break;
@@ -165,10 +167,10 @@ public class SecondaryIndexDataManager<T> implements
 						// first one
 
 						secondaryIndexStore.storeEntry(
-								secondaryIndex.getId(),
+								secondaryIndex.getName(),
 								insertionId,
-								adapter.getAdapterId(),
-								indexedAttributeFieldId,
+								adapter.getTypeName(),
+								indexedAttributeFieldName,
 								dataId,
 								// full simply sends over all of the
 								// attributes
@@ -182,7 +184,8 @@ public class SecondaryIndexDataManager<T> implements
 			}
 			if (delete) {
 				// capture statistics
-				for (final DataStatistics<T> associatedStatistic : secondaryIndex.getAssociatedStatistics()) {
+				for (final InternalDataStatistics<T, ?, ?> associatedStatistic : secondaryIndex
+						.getAssociatedStatistics()) {
 					associatedStatistic.entryIngested(
 							entry,
 							kvs);

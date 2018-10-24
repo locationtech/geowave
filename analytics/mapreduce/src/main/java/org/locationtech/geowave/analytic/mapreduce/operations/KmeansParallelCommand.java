@@ -105,8 +105,8 @@ public class KmeansParallelCommand extends
 		converter.readProperties(kmeansCommonOptions);
 		converter.readProperties(kmeansParallelOptions);
 		properties.store(
-				Extract.QUERY_OPTIONS,
-				commonOptions.buildQueryOptions());
+				Extract.QUERY,
+				commonOptions.buildQuery());
 
 		MultiLevelKMeansClusteringJobRunner runner = new MultiLevelKMeansClusteringJobRunner();
 		int status = runner.run(properties);

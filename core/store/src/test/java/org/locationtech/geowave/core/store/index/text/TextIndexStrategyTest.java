@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.store.index.text;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
@@ -22,15 +22,14 @@ import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
 public class TextIndexStrategyTest
 {
 	private final TextIndexStrategy strategy = new TextIndexStrategy();
-	private final ByteArrayId fieldId = new ByteArrayId(
-			"fieldId");
+	private final String fieldId = "fieldId";
 	private final String value = "myString";
 
 	@Test
 	public void testInsertions() {
 		final InsertionIds insertionIds = strategy.getInsertionIds(value);
 		Assert.assertTrue(insertionIds.getCompositeInsertionIds().contains(
-				new ByteArrayId(
+				new ByteArray(
 						value)));
 		Assert.assertTrue(insertionIds.getCompositeInsertionIds().size() == 1);
 	}
@@ -45,9 +44,9 @@ public class TextIndexStrategyTest
 		Assert.assertTrue(ranges.getCompositeQueryRanges().get(
 				0).equals(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								value),
-						new ByteArrayId(
+						new ByteArray(
 								value))));
 	}
 }

@@ -37,21 +37,21 @@ import org.locationtech.geowave.adapter.vector.FeatureTimestampHandler;
 import org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentValue;
 import org.locationtech.geowave.core.store.data.visibility.GlobalVisibilityHandler;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -121,8 +121,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final CoordinateReferenceSystem crs = dataAdapter.getFeatureType().getCoordinateReferenceSystem();
 		assertTrue(crs.getIdentifiers().toString().contains(
@@ -143,11 +142,11 @@ public class FeatureDataAdapterTest
 				});
 		final AdapterPersistenceEncoding persistenceEncoding = dataAdapter.encode(
 				newFeature,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
+				new SpatialDimensionalityTypeProvider().createIndex(
 						new SpatialOptions()).getIndexModel());
 
 		GeometryWrapper wrapper = null;
-		for (final Entry<ByteArrayId, ?> pv : persistenceEncoding.getCommonData().getValues().entrySet()) {
+		for (final Entry<String, ?> pv : persistenceEncoding.getCommonData().getValues().entrySet()) {
 			if (pv.getValue() instanceof GeometryWrapper) {
 				wrapper = (GeometryWrapper) pv.getValue();
 			}
@@ -174,8 +173,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -183,8 +181,8 @@ public class FeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -221,8 +219,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -230,8 +227,8 @@ public class FeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -285,8 +282,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -294,8 +290,8 @@ public class FeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -340,8 +336,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -349,8 +344,8 @@ public class FeatureDataAdapterTest
 		dataAdapterCopy.fromBinary(binary);
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -424,8 +419,7 @@ public class FeatureDataAdapterTest
 				schema,
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -437,8 +431,8 @@ public class FeatureDataAdapterTest
 				dataAdapterCopy.getFeatureType().getName().getNamespaceURI());
 
 		assertEquals(
-				dataAdapterCopy.getAdapterId(),
-				dataAdapter.getAdapterId());
+				dataAdapterCopy.getTypeName(),
+				dataAdapter.getTypeName());
 		assertEquals(
 				dataAdapterCopy.getFeatureType(),
 				dataAdapter.getFeatureType());
@@ -495,8 +489,7 @@ public class FeatureDataAdapterTest
 				builder.getFeatureType(),
 				new GlobalVisibilityHandler<SimpleFeature, Object>(
 						"default"));
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		final byte[] binary = dataAdapter.toBinary();
 
@@ -531,8 +524,7 @@ public class FeatureDataAdapterTest
 		config.updateType(sfType);
 		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				sfType);
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		dataAdapter.init(spatialIndex);
 		Assert.assertTrue(dataAdapter.getSupportedSecondaryIndices().size() == 3);
 	}

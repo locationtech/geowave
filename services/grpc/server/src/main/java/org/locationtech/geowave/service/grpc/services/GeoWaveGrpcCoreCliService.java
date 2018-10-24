@@ -51,7 +51,7 @@ public class GeoWaveGrpcCoreCliService extends
 
 		SetCommand cmd = new SetCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -88,7 +88,7 @@ public class GeoWaveGrpcCoreCliService extends
 
 		ListCommand cmd = new ListCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

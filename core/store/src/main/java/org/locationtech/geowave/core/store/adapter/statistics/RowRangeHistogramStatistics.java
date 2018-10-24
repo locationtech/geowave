@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,22 +11,18 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.ByteUtils;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogramFactory;
 import org.locationtech.geowave.core.store.adapter.statistics.histogram.TDigestNumericHistogram;
-import org.locationtech.geowave.core.store.adapter.statistics.histogram.MinimalBinDistanceHistogram.MinimalBinDistanceHistogramFactory;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
 
 /**
  * Dynamic histogram provide very high accuracy for CDF and quantiles over the a
@@ -34,9 +30,9 @@ import net.sf.json.JSONObject;
  *
  */
 public class RowRangeHistogramStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>>
 {
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final PartitionStatisticsType<NumericHistogram> STATS_TYPE = new PartitionStatisticsType<>(
 			"ROW_RANGE_HISTOGRAM");
 	private NumericHistogram histogram;
 
@@ -45,22 +41,23 @@ public class RowRangeHistogramStatistics<T> extends
 	}
 
 	public RowRangeHistogramStatistics(
-			final ByteArrayId indexId,
-			final ByteArrayId partitionKey ) {
+			final String indexName,
+			final ByteArray partitionKey ) {
 		this(
 				null,
-				indexId,
+				indexName,
 				partitionKey);
 	}
 
 	public RowRangeHistogramStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId indexId,
-			final ByteArrayId partitionKey ) {
+			final String indexName,
+			final ByteArray partitionKey ) {
 		super(
 				internalDataAdapterId,
-				composeId(
-						indexId,
+				STATS_TYPE,
+				PartitionStatisticsQueryBuilder.composeId(
+						indexName,
 						partitionKey));
 		histogram = createHistogram();
 	}
@@ -69,54 +66,14 @@ public class RowRangeHistogramStatistics<T> extends
 		return new TDigestNumericHistogram();
 	}
 
-	public static ByteArrayId composeId(
-			final ByteArrayId indexId,
-			final ByteArrayId partitionKey ) {
-		if ((partitionKey == null) || (partitionKey.getBytes() == null) || (partitionKey.getBytes().length == 0)) {
-			return new ByteArrayId(
-					STATS_TYPE.getString() + STATS_SEPARATOR.getString() + indexId.getString());
-		}
-		return AbstractDataStatistics.composeId(
-				STATS_TYPE.getString() + STATS_SEPARATOR.getString() + indexId.getString(),
-				ByteArrayUtils.byteArrayToString(partitionKey.getBytes()));
-	}
-
 	@Override
-	public DataStatistics<T> duplicate() {
-		final Pair<ByteArrayId, ByteArrayId> pair = decomposeIndexAndPartitionFromId(statisticsId);
-		return new RowRangeHistogramStatistics<T>(
-				internalDataAdapterId,
-				pair.getLeft(), // indexId
+	public InternalDataStatistics<T, NumericHistogram, PartitionStatisticsQueryBuilder<NumericHistogram>> duplicate() {
+		final Pair<String, ByteArray> pair = PartitionStatisticsQueryBuilder
+				.decomposeIndexAndPartitionFromId(extendedId);
+		return new RowRangeHistogramStatistics<>(
+				adapterId,
+				pair.getLeft(), // indexName
 				pair.getRight());
-	}
-
-	public static Pair<ByteArrayId, ByteArrayId> decomposeIndexAndPartitionFromId(
-			final ByteArrayId id ) {
-		// Need to account for length of type and of the separator
-		final int lengthOfNonId = STATS_TYPE.getBytes().length + STATS_SEPARATOR.getString().length();
-		final int idLength = id.getBytes().length - lengthOfNonId;
-		final byte[] idBytes = new byte[idLength];
-		System.arraycopy(
-				id.getBytes(),
-				lengthOfNonId,
-				idBytes,
-				0,
-				idLength);
-		final String idString = id.getString();
-		final int pos = idString.lastIndexOf(STATS_ID_SEPARATOR);
-		if (pos < 0) {
-			return Pair.of(
-					new ByteArrayId(
-							idString),
-					null);
-		}
-		return Pair.of(
-				new ByteArrayId(
-						idString.substring(
-								0,
-								pos)),
-				new ByteArrayId(
-						ByteArrayUtils.byteArrayFromString(idString.substring(pos + 1))));
 	}
 
 	public double cardinality(
@@ -213,10 +170,11 @@ public class RowRangeHistogramStatistics<T> extends
 	@Override
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
-		final Pair<ByteArrayId, ByteArrayId> indexAndPartition = decomposeIndexAndPartitionFromId(statisticsId);
+		final Pair<String, ByteArray> indexAndPartition = PartitionStatisticsQueryBuilder
+				.decomposeIndexAndPartitionFromId(extendedId);
 		buffer.append(
 				"histogram[index=").append(
-				indexAndPartition.getLeft().getString());
+				indexAndPartition.getLeft());
 		if ((indexAndPartition.getRight() != null) && (indexAndPartition.getRight().getBytes() != null)
 				&& (indexAndPartition.getRight().getBytes().length > 0)) {
 			buffer.append(
@@ -237,52 +195,51 @@ public class RowRangeHistogramStatistics<T> extends
 		return buffer.toString();
 	}
 
-	/**
-	 * Convert Row Range Numeric statistics to a JSON object
-	 */
+	@Override
+	public NumericHistogram getResult() {
+		return histogram;
+	}
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		final Pair<ByteArrayId, ByteArrayId> indexAndPartition = decomposeIndexAndPartitionFromId(statisticsId);
-		jo.put(
+	protected String resultsName() {
+		return "histogram";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		final Pair<String, ByteArray> indexAndPartition = PartitionStatisticsQueryBuilder
+				.decomposeIndexAndPartitionFromId(extendedId);
+		final Map<String, Object> retVal = new HashMap<>();
+		retVal.put(
 				"index",
-				indexAndPartition.getLeft().getString());
-		jo.put(
+				indexAndPartition.getLeft());
+		retVal.put(
 				"partitionAsHex",
 				indexAndPartition.getRight().getHexString());
 		if (histogram != null) {
-			final JSONObject histogramJson = new JSONObject();
-			histogramJson.put(
-					"range_min",
-					histogram.getMinValue());
-			histogramJson.put(
-					"range_min",
-					histogram.getMinValue());
-			histogramJson.put(
-					"range_max",
-					histogram.getMaxValue());
-			final JSONArray quantilesArray = new JSONArray();
+			final Map<String, Object> histogramMap = new HashMap<>();
+			histogramMap.put(
+					"min",
+					Double.toString(histogram.getMinValue()));
+			histogramMap.put(
+					"max",
+					Double.toString(histogram.getMaxValue()));
+			final Collection<String> quantilesArray = new ArrayList<>();
 			for (int i = 1; i < 10; i++) {
 				quantilesArray.add((i * 10) + "%: " + histogram.quantile(i * 0.1));
 			}
-			histogramJson.put(
+			histogramMap.put(
 					"quantiles",
 					quantilesArray);
-			jo.put(
-					"histogram",
-					histogramJson);
+			retVal.put(
+					"histogramValues",
+					histogramMap);
 		}
 		else {
-			jo.put(
+			retVal.put(
 					"histogram",
 					"empty");
 		}
-		return jo;
+		return retVal;
 	}
 }

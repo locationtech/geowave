@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,18 +11,16 @@
 package org.locationtech.geowave.core.store.adapter.statistics;
 
 import java.nio.ByteBuffer;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.apache.commons.lang3.Range;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 abstract public class NumericRangeDataStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>>
 {
 
 	private double min = Double.MAX_VALUE;
@@ -34,10 +32,12 @@ abstract public class NumericRangeDataStatistics<T> extends
 
 	public NumericRangeDataStatistics(
 			final Short internalDataAdapterId,
-			final ByteArrayId statisticsId ) {
+			final StatisticsType<Range<Double>, FieldStatisticsQueryBuilder<Range<Double>>> type,
+			final String fieldName ) {
 		super(
 				internalDataAdapterId,
-				statisticsId);
+				type,
+				fieldName);
 	}
 
 	public boolean isSet() {
@@ -113,8 +113,8 @@ abstract public class NumericRangeDataStatistics<T> extends
 	public String toString() {
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
-				"range[internalDataAdapterId=").append(
-				super.getInternalDataAdapterId());
+				"range[adapterId=").append(
+				super.getAdapterId());
 		if (isSet()) {
 			buffer.append(
 					", min=").append(
@@ -130,40 +130,35 @@ abstract public class NumericRangeDataStatistics<T> extends
 		return buffer.toString();
 	}
 
-	/**
-	 * Convert Feature Numeric Range statistics to a JSON object
-	 */
-
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-		jo.put(
-				"type",
-				"GENERIC_RANGE");
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
-		jo.put(
-				"statisticsID",
-				statisticsId.getString());
-
-		if (!isSet()) {
-			jo.put(
-					"range",
-					"No Values");
-		}
-		else {
-			jo.put(
-					"range_min",
-					getMin());
-			jo.put(
-					"range_max",
-					getMax());
-		}
-
-		return jo;
+	protected String resultsName() {
+		return "range";
 	}
 
+	@Override
+	protected Object resultsValue() {
+		if (isSet()) {
+			Map<String, Double> map = new HashMap<>();
+			map.put(
+					"min",
+					min);
+			map.put(
+					"max",
+					max);
+			return map;
+		}
+		else {
+			return "undefined";
+		}
+	}
+
+	@Override
+	public Range<Double> getResult() {
+		if (isSet()) {
+			return Range.between(
+					min,
+					max);
+		}
+		return null;
+	}
 }

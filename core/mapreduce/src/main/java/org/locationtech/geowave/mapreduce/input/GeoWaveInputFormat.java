@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -20,20 +20,25 @@ import org.apache.hadoop.mapreduce.InputSplit;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.apache.hadoop.mapreduce.RecordReader;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
+import org.locationtech.geowave.core.store.query.options.QueryAllIndices;
+import org.locationtech.geowave.core.store.query.options.QueryAllTypes;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
@@ -144,31 +149,82 @@ public class GeoWaveInputFormat<T> extends
 
 	public static void setQuery(
 			final Configuration config,
-			final DistributableQuery query ) {
-		GeoWaveInputConfigurator.setQuery(
+			final Query<?> query,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
+			final IndexStore indexStore ) {
+		setCommonQueryOptions(
+				config,
+				query.getCommonQueryOptions());
+		setDataTypeQueryOptions(
+				config,
+				query.getDataTypeQueryOptions(),
+				adapterStore,
+				internalAdapterStore);
+		setIndexQueryOptions(
+				config,
+				query.getIndexQueryOptions(),
+				indexStore);
+		setQueryConstraints(
+				config,
+				(QueryConstraints) query.getQueryConstraints());
+	}
+
+	public static void setQueryConstraints(
+			final Configuration config,
+			final QueryConstraints query ) {
+		GeoWaveInputConfigurator.setQueryConstraints(
 				CLASS,
 				config,
 				query);
 	}
 
-	protected static DistributableQuery getQuery(
+	protected static QueryConstraints getQueryConstraints(
 			final JobContext context ) {
-		return GeoWaveInputConfigurator.getQuery(
+		return GeoWaveInputConfigurator.getQueryCosntraints(
 				CLASS,
 				context);
 	}
 
-	public static void setQueryOptions(
+	public static void setIndexQueryOptions(
 			final Configuration config,
-			final QueryOptions queryOptions ) {
-		final PrimaryIndex index = queryOptions.getIndex();
-		if (index != null) {
+			final IndexQueryOptions queryOptions,
+			final IndexStore indexStore ) {
+		final String indexName = queryOptions.getIndexName();
+		if (indexName != null) {
 			// make available to the context index store
 			JobContextIndexStore.addIndex(
 					config,
-					index);
+					indexStore.getIndex(indexName));
 		}
 
+		GeoWaveInputConfigurator.setIndexQueryOptions(
+				CLASS,
+				config,
+				queryOptions);
+	}
+
+	protected static IndexQueryOptions getIndexQueryOptions(
+			final JobContext context ) {
+		final IndexQueryOptions options = GeoWaveInputConfigurator.getIndexQueryOptions(
+				CLASS,
+				context);
+		return options == null ? new QueryAllIndices() : options;
+	}
+
+	protected static DataTypeQueryOptions<?> getDataTypeQueryOptions(
+			final JobContext context ) {
+		final DataTypeQueryOptions<?> options = GeoWaveInputConfigurator.getDataTypeQueryOptions(
+				CLASS,
+				context);
+		return options == null ? new QueryAllTypes<>() : options;
+	}
+
+	public static void setDataTypeQueryOptions(
+			final Configuration config,
+			final DataTypeQueryOptions<?> queryOptions,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore ) {
 		// TODO figure out where to add internal adapter IDs to the job context
 		// and read it from the job context instead
 		try {
@@ -177,13 +233,18 @@ public class GeoWaveInputFormat<T> extends
 			// instead. It will fail, due to the 'null', if the query options
 			// does not
 			// contain the adapters
-			List<DataAdapter<Object>> adapters = queryOptions.getAdapters();
-			if (adapters != null && !adapters.isEmpty()) {
-				for (final DataAdapter<?> adapter : adapters) {
+			final String[] typeNames = queryOptions.getTypeNames();
+			if ((typeNames != null) && (typeNames.length > 0)) {
+				for (final String typeName : typeNames) {
 					// Also store for use the mapper and reducers
+					final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+					if (adapterId == null) {
+						LOGGER.error("Cannot fine type '" + typeName + "'");
+						continue;
+					}
 					JobContextAdapterStore.addDataAdapter(
 							config,
-							adapter);
+							adapterStore.getAdapter(adapterId));
 				}
 			}
 		}
@@ -193,21 +254,30 @@ public class GeoWaveInputFormat<T> extends
 							"Adapter Ids witih adapters are included in the query options.This, the adapter must be accessible from the data store for use by the consumer/Mapper.",
 							e);
 		}
-		GeoWaveInputConfigurator.setQueryOptions(
+		GeoWaveInputConfigurator.setDataTypeQueryOptions(
 				CLASS,
 				config,
 				queryOptions);
 	}
 
-	protected static QueryOptions getQueryOptions(
+	protected static CommonQueryOptions getCommonQueryOptions(
 			final JobContext context ) {
-		final QueryOptions options = GeoWaveInputConfigurator.getQueryOptions(
+		final CommonQueryOptions options = GeoWaveInputConfigurator.getCommonQueryOptions(
 				CLASS,
 				context);
-		return options == null ? new QueryOptions() : options;
+		return options == null ? new CommonQueryOptions() : options;
 	}
 
-	protected static PrimaryIndex getIndex(
+	public static void setCommonQueryOptions(
+			final Configuration config,
+			final CommonQueryOptions queryOptions ) {
+		GeoWaveInputConfigurator.setCommonQueryOptions(
+				CLASS,
+				config,
+				queryOptions);
+	}
+
+	protected static Index getIndex(
 			final JobContext context ) {
 		return GeoWaveInputConfigurator.getIndex(
 				CLASS,
@@ -248,8 +318,10 @@ public class GeoWaveInputFormat<T> extends
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
 			return (RecordReader<GeoWaveInputKey, T>) ((MapReduceDataStore) dataStore).createRecordReader(
-					getQuery(context),
-					getQueryOptions(context),
+					getCommonQueryOptions(context),
+					getDataTypeQueryOptions(context),
+					getIndexQueryOptions(context),
+					getQueryConstraints(context),
 					getJobContextAdapterStore(context),
 					getJobContextInternalAdapterStore(context),
 					getJobContextAdapterIndexMappingStore(context),
@@ -322,8 +394,10 @@ public class GeoWaveInputFormat<T> extends
 		final DataStore dataStore = GeoWaveStoreFinder.createDataStore(configOptions);
 		if ((dataStore != null) && (dataStore instanceof MapReduceDataStore)) {
 			return ((MapReduceDataStore) dataStore).getSplits(
-					getQuery(context),
-					getQueryOptions(context),
+					getCommonQueryOptions(context),
+					getDataTypeQueryOptions(context),
+					getIndexQueryOptions(context),
+					getQueryConstraints(context),
 					getJobContextAdapterStore(context),
 					getJobContextAdapterIndexMappingStore(context),
 					getJobContextDataStatisticsStore(context),

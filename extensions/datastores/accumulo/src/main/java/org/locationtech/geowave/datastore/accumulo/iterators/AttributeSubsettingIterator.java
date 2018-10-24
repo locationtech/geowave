@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -28,14 +28,10 @@ import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
-
-import com.google.common.base.Function;
-import com.google.common.collect.Lists;
 
 public class AttributeSubsettingIterator extends
 		TransformingIterator
@@ -68,7 +64,7 @@ public class AttributeSubsettingIterator extends
 						wholeRowVal);
 			}
 			else {
-				rowMapping = new TreeMap<Key, Value>();
+				rowMapping = new TreeMap<>();
 				rowMapping.put(
 						wholeRowKey,
 						wholeRowVal);
@@ -200,14 +196,14 @@ public class AttributeSubsettingIterator extends
 	 * @param numericDimensions
 	 *            the numeric dimension fields
 	 */
-	public static void setFieldIds(
+	public static void setFieldNames(
 			final IteratorSetting setting,
-			final DataAdapter<?> adapterAssociatedWithFieldIds,
-			final List<String> fieldIds,
+			final DataTypeAdapter<?> adapterAssociatedWithFieldIds,
+			final String[] fieldNames,
 			final CommonIndexModel indexModel ) {
 		final byte[] fieldSubsetBitmask = BitmaskUtils.generateFieldSubsetBitmask(
 				indexModel,
-				ByteArrayId.transformStringList(fieldIds),
+				fieldNames,
 				adapterAssociatedWithFieldIds);
 
 		setting.addOption(

@@ -12,18 +12,18 @@ package org.locationtech.geowave.core.store.index;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.api.Index;
 
 /**
  * This class fully describes everything necessary to index data within GeoWave.
  * The key components are the indexing strategy and the common index model.
  */
 public class PrimaryIndex implements
-		Index<MultiDimensionalNumericData, MultiDimensionalNumericData>
+		Index
 {
 	protected NumericIndexStrategy indexStrategy;
 	protected CommonIndexModel indexModel;
@@ -45,14 +45,13 @@ public class PrimaryIndex implements
 		return indexModel;
 	}
 
-	public ByteArrayId getId() {
-		return new ByteArrayId(
-				StringUtils.stringToBinary(indexStrategy.getId() + "_" + indexModel.getId()));
+	public String getName() {
+		return indexStrategy.getId() + "_" + indexModel.getId();
 	}
 
 	@Override
 	public int hashCode() {
-		return getId().hashCode();
+		return getName().hashCode();
 	}
 
 	@Override
@@ -68,8 +67,8 @@ public class PrimaryIndex implements
 			return false;
 		}
 		final PrimaryIndex other = (PrimaryIndex) obj;
-		return getId().equals(
-				other.getId());
+		return getName().equals(
+				other.getName());
 	}
 
 	@Override

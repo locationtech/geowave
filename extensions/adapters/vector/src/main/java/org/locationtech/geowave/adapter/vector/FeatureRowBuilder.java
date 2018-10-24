@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -24,7 +24,7 @@ import org.opengis.feature.simple.SimpleFeatureType;
  * rows from a set field values (in this case SimpleFeatures from a set of
  * attribute values). This implementation simply wraps a geotools
  * SimpleFeatureBuilder.
- * 
+ *
  */
 public class FeatureRowBuilder implements
 		RowBuilder<SimpleFeature, Object>
@@ -39,26 +39,26 @@ public class FeatureRowBuilder implements
 
 	@Override
 	public SimpleFeature buildRow(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		return builder.buildFeature(dataId.getString());
 	}
 
 	@Override
 	public void setField(
-			ByteArrayId id,
-			Object fieldValue ) {
+			final String fieldName,
+			final Object fieldValue ) {
 		builder.set(
-				id.getString(),
+				fieldName,
 				fieldValue);
 
 	}
 
 	@Override
 	public void setFields(
-			Map<ByteArrayId, Object> values ) {
-		for (Entry<ByteArrayId, Object> entry : values.entrySet()) {
+			final Map<String, Object> values ) {
+		for (final Entry<String, Object> entry : values.entrySet()) {
 			builder.set(
-					entry.getKey().getString(),
+					entry.getKey(),
 					entry.getValue());
 		}
 

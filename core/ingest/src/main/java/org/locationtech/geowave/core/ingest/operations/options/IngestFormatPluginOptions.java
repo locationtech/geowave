@@ -19,10 +19,10 @@ import org.locationtech.geowave.core.cli.api.PluginOptions;
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
 import org.locationtech.geowave.core.ingest.local.LocalFileIngestDriver;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginRegistry;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,7 +45,7 @@ public class IngestFormatPluginOptions extends
 	private Map<String, IngestFormatPluginProviderSpi<?, ?>> plugins = new HashMap<String, IngestFormatPluginProviderSpi<?, ?>>();
 
 	@ParametersDelegate
-	private HashMap<String, IngestFormatOptionProvider> options = new HashMap<String, IngestFormatOptionProvider>();
+	private HashMap<String, IngestFormatOptions> options = new HashMap<String, IngestFormatOptions>();
 
 	@Override
 	public void selectPlugin(
@@ -80,10 +80,10 @@ public class IngestFormatPluginOptions extends
 				formatName,
 				formatPlugin);
 
-		IngestFormatOptionProvider optionObject = formatPlugin.createOptionsInstances();
+		IngestFormatOptions optionObject = formatPlugin.createOptionsInstances();
 
 		if (optionObject == null) {
-			optionObject = new IngestFormatOptionProvider() {};
+			optionObject = new IngestFormatOptions() {};
 		}
 
 		options.put(
@@ -100,7 +100,7 @@ public class IngestFormatPluginOptions extends
 		Map<String, LocalFileIngestPlugin<?>> ingestPlugins = new HashMap<String, LocalFileIngestPlugin<?>>();
 		for (Entry<String, IngestFormatPluginProviderSpi<?, ?>> entry : plugins.entrySet()) {
 			IngestFormatPluginProviderSpi<?, ?> formatPlugin = entry.getValue();
-			IngestFormatOptionProvider formatOptions = options.get(entry.getKey());
+			IngestFormatOptions formatOptions = options.get(entry.getKey());
 			LocalFileIngestPlugin<?> plugin = null;
 			try {
 				plugin = formatPlugin.createLocalFileIngestPlugin(formatOptions);
@@ -126,7 +126,7 @@ public class IngestFormatPluginOptions extends
 		Map<String, IngestFromHdfsPlugin<?, ?>> ingestPlugins = new HashMap<String, IngestFromHdfsPlugin<?, ?>>();
 		for (Entry<String, IngestFormatPluginProviderSpi<?, ?>> entry : plugins.entrySet()) {
 			IngestFormatPluginProviderSpi<?, ?> formatPlugin = entry.getValue();
-			IngestFormatOptionProvider formatOptions = options.get(entry.getKey());
+			IngestFormatOptions formatOptions = options.get(entry.getKey());
 			IngestFromHdfsPlugin<?, ?> plugin = null;
 			try {
 				plugin = formatPlugin.createIngestFromHdfsPlugin(formatOptions);
@@ -152,7 +152,7 @@ public class IngestFormatPluginOptions extends
 		Map<String, AvroFormatPlugin<?, ?>> ingestPlugins = new HashMap<String, AvroFormatPlugin<?, ?>>();
 		for (Entry<String, IngestFormatPluginProviderSpi<?, ?>> entry : plugins.entrySet()) {
 			IngestFormatPluginProviderSpi<?, ?> formatPlugin = entry.getValue();
-			IngestFormatOptionProvider formatOptions = options.get(entry.getKey());
+			IngestFormatOptions formatOptions = options.get(entry.getKey());
 			AvroFormatPlugin<?, ?> plugin = null;
 			try {
 				plugin = formatPlugin.createAvroFormatPlugin(formatOptions);
@@ -183,12 +183,12 @@ public class IngestFormatPluginOptions extends
 		this.plugins = plugins;
 	}
 
-	public Map<String, IngestFormatOptionProvider> getOptions() {
+	public Map<String, IngestFormatOptions> getOptions() {
 		return options;
 	}
 
 	public void setOptions(
-			HashMap<String, IngestFormatOptionProvider> options ) {
+			HashMap<String, IngestFormatOptions> options ) {
 		this.options = options;
 	}
 

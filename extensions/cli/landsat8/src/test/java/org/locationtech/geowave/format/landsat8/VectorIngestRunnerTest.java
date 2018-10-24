@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.format.landsat8;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,17 +23,12 @@ import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.format.landsat8.Landsat8BasicCommandLineOptions;
-import org.locationtech.geowave.format.landsat8.Landsat8DownloadCommandLineOptions;
-import org.locationtech.geowave.format.landsat8.Landsat8RasterIngestCommandLineOptions;
-import org.locationtech.geowave.format.landsat8.VectorIngestRunner;
 
 import com.beust.jcommander.ParameterException;
 
@@ -59,25 +54,25 @@ public class VectorIngestRunnerTest
 			throws Exception {
 		JAIExt.initJAIEXT();
 
-		Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
+		final Landsat8BasicCommandLineOptions analyzeOptions = new Landsat8BasicCommandLineOptions();
 		analyzeOptions.setNBestScenes(1);
 		analyzeOptions.setCqlFilter("BBOX(shape,-76.6,42.34,-76.4,42.54) and band='BQA' and sizeMB < 1");
 		analyzeOptions.setUseCachedScenes(true);
 		analyzeOptions.setWorkspaceDir(Tests.WORKSPACE_DIR);
 
-		Landsat8DownloadCommandLineOptions downloadOptions = new Landsat8DownloadCommandLineOptions();
+		final Landsat8DownloadCommandLineOptions downloadOptions = new Landsat8DownloadCommandLineOptions();
 		downloadOptions.setOverwriteIfExists(false);
 
-		Landsat8RasterIngestCommandLineOptions ingestOptions = new Landsat8RasterIngestCommandLineOptions();
+		final Landsat8RasterIngestCommandLineOptions ingestOptions = new Landsat8RasterIngestCommandLineOptions();
 		ingestOptions.setRetainImages(true);
 		ingestOptions.setCreatePyramid(true);
 		ingestOptions.setCreateHistogram(true);
-		VectorIngestRunner runner = new VectorIngestRunner(
+		final VectorIngestRunner runner = new VectorIngestRunner(
 				analyzeOptions,
 				Arrays.asList(
 						"memorystore",
 						"spatialindex"));
-		ManualOperationParams params = new ManualOperationParams();
+		final ManualOperationParams params = new ManualOperationParams();
 		params.getContext().put(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT,
 				new File(
@@ -86,8 +81,7 @@ public class VectorIngestRunnerTest
 		runner.runInternal(params);
 		try (CloseableIterator<Object> results = getStore(
 				params).query(
-				new QueryOptions(),
-				new EverythingQuery())) {
+				QueryBuilder.newBuilder().build())) {
 			assertTrue(
 					"Store is not empty",
 					results.hasNext());
@@ -97,17 +91,17 @@ public class VectorIngestRunnerTest
 	}
 
 	private DataStore getStore(
-			OperationParams params ) {
-		File configFile = (File) params.getContext().get(
+			final OperationParams params ) {
+		final File configFile = (File) params.getContext().get(
 				ConfigOptions.PROPERTIES_FILE_CONTEXT);
 
-		StoreLoader inputStoreLoader = new StoreLoader(
+		final StoreLoader inputStoreLoader = new StoreLoader(
 				"memorystore");
 		if (!inputStoreLoader.loadFromConfig(configFile)) {
 			throw new ParameterException(
 					"Cannot find store name: " + inputStoreLoader.getStoreName());
 		}
-		DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
+		final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
 		return storeOptions.createDataStore();
 	}
 

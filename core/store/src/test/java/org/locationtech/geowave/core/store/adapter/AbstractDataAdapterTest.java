@@ -22,6 +22,7 @@ import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.MockComponents.MockAbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestNativeFieldHandler;
 import org.locationtech.geowave.core.store.adapter.MockComponents.TestPersistentIndexFieldHandler;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;

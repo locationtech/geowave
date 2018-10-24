@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -44,22 +44,20 @@ import org.locationtech.geowave.analytic.param.SampleParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -191,7 +189,7 @@ public class GeoWaveKMeansIT
 	}
 
 	private void runKPlusPlus(
-			final DistributableQuery query )
+			final QueryConstraints query )
 			throws Exception {
 
 		final MultiLevelKMeansClusteringJobRunner jobRunner = new MultiLevelKMeansClusteringJobRunner();
@@ -213,7 +211,8 @@ public class GeoWaveKMeansIT
 							SampleParameters.Sample.MIN_SAMPLE_SIZE
 						},
 						new Object[] {
-							query,
+							QueryBuilder.newBuilder().constraints(
+									query).build(),
 							MapReduceTestUtils.MIN_INPUT_SPLITS,
 							MapReduceTestUtils.MAX_INPUT_SPLITS,
 							2,
@@ -258,7 +257,7 @@ public class GeoWaveKMeansIT
 	}
 
 	private void runKJumpPlusPlus(
-			final DistributableQuery query )
+			final QueryConstraints query )
 			throws Exception {
 
 		final MultiLevelJumpKMeansClusteringJobRunner jobRunner2 = new MultiLevelJumpKMeansClusteringJobRunner();
@@ -279,7 +278,8 @@ public class GeoWaveKMeansIT
 							ClusteringParameters.Clustering.MAX_ITERATIONS
 						},
 						new Object[] {
-							query,
+							QueryBuilder.newBuilder().constraints(
+									query).build(),
 							MapReduceTestUtils.MIN_INPUT_SPLITS,
 							MapReduceTestUtils.MAX_INPUT_SPLITS,
 							2,
@@ -337,27 +337,25 @@ public class GeoWaveKMeansIT
 			AccumuloSecurityException,
 			IOException {
 
-		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManager<SimpleFeature> centroidManager = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				"centroid",
-				internalAdapterStore.addAdapterId(new ByteArrayId(
-						"centroid")),
-				TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString(),
+				internalAdapterStore.addTypeName("centroid"),
+				TestUtils.DEFAULT_SPATIAL_INDEX.getName(),
 				batchID,
 				level);
 
-		final CentroidManager<SimpleFeature> hullManager = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManager<SimpleFeature> hullManager = new CentroidManagerGeoWave<>(
 				dataStore,
 				indexStore,
 				adapterStore,
 				new SimpleFeatureItemWrapperFactory(),
 				"convex_hull",
-				internalAdapterStore.addAdapterId(new ByteArrayId(
-						"convex_hull")),
-				TestUtils.DEFAULT_SPATIAL_INDEX.getId().getString(),
+				internalAdapterStore.addTypeName("convex_hull"),
+				TestUtils.DEFAULT_SPATIAL_INDEX.getName(),
 				batchID,
 				level);
 
@@ -374,7 +372,7 @@ public class GeoWaveKMeansIT
 				Assert.assertTrue(centroid.getGeometry() != null);
 				Assert.assertTrue(centroid.getBatchID() != null);
 				boolean found = false;
-				final List<SimpleFeature> features = new ArrayList<SimpleFeature>();
+				final List<SimpleFeature> features = new ArrayList<>();
 				for (final AnalyticItemWrapper<SimpleFeature> hull : hulls) {
 					found |= (hull.getName().equals(centroid.getName()));
 					Assert.assertTrue(hull.getGeometry() != null);

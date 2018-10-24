@@ -20,19 +20,19 @@ import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.slf4j.Logger;
@@ -63,15 +63,10 @@ public class TwitterIngestPlugin extends
 	private SimpleFeatureBuilder twitterSftBuilder;
 	private SimpleFeatureType twitterSft;
 
-	private final ByteArrayId sftNameKey;
-
 	public TwitterIngestPlugin() {
 		twitterSft = TwitterUtils.createTwitterEventDataType();
 		twitterSftBuilder = new SimpleFeatureBuilder(
 				twitterSft);
-
-		sftNameKey = new ByteArrayId(
-				StringUtils.stringToBinary(TwitterUtils.TWITTER_SFT_NAME));
 	}
 
 	@Override
@@ -148,7 +143,7 @@ public class TwitterIngestPlugin extends
 	}, justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
-			final Collection<ByteArrayId> primaryIndexIds,
+			String[] indexNames,
 			final String globalVisibility ) {
 
 		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
@@ -296,8 +291,8 @@ public class TwitterIngestPlugin extends
 						// LOGGER.warn(tweetSft.toString());
 
 						featureData.add(new GeoWaveData<SimpleFeature>(
-								sftNameKey,
-								primaryIndexIds,
+								TwitterUtils.TWITTER_SFT_NAME,
+								indexNames,
 								tweetSft));
 					}
 					catch (final Exception e) {
@@ -335,8 +330,8 @@ public class TwitterIngestPlugin extends
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

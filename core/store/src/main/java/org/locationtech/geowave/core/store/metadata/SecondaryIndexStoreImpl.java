@@ -10,16 +10,16 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
 
 public class SecondaryIndexStoreImpl implements
 		SecondaryIndexDataStore
@@ -33,64 +33,65 @@ public class SecondaryIndexStoreImpl implements
 	}
 
 	@Override
-	public void storeJoinEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryIndexPartitionKey,
-			final ByteArrayId primaryIndexSortKey,
-			final ByteArrayId attributeVisibility ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void storeEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId dataId,
-			final GeoWaveValue... originalFields ) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public <T> CloseableIterator<T> query(
-			final SecondaryIndex<T> secondaryIndex,
-			final ByteArrayId indexedAttributeFieldId,
+			final SecondaryIndexImpl<T> secondaryIndex,
+			final String indexedAttributeFieldName,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex primaryIndex,
-			final DistributableQuery query,
+			final Index primaryIndex,
+			final QueryConstraints query,
 			final String... authorizations ) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
+	public void storeJoinEntry(
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			String primaryIndexName,
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void storeEntry(
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			ByteArray dataId,
+			GeoWaveValue... originalFields ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
 	public void deleteJoinEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId primaryIndexPartitionKey,
-			final ByteArrayId primaryIndexSortKey,
-			final ByteArrayId attributeVisibility ) {
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			String primaryIndexName,
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility ) {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public void deleteEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId dataId,
-			final GeoWaveValue... originalFields ) {
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			ByteArray dataId,
+			GeoWaveValue... originalFields ) {
 		// TODO Auto-generated method stub
 
 	}

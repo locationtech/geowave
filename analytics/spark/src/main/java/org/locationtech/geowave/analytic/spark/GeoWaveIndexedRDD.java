@@ -19,8 +19,8 @@ import java.util.List;
 import org.apache.spark.api.java.JavaPairRDD;
 import org.apache.spark.api.java.function.PairFlatMapFunction;
 import org.apache.spark.broadcast.Broadcast;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
@@ -42,8 +42,8 @@ public class GeoWaveIndexedRDD implements
 
 	private static Logger LOGGER = LoggerFactory.getLogger(GeoWaveIndexedRDD.class);
 	private final GeoWaveRDD geowaveRDD;
-	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>> rawFeatureRDD = null;
-	private JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> rawGeometryRDD = null;
+	private JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> rawFeatureRDD = null;
+	private JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> rawGeometryRDD = null;
 	// Because it can be expensive to serialize IndexStrategy for every record.
 	// Index strategy must be able to be broadcast.
 	private Broadcast<NumericIndexStrategy> indexStrategy = null;
@@ -70,11 +70,11 @@ public class GeoWaveIndexedRDD implements
 		reset();
 	}
 
-	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>> getIndexedFeatureRDD() {
+	public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> getIndexedFeatureRDD() {
 		return this.getIndexedFeatureRDD(0.0);
 	}
 
-	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>> getIndexedFeatureRDD(
+	public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> getIndexedFeatureRDD(
 			double bufferAmount ) {
 		verifyParameters();
 		if (!geowaveRDD.isLoaded()) {
@@ -82,17 +82,17 @@ public class GeoWaveIndexedRDD implements
 			return null;
 		}
 		if (rawFeatureRDD == null) {
-			JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>> indexedData = geowaveRDD
+			JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexedData = geowaveRDD
 					.getRawRDD()
 					.flatMapToPair(
-							new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>>() {
+							new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>() {
 								@Override
-								public Iterator<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>>> call(
+								public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>> call(
 										Tuple2<GeoWaveInputKey, SimpleFeature> t )
 										throws Exception {
 
 									// Flattened output array.
-									List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>>> result = new ArrayList<>();
+									List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>> result = new ArrayList<>();
 
 									// Pull feature to index from tuple
 									SimpleFeature inputFeature = t._2;
@@ -131,14 +131,14 @@ public class GeoWaveIndexedRDD implements
 												index);
 									}
 
-									for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+									for (Iterator<ByteArray> iter = insertIds.getCompositeInsertionIds().iterator(); iter
 											.hasNext();) {
-										ByteArrayId id = iter.next();
+										ByteArray id = iter.next();
 
 										Tuple2<GeoWaveInputKey, SimpleFeature> valuePair = new Tuple2<>(
 												t._1,
 												inputFeature);
-										Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, SimpleFeature>>(
+										Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>> indexPair = new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, SimpleFeature>>(
 												id,
 												valuePair);
 										result.add(indexPair);
@@ -154,13 +154,13 @@ public class GeoWaveIndexedRDD implements
 		return rawFeatureRDD;
 	}
 
-	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD() {
+	public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD() {
 		return this.getIndexedGeometryRDD(
 				0.0,
 				false);
 	}
 
-	public JavaPairRDD<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD(
+	public JavaPairRDD<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> getIndexedGeometryRDD(
 			double bufferAmount,
 			boolean recalculate ) {
 		verifyParameters();
@@ -174,9 +174,9 @@ public class GeoWaveIndexedRDD implements
 					.getRawRDD()
 					.filter(t -> (t._2.getDefaultGeometry() != null && !((Geometry)t._2.getDefaultGeometry()).getEnvelopeInternal().isNull()))
 					.flatMapToPair(
-							new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>() {
+							new PairFlatMapFunction<Tuple2<GeoWaveInputKey, SimpleFeature>, ByteArray, Tuple2<GeoWaveInputKey, Geometry>>() {
 								@Override
-								public Iterator<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> call(
+								public Iterator<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> call(
 										Tuple2<GeoWaveInputKey, SimpleFeature> t )
 										throws Exception {
 
@@ -212,17 +212,17 @@ public class GeoWaveIndexedRDD implements
 									}
 
 									// Flattened output array.
-									List<Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>> result = Lists
+									List<Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>> result = Lists
 											.newArrayListWithCapacity(insertIds.getSize());
 
-									for (Iterator<ByteArrayId> iter = insertIds.getCompositeInsertionIds().iterator(); iter
+									for (Iterator<ByteArray> iter = insertIds.getCompositeInsertionIds().iterator(); iter
 											.hasNext();) {
-										ByteArrayId id = iter.next();
+										ByteArray id = iter.next();
 
 										Tuple2<GeoWaveInputKey, Geometry> valuePair = new Tuple2<>(
 												t._1,
 												geom);
-										Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArrayId, Tuple2<GeoWaveInputKey, Geometry>>(
+										Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>> indexPair = new Tuple2<ByteArray, Tuple2<GeoWaveInputKey, Geometry>>(
 												id,
 												valuePair);
 										result.add(indexPair);

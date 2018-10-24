@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -22,9 +22,8 @@ import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStoreFactory;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginConfig;
 import org.locationtech.geowave.adapter.vector.plugin.GeoWavePluginException;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 
 public class BaseDataStoreTest
 {
@@ -34,7 +33,7 @@ public class BaseDataStoreTest
 	protected DataStore createDataStore()
 			throws IOException,
 			GeoWavePluginException {
-		final Map<String, Serializable> params = new HashMap<String, Serializable>();
+		final Map<String, Serializable> params = new HashMap<>();
 		params.put(
 				"gwNamespace",
 				"test_" + getClass().getName() + "_" + name.getMethodName());
@@ -43,8 +42,7 @@ public class BaseDataStoreTest
 		new GeoWavePluginConfig(
 				storeFactoryFamily,
 				params).getDataStore().delete(
-				new QueryOptions(),
-				new EverythingQuery());
+				QueryBuilder.newBuilder().build());
 
 		return new GeoWaveGTDataStoreFactory(
 				storeFactoryFamily).createNewDataStore(params);

@@ -13,10 +13,10 @@ package org.locationtech.geowave.analytic;
 import java.io.IOException;
 import java.io.Serializable;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,27 +63,27 @@ public class SerializableAdapterStore implements
 
 	@Override
 	public void addAdapter(
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		getAdapterStore().addAdapter(
 				adapter);
 	}
 
 	@Override
-	public DataAdapter<?> getAdapter(
-			final ByteArrayId adapterId ) {
+	public DataTypeAdapter<?> getAdapter(
+			final String typeName ) {
 		return getAdapterStore().getAdapter(
-				adapterId);
+				typeName);
 	}
 
 	@Override
 	public boolean adapterExists(
-			final ByteArrayId adapterId ) {
+			final String typeName ) {
 		return getAdapterStore().adapterExists(
-				adapterId);
+				typeName);
 	}
 
 	@Override
-	public CloseableIterator<DataAdapter<?>> getAdapters() {
+	public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
 		return getAdapterStore().getAdapters();
 	}
 
@@ -118,8 +118,8 @@ public class SerializableAdapterStore implements
 
 	@Override
 	public void removeAdapter(
-			final ByteArrayId adapterId ) {
+			final String typeName ) {
 		getAdapterStore().removeAdapter(
-				adapterId);
+				typeName);
 	}
 }

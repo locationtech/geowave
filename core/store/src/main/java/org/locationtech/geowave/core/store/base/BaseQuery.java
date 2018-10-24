@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,35 +10,34 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.base;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.callback.ScanCallbackList;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.flatten.BitmaskUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.Deleter;
-import org.locationtech.geowave.core.store.operations.Reader;
 import org.locationtech.geowave.core.store.operations.ReaderParams;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * This class is used internally to perform query operations against a base data
@@ -49,19 +48,19 @@ abstract class BaseQuery
 {
 	private final static Logger LOGGER = Logger.getLogger(BaseQuery.class);
 
-	protected List<Short> adapterIds;
-	protected final PrimaryIndex index;
-	protected final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair;
+	protected short[] adapterIds;
+	protected final Index index;
+	protected final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair;
 	protected final DifferingFieldVisibilityEntryCount differingVisibilityCounts;
 	protected final FieldVisibilityCount visibilityCounts;
 	protected final String[] authorizations;
 	protected final ScanCallbackList<?, ?> scanCallback;
 
 	public BaseQuery(
-			final PrimaryIndex index,
+			final Index index,
 			final ScanCallback<?, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
-			FieldVisibilityCount visibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
 		this(
 				null,
@@ -74,12 +73,12 @@ abstract class BaseQuery
 	}
 
 	public BaseQuery(
-			final List<Short> adapterIds,
-			final PrimaryIndex index,
-			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
+			final short[] adapterIds,
+			final Index index,
+			final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final ScanCallback<?, ?> scanCallback,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
-			FieldVisibilityCount visibilityCounts,
+			final FieldVisibilityCount visibilityCounts,
 			final String... authorizations ) {
 		this.adapterIds = adapterIds;
 		this.index = index;
@@ -88,23 +87,25 @@ abstract class BaseQuery
 		this.visibilityCounts = visibilityCounts;
 		this.authorizations = authorizations;
 
-		List<ScanCallback<?, ?>> callbacks = new ArrayList<>();
+		final List<ScanCallback<?, ?>> callbacks = new ArrayList<>();
 		if (scanCallback != null) {
 			callbacks.add(scanCallback);
 		}
-		this.scanCallback = (ScanCallbackList) new ScanCallbackList(
+		this.scanCallback = new ScanCallbackList(
 				callbacks);
 	}
 
-	protected <C> Reader<C> getReader(
+	protected <C> RowReader<C> getReader(
 			final DataStoreOperations operations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition,
 			final GeoWaveRowIteratorTransformer<C> rowTransformer,
-			boolean delete ) {
+			final boolean delete ) {
 		final int maxRangeDecomposition;
 		if (queryMaxRangeDecomposition != null) {
 			maxRangeDecomposition = queryMaxRangeDecomposition;
@@ -113,9 +114,10 @@ abstract class BaseQuery
 			maxRangeDecomposition = isAggregation() ? options.getAggregationMaxRangeDecomposition() : options
 					.getMaxRangeDecomposition();
 		}
-		ReaderParams<C> readerParams = new ReaderParams<C>(
+		final ReaderParams<C> readerParams = new ReaderParams<>(
 				index,
 				adapterStore,
+				internalAdapterStore,
 				adapterIds,
 				maxResolutionSubsamplingPerDimension,
 				getAggregation(),
@@ -124,7 +126,9 @@ abstract class BaseQuery
 				isAuthorizationsLimiting(),
 				isServerSideAggregation(options),
 				isRowMerging(adapterStore),
-				getRanges(maxRangeDecomposition),
+				getRanges(
+						maxRangeDecomposition,
+						targetResolutionPerDimensionForHierarchicalIndex),
 				getServerFilter(options),
 				limit,
 				maxRangeDecomposition,
@@ -134,7 +138,7 @@ abstract class BaseQuery
 				getAdditionalAuthorizations());
 		if (delete) {
 			scanCallback.waitUntilCallbackAdded();
-			Deleter<C> deleter = operations.createDeleter(readerParams);
+			final Deleter<C> deleter = operations.createDeleter(readerParams);
 			scanCallback.addScanCallback((ScanCallback) deleter);
 			return deleter;
 		}
@@ -142,9 +146,9 @@ abstract class BaseQuery
 	}
 
 	public boolean isRowMerging(
-			PersistentAdapterStore adapterStore ) {
+			final PersistentAdapterStore adapterStore ) {
 		if (adapterIds != null) {
-			for (short adapterId : adapterIds) {
+			for (final short adapterId : adapterIds) {
 				if (adapterStore.getAdapter(
 						adapterId).getAdapter() instanceof RowMergingDataAdapter) {
 					return true;
@@ -158,11 +162,6 @@ abstract class BaseQuery
 						return true;
 					}
 				}
-			}
-			catch (IOException e) {
-				LOGGER.error(
-						"Unable to close adapter store iterator",
-						e);
 			}
 		}
 		return false;
@@ -187,21 +186,22 @@ abstract class BaseQuery
 	}
 
 	abstract protected QueryRanges getRanges(
-			int maxRangeDecomposition );
+			int maxRangeDecomposition,
+			double[] targetResolutionPerDimensionForHierarchicalIndex );
 
 	protected Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> getAggregation() {
 		return null;
 	}
 
-	protected Pair<List<String>, InternalDataAdapter<?>> getFieldSubsets() {
+	protected Pair<String[], InternalDataAdapter<?>> getFieldSubsets() {
 		return fieldIdsAdapterPair;
 	}
 
 	protected byte[] getFieldBitmask() {
-		if (fieldIdsAdapterPair != null && fieldIdsAdapterPair.getLeft() != null) {
+		if ((fieldIdsAdapterPair != null) && (fieldIdsAdapterPair.getLeft() != null)) {
 			return BitmaskUtils.generateFieldSubsetBitmask(
 					index.getIndexModel(),
-					ByteArrayId.transformStringList(fieldIdsAdapterPair.getLeft()),
+					fieldIdsAdapterPair.getLeft(),
 					fieldIdsAdapterPair.getRight());
 		}
 
@@ -220,7 +220,7 @@ abstract class BaseQuery
 		return authorizations;
 	}
 
-	public DistributableQueryFilter getServerFilter(
+	public QueryFilter getServerFilter(
 			final DataStoreOptions options ) {
 		return null;
 	}

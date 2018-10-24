@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageInputStream;
 
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.KeyValueData;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipInfo;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipUtils;

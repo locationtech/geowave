@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,30 +10,30 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.text;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * A class based on FilterableConstraints that uses a text value for query
- * 
+ *
  */
 
 public class TextQueryConstraint implements
 		FilterableConstraints
 {
-	private final ByteArrayId fieldId;
+	private final String fieldName;
 	private final String matchValue;
 	private final boolean caseSensitive;
 
 	public TextQueryConstraint(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final String matchValue,
 			final boolean caseSensitive ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.matchValue = matchValue;
 		this.caseSensitive = caseSensitive;
 	}
@@ -49,14 +49,14 @@ public class TextQueryConstraint implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	@Override
-	public DistributableQueryFilter getFilter() {
+	public QueryFilter getFilter() {
 		return new TextExactMatchFilter(
-				fieldId,
+				fieldName,
 				matchValue,
 				caseSensitive);
 	}
@@ -65,9 +65,9 @@ public class TextQueryConstraint implements
 		// TODO case sensitivity
 		return new QueryRanges(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								matchValue),
-						new ByteArrayId(
+						new ByteArray(
 								matchValue)));
 	}
 

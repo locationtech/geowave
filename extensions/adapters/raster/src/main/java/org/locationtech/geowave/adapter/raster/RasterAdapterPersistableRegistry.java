@@ -11,7 +11,6 @@
 package org.locationtech.geowave.adapter.raster;
 
 import org.locationtech.geowave.adapter.raster.adapter.ClientMergeableRasterTile;
-import org.locationtech.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStrategyWrapper;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
@@ -28,6 +27,7 @@ import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterFootprintStatistics;
 import org.locationtech.geowave.core.index.persist.PersistableRegistrySpi;
+import org.locationtech.geowave.core.store.util.CompoundHierarchicalIndexStrategyWrapper;
 
 public class RasterAdapterPersistableRegistry implements
 		PersistableRegistrySpi

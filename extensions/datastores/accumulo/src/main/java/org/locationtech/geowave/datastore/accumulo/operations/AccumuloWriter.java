@@ -16,12 +16,12 @@ import org.apache.accumulo.core.data.Value;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.hadoop.io.Text;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 
 /**
  * This is a basic wrapper around the Accumulo batch writer so that write
@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.store.operations.Writer;
  * this implementation within a custom implementation of AccumuloOperations.
  */
 public class AccumuloWriter implements
-		Writer
+		RowWriter
 {
 	private final static Logger LOGGER = Logger.getLogger(AccumuloWriter.class);
 	private org.apache.accumulo.core.client.BatchWriter batchWriter;
@@ -117,7 +117,7 @@ public class AccumuloWriter implements
 		final byte[] partition = row.getPartitionKey();
 		if ((partition != null) && (partition.length > 0)) {
 			operations.ensurePartition(
-					new ByteArrayId(
+					new ByteArray(
 							partition),
 					tableName);
 		}
@@ -132,7 +132,7 @@ public class AccumuloWriter implements
 			if ((value.getVisibility() != null) && (value.getVisibility().length > 0)) {
 				mutation.put(
 						new Text(
-								ByteArrayUtils.shortToString(row.getInternalAdapterId())),
+								ByteArrayUtils.shortToString(row.getAdapterId())),
 						new Text(
 								value.getFieldMask()),
 						new ColumnVisibility(
@@ -143,7 +143,7 @@ public class AccumuloWriter implements
 			else {
 				mutation.put(
 						new Text(
-								ByteArrayUtils.shortToString(row.getInternalAdapterId())),
+								ByteArrayUtils.shortToString(row.getAdapterId())),
 						new Text(
 								value.getFieldMask()),
 						new Value(

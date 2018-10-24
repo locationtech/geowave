@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,16 +11,14 @@
 package org.locationtech.geowave.core.ingest.hdfs.mapreduce;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapreduce.Reducer;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
 /**
@@ -32,7 +30,7 @@ public class IngestReducer extends
 {
 	private IngestWithReducer ingestWithReducer;
 	private String globalVisibility;
-	private List<ByteArrayId> primaryIndexIds;
+	private String[] indexNames;
 
 	@Override
 	protected void reduce(
@@ -43,13 +41,14 @@ public class IngestReducer extends
 			InterruptedException {
 		try (CloseableIterator<GeoWaveData> data = ingestWithReducer.toGeoWaveData(
 				key,
-				primaryIndexIds,
+				indexNames,
 				globalVisibility,
 				values)) {
 			while (data.hasNext()) {
 				final GeoWaveData d = data.next();
 				context.write(
-						d.getOutputKey(),
+						new GeoWaveOutputKey<>(
+								d),
 						d.getValue());
 			}
 		}
@@ -68,7 +67,7 @@ public class IngestReducer extends
 			ingestWithReducer = (IngestWithReducer) PersistenceUtils.fromBinary(ingestWithReducerBytes);
 			globalVisibility = context.getConfiguration().get(
 					AbstractMapReduceIngest.GLOBAL_VISIBILITY_KEY);
-			primaryIndexIds = AbstractMapReduceIngest.getPrimaryIndexIds(context.getConfiguration());
+			indexNames = AbstractMapReduceIngest.getIndexNames(context.getConfiguration());
 		}
 		catch (final Exception e) {
 			throw new IllegalArgumentException(

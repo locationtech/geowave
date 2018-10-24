@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -30,13 +30,12 @@ import org.locationtech.geowave.adapter.raster.adapter.merge.RasterTileMergeStra
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -218,12 +217,8 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 			throws IOException {
 		final DataStore dataStore = dataStoreOptions.createDataStore();
 
-		try (CloseableIterator<?> it = dataStore.query(
-				new QueryOptions(
-						new ByteArrayId(
-								coverageName),
-						null),
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).build())) {
 
 			// the expected outcome is:
 			// band 1,2,3,4,5,6 has every value set correctly, band 0 has every
@@ -341,9 +336,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 				raster1,
 				raster2,
 				tileSize);
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				TestUtils.createCustomCRSPrimaryIndex())) {
+				TestUtils.createCustomCRSPrimaryIndex());
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			writer.write(createCoverageTypeDouble(
 					coverageName,
 					minX,
@@ -407,10 +403,10 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 		basicAdapter.getMetadata().put(
 				"test-key",
 				"test-value");
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				mergeStrategyOverriddenAdapter,
-				// TestUtils.DEFAULT_SPATIAL_INDEX
-				TestUtils.createCustomCRSPrimaryIndex())) {
+				TestUtils.createCustomCRSPrimaryIndex());
+		try (Writer writer = dataStore.createWriter(mergeStrategyOverriddenAdapter.getTypeName())) {
 			for (int r = 0; r < numRasters; r++) {
 				final WritableRaster raster = RasterUtils.createRasterTypeDouble(
 						numBands,
@@ -455,18 +451,15 @@ public class GeoWaveBasicCustomCRSRasterIT extends
 			throws IOException {
 		final DataStore dataStore = dataStoreOptions.createDataStore();
 
-		try (CloseableIterator<?> it = dataStore.query(
-				new QueryOptions(
-						new ByteArrayId(
-								coverageName),
-						null),
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).constraints(
 				new IndexOnlySpatialQuery(
 						new GeometryFactory().toGeometry(new Envelope(
 								westLon,
 								eastLon,
 								southLat,
 								northLat)),
-						TestUtils.CUSTOM_CRSCODE))) {
+						TestUtils.CUSTOM_CRSCODE)).build())) {
 			// the expected outcome is:
 			// band 1,2,3,4,5,6 has every value set correctly, band 0 has every
 			// even row set correctly and every odd row should be NaN, and band

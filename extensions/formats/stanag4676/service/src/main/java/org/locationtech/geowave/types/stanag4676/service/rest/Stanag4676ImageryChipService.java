@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -53,13 +53,13 @@ import org.jcodec.containers.mkv.muxer.MKVMuxer;
 import org.jcodec.containers.mkv.muxer.MKVMuxerTrack;
 import org.jcodec.scale.AWTUtil;
 import org.jcodec.scale.RgbToYuv420p;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.query.PrefixIdQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.format.stanag4676.Stanag4676IngestPlugin;
 import org.locationtech.geowave.format.stanag4676.image.ImageChip;
 import org.locationtech.geowave.format.stanag4676.image.ImageChipDataAdapter;
@@ -121,29 +121,22 @@ public class Stanag4676ImageryChipService
 		final String chipNameStr = "mission = '" + mission + "', track = '" + track + "'";
 
 		Object imageChip = null;
+		final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
 		// ImageChipUtils.getDataId(mission,track,cal.getTimeInMillis()).getBytes()
-		try (CloseableIterator<Object> imageChipIt = dataStore.query(
-				new QueryOptions(
-						ImageChipDataAdapter.ADAPTER_ID,
-						Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getId()),
-				new PrefixIdQuery(
+		try (CloseableIterator<?> imageChipIt = dataStore.query(bldr.addTypeName(
+				ImageChipDataAdapter.ADAPTER_TYPE_NAME).indexName(
+				Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
+				bldr.constraintsFactory().prefix(
 						null,
-						new ByteArrayId(
+						new ByteArray(
 								ByteArrayUtils.combineArrays(
-										ImageChipDataAdapter.ADAPTER_ID.getBytes(),
+										StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
 										ImageChipUtils.getDataId(
 												mission,
 												track,
-												cal.getTimeInMillis()).getBytes()))))) {
+												cal.getTimeInMillis()).getBytes())))).build())) {
 
 			imageChip = (imageChipIt.hasNext()) ? imageChipIt.next() : null;
-		}
-		catch (final IOException e1) {
-			LOGGER.error(
-					"Unablable to find image chip for " + chipNameStr + " at " + cal,
-					e1);
-			return Response.serverError().entity(
-					"Error generating JPEG from image chip").build();
 		}
 
 		if ((imageChip != null) && (imageChip instanceof ImageChip)) {
@@ -204,21 +197,21 @@ public class Stanag4676ImageryChipService
 				+ "'";
 
 		final DataStore dataStore = getSingletonInstance();
-		final TreeMap<Long, BufferedImage> imageChips = new TreeMap<Long, BufferedImage>();
+		final TreeMap<Long, BufferedImage> imageChips = new TreeMap<>();
 		int width = -1;
 		int height = -1;
-		try (CloseableIterator<Object> imageChipIt = dataStore.query(
-				new QueryOptions(
-						ImageChipDataAdapter.ADAPTER_ID,
-						Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getId()),
-				new PrefixIdQuery(
+		final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
+		try (CloseableIterator<?> imageChipIt = dataStore.query(bldr.addTypeName(
+				ImageChipDataAdapter.ADAPTER_TYPE_NAME).indexName(
+				Stanag4676IngestPlugin.IMAGE_CHIP_INDEX.getName()).constraints(
+				bldr.constraintsFactory().prefix(
 						null,
-						new ByteArrayId(
+						new ByteArray(
 								ByteArrayUtils.combineArrays(
-										ImageChipDataAdapter.ADAPTER_ID.getBytes(),
+										StringUtils.stringToBinary(ImageChipDataAdapter.ADAPTER_TYPE_NAME),
 										ImageChipUtils.getTrackDataIdPrefix(
 												mission,
-												track).getBytes()))))) {
+												track).getBytes())))).build())) {
 
 			while (imageChipIt.hasNext()) {
 				final Object imageChipObj = imageChipIt.next();
@@ -538,7 +531,7 @@ public class Stanag4676ImageryChipService
 				"Found {} props",
 				(props != null ? props.size() : 0));
 		if (props != null) {
-			final Map<String, String> strMap = new HashMap<String, String>();
+			final Map<String, String> strMap = new HashMap<>();
 
 			final Set<Object> keySet = props.keySet();
 			final Iterator<Object> it = keySet.iterator();

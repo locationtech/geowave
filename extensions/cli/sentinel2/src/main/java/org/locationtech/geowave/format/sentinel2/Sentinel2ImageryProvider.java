@@ -35,7 +35,7 @@ import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.geojson.geom.GeometryJSON;
 import org.geotools.util.Converters;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.format.sentinel2.amazon.AmazonImageryProvider;
 import org.locationtech.geowave.format.sentinel2.theia.TheiaImageryProvider;
 import org.opengis.feature.simple.SimpleFeature;

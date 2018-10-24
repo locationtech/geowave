@@ -265,7 +265,7 @@ public class KMeansIterationsJobRunner<T> implements
 	public Collection<ParameterEnum<?>> getParameters() {
 		final Set<ParameterEnum<?>> params = new HashSet<ParameterEnum<?>>();
 		params.addAll(Arrays.asList(new ParameterEnum<?>[] {
-			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.INDEX_NAME,
 			CentroidParameters.Centroid.DATA_TYPE_ID,
 			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,17 +12,17 @@ package org.locationtech.geowave.core.store.index.text;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class TextExactMatchFilter implements
-		DistributableQueryFilter
+		QueryFilter
 {
 
-	private ByteArrayId fieldId;
+	private String fieldName;
 	private String matchValue;
 	private boolean caseSensitive;
 
@@ -31,17 +31,17 @@ public class TextExactMatchFilter implements
 	}
 
 	public TextExactMatchFilter(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final String matchValue,
 			final boolean caseSensitive ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.matchValue = matchValue;
 		this.caseSensitive = caseSensitive;
 	}
 
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	public String getMatchValue() {
@@ -56,10 +56,10 @@ public class TextExactMatchFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId stringBytes = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
-				fieldId);
+		final ByteArray stringBytes = (ByteArray) persistenceEncoding.getCommonData().getValue(
+				fieldName);
 		if (stringBytes != null) {
-			String value = stringBytes.getString();
+			final String value = stringBytes.getString();
 			return caseSensitive ? matchValue.equals(value) : matchValue.equalsIgnoreCase(value);
 		}
 		return false;
@@ -67,11 +67,11 @@ public class TextExactMatchFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] fieldIdBytes = fieldId.getBytes();
+		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
 		final byte[] matchValueBytes = StringUtils.stringToBinary(matchValue);
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldIdBytes.length + 4 + matchValueBytes.length + 4);
-		bb.putInt(fieldIdBytes.length);
-		bb.put(fieldIdBytes);
+		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 4 + matchValueBytes.length + 4);
+		bb.putInt(fieldNameBytes.length);
+		bb.put(fieldNameBytes);
 		bb.putInt(matchValueBytes.length);
 		bb.put(matchValueBytes);
 		bb.putInt(caseSensitive ? 1 : 0);
@@ -80,12 +80,11 @@ public class TextExactMatchFilter implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldIdBytes = new byte[bb.getInt()];
-		bb.get(fieldIdBytes);
-		fieldId = new ByteArrayId(
-				fieldIdBytes);
+		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		bb.get(fieldNameBytes);
+		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
 		final byte[] matchValueBytes = new byte[bb.getInt()];
 		bb.get(matchValueBytes);
 		matchValue = StringUtils.stringFromBinary(matchValueBytes);

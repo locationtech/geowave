@@ -46,7 +46,7 @@ public abstract class MergeableGeoWaveRow implements
 
 	public boolean shouldMerge(
 			GeoWaveRow row ) {
-		return (this.getInternalAdapterId() == row.getInternalAdapterId()) && Arrays.equals(
+		return (this.getAdapterId() == row.getAdapterId()) && Arrays.equals(
 				this.getDataId(),
 				row.getDataId()) && Arrays.equals(
 				this.getPartitionKey(),

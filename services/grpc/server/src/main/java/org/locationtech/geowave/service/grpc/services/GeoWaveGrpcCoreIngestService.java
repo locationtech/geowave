@@ -57,7 +57,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LocalToHdfsCommand cmd = new LocalToHdfsCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -91,7 +91,7 @@ public class GeoWaveGrpcCoreIngestService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		SparkToGeowaveCommand cmd = new SparkToGeowaveCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -127,7 +127,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		KafkaToGeowaveCommand cmd = new KafkaToGeowaveCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -162,7 +162,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		ListPluginsCommand cmd = new ListPluginsCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -197,7 +197,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LocalToKafkaCommand cmd = new LocalToKafkaCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -230,7 +230,7 @@ public class GeoWaveGrpcCoreIngestService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse> responseObserver ) {
 		LocalToMapReduceToGeowaveCommand cmd = new LocalToMapReduceToGeowaveCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -264,7 +264,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		LocalToGeowaveCommand cmd = new LocalToGeowaveCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -298,7 +298,7 @@ public class GeoWaveGrpcCoreIngestService extends
 
 		MapReduceToGeowaveCommand cmd = new MapReduceToGeowaveCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

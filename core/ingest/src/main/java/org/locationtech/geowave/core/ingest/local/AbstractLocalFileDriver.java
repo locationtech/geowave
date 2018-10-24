@@ -31,11 +31,12 @@ import java.util.Properties;
 
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.ingest.IngestUtils;
 import org.locationtech.geowave.core.ingest.IngestUtils.URLTYPE;
 import org.locationtech.geowave.core.ingest.operations.ConfigAWSCommand;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
+import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
+import org.locationtech.geowave.core.store.ingest.LocalPluginBase;
 import org.locationtech.geowave.mapreduce.hdfs.HdfsUrlStreamHandlerFactory;
 import org.locationtech.geowave.mapreduce.operations.ConfigHDFSCommand;
 import org.locationtech.geowave.mapreduce.s3.S3URLStreamHandlerFactory;

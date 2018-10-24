@@ -24,7 +24,7 @@ import org.apache.accumulo.core.iterators.Filter;
 import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.accumulo.core.iterators.user.WholeRowIterator;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -130,14 +130,14 @@ public class SingleEntryFilterIterator extends
 	}
 
 	public static final String encodeIDs(
-			final List<ByteArrayId> dataIds ) {
+			final List<ByteArray> dataIds ) {
 		int size = 4;
-		for (final ByteArrayId id : dataIds) {
+		for (final ByteArray id : dataIds) {
 			size += id.getBytes().length + 4;
 		}
 		final ByteBuffer buffer = ByteBuffer.allocate(size);
 		buffer.putInt(dataIds.size());
-		for (final ByteArrayId id : dataIds) {
+		for (final ByteArray id : dataIds) {
 			final byte[] sId = id.getBytes();
 			buffer.putInt(sId.length);
 			buffer.put(sId);

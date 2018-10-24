@@ -141,8 +141,8 @@ public class NearestNeighborCommand extends
 		converter.readProperties(commonOptions);
 		converter.readProperties(nnOptions);
 		properties.store(
-				Extract.QUERY_OPTIONS,
-				commonOptions.buildQueryOptions());
+				Extract.QUERY,
+				commonOptions.buildQuery());
 
 		final GeoWaveExtractNNJobRunner runner = new GeoWaveExtractNNJobRunner();
 		final int status = runner.run(properties);

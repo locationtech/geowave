@@ -25,11 +25,11 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.geotools.filter.text.ecql.ECQL;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractTimeFilterVisitor;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraints;
 import org.locationtech.geowave.core.geotime.store.query.TemporalConstraintsSet;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
+import org.locationtech.geowave.core.geotime.util.ExtractTimeFilterVisitor;
 import org.opengis.filter.Filter;
 import org.opengis.filter.FilterFactory;
 

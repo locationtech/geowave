@@ -19,8 +19,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
@@ -97,13 +97,13 @@ public class BitmaskUtils
 				Collections.singleton(fieldPosition)));
 	}
 
-	private static LoadingCache<ByteArrayId, List<Integer>> fieldPositionCache = CacheBuilder.newBuilder().maximumSize(
+	private static LoadingCache<ByteArray, List<Integer>> fieldPositionCache = CacheBuilder.newBuilder().maximumSize(
 			100).build(
-			new CacheLoader<ByteArrayId, List<Integer>>() {
+			new CacheLoader<ByteArray, List<Integer>>() {
 
 				@Override
 				public List<Integer> load(
-						ByteArrayId key )
+						ByteArray key )
 						throws Exception {
 					final List<Integer> fieldPositions = new ArrayList<>();
 					int currentByte = 0;
@@ -130,7 +130,7 @@ public class BitmaskUtils
 	 */
 	public static List<Integer> getFieldPositions(
 			final byte[] bitmask ) {
-		return fieldPositionCache.getUnchecked(new ByteArrayId(
+		return fieldPositionCache.getUnchecked(new ByteArray(
 				bitmask));
 	}
 
@@ -169,21 +169,21 @@ public class BitmaskUtils
 	 */
 	public static byte[] generateFieldSubsetBitmask(
 			final CommonIndexModel indexModel,
-			final List<ByteArrayId> fieldIds,
-			final DataAdapter<?> adapterAssociatedWithFieldIds ) {
+			final String[] fieldNames,
+			final DataTypeAdapter<?> adapterAssociatedWithFieldIds ) {
 		final SortedSet<Integer> fieldPositions = new TreeSet<Integer>();
 
 		// dimension fields must also be included
 		for (final NumericDimensionField<? extends CommonIndexValue> dimension : indexModel.getDimensions()) {
 			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
 					indexModel,
-					dimension.getFieldId()));
+					dimension.getFieldName()));
 		}
 
-		for (final ByteArrayId fieldId : fieldIds) {
+		for (final String fieldName : fieldNames) {
 			fieldPositions.add(adapterAssociatedWithFieldIds.getPositionOfOrderedField(
 					indexModel,
-					fieldId));
+					fieldName));
 		}
 		return generateCompositeBitmask(fieldPositions);
 	}

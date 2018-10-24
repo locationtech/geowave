@@ -39,28 +39,28 @@ public class SpatialJoinCmdOptions
 	private Integer partCount = -1;
 
 	@Parameter(names = {
-		"-la",
-		"--leftAdapter"
-	}, description = "Feature type name (adapter ID) of left Store to use in join")
-	private String leftAdapterId = null;
+		"-lt",
+		"--leftTypeName"
+	}, description = "Feature type name of left Store to use in join")
+	private String leftAdapterTypeName = null;
 
 	@Parameter(names = {
 		"-ol",
-		"--outLeftAdapter"
-	}, description = "Feature type name (adapter ID) of left join results.")
-	private String outLeftAdapterId = null;
+		"--outLeftTypeName"
+	}, description = "Feature type name of left join results.")
+	private String outLeftAdapterTypeName = null;
 
 	@Parameter(names = {
 		"-ra",
-		"--rightAdapter"
-	}, description = "Feature type name (adapter ID) of right Store to use in join")
-	private String rightAdapterId = null;
+		"--rightTypeNamer"
+	}, description = "Feature type name of right Store to use in join")
+	private String rightAdapterTypeName = null;
 
 	@Parameter(names = {
 		"-or",
-		"--outRightAdapter"
-	}, description = "Feature type name (adapter ID) of right join results.")
-	private String outRightAdapterId = null;
+		"--outRightTypeName"
+	}, description = "Feature type name of right join results.")
+	private String outRightAdapterTypeName = null;
 
 	@Parameter(names = {
 		"-p",
@@ -123,22 +123,22 @@ public class SpatialJoinCmdOptions
 		this.partCount = partCount;
 	}
 
-	public String getLeftAdapterId() {
-		return leftAdapterId;
+	public String getLeftAdapterTypeName() {
+		return leftAdapterTypeName;
 	}
 
-	public void setLeftAdapterId(
-			String leftAdapterId ) {
-		this.leftAdapterId = leftAdapterId;
+	public void setLeftAdapterTypeName(
+			String leftAdapterTypeName ) {
+		this.leftAdapterTypeName = leftAdapterTypeName;
 	}
 
-	public String getRightAdapterId() {
-		return rightAdapterId;
+	public String getRightAdapterTypeName() {
+		return rightAdapterTypeName;
 	}
 
-	public void setRightAdapterId(
-			String rightAdapterId ) {
-		this.rightAdapterId = rightAdapterId;
+	public void setRightAdapterTypeName(
+			String rightAdapterTypeName ) {
+		this.rightAdapterTypeName = rightAdapterTypeName;
 	}
 
 	public String getPredicate() {
@@ -159,21 +159,21 @@ public class SpatialJoinCmdOptions
 		this.radius = radius;
 	}
 
-	public String getOutputLeftAdapterId() {
-		return outLeftAdapterId;
+	public String getOutputLeftAdapterTypeName() {
+		return outLeftAdapterTypeName;
 	}
 
-	public void setOutputLeftAdapterId(
-			String outLeftAdapterId ) {
-		this.outLeftAdapterId = outLeftAdapterId;
+	public void setOutputLeftAdapterTypeName(
+			String outLeftAdapterTypeName ) {
+		this.outLeftAdapterTypeName = outLeftAdapterTypeName;
 	}
 
-	public String getOutputRightAdapterId() {
-		return outRightAdapterId;
+	public String getOutputRightAdapterTypeName() {
+		return outRightAdapterTypeName;
 	}
 
-	public void setOutputRightAdapterId(
-			String outRightAdapterId ) {
-		this.outRightAdapterId = outRightAdapterId;
+	public void setOutputRightAdapterTypeName(
+			String outRightAdapterTypeName ) {
+		this.outRightAdapterTypeName = outRightAdapterTypeName;
 	}
 }

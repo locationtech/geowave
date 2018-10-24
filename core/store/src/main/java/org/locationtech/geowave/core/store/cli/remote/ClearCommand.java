@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,11 +17,9 @@ import java.util.List;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +44,7 @@ public class ClearCommand extends
 	private final static Logger LOGGER = LoggerFactory.getLogger(ClearCommand.class);
 
 	@Parameter(description = "<store name>")
-	private List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<>();
 
 	private DataStorePluginOptions inputStoreOptions = null;
 
@@ -62,7 +60,7 @@ public class ClearCommand extends
 
 	public void setParameters(
 			final String storeName ) {
-		parameters = new ArrayList<String>();
+		parameters = new ArrayList<>();
 		parameters.add(storeName);
 	}
 
@@ -95,8 +93,7 @@ public class ClearCommand extends
 		LOGGER.info("Deleting everything in store: " + inputStoreName);
 
 		inputStoreOptions.createDataStore().delete(
-				new QueryOptions(),
-				new EverythingQuery());
+				QueryBuilder.newBuilder().build());
 		return null;
 	}
 }

@@ -12,9 +12,9 @@ package org.locationtech.geowave.format.geotools.raster;
 
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.coverage.grid.GridCoverage;
 
 /**
@@ -29,7 +29,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 
 	@Override
 	public AvroFormatPlugin<Object, GridCoverage> createAvroFormatPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(
@@ -38,7 +38,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 
 	@Override
 	public IngestFromHdfsPlugin<Object, GridCoverage> createIngestFromHdfsPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException {
 		// unsupported right now
 		throw new UnsupportedOperationException(
@@ -47,7 +47,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 
 	@Override
 	public LocalFileIngestPlugin<GridCoverage> createLocalFileIngestPlugin(
-			IngestFormatOptionProvider options )
+			IngestFormatOptions options )
 			throws UnsupportedOperationException {
 		return new GeoToolsRasterDataStoreIngestPlugin(
 				optionProvider);
@@ -64,7 +64,7 @@ public class GeoToolsRasterDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider createOptionsInstances() {
+	public IngestFormatOptions createOptionsInstances() {
 		return optionProvider;
 	}
 

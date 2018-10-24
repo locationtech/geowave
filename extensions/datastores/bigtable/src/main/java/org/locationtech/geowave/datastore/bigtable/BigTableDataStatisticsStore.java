@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.bigtable;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.metadata.DataStatisticsStoreImpl;
@@ -33,9 +33,9 @@ public class BigTableDataStatisticsStore extends
 	}
 
 	@Override
-	protected ByteArrayId shortToByteArrayId(
+	protected ByteArray shortToByteArrayId(
 			final short internalAdapterId ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				ByteArrayUtils.shortToString(internalAdapterId));
 	}
 
@@ -44,7 +44,7 @@ public class BigTableDataStatisticsStore extends
 			final byte[] bytes ) {
 		// make sure we use the same String encoding as decoding byt using the
 		// ByteArrayId constructor
-		return ByteArrayUtils.shortFromString(new ByteArrayId(
+		return ByteArrayUtils.shortFromString(new ByteArray(
 				bytes).getString());
 	}
 

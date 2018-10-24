@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 
@@ -130,26 +130,22 @@ public class SpatialJoinCommand extends
 
 		// set DataStore options for runner
 		runner.setLeftStore(leftDataStore);
-		if (spatialJoinOptions.getLeftAdapterId() != null) {
-			runner.setLeftAdapterId(new ByteArrayId(
-					spatialJoinOptions.getLeftAdapterId()));
+		if (spatialJoinOptions.getLeftAdapterTypeName() != null) {
+			runner.setLeftAdapterTypeName(spatialJoinOptions.getLeftAdapterTypeName());
 		}
 
 		runner.setRightStore(rightDataStore);
-		if (spatialJoinOptions.getRightAdapterId() != null) {
-			runner.setRightAdapterId(new ByteArrayId(
-					spatialJoinOptions.getRightAdapterId()));
+		if (spatialJoinOptions.getRightAdapterTypeName() != null) {
+			runner.setRightAdapterTypeName(spatialJoinOptions.getRightAdapterTypeName());
 		}
 
 		runner.setOutputStore(outputDataStore);
-		if (spatialJoinOptions.getOutputLeftAdapterId() != null) {
-			runner.setOutputLeftAdapterId(new ByteArrayId(
-					spatialJoinOptions.getOutputLeftAdapterId()));
+		if (spatialJoinOptions.getOutputLeftAdapterTypeName() != null) {
+			runner.setOutputLeftAdapterTypeName(spatialJoinOptions.getOutputLeftAdapterTypeName());
 		}
 
-		if (spatialJoinOptions.getOutputRightAdapterId() != null) {
-			runner.setOutputRightAdapterId(new ByteArrayId(
-					spatialJoinOptions.getOutputRightAdapterId()));
+		if (spatialJoinOptions.getOutputRightAdapterTypeName() != null) {
+			runner.setOutputRightAdapterTypeName(spatialJoinOptions.getOutputRightAdapterTypeName());
 		}
 
 		// Finally call run to execute the join

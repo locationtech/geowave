@@ -21,7 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
@@ -109,9 +109,9 @@ public class SimpleNumericIndexStrategyTest
 	private byte[] getByteArray(
 			final long value ) {
 		final MultiDimensionalNumericData insertionData = getIndexedRange(value);
-		final List<ByteArrayId> insertionIds = strategy.getInsertionIds(
+		final List<ByteArray> insertionIds = strategy.getInsertionIds(
 				insertionData).getCompositeInsertionIds();
-		final ByteArrayId insertionId = insertionIds.iterator().next();
+		final ByteArray insertionId = insertionIds.iterator().next();
 		return insertionId.getBytes();
 	}
 
@@ -124,8 +124,8 @@ public class SimpleNumericIndexStrategyTest
 				1);
 		final ByteArrayRange range = ranges.getCompositeQueryRanges().get(
 				0);
-		final ByteArrayId start = range.getStart();
-		final ByteArrayId end = range.getEnd();
+		final ByteArray start = range.getStart();
+		final ByteArray end = range.getEnd();
 		Assert.assertTrue(Arrays.equals(
 				start.getBytes(),
 				end.getBytes()));
@@ -148,8 +148,8 @@ public class SimpleNumericIndexStrategyTest
 				ranges.size(),
 				1);
 		final ByteArrayRange range = ranges.get(0);
-		final ByteArrayId start = range.getStart();
-		final ByteArrayId end = range.getEnd();
+		final ByteArray start = range.getStart();
+		final ByteArray end = range.getEnd();
 		Assert.assertEquals(
 				castToLong(strategy.getLexicoder().fromByteArray(
 						start.getBytes())),
@@ -200,12 +200,12 @@ public class SimpleNumericIndexStrategyTest
 	public void testGetInsertionIdsPoint() {
 		final long pointValue = 5926;
 		final MultiDimensionalNumericData indexedData = getIndexedRange(pointValue);
-		final List<ByteArrayId> insertionIds = strategy.getInsertionIds(
+		final List<ByteArray> insertionIds = strategy.getInsertionIds(
 				indexedData).getCompositeInsertionIds();
 		Assert.assertEquals(
 				insertionIds.size(),
 				1);
-		final ByteArrayId insertionId = insertionIds.get(0);
+		final ByteArray insertionId = insertionIds.get(0);
 		Assert.assertEquals(
 				castToLong(strategy.getLexicoder().fromByteArray(
 						insertionId.getBytes())),
@@ -219,13 +219,13 @@ public class SimpleNumericIndexStrategyTest
 		final MultiDimensionalNumericData indexedData = getIndexedRange(
 				startValue,
 				endValue);
-		final List<ByteArrayId> insertionIds = strategy.getInsertionIds(
+		final List<ByteArray> insertionIds = strategy.getInsertionIds(
 				indexedData).getCompositeInsertionIds();
 		Assert.assertEquals(
 				insertionIds.size(),
 				(int) ((endValue - startValue) + 1));
 		int i = 0;
-		for (final ByteArrayId insertionId : insertionIds) {
+		for (final ByteArray insertionId : insertionIds) {
 			Assert.assertEquals(
 					castToLong(strategy.getLexicoder().fromByteArray(
 							insertionId.getBytes())),

@@ -117,14 +117,14 @@ public class KmeansSparkCommand extends
 		runner.setNumClusters(kMeansSparkOptions.getNumClusters());
 		runner.setNumIterations(kMeansSparkOptions.getNumIterations());
 		runner.setUseTime(kMeansSparkOptions.isUseTime());
-		runner.setAdapterId(kMeansSparkOptions.getAdapterId());
+		runner.setTypeName(kMeansSparkOptions.getTypeName());
 
 		if (kMeansSparkOptions.getEpsilon() != null) {
 			runner.setEpsilon(kMeansSparkOptions.getEpsilon());
 		}
 
-		if (kMeansSparkOptions.getAdapterId() != null) {
-			runner.setAdapterId(kMeansSparkOptions.getAdapterId());
+		if (kMeansSparkOptions.getTypeName() != null) {
+			runner.setTypeName(kMeansSparkOptions.getTypeName());
 		}
 
 		if (kMeansSparkOptions.getCqlFilter() != null) {

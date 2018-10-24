@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,25 +16,22 @@ import java.util.Map;
 
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
-import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
 
 import com.vividsolutions.jts.geom.Envelope;
 
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-
 abstract public class BoundingBoxDataStatistics<T> extends
-		AbstractDataStatistics<T>
+		AbstractDataStatistics<T, Envelope, FieldStatisticsQueryBuilder<Envelope>>
 {
-	public final static ByteArrayId STATS_TYPE = new ByteArrayId(
+	public final static FieldStatisticsType<Envelope> STATS_TYPE = new FieldStatisticsType<>(
 			"BOUNDING_BOX");
 
 	protected double minX = Double.MAX_VALUE;
@@ -48,18 +45,19 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	}
 
 	public BoundingBoxDataStatistics(
-			final Short internalAdapterId ) {
+			final Short adapterId ) {
 		super(
-				internalAdapterId,
+				adapterId,
 				STATS_TYPE);
 	}
 
 	public BoundingBoxDataStatistics(
-			final Short internalAdapterId,
-			final ByteArrayId statisticsId ) {
+			final Short adapterId,
+			final String fieldName ) {
 		super(
-				internalAdapterId,
-				statisticsId);
+				adapterId,
+				STATS_TYPE,
+				fieldName);
 	}
 
 	public boolean isSet() {
@@ -146,7 +144,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 				minY,
 				maxY);
 
-		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<Class<? extends NumericDimensionDefinition>, ConstraintData>();
+		final Map<Class<? extends NumericDimensionDefinition>, ConstraintData> constraintsPerDimension = new HashMap<>();
 		// Create and return a new IndexRange array with an x and y axis
 		// range
 		constraintsPerDimension.put(
@@ -193,7 +191,7 @@ abstract public class BoundingBoxDataStatistics<T> extends
 		final StringBuffer buffer = new StringBuffer();
 		buffer.append(
 				"bbox[internalAdapter=").append(
-				Short.toString(super.getInternalDataAdapterId()));
+				Short.toString(super.getAdapterId()));
 		if (isSet()) {
 			buffer.append(
 					", minX=").append(
@@ -220,41 +218,45 @@ abstract public class BoundingBoxDataStatistics<T> extends
 	 */
 
 	@Override
-	public JSONObject toJSONObject(
-			final InternalAdapterStore store )
-			throws JSONException {
-		final JSONObject jo = new JSONObject();
-
-		jo.put(
-				"type",
-				STATS_TYPE.getString());
-		jo.put(
-				"dataAdapterID",
-				store.getAdapterId(internalDataAdapterId));
-		jo.put(
-				"statisticsId",
-				statisticsId.getString());
-
+	public Envelope getResult() {
 		if (isSet()) {
-			jo.put(
-					"minX",
-					minX);
-			jo.put(
-					"maxX",
-					maxX);
-			jo.put(
-					"minY",
-					minY);
-			jo.put(
-					"maxY",
+			return new Envelope(
+					minX,
+					maxX,
+					minY,
 					maxY);
 		}
 		else {
-			jo.put(
-					"boundaries",
-					"No Values");
+			return new Envelope();
 		}
-		return jo;
+	}
+
+	@Override
+	protected String resultsName() {
+		return "boundaries";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		if (isSet()) {
+			final Map<String, Double> map = new HashMap<>();
+			map.put(
+					"minX",
+					minX);
+			map.put(
+					"maxX",
+					maxX);
+			map.put(
+					"minY",
+					minY);
+			map.put(
+					"maxY",
+					maxY);
+			return map;
+		}
+		else {
+			return "No Values";
+		}
 	}
 
 }

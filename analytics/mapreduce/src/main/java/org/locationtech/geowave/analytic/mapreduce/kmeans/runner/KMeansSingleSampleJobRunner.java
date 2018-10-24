@@ -133,7 +133,7 @@ public class KMeansSingleSampleJobRunner<T> extends
 			SampleParameters.Sample.SAMPLE_SIZE,
 			SampleParameters.Sample.SAMPLE_RANK_FUNCTION,
 			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.INDEX_NAME,
 			CentroidParameters.Centroid.DATA_TYPE_ID,
 			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
@@ -148,8 +148,8 @@ public class KMeansSingleSampleJobRunner<T> extends
 
 		// override
 		params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);
-		params.remove(SampleParameters.Sample.DATA_TYPE_ID);
-		params.remove(SampleParameters.Sample.INDEX_ID);
+		params.remove(SampleParameters.Sample.DATA_TYPE_NAME);
+		params.remove(SampleParameters.Sample.INDEX_NAME);
 		return params;
 	}
 

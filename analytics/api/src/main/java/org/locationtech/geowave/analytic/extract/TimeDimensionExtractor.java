@@ -13,7 +13,7 @@ package org.locationtech.geowave.analytic.extract;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.locationtech.geowave.core.geotime.TimeUtils;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.AttributeDescriptor;
 

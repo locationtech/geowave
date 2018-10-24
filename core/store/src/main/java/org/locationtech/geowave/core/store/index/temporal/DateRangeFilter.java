@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,16 +13,17 @@ package org.locationtech.geowave.core.store.index.temporal;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class DateRangeFilter implements
-		DistributableQueryFilter
+		QueryFilter
 {
-	protected ByteArrayId fieldId;
+	protected String fieldName;
 	protected Date start;
 	protected Date end;
 	protected boolean inclusiveLow;
@@ -33,13 +34,13 @@ public class DateRangeFilter implements
 	}
 
 	public DateRangeFilter(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final Date start,
 			final Date end,
 			final boolean inclusiveLow,
 			final boolean inclusiveHigh ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.start = start;
 		this.end = end;
 		this.inclusiveHigh = inclusiveHigh;
@@ -50,8 +51,8 @@ public class DateRangeFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId dateLongBytes = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
-				fieldId);
+		final ByteArray dateLongBytes = (ByteArray) persistenceEncoding.getCommonData().getValue(
+				fieldName);
 		if (dateLongBytes != null) {
 			final long dateLong = Lexicoders.LONG.fromByteArray(dateLongBytes.getBytes());
 			final Date value = new Date(
@@ -85,9 +86,10 @@ public class DateRangeFilter implements
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldId.getBytes().length + 8 + 8 + 8);
-		bb.putInt(fieldId.getBytes().length);
-		bb.put(fieldId.getBytes());
+		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
+		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 8 + 8 + 8);
+		bb.putInt(fieldNameBytes.length);
+		bb.put(fieldNameBytes);
 		bb.putLong(start.getTime());
 		bb.putLong(end.getTime());
 		final int rangeInclusiveHighInt = (inclusiveHigh) ? 1 : 0;
@@ -101,10 +103,9 @@ public class DateRangeFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldIdBytes = new byte[bb.getInt()];
-		bb.get(fieldIdBytes);
-		fieldId = new ByteArrayId(
-				fieldIdBytes);
+		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		bb.get(fieldNameBytes);
+		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
 		start = new Date(
 				bb.getLong());
 		end = new Date(

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,11 +12,9 @@ package org.locationtech.geowave.core.store.data;
 
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.data.PersistentDataset;
-import org.locationtech.geowave.core.store.data.PersistentValue;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.flatten.FlattenedFieldInfo;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
@@ -37,9 +35,9 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 
 	public DeferredReadCommonIndexedPersistenceEncoding(
 			final short adapterId,
-			final ByteArrayId dataId,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
+			final ByteArray dataId,
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final FlattenedUnreadData unreadData ) {
@@ -51,30 +49,30 @@ public class DeferredReadCommonIndexedPersistenceEncoding extends
 				duplicateCount,
 				commonData,
 				new PersistentDataset<byte[]>(),
-				new PersistentDataset<Object>());
+				new PersistentDataset<>());
 		this.unreadData = unreadData;
 
 	}
 
 	@Override
 	public void convertUnknownValues(
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final CommonIndexModel model ) {
 		if (unreadData != null) {
 			final List<FlattenedFieldInfo> fields = unreadData.finishRead();
 			for (final FlattenedFieldInfo field : fields) {
-				ByteArrayId fieldId = adapter.getFieldIdForPosition(
+				String fieldName = adapter.getFieldNameForPosition(
 						model,
 						field.getFieldPosition());
-				if (fieldId == null) {
-					fieldId = adapter.getFieldIdForPosition(
+				if (fieldName == null) {
+					fieldName = adapter.getFieldNameForPosition(
 							model,
 							field.getFieldPosition());
 				}
-				final FieldReader<Object> reader = adapter.getReader(fieldId);
+				final FieldReader<Object> reader = adapter.getReader(fieldName);
 				final Object value = reader.readField(field.getValue());
 				adapterExtendedData.addValue(
-						fieldId,
+						fieldName,
 						value);
 			}
 		}

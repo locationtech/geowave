@@ -74,7 +74,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListWorkspacesCommand cmd = new GeoServerListWorkspacesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -109,7 +109,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerAddCoverageCommand cmd = new GeoServerAddCoverageCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -144,7 +144,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveCoverageStoreCommand cmd = new GeoServerRemoveCoverageStoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -180,7 +180,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerAddCoverageStoreCommand cmd = new GeoServerAddCoverageStoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -214,7 +214,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 		GeoServerGetCoverageStoreCommand cmd = new GeoServerGetCoverageStoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -248,7 +248,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 		GeoServerAddDatastoreCommand cmd = new GeoServerAddDatastoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -283,7 +283,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerGetStyleCommand cmd = new GeoServerGetStyleCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -318,7 +318,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		ConfigGeoServerCommand cmd = new ConfigGeoServerCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -352,7 +352,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 		GeoServerGetCoverageCommand cmd = new GeoServerGetCoverageCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -387,7 +387,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListFeatureLayersCommand cmd = new GeoServerListFeatureLayersCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -422,7 +422,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerGetStoreAdapterCommand cmd = new GeoServerGetStoreAdapterCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -456,7 +456,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 			StreamObserver<org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse> responseObserver ) {
 		GeoServerAddWorkspaceCommand cmd = new GeoServerAddWorkspaceCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -491,7 +491,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveDatastoreCommand cmd = new GeoServerRemoveDatastoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -527,7 +527,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveWorkspaceCommand cmd = new GeoServerRemoveWorkspaceCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -562,7 +562,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerAddStyleCommand cmd = new GeoServerAddStyleCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -598,7 +598,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListDatastoresCommand cmd = new GeoServerListDatastoresCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -634,7 +634,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListCoverageStoresCommand cmd = new GeoServerListCoverageStoresCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -670,7 +670,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerAddLayerCommand cmd = new GeoServerAddLayerCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -705,7 +705,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListStylesCommand cmd = new GeoServerListStylesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -740,7 +740,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerGetFeatureLayerCommand cmd = new GeoServerGetFeatureLayerCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -775,7 +775,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveCoverageCommand cmd = new GeoServerRemoveCoverageCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -810,7 +810,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerListCoveragesCommand cmd = new GeoServerListCoveragesCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -846,7 +846,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveFeatureLayerCommand cmd = new GeoServerRemoveFeatureLayerCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -882,7 +882,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerRemoveStyleCommand cmd = new GeoServerRemoveStyleCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -918,7 +918,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerGetDatastoreCommand cmd = new GeoServerGetDatastoreCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -953,7 +953,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerAddFeatureLayerCommand cmd = new GeoServerAddFeatureLayerCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -988,7 +988,7 @@ public class GeoWaveGrpcCliGeoserverService extends
 
 		GeoServerSetLayerStyleCommand cmd = new GeoServerSetLayerStyleCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

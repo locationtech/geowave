@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,45 +12,41 @@ package org.locationtech.geowave.format.geolife;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.avro.Schema;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.adapter.vector.utils.FeatureGeometryUtils;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
 import org.opengis.referencing.crs.CoordinateReferenceSystem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -71,21 +67,19 @@ public class GeoLifeIngestPlugin extends
 	private final SimpleFeatureBuilder geolifeTrackBuilder;
 	private final SimpleFeatureType geolifeTrackType;
 
-	private final ByteArrayId pointKey;
-	private final ByteArrayId trackKey;
+	private final String pointKey;
+	private final String trackKey;
 
 	private CoordinateReferenceSystem crs;
 
 	public GeoLifeIngestPlugin() {
 		geolifePointType = GeoLifeUtils.createGeoLifePointDataType();
-		pointKey = new ByteArrayId(
-				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_POINT_FEATURE));
+		pointKey = GeoLifeUtils.GEOLIFE_POINT_FEATURE;
 		geolifePointBuilder = new SimpleFeatureBuilder(
 				geolifePointType);
 
 		geolifeTrackType = GeoLifeUtils.createGeoLifeTrackDataType();
-		trackKey = new ByteArrayId(
-				StringUtils.stringToBinary(GeoLifeUtils.GEOLIFE_TRACK_FEATURE));
+		trackKey = GeoLifeUtils.GEOLIFE_TRACK_FEATURE;
 		geolifeTrackBuilder = new SimpleFeatureBuilder(
 				geolifeTrackType);
 		try {
@@ -170,10 +164,10 @@ public class GeoLifeIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 
-		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
+		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 
 		final InputStream in = new ByteArrayInputStream(
 				hfile.getOriginalFile().array());
@@ -183,7 +177,7 @@ public class GeoLifeIngestPlugin extends
 		final BufferedReader br = new BufferedReader(
 				isr);
 		int pointInstance = 0;
-		final List<Coordinate> pts = new ArrayList<Coordinate>();
+		final List<Coordinate> pts = new ArrayList<>();
 		final String trackId = FilenameUtils.getName(hfile.getOriginalFilePath().toString());
 		String line;
 		Date startTimeStamp = null;
@@ -200,11 +194,11 @@ public class GeoLifeIngestPlugin extends
 					continue;
 				}
 
-				currLat = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
+				currLat = GeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[0]),
 						crs,
 						1);
-				currLng = FeatureGeometryUtils.adjustCoordinateDimensionToRange(
+				currLng = GeometryUtils.adjustCoordinateDimensionToRange(
 						Double.parseDouble(vals[1]),
 						crs,
 						0);
@@ -247,9 +241,9 @@ public class GeoLifeIngestPlugin extends
 				geolifePointBuilder.set(
 						"Elevation",
 						elevation);
-				featureData.add(new GeoWaveData<SimpleFeature>(
+				featureData.add(new GeoWaveData<>(
 						pointKey,
-						primaryIndexIds,
+						indexNames,
 						geolifePointBuilder.buildFeature(trackId + "_" + pointInstance)));
 			}
 
@@ -274,9 +268,9 @@ public class GeoLifeIngestPlugin extends
 			geolifeTrackBuilder.set(
 					"TrackId",
 					trackId);
-			featureData.add(new GeoWaveData<SimpleFeature>(
+			featureData.add(new GeoWaveData<>(
 					trackKey,
-					primaryIndexIds,
+					indexNames,
 					geolifeTrackBuilder.buildFeature(trackId)));
 
 		}
@@ -296,13 +290,13 @@ public class GeoLifeIngestPlugin extends
 			IOUtils.closeQuietly(in);
 		}
 
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
+		return new CloseableIterator.Wrapper<>(
 				featureData.iterator());
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

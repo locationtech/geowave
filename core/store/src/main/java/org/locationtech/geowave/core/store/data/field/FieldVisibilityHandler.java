@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,13 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data.field;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-
 /**
  * This class must be implemented to perform per field value visibility
  * decisions. The byte array that is returned will be used directly in the
  * visibility column for Accumulo.
- * 
+ *
  * @param <RowType>
  * @param <FieldType>
  */
@@ -24,10 +22,10 @@ public interface FieldVisibilityHandler<RowType, FieldType>
 {
 	/**
 	 * Determine visibility on a per field basis.
-	 * 
+	 *
 	 * @param rowValue
 	 *            The value for the full row.
-	 * @param fieldId
+	 * @param fieldName
 	 *            The ID of the field for which to determine visibility
 	 * @param fieldValue
 	 *            The value of the field to determine visibility
@@ -35,7 +33,7 @@ public interface FieldVisibilityHandler<RowType, FieldType>
 	 */
 	public byte[] getVisibility(
 			RowType rowValue,
-			ByteArrayId fieldId,
+			String fieldName,
 			FieldType fieldValue );
 
 }

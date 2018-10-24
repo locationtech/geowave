@@ -19,7 +19,7 @@ import java.io.PrintStream;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.core.cli.parser.ManualOperationParams;
 import org.locationtech.geowave.format.sentinel2.AnalyzeRunner;
 import org.locationtech.geowave.format.sentinel2.Sentinel2BasicCommandLineOptions;

@@ -36,9 +36,6 @@ public class IntegrationTestPersistableRegistry implements
 			new PersistableIdAndConstructor(
 					(short) 10778,
 					DuplicateCountAggregation::new),
-			new PersistableIdAndConstructor(
-					(short) 10779,
-					DuplicateCount::new),
 		};
 	}
 }

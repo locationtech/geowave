@@ -22,7 +22,7 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -102,13 +102,13 @@ public class RoundRobinKeyIndexStrategyTest
 		final List<ByteArrayRange> ranges = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			for (final ByteArrayRange r2 : sfcIndexRanges) {
-				final ByteArrayId start = new ByteArrayId(
+				final ByteArray start = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
 								},
 								r2.getStart().getBytes()));
-				final ByteArrayId end = new ByteArrayId(
+				final ByteArray end = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
@@ -132,13 +132,13 @@ public class RoundRobinKeyIndexStrategyTest
 	public void testUniformityAndLargeKeySet() {
 		final RoundRobinKeyIndexStrategy strategy = new RoundRobinKeyIndexStrategy(
 				512);
-		final Map<ByteArrayId, Integer> countMap = new HashMap<ByteArrayId, Integer>();
+		final Map<ByteArray, Integer> countMap = new HashMap<ByteArray, Integer>();
 		for (int i = 0; i < 2048; i++) {
-			final Set<ByteArrayId> ids = strategy.getInsertionPartitionKeys(sfcIndexedRange);
+			final Set<ByteArray> ids = strategy.getInsertionPartitionKeys(sfcIndexedRange);
 			assertEquals(
 					1,
 					ids.size());
-			final ByteArrayId key = ids.iterator().next();
+			final ByteArray key = ids.iterator().next();
 			if (countMap.containsKey(key)) {
 				countMap.put(
 						key,
@@ -160,15 +160,15 @@ public class RoundRobinKeyIndexStrategyTest
 
 	@Test
 	public void testGetInsertionIds() {
-		final List<ByteArrayId> ids = new ArrayList<>();
+		final List<ByteArray> ids = new ArrayList<>();
 
 		final InsertionIds ids2 = sfcIndexStrategy.getInsertionIds(
 				sfcIndexedRange,
 				1);
-		final List<ByteArrayId> compositeIds = ids2.getCompositeInsertionIds();
+		final List<ByteArray> compositeIds = ids2.getCompositeInsertionIds();
 		for (int i = 0; i < 3; i++) {
-			for (final ByteArrayId id2 : compositeIds) {
-				ids.add(new ByteArrayId(
+			for (final ByteArray id2 : compositeIds) {
+				ids.add(new ByteArray(
 						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
@@ -176,9 +176,9 @@ public class RoundRobinKeyIndexStrategyTest
 								id2.getBytes())));
 			}
 		}
-		final Set<ByteArrayId> testIds = new HashSet<>(
+		final Set<ByteArray> testIds = new HashSet<>(
 				ids);
-		final Set<ByteArrayId> compoundIndexIds = new HashSet<>(
+		final Set<ByteArray> compoundIndexIds = new HashSet<>(
 				compoundIndexStrategy.getInsertionIds(
 						sfcIndexedRange,
 						8).getCompositeInsertionIds());
@@ -190,13 +190,13 @@ public class RoundRobinKeyIndexStrategyTest
 						0));
 		// the first 2 bytes are the partition keys
 		final MultiDimensionalCoordinates coordinatesPerDim = compoundIndexStrategy.getCoordinatesPerDimension(
-				new ByteArrayId(
+				new ByteArray(
 						Arrays.copyOfRange(
 								ids.get(
 										0).getBytes(),
 								0,
 								2)),
-				new ByteArrayId(
+				new ByteArray(
 						Arrays.copyOfRange(
 								ids.get(
 										0).getBytes(),

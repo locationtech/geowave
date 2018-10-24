@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,15 +15,16 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Arrays;
 
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.io.WritableComparator;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.mapreduce.GeoWaveKey;
+import org.locationtech.geowave.core.index.StringUtils;
+import org.locationtech.geowave.core.store.api.Index;
+
+import com.google.common.primitives.Bytes;
 
 /**
  * This class encapsulates the unique identifier for GeoWave input data using a
@@ -39,7 +40,7 @@ public class GeoWaveInputKey implements
 	 */
 	private static final long serialVersionUID = 1L;
 	protected Short internalAdapterId;
-	private ByteArrayId dataId;
+	private ByteArray dataId;
 	private transient org.locationtech.geowave.core.store.entities.GeoWaveKey key;
 
 	public GeoWaveInputKey() {
@@ -48,16 +49,16 @@ public class GeoWaveInputKey implements
 
 	public GeoWaveInputKey(
 			final org.locationtech.geowave.core.store.entities.GeoWaveKey key,
-			final ByteArrayId indexId ) {
+			final String indexName ) {
 		this(
-				key.getInternalAdapterId(),
+				key.getAdapterId(),
 				key,
-				indexId);
+				indexName);
 	}
 
 	public GeoWaveInputKey(
 			final short internalAdapterId,
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		this.internalAdapterId = internalAdapterId;
 		this.dataId = dataId;
 	}
@@ -65,10 +66,10 @@ public class GeoWaveInputKey implements
 	public GeoWaveInputKey(
 			final short internalAdapterId,
 			final org.locationtech.geowave.core.store.entities.GeoWaveKey key,
-			final ByteArrayId indexId ) {
+			final String indexName ) {
 		this.internalAdapterId = internalAdapterId;
 		if (key.getNumberOfDuplicates() > 0) {
-			dataId = new ByteArrayId(
+			dataId = new ByteArray(
 					key.getDataId());
 		}
 		else {
@@ -76,32 +77,20 @@ public class GeoWaveInputKey implements
 			// ID with the index ID concatenated with the insertion
 			// ID to gaurantee uniqueness and effectively disable
 			// aggregating by only the data ID
-			byte[] idBytes = key.getDataId();
-			if (key.getSortKey() != null) {
-				idBytes = ArrayUtils.addAll(
-						key.getSortKey(),
-						idBytes);
-			}
-			if (key.getPartitionKey() != null) {
-				idBytes = ArrayUtils.addAll(
-						key.getPartitionKey(),
-						idBytes);
-			}
-			if (indexId != null) {
-				idBytes = ArrayUtils.addAll(
-						indexId.getBytes(),
-						idBytes);
-			}
-			dataId = new ByteArrayId(
-					idBytes);
+			dataId = new ByteArray(
+					Bytes.concat(
+							indexName == null ? new byte[0] : StringUtils.stringToBinary(indexName),
+							key.getPartitionKey() == null ? new byte[0] : key.getPartitionKey(),
+							key.getSortKey() == null ? new byte[0] : key.getSortKey(),
+							key.getDataId()));
 		}
 		this.key = key;
 	}
 
 	public Pair<byte[], byte[]> getPartitionAndSortKey(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final int partitionKeyLength = index.getIndexStrategy().getPartitionKeyLength();
-		final int indexIdLength = index.getId().getBytes().length;
+		final int indexIdLength = StringUtils.stringToBinary(index.getName()).length;
 		if (dataId.getBytes().length < (indexIdLength + partitionKeyLength)) {
 			return null;
 		}
@@ -139,18 +128,18 @@ public class GeoWaveInputKey implements
 	}
 
 	public void setDataId(
-			final ByteArrayId dataId ) {
+			final ByteArray dataId ) {
 		this.dataId = dataId;
 	}
 
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return dataId;
 	}
 
 	@Override
 	public int compareTo(
 			final GeoWaveInputKey o ) {
-		byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(internalAdapterId);
+		final byte[] internalAdapterIdBytes = ByteArrayUtils.shortToByteArray(internalAdapterId);
 		final int adapterCompare = WritableComparator.compareBytes(
 				internalAdapterIdBytes,
 				0,
@@ -162,7 +151,7 @@ public class GeoWaveInputKey implements
 		if (adapterCompare != 0) {
 			return adapterCompare;
 		}
-		final GeoWaveInputKey other = (GeoWaveInputKey) o;
+		final GeoWaveInputKey other = o;
 		return WritableComparator.compareBytes(
 				dataId.getBytes(),
 				0,
@@ -176,26 +165,40 @@ public class GeoWaveInputKey implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dataId == null) ? 0 : dataId.hashCode());
-		result = prime * result + ((internalAdapterId == null) ? 0 : internalAdapterId.hashCode());
+		result = (prime * result) + ((dataId == null) ? 0 : dataId.hashCode());
+		result = (prime * result) + ((internalAdapterId == null) ? 0 : internalAdapterId.hashCode());
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		GeoWaveInputKey other = (GeoWaveInputKey) obj;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final GeoWaveInputKey other = (GeoWaveInputKey) obj;
 		if (dataId == null) {
-			if (other.dataId != null) return false;
+			if (other.dataId != null) {
+				return false;
+			}
 		}
-		else if (!dataId.equals(other.dataId)) return false;
+		else if (!dataId.equals(other.dataId)) {
+			return false;
+		}
 		if (internalAdapterId == null) {
-			if (other.internalAdapterId != null) return false;
+			if (other.internalAdapterId != null) {
+				return false;
+			}
 		}
-		else if (!internalAdapterId.equals(other.internalAdapterId)) return false;
+		else if (!internalAdapterId.equals(other.internalAdapterId)) {
+			return false;
+		}
 		return true;
 	}
 
@@ -207,7 +210,7 @@ public class GeoWaveInputKey implements
 		final int dataIdLength = input.readInt();
 		final byte[] dataIdBytes = new byte[dataIdLength];
 		input.readFully(dataIdBytes);
-		dataId = new ByteArrayId(
+		dataId = new ByteArray(
 				dataIdBytes);
 	}
 

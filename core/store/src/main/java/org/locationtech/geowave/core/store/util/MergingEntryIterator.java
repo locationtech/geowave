@@ -17,19 +17,19 @@ import java.util.Map;
 
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter.RowTransform;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class MergingEntryIterator<T> extends
 		NativeEntryIteratorWrapper<T>
@@ -41,7 +41,7 @@ public class MergingEntryIterator<T> extends
 
 	public MergingEntryIterator(
 			final PersistentAdapterStore adapterStore,
-			final PrimaryIndex index,
+			final Index index,
 			final Iterator<GeoWaveRow> scannerIt,
 			final QueryFilter clientFilter,
 			final ScanCallback<T, GeoWaveRow> scanCallback,
@@ -63,7 +63,7 @@ public class MergingEntryIterator<T> extends
 	protected GeoWaveRow getNextEncodedResult() {
 		GeoWaveRow nextResult = scannerIt.next();
 
-		final short internalAdapterId = nextResult.getInternalAdapterId();
+		final short internalAdapterId = nextResult.getAdapterId();
 
 		final RowMergingDataAdapter mergingAdapter = mergingAdapters.get(internalAdapterId);
 
@@ -96,7 +96,7 @@ public class MergingEntryIterator<T> extends
 			}
 			catch (final IOException e) {
 				LOGGER.error(
-						"Unable to initialize merge strategy for adapter: " + mergingAdapter.getAdapterId(),
+						"Unable to initialize merge strategy for adapter: " + mergingAdapter.getTypeName(),
 						e);
 			}
 			transforms.put(
@@ -119,8 +119,8 @@ public class MergingEntryIterator<T> extends
 
 		for (GeoWaveValue fieldValue : singleRow.getFieldValues()) {
 			final Mergeable mergeable = rowTransform.getRowAsMergeableObject(
-					singleRow.getInternalAdapterId(),
-					new ByteArrayId(
+					singleRow.getAdapterId(),
+					new ByteArray(
 							fieldValue.getFieldMask()),
 					fieldValue.getValue());
 
@@ -142,7 +142,7 @@ public class MergingEntryIterator<T> extends
 		return new GeoWaveRowImpl(
 				new GeoWaveKeyImpl(
 						singleRow.getDataId(),
-						singleRow.getInternalAdapterId(),
+						singleRow.getAdapterId(),
 						singleRow.getPartitionKey(),
 						singleRow.getSortKey(),
 						singleRow.getNumberOfDuplicates()),

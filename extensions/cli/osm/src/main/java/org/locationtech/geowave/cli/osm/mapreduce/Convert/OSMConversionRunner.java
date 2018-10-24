@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -33,11 +33,10 @@ import org.locationtech.geowave.core.cli.parser.CommandLineOperationParams;
 import org.locationtech.geowave.core.cli.parser.OperationParser;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.AbstractMapReduceIngest;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.AccumuloStoreFactoryFamily;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
@@ -179,14 +178,13 @@ public class OSMConversionRunner extends
 					fda);
 		}
 
-		final PrimaryIndex primaryIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index primaryIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		GeoWaveOutputFormat.addIndex(
 				job.getConfiguration(),
 				primaryIndex);
 		job.getConfiguration().set(
-				AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY,
-				StringUtils.stringFromBinary(primaryIndex.getId().getBytes()));
+				AbstractMapReduceIngest.INDEX_NAMES_KEY,
+				primaryIndex.getName());
 
 		job.setOutputFormatClass(GeoWaveOutputFormat.class);
 		job.setMapOutputKeyClass(GeoWaveOutputKey.class);

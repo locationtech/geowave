@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,29 +11,27 @@
 package org.locationtech.geowave.adapter.vector.delete;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.cli.ParseException;
 import org.apache.commons.lang3.time.StopWatch;
-import org.geotools.filter.text.cql2.CQLException;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.cli.VectorSection;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.Command;
 import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,16 +49,16 @@ public class CQLDelete extends
 	private static Logger LOGGER = LoggerFactory.getLogger(CQLDelete.class);
 
 	@Parameter(description = "<storename>")
-	private final List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<>();
 
 	@Parameter(names = "--cql", required = true, description = "CQL Filter for delete")
 	private String cqlStr;
 
-	@Parameter(names = "--indexId", required = false, description = "The name of the index (optional)", converter = StringToByteArrayConverter.class)
-	private ByteArrayId indexId;
+	@Parameter(names = "--indexName", required = false, description = "The name of the index (optional)", converter = StringToByteArrayConverter.class)
+	private String indexName;
 
-	@Parameter(names = "--adapterId", required = false, description = "Optional ability to provide an adapter ID", converter = StringToByteArrayConverter.class)
-	private ByteArrayId adapterId;
+	@Parameter(names = "--typeName", required = false, description = "Optional ability to provide a type name for the data adapter", converter = StringToByteArrayConverter.class)
+	private String typeName;
 
 	@Parameter(names = "--debug", required = false, description = "Print out additional info for debug purposes")
 	private boolean debug = false;
@@ -85,7 +83,7 @@ public class CQLDelete extends
 		final String storeName = parameters.get(0);
 
 		// Config file
-		File configFile = getGeoWaveConfigFile(params);
+		final File configFile = getGeoWaveConfigFile(params);
 
 		// Attempt to load store.
 		final StoreLoader storeOptions = new StoreLoader(
@@ -95,104 +93,67 @@ public class CQLDelete extends
 					"Cannot find store name: " + storeOptions.getStoreName());
 		}
 
-		DataStore dataStore;
-		PersistentAdapterStore adapterStore;
-		InternalAdapterStore internalAdapterStore;
-		try {
-			dataStore = storeOptions.createDataStore();
-			adapterStore = storeOptions.createAdapterStore();
-			internalAdapterStore = storeOptions.createInternalAdapterStore();
+		final DataStore dataStore = storeOptions.createDataStore();
+		final PersistentAdapterStore adapterStore = storeOptions.createAdapterStore();
+		final InternalAdapterStore internalAdapterStore = storeOptions.createInternalAdapterStore();
 
-			final GeotoolsFeatureDataAdapter adapter;
-			if (adapterId != null) {
-				adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
-						internalAdapterStore.getInternalAdapterId(adapterId)).getAdapter();
-			}
-			else {
-				final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
-				adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
-				it.close();
-			}
-
-			if (debug && (adapter != null)) {
-				LOGGER.debug(adapter.toString());
-			}
-
-			stopWatch.start();
-			final long results = delete(
-					adapter,
-					adapterId,
-					indexId,
-					dataStore,
-					debug);
-			stopWatch.stop();
-
-			if (debug) {
-				LOGGER.debug(results + " results remaining after delete; time = " + stopWatch.toString());
-			}
+		final GeotoolsFeatureDataAdapter adapter;
+		if (typeName != null) {
+			adapter = (GeotoolsFeatureDataAdapter) adapterStore.getAdapter(
+					internalAdapterStore.getAdapterId(typeName)).getAdapter();
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"Unable to read adapter",
-					e);
+		else {
+			final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
+			adapter = (GeotoolsFeatureDataAdapter) it.next().getAdapter();
+			it.close();
+		}
+
+		if (debug && (adapter != null)) {
+			LOGGER.debug(adapter.toString());
+		}
+
+		stopWatch.start();
+		final long results = delete(
+				adapter,
+				typeName,
+				indexName,
+				dataStore,
+				debug);
+		stopWatch.stop();
+
+		if (debug) {
+			LOGGER.debug(results + " results remaining after delete; time = " + stopWatch.toString());
 		}
 	}
 
 	protected long delete(
 			final GeotoolsFeatureDataAdapter adapter,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexId,
+			final String typeName,
+			final String indexName,
 			final DataStore dataStore,
 			final boolean debug ) {
 		long missed = 0;
 
-		try {
-			final boolean success = dataStore.delete(
-					new QueryOptions(
-							adapterId,
-							indexId),
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
-							cqlStr,
-							adapter,
-							null,
-							null));
+		final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		final Query<SimpleFeature> query = bldr.addTypeName(
+				typeName).indexName(
+				indexName).constraints(
+				bldr.constraintsFactory().cqlConstraints(
+						cqlStr)).build();
+		final boolean success = dataStore.delete(query);
 
-			if (debug) {
-				LOGGER.debug("CQL Delete " + (success ? "Success" : "Failure"));
-			}
-		}
-		catch (final CQLException e2) {
-			LOGGER.warn(
-					"Error parsing CQL",
-					e2);
+		if (debug) {
+			LOGGER.debug("CQL Delete " + (success ? "Success" : "Failure"));
 		}
 
 		// Verify delete by running the CQL query
 		if (debug) {
-			try (final CloseableIterator<Object> it = dataStore.query(
-					new QueryOptions(
-							adapterId,
-							indexId),
-					org.locationtech.geowave.adapter.vector.query.cql.CQLQuery.createOptimalQuery(
-							cqlStr,
-							adapter,
-							null,
-							null))) {
+			try (final CloseableIterator<SimpleFeature> it = dataStore.query(query)) {
 
 				while (it.hasNext()) {
 					it.next();
 					missed++;
 				}
-			}
-			catch (final IOException e) {
-				LOGGER.warn(
-						"Unable to read result",
-						e);
-			}
-			catch (final CQLException e1) {
-				LOGGER.error(
-						"Unable to create optimal query",
-						e1);
 			}
 		}
 
@@ -200,12 +161,12 @@ public class CQLDelete extends
 	}
 
 	public static class StringToByteArrayConverter implements
-			IStringConverter<ByteArrayId>
+			IStringConverter<ByteArray>
 	{
 		@Override
-		public ByteArrayId convert(
+		public ByteArray convert(
 				final String value ) {
-			return new ByteArrayId(
+			return new ByteArray(
 					value);
 		}
 	}

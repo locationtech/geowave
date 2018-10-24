@@ -21,7 +21,7 @@ import java.util.Date;
 
 import org.apache.commons.io.IOUtils;
 import org.geotools.coverageio.gdal.jp2ecw.JP2ECWReader;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

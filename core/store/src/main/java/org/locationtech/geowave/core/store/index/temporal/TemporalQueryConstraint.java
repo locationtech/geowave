@@ -14,11 +14,11 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 /**
  * A class based on FilterableConstraints that uses temporal values and includes
@@ -29,18 +29,18 @@ import org.locationtech.geowave.core.store.index.FilterableConstraints;
 public class TemporalQueryConstraint implements
 		FilterableConstraints
 {
-	protected final ByteArrayId fieldId;
+	protected final String fieldName;
 	protected final Date start;
 	protected final Date end;
 	protected boolean inclusiveLow;
 	protected boolean inclusiveHigh;
 
 	public TemporalQueryConstraint(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final Date start,
 			final Date end ) {
 		this(
-				fieldId,
+				fieldName,
 				start,
 				end,
 				false,
@@ -48,18 +48,18 @@ public class TemporalQueryConstraint implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	public TemporalQueryConstraint(
-			final ByteArrayId fieldId,
+			final String fieldName,
 			final Date start,
 			final Date end,
 			final boolean inclusiveLow,
 			final boolean inclusiveHigh ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.start = start;
 		this.end = end;
 		this.inclusiveHigh = inclusiveHigh;
@@ -77,9 +77,9 @@ public class TemporalQueryConstraint implements
 	}
 
 	@Override
-	public DistributableQueryFilter getFilter() {
+	public QueryFilter getFilter() {
 		return new DateRangeFilter(
-				fieldId,
+				fieldName,
 				start,
 				end,
 				inclusiveLow,
@@ -89,9 +89,9 @@ public class TemporalQueryConstraint implements
 	public QueryRanges getQueryRanges() {
 		return new QueryRanges(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								TemporalIndexStrategy.toIndexByte(start)),
-						new ByteArrayId(
+						new ByteArray(
 								TemporalIndexStrategy.toIndexByte(end))));
 	}
 
@@ -114,7 +114,7 @@ public class TemporalQueryConstraint implements
 			final FilterableConstraints constraints ) {
 		if (constraints instanceof TemporalQueryConstraint) {
 			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
-			if (fieldId.equals(filterConstraints.fieldId)) {
+			if (fieldName.equals(filterConstraints.fieldName)) {
 				Date newStart = start.compareTo(filterConstraints.start) < 0 ? filterConstraints.start : start;
 				Date newEnd = end.compareTo(filterConstraints.end) > 0 ? filterConstraints.end : end;
 				final boolean lowEquals = start.equals(filterConstraints.start);
@@ -128,7 +128,7 @@ public class TemporalQueryConstraint implements
 						: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 
 				return new TemporalQueryConstraint(
-						fieldId,
+						fieldName,
 						newStart,
 						newEnd,
 						newInclusiveLow,
@@ -157,7 +157,7 @@ public class TemporalQueryConstraint implements
 			final FilterableConstraints constraints ) {
 		if (constraints instanceof TemporalQueryConstraint) {
 			final TemporalQueryConstraint filterConstraints = (TemporalQueryConstraint) constraints;
-			if (fieldId.equals(filterConstraints.fieldId)) {
+			if (fieldName.equals(filterConstraints.fieldName)) {
 				Date newStart = start.compareTo(filterConstraints.start) > 0 ? filterConstraints.start : start;
 				Date newEnd = end.compareTo(filterConstraints.end) < 0 ? filterConstraints.end : end;
 				final boolean lowEquals = start.equals(filterConstraints.start);
@@ -171,7 +171,7 @@ public class TemporalQueryConstraint implements
 						: (replaceMax ? filterConstraints.inclusiveHigh : inclusiveHigh);
 
 				return new TemporalQueryConstraint(
-						fieldId,
+						fieldName,
 						newStart,
 						newEnd,
 						newInclusiveLow,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,8 +19,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
@@ -30,13 +28,13 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -44,6 +42,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.opengis.feature.Property;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -63,6 +63,7 @@ public class GeoWaveVectorSerializationIT extends
 	protected DataStorePluginOptions dataStore;
 	private static long startMillis;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStore;
 	}
@@ -214,19 +215,19 @@ public class GeoWaveVectorSerializationIT extends
 					arg.getValue());
 		}
 
-		final org.locationtech.geowave.core.store.DataStore geowaveStore = dataStore.createDataStore();
+		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStore.createDataStore();
 
 		final SimpleFeature sf = serBuilder.buildFeature("343");
-		try (IndexWriter writer = geowaveStore.createWriter(
+		geowaveStore.addType(
 				serAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (Writer writer = geowaveStore.createWriter(serAdapter.getTypeName())) {
 			writer.write(sf);
 		}
-		final DistributableQuery q = new SpatialQuery(
+		final QueryConstraints q = new SpatialQuery(
 				((Geometry) args.get(Geometry.class)).buffer(0.5d));
-		try (final CloseableIterator<?> iter = geowaveStore.query(
-				new QueryOptions(/* TODO do I need to pass 'index'? */),
-				q)) {
+		try (final CloseableIterator<?> iter = geowaveStore.query(QueryBuilder.newBuilder().constraints(
+				q).build())) {
 			boolean foundFeat = false;
 			while (iter.hasNext()) {
 				final Object maybeFeat = iter.next();

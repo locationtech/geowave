@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,59 +13,60 @@ package org.locationtech.geowave.core.store;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.ByteArrayUtils;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 /**
  * Meta-data for retaining Adapter to Index association
- * 
- * 
- * 
+ *
+ *
+ *
  */
 public class AdapterToIndexMapping implements
 		Persistable
 {
-	private short internalAdapterId;
-	private ByteArrayId[] indexIds;
+	private short adapterId;
+	private String[] indexNames;
 
 	public AdapterToIndexMapping() {
 
 	}
 
 	public AdapterToIndexMapping(
-			short internalAdapterId,
-			PrimaryIndex[] indices ) {
+			final short adapterId,
+			final Index[] indices ) {
 		super();
-		this.internalAdapterId = internalAdapterId;
-		this.indexIds = new ByteArrayId[indices.length];
-		for (int i = 0; i < indices.length; i++)
-			indexIds[i] = indices[i].getId();
+		this.adapterId = adapterId;
+		indexNames = new String[indices.length];
+		for (int i = 0; i < indices.length; i++) {
+			indexNames[i] = indices[i].getName();
+		}
 	}
 
 	public AdapterToIndexMapping(
-			short internalAdapterId,
-			ByteArrayId[] indexIds ) {
+			final short adapterId,
+			final String... indexNames ) {
 		super();
-		this.internalAdapterId = internalAdapterId;
-		this.indexIds = indexIds;
+		this.adapterId = adapterId;
+		this.indexNames = indexNames;
 	}
 
-	public short getInternalAdapterId() {
-		return internalAdapterId;
+	public short getAdapterId() {
+		return adapterId;
 	}
 
-	public ByteArrayId[] getIndexIds() {
-		return indexIds;
+	public String[] getIndexNames() {
+		return indexNames;
 	}
 
-	public PrimaryIndex[] getIndices(
-			IndexStore indexStore ) {
-		final PrimaryIndex[] indices = new PrimaryIndex[indexIds.length];
-		for (int i = 0; i < this.indexIds.length; i++) {
-			indices[i] = (PrimaryIndex) indexStore.getIndex(this.indexIds[i]);
+	public Index[] getIndices(
+			final IndexStore indexStore ) {
+		final Index[] indices = new Index[indexNames.length];
+		for (int i = 0; i < indexNames.length; i++) {
+			indices[i] = indexStore.getIndex(indexNames[i]);
 		}
 		return indices;
 	}
@@ -74,55 +75,70 @@ public class AdapterToIndexMapping implements
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((internalAdapterId == 0) ? 0 : Short.hashCode(internalAdapterId));
-		result = prime * result + Arrays.hashCode(indexIds);
+		result = (prime * result) + ((adapterId == 0) ? 0 : Short.hashCode(adapterId));
+		result = (prime * result) + Arrays.hashCode(indexNames);
 		return result;
 	}
 
 	@Override
 	public boolean equals(
-			Object obj ) {
-		if (this == obj) return true;
-		if (obj == null) return false;
-		if (getClass() != obj.getClass()) return false;
-		AdapterToIndexMapping other = (AdapterToIndexMapping) obj;
-		if (internalAdapterId == 0) {
-			if (other.internalAdapterId != 0) return false;
+			final Object obj ) {
+		if (this == obj) {
+			return true;
 		}
-		else if (internalAdapterId != other.internalAdapterId) return false;
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final AdapterToIndexMapping other = (AdapterToIndexMapping) obj;
+		if (adapterId == 0) {
+			if (other.adapterId != 0) {
+				return false;
+			}
+		}
+		else if (adapterId != other.adapterId) {
+			return false;
+		}
 		if (!Arrays.equals(
-				indexIds,
-				other.indexIds)) return false;
+				indexNames,
+				other.indexNames)) {
+			return false;
+		}
 		return true;
 	}
 
 	public boolean contains(
-			ByteArrayId indexId ) {
-		for (final ByteArrayId id : this.indexIds)
-			if (id.equals(indexId)) return true;
+			final String indexName ) {
+		for (final String id : indexNames) {
+			if (id.equals(indexName)) {
+				return true;
+			}
+		}
 		return false;
 	}
 
 	public boolean isNotEmpty() {
-		return this.indexIds.length > 0;
+		return indexNames.length > 0;
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final byte[] indexIdBytes = ByteArrayId.toBytes(this.indexIds);
+		final byte[] indexIdBytes = StringUtils.stringsToBinary(indexNames);
 		final ByteBuffer buf = ByteBuffer.allocate(2 + indexIdBytes.length);
-		buf.putShort(internalAdapterId);
+		buf.putShort(adapterId);
 		buf.put(indexIdBytes);
 		return buf.array();
 	}
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		internalAdapterId = buf.getShort();
-		final byte[] indexIdBytes = new byte[bytes.length - 2];
-		buf.get(indexIdBytes);
-		this.indexIds = ByteArrayId.fromBytes(indexIdBytes);
+		adapterId = buf.getShort();
+		final byte[] indexNamesBytes = new byte[bytes.length - 2];
+		buf.get(indexNamesBytes);
+		indexNames = StringUtils.stringsFromBinary(indexNamesBytes);
 	}
 }

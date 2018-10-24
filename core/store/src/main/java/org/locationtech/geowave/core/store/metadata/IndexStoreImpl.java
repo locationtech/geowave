@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.metadata;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import java.util.HashMap;
+
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.index.Index;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.core.store.operations.MetadataType;
@@ -21,14 +23,14 @@ import org.locationtech.geowave.core.store.operations.MetadataType;
 /**
  * This class will persist Index objects within an Accumulo table for GeoWave
  * metadata. The indices will be persisted in an "INDEX" column family.
- * 
+ *
  * There is an LRU cache associated with it so staying in sync with external
  * updates is not practical - it assumes the objects are not updated often or at
  * all. The objects are stored in their own table.
- * 
+ *
  **/
 public class IndexStoreImpl extends
-		AbstractGeoWavePersistence<Index<?, ?>> implements
+		AbstractGeoWavePersistence<Index> implements
 		IndexStore
 {
 	public IndexStoreImpl(
@@ -42,34 +44,37 @@ public class IndexStoreImpl extends
 
 	@Override
 	public void addIndex(
-			final Index<?, ?> index ) {
+			final Index index ) {
 		addObject(index);
 	}
 
 	@Override
-	public Index<?, ?> getIndex(
-			final ByteArrayId indexId ) {
+	public Index getIndex(
+			final String indexName ) {
 		return getObject(
-				indexId,
+				new ByteArray(
+						indexName),
 				null);
 	}
 
 	@Override
-	protected ByteArrayId getPrimaryId(
-			final Index<?, ?> persistedObject ) {
-		return persistedObject.getId();
+	protected ByteArray getPrimaryId(
+			final Index persistedObject ) {
+		return new ByteArray(
+				persistedObject.getName());
 	}
 
 	@Override
 	public boolean indexExists(
-			final ByteArrayId id ) {
+			final String indexName ) {
 		return objectExists(
-				id,
+				new ByteArray(
+						indexName),
 				null);
 	}
 
 	@Override
-	public CloseableIterator<Index<?, ?>> getIndices() {
+	public CloseableIterator<Index> getIndices() {
 		return getObjects();
 	}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -25,24 +25,17 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.analytic.AnalyticFeature;
 import org.locationtech.geowave.analytic.AnalyticItemWrapper;
 import org.locationtech.geowave.analytic.SimpleFeatureItemWrapperFactory;
-import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
-import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
-import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement;
 import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.DistortionDataAdapter;
 import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
@@ -56,19 +49,21 @@ public class DistortionGroupManagementTest
 	public TestName name = new TestName();
 	final GeometryFactory factory = new GeometryFactory();
 	final SimpleFeatureType ftype;
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+	final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	final FeatureDataAdapter adapter;
 	final DataStorePluginOptions storePluginOptions;
 
 	private <T> void ingest(
-			final WritableDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final DataTypeAdapter<T> adapter,
+			final Index index,
 			final T entry )
 			throws IOException {
-		try (IndexWriter writer = storePluginOptions.createDataStore().createWriter(
+		final DataStore store = storePluginOptions.createDataStore();
+		store.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer writer = store.createWriter(adapter.getTypeName())) {
 			writer.write(entry);
 		}
 	}
@@ -92,9 +87,10 @@ public class DistortionGroupManagementTest
 		opts.setGeowaveNamespace(namespace);
 		storePluginOptions = new DataStorePluginOptions(
 				opts);
-		storePluginOptions.createDataStore().createWriter(
+		final DataStore store = storePluginOptions.createDataStore();
+		store.addType(
 				adapter,
-				index).close();
+				index);
 	}
 
 	private void addDistortion(
@@ -446,19 +442,19 @@ public class DistortionGroupManagementTest
 				storePluginOptions);
 		distortionGroupManagement.retainBestGroups(
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				index.getName(),
 				"b1",
 				1);
-		final CentroidManagerGeoWave<SimpleFeature> centroidManager = new CentroidManagerGeoWave<SimpleFeature>(
+		final CentroidManagerGeoWave<SimpleFeature> centroidManager = new CentroidManagerGeoWave<>(
 				storePluginOptions.createDataStore(),
 				storePluginOptions.createIndexStore(),
 				storePluginOptions.createAdapterStore(),
 				new SimpleFeatureItemWrapperFactory(),
-				StringUtils.stringFromBinary(adapter.getAdapterId().getBytes()),
-				storePluginOptions.createInternalAdapterStore().getInternalAdapterId(
-						adapter.getAdapterId()),
-				StringUtils.stringFromBinary(index.getId().getBytes()),
+				adapter.getTypeName(),
+				storePluginOptions.createInternalAdapterStore().getAdapterId(
+						adapter.getTypeName()),
+				index.getName(),
 				"b1",
 				1);
 		final List<String> groups = centroidManager.getAllCentroidGroups();

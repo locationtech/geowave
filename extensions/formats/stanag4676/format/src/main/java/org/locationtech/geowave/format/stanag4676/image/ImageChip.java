@@ -16,7 +16,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -56,7 +56,7 @@ public class ImageChip
 		return imageBinary;
 	}
 
-	public ByteArrayId getDataId() {
+	public ByteArray getDataId() {
 		return ImageChipUtils.getDataId(
 				mission,
 				trackId,

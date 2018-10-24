@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -36,16 +36,15 @@ import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 import org.locationtech.geowave.analytic.distance.FeatureCentroidOrthodromicDistanceFn;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
-import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce;
 import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -73,7 +72,7 @@ public class NNMapReduceTest
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
-		final NNMapReduce.NNMapper<SimpleFeature> nnMapper = new NNMapReduce.NNMapper<SimpleFeature>();
+		final NNMapReduce.NNMapper<SimpleFeature> nnMapper = new NNMapReduce.NNMapper<>();
 		final NNMapReduce.NNReducer<SimpleFeature, Text, Text, Boolean> nnReducer = new NNMapReduce.NNSimpleFeatureIDOutputReducer();
 
 		mapDriver = MapDriver.newMapDriver(nnMapper);
@@ -105,7 +104,7 @@ public class NNMapReduceTest
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
@@ -113,17 +112,17 @@ public class NNMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				mapDriver.getConfiguration(),
 				adapter);
-		internalAdapterId = InternalAdapterStoreImpl.getInitialInternalAdapterId(adapter.getAdapterId());
+		internalAdapterId = InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName());
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				adapter);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				mapDriver.getConfiguration(),
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				internalAdapterId);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				reduceDriver.getConfiguration(),
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				internalAdapterId);
 
 		serializations();
@@ -190,22 +189,22 @@ public class NNMapReduceTest
 
 		final GeoWaveInputKey inputKey1 = new GeoWaveInputKey();
 		inputKey1.setInternalAdapterId(internalAdapterId);
-		inputKey1.setDataId(new ByteArrayId(
+		inputKey1.setDataId(new ByteArray(
 				feature1.getID()));
 
 		final GeoWaveInputKey inputKey2 = new GeoWaveInputKey();
 		inputKey2.setInternalAdapterId(internalAdapterId);
-		inputKey2.setDataId(new ByteArrayId(
+		inputKey2.setDataId(new ByteArray(
 				feature2.getID()));
 
 		final GeoWaveInputKey inputKey3 = new GeoWaveInputKey();
 		inputKey3.setInternalAdapterId(internalAdapterId);
-		inputKey3.setDataId(new ByteArrayId(
+		inputKey3.setDataId(new ByteArray(
 				feature4.getID()));
 
 		final GeoWaveInputKey inputKey4 = new GeoWaveInputKey();
 		inputKey4.setInternalAdapterId(internalAdapterId);
-		inputKey4.setDataId(new ByteArrayId(
+		inputKey4.setDataId(new ByteArray(
 				feature4.getID()));
 
 		mapDriver.addInput(
@@ -307,30 +306,30 @@ public class NNMapReduceTest
 		final PartitionDataWritable writable2 = new PartitionDataWritable();
 
 		writable1.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abc"),
 				true));
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abc"),
 				false));
 
 		assertTrue(writable1.compareTo(writable2) == 0);
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abd"),
 				false));
 		assertTrue(writable1.compareTo(writable2) < 0);
 		writable2.setPartitionData(new PartitionData(
-				new ByteArrayId(
+				new ByteArray(
 						new byte[] {}),
-				new ByteArrayId(
+				new ByteArray(
 						"abd"),
 				true));
 		assertTrue(writable1.compareTo(writable2) < 0);
@@ -360,7 +359,7 @@ public class NNMapReduceTest
 
 	private List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> getReducerDataFromMapperInput(
 			final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults ) {
-		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> reducerInputSet = new ArrayList<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>>();
+		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> reducerInputSet = new ArrayList<>();
 		for (final Pair<PartitionDataWritable, AdapterWithObjectWritable> pair : mapperResults) {
 			getListFor(
 					pair.getFirst(),
@@ -380,7 +379,7 @@ public class NNMapReduceTest
 				return pair.getSecond();
 			}
 		}
-		final List<AdapterWithObjectWritable> newPairList = new ArrayList<AdapterWithObjectWritable>();
+		final List<AdapterWithObjectWritable> newPairList = new ArrayList<>();
 		reducerInputSet.add(new Pair(
 				pd,
 				newPairList));
@@ -405,7 +404,7 @@ public class NNMapReduceTest
 			final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults,
 			final String id,
 			final boolean primary ) {
-		final ArrayList<PartitionData> results = new ArrayList<PartitionData>();
+		final ArrayList<PartitionData> results = new ArrayList<>();
 		for (final Pair<PartitionDataWritable, AdapterWithObjectWritable> pair : mapperResults) {
 			if (((FeatureWritable) pair.getSecond().getObjectWritable().get()).getFeature().getID().equals(
 					id) && (pair.getFirst().partitionData.isPrimary() == primary)) {

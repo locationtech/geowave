@@ -22,7 +22,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 import org.locationtech.geowave.adapter.vector.AvroFeatureUtils;
 import org.locationtech.geowave.adapter.vector.avro.AttributeValues;
 import org.locationtech.geowave.adapter.vector.avro.AvroSimpleFeatureCollection;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;

@@ -30,7 +30,7 @@ import org.locationtech.geowave.core.geotime.index.dimension.TemporalBinningStra
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
@@ -44,7 +44,7 @@ import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.index.sfc.data.NumericValue;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 
 public class TieredSFCIndexStrategyTest
 {
@@ -111,7 +111,7 @@ public class TieredSFCIndexStrategyTest
 
 		MultiDimensionalNumericData indexedData = new BasicNumericDataset(
 				dataPerDimension1);
-		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
+		final NumericIndexStrategy strategy = new SpatialTemporalDimensionalityTypeProvider().createIndex(
 				new SpatialTemporalOptions()).getIndexStrategy();
 
 		final InsertionIds ids1 = strategy.getInsertionIds(indexedData);
@@ -418,7 +418,7 @@ public class TieredSFCIndexStrategyTest
 		// different bin
 		indexedData = new BasicNumericDataset(
 				dataPerDimension3);
-		final List<ByteArrayId> ids3 = strategy.getInsertionIds(
+		final List<ByteArray> ids3 = strategy.getInsertionIds(
 				indexedData).getCompositeInsertionIds();
 		assertEquals(
 				1,

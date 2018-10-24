@@ -10,17 +10,17 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.hbase;
 
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.DataStoreFactory;
+import org.locationtech.geowave.core.store.BaseDataStoreFactory;
 import org.locationtech.geowave.core.store.StoreFactoryHelper;
 import org.locationtech.geowave.core.store.StoreFactoryOptions;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
 import org.locationtech.geowave.datastore.hbase.cli.config.HBaseOptions;
 import org.locationtech.geowave.datastore.hbase.cli.config.HBaseRequiredOptions;
 import org.locationtech.geowave.datastore.hbase.operations.HBaseOperations;
 
 public class HBaseDataStoreFactory extends
-		DataStoreFactory
+		BaseDataStoreFactory
 {
 	public HBaseDataStoreFactory(
 			final String typeName,

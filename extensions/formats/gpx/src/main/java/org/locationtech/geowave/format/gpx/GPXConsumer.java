@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,7 +17,6 @@ import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -26,46 +25,38 @@ import java.util.Stack;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.events.Attribute;
 import javax.xml.stream.events.StartElement;
 import javax.xml.stream.events.XMLEvent;
 
-import com.vividsolutions.jts.simplify.DouglasPeuckerSimplifier;
-import com.vividsolutions.jts.simplify.TopologyPreservingSimplifier;
-
 import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
-import org.opengis.geometry.BoundingBox;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.LineString;
 
 /**
  * Consumes a GPX file. The consumer is an iterator, parsing the input stream
  * and returning results as the stream is parsed. Data is emitted for each
  * element at the 'end' tag.
- * 
+ *
  * Caution: Developers should maintain the cohesiveness of attribute names
  * associated with each feature type defined in {@link GpxUtils}.
- * 
+ *
  * Route way points and way points are treated similarly except way points do
  * not include the parent ID information in their ID. The assumption is that the
  * name, lat and lon attributes are globally unique. In contrast, Route way
  * points include the file name and parent route name as part of their ID.
  * Routes are not assumed to be global.
- * 
- * 
+ *
+ *
  */
 public class GPXConsumer implements
 		CloseableIterator<GeoWaveData<SimpleFeature>>
@@ -83,17 +74,8 @@ public class GPXConsumer implements
 	protected static final SimpleFeatureType trackType = GpxUtils.createGPXTrackDataType();
 	protected static final SimpleFeatureType routeType = GpxUtils.createGPXRouteDataType();
 
-	protected static final ByteArrayId pointKey = new ByteArrayId(
-			StringUtils.stringToBinary(GpxUtils.GPX_POINT_FEATURE));
-	protected static final ByteArrayId waypointKey = new ByteArrayId(
-			StringUtils.stringToBinary(GpxUtils.GPX_WAYPOINT_FEATURE));
-	protected static final ByteArrayId trackKey = new ByteArrayId(
-			StringUtils.stringToBinary(GpxUtils.GPX_TRACK_FEATURE));
-	protected static final ByteArrayId routeKey = new ByteArrayId(
-			StringUtils.stringToBinary(GpxUtils.GPX_ROUTE_FEATURE));
-
 	final InputStream fileStream;
-	final Collection<ByteArrayId> primaryIndexIds;
+	final String[] indexNames;
 	final String inputID;
 	final String globalVisibility;
 	final Map<String, Map<String, String>> additionalData;
@@ -102,7 +84,7 @@ public class GPXConsumer implements
 
 	final XMLInputFactory inputFactory = XMLInputFactory.newInstance();
 
-	final Stack<GPXDataElement> currentElementStack = new Stack<GPXDataElement>();
+	final Stack<GPXDataElement> currentElementStack = new Stack<>();
 	GPXDataElement top = null;
 
 	static final NumberFormat LatLongFormat = new DecimalFormat(
@@ -112,7 +94,7 @@ public class GPXConsumer implements
 	GeoWaveData<SimpleFeature> nextFeature = null;
 
 	/**
-	 * 
+	 *
 	 * @param fileStream
 	 * @param primaryIndexId
 	 * @param inputID
@@ -125,12 +107,12 @@ public class GPXConsumer implements
 	 *            if true, waypoints are globally unique, otherwise are unique
 	 *            to this file and should have inputID and other components
 	 *            added to the identifier
-	 * 
+	 *
 	 * @param globalVisibility
 	 */
 	public GPXConsumer(
 			final InputStream fileStream,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String inputID,
 			final Map<String, Map<String, String>> additionalData,
 			final boolean uniqueWayPoints,
@@ -138,13 +120,13 @@ public class GPXConsumer implements
 			final double maxLength ) {
 		super();
 		this.fileStream = fileStream;
-		this.primaryIndexIds = primaryIndexIds;
+		this.indexNames = indexNames;
 		this.inputID = inputID != null ? inputID : "";
 		this.uniqueWayPoints = uniqueWayPoints;
 		this.additionalData = additionalData;
 		this.globalVisibility = globalVisibility;
 		this.maxLength = maxLength;
-		this.top = new GPXDataElement(
+		top = new GPXDataElement(
 				"gpx",
 				this.maxLength);
 		pointBuilder = new SimpleFeatureBuilder(
@@ -168,7 +150,7 @@ public class GPXConsumer implements
 				nextFeature = null;
 			}
 		}
-		catch (Exception e) {
+		catch (final Exception e) {
 			LOGGER.error(
 					"Error processing GPX input stream",
 					e);
@@ -200,8 +182,7 @@ public class GPXConsumer implements
 	public void remove() {}
 
 	@Override
-	public void close()
-			throws IOException {
+	public void close() {
 		try {
 			eventReader.close();
 		}
@@ -248,7 +229,7 @@ public class GPXConsumer implements
 						currentElement)) {
 					final GPXDataElement newElement = new GPXDataElement(
 							event.asStartElement().getName().getLocalPart(),
-							this.maxLength);
+							maxLength);
 					currentElement.addChild(newElement);
 					currentElement = newElement;
 					currentElementStack.push(currentElement);
@@ -548,7 +529,7 @@ public class GPXConsumer implements
 				final GPXDataElement child ) {
 
 			if (children == null) {
-				children = new ArrayList<GPXDataElement>();
+				children = new ArrayList<>();
 			}
 			children.add(child);
 			child.parent = this;
@@ -623,7 +604,7 @@ public class GPXConsumer implements
 			if (isCoordinate()) {
 				return Arrays.asList(getCoordinate());
 			}
-			final ArrayList<Coordinate> coords = new ArrayList<Coordinate>();
+			final ArrayList<Coordinate> coords = new ArrayList<>();
 			for (int i = 0; (children != null) && (i < children.size()); i++) {
 				coords.addAll(children.get(
 						i).buildCoordinates());
@@ -774,16 +755,16 @@ public class GPXConsumer implements
 
 				final List<Coordinate> childSequence = buildCoordinates();
 
-				int childCoordCount = childSequence.size();
+				final int childCoordCount = childSequence.size();
 				if (childCoordCount <= 1) {
 					return false;
 				}
 
-				LineString geom = GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
+				final LineString geom = GeometryUtils.GEOMETRY_FACTORY.createLineString(childSequence
 						.toArray(new Coordinate[childSequence.size()]));
 
 				// Filter gpx track based on maxExtent
-				if (geom.isEmpty() || geom.getEnvelopeInternal().maxExtent() > this.maxLineLength) {
+				if (geom.isEmpty() || (geom.getEnvelopeInternal().maxExtent() > maxLineLength)) {
 					return false;
 				}
 
@@ -843,8 +824,8 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexIds,
-							trackKey,
+							indexNames,
+							GpxUtils.GPX_TRACK_FEATURE,
 							trackBuilder,
 							additionalData.get(element.getPath()));
 				}
@@ -864,8 +845,8 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexIds,
-							routeKey,
+							indexNames,
+							GpxUtils.GPX_ROUTE_FEATURE,
 							routeBuilder,
 							additionalData.get(element.getPath()));
 				}
@@ -879,8 +860,8 @@ public class GPXConsumer implements
 									uniqueWayPoints ? "" : inputID,
 									true,
 									!uniqueWayPoints),
-							primaryIndexIds,
-							waypointKey,
+							indexNames,
+							GpxUtils.GPX_WAYPOINT_FEATURE,
 							waypointBuilder,
 							additionalData.get(element.getPath()));
 				}
@@ -893,8 +874,8 @@ public class GPXConsumer implements
 									inputID,
 									true,
 									true),
-							primaryIndexIds,
-							waypointKey,
+							indexNames,
+							GpxUtils.GPX_WAYPOINT_FEATURE,
 							waypointBuilder,
 							additionalData.get(element.getPath()));
 				}
@@ -916,8 +897,8 @@ public class GPXConsumer implements
 									inputID,
 									false,
 									true),
-							primaryIndexIds,
-							pointKey,
+							indexNames,
+							GpxUtils.GPX_POINT_FEATURE,
 							pointBuilder,
 							additionalData.get(element.getPath()));
 				}
@@ -941,8 +922,8 @@ public class GPXConsumer implements
 
 	private static GeoWaveData<SimpleFeature> buildGeoWaveDataInstance(
 			final String id,
-			final Collection<ByteArrayId> primaryIndexIds,
-			final ByteArrayId key,
+			final String[] indexNames,
+			final String key,
 			final SimpleFeatureBuilder builder,
 			final Map<String, String> additionalDataSet ) {
 
@@ -953,9 +934,9 @@ public class GPXConsumer implements
 						entry.getValue());
 			}
 		}
-		return new GeoWaveData<SimpleFeature>(
+		return new GeoWaveData<>(
 				key,
-				primaryIndexIds,
+				indexNames,
 				builder.buildFeature(id));
 	}
 

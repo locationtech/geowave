@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -34,13 +34,12 @@ import org.locationtech.geowave.analytic.PropertyManagement;
 import org.locationtech.geowave.analytic.SimpleFeatureItemWrapperFactory;
 import org.locationtech.geowave.analytic.clustering.CentroidManagerGeoWave;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
-import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.clustering.DistortionGroupManagement.DistortionEntry;
+import org.locationtech.geowave.analytic.clustering.NestedGroupCentroidAssignment;
 import org.locationtech.geowave.analytic.distance.DistanceFn;
 import org.locationtech.geowave.analytic.distance.FeatureCentroidDistanceFn;
 import org.locationtech.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
 import org.locationtech.geowave.analytic.mapreduce.CountofDoubleWritable;
-import org.locationtech.geowave.analytic.mapreduce.kmeans.KMeansDistortionMapReduce;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
 import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
@@ -48,12 +47,12 @@ import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.DataStore;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.locationtech.geowave.core.store.memory.MemoryStoreFactoryFamily;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
@@ -85,11 +84,11 @@ public class KMeansDistortionMapReduceTest
 			ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 	final FeatureDataAdapter testObjectAdapter = new FeatureDataAdapter(
 			ftype);
-	short internalAdapterId = 1234;
+	short adapterId = 1234;
 
-	private static final List<Object> capturedObjects = new ArrayList<Object>();
+	private static final List<Object> capturedObjects = new ArrayList<>();
 
-	final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+	final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 	final GeometryFactory factory = new GeometryFactory();
 	final String grp1 = "g1";
 
@@ -116,19 +115,19 @@ public class KMeansDistortionMapReduceTest
 				reduceDriver.getConfiguration(),
 				testObjectAdapter);
 
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				mapDriver.getConfiguration(),
-				testObjectAdapter.getAdapterId(),
-				internalAdapterId);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+				testObjectAdapter.getTypeName(),
+				adapterId);
+		JobContextInternalAdapterStore.addTypeName(
 				reduceDriver.getConfiguration(),
-				testObjectAdapter.getAdapterId(),
-				internalAdapterId);
+				testObjectAdapter.getTypeName(),
+				adapterId);
 		final PropertyManagement propManagement = new PropertyManagement();
 		propManagement.store(
-				CentroidParameters.Centroid.INDEX_ID,
-				new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialOptions()).getId().getString());
+				CentroidParameters.Centroid.INDEX_NAME,
+				new SpatialDimensionalityTypeProvider().createIndex(
+						new SpatialOptions()).getName());
 		propManagement.store(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
 				ftype.getTypeName());
@@ -146,15 +145,15 @@ public class KMeansDistortionMapReduceTest
 				CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 				SimpleFeatureItemWrapperFactory.class);
 
-		DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
+		final DataStorePluginOptions pluginOptions = new DataStorePluginOptions();
 		GeoWaveStoreFinder.getRegisteredStoreFactoryFamilies().put(
 				"memory",
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
-		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
 		opts.setGeowaveNamespace(namespace);
-		PersistableStore store = new PersistableStore(
+		final PersistableStore store = new PersistableStore(
 				pluginOptions);
 
 		propManagement.store(
@@ -208,12 +207,13 @@ public class KMeansDistortionMapReduceTest
 	private void ingest(
 			final DataStore dataStore,
 			final FeatureDataAdapter adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final SimpleFeature feature )
 			throws IOException {
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				index)) {
+				index);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			writer.write(feature);
 			writer.close();
 		}
@@ -244,8 +244,8 @@ public class KMeansDistortionMapReduceTest
 			throws IOException {
 
 		final GeoWaveInputKey inputKey = new GeoWaveInputKey();
-		inputKey.setInternalAdapterId(internalAdapterId);
-		inputKey.setDataId(new ByteArrayId(
+		inputKey.setInternalAdapterId(adapterId);
+		inputKey.setDataId(new ByteArray(
 				"abc".getBytes()));
 
 		final ObjectWritable ow = new ObjectWritable();

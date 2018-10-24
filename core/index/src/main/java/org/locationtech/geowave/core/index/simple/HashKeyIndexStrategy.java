@@ -17,7 +17,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.PartitionIndexStrategy;
 import org.locationtech.geowave.core.index.StringUtils;
@@ -57,7 +57,7 @@ public class HashKeyIndexStrategy implements
 		PartitionIndexStrategy<MultiDimensionalNumericData, MultiDimensionalNumericData>
 {
 
-	private final List<ByteArrayId> keys = new ArrayList<ByteArrayId>();
+	private final List<ByteArray> keys = new ArrayList<ByteArray>();
 
 	public HashKeyIndexStrategy() {
 		this(
@@ -76,7 +76,7 @@ public class HashKeyIndexStrategy implements
 			final ByteBuffer buf = ByteBuffer.allocate(4);
 			for (int i = 0; i < size; i++) {
 				buf.putInt(i);
-				final ByteArrayId id = new ByteArrayId(
+				final ByteArray id = new ByteArray(
 						Arrays.copyOf(
 								buf.array(),
 								4));
@@ -86,7 +86,7 @@ public class HashKeyIndexStrategy implements
 		}
 		else {
 			for (int i = 0; i < size; i++) {
-				final ByteArrayId id = new ByteArrayId(
+				final ByteArray id = new ByteArray(
 						new byte[] {
 							(byte) i
 						});
@@ -115,7 +115,7 @@ public class HashKeyIndexStrategy implements
 		init(buf.getInt());
 	}
 
-	public Set<ByteArrayId> getPartitionKeys() {
+	public Set<ByteArray> getPartitionKeys() {
 		return Sets.newHashSet(keys);
 	}
 
@@ -149,7 +149,7 @@ public class HashKeyIndexStrategy implements
 	 *
 	 */
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		final long hashCode = Math.abs(hashCode(
 				insertionData.getMaxValuesPerDimension(),
@@ -165,14 +165,14 @@ public class HashKeyIndexStrategy implements
 	 * always return all keys
 	 */
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return getPartitionKeys();
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return getPartitionKeys();
 	}
 }

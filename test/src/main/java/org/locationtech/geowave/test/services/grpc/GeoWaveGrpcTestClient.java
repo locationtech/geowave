@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -26,20 +26,27 @@ import java.util.TimeZone;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.service.grpc.protobuf.AddIndexGroupCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc.AnalyticMapreduceBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc.AnalyticSparkBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.CQLQueryParameters;
 import org.locationtech.geowave.service.grpc.protobuf.CalculateStatCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.ClearCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc.CliGeoserverBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.ConfigGeoServerCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.ConfigHDFSCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.CoreCliGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.CoreCliGrpc.CoreCliBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.CoreIngestGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.CoreIngestGrpc.CoreIngestBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapreduceBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreBlockingStub;
 import org.locationtech.geowave.service.grpc.protobuf.DBScanCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.Feature;
 import org.locationtech.geowave.service.grpc.protobuf.FeatureAttribute;
@@ -69,12 +76,14 @@ import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveFeatureLaye
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveStyleCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerRemoveWorkspaceCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.GeoServerSetLayerStyleCommandParameters;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.MapStringStringResponse;
+import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
 import org.locationtech.geowave.service.grpc.protobuf.KafkaToGeowaveCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.KdeCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.KmeansSparkCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.ListAdapterCommandParameters;
+import org.locationtech.geowave.service.grpc.protobuf.ListTypesCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.ListCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.ListIndexCommandParameters;
+import org.locationtech.geowave.service.grpc.protobuf.ListIndicesCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.ListPluginsCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.ListStatsCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.LocalToGeowaveCommandParameters;
@@ -84,7 +93,7 @@ import org.locationtech.geowave.service.grpc.protobuf.LocalToMapReduceToGeowaveC
 import org.locationtech.geowave.service.grpc.protobuf.MapReduceToGeowaveCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.NearestNeighborCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.RecalculateStatsCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.RemoveAdapterCommandParameters;
+import org.locationtech.geowave.service.grpc.protobuf.RemoveTypeCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveIndexCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveIndexGroupCommandParameters;
 import org.locationtech.geowave.service.grpc.protobuf.RemoveStatCommandParameters;
@@ -97,22 +106,12 @@ import org.locationtech.geowave.service.grpc.protobuf.SpatialQueryParameters;
 import org.locationtech.geowave.service.grpc.protobuf.SpatialTemporalQueryParameters;
 import org.locationtech.geowave.service.grpc.protobuf.TemporalConstraints;
 import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc;
+import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc.VectorBlockingStub;
+import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc.VectorStub;
 import org.locationtech.geowave.service.grpc.protobuf.VectorIngestParameters;
 import org.locationtech.geowave.service.grpc.protobuf.VectorQueryParameters;
 import org.locationtech.geowave.service.grpc.protobuf.VectorStoreParameters;
 import org.locationtech.geowave.service.grpc.protobuf.VersionCommandParameters;
-import org.locationtech.geowave.service.grpc.protobuf.AnalyticMapreduceGrpc.AnalyticMapreduceBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.AnalyticSparkGrpc.AnalyticSparkBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.CliGeoserverGrpc.CliGeoserverBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.CoreCliGrpc.CoreCliBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.CoreIngestGrpc.CoreIngestBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.CoreMapreduceGrpc.CoreMapreduceBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.CoreStoreGrpc.CoreStoreBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.MapStringStringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.StringResponse;
-import org.locationtech.geowave.service.grpc.protobuf.GeoWaveReturnTypes.VoidResponse;
-import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc.VectorBlockingStub;
-import org.locationtech.geowave.service.grpc.protobuf.VectorGrpc.VectorStub;
 import org.locationtech.geowave.test.TestUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,12 +119,11 @@ import org.slf4j.LoggerFactory;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.util.Timestamps;
 import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.io.WKBWriter;
 
 import io.grpc.ManagedChannel;
-import io.grpc.ManagedChannelBuilder;
-import io.grpc.netty.NettyChannelBuilder;
-import io.grpc.StatusRuntimeException;
 import io.grpc.internal.DnsNameResolverProvider;
+import io.grpc.netty.NettyChannelBuilder;
 import io.grpc.stub.StreamObserver;
 
 public class GeoWaveGrpcTestClient
@@ -147,8 +145,8 @@ public class GeoWaveGrpcTestClient
 	public int numFeaturesProcessed = 0;
 
 	public GeoWaveGrpcTestClient(
-			String host,
-			int port ) {
+			final String host,
+			final int port ) {
 		this(
 				NettyChannelBuilder.forAddress(
 						host,
@@ -158,7 +156,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public GeoWaveGrpcTestClient(
-			NettyChannelBuilder channelBuilder ) {
+			final NettyChannelBuilder channelBuilder ) {
 		channel = channelBuilder.build();
 		vectorBlockingStub = VectorGrpc.newBlockingStub(channel);
 		vectorAsyncStub = VectorGrpc.newStub(channel);
@@ -182,44 +180,44 @@ public class GeoWaveGrpcTestClient
 	public void setCommand(
 			final String key,
 			final String val ) {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(key);
 		params.add(val);
-		SetCommandParameters request = SetCommandParameters.newBuilder().addAllParameters(
+		final SetCommandParameters request = SetCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreCliBlockingStub.setCommand(request);
 	}
 
 	public Map<String, String> listCommand() {
-		ListCommandParameters request = ListCommandParameters.newBuilder().build();
-		MapStringStringResponse response = coreCliBlockingStub.listCommand(request);
-		Map<String, String> map = response.getResponseValueMap();
+		final ListCommandParameters request = ListCommandParameters.newBuilder().build();
+		final MapStringStringResponse response = coreCliBlockingStub.listCommand(request);
+		final Map<String, String> map = response.getResponseValueMap();
 		return map;
 	}
 
 	// Vector Service Methods
 	public void vectorIngest(
-			int minLat,
-			int maxLat,
-			int minLon,
-			int maxLon,
-			int latStepDegs,
-			int lonStepDegs )
+			final int minLat,
+			final int maxLat,
+			final int minLon,
+			final int maxLon,
+			final int latStepDegs,
+			final int lonStepDegs )
 			throws InterruptedException,
 			UnsupportedEncodingException {
 		LOGGER.info("Performing Vector Ingest...");
-		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
-				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+		final VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
+				GeoWaveGrpcTestUtils.storeName).setTypeName(
+				GeoWaveGrpcTestUtils.typeName).setIndexName(
+				GeoWaveGrpcTestUtils.indexName).build();
 
 		final CountDownLatch finishLatch = new CountDownLatch(
 				1);
-		StreamObserver<StringResponse> responseObserver = new StreamObserver<StringResponse>() {
+		final StreamObserver<StringResponse> responseObserver = new StreamObserver<StringResponse>() {
 
 			@Override
 			public void onNext(
-					StringResponse value ) {
+					final StringResponse value ) {
 				try {
 					numFeaturesProcessed = Integer.parseInt(value.getResponseValue());
 				}
@@ -231,7 +229,7 @@ public class GeoWaveGrpcTestClient
 
 			@Override
 			public void onError(
-					Throwable t ) {
+					final Throwable t ) {
 				LOGGER.error(
 						"Error: Vector Ingest failed.",
 						t);
@@ -244,27 +242,27 @@ public class GeoWaveGrpcTestClient
 				finishLatch.countDown();
 			}
 		};
-		StreamObserver<VectorIngestParameters> requestObserver = vectorAsyncStub.vectorIngest(responseObserver);
+		final StreamObserver<VectorIngestParameters> requestObserver = vectorAsyncStub.vectorIngest(responseObserver);
 
 		// Build up and add features to the request here...
-		VectorIngestParameters.Builder requestBuilder = VectorIngestParameters.newBuilder();
-		FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
+		final VectorIngestParameters.Builder requestBuilder = VectorIngestParameters.newBuilder();
+		final FeatureAttribute.Builder attBuilder = FeatureAttribute.newBuilder();
 		for (int longitude = minLon; longitude <= maxLon; longitude += lonStepDegs) {
 			for (int latitude = minLat; latitude <= maxLat; latitude += latStepDegs) {
-				attBuilder.setValGeometry(GeometryUtils.GEOMETRY_FACTORY.createPoint(
-						new Coordinate(
+				attBuilder.setValGeometry(copyFrom(new WKBWriter().write(GeometryUtils.GEOMETRY_FACTORY
+						.createPoint(new Coordinate(
 								longitude,
-								latitude)).toString());
+								latitude)))));
 				requestBuilder.putFeature(
 						"geometry",
 						attBuilder.build());
 
-				TimeZone tz = TimeZone.getTimeZone("UTC");
-				DateFormat df = new SimpleDateFormat(
+				final TimeZone tz = TimeZone.getTimeZone("UTC");
+				final DateFormat df = new SimpleDateFormat(
 						"yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC,
 													// no timezone offset
 				df.setTimeZone(tz);
-				String isoDate = df.format(new Date());
+				final String isoDate = df.format(new Date());
 				attBuilder.setValString(isoDate);
 				requestBuilder.putFeature(
 						"TimeStamp",
@@ -280,7 +278,7 @@ public class GeoWaveGrpcTestClient
 						"Longitude",
 						attBuilder.build());
 
-				VectorIngestParameters params = requestBuilder.setBaseParams(
+				final VectorIngestParameters params = requestBuilder.setBaseParams(
 						baseParams).build();
 				requestObserver.onNext(params);
 				if (finishLatch.getCount() == 0) {
@@ -306,46 +304,46 @@ public class GeoWaveGrpcTestClient
 	public ArrayList<Feature> vectorQuery()
 			throws UnsupportedEncodingException {
 		LOGGER.info("Performing Vector Query...");
-		VectorQueryParameters request = VectorQueryParameters.newBuilder().setStoreName(
-				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setQuery(
+		final VectorQueryParameters request = VectorQueryParameters.newBuilder().setStoreName(
+				GeoWaveGrpcTestUtils.storeName).setTypeName(
+				GeoWaveGrpcTestUtils.typeName).setQuery(
 				GeoWaveGrpcTestUtils.cqlSpatialQuery).build();
 
-		Iterator<Feature> features = vectorBlockingStub.vectorQuery(request);
-		final ArrayList<Feature> feature_list = new ArrayList<Feature>();
+		final Iterator<Feature> features = vectorBlockingStub.vectorQuery(request);
+		final ArrayList<Feature> feature_list = new ArrayList<>();
 
 		// iterate over features
 		for (int i = 1; features.hasNext(); i++) {
-			Feature feature = features.next();
+			final Feature feature = features.next();
 			feature_list.add(feature);
 		}
 		return feature_list;
 	}
 
 	private static ByteString copyFrom(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		return ByteString.copyFrom(bytes);
 	}
 
 	public ArrayList<Feature> cqlQuery()
 			throws UnsupportedEncodingException {
 		LOGGER.info("Performing CQL Query...");
-		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
-				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+		final VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
+				GeoWaveGrpcTestUtils.storeName).setTypeName(
+				GeoWaveGrpcTestUtils.typeName).setIndexName(
+				GeoWaveGrpcTestUtils.indexName).build();
 
-		CQLQueryParameters request = CQLQueryParameters.newBuilder().setBaseParams(
+		final CQLQueryParameters request = CQLQueryParameters.newBuilder().setBaseParams(
 				baseParams).setCql(
 				GeoWaveGrpcTestUtils.cqlSpatialQuery).build();
 
 		Iterator<Feature> features;
-		final ArrayList<Feature> feature_list = new ArrayList<Feature>();
+		final ArrayList<Feature> feature_list = new ArrayList<>();
 		features = vectorBlockingStub.cqlQuery(request);
 
 		// iterate over features
 		for (int i = 1; features.hasNext(); i++) {
-			Feature feature = features.next();
+			final Feature feature = features.next();
 			feature_list.add(feature);
 		}
 		return feature_list;
@@ -354,23 +352,22 @@ public class GeoWaveGrpcTestClient
 	public ArrayList<Feature> spatialQuery()
 			throws UnsupportedEncodingException {
 		LOGGER.info("Performing Spatial Query...");
-		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
-				GeoWaveGrpcTestUtils.storeName).setAdapterId(
-				copyFrom(GeoWaveGrpcTestUtils.adapterId.getBytes("UTF-8"))).setIndexId(
-				copyFrom(GeoWaveGrpcTestUtils.indexId.getBytes("UTF-8"))).build();
+		final VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
+				GeoWaveGrpcTestUtils.storeName).setTypeName(
+				GeoWaveGrpcTestUtils.typeName).setIndexName(
+				GeoWaveGrpcTestUtils.indexName).build();
 
-		final String queryPolygonDefinition = GeoWaveGrpcTestUtils.wktSpatialQuery;
-		SpatialQueryParameters request = SpatialQueryParameters.newBuilder().setBaseParams(
+		final SpatialQueryParameters request = SpatialQueryParameters.newBuilder().setBaseParams(
 				baseParams).setGeometry(
-				queryPolygonDefinition).build();
+				copyFrom(GeoWaveGrpcTestUtils.wkbSpatialQuery)).build();
 
 		Iterator<Feature> features;
-		final ArrayList<Feature> feature_list = new ArrayList<Feature>();
+		final ArrayList<Feature> feature_list = new ArrayList<>();
 		features = vectorBlockingStub.spatialQuery(request);
 
 		// iterate over features
 		for (int i = 1; features.hasNext(); i++) {
-			Feature feature = features.next();
+			final Feature feature = features.next();
 			feature_list.add(feature);
 		}
 		return feature_list;
@@ -379,37 +376,36 @@ public class GeoWaveGrpcTestClient
 	public ArrayList<Feature> spatialTemporalQuery()
 			throws ParseException {
 		LOGGER.info("Performing Spatial Temporal Query...");
-		VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
+		final VectorStoreParameters baseParams = VectorStoreParameters.newBuilder().setStoreName(
 				GeoWaveGrpcTestUtils.storeName).build();
 
-		TimeZone tz = TimeZone.getTimeZone("UTC");
-		DateFormat df = new SimpleDateFormat(
+		final TimeZone tz = TimeZone.getTimeZone("UTC");
+		final DateFormat df = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm'Z'"); // Quoted "Z" to indicate UTC,
 											// no timezone offset
 		df.setTimeZone(tz);
-		final String queryPolygonDefinition = GeoWaveGrpcTestUtils.wktSpatialQuery;
 
-		SpatialQueryParameters spatialQuery = SpatialQueryParameters.newBuilder().setBaseParams(
+		final SpatialQueryParameters spatialQuery = SpatialQueryParameters.newBuilder().setBaseParams(
 				baseParams).setGeometry(
-				queryPolygonDefinition).build();
-		TemporalConstraints t = TemporalConstraints.newBuilder().setStartTime(
+				copyFrom(GeoWaveGrpcTestUtils.wkbSpatialQuery)).build();
+		final TemporalConstraints t = TemporalConstraints.newBuilder().setStartTime(
 				Timestamps.fromMillis(df.parse(
 						GeoWaveGrpcTestUtils.temporalQueryStartTime).getTime())).setEndTime(
 				Timestamps.fromMillis(df.parse(
 						GeoWaveGrpcTestUtils.temporalQueryEndTime).getTime())).build();
-		SpatialTemporalQueryParameters request = SpatialTemporalQueryParameters.newBuilder().setSpatialParams(
+		final SpatialTemporalQueryParameters request = SpatialTemporalQueryParameters.newBuilder().setSpatialParams(
 				spatialQuery).addTemporalConstraints(
 				0,
 				t).setCompareOperation(
 				"CONTAINS").build();
 
 		Iterator<Feature> features;
-		final ArrayList<Feature> feature_list = new ArrayList<Feature>();
+		final ArrayList<Feature> feature_list = new ArrayList<>();
 		features = vectorBlockingStub.spatialTemporalQuery(request);
 
 		// iterate over features
 		for (int i = 1; features.hasNext(); i++) {
-			Feature feature = features.next();
+			final Feature feature = features.next();
 			feature_list.add(feature);
 		}
 		return feature_list;
@@ -417,7 +413,7 @@ public class GeoWaveGrpcTestClient
 
 	// Core Mapreduce
 	public boolean configHDFSCommand() {
-		ConfigHDFSCommandParameters request = ConfigHDFSCommandParameters.newBuilder().addParameters(
+		final ConfigHDFSCommandParameters request = ConfigHDFSCommandParameters.newBuilder().addParameters(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).build();
 		coreMapreduceBlockingStub.configHDFSCommand(request);
 		return true;
@@ -425,9 +421,9 @@ public class GeoWaveGrpcTestClient
 
 	// Analytic Mapreduce
 	public boolean dbScanCommand() {
-		ArrayList<String> adapters = new ArrayList<String>();
-		adapters.add(GeoWaveGrpcTestUtils.adapterId);
-		DBScanCommandParameters request = DBScanCommandParameters.newBuilder().addParameters(
+		final ArrayList<String> types = new ArrayList<>();
+		types.add(GeoWaveGrpcTestUtils.typeName);
+		final DBScanCommandParameters request = DBScanCommandParameters.newBuilder().addParameters(
 				GeoWaveGrpcTestUtils.storeName).setClusteringMaxIterations(
 				"5").setClusteringMinimumSize(
 				"10").setExtractMinInputSplit(
@@ -437,21 +433,21 @@ public class GeoWaveGrpcTestClient
 				"4").setMapReduceHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setMapReduceJobtrackerHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setMapReduceHdfsBaseDir(
-				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).addAllAdapterIds(
-				adapters).build();
+				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory()).addAllTypeNames(
+				types).build();
 		analyticMapreduceBlockingStub.dBScanCommand(request);
 		return true;
 	}
 
 	public boolean nearestNeighborCommand() {
-		ArrayList<String> adapters = new ArrayList<String>();
-		adapters.add(GeoWaveGrpcTestUtils.adapterId);
-		NearestNeighborCommandParameters request = NearestNeighborCommandParameters
+		final ArrayList<String> types = new ArrayList<>();
+		types.add(GeoWaveGrpcTestUtils.typeName);
+		final NearestNeighborCommandParameters request = NearestNeighborCommandParameters
 				.newBuilder()
 				.addParameters(
 						GeoWaveGrpcTestUtils.storeName)
-				.addAllAdapterIds(
-						adapters)
+				.addAllTypeNames(
+						types)
 				.setExtractQuery(
 						GeoWaveGrpcTestUtils.wktSpatialQuery)
 				.setExtractMinInputSplit(
@@ -476,13 +472,13 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean kdeCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.outputStoreName);
-		KdeCommandParameters request = KdeCommandParameters.newBuilder().addAllParameters(
+		final KdeCommandParameters request = KdeCommandParameters.newBuilder().addAllParameters(
 				params).setCoverageName(
 				"grpc_kde").setFeatureType(
-				GeoWaveGrpcTestUtils.adapterId).setHdfsHostPort(
+				GeoWaveGrpcTestUtils.typeName).setHdfsHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfs()).setJobTrackerOrResourceManHostPort(
 				GeoWaveGrpcTestUtils.getMapReduceTestEnv().getJobtracker()).setMinLevel(
 				5).setMaxLevel(
@@ -496,147 +492,161 @@ public class GeoWaveGrpcTestClient
 
 	// Core Store
 	public boolean RecalculateStatsCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		RecalculateStatsCommandParameters request = RecalculateStatsCommandParameters.newBuilder().addAllParameters(
-				params).setJsonFormatFlag(
-				true).build();
+		final RecalculateStatsCommandParameters request = RecalculateStatsCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.setJsonFormatFlag(
+						true)
+				.build();
 		coreStoreBlockingStub.recalculateStatsCommand(request);
 		return true;
 	}
 
 	public String RemoveIndexCommand() {
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(GeoWaveGrpcTestUtils.indexId);
-		RemoveIndexCommandParameters request = RemoveIndexCommandParameters.newBuilder().addAllParameters(
+		final ArrayList<String> params = new ArrayList<>();
+		params.add(GeoWaveGrpcTestUtils.indexName);
+		final RemoveIndexCommandParameters request = RemoveIndexCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.removeIndexCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.removeIndexCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public boolean VersionCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		VersionCommandParameters request = VersionCommandParameters.newBuilder().addAllParameters(
+		final VersionCommandParameters request = VersionCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.versionCommand(request);
 		return true;
 	}
 
 	public String ListIndexCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		ListIndexCommandParameters request = ListIndexCommandParameters.newBuilder().addAllParameters(
+		final ListIndicesCommandParameters request = ListIndicesCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.listIndexCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.listIndicesCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public String ListStatsCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		ListStatsCommandParameters request = ListStatsCommandParameters.newBuilder().addAllParameters(
+		final ListStatsCommandParameters request = ListStatsCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.listStatsCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.listStatsCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public String AddIndexGroupCommand() {
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(GeoWaveGrpcTestUtils.indexId + "-group");
-		params.add(GeoWaveGrpcTestUtils.indexId);
-		AddIndexGroupCommandParameters request = AddIndexGroupCommandParameters.newBuilder().addAllParameters(
+		final ArrayList<String> params = new ArrayList<>();
+		params.add(GeoWaveGrpcTestUtils.indexName + "-group");
+		params.add(GeoWaveGrpcTestUtils.indexName);
+		final AddIndexGroupCommandParameters request = AddIndexGroupCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.addIndexGroupCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.addIndexGroupCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public boolean ClearCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		ClearCommandParameters request = ClearCommandParameters.newBuilder().addAllParameters(
+		final ClearCommandParameters request = ClearCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.clearCommand(request);
 		return true;
 	}
 
 	public String ListAdapterCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		ListAdapterCommandParameters request = ListAdapterCommandParameters.newBuilder().addAllParameters(
+		final ListTypesCommandParameters request = ListTypesCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.listAdapterCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.listTypesCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public String RemoveStoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		RemoveStoreCommandParameters request = RemoveStoreCommandParameters.newBuilder().addAllParameters(
+		final RemoveStoreCommandParameters request = RemoveStoreCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		StringResponse resp = coreStoreBlockingStub.removeStoreCommand(request);
+		final StringResponse resp = coreStoreBlockingStub.removeStoreCommand(request);
 		return resp.getResponseValue();
 	}
 
 	public boolean RemoveAdapterCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.adapterId);
-		RemoveAdapterCommandParameters request = RemoveAdapterCommandParameters.newBuilder().addAllParameters(
+		params.add(GeoWaveGrpcTestUtils.typeName);
+		final RemoveTypeCommandParameters request = RemoveTypeCommandParameters.newBuilder().addAllParameters(
 				params).build();
-		coreStoreBlockingStub.removeAdapterCommand(request);
+		coreStoreBlockingStub.removeTypeCommand(request);
 		return true;
 	}
 
 	public boolean RemoveStatCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.adapterId);
+		params.add(GeoWaveGrpcTestUtils.typeName);
 		params.add("FEATURE_BBOX#geometry");
-		RemoveStatCommandParameters request = RemoveStatCommandParameters.newBuilder().addAllParameters(
+		final RemoveStatCommandParameters request = RemoveStatCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.removeStatCommand(request);
 		return true;
 	}
 
 	public boolean CalculateStatCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.adapterId);
+		params.add(GeoWaveGrpcTestUtils.typeName);
 		params.add("FEATURE_BBOX#geometry");
-		CalculateStatCommandParameters request = CalculateStatCommandParameters.newBuilder().addAllParameters(
+		final CalculateStatCommandParameters request = CalculateStatCommandParameters.newBuilder().addAllParameters(
 				params).build();
 		coreStoreBlockingStub.calculateStatCommand(request);
 		return true;
 	}
 
 	public String RemoveIndexGroupCommand() {
-		ArrayList<String> params = new ArrayList<String>();
-		params.add(GeoWaveGrpcTestUtils.indexId + "-group");
-		RemoveIndexGroupCommandParameters request = RemoveIndexGroupCommandParameters.newBuilder().addAllParameters(
-				params).build();
-		StringResponse resp = coreStoreBlockingStub.removeIndexGroupCommand(request);
+		final ArrayList<String> params = new ArrayList<>();
+		params.add(GeoWaveGrpcTestUtils.indexName + "-group");
+		final RemoveIndexGroupCommandParameters request = RemoveIndexGroupCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.build();
+		final StringResponse resp = coreStoreBlockingStub.removeIndexGroupCommand(request);
 		return resp.getResponseValue();
 	}
 
 	// Cli GeoServer
 	public String GeoServerAddLayerCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddLayerCommandParameters request = GeoServerAddLayerCommandParameters.newBuilder().addAllParameters(
-				params).setAdapterId(
-				"GeometryTest").setAddOption(
-				"VECTOR").setStyle(
-				"default").setWorkspace(
-				"default").build();
+		final GeoServerAddLayerCommandParameters request = GeoServerAddLayerCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.setAdapterId(
+						"GeometryTest")
+				.setAddOption(
+						"VECTOR")
+				.setStyle(
+						"default")
+				.setWorkspace(
+						"default")
+				.build();
 		return cliGeoserverBlockingStub.geoServerAddLayerCommand(
 				request).getResponseValue();
 	}
 
 	public String GeoServerGetDatastoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetDatastoreCommandParameters request = GeoServerGetDatastoreCommandParameters
+		final GeoServerGetDatastoreCommandParameters request = GeoServerGetDatastoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -648,9 +658,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerGetFeatureLayerCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetFeatureLayerCommandParameters request = GeoServerGetFeatureLayerCommandParameters
+		final GeoServerGetFeatureLayerCommandParameters request = GeoServerGetFeatureLayerCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -660,7 +670,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerListCoverageStoresCommand() {
-		GeoServerListCoverageStoresCommandParameters request = GeoServerListCoverageStoresCommandParameters
+		final GeoServerListCoverageStoresCommandParameters request = GeoServerListCoverageStoresCommandParameters
 				.newBuilder()
 				.setWorkspace(
 						"default")
@@ -670,9 +680,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public List<String> GeoServerGetStoreAdapterCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetStoreAdapterCommandParameters request = GeoServerGetStoreAdapterCommandParameters
+		final GeoServerGetStoreAdapterCommandParameters request = GeoServerGetStoreAdapterCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -682,9 +692,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerGetCoverageCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetCoverageCommandParameters request = GeoServerGetCoverageCommandParameters
+		final GeoServerGetCoverageCommandParameters request = GeoServerGetCoverageCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -698,9 +708,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerRemoveFeatureLayerCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveFeatureLayerCommandParameters request = GeoServerRemoveFeatureLayerCommandParameters
+		final GeoServerRemoveFeatureLayerCommandParameters request = GeoServerRemoveFeatureLayerCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -710,9 +720,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerAddCoverageCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddCoverageCommandParameters request = GeoServerAddCoverageCommandParameters
+		final GeoServerAddCoverageCommandParameters request = GeoServerAddCoverageCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -726,9 +736,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerRemoveWorkspaceCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveWorkspaceCommandParameters request = GeoServerRemoveWorkspaceCommandParameters
+		final GeoServerRemoveWorkspaceCommandParameters request = GeoServerRemoveWorkspaceCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -738,7 +748,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public List<String> GeoServerListWorkspacesCommand() {
-		GeoServerListWorkspacesCommandParameters request = GeoServerListWorkspacesCommandParameters
+		final GeoServerListWorkspacesCommandParameters request = GeoServerListWorkspacesCommandParameters
 				.newBuilder()
 				.build();
 		return cliGeoserverBlockingStub.geoServerListWorkspacesCommand(
@@ -746,9 +756,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerGetCoverageStoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetCoverageStoreCommandParameters request = GeoServerGetCoverageStoreCommandParameters
+		final GeoServerGetCoverageStoreCommandParameters request = GeoServerGetCoverageStoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -760,21 +770,27 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String ConfigGeoServerCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		ConfigGeoServerCommandParameters request = ConfigGeoServerCommandParameters.newBuilder().addAllParameters(
-				params).setWorkspace(
-				"default").setUsername(
-				"user").setPass(
-				"default").build();
+		final ConfigGeoServerCommandParameters request = ConfigGeoServerCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.setWorkspace(
+						"default")
+				.setUsername(
+						"user")
+				.setPass(
+						"default")
+				.build();
 		return cliGeoserverBlockingStub.configGeoServerCommand(
 				request).getResponseValue();
 	}
 
 	public String GeoServerListCoveragesCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerListCoveragesCommandParameters request = GeoServerListCoveragesCommandParameters
+		final GeoServerListCoveragesCommandParameters request = GeoServerListCoveragesCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -786,15 +802,15 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerListStylesCommand() {
-		GeoServerListStylesCommandParameters request = GeoServerListStylesCommandParameters.newBuilder().build();
+		final GeoServerListStylesCommandParameters request = GeoServerListStylesCommandParameters.newBuilder().build();
 		return cliGeoserverBlockingStub.geoServerListStylesCommand(
 				request).getResponseValue();
 	}
 
 	public String GeoServerAddCoverageStoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddCoverageStoreCommandParameters request = GeoServerAddCoverageStoreCommandParameters
+		final GeoServerAddCoverageStoreCommandParameters request = GeoServerAddCoverageStoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -814,9 +830,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerAddFeatureLayerCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddFeatureLayerCommandParameters request = GeoServerAddFeatureLayerCommandParameters
+		final GeoServerAddFeatureLayerCommandParameters request = GeoServerAddFeatureLayerCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -830,9 +846,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerAddDatastoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		GeoServerAddDatastoreCommandParameters request = GeoServerAddDatastoreCommandParameters
+		final GeoServerAddDatastoreCommandParameters request = GeoServerAddDatastoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -846,7 +862,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerListDatastoresCommand() {
-		GeoServerListDatastoresCommandParameters request = GeoServerListDatastoresCommandParameters
+		final GeoServerListDatastoresCommandParameters request = GeoServerListDatastoresCommandParameters
 				.newBuilder()
 				.setWorkspace(
 						"default")
@@ -856,9 +872,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerSetLayerStyleCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerSetLayerStyleCommandParameters request = GeoServerSetLayerStyleCommandParameters
+		final GeoServerSetLayerStyleCommandParameters request = GeoServerSetLayerStyleCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -870,9 +886,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerRemoveCoverageStoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveCoverageStoreCommandParameters request = GeoServerRemoveCoverageStoreCommandParameters
+		final GeoServerRemoveCoverageStoreCommandParameters request = GeoServerRemoveCoverageStoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -884,9 +900,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerRemoveDatastoreCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveDatastoreCommandParameters request = GeoServerRemoveDatastoreCommandParameters
+		final GeoServerRemoveDatastoreCommandParameters request = GeoServerRemoveDatastoreCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -898,19 +914,23 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerAddStyleCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddStyleCommandParameters request = GeoServerAddStyleCommandParameters.newBuilder().addAllParameters(
-				params).setStylesld(
-				"styles-id").build();
+		final GeoServerAddStyleCommandParameters request = GeoServerAddStyleCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.setStylesld(
+						"styles-id")
+				.build();
 		return cliGeoserverBlockingStub.geoServerAddStyleCommand(
 				request).getResponseValue();
 	}
 
 	public String GeoServerAddWorkspaceCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerAddWorkspaceCommandParameters request = GeoServerAddWorkspaceCommandParameters
+		final GeoServerAddWorkspaceCommandParameters request = GeoServerAddWorkspaceCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -920,18 +940,21 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerGetStyleCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerGetStyleCommandParameters request = GeoServerGetStyleCommandParameters.newBuilder().addAllParameters(
-				params).build();
+		final GeoServerGetStyleCommandParameters request = GeoServerGetStyleCommandParameters
+				.newBuilder()
+				.addAllParameters(
+						params)
+				.build();
 		return cliGeoserverBlockingStub.geoServerGetStyleCommand(
 				request).getResponseValue();
 	}
 
 	public String GeoServerRemoveStyleCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveStyleCommandParameters request = GeoServerRemoveStyleCommandParameters
+		final GeoServerRemoveStyleCommandParameters request = GeoServerRemoveStyleCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -941,9 +964,9 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerRemoveCoverageCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add("grpc");
-		GeoServerRemoveCoverageCommandParameters request = GeoServerRemoveCoverageCommandParameters
+		final GeoServerRemoveCoverageCommandParameters request = GeoServerRemoveCoverageCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -957,7 +980,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String GeoServerListFeatureLayersCommand() {
-		GeoServerListFeatureLayersCommandParameters request = GeoServerListFeatureLayersCommandParameters
+		final GeoServerListFeatureLayersCommandParameters request = GeoServerListFeatureLayersCommandParameters
 				.newBuilder()
 				.setWorkspace(
 						"default")
@@ -972,13 +995,13 @@ public class GeoWaveGrpcTestClient
 
 	// Core Ingest
 	public boolean LocalToHdfsCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory());
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
-		LocalToHdfsCommandParameters request = LocalToHdfsCommandParameters.newBuilder().addAllParameters(
+		final LocalToHdfsCommandParameters request = LocalToHdfsCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
 				"gpx").build();
@@ -987,14 +1010,14 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean LocalToGeowaveCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.indexId);
+		params.add(GeoWaveGrpcTestUtils.indexName);
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
-		LocalToGeowaveCommandParameters request = LocalToGeowaveCommandParameters.newBuilder().addAllParameters(
+		final LocalToGeowaveCommandParameters request = LocalToGeowaveCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
 				"gpx").setThreads(
@@ -1004,13 +1027,13 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean MapReduceToGeowaveCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory());
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.indexId);
+		params.add(GeoWaveGrpcTestUtils.indexName);
 
-		ArrayList<String> extensions = new ArrayList<String>();
-		MapReduceToGeowaveCommandParameters request = MapReduceToGeowaveCommandParameters
+		final ArrayList<String> extensions = new ArrayList<>();
+		final MapReduceToGeowaveCommandParameters request = MapReduceToGeowaveCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -1026,7 +1049,7 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean SparkToGeowaveCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 
 		final File tempDataDir = new File(
 				"./" + TestUtils.TEST_CASE_BASE);
@@ -1034,7 +1057,7 @@ public class GeoWaveGrpcTestClient
 		try {
 			hdfsPath = tempDataDir.toURI().toURL().toString();
 		}
-		catch (MalformedURLException e) {
+		catch (final MalformedURLException e) {
 			return false;
 		}
 
@@ -1042,11 +1065,11 @@ public class GeoWaveGrpcTestClient
 		// params.add("s3://geowave-test/data/gdelt");
 		params.add(hdfsPath + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.indexId);
+		params.add(GeoWaveGrpcTestUtils.indexName);
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
-		SparkToGeowaveCommandParameters request = SparkToGeowaveCommandParameters.newBuilder().addAllParameters(
+		final SparkToGeowaveCommandParameters request = SparkToGeowaveCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
 				"gpx").setAppName(
@@ -1060,15 +1083,15 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean LocalToMapReduceToGeowaveCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
 		params.add(GeoWaveGrpcTestUtils.getMapReduceTestEnv().getHdfsBaseDirectory());
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.indexId);
+		params.add(GeoWaveGrpcTestUtils.indexName);
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
-		LocalToMapReduceToGeowaveCommandParameters request = LocalToMapReduceToGeowaveCommandParameters
+		final LocalToMapReduceToGeowaveCommandParameters request = LocalToMapReduceToGeowaveCommandParameters
 				.newBuilder()
 				.addAllParameters(
 						params)
@@ -1084,13 +1107,13 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean KafkaToGeowaveCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
-		params.add(GeoWaveGrpcTestUtils.indexId);
+		params.add(GeoWaveGrpcTestUtils.indexName);
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
-		KafkaToGeowaveCommandParameters request = KafkaToGeowaveCommandParameters.newBuilder().addAllParameters(
+		final KafkaToGeowaveCommandParameters request = KafkaToGeowaveCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
 				"gpx").setGroupId(
@@ -1106,16 +1129,16 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public String ListPluginsCommand() {
-		ListPluginsCommandParameters request = ListPluginsCommandParameters.newBuilder().build();
+		final ListPluginsCommandParameters request = ListPluginsCommandParameters.newBuilder().build();
 		return coreIngestBlockingStub.listPluginsCommand(
 				request).getResponseValue();
 	}
 
 	public boolean LocalToKafkaCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(TestUtils.TEST_CASE_BASE + "osm_gpx_test_case/");
 
-		ArrayList<String> extensions = new ArrayList<String>();
+		final ArrayList<String> extensions = new ArrayList<>();
 
 		String localhost = "localhost";
 		try {
@@ -1127,7 +1150,7 @@ public class GeoWaveGrpcTestClient
 					e);
 		}
 
-		LocalToKafkaCommandParameters request = LocalToKafkaCommandParameters.newBuilder().addAllParameters(
+		final LocalToKafkaCommandParameters request = LocalToKafkaCommandParameters.newBuilder().addAllParameters(
 				params).addAllExtensions(
 				extensions).setFormats(
 				"gpx").setMetadataBrokerList(
@@ -1142,10 +1165,10 @@ public class GeoWaveGrpcTestClient
 
 	// Analytic Spark
 	public boolean KmeansSparkCommand() {
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.outputStoreName);
-		KmeansSparkCommandParameters request = KmeansSparkCommandParameters.newBuilder().addAllParameters(
+		final KmeansSparkCommandParameters request = KmeansSparkCommandParameters.newBuilder().addAllParameters(
 				params).setAppName(
 				"test-app") // Spark app name
 				.setHost(
@@ -1154,8 +1177,8 @@ public class GeoWaveGrpcTestClient
 				.setMaster(
 						"local[*]")
 				// spark master designation Id
-				.setAdapterId(
-						GeoWaveGrpcTestUtils.adapterId)
+				.setTypeName(
+						GeoWaveGrpcTestUtils.typeName)
 				.setNumClusters(
 						2)
 				//
@@ -1187,15 +1210,15 @@ public class GeoWaveGrpcTestClient
 	}
 
 	public boolean SparkSqlCommand() {
-		ArrayList<String> params = new ArrayList<String>();
-		params.add("select * from %" + GeoWaveGrpcTestUtils.storeName + "|" + GeoWaveGrpcTestUtils.adapterId);
-		SparkSqlCommandParameters request = SparkSqlCommandParameters.newBuilder().addAllParameters(
+		final ArrayList<String> params = new ArrayList<>();
+		params.add("select * from %" + GeoWaveGrpcTestUtils.storeName + "|" + GeoWaveGrpcTestUtils.typeName);
+		final SparkSqlCommandParameters request = SparkSqlCommandParameters.newBuilder().addAllParameters(
 				params).setOutputStoreName(
 				GeoWaveGrpcTestUtils.outputStoreName).setMaster(
 				"local[*]").setAppName(
 				"sparkSqlTestApp").setHost(
 				"localhost").setOutputTypeName(
-				GeoWaveGrpcTestUtils.adapterId).setShowResults(
+				GeoWaveGrpcTestUtils.typeName).setShowResults(
 				5).build();
 		analyticSparkBlockingStub.sparkSqlCommand(request);
 		return true;
@@ -1203,19 +1226,19 @@ public class GeoWaveGrpcTestClient
 
 	public boolean SpatialJoinCommand() {
 
-		ArrayList<String> params = new ArrayList<String>();
+		final ArrayList<String> params = new ArrayList<>();
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.storeName);
 		params.add(GeoWaveGrpcTestUtils.outputStoreName);
-		SpatialJoinCommandParameters request = SpatialJoinCommandParameters.newBuilder().addAllParameters(
+		final SpatialJoinCommandParameters request = SpatialJoinCommandParameters.newBuilder().addAllParameters(
 				params).setAppName(
 				"test-app2").setMaster(
 				"local[*]").setHost(
-				"localhost").setLeftAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setRightAdapterId(
-				GeoWaveGrpcTestUtils.adapterId).setOutLeftAdapterId(
-				GeoWaveGrpcTestUtils.adapterId + "_l").setOutRightAdapterId(
-				GeoWaveGrpcTestUtils.adapterId + "_r").setPredicate(
+				"localhost").setLeftAdapterTypeName(
+				GeoWaveGrpcTestUtils.typeName).setRightAdapterTypeName(
+				GeoWaveGrpcTestUtils.typeName).setOutLeftAdapterTypeName(
+				GeoWaveGrpcTestUtils.typeName + "_l").setOutRightAdapterTypeName(
+				GeoWaveGrpcTestUtils.typeName + "_r").setPredicate(
 				"GeomIntersects").setRadius(
 				0.1).setNegativeTest(
 				false).build();

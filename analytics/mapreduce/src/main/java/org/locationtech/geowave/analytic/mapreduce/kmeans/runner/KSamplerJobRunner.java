@@ -29,14 +29,14 @@ import org.locationtech.geowave.analytic.sample.function.RandomSamplingRankFunct
 import org.locationtech.geowave.analytic.sample.function.SamplingRankFunction;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 
@@ -97,25 +97,23 @@ public class KSamplerJobRunner extends
 		final PersistentAdapterStore adapterStore = super.getAdapterStore(runTimeProperties);
 
 		final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
-		Short sampleInternalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
-				runTimeProperties.getPropertyAsString(
-						SampleParameters.Sample.DATA_TYPE_ID,
-						"sample")));
+		Short sampleInternalAdapterId = internalAdapterStore.getAdapterId(runTimeProperties.getPropertyAsString(
+				SampleParameters.Sample.DATA_TYPE_NAME,
+				"sample"));
 		if (sampleInternalAdapterId == null) {
 			return null;
 		}
 		return adapterStore.getAdapter(sampleInternalAdapterId);
 	}
 
-	private PrimaryIndex getIndex(
+	private Index getIndex(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
 		final IndexStore indexStore = super.getIndexStore(runTimeProperties);
 
-		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				runTimeProperties.getPropertyAsString(
-						SampleParameters.Sample.INDEX_ID,
-						"index")));
+		return (Index) indexStore.getIndex(runTimeProperties.getPropertyAsString(
+				SampleParameters.Sample.INDEX_NAME,
+				"index"));
 	}
 
 	@Override
@@ -129,7 +127,7 @@ public class KSamplerJobRunner extends
 				UUID.randomUUID().toString());
 
 		runTimeProperties.storeIfEmpty(
-				SampleParameters.Sample.DATA_TYPE_ID,
+				SampleParameters.Sample.DATA_TYPE_NAME,
 				"sample");
 
 		runTimeProperties.store(
@@ -137,15 +135,15 @@ public class KSamplerJobRunner extends
 				zoomLevel);
 
 		runTimeProperties.storeIfEmpty(
-				SampleParameters.Sample.INDEX_ID,
-				new SpatialTemporalDimensionalityTypeProvider().createPrimaryIndex(
-						new SpatialTemporalOptions()).getId());
+				SampleParameters.Sample.INDEX_NAME,
+				new SpatialTemporalDimensionalityTypeProvider().createIndex(
+						new SpatialTemporalOptions()).getName());
 		runTimeProperties.setConfig(
 				new ParameterEnum[] {
 					GlobalParameters.Global.BATCH_ID,
-					SampleParameters.Sample.INDEX_ID,
+					SampleParameters.Sample.INDEX_NAME,
 					SampleParameters.Sample.SAMPLE_SIZE,
-					SampleParameters.Sample.DATA_TYPE_ID,
+					SampleParameters.Sample.DATA_TYPE_NAME,
 					CentroidParameters.Centroid.EXTRACTOR_CLASS,
 					CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
 					CentroidParameters.Centroid.ZOOM_LEVEL

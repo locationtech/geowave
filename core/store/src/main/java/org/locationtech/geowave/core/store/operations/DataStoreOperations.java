@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,22 +12,21 @@ package org.locationtech.geowave.core.store.operations;
 
 import java.io.IOException;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 
 public interface DataStoreOperations
 {
 
 	public boolean indexExists(
-			ByteArrayId indexId )
+			String indexName )
 			throws IOException;
 
 	public boolean createIndex(
-			PrimaryIndex index )
+			Index index )
 			throws IOException;
 
 	public boolean metadataExists(
@@ -38,7 +37,7 @@ public interface DataStoreOperations
 			throws Exception;
 
 	public boolean deleteAll(
-			ByteArrayId indexId,
+			String indexName,
 			Short adapterId,
 			String... additionalAuthorizations );
 
@@ -48,26 +47,30 @@ public interface DataStoreOperations
 
 	/**
 	 * Creates a new writer that can be used by an index.
-	 *
+	 * 
+	 * @param typeName
+	 *            TODO
+	 * @param adapterId
+	 *            The name of the adapter.
 	 * @param indexId
 	 *            The basic name of the table. Note that that basic
 	 *            implementation of the factory will allow for a table namespace
 	 *            to prefix this name
-	 * @param adapterId
-	 *            The name of the adapter.
 	 * @param options
 	 *            basic options available
 	 * @param splits
 	 *            If the table is created, these splits will be added as
 	 *            partition keys. Null can be used to imply not to add any
 	 *            splits.
+	 *
 	 * @return The appropriate writer
 	 * @throws TableNotFoundException
 	 *             The table does not exist in this Accumulo instance
 	 */
-	public Writer createWriter(
-			PrimaryIndex index,
-			short internalAdapterId );
+	public RowWriter createWriter(
+			Index index,
+			String typeName,
+			short adapterId );
 
 	public MetadataWriter createMetadataWriter(
 			MetadataType metadataType );
@@ -78,14 +81,14 @@ public interface DataStoreOperations
 	public MetadataDeleter createMetadataDeleter(
 			MetadataType metadataType );
 
-	public <T> Reader<T> createReader(
+	public <T> RowReader<T> createReader(
 			ReaderParams<T> readerParams );
 
 	public <T> Deleter<T> createDeleter(
 			ReaderParams<T> readerParams );
 
 	public boolean mergeData(
-			final PrimaryIndex index,
+			final Index index,
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore );
 

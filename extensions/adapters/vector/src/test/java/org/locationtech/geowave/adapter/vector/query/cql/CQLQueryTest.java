@@ -21,21 +21,22 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
+import org.locationtech.geowave.core.geotime.store.query.OptimalCQLQuery;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
 import org.opengis.feature.simple.SimpleFeatureType;
 
 public class CQLQueryTest
 {
-	private static final PrimaryIndex SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
-	private static final PrimaryIndex SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialTemporalOptions());
+	private static final Index SPATIAL_INDEX = new SpatialDimensionalityTypeProvider()
+			.createIndex(new SpatialOptions());
+	private static final Index SPATIAL_TEMPORAL_INDEX = new SpatialTemporalDimensionalityTypeProvider()
+			.createIndex(new SpatialTemporalOptions());
 	SimpleFeatureType type;
 	FeatureDataAdapter adapter;
 
@@ -55,7 +56,7 @@ public class CQLQueryTest
 	@Test
 	public void testGeoAndTemporalWithMatchingIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
 				null,
@@ -82,7 +83,7 @@ public class CQLQueryTest
 	@Test
 	public void testGeoAndTemporalWithNonMatchingIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and when during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
 				null,
@@ -107,7 +108,7 @@ public class CQLQueryTest
 	@Test
 	public void testGeoWithMatchingIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20)",
 				adapter,
 				null,
@@ -132,7 +133,7 @@ public class CQLQueryTest
 	@Test
 	public void testNoConstraintsWithGeoIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"pid = '10'",
 				adapter,
 				null,
@@ -144,7 +145,7 @@ public class CQLQueryTest
 	@Test
 	public void testNoConstraintsWithTemporalIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"pid = '10'",
 				adapter,
 				null,
@@ -156,7 +157,7 @@ public class CQLQueryTest
 	@Test
 	public void testGeoWithTemporalIndex()
 			throws CQLException {
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20)",
 				adapter,
 				null,
@@ -175,7 +176,7 @@ public class CQLQueryTest
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
 		adapter.init(SPATIAL_INDEX);
-		final CQLQuery query = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and start during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
 				null,
@@ -197,7 +198,7 @@ public class CQLQueryTest
 					41.3,
 					1.116538375999E12
 				}));
-		final CQLQuery query2 = (CQLQuery) CQLQuery.createOptimalQuery(
+		final ExplicitCQLQuery query2 = (ExplicitCQLQuery) OptimalCQLQuery.createOptimalQuery(
 				"BBOX(geometry,27.20,41.30,27.30,41.20) and end during 2005-05-19T20:32:56Z/2005-05-19T21:32:56Z",
 				adapter,
 				null,
@@ -220,7 +221,7 @@ public class CQLQueryTest
 					1.116538375999E12
 				}));
 
-		final CQLQuery query3 = (CQLQuery) CQLQuery
+		final ExplicitCQLQuery query3 = (ExplicitCQLQuery) OptimalCQLQuery
 				.createOptimalQuery(
 						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start before 2005-05-19T21:32:56Z and end after 2005-05-19T20:32:56Z)",
 						adapter,
@@ -244,7 +245,7 @@ public class CQLQueryTest
 					1.116538375999E12
 				}));
 
-		final CQLQuery query4 = (CQLQuery) CQLQuery
+		final ExplicitCQLQuery query4 = (ExplicitCQLQuery) OptimalCQLQuery
 				.createOptimalQuery(
 						"BBOX(geometry,27.20,41.30,27.30,41.20) and (start after 2005-05-19T20:32:56Z and end after 2005-05-19T20:32:56Z)",
 						adapter,

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,37 +16,44 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.InputSplit;
+import org.apache.hadoop.mapreduce.JobID;
+import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.locationtech.geowave.adapter.vector.GeotoolsFeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
+import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
+import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.operations.Reader;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.index.IndexStore;
+import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
+import org.locationtech.geowave.core.store.operations.RowReader;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.QuerySingleIndex;
 import org.locationtech.geowave.examples.ingest.SimpleIngest;
-import org.locationtech.geowave.mapreduce.MapReduceMemoryDataStore;
-import org.locationtech.geowave.mapreduce.MapReduceMemoryOperations;
-import org.locationtech.geowave.mapreduce.splits.GeoWaveInputSplit;
-import org.locationtech.geowave.mapreduce.splits.RangeLocationPair;
-import org.locationtech.geowave.mapreduce.splits.RecordReaderParams;
-import org.locationtech.geowave.mapreduce.splits.SplitInfo;
+import org.locationtech.geowave.mapreduce.MapReduceDataStore;
+import org.locationtech.geowave.mapreduce.MapReduceDataStoreOperations;
 import org.locationtech.geowave.service.rest.GeoWaveOperationServiceWrapper;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.opengis.feature.simple.SimpleFeature;
@@ -57,8 +64,6 @@ import org.slf4j.LoggerFactory;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
-
-import edu.emory.mathcs.backport.java.util.Collections;
 
 @RunWith(GeoWaveITRunner.class)
 @Environments({
@@ -81,36 +86,14 @@ public class SplitsProviderIT extends
 	private static long startMillis;
 	private final static String testName = "SplitsProviderIT";
 
-	private static MapReduceMemoryOperations mapReduceMemoryOps;
-	private static DataStoreInfo uniformDataStore;
-	private static DataStoreInfo bimodalDataStore;
-	private static DataStoreInfo skewedDataStore;
-
-	@Override
-	protected DataStorePluginOptions getDataStorePluginOptions() {
-		return dataStorePluginOptions;
-	}
+	private static final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
+	private static final Index idx = SimpleIngest.createSpatialIndex();
+	private static final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
 
 	enum Distribution {
 		UNIFORM,
 		BIMODAL,
 		SKEWED
-	}
-
-	private static class DataStoreInfo
-	{
-		final public MapReduceMemoryDataStore mapReduceMemoryDataStore;
-		final public PrimaryIndex index;
-		final public GeotoolsFeatureDataAdapter adapter;
-
-		public DataStoreInfo(
-				MapReduceMemoryDataStore mapReduceMemoryDataStore,
-				PrimaryIndex index,
-				GeotoolsFeatureDataAdapter adapter ) {
-			this.mapReduceMemoryDataStore = mapReduceMemoryDataStore;
-			this.index = index;
-			this.adapter = adapter;
-		}
 	}
 
 	@BeforeClass
@@ -119,11 +102,6 @@ public class SplitsProviderIT extends
 		TestUtils.printStartOfTest(
 				LOGGER,
 				testName);
-
-		mapReduceMemoryOps = new MapReduceMemoryOperations();
-		uniformDataStore = createDataStore(Distribution.UNIFORM);
-		bimodalDataStore = createDataStore(Distribution.BIMODAL);
-		skewedDataStore = createDataStore(Distribution.SKEWED);
 	}
 
 	@AfterClass
@@ -134,111 +112,18 @@ public class SplitsProviderIT extends
 				startMillis);
 	}
 
-	@Test
-	public void testUniform() {
-		DistributableQuery query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				uniformDataStore,
-				query,
-				12,
-				12) < 0.1);
+	@Override
+	protected DataStorePluginOptions getDataStorePluginOptions() {
+		return dataStorePluginOptions;
 	}
 
-	@Test
-	public void testBimodal() {
-		DistributableQuery query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				bimodalDataStore,
-				query,
-				12,
-				12) < 0.1);
-
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-120,
-						-60,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				bimodalDataStore,
-				query,
-				12,
-				12) < 0.1);
-
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-20,
-						20,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				bimodalDataStore,
-				query,
-				12,
-				12) < 0.1);
-	}
-
-	@Test
-	public void testSkewed() {
-		DistributableQuery query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				skewedDataStore,
-				query,
-				12,
-				12) < 0.1);
-
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						-180,
-						-140,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				skewedDataStore,
-				query,
-				12,
-				12) < 0.1);
-
-		query = new SpatialQuery(
-				new GeometryFactory().toGeometry(new Envelope(
-						0,
-						180,
-						-90,
-						90)));
-		assertTrue(getSplitsMSE(
-				skewedDataStore,
-				query,
-				12,
-				12) < 0.1);
-	}
-
-	private static DataStoreInfo createDataStore(
-			Distribution distr ) {
-
-		final MapReduceMemoryDataStore dataStore = new MapReduceMemoryDataStore(
-				mapReduceMemoryOps);
-		final SimpleFeatureType sft = SimpleIngest.createPointFeatureType();
-		final PrimaryIndex idx = SimpleIngest.createSpatialIndex();
-		final GeotoolsFeatureDataAdapter fda = SimpleIngest.createDataAdapter(sft);
-
-		try (final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
+	private void ingestWithDistribution(
+			final Distribution distr ) {
+		final DataStore dataStore = dataStorePluginOptions.createDataStore();
+		dataStore.addType(
 				fda,
-				idx)) {
+				idx);
+		try (final Writer<SimpleFeature> writer = dataStore.createWriter(fda.getTypeName())) {
 
 			switch (distr) {
 				case UNIFORM:
@@ -256,96 +141,177 @@ public class SplitsProviderIT extends
 							400000);
 					break;
 				case SKEWED:
+				default:
 					createSkewedFeatures(
 							new SimpleFeatureBuilder(
 									sft),
 							writer,
 							700000);
 					break;
-				default:
-					LOGGER.error("Invalid Distribution");
-					throw new Exception();
 			}
 		}
-		catch (MismatchedIndexToAdapterMapping e) {
-			LOGGER.error(
-					"MismathcedIndexToAdapterMapping exception thrown when creating data store writer",
-					e);
-		}
-		catch (IOException e) {
-			LOGGER.error(
-					"IOException thrown when creating data store writer",
-					e);
-		}
-		catch (Exception e) {
-			LOGGER.error(
-					"Exception thrown when creating data store writer",
-					e);
-		}
+	}
 
-		return new DataStoreInfo(
-				dataStore,
-				idx,
-				fda);
+	@Test
+	public void testUniform() {
+		ingestWithDistribution(Distribution.UNIFORM);
+		final QueryConstraints query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-180,
+						180,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+	}
+
+	@Test
+	public void testBimodal() {
+		ingestWithDistribution(Distribution.BIMODAL);
+		QueryConstraints query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-180,
+						180,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-120,
+						-60,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-20,
+						20,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+	}
+
+	@Test
+	public void testSkewed() {
+		ingestWithDistribution(Distribution.SKEWED);
+		QueryConstraints query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-180,
+						180,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						-180,
+						-140,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
+
+		query = new SpatialQuery(
+				new GeometryFactory().toGeometry(new Envelope(
+						0,
+						180,
+						-90,
+						90)));
+		assertTrue(getSplitsMSE(
+				query,
+				12,
+				12) < 0.1);
 	}
 
 	private double getSplitsMSE(
-			DataStoreInfo dataStoreInfo,
-			DistributableQuery query,
-			int minSplits,
-			int maxSplits ) {
+			final QueryConstraints query,
+			final int minSplits,
+			final int maxSplits ) {
 
 		// get splits and create reader for each RangeLocationPair, then summing
 		// up the rows for each split
 
-		QueryOptions queryOptions = new QueryOptions(
-				dataStoreInfo.adapter.getAdapterId(),
-				dataStoreInfo.index.getId());
-
 		List<InputSplit> splits = null;
+		final MapReduceDataStore dataStore = (MapReduceDataStore) dataStorePluginOptions.createDataStore();
+		final PersistentAdapterStore as = dataStorePluginOptions.createAdapterStore();
+		final InternalAdapterStore ias = dataStorePluginOptions.createInternalAdapterStore();
+		final MapReduceDataStoreOperations ops = (MapReduceDataStoreOperations) dataStorePluginOptions
+				.createDataStoreOperations();
+		final IndexStore is = dataStorePluginOptions.createIndexStore();
+		final AdapterIndexMappingStore aim = dataStorePluginOptions.createAdapterIndexMappingStore();
+		final DataStatisticsStore stats = dataStorePluginOptions.createDataStatisticsStore();
+
+		final MemoryAdapterStore mas = new MemoryAdapterStore();
+		mas.addAdapter(fda);
 		try {
-			splits = dataStoreInfo.mapReduceMemoryDataStore.getSplits(
-					query,
-					queryOptions,
-					null,
-					null,
-					null,
-					null,
-					null,
-					null,
+			splits = dataStore.getSplits(
+					new CommonQueryOptions(),
+					new FilterByTypeQueryOptions<>(
+							new String[] {
+								fda.getTypeName()
+							}),
+					new QuerySingleIndex(
+							idx.getName()),
+					new EverythingQuery(),
+					mas,
+					aim,
+					stats,
+					ias,
+					is,
+					new JobContextImpl(
+							new Configuration(),
+							new JobID()),
 					minSplits,
 					maxSplits);
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			LOGGER.error(
 					"IOException thrown when calling getSplits",
 					e);
 		}
-		catch (InterruptedException e) {
+		catch (final InterruptedException e) {
 			LOGGER.error(
 					"InterruptedException thrown when calling getSplits",
 					e);
 		}
 
-		double[] observed = new double[splits.size()];
+		final double[] observed = new double[splits.size()];
 
 		int totalCount = 0;
 		int currentSplit = 0;
 
-		for (InputSplit split : splits) {
+		for (final InputSplit split : splits) {
 			int countPerSplit = 0;
 			if (GeoWaveInputSplit.class.isAssignableFrom(split.getClass())) {
-				GeoWaveInputSplit gwSplit = (GeoWaveInputSplit) split;
-				for (ByteArrayId indexId : gwSplit.getIndexIds()) {
-					SplitInfo splitInfo = gwSplit.getInfo(indexId);
-					for (RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
-						RecordReaderParams<?> readerParams = new RecordReaderParams(
+				final GeoWaveInputSplit gwSplit = (GeoWaveInputSplit) split;
+				for (final String indexName : gwSplit.getIndexNames()) {
+					final SplitInfo splitInfo = gwSplit.getInfo(indexName);
+					for (final RangeLocationPair p : splitInfo.getRangeLocationPairs()) {
+						final RecordReaderParams<?> readerParams = new RecordReaderParams<>(
 								splitInfo.getIndex(),
-								dataStoreInfo.mapReduceMemoryDataStore.getAdapterStore(),
-								Collections.singletonList(dataStorePluginOptions
-										.createInternalAdapterStore()
-										.getInternalAdapterId(
-												dataStoreInfo.adapter.getAdapterId())),
+								as,
+								ias,
+								new short[] {
+									ias.getAdapterId(fda.getTypeName())
+								},
 								null,
 								null,
 								null,
@@ -354,15 +320,14 @@ public class SplitsProviderIT extends
 								p.getRange(),
 								null,
 								null,
-								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
-								null);
-						try (Reader<?> reader = mapReduceMemoryOps.createReader(readerParams)) {
+								GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER);
+						try (RowReader<?> reader = ops.createReader(readerParams)) {
 							while (reader.hasNext()) {
 								reader.next();
 								countPerSplit++;
 							}
 						}
-						catch (Exception e) {
+						catch (final Exception e) {
 							LOGGER.error(
 									"Exception thrown when calling createReader",
 									e);
@@ -375,7 +340,7 @@ public class SplitsProviderIT extends
 			currentSplit++;
 		}
 
-		double expected = 1.0 / splits.size();
+		final double expected = 1.0 / splits.size();
 
 		double sum = 0;
 
@@ -390,7 +355,7 @@ public class SplitsProviderIT extends
 
 	public static void createUniformFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
@@ -422,7 +387,7 @@ public class SplitsProviderIT extends
 
 	public static void createBimodalFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;
@@ -485,7 +450,7 @@ public class SplitsProviderIT extends
 
 	public static void createSkewedFeatures(
 			final SimpleFeatureBuilder pointBuilder,
-			final IndexWriter<SimpleFeature> writer,
+			final Writer<SimpleFeature> writer,
 			final int firstFeatureId ) {
 
 		int featureId = firstFeatureId;

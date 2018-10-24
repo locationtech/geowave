@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 
 /**
@@ -26,10 +26,10 @@ public interface DataWriter<RowType, FieldType>
 	/**
 	 * Get a writer for an individual field given the ID.
 	 * 
-	 * @param fieldId
+	 * @param fieldName
 	 *            the unique field ID
 	 * @return the writer for the given field
 	 */
 	public FieldWriter<RowType, FieldType> getWriter(
-			ByteArrayId fieldId );
+			String fieldName );
 }

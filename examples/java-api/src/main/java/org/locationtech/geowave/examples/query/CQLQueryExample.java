@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.examples.query;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,34 +17,25 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.apache.accumulo.core.client.AccumuloException;
-import org.apache.accumulo.core.client.AccumuloSecurityException;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloClusterImpl;
-import org.apache.accumulo.minicluster.impl.MiniAccumuloConfigImpl;
-import org.apache.commons.io.FileUtils;
 import org.geotools.feature.AttributeTypeBuilder;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.filter.text.cql2.CQLException;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.store.query.api.VectorQueryBuilder;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.datastore.accumulo.AccumuloDataStore;
-import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloOptions;
-import org.locationtech.geowave.datastore.accumulo.minicluster.MiniAccumuloClusterFactory;
-import org.locationtech.geowave.datastore.accumulo.operations.AccumuloOperations;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataStoreFactory;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
+import org.locationtech.geowave.core.store.memory.MemoryRequiredOptions;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 
-import com.google.common.io.Files;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -58,12 +48,9 @@ import com.vividsolutions.jts.geom.Geometry;
  */
 public class CQLQueryExample
 {
-	private static File tempAccumuloDir;
-	private static MiniAccumuloClusterImpl accumulo;
 	private static DataStore dataStore;
 
-	private static final PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	// Points (to be ingested into GeoWave Data Store)
 	private static final Coordinate washingtonMonument = new Coordinate(
@@ -107,78 +94,34 @@ public class CQLQueryExample
 
 	public static void main(
 			final String[] args )
-			throws AccumuloException,
-			AccumuloSecurityException,
-			InterruptedException,
-			IOException,
+			throws IOException,
 			CQLException {
-
-		// spin up a MiniAccumuloCluster and initialize the DataStore
-		setup();
-
+		dataStore = DataStoreFactory.createDataStore(new MemoryRequiredOptions());
 		// ingest 3 points represented as SimpleFeatures: Washington Monument,
 		// White House, FedEx Field
 		ingestCannedData();
 
 		// execute a query for a bounding box
-		executeCQLuery();
-
-		// stop MiniAccumuloCluster and delete temporary files
-		cleanup();
+		executeCQLQuery();
 	}
 
-	private static void executeCQLuery()
+	private static void executeCQLQuery()
 			throws IOException,
 			CQLException {
 
 		System.out.println("Executing query, expecting to match two points...");
-
-		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(
-				new QueryOptions(
-						ADAPTER,
-						index),
-				CQLQuery.createOptimalQuery(
-						"BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'",
-						ADAPTER,
-						index))) {
+		final VectorQueryBuilder bldr = VectorQueryBuilder.newBuilder();
+		try (final CloseableIterator<SimpleFeature> iterator = dataStore.query(bldr.indexName(
+				index.getName()).addTypeName(
+				ADAPTER.getTypeName()).constraints(
+				bldr.constraintsFactory().cqlConstraints(
+						"BBOX(geometry,-77.6167,38.6833,-76.6,38.9200) and locationName like 'W%'")).build())) {
 
 			while (iterator.hasNext()) {
 				System.out.println("Query match: " + iterator.next().getID());
 			}
 		}
 
-	}
-
-	private static void setup()
-			throws AccumuloException,
-			AccumuloSecurityException,
-			IOException,
-			InterruptedException {
-
-		final String ACCUMULO_USER = "root";
-		final String ACCUMULO_PASSWORD = "Ge0wave";
-		final String TABLE_NAMESPACE = "";
-
-		tempAccumuloDir = Files.createTempDir();
-
-		accumulo = MiniAccumuloClusterFactory.newAccumuloCluster(
-				new MiniAccumuloConfigImpl(
-						tempAccumuloDir,
-						ACCUMULO_PASSWORD),
-				CQLQueryExample.class);
-
-		accumulo.start();
-
-		final AccumuloOptions options = new AccumuloOptions();
-		dataStore = new AccumuloDataStore(
-				new AccumuloOperations(
-						accumulo.getZooKeepers(),
-						accumulo.getInstanceName(),
-						ACCUMULO_USER,
-						ACCUMULO_PASSWORD,
-						TABLE_NAMESPACE,
-						options),
-				options);
 	}
 
 	private static void ingestCannedData()
@@ -196,10 +139,10 @@ public class CQLQueryExample
 		}
 
 		System.out.println("Ingesting canned data...");
-
-		try (IndexWriter indexWriter = dataStore.createWriter(
+		dataStore.addType(
 				ADAPTER,
-				index)) {
+				index);
+		try (Writer<SimpleFeature> indexWriter = dataStore.createWriter(ADAPTER.getTypeName())) {
 			for (final SimpleFeature sf : points) {
 				//
 				indexWriter.write(sf);
@@ -208,18 +151,6 @@ public class CQLQueryExample
 		}
 
 		System.out.println("Ingest complete.");
-	}
-
-	private static void cleanup()
-			throws IOException,
-			InterruptedException {
-
-		try {
-			accumulo.stop();
-		}
-		finally {
-			FileUtils.deleteDirectory(tempAccumuloDir);
-		}
 	}
 
 	private static SimpleFeatureType getPointSimpleFeatureType() {

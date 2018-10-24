@@ -13,7 +13,7 @@ package org.locationtech.geowave.format.twitter;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestFormat;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
 
 /**
  * This represents an ingest format plugin provider for Twitter data. It will
@@ -26,7 +26,7 @@ public class TwitterIngestFormat extends
 
 	@Override
 	protected AbstractSimpleFeatureIngestPlugin<WholeFile> newPluginInstance(
-			final IngestFormatOptionProvider options ) {
+			final IngestFormatOptions options ) {
 		return new TwitterIngestPlugin();
 	}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,10 +12,8 @@ package org.locationtech.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -37,7 +35,7 @@ import org.locationtech.geowave.analytic.sample.function.RandomSamplingRankFunct
 import org.locationtech.geowave.analytic.sample.function.SamplingRankFunction;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputReducer;
@@ -53,63 +51,63 @@ import com.vividsolutions.jts.geom.Point;
  * features PER GROUP. Outputs the samples in SimpleFeatures. Sampling is
  * achieved by picking the top ranked input objects. Rank is determined by a
  * sample function implementing {@link SamplingRankFunction}.
- * 
+ *
  * The input features should have a groupID set if they intend to be sampled by
  * group.
- * 
+ *
  * Keys are partitioned by the group ID in an attempt to process each group in a
  * separate reducer.
- * 
+ *
  * Sampled features are written to as a new SimpleFeature to a data store. The
  * SimpleFeature contains attributes:
- * 
+ *
  * @formatter:off
- * 
+ *
  *                name - data id of the sampled point
- * 
+ *
  *                weight - can be anything including the sum of all assigned
  *                feature distances
- * 
+ *
  *                geometry - geometry of the sampled features
- * 
+ *
  *                count - to hold the number of assigned features
- * 
+ *
  *                groupID - the assigned group ID to the input objects
  * @formatter:on
- * 
+ *
  *               Properties:
  * @formatter:off
- * 
+ *
  *                "KSamplerMapReduce.Sample.SampleSize" - number of input
  *                objects to sample. defaults to 1.
- * 
+ *
  *                "KSamplerMapReduce.Sample.DataTypeId" - Id of the data type to
  *                store the k samples - defaults to "centroids"
- * 
+ *
  *                "KSamplerMapReduce.Centroid.ExtractorClass" - extracts a
  *                centroid from an item. This parameter allows customization of
  *                determining one or more representative centroids for a
  *                geometry.
- * 
+ *
  *                "KSamplerMapReduce.Sample.IndexId" - The Index ID used for
  *                output simple features.
- * 
+ *
  *                "KSamplerMapReduce.Sample.SampleRankFunction" - An
  *                implementation of {@link SamplingRankFunction} used to rank
  *                the input object.
- * 
+ *
  *                "KSamplerMapReduce.Centroid.ZoomLevel" - Sets an attribute on
  *                the sampled objects recording a zoom level used in the
  *                sampling process. The interpretation of the attribute is not
  *                specified or assumed.
- * 
+ *
  *                "KSamplerMapReduce.Global.BatchId" ->the id of the batch;
  *                defaults to current time in millis (for range comparisons)
- * 
+ *
  *                "KSamplerMapReduce.Centroid.WrapperFactoryClass" ->
  *                {@link AnalyticItemWrapperFactory} to extract non-geometric
  *                dimensions
- * 
+ *
  * @formatter:on
  */
 public class KSamplerMapReduce
@@ -161,10 +159,12 @@ public class KSamplerMapReduce
 					(T) value);
 			if (rank > 0.0000000001) {
 				final AnalyticItemWrapper<Object> wrapper = itemWrapperFactory.create(value);
-				outputKey.setDataId(new ByteArrayId(
+				outputKey.setDataId(new ByteArray(
 						keyManager.putData(
 								nestedGroupCentroidAssigner.getGroupForLevel(wrapper),
-								1.0 - rank, // sorts in ascending order
+								1.0 - rank, // sorts in
+											// ascending
+											// order
 								key.getDataId().getBytes())));
 				outputKey.setInternalAdapterId(key.getInternalAdapterId());
 				outputKey.setGeoWaveKey(key.getGeoWaveKey());
@@ -190,7 +190,7 @@ public class KSamplerMapReduce
 					1);
 
 			try {
-				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
+				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<>(
 						context,
 						KSamplerMapReduce.class,
 						KSamplerMapReduce.LOGGER);
@@ -241,11 +241,11 @@ public class KSamplerMapReduce
 		private int maxCount = 1;
 		private CentroidExtractor<T> centroidExtractor;
 		private AnalyticItemWrapperFactory<T> itemWrapperFactory;
-		private ByteArrayId sampleDataTypeId = null;
-		private List<ByteArrayId> indexIds;
+		private String sampleDataTypeName = null;
+		private String[] indexNames;
 		private int zoomLevel = 1;
 		private String batchID;
-		private final Map<String, Integer> outputCounts = new HashMap<String, Integer>();
+		private final Map<String, Integer> outputCounts = new HashMap<>();
 
 		@Override
 		protected void reduceNativeValues(
@@ -269,8 +269,8 @@ public class KSamplerMapReduce
 					if (centroid != null) {
 						context.write(
 								new GeoWaveOutputKey(
-										sampleDataTypeId,
-										indexIds),
+										sampleDataTypeName,
+										indexNames),
 								centroid.getWrappedItem());
 						outputCount++;
 						outputCounts.put(
@@ -319,22 +319,21 @@ public class KSamplerMapReduce
 					CentroidParameters.Centroid.ZOOM_LEVEL,
 					1);
 
-			sampleDataTypeId = new ByteArrayId(
-					StringUtils.stringToBinary(config.getString(
-							SampleParameters.Sample.DATA_TYPE_ID,
-							"sample")));
+			sampleDataTypeName = config.getString(
+					SampleParameters.Sample.DATA_TYPE_NAME,
+					"sample");
 
 			batchID = config.getString(
 					GlobalParameters.Global.BATCH_ID,
 					UUID.randomUUID().toString());
 
-			final ByteArrayId indexId = new ByteArrayId(
-					StringUtils.stringToBinary(config.getString(
-							SampleParameters.Sample.INDEX_ID,
-							new SpatialDimensionalityTypeProvider().createPrimaryIndex(
-									new SpatialOptions()).getId().getString())));
-			indexIds = new ArrayList<ByteArrayId>();
-			indexIds.add(indexId);
+			final String indexName = config.getString(
+					SampleParameters.Sample.INDEX_NAME,
+					new SpatialDimensionalityTypeProvider().createIndex(
+							new SpatialOptions()).getName());
+			indexNames = new String[] {
+				indexName
+			};
 			try {
 				centroidExtractor = config.getInstance(
 						CentroidParameters.Centroid.EXTRACTOR_CLASS,

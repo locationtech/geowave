@@ -32,7 +32,6 @@ import org.locationtech.geowave.adapter.vector.index.ChooseHeuristicMatchIndexQu
 import org.locationtech.geowave.adapter.vector.index.IndexQueryStrategySPI;
 import org.locationtech.geowave.adapter.vector.plugin.lock.LockingManagementFactory;
 import org.locationtech.geowave.core.index.SPIServiceRegistry;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreOptions;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.StoreFactoryFamilySpi;
@@ -42,6 +41,7 @@ import org.locationtech.geowave.core.store.adapter.AdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.DataStore;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.config.ConfigOption;
 import org.locationtech.geowave.core.store.config.ConfigUtils;

@@ -23,20 +23,20 @@ import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalDimensionalit
 import org.locationtech.geowave.core.geotime.ingest.SpatialTemporalOptions;
 import org.locationtech.geowave.core.geotime.store.dimension.TimeField;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.PersistentValue;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.filter.BasicQueryFilter.BasicQueryCompareOperation;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
 
 public class BasicQueryTest
 {
@@ -50,7 +50,7 @@ public class BasicQueryTest
 
 		commonData.addValue(
 				new TimeField(
-						Unit.YEAR).getFieldId(),
+						Unit.YEAR).getFieldName(),
 				new TimeRange(
 						start.getTime(),
 						end.getTime(),
@@ -58,11 +58,11 @@ public class BasicQueryTest
 
 		return new CommonIndexedPersistenceEncoding(
 				(short) 1,
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
-				new ByteArrayId(
+				new ByteArray(
 						"1"),
 				1,
 				commonData,
@@ -121,8 +121,7 @@ public class BasicQueryTest
 					df.parse("2017-02-22T11:00:00GMT-00:00"),
 					df.parse("2017-02-22T14:00:00GMT-00:00"))
 		};
-		final PrimaryIndex index = new SpatialTemporalDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialTemporalOptions());
+		final Index index = new SpatialTemporalDimensionalityTypeProvider().createIndex(new SpatialTemporalOptions());
 		int pos = 0;
 		for (final CommonIndexedPersistenceEncoding dataItem : data) {
 			for (final QueryFilter filter : query.createFilters(index)) {

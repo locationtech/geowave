@@ -10,21 +10,21 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 
 public interface IndexStore
 {
 	public void addIndex(
-			Index<?, ?> index );
+			Index index );
 
-	public Index<?, ?> getIndex(
-			ByteArrayId indexId );
+	public Index getIndex(
+			String indexName );
 
 	public boolean indexExists(
-			ByteArrayId indexId );
+			String indexName );
 
-	public CloseableIterator<Index<?, ?>> getIndices();
+	public CloseableIterator<Index> getIndices();
 
 	public void removeAll();
 }

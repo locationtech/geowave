@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,7 +10,6 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.spark.kmeans;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.List;
 
@@ -24,21 +23,19 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
+import org.locationtech.geowave.adapter.vector.util.DateUtilities;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.adapter.vector.utils.DateUtilities;
-import org.locationtech.geowave.adapter.vector.utils.PolygonAreaCalculator;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.adapter.vector.util.PolygonAreaCalculator;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
 import org.locationtech.geowave.core.geotime.store.query.TemporalRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.referencing.FactoryException;
@@ -56,7 +53,7 @@ public class KMeansUtils
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(KMeansUtils.class);
 
-	public static DataAdapter writeClusterCentroids(
+	public static DataTypeAdapter writeClusterCentroids(
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
 			final String centroidAdapterName,
@@ -103,14 +100,13 @@ public class KMeansUtils
 				sfType);
 
 		final DataStore featureStore = outputDataStore.createDataStore();
-		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
-
-		try (IndexWriter writer = featureStore.createWriter(
+		final Index featureIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+		featureStore.addType(
 				featureAdapter,
-				featureIndex)) {
+				featureIndex);
+		try (Writer writer = featureStore.createWriter(featureAdapter.getTypeName())) {
 			for (final Vector center : clusterModel.clusterCenters()) {
-				int index = clusterModel.predict(center);
+				final int index = clusterModel.predict(center);
 
 				final double lon = center.apply(0);
 				final double lat = center.apply(1);
@@ -121,10 +117,10 @@ public class KMeansUtils
 								lon,
 								lat)));
 
-				if (scaledRange != null && center.size() > 2) {
+				if ((scaledRange != null) && (center.size() > 2)) {
 					final double timeVal = center.apply(2);
 
-					Date time = scaledRange.valueToTime(timeVal);
+					final Date time = scaledRange.valueToTime(timeVal);
 
 					sfBuilder.set(
 							"Time",
@@ -142,21 +138,11 @@ public class KMeansUtils
 				writer.write(sf);
 			}
 		}
-		catch (final MismatchedIndexToAdapterMapping e) {
-			LOGGER.error(
-					e.getMessage(),
-					e);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					e.getMessage(),
-					e);
-		}
 
 		return featureAdapter;
 	}
 
-	public static DataAdapter writeClusterHulls(
+	public static DataTypeAdapter writeClusterHulls(
 			final JavaRDD<Vector> inputCentroids,
 			final KMeansModel clusterModel,
 			final DataStorePluginOptions outputDataStore,
@@ -217,18 +203,17 @@ public class KMeansUtils
 				sfType);
 
 		final DataStore featureStore = outputDataStore.createDataStore();
-		final PrimaryIndex featureIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index featureIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
-		PolygonAreaCalculator polyCalc = (computeMetadata ? new PolygonAreaCalculator() : null);
-
-		try (IndexWriter writer = featureStore.createWriter(
+		final PolygonAreaCalculator polyCalc = (computeMetadata ? new PolygonAreaCalculator() : null);
+		featureStore.addType(
 				featureAdapter,
-				featureIndex)) {
+				featureIndex);
+		try (Writer writer = featureStore.createWriter(featureAdapter.getTypeName())) {
 
 			for (final Tuple2<Integer, Geometry> hull : hullRdd.collect()) {
-				Integer index = hull._1;
-				Geometry geom = hull._2;
+				final Integer index = hull._1;
+				final Geometry geom = hull._2;
 
 				sfBuilder.set(
 						Geometry.class.getName(),
@@ -243,8 +228,8 @@ public class KMeansUtils
 				double density = 0.0;
 
 				if (computeMetadata) {
-					for (Iterable<Vector> points : groupByRdd.lookup(index)) {
-						Vector[] pointVec = Iterables.toArray(
+					for (final Iterable<Vector> points : groupByRdd.lookup(index)) {
+						final Vector[] pointVec = Iterables.toArray(
 								points,
 								Vector.class);
 						count += pointVec.length;
@@ -255,9 +240,9 @@ public class KMeansUtils
 						// Exception handling will catch if polyCalc is null
 						area = polyCalc.getAreaDensify(geom);
 
-						density = (double) count / area;
+						density = count / area;
 					}
-					catch (Exception e) {
+					catch (final Exception e) {
 						LOGGER.error("Problem computing polygon area: " + e.getMessage());
 					}
 				}
@@ -279,16 +264,6 @@ public class KMeansUtils
 				writer.write(sf);
 			}
 		}
-		catch (final MismatchedIndexToAdapterMapping e) {
-			LOGGER.error(
-					e.getMessage(),
-					e);
-		}
-		catch (final IOException e) {
-			LOGGER.error(
-					e.getMessage(),
-					e);
-		}
 
 		return featureAdapter;
 	}
@@ -296,14 +271,14 @@ public class KMeansUtils
 	public static ScaledTemporalRange setRunnerTimeParams(
 			final KMeansRunner runner,
 			final DataStorePluginOptions inputDataStore,
-			ByteArrayId adapterId ) {
-		if (adapterId == null) { // if no id provided, locate a single
-									// featureadapter
-			List<ByteArrayId> adapterIdList = FeatureDataUtils.getFeatureAdapterIds(inputDataStore);
-			if (adapterIdList.size() == 1) {
-				adapterId = adapterIdList.get(0);
+			String typeName ) {
+		if (typeName == null) { // if no id provided, locate a single
+								// featureadapter
+			final List<String> typeNameList = FeatureDataUtils.getFeatureTypeNames(inputDataStore);
+			if (typeNameList.size() == 1) {
+				typeName = typeNameList.get(0);
 			}
-			else if (adapterIdList.isEmpty()) {
+			else if (typeNameList.isEmpty()) {
 				LOGGER.error("No feature adapters found for use with time param");
 
 				return null;
@@ -316,16 +291,16 @@ public class KMeansUtils
 			}
 		}
 
-		ScaledTemporalRange scaledRange = new ScaledTemporalRange();
+		final ScaledTemporalRange scaledRange = new ScaledTemporalRange();
 
-		String timeField = FeatureDataUtils.getTimeField(
+		final String timeField = FeatureDataUtils.getTimeField(
 				inputDataStore,
-				adapterId);
+				typeName);
 
 		if (timeField != null) {
-			TemporalRange timeRange = DateUtilities.getTemporalRange(
+			final TemporalRange timeRange = DateUtilities.getTemporalRange(
 					inputDataStore,
-					adapterId,
+					typeName,
 					timeField);
 
 			if (timeRange != null) {
@@ -334,19 +309,19 @@ public class KMeansUtils
 						timeRange.getEndTime());
 			}
 
-			String geomField = FeatureDataUtils.getGeomField(
+			final String geomField = FeatureDataUtils.getGeomField(
 					inputDataStore,
-					adapterId);
+					typeName);
 
-			Envelope bbox = org.locationtech.geowave.adapter.vector.utils.FeatureGeometryUtils.getGeoBounds(
+			final Envelope bbox = org.locationtech.geowave.adapter.vector.util.FeatureGeometryUtils.getGeoBounds(
 					inputDataStore,
-					adapterId,
+					typeName,
 					geomField);
 
 			if (bbox != null) {
-				double xRange = bbox.getMaxX() - bbox.getMinX();
-				double yRange = bbox.getMaxY() - bbox.getMinY();
-				double valueRange = Math.min(
+				final double xRange = bbox.getMaxX() - bbox.getMinX();
+				final double yRange = bbox.getMaxY() - bbox.getMinY();
+				final double valueRange = Math.min(
 						xRange,
 						yRange);
 				scaledRange.setValueRange(

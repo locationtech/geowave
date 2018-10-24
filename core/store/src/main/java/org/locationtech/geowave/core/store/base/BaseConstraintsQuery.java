@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,38 +15,33 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.IndexMetaData;
-import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveRowIteratorTransformer;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.operations.Reader;
-import org.locationtech.geowave.core.store.query.CoordinateRangeQueryFilter;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.operations.RowReader;
 import org.locationtech.geowave.core.store.query.aggregate.CommonIndexAggregation;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.filter.CoordinateRangeQueryFilter;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 
 import com.google.common.collect.Iterators;
@@ -64,19 +59,19 @@ public class BaseConstraintsQuery extends
 
 	public final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation;
 	public final List<MultiDimensionalNumericData> constraints;
-	public final List<DistributableQueryFilter> distributableFilters;
+	public final List<QueryFilter> distributableFilters;
 
 	public final IndexMetaData[] indexMetaData;
-	private final PrimaryIndex index;
+	private final Index index;
 
 	public BaseConstraintsQuery(
-			final List<Short> adapterIds,
-			final PrimaryIndex index,
-			final Query query,
+			final short[] adapterIds,
+			final Index index,
+			final QueryConstraints query,
 			final DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
@@ -99,14 +94,14 @@ public class BaseConstraintsQuery extends
 	}
 
 	public BaseConstraintsQuery(
-			final List<Short> adapterIds,
-			final PrimaryIndex index,
+			final short[] adapterIds,
+			final Index index,
 			final List<MultiDimensionalNumericData> constraints,
 			final List<QueryFilter> queryFilters,
 			DedupeFilter clientDedupeFilter,
 			final ScanCallback<?, ?> scanCallback,
 			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation,
-			final Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair,
+			final Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair,
 			final IndexMetaData[] indexMetaData,
 			final DuplicateEntryCount duplicateCounts,
 			final DifferingFieldVisibilityEntryCount differingVisibilityCounts,
@@ -139,14 +134,14 @@ public class BaseConstraintsQuery extends
 	}
 
 	@Override
-	public DistributableQueryFilter getServerFilter(
+	public QueryFilter getServerFilter(
 			final DataStoreOptions options ) {
 		// TODO GEOWAVE-1018 is options necessary? is this correct?
 		if ((distributableFilters == null) || distributableFilters.isEmpty()) {
 			return null;
 		}
 		else if (distributableFilters.size() > 1) {
-			return new DistributableFilterList(
+			return new FilterList(
 					distributableFilters);
 		}
 		else {
@@ -169,18 +164,22 @@ public class BaseConstraintsQuery extends
 			final DataStoreOperations datastoreOperations,
 			final DataStoreOptions options,
 			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
 			final double[] maxResolutionSubsamplingPerDimension,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex,
 			final Integer limit,
 			final Integer queryMaxRangeDecomposition,
-			boolean delete ) {
+			final boolean delete ) {
 		if (isAggregation()) {
 			if ((options == null) || !options.isServerSideLibraryEnabled()) {
 				// Aggregate client-side
-				final CloseableIterator<Object> it = (CloseableIterator<Object>) super.query(
+				final CloseableIterator<Object> it = super.query(
 						datastoreOperations,
 						options,
 						adapterStore,
+						internalAdapterStore,
 						maxResolutionSubsamplingPerDimension,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						limit,
 						queryMaxRangeDecomposition,
 						false);
@@ -198,23 +197,26 @@ public class BaseConstraintsQuery extends
 				// still won't be effective and the aggregation will return
 				// incorrect results
 				if (!clientFilters.isEmpty()) {
-					QueryFilter f = clientFilters.get(clientFilters.size() - 1);
+					final QueryFilter f = clientFilters.get(clientFilters.size() - 1);
 					if (f instanceof DedupeFilter) {
-						distributableFilters.add((DedupeFilter) f);
+						distributableFilters.add(f);
 						LOGGER
 								.warn("Aggregating results when duplicates exist in the table may result in duplicate aggregation");
 					}
 				}
-				try (final Reader<GeoWaveRow> reader = getReader(
+				try (final RowReader<GeoWaveRow> reader = getReader(
 						datastoreOperations,
 						options,
 						adapterStore,
+						internalAdapterStore,
 						maxResolutionSubsamplingPerDimension,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						limit,
 						queryMaxRangeDecomposition,
 						GeoWaveRowIteratorTransformer.NO_OP_TRANSFORMER,
 						false)) {
-					Mergeable mergedAggregationResult = null;
+					Object mergedAggregationResult = null;
+					Aggregation<?, Object, Object> agg = (Aggregation<?, Object, Object>) aggregation.getValue();
 					if ((reader == null) || !reader.hasNext()) {
 						return new CloseableIterator.Empty();
 					}
@@ -224,12 +226,12 @@ public class BaseConstraintsQuery extends
 							for (final GeoWaveValue value : row.getFieldValues()) {
 								if ((value.getValue() != null) && (value.getValue().length > 0)) {
 									if (mergedAggregationResult == null) {
-										mergedAggregationResult = (Mergeable) PersistenceUtils.fromBinary(value
-												.getValue());
+										mergedAggregationResult = agg.resultFromBinary(value.getValue());
 									}
 									else {
-										mergedAggregationResult.merge((Mergeable) PersistenceUtils.fromBinary(value
-												.getValue()));
+										mergedAggregationResult = agg.merge(
+												mergedAggregationResult,
+												agg.resultFromBinary(value.getValue()));
 									}
 								}
 							}
@@ -249,7 +251,9 @@ public class BaseConstraintsQuery extends
 				datastoreOperations,
 				options,
 				adapterStore,
+				internalAdapterStore,
 				maxResolutionSubsamplingPerDimension,
+				targetResolutionPerDimensionForHierarchicalIndex,
 				limit,
 				queryMaxRangeDecomposition,
 				delete);
@@ -307,11 +311,11 @@ public class BaseConstraintsQuery extends
 	@Override
 	public List<MultiDimensionalCoordinateRangesArray> getCoordinateRanges() {
 		if ((constraints == null) || constraints.isEmpty()) {
-			return new ArrayList<MultiDimensionalCoordinateRangesArray>();
+			return new ArrayList<>();
 		}
 		else {
 			final NumericIndexStrategy indexStrategy = index.getIndexStrategy();
-			final List<MultiDimensionalCoordinateRangesArray> ranges = new ArrayList<MultiDimensionalCoordinateRangesArray>();
+			final List<MultiDimensionalCoordinateRangesArray> ranges = new ArrayList<>();
 			for (final MultiDimensionalNumericData nd : constraints) {
 				ranges.add(new MultiDimensionalCoordinateRangesArray(
 						indexStrategy.getCoordinateRangesPerDimension(
@@ -324,26 +328,28 @@ public class BaseConstraintsQuery extends
 
 	@Override
 	protected QueryRanges getRanges(
-			int maxRangeDecomposition ) {
+			final int maxRangeDecomposition,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex ) {
 		return DataStoreUtils.constraintsToQueryRanges(
 				constraints,
 				index.getIndexStrategy(),
+				targetResolutionPerDimensionForHierarchicalIndex,
 				maxRangeDecomposition,
 				indexMetaData);
 	}
 
 	private SplitFilterLists splitList(
 			final List<QueryFilter> allFilters ) {
-		final List<DistributableQueryFilter> distributableFilters = new ArrayList<DistributableQueryFilter>();
-		final List<QueryFilter> clientFilters = new ArrayList<QueryFilter>();
+		final List<QueryFilter> distributableFilters = new ArrayList<>();
+		final List<QueryFilter> clientFilters = new ArrayList<>();
 		if ((allFilters == null) || allFilters.isEmpty()) {
 			return new SplitFilterLists(
 					distributableFilters,
 					clientFilters);
 		}
 		for (final QueryFilter filter : allFilters) {
-			if (filter instanceof DistributableQueryFilter) {
-				distributableFilters.add((DistributableQueryFilter) filter);
+			if (filter instanceof QueryFilter) {
+				distributableFilters.add(filter);
 			}
 			else {
 				clientFilters.add(filter);
@@ -356,11 +362,11 @@ public class BaseConstraintsQuery extends
 
 	private static class SplitFilterLists
 	{
-		private final List<DistributableQueryFilter> distributableFilters;
+		private final List<QueryFilter> distributableFilters;
 		private final List<QueryFilter> clientFilters;
 
 		public SplitFilterLists(
-				final List<DistributableQueryFilter> distributableFilters,
+				final List<QueryFilter> distributableFilters,
 				final List<QueryFilter> clientFilters ) {
 			this.distributableFilters = distributableFilters;
 			this.clientFilters = clientFilters;

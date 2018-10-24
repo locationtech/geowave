@@ -21,11 +21,11 @@ import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +77,7 @@ public class KdeCommand extends
 		final String outputStore = parameters.get(1);
 		// Config file
 		final File configFile = getGeoWaveConfigFile(params);
-		PrimaryIndex outputPrimaryIndex = null;
+		Index outputPrimaryIndex = null;
 
 		final StoreLoader inputStoreLoader = new StoreLoader(
 				inputStore);
@@ -111,7 +111,7 @@ public class KdeCommand extends
 			for (final IndexPluginOptions dimensionType : outputIndexOptions) {
 				if (dimensionType.getType().equals(
 						"spatial")) {
-					final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
+					final Index primaryIndex = dimensionType.createIndex();
 					if (primaryIndex == null) {
 						LOGGER.error("Could not get index instance, getIndex() returned null;");
 						throw new IOException(

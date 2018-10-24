@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,56 +12,73 @@ package org.locationtech.geowave.core.store.base;
 
 import java.io.Closeable;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
+import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DuplicateEntryCount;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsImpl;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.AggregationQuery;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.IngestOptions;
+import org.locationtech.geowave.core.store.api.Query;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Statistics;
+import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.callback.IngestCallback;
 import org.locationtech.geowave.core.store.callback.IngestCallbackList;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
 import org.locationtech.geowave.core.store.data.visibility.FieldVisibilityCount;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
-import org.locationtech.geowave.core.store.filter.DedupeFilter;
 import org.locationtech.geowave.core.store.index.IndexMetaDataSet;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.index.writer.IndependentAdapterIndexWriter;
 import org.locationtech.geowave.core.store.index.writer.IndexCompositeWriter;
 import org.locationtech.geowave.core.store.memory.MemoryPersistentAdapterStore;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.query.AdapterQuery;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.InsertionIdQuery;
-import org.locationtech.geowave.core.store.query.PrefixIdQuery;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.aggregate.AdapterAndIndexBasedAggregation;
+import org.locationtech.geowave.core.store.query.constraints.AdapterAndIndexBasedQueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.EverythingQuery;
+import org.locationtech.geowave.core.store.query.constraints.InsertionIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.PrefixIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.TypeConstraintQuery;
+import org.locationtech.geowave.core.store.query.filter.DedupeFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Streams;
 
 public class BaseDataStore implements
 		DataStore
@@ -98,43 +115,32 @@ public class BaseDataStore implements
 	}
 
 	public void store(
-			final PrimaryIndex index ) {
-		if (baseOptions.isPersistIndex() && !indexStore.indexExists(index.getId())) {
+			final Index index ) {
+		if (!indexStore.indexExists(index.getName())) {
 			indexStore.addIndex(index);
 		}
 	}
 
 	protected synchronized void store(
-			final InternalDataAdapter<?> internalAdapter ) {
-		if (baseOptions.isPersistAdapter() && !adapterStore.adapterExists(internalAdapter.getInternalAdapterId())) {
-			adapterStore.addAdapter(internalAdapter);
+			final InternalDataAdapter<?> adapter ) {
+		if (!adapterStore.adapterExists(adapter.getAdapterId())) {
+			adapterStore.addAdapter(adapter);
 		}
 
 	}
 
 	public DataStatisticsStore getStatisticsStore() {
-		return this.statisticsStore;
+		return statisticsStore;
 	}
 
-	@Override
-	public <T> IndexWriter<T> createWriter(
-			final WritableDataAdapter<T> adapter,
-			final PrimaryIndex... indices )
-			throws MismatchedIndexToAdapterMapping {
-		adapter.init(indices);
-		// add internal adapter
-		final InternalDataAdapter<T> internalAdapter = new InternalDataAdapterWrapper<T>(
-				adapter,
-				internalAdapterStore.addAdapterId(adapter.getAdapterId()));
-		store(internalAdapter);
-		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
-				internalAdapter.getInternalAdapterId(),
-				indices));
+	private <T> Writer<T> createWriter(
+			final InternalDataAdapter<T> adapter,
+			final Index... indices ) {
 
-		final IndexWriter<T>[] writers = new IndexWriter[indices.length];
+		final Writer<T>[] writers = new Writer[indices.length];
 
 		int i = 0;
-		for (final PrimaryIndex index : indices) {
+		for (final Index index : indices) {
 			final DataStoreCallbackManager callbackManager = new DataStoreCallbackManager(
 					statisticsStore,
 					secondaryIndexDataStore,
@@ -142,33 +148,25 @@ public class BaseDataStore implements
 
 			callbackManager.setPersistStats(baseOptions.isPersistDataStatistics());
 
-			final List<IngestCallback<T>> callbacks = new ArrayList<IngestCallback<T>>();
-
-			store(index);
-
-			final String indexName = index.getId().getString();
+			final List<IngestCallback<T>> callbacks = new ArrayList<>();
 
 			callbacks.add(callbackManager.getIngestCallback(
-					internalAdapter,
+					adapter,
 					index));
 
-			initOnIndexWriterCreate(
-					internalAdapter,
-					index);
-
-			final IngestCallbackList<T> callbacksList = new IngestCallbackList<T>(
+			final IngestCallbackList<T> callbacksList = new IngestCallbackList<>(
 					callbacks);
 			writers[i] = createIndexWriter(
-					internalAdapter,
+					adapter,
 					index,
 					baseOperations,
 					baseOptions,
 					callbacksList,
 					callbacksList);
 
-			if (adapter instanceof IndexDependentDataAdapter) {
-				writers[i] = new IndependentAdapterIndexWriter<T>(
-						(IndexDependentDataAdapter<T>) adapter,
+			if (adapter.getAdapter() instanceof IndexDependentDataAdapter) {
+				writers[i] = new IndependentAdapterIndexWriter<>(
+						(IndexDependentDataAdapter<T>) adapter.getAdapter(),
 						index,
 						writers[i]);
 			}
@@ -179,14 +177,30 @@ public class BaseDataStore implements
 
 	}
 
+	public <T, R extends GeoWaveRow> CloseableIterator<T> query(
+			final Query<T> query,
+			final ScanCallback<T, R> scanCallback ) {
+		return internalQuery(
+				query,
+				false,
+				scanCallback);
+	}
+
 	@Override
 	public <T> CloseableIterator<T> query(
-			final QueryOptions queryOptions,
-			final Query query ) {
+			final Query<T> query ) {
 		return internalQuery(
-				queryOptions,
 				query,
 				false);
+	}
+
+	protected <T> CloseableIterator<T> internalQuery(
+			final Query<T> query,
+			final boolean delete ) {
+		return internalQuery(
+				query,
+				delete,
+				null);
 	}
 
 	/*
@@ -201,63 +215,82 @@ public class BaseDataStore implements
 	 * org.locationtech.geowave.core.store.query.Query)
 	 */
 	protected <T> CloseableIterator<T> internalQuery(
-			final QueryOptions queryOptions,
-			final Query query,
-			final boolean delete ) {
-		final List<CloseableIterator<Object>> results = new ArrayList<CloseableIterator<Object>>();
+			Query<T> query,
+			final boolean delete,
+			final ScanCallback<T, ?> scanCallback ) {
+		if (query == null) {
+			query = (Query) QueryBuilder.newBuilder().build();
+		}
 		// all queries will use the same instance of the dedupe filter for
 		// client side filtering because the filter needs to be applied across
 		// indices
-		final BaseQueryOptions sanitizedQueryOptions = new BaseQueryOptions(
-				(queryOptions == null) ? new QueryOptions() : queryOptions,
-				internalAdapterStore);
+		final BaseQueryOptions queryOptions = new BaseQueryOptions(
+				query,
+				adapterStore,
+				internalAdapterStore,
+				scanCallback);
+		return internalQuery(
+				query.getQueryConstraints(),
+				queryOptions,
+				delete);
+	}
+
+	protected <T> CloseableIterator<T> internalQuery(
+			final QueryConstraints constraints,
+			final BaseQueryOptions queryOptions,
+			final boolean delete ) {
+
+		final List<CloseableIterator<Object>> results = new ArrayList<>();
 
 		// If CQL filter is set
-		if (query instanceof AdapterQuery) {
-			final ByteArrayId CQlAdapterId = ((AdapterQuery) query).getAdapterId();
+		if (constraints instanceof TypeConstraintQuery) {
+			final String constraintTypeName = ((TypeConstraintQuery) constraints).getTypeName();
 
-			if ((sanitizedQueryOptions.getAdapterIds() == null) || (sanitizedQueryOptions.getAdapterIds().isEmpty())) {
-				sanitizedQueryOptions.setInternalAdapterId(internalAdapterStore.getInternalAdapterId(CQlAdapterId));
+			if ((queryOptions.getAdapterIds() == null) || (queryOptions.getAdapterIds().length == 0)) {
+				queryOptions.setAdapterId(internalAdapterStore.getAdapterId(constraintTypeName));
 			}
-			else if (sanitizedQueryOptions.getAdapterIds().size() == 1) {
-				if (!sanitizedQueryOptions.getAdapterIds().iterator().next().equals(
-						internalAdapterStore.getInternalAdapterId(CQlAdapterId))) {
-					LOGGER.error("CQL Query AdapterID does not match Query Options AdapterId");
+			else if (queryOptions.getAdapterIds().length == 1) {
+				final Short adapterId = internalAdapterStore.getAdapterId(constraintTypeName);
+				if ((adapterId == null) || (queryOptions.getAdapterIds()[0] != adapterId.shortValue())) {
+					LOGGER.error("Constraint Query Type name does not match Query Options Type Name");
 					throw new RuntimeException(
-							"CQL Query AdapterID does not match Query Options AdapterId");
+							"Constraint Query Type name does not match Query Options Type Name");
 				}
 			}
 			else {
 				// Throw exception when QueryOptions has more than one adapter
 				// and CQL Adapter is set.
-				LOGGER.error("CQL Query AdapterID does not match Query Options AdapterId");
+				LOGGER.error("Constraint Query Type name does not match Query Options Type Name");
 				throw new RuntimeException(
-						"CQL Query AdapterID does not match Query Options AdapterId");
+						"Constraint Query Type name does not match Query Options Type Name");
 			}
 
 		}
 
-		final Query sanitizedQuery = (query == null) ? new EverythingQuery() : query;
-
+		final QueryConstraints sanitizedConstraints = (constraints == null) ? new EverythingQuery() : constraints;
+		final boolean isConstraintsAdapterIndexSpecific = sanitizedConstraints instanceof AdapterAndIndexBasedQueryConstraints;
+		final boolean isAggregationAdapterIndexSpecific = (queryOptions.getAggregation() != null)
+				&& (queryOptions.getAggregation().getRight() instanceof AdapterAndIndexBasedAggregation);
 		final DedupeFilter filter = new DedupeFilter();
 		MemoryPersistentAdapterStore tempAdapterStore;
 		final List<DataStoreCallbackManager> deleteCallbacks = new ArrayList<>();
 
 		try {
 			tempAdapterStore = new MemoryPersistentAdapterStore(
-					sanitizedQueryOptions.getAdaptersArray(adapterStore));
+					queryOptions.getAdaptersArray(adapterStore));
 			// keep a list of adapters that have been queried, to only load an
 			// adapter to be queried once
-			final Set<Short> queriedAdapters = new HashSet<Short>();
-			final List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> indexAdapterPairList = delete ? sanitizedQueryOptions
+			final Set<Short> queriedAdapters = new HashSet<>();
+			final List<Pair<Index, List<InternalDataAdapter<?>>>> indexAdapterPairList = delete ? queryOptions
 					.getIndicesForAdapters(
 							tempAdapterStore,
 							indexMappingStore,
-							indexStore) : sanitizedQueryOptions.getAdaptersWithMinimalSetOfIndices(
+							indexStore) : queryOptions.getAdaptersWithMinimalSetOfIndices(
 					tempAdapterStore,
 					indexMappingStore,
 					indexStore);
-			for (Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
+			final Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregation = queryOptions.getAggregation();
+			for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : indexAdapterPairList) {
 				final List<Short> adapterIdsToQuery = new ArrayList<>();
 				// this only needs to be done once per index, not once per
 				// adapter
@@ -267,13 +300,13 @@ public class BaseDataStore implements
 						final DataStoreCallbackManager callbackCache = new DataStoreCallbackManager(
 								statisticsStore,
 								secondaryIndexDataStore,
-								queriedAdapters.add(adapter.getInternalAdapterId()));
+								queriedAdapters.add(adapter.getAdapterId()));
 						callbackCache.setPersistStats(baseOptions.isPersistDataStatistics());
 						deleteCallbacks.add(callbackCache);
-						final ScanCallback callback = sanitizedQueryOptions.getScanCallback();
+						final ScanCallback callback = queryOptions.getScanCallback();
 
-						final PrimaryIndex index = indexAdapterPair.getLeft();
-						sanitizedQueryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
+						final Index index = indexAdapterPair.getLeft();
+						queryOptions.setScanCallback(new ScanCallback<Object, GeoWaveRow>() {
 
 							@Override
 							public void entryScanned(
@@ -292,26 +325,43 @@ public class BaseDataStore implements
 							}
 						});
 					}
-					if (sanitizedQuery instanceof InsertionIdQuery) {
-						sanitizedQueryOptions.setLimit(-1);
+					QueryConstraints adapterIndexConstraints;
+					if (isConstraintsAdapterIndexSpecific) {
+						adapterIndexConstraints = ((AdapterAndIndexBasedQueryConstraints) sanitizedConstraints)
+								.createQueryConstraints(
+										adapter,
+										indexAdapterPair.getLeft());
+					}
+					else {
+						adapterIndexConstraints = sanitizedConstraints;
+					}
+					if (isAggregationAdapterIndexSpecific) {
+						queryOptions.setAggregation(
+								((AdapterAndIndexBasedAggregation) aggregation.getRight()).createAggregation(
+										adapter,
+										indexAdapterPair.getLeft()),
+								aggregation.getLeft());
+					}
+					if (adapterIndexConstraints instanceof InsertionIdQuery) {
+						queryOptions.setLimit(-1);
 						results.add(queryInsertionId(
 								adapter,
 								indexAdapterPair.getLeft(),
-								(InsertionIdQuery) sanitizedQuery,
+								(InsertionIdQuery) adapterIndexConstraints,
 								filter,
-								sanitizedQueryOptions,
+								queryOptions,
 								tempAdapterStore,
 								delete));
 						continue;
 					}
-					else if (sanitizedQuery instanceof PrefixIdQuery) {
+					else if (adapterIndexConstraints instanceof PrefixIdQuery) {
 						if (!queriedAllAdaptersByPrefix) {
-							final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) sanitizedQuery;
+							final PrefixIdQuery prefixIdQuery = (PrefixIdQuery) adapterIndexConstraints;
 							results.add(queryRowPrefix(
 									indexAdapterPair.getLeft(),
 									prefixIdQuery.getPartitionKey(),
 									prefixIdQuery.getSortKeyPrefix(),
-									sanitizedQueryOptions,
+									queryOptions,
 									indexAdapterPair.getRight(),
 									tempAdapterStore,
 									delete));
@@ -319,7 +369,21 @@ public class BaseDataStore implements
 						}
 						continue;
 					}
-					adapterIdsToQuery.add(adapter.getInternalAdapterId());
+					else if (isConstraintsAdapterIndexSpecific || isAggregationAdapterIndexSpecific) {
+						// can't query multiple adapters in the same scan
+						results.add(queryConstraints(
+								Collections.singletonList(adapter.getAdapterId()),
+								indexAdapterPair.getLeft(),
+								adapterIndexConstraints,
+								filter,
+								queryOptions,
+								tempAdapterStore,
+								delete));
+						continue;
+					}
+					// finally just add it to a list to query multiple adapters
+					// in on scan
+					adapterIdsToQuery.add(adapter.getAdapterId());
 				}
 				// supports querying multiple adapters in a single index
 				// in one query instance (one scanner) for efficiency
@@ -327,9 +391,9 @@ public class BaseDataStore implements
 					results.add(queryConstraints(
 							adapterIdsToQuery,
 							indexAdapterPair.getLeft(),
-							sanitizedQuery,
+							sanitizedConstraints,
 							filter,
-							sanitizedQueryOptions,
+							queryOptions,
 							tempAdapterStore,
 							delete));
 				}
@@ -341,8 +405,9 @@ public class BaseDataStore implements
 					"Failed to resolve adapter or index for query",
 					e1);
 		}
-		return new CloseableIteratorWrapper<T>(
+		return new CloseableIteratorWrapper<>(
 				new Closeable() {
+
 					@Override
 					public void close()
 							throws IOException {
@@ -353,26 +418,39 @@ public class BaseDataStore implements
 							c.close();
 						}
 					}
+
 				},
 				Iterators.concat(new CastIterator<T>(
 						results.iterator())));
 	}
 
-	@Override
-	public boolean delete(
-			final QueryOptions queryOptions,
-			final Query query ) {
-		final BaseQueryOptions sanitizedQueryOptions = new BaseQueryOptions(
-				queryOptions,
-				internalAdapterStore);
-		if (((query == null) || (query instanceof EverythingQuery))) {
-			if (sanitizedQueryOptions.isAllAdapters()) {
+	private boolean isAllAdapters(
+			final String[] typeNames ) {
+		return Arrays.equals(
+				internalAdapterStore.getTypeNames(),
+				typeNames);
+	}
+
+	public <T> boolean delete(
+			Query<T> query,
+			final ScanCallback<T, ?> scanCallback ) {
+		if (query == null) {
+			query = (Query) QueryBuilder.newBuilder().build();
+		}
+		if (((query.getQueryConstraints() == null) || (query.getQueryConstraints() instanceof EverythingQuery))) {
+			if ((query.getDataTypeQueryOptions().getTypeNames() == null)
+					|| (query.getDataTypeQueryOptions().getTypeNames().length == 0)
+					|| isAllAdapters(query.getDataTypeQueryOptions().getTypeNames())) {
 				// TODO what about authorizations here?
 				return deleteEverything();
 			}
 			else {
 				try {
-					for (final Pair<PrimaryIndex, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
+					final BaseQueryOptions sanitizedQueryOptions = new BaseQueryOptions(
+							query,
+							adapterStore,
+							internalAdapterStore);
+					for (final Pair<Index, List<InternalDataAdapter<?>>> indexAdapterPair : sanitizedQueryOptions
 							.getIndicesForAdapters(
 									adapterStore,
 									indexMappingStore,
@@ -383,9 +461,9 @@ public class BaseDataStore implements
 								deleteEntries(
 										adapter,
 										indexAdapterPair.getLeft(),
-										sanitizedQueryOptions.getAuthorizations());
+										query.getCommonQueryOptions().getAuthorizations());
 							}
-							catch (IOException e) {
+							catch (final IOException e) {
 								LOGGER.warn(
 										"Unable to delete by adapter",
 										e);
@@ -394,7 +472,7 @@ public class BaseDataStore implements
 						}
 					}
 				}
-				catch (IOException e) {
+				catch (final IOException e) {
 					LOGGER.warn(
 							"Unable to get adapters to delete",
 							e);
@@ -404,22 +482,24 @@ public class BaseDataStore implements
 		}
 		else {
 			try (CloseableIterator<?> dataIt = internalQuery(
-					queryOptions,
 					query,
-					true)) {
+					true,
+					scanCallback)) {
 				while (dataIt.hasNext()) {
 					dataIt.next();
 				}
 			}
-			catch (IOException e) {
-				LOGGER.warn(
-						"Unable to close deleter",
-						e);
-				return false;
-			}
 		}
 
 		return true;
+	}
+
+	@Override
+	public <T> boolean delete(
+			final Query<T> query ) {
+		return delete(
+				query,
+				null);
 	}
 
 	protected boolean deleteEverything() {
@@ -445,32 +525,32 @@ public class BaseDataStore implements
 
 	private <T> void deleteEntries(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final String... additionalAuthorizations )
 			throws IOException {
 		statisticsStore.removeAllStatistics(
-				adapter.getInternalAdapterId(),
+				adapter.getAdapterId(),
 				additionalAuthorizations);
 
 		// cannot delete because authorizations are not used
 		// this.indexMappingStore.remove(adapter.getAdapterId());
 
 		baseOperations.deleteAll(
-				index.getId(),
-				adapter.getInternalAdapterId(),
+				index.getName(),
+				adapter.getAdapterId(),
 				additionalAuthorizations);
 	}
 
 	protected CloseableIterator<Object> queryConstraints(
 			final List<Short> adapterIdsToQuery,
-			final PrimaryIndex index,
-			final Query sanitizedQuery,
+			final Index index,
+			final QueryConstraints sanitizedQuery,
 			final DedupeFilter filter,
 			final BaseQueryOptions sanitizedQueryOptions,
 			final PersistentAdapterStore tempAdapterStore,
 			final boolean delete ) {
 		final BaseConstraintsQuery constraintsQuery = new BaseConstraintsQuery(
-				adapterIdsToQuery,
+				ArrayUtils.toPrimitive(adapterIdsToQuery.toArray(new Short[0])),
 				index,
 				sanitizedQuery,
 				filter,
@@ -503,52 +583,64 @@ public class BaseDataStore implements
 				baseOperations,
 				baseOptions,
 				tempAdapterStore,
+				internalAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getTargetResolutionPerDimensionForHierarchicalIndex(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getMaxRangeDecomposition(),
 				delete);
 	}
 
 	protected CloseableIterator<Object> queryRowPrefix(
-			final PrimaryIndex index,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortPrefix,
+			final Index index,
+			final ByteArray partitionKey,
+			final ByteArray sortPrefix,
 			final BaseQueryOptions sanitizedQueryOptions,
-			List<InternalDataAdapter<?>> adapters,
+			final List<InternalDataAdapter<?>> adapters,
 			final PersistentAdapterStore tempAdapterStore,
 			final boolean delete ) {
-		Set<Short> adapterIds = adapters.stream().map(a -> a.getInternalAdapterId()).collect(Collectors.toSet());
-		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<Object>(
+		final Set<Short> adapterIds = adapters
+				.stream()
+				.map(
+						a -> a.getAdapterId())
+				.collect(
+						Collectors.toSet());
+		final BaseRowPrefixQuery<Object> prefixQuery = new BaseRowPrefixQuery<>(
 				index,
 				partitionKey,
 				sortPrefix,
 				(ScanCallback<Object, ?>) sanitizedQueryOptions.getScanCallback(),
-				DifferingFieldVisibilityEntryCount.getVisibilityCounts(
-						index,
-						adapterIds,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
-				FieldVisibilityCount.getVisibilityCounts(
-						index,
-						adapterIds,
-						statisticsStore,
-						sanitizedQueryOptions.getAuthorizations()),
+				DifferingFieldVisibilityEntryCount
+						.getVisibilityCounts(
+								index,
+								adapterIds,
+								statisticsStore,
+								sanitizedQueryOptions.getAuthorizations()),
+				FieldVisibilityCount
+						.getVisibilityCounts(
+								index,
+								adapterIds,
+								statisticsStore,
+								sanitizedQueryOptions.getAuthorizations()),
 				sanitizedQueryOptions.getAuthorizations());
 
-		return prefixQuery.query(
-				baseOperations,
-				baseOptions,
-				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
-				tempAdapterStore,
-				sanitizedQueryOptions.getLimit(),
-				sanitizedQueryOptions.getMaxRangeDecomposition(),
-				delete);
+		return prefixQuery
+				.query(
+						baseOperations,
+						baseOptions,
+						sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+						sanitizedQueryOptions.getTargetResolutionPerDimensionForHierarchicalIndex(),
+						tempAdapterStore,
+						internalAdapterStore,
+						sanitizedQueryOptions.getLimit(),
+						sanitizedQueryOptions.getMaxRangeDecomposition(),
+						delete);
 
 	}
 
 	protected CloseableIterator<Object> queryInsertionId(
 			final InternalDataAdapter<?> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final InsertionIdQuery query,
 			final DedupeFilter filter,
 			final BaseQueryOptions sanitizedQueryOptions,
@@ -557,15 +649,15 @@ public class BaseDataStore implements
 		final DifferingFieldVisibilityEntryCount differingVisibilityCounts = DifferingFieldVisibilityEntryCount
 				.getVisibilityCounts(
 						index,
-						Collections.singletonList(adapter.getInternalAdapterId()),
+						Collections.singletonList(adapter.getAdapterId()),
 						statisticsStore,
 						sanitizedQueryOptions.getAuthorizations());
-		FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
+		final FieldVisibilityCount visibilityCounts = FieldVisibilityCount.getVisibilityCounts(
 				index,
-				Collections.singletonList(adapter.getInternalAdapterId()),
+				Collections.singletonList(adapter.getAdapterId()),
 				statisticsStore,
 				sanitizedQueryOptions.getAuthorizations());
-		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<Object>(
+		final BaseInsertionIdQuery<Object> q = new BaseInsertionIdQuery<>(
 				adapter,
 				index,
 				query,
@@ -578,20 +670,22 @@ public class BaseDataStore implements
 				baseOperations,
 				baseOptions,
 				tempAdapterStore,
+				internalAdapterStore,
 				sanitizedQueryOptions.getMaxResolutionSubsamplingPerDimension(),
+				sanitizedQueryOptions.getTargetResolutionPerDimensionForHierarchicalIndex(),
 				sanitizedQueryOptions.getLimit(),
 				sanitizedQueryOptions.getMaxRangeDecomposition(),
 				delete);
 	}
 
-	protected <T> IndexWriter<T> createIndexWriter(
+	protected <T> Writer<T> createIndexWriter(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index,
+			final Index index,
 			final DataStoreOperations baseOperations,
 			final DataStoreOptions baseOptions,
 			final IngestCallback<T> callback,
 			final Closeable closable ) {
-		return new BaseIndexWriter<T>(
+		return new BaseIndexWriter<>(
 				adapter,
 				index,
 				baseOperations,
@@ -602,6 +696,509 @@ public class BaseDataStore implements
 
 	protected <T> void initOnIndexWriterCreate(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {}
+			final Index index ) {}
 
+	/**
+	 * Get all the adapters that have been used within this data store
+	 *
+	 * @return An array of the adapters used within this datastore.
+	 */
+	@Override
+	public DataTypeAdapter<?>[] getTypes() {
+		try (CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters()) {
+			return Iterators
+					.toArray(
+							Iterators
+									.transform(
+											it,
+											a -> (DataTypeAdapter<?>) a.getAdapter()),
+							DataTypeAdapter.class);
+		}
+	}
+
+	// public Statistics<?>[] getStatistics(
+	// @Nullable String typeName,
+	// String... authorizations ) {
+	// if (typeName == null) {
+	// try (CloseableIterator<InternalDataStatistics<?, ?,?>> it =
+	// (CloseableIterator) statisticsStore
+	// .getAllDataStatistics(
+	// authorizations)) {
+	// return Iterators
+	// .toArray(
+	// Iterators.transform(it,s -> new StatisticsImpl<>(result, statsType,
+	// statsId, typeName) ),
+	// InternalDataStatistics.class);
+	// }
+	// catch (final IOException e) {
+	// LOGGER
+	// .warn(
+	// "Unable to close statistics iterator",
+	// e);
+	// return new InternalDataStatistics[0];
+	// }
+	// }
+	// final Short internalAdapterId = internalAdapterStore
+	// .getAdapterId(
+	// typeName);
+	// if (internalAdapterId == null) {
+	// LOGGER
+	// .warn(
+	// "Unable to find adapter '" + typeName + "' for stats");
+	// return new InternalDataStatistics[0];
+	// }
+	// try (CloseableIterator<InternalDataStatistics<?,?,?>> it =
+	// (CloseableIterator) statisticsStore
+	// .getDataStatistics(
+	// internalAdapterId,
+	// authorizations)) {
+	// return Iterators
+	// .toArray(
+	// it,
+	// InternalDataStatistics.class);
+	// }
+	// catch (final IOException e) {
+	// LOGGER
+	// .warn(
+	// "Unable to close statistics iterator per adapter",
+	// e);
+	// return new InternalDataStatistics[0];
+	// }
+	// }
+	//
+	// public <R> R getStatisticsResult(
+	// String typeName,
+	// StatisticsType<R,?> statisticsType,
+	// String... authorizations ) {
+	//
+	// final Short internalAdapterId = internalAdapterStore
+	// .getAdapterId(
+	// typeName);
+	// if (internalAdapterId == null) {
+	// LOGGER
+	// .warn(
+	// "Unable to find adapter '" + typeName + "' for statistics");
+	// return null;
+	// }
+	// return (R) statisticsStore
+	// .getDataStatistics(
+	// internalAdapterId,
+	// statisticsType,
+	// authorizations);
+	// }
+
+	@Override
+	public Index[] getIndices() {
+		return getIndices(null);
+	}
+
+	@Override
+	public Index[] getIndices(
+			final String typeName ) {
+		if (typeName == null) {
+			final List<Index> indexList = new ArrayList<>();
+			try (CloseableIterator<Index> indexIt = indexStore.getIndices()) {
+				while (indexIt.hasNext()) {
+					indexList.add(indexIt.next());
+				}
+				return indexList.toArray(new Index[0]);
+			}
+		}
+		final Short internalAdapterId = internalAdapterStore.getAdapterId(typeName);
+		if (internalAdapterId == null) {
+			LOGGER.warn("Unable to find adapter '" + typeName + "' for indices");
+			return new Index[0];
+		}
+		final AdapterToIndexMapping indices = indexMappingStore.getIndicesForAdapter(internalAdapterId);
+		return indices.getIndices(indexStore);
+	}
+
+	@Override
+	public void addIndex(
+			final String typeName,
+			final Index... indices ) {
+		if (indices.length == 0) {
+			LOGGER
+					.warn(
+							"At least one index must be provided.");
+			return;
+		}
+		final Short adapterId = internalAdapterStore
+				.getAdapterId(
+						typeName);
+		if (adapterId == null) {
+			LOGGER
+					.warn(
+							"DataTypeAdapter does not exist for type '" + typeName
+									+ "'. Add it using addType(<dataTypeAdapter>) and then add the indices again.");
+			return;
+		}
+		else {
+			final InternalDataAdapter<?> adapter = adapterStore
+					.getAdapter(
+							adapterId);
+			if (adapter == null) {
+				LOGGER
+						.warn(
+								"DataTypeAdapter is undefined for type '" + typeName
+										+ "'. Add it using addType(<dataTypeAdapter>) and then add the indices again.");
+				return;
+			}
+			final AdapterToIndexMapping existingMapping = indexMappingStore
+					.getIndicesForAdapter(
+							adapterId);
+			if ((existingMapping != null) && (existingMapping.getIndexNames().length > 0)) {
+				// reduce the provided indices to only those that don't already
+				// exist
+				final Index[] newIndices = Arrays
+						.stream(
+								indices)
+						.filter(
+								i -> !ArrayUtils
+										.contains(
+												existingMapping.getIndexNames(),
+												i.getName()))
+						.toArray(
+								size -> new Index[size]);
+				if (newIndices.length > 0) {
+					LOGGER
+							.info(
+									"Indices already available for type '" + typeName
+											+ "'. Writing existing data to new indices for consistency.");
+
+					internalAddIndices(
+							adapter,
+							newIndices,
+							true);
+					try (Writer writer = createWriter(
+							adapter,
+							newIndices)) {
+						try (
+								// TODO what about authorizations
+								final CloseableIterator it = query(
+										QueryBuilder.newBuilder().build())) {
+							while (it.hasNext()) {
+								writer
+										.write(
+												it.next());
+							}
+						}
+					}
+				}
+				else if (LOGGER.isInfoEnabled()) {
+					LOGGER
+							.info(
+									"Indices " + ArrayUtils
+											.toString(
+													indices)
+											+ " already added.");
+				}
+			}
+			else {
+				internalAddIndices(
+						adapter,
+						indices,
+						true);
+			}
+		}
+	}
+
+	private void internalAddIndices(
+			final InternalDataAdapter<?> adapter,
+			final Index[] indices,
+			final boolean updateAdapter ) {
+		if (adapter.getAdapter() instanceof InitializeWithIndicesDataAdapter) {
+			if (((InitializeWithIndicesDataAdapter) adapter.getAdapter()).init(indices) && updateAdapter) {
+				adapterStore.removeAdapter(adapter.getAdapterId());
+				adapterStore.addAdapter(adapter);
+			}
+		}
+		indexMappingStore.addAdapterIndexMapping(new AdapterToIndexMapping(
+				internalAdapterStore.addTypeName(adapter.getTypeName()),
+				indices));
+		for (final Index index : indices) {
+			store(index);
+			initOnIndexWriterCreate(
+					adapter,
+					index);
+		}
+	}
+
+	@Override
+	public <T> void addType(
+			final DataTypeAdapter<T> dataTypeAdapter,
+			final Index... initialIndices ) {
+		// add internal adapter
+		final InternalDataAdapter<T> adapter = new InternalDataAdapterWrapper<>(
+				dataTypeAdapter,
+				internalAdapterStore.addTypeName(dataTypeAdapter.getTypeName()));
+		internalAddIndices(
+				adapter,
+				initialIndices,
+				false);
+		store(adapter);
+	}
+
+	/**
+	 * Returns an index writer to perform batched write operations for the given
+	 * typename
+	 *
+	 */
+	@Override
+	public <T> Writer<T> createWriter(
+			final String typeName ) {
+		final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+		if (adapterId == null) {
+			LOGGER.warn("DataTypeAdapter does not exist for type '" + typeName
+					+ "'. Add it using addType(<dataTypeAdapter>).");
+			return null;
+		}
+		final InternalDataAdapter<T> adapter = (InternalDataAdapter<T>) adapterStore.getAdapter(adapterId);
+		if (adapter == null) {
+			LOGGER.warn("DataTypeAdapter is undefined for type '" + typeName
+					+ "'. Add it using addType(<dataTypeAdapter>).");
+			return null;
+		}
+		final AdapterToIndexMapping mapping = indexMappingStore.getIndicesForAdapter(adapterId);
+		if (mapping == null) {
+			LOGGER.warn("No indices for type '" + typeName + "'. Add indices using addIndex(<typename>, <indices>).");
+			return null;
+		}
+		return createWriter(
+				adapter,
+				mapping.getIndices(indexStore));
+	}
+
+	@Override
+	public <T> void ingest(
+			final URL url,
+			final Index... index )
+			throws MismatchedIndexToAdapterMapping {
+		ingest(
+				url,
+				null,
+				index);
+	}
+
+	@Override
+	public <T> void ingest(
+			final URL url,
+			final IngestOptions<T> options,
+			final Index... index )
+			throws MismatchedIndexToAdapterMapping {
+		// TODO Issue #1442 likely need to move logic from LocalFileIngestDriver
+		// into core-store
+	}
+
+	@Override
+	public <P extends Persistable, R, T> R aggregate(
+			final AggregationQuery<P, R, T> query ) {
+		if (query == null) {
+			LOGGER.warn("Aggregation must be defined");
+			return null;
+		}
+		R results = null;
+
+		final Aggregation<P, R, T> aggregation = query.getDataTypeQueryOptions().getAggregation();
+		try (CloseableIterator<R> resultsIt = internalQuery(
+				query.getQueryConstraints(),
+				new BaseQueryOptions(
+						query,
+						adapterStore,
+						internalAdapterStore),
+				false)) {
+			while (resultsIt.hasNext()) {
+				final R next = resultsIt.next();
+				if (results == null) {
+					results = next;
+				}
+				else {
+					results = aggregation.merge(
+							results,
+							next);
+				}
+			}
+		}
+		if (results == null) {
+			aggregation.clearResult();
+			return aggregation.getResult();
+		}
+		else {
+			return results;
+		}
+	}
+
+	protected <R> CloseableIterator<InternalDataStatistics<?, R, ?>> internalQueryStatistics(
+			final StatisticsQuery<R> query ) {
+		// sanity check, although suing the builders should disallow this type
+		// of query
+		if ((query.getStatsType() == null) && (query.getExtendedId() != null) && (query.getExtendedId().length() > 0)) {
+			LOGGER
+					.error(
+							"Cannot query by extended ID '" + query.getExtendedId()
+									+ "' if statistic type is not provided");
+			return new CloseableIterator.Empty<>();
+		}
+		CloseableIterator<InternalDataStatistics<?, R, ?>> it = null;
+		if ((query.getTypeName() != null) && (query.getTypeName().length() > 0)) {
+			final Short adapterId = internalAdapterStore
+					.getAdapterId(
+							query.getTypeName());
+			if (adapterId == null) {
+				LOGGER
+						.error(
+								"DataTypeAdapter does not exist for type '" + query.getTypeName() + "'");
+				return new CloseableIterator.Empty<>();
+			}
+			if (query.getStatsType() != null) {
+				if ((query.getExtendedId() != null) && (query.getExtendedId().length() > 0)) {
+
+					it = (CloseableIterator) statisticsStore
+							.getDataStatistics(
+									adapterId,
+									query.getExtendedId(),
+									query.getStatsType(),
+									query.getAuthorizations());
+				}
+				else {
+					it = (CloseableIterator) statisticsStore
+							.getDataStatistics(
+									adapterId,
+									query.getStatsType(),
+									query.getAuthorizations());
+				}
+			}
+			else {
+				it = (CloseableIterator) statisticsStore
+						.getDataStatistics(
+								adapterId,
+								query.getAuthorizations());
+				if (query.getExtendedId() != null) {
+					it = new CloseableIteratorWrapper<>(
+							it,
+							Iterators
+									.filter(
+											it,
+											s -> s
+													.getExtendedId()
+													.startsWith(
+															query.getExtendedId())));
+				}
+			}
+		}
+		else {
+			if (query.getStatsType() != null) {
+				if (query.getExtendedId() != null) {
+					it = (CloseableIterator) statisticsStore
+							.getDataStatistics(
+									query.getExtendedId(),
+									query.getStatsType(),
+									query.getAuthorizations());
+				}
+				else {
+					it = (CloseableIterator) statisticsStore
+							.getDataStatistics(
+									query.getStatsType(),
+									query.getAuthorizations());
+				}
+			}
+			else {
+				it = (CloseableIterator) statisticsStore
+						.getAllDataStatistics(
+								query.getAuthorizations());
+			}
+		}
+		return it;
+
+	}
+
+	@Override
+	public <R> Statistics<R>[] queryStatistics(
+			final StatisticsQuery<R> query ) {
+		try (CloseableIterator<InternalDataStatistics<?, R, ?>> it = internalQueryStatistics(
+				query)) {
+			return Streams
+					.stream(
+							it)
+					.map(
+							s -> new StatisticsImpl<>(
+									s.getResult(),
+									s.getType(),
+									s.getExtendedId(),
+									internalAdapterStore
+											.getTypeName(
+													s.getAdapterId())))
+					.toArray(
+							size -> new Statistics[size]);
+		}
+	}
+
+	@Override
+	public <R> R aggregateStatistics(
+			final StatisticsQuery<R> query ) {
+		if (query.getStatsType() == null) {
+			LOGGER
+					.error(
+							"Statistic Type must be provided for a statistical aggregation");
+			return null;
+		}
+		try (CloseableIterator<InternalDataStatistics<?, R, ?>> it = internalQueryStatistics(
+				query)) {
+			final Optional<InternalDataStatistics<?, R, ?>> result = Streams
+					.stream(
+							it)
+					.reduce(
+							InternalDataStatistics::reduce);
+			if (result.isPresent()) {
+				return result.get().getResult();
+			}
+			LOGGER
+					.warn(
+							"No statistics found matching query criteria for statistical aggregation");
+			return null;
+		}
+	}
+
+	@Override
+	public void copyTo(
+			final DataStore other ) {
+
+	}
+
+	@Override
+	public void copyTo(
+			final DataStore other,
+			final Query<?> query ) {
+		if (query == null) {
+			copyTo(other);
+		}
+		// TODO issue #1440 addresses filling out this method
+	}
+
+	@Override
+	public void removeIndex(
+			final String indexName ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeIndex(
+			final String typeName,
+			final String indexName ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void removeType(
+			final String typeName ) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void deleteAll() {
+		deleteEverything();
+	}
 }

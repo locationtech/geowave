@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,9 +10,9 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter.statistics;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 
 /**
@@ -26,13 +26,13 @@ import org.locationtech.geowave.core.store.index.CommonIndexModel;
  */
 public interface StatisticsProvider<T>
 {
-	public ByteArrayId[] getSupportedStatisticsTypes();
+	public StatisticsId[] getSupportedStatistics();
 
-	public DataStatistics<T> createDataStatistics(
-			ByteArrayId statisticsId );
+	public <R, B extends StatisticsQueryBuilder<R, B>> InternalDataStatistics<T, R, B> createDataStatistics(
+			StatisticsId statisticsId );
 
 	public EntryVisibilityHandler<T> getVisibilityHandler(
 			CommonIndexModel indexModel,
-			DataAdapter<T> adapter,
-			ByteArrayId statisticsId );
+			DataTypeAdapter<T> adapter,
+			StatisticsId statisticsId );
 }

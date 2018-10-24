@@ -21,10 +21,10 @@ import java.util.Collection;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.gdelt.GDELTIngestPlugin;
 import org.locationtech.geowave.format.gdelt.GDELTUtils;
 import org.opengis.feature.simple.SimpleFeature;
@@ -61,12 +61,11 @@ public class GDELTIngestTest
 				filePath);
 
 		assertTrue(GDELTUtils.validate(toIngest));
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(new ByteArrayId(
-				"123".getBytes(StringUtils.UTF8_CHARSET)));
 		final CloseableIterator<GeoWaveData<SimpleFeature>> features = ingester.toGeoWaveData(
 				toIngest,
-				indexIds,
+				new String[] {
+					"123"
+				},
 				"");
 
 		assertTrue((features != null) && features.hasNext());
@@ -83,7 +82,9 @@ public class GDELTIngestTest
 
 		final CloseableIterator<GeoWaveData<SimpleFeature>> featuresExt = ingesterExt.toGeoWaveData(
 				toIngest,
-				indexIds,
+				new String[] {
+					"123"
+				},
 				"");
 
 		assertTrue((featuresExt != null) && featuresExt.hasNext());

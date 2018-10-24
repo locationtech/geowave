@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,9 +19,10 @@ import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -40,11 +41,11 @@ public class GeowaveRDDExample
 			return false;
 		}
 
-		String storeName = args[0];
+		final String storeName = args[0];
 
 		int minSplits = -1;
 		int maxSplits = -1;
-		DistributableQuery query = null;
+		QueryConstraints query = null;
 
 		if (args.length > 1) {
 			if (args[1].equals("--splits")) {
@@ -63,12 +64,12 @@ public class GeowaveRDDExample
 							return false;
 						}
 
-						double west = Double.parseDouble(args[5]);
-						double south = Double.parseDouble(args[6]);
-						double east = Double.parseDouble(args[7]);
-						double north = Double.parseDouble(args[8]);
+						final double west = Double.parseDouble(args[5]);
+						final double south = Double.parseDouble(args[6]);
+						final double east = Double.parseDouble(args[7]);
+						final double north = Double.parseDouble(args[8]);
 
-						Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+						final Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
 								west,
 								south,
 								east,
@@ -85,12 +86,12 @@ public class GeowaveRDDExample
 					return false;
 				}
 
-				double west = Double.parseDouble(args[2]);
-				double south = Double.parseDouble(args[3]);
-				double east = Double.parseDouble(args[4]);
-				double north = Double.parseDouble(args[5]);
+				final double west = Double.parseDouble(args[2]);
+				final double south = Double.parseDouble(args[3]);
+				final double east = Double.parseDouble(args[4]);
+				final double north = Double.parseDouble(args[5]);
 
-				Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
+				final Geometry bbox = new GeometryFactory().toGeometry(new Envelope(
 						west,
 						south,
 						east,
@@ -116,17 +117,18 @@ public class GeowaveRDDExample
 			}
 			inputStoreOptions = inputStoreLoader.getDataStorePlugin();
 
-			SparkConf sparkConf = new SparkConf();
+			final SparkConf sparkConf = new SparkConf();
 
 			sparkConf.setAppName("GeoWaveRDD");
 			sparkConf.setMaster("local");
-			JavaSparkContext context = new JavaSparkContext(
+			final JavaSparkContext context = new JavaSparkContext(
 					sparkConf);
-			RDDOptions rddOpts = new RDDOptions();
-			rddOpts.setQuery(query);
+			final RDDOptions rddOpts = new RDDOptions();
+			rddOpts.setQuery(QueryBuilder.newBuilder().constraints(
+					query).build());
 			rddOpts.setMinSplits(minSplits);
 			rddOpts.setMaxSplits(maxSplits);
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDDLoader.loadRDD(
+			final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = GeoWaveRDDLoader.loadRDD(
 					context.sc(),
 					inputStoreOptions,
 					rddOpts).getRawRDD();
@@ -135,7 +137,7 @@ public class GeowaveRDDExample
 
 			context.close();
 		}
-		catch (IOException e) {
+		catch (final IOException e) {
 			System.err.println(e.getMessage());
 		}
 

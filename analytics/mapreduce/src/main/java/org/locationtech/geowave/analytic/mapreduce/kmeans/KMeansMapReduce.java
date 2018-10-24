@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,8 +11,6 @@
 package org.locationtech.geowave.analytic.mapreduce.kmeans;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.io.ObjectWritable;
@@ -33,7 +31,6 @@ import org.locationtech.geowave.analytic.extract.SimpleFeatureCentroidExtractor;
 import org.locationtech.geowave.analytic.kmeans.AssociationNotification;
 import org.locationtech.geowave.analytic.mapreduce.GroupIDText;
 import org.locationtech.geowave.analytic.param.CentroidParameters;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
@@ -53,7 +50,7 @@ import com.vividsolutions.jts.geom.Point;
  * dimensions updated towards their respective mean for the assigned items.
  * <p/>
  * Properties:
- * 
+ *
  * @formatter:off "KMeansMapReduce.Common.DistanceFunctionClass" - Used to
  *                determine distance to centroid
  *                <p/>
@@ -135,7 +132,7 @@ public class KMeansMapReduce
 					KMeansMapReduce.LOGGER);
 
 			try {
-				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<Object>(
+				nestedGroupCentroidAssigner = new NestedGroupCentroidAssignment<>(
 						context,
 						KMeansMapReduce.class,
 						KMeansMapReduce.LOGGER);
@@ -213,7 +210,7 @@ public class KMeansMapReduce
 
 		protected CentroidManager<Object> centroidManager;
 		private final GeoObjectDimensionValues geoObject = new GeoObjectDimensionValues();
-		private List<ByteArrayId> indexIds;
+		private String[] indexNames;
 
 		@Override
 		public void reduce(
@@ -278,8 +275,8 @@ public class KMeansMapReduce
 			// new center
 			context.write(
 					new GeoWaveOutputKey(
-							centroidManager.getDataTypeId(),
-							indexIds),
+							centroidManager.getDataTypeName(),
+							indexNames),
 					nextCentroid.getWrappedItem());
 
 		}
@@ -301,12 +298,13 @@ public class KMeansMapReduce
 				InterruptedException {
 			super.setup(context);
 			try {
-				centroidManager = new CentroidManagerGeoWave<Object>(
+				centroidManager = new CentroidManagerGeoWave<>(
 						context,
 						KMeansMapReduce.class,
 						KMeansMapReduce.LOGGER);
-				indexIds = new ArrayList<ByteArrayId>();
-				indexIds.add(centroidManager.getIndexId());
+				indexNames = new String[] {
+					centroidManager.getIndexName()
+				};
 			}
 			catch (final Exception e) {
 				throw new IOException(

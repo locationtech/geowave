@@ -28,7 +28,7 @@ public class InsertionIds implements
 		Persistable
 {
 	private Collection<SinglePartitionInsertionIds> partitionKeys;
-	private List<ByteArrayId> compositeInsertionIds;
+	private List<ByteArray> compositeInsertionIds;
 	private int size = -1;
 
 	public InsertionIds() {
@@ -36,7 +36,7 @@ public class InsertionIds implements
 	}
 
 	public InsertionIds(
-			final List<ByteArrayId> sortKeys ) {
+			final List<ByteArray> sortKeys ) {
 		this(
 				new SinglePartitionInsertionIds(
 						null,
@@ -44,15 +44,15 @@ public class InsertionIds implements
 	}
 
 	public InsertionIds(
-			final ByteArrayId partitionKey ) {
+			final ByteArray partitionKey ) {
 		this(
 				new SinglePartitionInsertionIds(
 						partitionKey));
 	}
 
 	public InsertionIds(
-			final ByteArrayId partitionKey,
-			final List<ByteArrayId> sortKeys ) {
+			final ByteArray partitionKey,
+			final List<ByteArray> sortKeys ) {
 		this(
 				new SinglePartitionInsertionIds(
 						partitionKey,
@@ -115,7 +115,7 @@ public class InsertionIds implements
 		}
 		int internalSize = 0;
 		for (final SinglePartitionInsertionIds k : partitionKeys) {
-			final List<ByteArrayId> i = k.getCompositeInsertionIds();
+			final List<ByteArray> i = k.getCompositeInsertionIds();
 			if ((i != null) && !i.isEmpty()) {
 				internalSize += i.size();
 			}
@@ -136,10 +136,10 @@ public class InsertionIds implements
 										input.getPartitionKey(),
 										Collections2.transform(
 												input.getSortKeys(),
-												new Function<ByteArrayId, ByteArrayRange>() {
+												new Function<ByteArray, ByteArrayRange>() {
 													@Override
 													public ByteArrayRange apply(
-															final ByteArrayId input ) {
+															final ByteArray input ) {
 														return new ByteArrayRange(
 																input,
 																input,
@@ -150,16 +150,16 @@ public class InsertionIds implements
 						}));
 	}
 
-	public List<ByteArrayId> getCompositeInsertionIds() {
+	public List<ByteArray> getCompositeInsertionIds() {
 		if (compositeInsertionIds != null) {
 			return compositeInsertionIds;
 		}
 		if ((partitionKeys == null) || partitionKeys.isEmpty()) {
 			return Collections.EMPTY_LIST;
 		}
-		final List<ByteArrayId> internalCompositeInsertionIds = new ArrayList<>();
+		final List<ByteArray> internalCompositeInsertionIds = new ArrayList<>();
 		for (final SinglePartitionInsertionIds k : partitionKeys) {
-			final List<ByteArrayId> i = k.getCompositeInsertionIds();
+			final List<ByteArray> i = k.getCompositeInsertionIds();
 			if ((i != null) && !i.isEmpty()) {
 				internalCompositeInsertionIds.addAll(i);
 			}
@@ -169,8 +169,8 @@ public class InsertionIds implements
 	}
 
 	public boolean contains(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		for (final SinglePartitionInsertionIds p : partitionKeys) {
 			if (((partitionKey == null) && (p.getPartitionKey() == null))
 					|| ((partitionKey != null) && partitionKey.equals(p.getPartitionKey()))) {
@@ -188,19 +188,19 @@ public class InsertionIds implements
 		return false;
 	}
 
-	public Pair<ByteArrayId, ByteArrayId> getFirstPartitionAndSortKeyPair() {
+	public Pair<ByteArray, ByteArray> getFirstPartitionAndSortKeyPair() {
 		if (partitionKeys == null) {
 			return null;
 		}
 		for (final SinglePartitionInsertionIds p : partitionKeys) {
 			if ((p.getSortKeys() != null) && !p.getSortKeys().isEmpty()) {
-				return new ImmutablePair<ByteArrayId, ByteArrayId>(
+				return new ImmutablePair<ByteArray, ByteArray>(
 						p.getPartitionKey(),
 						p.getSortKeys().get(
 								0));
 			}
 			else if ((p.getPartitionKey() != null)) {
-				return new ImmutablePair<ByteArrayId, ByteArrayId>(
+				return new ImmutablePair<ByteArray, ByteArray>(
 						p.getPartitionKey(),
 						null);
 			}

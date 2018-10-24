@@ -181,7 +181,7 @@ public class CassandraRow extends MergeableGeoWaveRow
 	}
 
 	@Override
-	public short getInternalAdapterId() {
+	public short getAdapterId() {
 		return row.getShort(CassandraField.GW_ADAPTER_ID_KEY.getFieldName());
 	}
 }

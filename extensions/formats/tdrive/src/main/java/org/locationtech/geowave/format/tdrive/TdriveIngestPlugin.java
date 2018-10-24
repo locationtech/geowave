@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -11,41 +11,35 @@
 package org.locationtech.geowave.format.tdrive;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.apache.avro.Schema;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.mortbay.log.Log;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
@@ -60,14 +54,10 @@ public class TdriveIngestPlugin extends
 	private final SimpleFeatureBuilder tdrivepointBuilder;
 	private final SimpleFeatureType tdrivepointType;
 
-	private final ByteArrayId pointKey;
-
 	public TdriveIngestPlugin() {
 
 		tdrivepointType = TdriveUtils.createTdrivePointDataType();
 
-		pointKey = new ByteArrayId(
-				StringUtils.stringToBinary(TdriveUtils.TDRIVE_POINT_FEATURE));
 		tdrivepointBuilder = new SimpleFeatureBuilder(
 				tdrivepointType);
 	}
@@ -143,7 +133,7 @@ public class TdriveIngestPlugin extends
 								pointInstance++;
 							}
 						}
-						catch (Exception e) {
+						catch (final Exception e) {
 							Log.warn(
 									"Error parsing tdrive file: " + input.getPath(),
 									e);
@@ -160,17 +150,23 @@ public class TdriveIngestPlugin extends
 				@Override
 				public TdrivePoint next() {
 					computeNext();
-					TdrivePoint retVal = next;
+					final TdrivePoint retVal = next;
 					next = null;
 					return retVal;
 				}
 
 				@Override
-				public void close()
-						throws IOException {
-					br.close();
-					fr.close();
-					fis.close();
+				public void close() {
+					try {
+						br.close();
+						fr.close();
+						fis.close();
+					}
+					catch (final IOException e) {
+						LOGGER.warn(
+								"unable to close native resources",
+								e);
+					}
 
 				}
 
@@ -205,10 +201,10 @@ public class TdriveIngestPlugin extends
 	@Override
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final TdrivePoint tdrivePoint,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 
-		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
+		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 
 		// tdrivepointBuilder = new SimpleFeatureBuilder(tdrivepointType);
 		tdrivepointBuilder.set(
@@ -233,17 +229,17 @@ public class TdriveIngestPlugin extends
 				"Longitude",
 				tdrivePoint.getLongitude());
 		featureData.add(new GeoWaveData<SimpleFeature>(
-				pointKey,
-				primaryIndexIds,
+				TdriveUtils.TDRIVE_POINT_FEATURE,
+				indexNames,
 				tdrivepointBuilder.buildFeature(tdrivePoint.getTaxiid() + "_" + tdrivePoint.getPointinstance())));
 
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
+		return new CloseableIterator.Wrapper<>(
 				featureData.iterator());
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	public static class IngestTdrivePointFromHdfs extends

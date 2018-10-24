@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -87,17 +87,17 @@ import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterBoundingBoxStatistics;
 import org.locationtech.geowave.adapter.raster.stats.RasterFootprintStatistics;
 import org.locationtech.geowave.adapter.raster.util.SampleModelPersistenceUtils;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.LatitudeDefinition;
 import org.locationtech.geowave.core.geotime.index.dimension.LongitudeDefinition;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCRSSpatialDimension;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
-import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -106,22 +106,24 @@ import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.FitToIndexPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DefaultFieldStatisticVisibility;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.util.CompoundHierarchicalIndexStrategyWrapper;
 import org.locationtech.geowave.core.store.util.IteratorWrapper;
 import org.locationtech.geowave.core.store.util.IteratorWrapper.Converter;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
@@ -159,8 +161,7 @@ public class RasterDataAdapter implements
 	private static Object CLASS_INIT_MUTEX = new Object();
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(RasterDataAdapter.class);
-	private final static ByteArrayId DATA_FIELD_ID = new ByteArrayId(
-			"image");
+	private final static String DATA_FIELD_ID = "image";
 	public final static int DEFAULT_TILE_SIZE = 256;
 	public final static boolean DEFAULT_BUILD_PYRAMID = false;
 	public final static boolean DEFAULT_BUILD_HISTOGRAM = true;
@@ -185,7 +186,7 @@ public class RasterDataAdapter implements
 	private String[] namesPerBand;
 	private double[] backgroundValuesPerBand;
 	private boolean buildPyramid;
-	private ByteArrayId[] supportedStatsTypes;
+	private StatisticsId[] supportedStats;
 	private EntryVisibilityHandler<GridCoverage> visibilityHandler;
 	private RasterTileMergeStrategy<?> mergeStrategy;
 	private boolean equalizeHistogram;
@@ -486,19 +487,19 @@ public class RasterDataAdapter implements
 			supportedStatsLength++;
 		}
 
-		supportedStatsTypes = new ByteArrayId[supportedStatsLength];
-		supportedStatsTypes[0] = OverviewStatistics.STATS_TYPE;
-		supportedStatsTypes[1] = BoundingBoxDataStatistics.STATS_TYPE;
+		supportedStats = new StatisticsId[supportedStatsLength];
+		supportedStats[0] = OverviewStatistics.STATS_TYPE.newBuilder().build().getId();
+		supportedStats[1] = BoundingBoxDataStatistics.STATS_TYPE.newBuilder().build().getId();
 
 		if (histogramConfig != null) {
-			supportedStatsTypes[2] = HistogramStatistics.STATS_TYPE;
+			supportedStats[2] = HistogramStatistics.STATS_TYPE.newBuilder().build().getId();
 		}
 		visibilityHandler = new DefaultFieldStatisticVisibility<>();
 	}
 
 	@Override
 	public Iterator<GridCoverage> convertToIndex(
-			final PrimaryIndex index,
+			final Index index,
 			final GridCoverage gridCoverage ) {
 		final HierarchicalNumericIndexStrategy indexStrategy = CompoundHierarchicalIndexStrategyWrapper
 				.findHierarchicalStrategy(index.getIndexStrategy());
@@ -662,7 +663,7 @@ public class RasterDataAdapter implements
 				final SubStrategy pyramidLevel ) {
 			// get all pairs of partition/sort keys for insertionIds that
 			// represent the original bounds at this pyramid level
-			final Iterator<Pair<ByteArrayId, ByteArrayId>> insertionIds = pyramidLevel
+			final Iterator<Pair<ByteArray, ByteArray>> insertionIds = pyramidLevel
 					.getIndexStrategy()
 					.getInsertionIds(
 							originalBounds)
@@ -687,7 +688,7 @@ public class RasterDataAdapter implements
 
 				@Override
 				public GridCoverage next() {
-					Pair<ByteArrayId, ByteArrayId> insertionId = insertionIds.next();
+					Pair<ByteArray, ByteArray> insertionId = insertionIds.next();
 					if (insertionId == null) {
 						return null;
 					}
@@ -978,36 +979,21 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public ByteArrayId getAdapterId() {
-		return new ByteArrayId(
-				getCoverageName());
+	public String getTypeName() {
+		return getCoverageName();
 	}
 
 	@Override
-	public boolean isSupported(
+	public ByteArray getDataId(
 			final GridCoverage entry ) {
-		if (!getSampleModel().equals(
-				entry.getRenderedImage().getSampleModel())) {
-			return false;
-		}
-		if (!getColorModel().equals(
-				entry.getRenderedImage().getColorModel())) {
-			return false;
-		}
-		return true;
-	}
-
-	@Override
-	public ByteArrayId getDataId(
-			final GridCoverage entry ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				new byte[] {});
 	}
 
 	@Override
 	public GridCoverage decode(
 			final IndexedAdapterPersistenceEncoding data,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		final Object rasterTile = data.getAdapterExtendedData().getValue(
 				DATA_FIELD_ID);
 		if ((rasterTile == null) || !(rasterTile instanceof RasterTile)) {
@@ -1022,9 +1008,9 @@ public class RasterDataAdapter implements
 
 	public GridCoverage getCoverageFromRasterTile(
 			final RasterTile rasterTile,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
-			final PrimaryIndex index ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
+			final Index index ) {
 		final MultiDimensionalNumericData indexRange = index.getIndexStrategy().getRangeForId(
 				partitionKey,
 				sortKey);
@@ -1316,7 +1302,7 @@ public class RasterDataAdapter implements
 		final AdapterPersistenceEncoding encoding;
 		if (entry instanceof FitToIndexGridCoverage) {
 			encoding = new FitToIndexPersistenceEncoding(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
 					adapterExtendedData,
@@ -1327,7 +1313,7 @@ public class RasterDataAdapter implements
 			// this shouldn't happen
 			LOGGER.warn("Grid coverage is not fit to the index");
 			encoding = new AdapterPersistenceEncoding(
-					new ByteArrayId(
+					new ByteArray(
 							new byte[] {}),
 					new PersistentDataset<CommonIndexValue>(),
 					adapterExtendedData);
@@ -1337,8 +1323,8 @@ public class RasterDataAdapter implements
 
 	@Override
 	public FieldReader<Object> getReader(
-			final ByteArrayId fieldId ) {
-		if (DATA_FIELD_ID.equals(fieldId)) {
+			final String fieldName ) {
+		if (DATA_FIELD_ID.equals(fieldName)) {
 			return (FieldReader) new RasterTileReader();
 		}
 		return null;
@@ -1692,32 +1678,32 @@ public class RasterDataAdapter implements
 
 	@Override
 	public FieldWriter<GridCoverage, Object> getWriter(
-			final ByteArrayId fieldId ) {
-		if (DATA_FIELD_ID.equals(fieldId)) {
+			final String fieldName ) {
+		if (DATA_FIELD_ID.equals(fieldName)) {
 			return (FieldWriter) new RasterTileWriter();
 		}
 		return null;
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsTypes() {
-		return supportedStatsTypes;
+	public StatisticsId[] getSupportedStatistics() {
+		return supportedStats;
 	}
 
 	@Override
-	public DataStatistics<GridCoverage> createDataStatistics(
-			final ByteArrayId statisticsType ) {
-		DataStatistics<GridCoverage> retVal = null;
-		if (OverviewStatistics.STATS_TYPE.equals(statisticsType)) {
+	public InternalDataStatistics<GridCoverage, ?, ?> createDataStatistics(
+			final StatisticsId statisticsId ) {
+		InternalDataStatistics<GridCoverage, ?, ?> retVal = null;
+		if (OverviewStatistics.STATS_TYPE.equals(statisticsId.getType())) {
 			retVal = new OverviewStatistics();
 		}
-		else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsType)) {
+		else if (BoundingBoxDataStatistics.STATS_TYPE.equals(statisticsId.getType())) {
 			retVal = new RasterBoundingBoxStatistics();
 		}
-		else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsType)) {
+		else if (RasterFootprintStatistics.STATS_TYPE.equals(statisticsId.getType())) {
 			retVal = new RasterFootprintStatistics();
 		}
-		else if (HistogramStatistics.STATS_TYPE.equals(statisticsType) && (histogramConfig != null)) {
+		else if (HistogramStatistics.STATS_TYPE.equals(statisticsId.getType()) && (histogramConfig != null)) {
 			retVal = new HistogramStatistics(
 					histogramConfig);
 		}
@@ -1725,7 +1711,9 @@ public class RasterDataAdapter implements
 			// HP Fortify "Log Forging" false positive
 			// What Fortify considers "user input" comes only
 			// from users with OS-level access anyway
-			LOGGER.warn("Unrecognized statistics type " + statisticsType.getString() + " using count statistic");
+			LOGGER
+					.warn("Unrecognized statistics type " + statisticsId.getType().getString()
+							+ " using count statistic");
 			retVal = new CountDataStatistics<>();
 		}
 		return retVal;
@@ -2121,29 +2109,29 @@ public class RasterDataAdapter implements
 	@Override
 	public int getPositionOfOrderedField(
 			final CommonIndexModel model,
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		int i = 0;
 		for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
-			if (fieldId.equals(dimensionField.getFieldId())) {
+			if (fieldName.equals(dimensionField.getFieldName())) {
 				return i;
 			}
 			i++;
 		}
-		if (fieldId.equals(DATA_FIELD_ID)) {
+		if (fieldName.equals(DATA_FIELD_ID)) {
 			return i;
 		}
 		return -1;
 	}
 
 	@Override
-	public ByteArrayId getFieldIdForPosition(
+	public String getFieldNameForPosition(
 			final CommonIndexModel model,
 			final int position ) {
 		if (position < model.getDimensions().length) {
 			int i = 0;
 			for (final NumericDimensionField<? extends CommonIndexValue> dimensionField : model.getDimensions()) {
 				if (i == position) {
-					return dimensionField.getFieldId();
+					return dimensionField.getFieldName();
 				}
 				i++;
 			}
@@ -2158,16 +2146,10 @@ public class RasterDataAdapter implements
 	}
 
 	@Override
-	public void init(
-			final PrimaryIndex... indices ) {
-		// TODO Auto-generated method stub
-	}
-
-	@Override
 	public EntryVisibilityHandler<GridCoverage> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<GridCoverage> adapter,
-			final ByteArrayId statisticsId ) {
+			final DataTypeAdapter<GridCoverage> adapter,
+			final StatisticsId statisticsId ) {
 		return visibilityHandler;
 	}
 }

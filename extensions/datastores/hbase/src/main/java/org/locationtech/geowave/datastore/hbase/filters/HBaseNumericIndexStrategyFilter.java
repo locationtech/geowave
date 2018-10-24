@@ -16,15 +16,15 @@ import java.nio.ByteBuffer;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.exceptions.DeserializationException;
 import org.apache.hadoop.hbase.filter.FilterBase;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinates;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRangesArray.ArrayOfArrays;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeCache;
-import org.locationtech.geowave.core.store.query.CoordinateRangeUtils.RangeLookupFactory;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeCache;
+import org.locationtech.geowave.core.store.query.constraints.CoordinateRangeUtils.RangeLookupFactory;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 
 public class HBaseNumericIndexStrategyFilter extends
@@ -107,9 +107,9 @@ public class HBaseNumericIndexStrategyFilter extends
 				cell.getRowOffset(),
 				cell.getRowLength());
 
-		ByteArrayId sortKey = new ByteArrayId(
+		ByteArray sortKey = new ByteArray(
 				cellKey.getSortKey());
-		ByteArrayId partitionKey = new ByteArrayId(
+		ByteArray partitionKey = new ByteArray(
 				cellKey.getPartitionKey());
 
 		final MultiDimensionalCoordinates coordinates = indexStrategy.getCoordinatesPerDimension(

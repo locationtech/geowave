@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -37,8 +37,8 @@ public class RasterTileResizeCommandLineOptions
 	@Parameter(names = "--outputTileSize", description = "The tile size to output", required = true)
 	private Integer outputTileSize;
 
-	@Parameter(names = "--indexId", description = "The index that the input raster is stored in")
-	private String indexId;
+	@Parameter(names = "--indexName", description = "The index that the input raster is stored in")
+	private String indexName;
 
 	// Default constructor
 	public RasterTileResizeCommandLineOptions() {
@@ -53,7 +53,7 @@ public class RasterTileResizeCommandLineOptions
 			final String hdfsHostPort,
 			final String jobTrackerOrResourceManHostPort,
 			final Integer outputTileSize,
-			final String indexId ) {
+			final String indexName ) {
 		this.inputCoverageName = inputCoverageName;
 		this.outputCoverageName = outputCoverageName;
 		this.minSplits = minSplits;
@@ -61,7 +61,7 @@ public class RasterTileResizeCommandLineOptions
 		this.hdfsHostPort = hdfsHostPort;
 		this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
 		this.outputTileSize = outputTileSize;
-		this.indexId = indexId;
+		this.indexName = indexName;
 	}
 
 	public String getInputCoverageName() {
@@ -92,48 +92,48 @@ public class RasterTileResizeCommandLineOptions
 		return outputTileSize;
 	}
 
-	public String getIndexId() {
-		return indexId;
+	public String getIndexName() {
+		return indexName;
 	}
 
 	public void setInputCoverageName(
-			String inputCoverageName ) {
+			final String inputCoverageName ) {
 		this.inputCoverageName = inputCoverageName;
 	}
 
 	public void setOutputCoverageName(
-			String outputCoverageName ) {
+			final String outputCoverageName ) {
 		this.outputCoverageName = outputCoverageName;
 	}
 
 	public void setMinSplits(
-			Integer minSplits ) {
+			final Integer minSplits ) {
 		this.minSplits = minSplits;
 	}
 
 	public void setMaxSplits(
-			Integer maxSplits ) {
+			final Integer maxSplits ) {
 		this.maxSplits = maxSplits;
 	}
 
 	public void setHdfsHostPort(
-			String hdfsHostPort ) {
+			final String hdfsHostPort ) {
 		this.hdfsHostPort = hdfsHostPort;
 	}
 
 	public void setJobTrackerOrResourceManHostPort(
-			String jobTrackerOrResourceManHostPort ) {
+			final String jobTrackerOrResourceManHostPort ) {
 		this.jobTrackerOrResourceManHostPort = jobTrackerOrResourceManHostPort;
 	}
 
 	public void setOutputTileSize(
-			Integer outputTileSize ) {
+			final Integer outputTileSize ) {
 		this.outputTileSize = outputTileSize;
 	}
 
-	public void setIndexId(
-			String indexId ) {
-		this.indexId = indexId;
+	public void setIndexName(
+			final String indexName ) {
+		this.indexName = indexName;
 	}
 
 }

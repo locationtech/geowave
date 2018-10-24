@@ -12,10 +12,10 @@ package org.locationtech.geowave.adapter.vector;
 
 import java.util.Arrays;
 
-import org.locationtech.geowave.core.geotime.TimeUtils;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
 import org.locationtech.geowave.core.geotime.store.dimension.Time.TimeRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
@@ -35,7 +35,7 @@ public class FeatureTimeRangeHandler implements
 	private final FeatureAttributeHandler nativeStartTimeHandler;
 	private final FeatureAttributeHandler nativeEndTimeHandler;
 	private final FieldVisibilityHandler<SimpleFeature, Object> visibilityHandler;
-	private final ByteArrayId[] nativeFieldIds;
+	private final String[] nativeFieldNames;
 
 	public FeatureTimeRangeHandler(
 			final FeatureAttributeHandler nativeStartTimeHandler,
@@ -53,15 +53,15 @@ public class FeatureTimeRangeHandler implements
 		this.nativeStartTimeHandler = nativeStartTimeHandler;
 		this.nativeEndTimeHandler = nativeEndTimeHandler;
 		this.visibilityHandler = visibilityHandler;
-		nativeFieldIds = new ByteArrayId[] {
-			nativeStartTimeHandler.getFieldId(),
-			nativeEndTimeHandler.getFieldId()
+		nativeFieldNames = new String[] {
+			nativeStartTimeHandler.getFieldName(),
+			nativeEndTimeHandler.getFieldName()
 		};
 	}
 
 	@Override
-	public ByteArrayId[] getNativeFieldIds() {
-		return nativeFieldIds;
+	public String[] getNativeFieldNames() {
+		return nativeFieldNames;
 	}
 
 	@Override
@@ -73,11 +73,11 @@ public class FeatureTimeRangeHandler implements
 		if (visibilityHandler != null) {
 			final byte[] startVisibility = visibilityHandler.getVisibility(
 					row,
-					nativeStartTimeHandler.getFieldId(),
+					nativeStartTimeHandler.getFieldName(),
 					startObj);
 			final byte[] endVisibility = visibilityHandler.getVisibility(
 					row,
-					nativeEndTimeHandler.getFieldId(),
+					nativeEndTimeHandler.getFieldName(),
 					endObj);
 			if (Arrays.equals(
 					startVisibility,
@@ -118,10 +118,10 @@ public class FeatureTimeRangeHandler implements
 				(long) value.getMax());
 		return new PersistentValue[] {
 			new PersistentValue<Object>(
-					nativeStartTimeHandler.getFieldId(),
+					nativeStartTimeHandler.getFieldName(),
 					startObj),
 			new PersistentValue<Object>(
-					nativeEndTimeHandler.getFieldId(),
+					nativeEndTimeHandler.getFieldName(),
 					endObj),
 		};
 	}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,12 +10,11 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.data;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 
 /**
  * This interface is used to read data from a row in a GeoWave data store.
- * 
+ *
  * @param <FieldType>
  *            The binding class of this field
  */
@@ -23,12 +22,12 @@ public interface DataReader<FieldType>
 {
 	/**
 	 * Get a reader for an individual field.
-	 * 
-	 * @param fieldId
+	 *
+	 * @param fieldName
 	 *            the ID of the field
-	 * @return the FieldReader for the given ID
+	 * @return the FieldReader for the given field Name (ID)
 	 */
 	public FieldReader<FieldType> getReader(
-			ByteArrayId fieldId );
+			String fieldName );
 
 }

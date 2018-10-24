@@ -16,13 +16,12 @@ import java.util.Map;
 import org.apache.hadoop.io.ObjectWritable;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 
 /**
@@ -44,7 +43,7 @@ public class HadoopWritableSerializationTool
 {
 	private final TransientAdapterStore adapterStore;
 	private final InternalAdapterStore internalAdapterStore;
-	private final Map<ByteArrayId, HadoopWritableSerializer<Object, Writable>> serializers = new HashMap<ByteArrayId, HadoopWritableSerializer<Object, Writable>>();
+	private final Map<String, HadoopWritableSerializer<Object, Writable>> serializers = new HashMap<>();
 	private final ObjectWritable objectWritable = new ObjectWritable();
 
 	public HadoopWritableSerializationTool(
@@ -67,31 +66,31 @@ public class HadoopWritableSerializationTool
 	}
 
 	public InternalDataAdapter<?> getInternalAdapter(
-			final short internalAdapterId ) {
+			final short adapterId ) {
 		return new InternalDataAdapterWrapper(
-				(WritableDataAdapter) adapterStore.getAdapter(internalAdapterStore.getAdapterId(internalAdapterId)),
-				internalAdapterId);
+				(DataTypeAdapter) adapterStore.getAdapter(internalAdapterStore.getTypeName(adapterId)),
+				adapterId);
 	}
 
-	public DataAdapter<?> getAdapter(
-			final ByteArrayId adapterId ) {
-		return adapterStore.getAdapter(adapterId);
-	}
-
-	public HadoopWritableSerializer<Object, Writable> getHadoopWritableSerializerForAdapter(
-			final short internalAdapterId ) {
-		return getHadoopWritableSerializerForAdapter(internalAdapterStore.getAdapterId(internalAdapterId));
+	public DataTypeAdapter<?> getAdapter(
+			final String typeName ) {
+		return adapterStore.getAdapter(typeName);
 	}
 
 	public HadoopWritableSerializer<Object, Writable> getHadoopWritableSerializerForAdapter(
-			final ByteArrayId adapterId ) {
+			final short adapterId ) {
+		return getHadoopWritableSerializerForAdapter(internalAdapterStore.getTypeName(adapterId));
+	}
 
-		HadoopWritableSerializer<Object, Writable> serializer = serializers.get(adapterId);
+	public HadoopWritableSerializer<Object, Writable> getHadoopWritableSerializerForAdapter(
+			final String typeName ) {
+
+		HadoopWritableSerializer<Object, Writable> serializer = serializers.get(typeName);
 		if (serializer == null) {
-			DataAdapter<?> adapter;
+			DataTypeAdapter<?> adapter;
 
 			HadoopDataAdapter<Object, Writable> hadoopAdapter = null;
-			if (((adapterStore != null) && ((adapter = adapterStore.getAdapter(adapterId)) != null))) {
+			if (((adapterStore != null) && ((adapter = adapterStore.getAdapter(typeName)) != null))) {
 				if (adapter instanceof HadoopDataAdapter) {
 					hadoopAdapter = (HadoopDataAdapter<Object, Writable>) adapter;
 				}
@@ -103,7 +102,7 @@ public class HadoopWritableSerializationTool
 			if (hadoopAdapter != null) {
 				serializer = hadoopAdapter.createWritableSerializer();
 				serializers.put(
-						adapterId,
+						typeName,
 						serializer);
 			}
 			else {
@@ -129,34 +128,34 @@ public class HadoopWritableSerializationTool
 	}
 
 	public ObjectWritable toWritable(
-			final short internalAdapterId,
+			final short adapterId,
 			final Object entry ) {
 		if (entry instanceof Writable) {
 			objectWritable.set(entry);
 		}
 		else {
 			objectWritable.set(getHadoopWritableSerializerForAdapter(
-					internalAdapterId).toWritable(
+					adapterId).toWritable(
 					entry));
 		}
 		return objectWritable;
 	}
 
 	public Object fromWritable(
-			final ByteArrayId adapterID,
+			final String typeName,
 			final ObjectWritable writable ) {
 		final Object innerObj = writable.get();
 		return (innerObj instanceof Writable) ? getHadoopWritableSerializerForAdapter(
-				adapterID).fromWritable(
+				typeName).fromWritable(
 				(Writable) innerObj) : innerObj;
 	}
 
 	public Object fromWritable(
-			final short internalAdapterId,
+			final short adapterId,
 			final ObjectWritable writable ) {
 		final Object innerObj = writable.get();
 		return (innerObj instanceof Writable) ? getHadoopWritableSerializerForAdapter(
-				internalAdapterId).fromWritable(
+				adapterId).fromWritable(
 				(Writable) innerObj) : innerObj;
 	}
 }

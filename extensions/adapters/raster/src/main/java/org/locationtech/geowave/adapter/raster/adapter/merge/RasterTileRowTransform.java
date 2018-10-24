@@ -15,7 +15,7 @@ import java.util.Map;
 
 import org.locationtech.geowave.adapter.raster.adapter.RasterTile;
 import org.locationtech.geowave.adapter.raster.adapter.ServerMergeableRasterTile;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
@@ -63,7 +63,7 @@ public class RasterTileRowTransform<T extends Persistable> implements
 	@Override
 	public Mergeable getRowAsMergeableObject(
 			final short internalAdapterId,
-			final ByteArrayId fieldId,
+			final ByteArray fieldId,
 			final byte[] rowValueBinary ) {
 		final RasterTile mergeable = new RasterTile();
 

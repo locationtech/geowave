@@ -21,15 +21,16 @@ import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.visibility.UnconstrainedVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.UniformVisibilityWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.datastore.accumulo.util.AccumuloKeyValuePairGenerator;
 import org.opengis.feature.simple.SimpleFeature;
@@ -40,9 +41,9 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 		Mapper<LongWritable, Text, Key, Value>
 {
 
-	private final WritableDataAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
+	private final DataTypeAdapter<SimpleFeature> adapter = new FeatureDataAdapter(
 			GeonamesSimpleFeatureType.getInstance());
-	private final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+	private final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 	private final VisibilityWriter<SimpleFeature> visibilityWriter = new UniformVisibilityWriter<SimpleFeature>(
 			new UnconstrainedVisibilityHandler<SimpleFeature, Object>());
 	private final AccumuloKeyValuePairGenerator<SimpleFeature> generator = new AccumuloKeyValuePairGenerator<SimpleFeature>(
@@ -50,7 +51,7 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 			// but is simple and will work in a majority of cases
 			new InternalDataAdapterWrapper<>(
 					adapter,
-					InternalAdapterStoreImpl.getInitialInternalAdapterId(adapter.getAdapterId())),
+					InternalAdapterStoreImpl.getInitialAdapterId(adapter.getTypeName())),
 			index,
 			visibilityWriter);
 	private SimpleFeature simpleFeature;
@@ -72,12 +73,10 @@ public class SimpleFeatureToAccumuloKeyValueMapper extends
 			InterruptedException {
 
 		simpleFeature = parseGeonamesValue(value);
-		adapter.init(index);
+		((InitializeWithIndicesDataAdapter) adapter).init(index);
 
 		// build Geowave-formatted Accumulo [Key,Value] pairs
-		keyValuePairs = generator.constructKeyValuePairs(
-				adapter.getAdapterId().getBytes(),
-				simpleFeature);
+		keyValuePairs = generator.constructKeyValuePairs(simpleFeature);
 
 		// output each [Key,Value] pair to shuffle-and-sort phase where we rely
 		// on MapReduce to sort by Key

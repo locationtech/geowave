@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,7 +15,7 @@ package org.locationtech.geowave.cli.osm.accumulo.osmschema;
  */
 public class ColumnFamily
 {
-	public static final byte[] NODE = "n".getBytes(Constants.CHARSET);
-	public static final byte[] WAY = "w".getBytes(Constants.CHARSET);
-	public static final byte[] RELATION = "r".getBytes(Constants.CHARSET);
+	public static final String NODE = "n";
+	public static final String WAY = "w";
+	public static final String RELATION = "r";
 }

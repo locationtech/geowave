@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,31 +10,29 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.writer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.IndexDependentDataAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class IndependentAdapterIndexWriter<T> implements
-		IndexWriter<T>
+		Writer<T>
 {
 
 	final IndexDependentDataAdapter<T> adapter;
-	final PrimaryIndex index;
-	final IndexWriter<T> writer;
+	final Index index;
+	final Writer<T> writer;
 
 	public IndependentAdapterIndexWriter(
-			IndexDependentDataAdapter<T> adapter,
-			PrimaryIndex index,
-			IndexWriter<T> writer ) {
+			final IndexDependentDataAdapter<T> adapter,
+			final Index index,
+			final Writer<T> writer ) {
 		super();
 		this.writer = writer;
 		this.index = index;
@@ -48,9 +46,9 @@ public class IndependentAdapterIndexWriter<T> implements
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
-		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<SinglePartitionInsertionIds>();
+		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<>();
 		while (indexedEntries.hasNext()) {
-			InsertionIds ids = writer.write(
+			final InsertionIds ids = writer.write(
 					indexedEntries.next(),
 					feldVisibilityWriter);
 			partitionInsertionIds.addAll(ids.getPartitionKeys());
@@ -61,20 +59,19 @@ public class IndependentAdapterIndexWriter<T> implements
 	}
 
 	@Override
-	public void close()
-			throws IOException {
+	public void close() {
 		writer.close();
 	}
 
 	@Override
 	public InsertionIds write(
-			T entry ) {
+			final T entry ) {
 		final Iterator<T> indexedEntries = adapter.convertToIndex(
 				index,
 				entry);
-		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<SinglePartitionInsertionIds>();
+		final List<SinglePartitionInsertionIds> partitionInsertionIds = new ArrayList<>();
 		while (indexedEntries.hasNext()) {
-			InsertionIds ids = writer.write(indexedEntries.next());
+			final InsertionIds ids = writer.write(indexedEntries.next());
 			partitionInsertionIds.addAll(ids.getPartitionKeys());
 		}
 		return new InsertionIds(
@@ -82,7 +79,7 @@ public class IndependentAdapterIndexWriter<T> implements
 	}
 
 	@Override
-	public PrimaryIndex[] getIndices() {
+	public Index[] getIndices() {
 		return writer.getIndices();
 	}
 

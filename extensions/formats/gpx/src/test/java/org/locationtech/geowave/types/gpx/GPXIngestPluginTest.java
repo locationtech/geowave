@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,18 +15,14 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin;
 import org.locationtech.geowave.types.HelperClass;
 import org.locationtech.geowave.types.ValidateObject;
@@ -35,7 +31,7 @@ import org.opengis.feature.simple.SimpleFeature;
 public class GPXIngestPluginTest
 {
 
-	Map<String, ValidateObject<SimpleFeature>> expectedResults = new HashMap<String, ValidateObject<SimpleFeature>>();
+	Map<String, ValidateObject<SimpleFeature>> expectedResults = new HashMap<>();
 
 	@Before
 	public void setup() {
@@ -74,14 +70,12 @@ public class GPXIngestPluginTest
 				this.getClass().getClassLoader().getResource(
 						"metadata.xml").getPath()).getParentFile().toURI().toURL());
 
-		final ByteArrayId indexId = new ByteArrayId(
-				"123".getBytes(StringUtils.getGeoWaveCharset()));
-		final Collection<ByteArrayId> indexIds = new ArrayList<ByteArrayId>();
-		indexIds.add(indexId);
 		final CloseableIterator<GeoWaveData<SimpleFeature>> consumer = pluggin.toGeoWaveData(
 				this.getClass().getClassLoader().getResource(
 						"12345.xml"),
-				indexIds,
+				new String[] {
+					"123"
+				},
 				"");
 
 		int totalCount = 0;

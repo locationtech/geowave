@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -23,6 +23,7 @@ import org.locationtech.geowave.cli.osm.accumulo.osmschema.Constants;
 import org.locationtech.geowave.cli.osm.accumulo.osmschema.Schema;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
 import org.locationtech.geowave.cli.osm.types.generated.LongArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.slf4j.Logger;
@@ -48,122 +49,122 @@ public class OSMMapperBase<T> extends
 			"OSM");
 
 	protected byte[] getIdHash(
-			long id ) {
+			final long id ) {
 		return Schema.getIdHash(id);
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			Long val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final Long val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					longWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			Integer val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final Integer val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					intWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			Double val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final Double val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					doubleWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			String val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final String val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					stringWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			CharSequence val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final CharSequence val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					stringWriter.writeField(val.toString()));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			Boolean val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final Boolean val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					booleanWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			Calendar val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final Calendar val ) {
 		if (val != null) {
 			m.put(
-					cf,
-					cq,
+					StringUtils.stringToBinary(cf),
+					StringUtils.stringToBinary(cq),
 					_visibility,
 					calendarWriter.writeField(val));
 		}
 	}
 
 	protected void put(
-			Mutation m,
-			byte[] cf,
-			byte[] cq,
-			LongArray val ) {
+			final Mutation m,
+			final String cf,
+			final String cq,
+			final LongArray val ) {
 		if (val != null) {
 			try {
 				m.put(
-						cf,
-						cq,
+						StringUtils.stringToBinary(cf),
+						StringUtils.stringToBinary(cq),
 						_visibility,
 						TypeUtils.serializeLongArray(val));
 			}
-			catch (IOException e) {
+			catch (final IOException e) {
 				log.error(
 						"Unable to serialize LongArray instance",
 						e);
@@ -173,12 +174,12 @@ public class OSMMapperBase<T> extends
 
 	@Override
 	public void setup(
-			Context context )
+			final Context context )
 			throws IOException,
 			InterruptedException {
-		String tn = context.getConfiguration().get(
+		final String tn = context.getConfiguration().get(
 				"tableName");
-		if (tn != null && !tn.isEmpty()) {
+		if ((tn != null) && !tn.isEmpty()) {
 			_tableName.set(tn);
 		}
 		String visibility = context.getConfiguration().get(

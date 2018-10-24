@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,15 +12,12 @@ package org.locationtech.geowave.format.gdelt;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.zip.ZipInputStream;
@@ -28,26 +25,25 @@ import java.util.zip.ZipInputStream;
 import org.apache.avro.Schema;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
 import org.locationtech.geowave.adapter.vector.ingest.AbstractSimpleFeatureIngestPlugin;
 import org.locationtech.geowave.adapter.vector.ingest.DataSchemaOptionProvider;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.IngestPluginBase;
 import org.locationtech.geowave.core.ingest.avro.WholeFile;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithMapper;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestWithReducer;
 import org.locationtech.geowave.core.store.CloseableIterator;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.IngestPluginBase;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Iterators;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -66,7 +62,7 @@ public class GDELTIngestPlugin extends
 	private SimpleFeatureBuilder gdeltEventBuilder;
 	private SimpleFeatureType gdeltEventType;
 
-	private final ByteArrayId eventKey;
+	private final String eventKey;
 
 	private boolean includeSupplementalFields;
 
@@ -75,15 +71,13 @@ public class GDELTIngestPlugin extends
 		// default to reduced data format
 		setIncludeSupplementalFields(false);
 
-		eventKey = new ByteArrayId(
-				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
+		eventKey = GDELTUtils.GDELT_EVENT_FEATURE;
 	}
 
 	public GDELTIngestPlugin(
-			DataSchemaOptionProvider dataSchemaOptionProvider ) {
+			final DataSchemaOptionProvider dataSchemaOptionProvider ) {
 		setIncludeSupplementalFields(dataSchemaOptionProvider.includeSupplementalFields());
-		eventKey = new ByteArrayId(
-				StringUtils.stringToBinary(GDELTUtils.GDELT_EVENT_FEATURE));
+		eventKey = GDELTUtils.GDELT_EVENT_FEATURE;
 	}
 
 	private void setIncludeSupplementalFields(
@@ -139,7 +133,7 @@ public class GDELTIngestPlugin extends
 			return new CloseableIterator.Empty<>();
 		}
 
-		return new CloseableIterator.Wrapper<WholeFile>(
+		return new CloseableIterator.Wrapper<>(
 				Iterators.singletonIterator(avroFile));
 	}
 
@@ -167,10 +161,10 @@ public class GDELTIngestPlugin extends
 	}, justification = "Intentionally catching any possible exception as there may be unknown format issues in a file and we don't want to error partially through parsing")
 	protected CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveDataInternal(
 			final WholeFile hfile,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String globalVisibility ) {
 
-		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<GeoWaveData<SimpleFeature>>();
+		final List<GeoWaveData<SimpleFeature>> featureData = new ArrayList<>();
 
 		final InputStream in = new ByteArrayInputStream(
 				hfile.getOriginalFile().array());
@@ -350,9 +344,9 @@ public class GDELTIngestPlugin extends
 						}
 					}
 
-					featureData.add(new GeoWaveData<SimpleFeature>(
+					featureData.add(new GeoWaveData<>(
 							eventKey,
-							primaryIndexIds,
+							indexNames,
 							gdeltEventBuilder.buildFeature(eventId)));
 				}
 				catch (final Exception e) {
@@ -376,13 +370,13 @@ public class GDELTIngestPlugin extends
 			IOUtils.closeQuietly(in);
 		}
 
-		return new CloseableIterator.Wrapper<GeoWaveData<SimpleFeature>>(
+		return new CloseableIterator.Wrapper<>(
 				featureData.iterator());
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

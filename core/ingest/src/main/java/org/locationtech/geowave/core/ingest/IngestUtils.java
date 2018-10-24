@@ -27,6 +27,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
 import org.locationtech.geowave.mapreduce.hdfs.HdfsUrlStreamHandlerFactory;
 import org.locationtech.geowave.mapreduce.s3.GeoWaveAmazonS3Factory;
 import org.locationtech.geowave.mapreduce.s3.S3URLStreamHandlerFactory;

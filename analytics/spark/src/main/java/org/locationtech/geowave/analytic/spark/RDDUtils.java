@@ -24,14 +24,14 @@ import org.apache.spark.mllib.linalg.Vectors;
 import org.geotools.geometry.jts.JTS;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.query.ScaledTemporalRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputKey;
 import org.opengis.feature.simple.SimpleFeature;
@@ -62,7 +62,7 @@ public class RDDUtils
 	 */
 	public static void writeRDDToGeoWave(
 			SparkContext sc,
-			PrimaryIndex index,
+			Index index,
 			DataStorePluginOptions outputStoreOptions,
 			FeatureDataAdapter adapter,
 			GeoWaveRDD inputRDD )
@@ -82,7 +82,7 @@ public class RDDUtils
 
 	public static void writeRDDToGeoWave(
 			SparkContext sc,
-			PrimaryIndex[] indices,
+			Index[] indices,
 			DataStorePluginOptions outputStoreOptions,
 			FeatureDataAdapter adapter,
 			GeoWaveRDD inputRDD )
@@ -195,12 +195,12 @@ public class RDDUtils
 			Geometry geom,
 			NumericIndexStrategy index ) {
 		for (final SinglePartitionInsertionIds insertionId : rawIds.getPartitionKeys()) {
-			final ByteArrayId partitionKey = insertionId.getPartitionKey();
+			final ByteArray partitionKey = insertionId.getPartitionKey();
 			final int size = insertionId.getSortKeys().size();
 			if (size > 3) {
-				final Iterator<ByteArrayId> it = insertionId.getSortKeys().iterator();
+				final Iterator<ByteArray> it = insertionId.getSortKeys().iterator();
 				while (it.hasNext()) {
-					final ByteArrayId sortKey = it.next();
+					final ByteArray sortKey = it.next();
 					MultiDimensionalNumericData keyTile = index.getRangeForId(
 							partitionKey,
 							sortKey);
@@ -229,9 +229,9 @@ public class RDDUtils
 	 * @throws IOException
 	 */
 	private static void writeToGeoWave(SparkContext sc,
-	                                    PrimaryIndex index,
+	                                    Index index,
 	                                    DataStorePluginOptions outputStoreOptions,
-	                                    DataAdapter adapter,
+	                                    DataTypeAdapter adapter,
 	                                    JavaRDD<SimpleFeature> inputRDD) throws IOException{
 
 	    //setup the configuration and the output format
@@ -248,13 +248,13 @@ public class RDDUtils
 	    job.setOutputValueClass(SimpleFeature.class);
 	    job.setOutputFormatClass(GeoWaveOutputFormat.class);
 
-	    // broadcast byte ids
-	    ClassTag<ByteArrayId> byteTag = scala.reflect.ClassTag$.MODULE$.apply(ByteArrayId.class);
-	    Broadcast<ByteArrayId> adapterId = sc.broadcast(adapter.getAdapterId(), byteTag );
-	    Broadcast<ByteArrayId> indexId = sc.broadcast(index.getId(), byteTag);
+	    // broadcast string names
+	    ClassTag<String> stringTag = scala.reflect.ClassTag$.MODULE$.apply(String.class);
+	    Broadcast<String> typeName = sc.broadcast(adapter.getTypeName(), stringTag );
+	    Broadcast<String> indexName = sc.broadcast(index.getName(), stringTag);
 
 	    //map to a pair containing the output key and the output value
-	    inputRDD.mapToPair(feat -> new Tuple2<GeoWaveOutputKey,SimpleFeature>(new GeoWaveOutputKey(adapterId.value(), indexId.value()),feat))
+	    inputRDD.mapToPair(feat -> new Tuple2<GeoWaveOutputKey,SimpleFeature>(new GeoWaveOutputKey(typeName.value(), indexName.value()),feat))
 	    .saveAsNewAPIHadoopDataset(job.getConfiguration());
 	  }
 

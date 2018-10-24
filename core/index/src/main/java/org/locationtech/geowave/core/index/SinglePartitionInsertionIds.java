@@ -20,40 +20,40 @@ import org.locationtech.geowave.core.index.persist.Persistable;
 public class SinglePartitionInsertionIds implements
 		Persistable
 {
-	private List<ByteArrayId> compositeInsertionIds;
-	private ByteArrayId partitionKey;
-	private List<ByteArrayId> sortKeys;
+	private List<ByteArray> compositeInsertionIds;
+	private ByteArray partitionKey;
+	private List<ByteArray> sortKeys;
 
 	public SinglePartitionInsertionIds() {}
 
 	public SinglePartitionInsertionIds(
-			final ByteArrayId partitionKey ) {
+			final ByteArray partitionKey ) {
 		this(
 				partitionKey,
-				(ByteArrayId) null);
+				(ByteArray) null);
 	}
 
 	public SinglePartitionInsertionIds(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		this.partitionKey = partitionKey;
 		sortKeys = sortKey == null ? null : Arrays.asList(sortKey);
 	}
 
 	public SinglePartitionInsertionIds(
-			final ByteArrayId partitionKey,
+			final ByteArray partitionKey,
 			final SinglePartitionInsertionIds insertionId2 ) {
 		this(
 				new SinglePartitionInsertionIds(
 						partitionKey,
-						(List<ByteArrayId>) null),
+						(List<ByteArray>) null),
 				insertionId2);
 	}
 
 	public SinglePartitionInsertionIds(
 			final SinglePartitionInsertionIds insertionId1,
 			final SinglePartitionInsertionIds insertionId2 ) {
-		partitionKey = new ByteArrayId(
+		partitionKey = new ByteArray(
 				ByteArrayUtils.combineArrays(
 						insertionId1.partitionKey.getBytes(),
 						insertionId2.partitionKey.getBytes()));
@@ -65,11 +65,11 @@ public class SinglePartitionInsertionIds implements
 		}
 		else {
 			// use all permutations of range keys
-			sortKeys = new ArrayList<ByteArrayId>(
+			sortKeys = new ArrayList<ByteArray>(
 					insertionId1.sortKeys.size() * insertionId2.sortKeys.size());
-			for (final ByteArrayId sortKey1 : insertionId1.sortKeys) {
-				for (final ByteArrayId sortKey2 : insertionId2.sortKeys) {
-					sortKeys.add(new ByteArrayId(
+			for (final ByteArray sortKey1 : insertionId1.sortKeys) {
+				for (final ByteArray sortKey2 : insertionId2.sortKeys) {
+					sortKeys.add(new ByteArray(
 							ByteArrayUtils.combineArrays(
 									sortKey1.getBytes(),
 									sortKey2.getBytes())));
@@ -79,13 +79,13 @@ public class SinglePartitionInsertionIds implements
 	}
 
 	public SinglePartitionInsertionIds(
-			final ByteArrayId partitionKey,
-			final List<ByteArrayId> sortKeys ) {
+			final ByteArray partitionKey,
+			final List<ByteArray> sortKeys ) {
 		this.partitionKey = partitionKey;
 		this.sortKeys = sortKeys;
 	}
 
-	public List<ByteArrayId> getCompositeInsertionIds() {
+	public List<ByteArray> getCompositeInsertionIds() {
 		if (compositeInsertionIds != null) {
 			return compositeInsertionIds;
 		}
@@ -100,10 +100,10 @@ public class SinglePartitionInsertionIds implements
 			return compositeInsertionIds;
 		}
 
-		final List<ByteArrayId> internalInsertionIds = new ArrayList<>(
+		final List<ByteArray> internalInsertionIds = new ArrayList<>(
 				sortKeys.size());
-		for (final ByteArrayId sortKey : sortKeys) {
-			internalInsertionIds.add(new ByteArrayId(
+		for (final ByteArray sortKey : sortKeys) {
+			internalInsertionIds.add(new ByteArray(
 					ByteArrayUtils.combineArrays(
 							partitionKey.getBytes(),
 							sortKey.getBytes())));
@@ -112,11 +112,11 @@ public class SinglePartitionInsertionIds implements
 		return compositeInsertionIds;
 	}
 
-	public ByteArrayId getPartitionKey() {
+	public ByteArray getPartitionKey() {
 		return partitionKey;
 	}
 
-	public List<ByteArrayId> getSortKeys() {
+	public List<ByteArray> getSortKeys() {
 		return sortKeys;
 	}
 
@@ -178,7 +178,7 @@ public class SinglePartitionInsertionIds implements
 		else {
 			sSize = sortKeys.size();
 			byteBufferSize += (4 * sSize);
-			for (final ByteArrayId sKey : sortKeys) {
+			for (final ByteArray sKey : sortKeys) {
 				byteBufferSize += sKey.getBytes().length;
 			}
 		}
@@ -190,7 +190,7 @@ public class SinglePartitionInsertionIds implements
 		buf.putInt(sSize);
 
 		if (sSize > 0) {
-			for (final ByteArrayId sKey : sortKeys) {
+			for (final ByteArray sKey : sortKeys) {
 				buf.putInt(sKey.getBytes().length);
 				buf.put(sKey.getBytes());
 			}
@@ -206,7 +206,7 @@ public class SinglePartitionInsertionIds implements
 		if (pLength > 0) {
 			final byte[] pBytes = new byte[pLength];
 			buf.get(pBytes);
-			partitionKey = new ByteArrayId(
+			partitionKey = new ByteArray(
 					pBytes);
 		}
 		else {
@@ -220,7 +220,7 @@ public class SinglePartitionInsertionIds implements
 				final int keyLength = buf.getInt();
 				final byte[] sortKey = new byte[keyLength];
 				buf.get(sortKey);
-				sortKeys.add(new ByteArrayId(
+				sortKeys.add(new ByteArray(
 						sortKey));
 			}
 		}

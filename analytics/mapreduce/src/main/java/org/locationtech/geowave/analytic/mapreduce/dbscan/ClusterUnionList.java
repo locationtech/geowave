@@ -15,7 +15,7 @@ import java.util.Map;
 import org.locationtech.geowave.analytic.nn.DistanceProfile;
 import org.locationtech.geowave.analytic.nn.NeighborList;
 import org.locationtech.geowave.analytic.nn.NeighborListFactory;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,10 +38,10 @@ public class ClusterUnionList extends
 	protected static final Logger LOGGER = LoggerFactory.getLogger(ClusterUnionList.class);
 
 	public ClusterUnionList(
-			final ByteArrayId centerId,
+			final ByteArray centerId,
 			final ClusterItem center,
 			final NeighborListFactory<ClusterItem> factory,
-			final Map<ByteArrayId, Cluster> index ) {
+			final Map<ByteArray, Cluster> index ) {
 		super(
 				center.getGeometry(),
 				(int) center.getCount(),
@@ -50,7 +50,7 @@ public class ClusterUnionList extends
 	}
 
 	protected long addAndFetchCount(
-			final ByteArrayId id,
+			final ByteArray id,
 			final ClusterItem newInstance,
 			final DistanceProfile<?> distanceProfile ) {
 		return 0;
@@ -76,16 +76,16 @@ public class ClusterUnionList extends
 	public static class ClusterUnionListFactory implements
 			NeighborListFactory<ClusterItem>
 	{
-		private final Map<ByteArrayId, Cluster> index;
+		private final Map<ByteArray, Cluster> index;
 
 		public ClusterUnionListFactory(
-				final Map<ByteArrayId, Cluster> index ) {
+				final Map<ByteArray, Cluster> index ) {
 			super();
 			this.index = index;
 		}
 
 		public NeighborList<ClusterItem> buildNeighborList(
-				final ByteArrayId centerId,
+				final ByteArray centerId,
 				final ClusterItem center ) {
 			Cluster list = index.get(centerId);
 			if (list == null) {

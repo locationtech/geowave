@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -32,23 +32,20 @@ import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.analytic.param.FormatConfiguration;
 import org.locationtech.geowave.analytic.param.InputParameters;
 import org.locationtech.geowave.analytic.param.OutputParameters;
+import org.locationtech.geowave.analytic.param.OutputParameters.Output;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.StoreParameters;
-import org.locationtech.geowave.analytic.param.OutputParameters.Output;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextIndexStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -125,7 +122,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 	public PersistentAdapterStore getAdapterStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createAdapterStore();
 	}
@@ -133,7 +130,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 	public InternalAdapterStore getInternalAdapterStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createInternalAdapterStore();
 	}
@@ -141,7 +138,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 	public IndexStore getIndexStore(
 			final PropertyManagement runTimeProperties )
 			throws Exception {
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				runTimeProperties);
 		return store.getDataStoreOptions().createIndexStore();
 	}
@@ -208,16 +205,16 @@ public abstract class GeoWaveAnalyticJobRunner extends
 			final InternalDataAdapter<?> adapter ) {
 		JobContextAdapterStore.addDataAdapter(
 				config,
-				adapter);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+				adapter.getAdapter());
+		JobContextInternalAdapterStore.addTypeName(
 				config,
-				adapter.getAdapterId(),
-				adapter.getInternalAdapterId());
+				adapter.getTypeName(),
+				adapter.getAdapterId());
 	}
 
 	public static void addIndex(
 			final Configuration config,
-			final PrimaryIndex index ) {
+			final Index index ) {
 		JobContextIndexStore.addIndex(
 				config,
 				index);
@@ -279,7 +276,7 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 	@Override
 	public Collection<ParameterEnum<?>> getParameters() {
-		final List<ParameterEnum<?>> params = new ArrayList<ParameterEnum<?>>();
+		final List<ParameterEnum<?>> params = new ArrayList<>();
 		if (inputFormat != null) {
 			params.addAll(inputFormat.getParameters());
 		}
@@ -315,19 +312,18 @@ public abstract class GeoWaveAnalyticJobRunner extends
 
 		final PersistentAdapterStore adapterStore = getAdapterStore(runTimeProperties);
 		final InternalAdapterStore internalAdapterStore = getInternalAdapterStore(runTimeProperties);
-		Short convexHullInternalAdapterId = internalAdapterStore.getInternalAdapterId(new ByteArrayId(
-				projectionDataTypeId));
+		final Short convexHullInternalAdapterId = internalAdapterStore.getAdapterId(projectionDataTypeId);
 		if (convexHullInternalAdapterId == null) {
 			final String namespaceURI = runTimeProperties.storeIfEmpty(
 					dataNameSpaceEnum,
 					BasicFeatureTypes.DEFAULT_NAMESPACE).toString();
-			FeatureDataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
+			final FeatureDataAdapter adapter = AnalyticFeature.createGeometryFeatureAdapter(
 					projectionDataTypeId,
 					new String[0],
 					namespaceURI,
 					ClusteringUtils.CLUSTERING_CRS);
-			short internalAdapterId = internalAdapterStore.addAdapterId(adapter.getAdapterId());
-			InternalDataAdapter<?> internalAdapter = new InternalDataAdapterWrapper<>(
+			final short internalAdapterId = internalAdapterStore.addTypeName(adapter.getTypeName());
+			final InternalDataAdapter<?> internalAdapter = new InternalDataAdapterWrapper<>(
 					adapter,
 					internalAdapterId);
 			adapterStore.addAdapter(internalAdapter);
@@ -342,25 +338,22 @@ public abstract class GeoWaveAnalyticJobRunner extends
 			final String defaultIdxName )
 			throws Exception {
 
-		final String indexId = runTimeProperties.getPropertyAsString(
+		final String indexName = runTimeProperties.getPropertyAsString(
 				indexIdEnum,
 				defaultIdxName);
 
 		final IndexStore indexStore = getIndexStore(runTimeProperties);
 
-		PrimaryIndex index = (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				indexId));
+		Index index = indexStore.getIndex(indexName);
 		if (index == null) {
-			final PrimaryIndex defaultSpatialIndex = new SpatialDimensionalityTypeProvider()
-					.createPrimaryIndex(new SpatialOptions());
-			index = new CustomIdIndex(
+			final Index defaultSpatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
+			index = new CustomNameIndex(
 					defaultSpatialIndex.getIndexStrategy(),
 					defaultSpatialIndex.getIndexModel(),
-					new ByteArrayId(
-							indexId));
+					indexName);
 			indexStore.addIndex(index);
 		}
-		return indexId;
+		return indexName;
 	}
 
 }

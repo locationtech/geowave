@@ -24,9 +24,8 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.fs.FsUrlStreamHandlerFactory;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.DeferredReadCommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
@@ -34,12 +33,11 @@ import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveKeyImpl;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
 import org.locationtech.geowave.core.store.entities.GeoWaveValueImpl;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.datastore.accumulo.util.AccumuloUtils;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,11 +51,11 @@ public class QueryFilterIterator extends
 	public static final String FILTER = "filter";
 	public static final String MODEL = "model";
 	public static final String PARTITION_KEY_LENGTH = "partitionLength";
-	private DistributableQueryFilter filter;
+	private QueryFilter filter;
 	protected CommonIndexModel model;
 	protected int partitionKeyLength = 0;
 	protected Text currentRow = new Text();
-	private List<ByteArrayId> commonIndexFieldIds = new ArrayList<>();
+	private List<String> commonIndexFieldNames = new ArrayList<>();
 
 	static {
 		initialize();
@@ -186,7 +184,7 @@ public class QueryFilterIterator extends
 				gwValue,
 				commonData,
 				model,
-				commonIndexFieldIds);
+				commonIndexFieldNames);
 	}
 
 	@Override
@@ -196,7 +194,7 @@ public class QueryFilterIterator extends
 		iterator.setSource(getSource().deepCopy(
 				env));
 		iterator.filter = filter;
-		iterator.commonIndexFieldIds.addAll(commonIndexFieldIds);
+		iterator.commonIndexFieldNames.addAll(commonIndexFieldNames);
 		iterator.model = model;
 		return iterator;
 	}
@@ -221,12 +219,12 @@ public class QueryFilterIterator extends
 				currentRow.copyBytes(),
 				partitionKeyLength);
 		return new DeferredReadCommonIndexedPersistenceEncoding(
-				rowId.getInternalAdapterId(),
-				new ByteArrayId(
+				rowId.getAdapterId(),
+				new ByteArray(
 						rowId.getDataId()),
-				new ByteArrayId(
+				new ByteArray(
 						rowId.getPartitionKey()),
-				new ByteArrayId(
+				new ByteArray(
 						rowId.getSortKey()),
 				rowId.getNumberOfDuplicates(),
 				commonData,
@@ -267,13 +265,13 @@ public class QueryFilterIterator extends
 			if (options.containsKey(FILTER)) {
 				final String filterStr = options.get(FILTER);
 				final byte[] filterBytes = ByteArrayUtils.byteArrayFromString(filterStr);
-				filter = (DistributableQueryFilter) URLClassloaderUtils.fromBinary(filterBytes);
+				filter = (QueryFilter) URLClassloaderUtils.fromBinary(filterBytes);
 			}
 			if (options.containsKey(MODEL)) {
 				final String modelStr = options.get(MODEL);
 				final byte[] modelBytes = ByteArrayUtils.byteArrayFromString(modelStr);
 				model = (CommonIndexModel) URLClassloaderUtils.fromBinary(modelBytes);
-				commonIndexFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
+				commonIndexFieldNames = DataStoreUtils.getUniqueDimensionFields(model);
 			}
 			if (options.containsKey(PARTITION_KEY_LENGTH)) {
 				final String partitionKeyLengthStr = options.get(PARTITION_KEY_LENGTH);

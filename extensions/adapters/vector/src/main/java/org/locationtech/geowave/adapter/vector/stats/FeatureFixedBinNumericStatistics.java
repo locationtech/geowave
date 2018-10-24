@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,9 +13,13 @@ package org.locationtech.geowave.adapter.vector.stats;
 import java.nio.ByteBuffer;
 import java.util.Date;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.geotime.store.statistics.FieldNameStatistic;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.FieldStatisticsType;
 import org.locationtech.geowave.core.store.adapter.statistics.FixedBinNumericStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.FixedBinNumericHistogram;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -38,10 +42,10 @@ import org.opengis.feature.simple.SimpleFeature;
  */
 public class FeatureFixedBinNumericStatistics extends
 		FixedBinNumericStatistics<SimpleFeature> implements
-		FeatureStatistic
+		FieldNameStatistic
 {
 
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final FieldStatisticsType<FixedBinNumericHistogram> STATS_TYPE = new FieldStatisticsType<>(
 			"FEATURE_FIXED_BIN_NUMERIC_HISTOGRAM");
 
 	public FeatureFixedBinNumericStatistics() {
@@ -56,24 +60,22 @@ public class FeatureFixedBinNumericStatistics extends
 	}
 
 	public FeatureFixedBinNumericStatistics(
-			final Short internalDataAdapterId,
+			final Short adapterId,
 			final String fieldName ) {
 		super(
-				internalDataAdapterId,
-				composeId(
-						STATS_TYPE.getString(),
-						fieldName));
+				adapterId,
+				STATS_TYPE,
+				fieldName);
 	}
 
 	public FeatureFixedBinNumericStatistics(
-			final Short internalDataAdapterId,
+			final Short adapterId,
 			final String fieldName,
 			final int bins ) {
 		super(
-				internalDataAdapterId,
-				composeId(
-						STATS_TYPE.getString(),
-						fieldName),
+				adapterId,
+				STATS_TYPE,
+				fieldName,
 				bins);
 	}
 
@@ -85,30 +87,22 @@ public class FeatureFixedBinNumericStatistics extends
 			final double maxValue ) {
 		super(
 				internalDataAdapterId,
-				composeId(
-						STATS_TYPE.getString(),
-						fieldName),
+				STATS_TYPE,
+				fieldName,
 				bins,
 				minValue,
 				maxValue);
 	}
 
-	public static final ByteArrayId composeId(
-			final String fieldName ) {
-		return composeId(
-				STATS_TYPE.getString(),
-				fieldName);
-	}
-
 	@Override
 	public String getFieldName() {
-		return decomposeNameFromId(getStatisticsId());
+		return extendedId;
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> duplicate() {
+	public InternalDataStatistics<SimpleFeature, FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> duplicate() {
 		return new FeatureFixedBinNumericStatistics(
-				internalDataAdapterId,
+				adapterId,
 				getFieldName());
 	}
 
@@ -190,7 +184,7 @@ public class FeatureFixedBinNumericStatistics extends
 		}
 
 		@Override
-		public DataStatistics<SimpleFeature> create(
+		public InternalDataStatistics<SimpleFeature, FixedBinNumericHistogram, FieldStatisticsQueryBuilder<FixedBinNumericHistogram>> create(
 				final Short internalDataAdapterId,
 				final String fieldName ) {
 			return new FeatureFixedBinNumericStatistics(
@@ -203,7 +197,7 @@ public class FeatureFixedBinNumericStatistics extends
 
 		@Override
 		public byte[] toBinary() {
-			ByteBuffer buf = ByteBuffer.allocate(16);
+			final ByteBuffer buf = ByteBuffer.allocate(16);
 			buf.putDouble(minValue);
 			buf.putDouble(maxValue);
 			return buf.array();
@@ -211,8 +205,8 @@ public class FeatureFixedBinNumericStatistics extends
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {
-			ByteBuffer buf = ByteBuffer.wrap(bytes);
+				final byte[] bytes ) {
+			final ByteBuffer buf = ByteBuffer.wrap(bytes);
 			minValue = buf.getDouble();
 			maxValue = buf.getDouble();
 		}

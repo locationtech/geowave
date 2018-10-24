@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.FloatCompareUtils;
@@ -229,8 +229,8 @@ public class TieredSFCIndexStrategy implements
 
 	@Override
 	public MultiDimensionalCoordinates getCoordinatesPerDimension(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		if ((partitionKey != null) && (partitionKey.getBytes().length > 0)) {
 			final byte[] rowId = ByteArrayUtils.combineArrays(
 					partitionKey.getBytes(),
@@ -254,9 +254,9 @@ public class TieredSFCIndexStrategy implements
 
 	@Override
 	public MultiDimensionalNumericData getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
-		final List<ByteArrayId> insertionIds = new SinglePartitionInsertionIds(
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
+		final List<ByteArray> insertionIds = new SinglePartitionInsertionIds(
 				partitionKey,
 				sortKey).getCompositeInsertionIds();
 		if (insertionIds.isEmpty()) {
@@ -396,7 +396,7 @@ public class TieredSFCIndexStrategy implements
 		// this should never happen because of the check for tier 0
 		return new SinglePartitionInsertionIds(
 				null,
-				new ArrayList<ByteArrayId>());
+				new ArrayList<ByteArray>());
 	}
 
 	protected static SinglePartitionInsertionIds getRowIdsAtTier(
@@ -431,7 +431,7 @@ public class TieredSFCIndexStrategy implements
 			final BinnedNumericDataset index,
 			final byte tierId,
 			final SpaceFillingCurve sfc ) {
-		final List<ByteArrayId> retVal = new ArrayList<ByteArrayId>();
+		final List<ByteArray> retVal = new ArrayList<ByteArray>();
 		final byte[] tierAndBinId = ByteArrayUtils.combineArrays(
 				new byte[] {
 					tierId
@@ -447,7 +447,7 @@ public class TieredSFCIndexStrategy implements
 			byte[] currentRowId = Arrays.copyOf(
 					range.getStart().getBytes(),
 					range.getStart().getBytes().length);
-			retVal.add(new ByteArrayId(
+			retVal.add(new ByteArray(
 					currentRowId));
 			while (!Arrays.equals(
 					currentRowId,
@@ -458,7 +458,7 @@ public class TieredSFCIndexStrategy implements
 				// increment until we reach the end row ID
 				boolean overflow = !ByteArrayUtils.increment(currentRowId);
 				if (!overflow) {
-					retVal.add(new ByteArrayId(
+					retVal.add(new ByteArray(
 							currentRowId));
 				}
 				else {
@@ -473,7 +473,7 @@ public class TieredSFCIndexStrategy implements
 			}
 		}
 		return new SinglePartitionInsertionIds(
-				new ByteArrayId(
+				new ByteArray(
 						tierAndBinId),
 				retVal);
 	}
@@ -591,7 +591,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	public InsertionIds reprojectToTier(
-			ByteArrayId insertId,
+			ByteArray insertId,
 			Byte reprojectTierId,
 			BigInteger maxDuplicates ) {
 		MultiDimensionalNumericData originalRange = this.getRangeForId(
@@ -748,7 +748,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getInsertionPartitionKeys(
+	public Set<ByteArray> getInsertionPartitionKeys(
 			final MultiDimensionalNumericData insertionData ) {
 		return IndexUtils.getInsertionPartitionKeys(
 				this,
@@ -756,7 +756,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getQueryPartitionKeys(
+	public Set<ByteArray> getQueryPartitionKeys(
 			final MultiDimensionalNumericData queryData,
 			final IndexMetaData... hints ) {
 		return IndexUtils.getQueryPartitionKeys(
@@ -766,7 +766,7 @@ public class TieredSFCIndexStrategy implements
 	}
 
 	@Override
-	public Set<ByteArrayId> getPredefinedSplits() {
+	public Set<ByteArray> getPredefinedSplits() {
 		return Collections.EMPTY_SET;
 	}
 }

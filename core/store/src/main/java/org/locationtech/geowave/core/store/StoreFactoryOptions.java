@@ -37,7 +37,14 @@ abstract public class StoreFactoryOptions
 	public final static String GEOWAVE_NAMESPACE_OPTION = "gwNamespace";
 	public final static String GEOWAVE_NAMESPACE_DESCRIPTION = "The geowave namespace (optional; default is no namespace)";
 	@Parameter(names = "--" + GEOWAVE_NAMESPACE_OPTION, description = GEOWAVE_NAMESPACE_DESCRIPTION)
-	private String geowaveNamespace;
+	protected String geowaveNamespace;
+
+	public StoreFactoryOptions() {}
+
+	public StoreFactoryOptions(
+			String geowaveNamespace ) {
+		this.geowaveNamespace = geowaveNamespace;
+	}
 
 	public String getGeowaveNamespace() {
 		if ("null".equalsIgnoreCase(geowaveNamespace)) {

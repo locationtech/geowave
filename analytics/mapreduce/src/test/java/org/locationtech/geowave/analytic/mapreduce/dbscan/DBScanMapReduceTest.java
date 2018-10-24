@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -34,9 +34,6 @@ import org.locationtech.geowave.analytic.AnalyticFeature;
 import org.locationtech.geowave.analytic.Projection;
 import org.locationtech.geowave.analytic.SimpleFeatureProjection;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
-import org.locationtech.geowave.analytic.mapreduce.dbscan.Cluster;
-import org.locationtech.geowave.analytic.mapreduce.dbscan.ClusterItem;
-import org.locationtech.geowave.analytic.mapreduce.dbscan.DBScanMapReduce;
 import org.locationtech.geowave.analytic.mapreduce.kmeans.SimpleFeatureImplSerialization;
 import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce;
 import org.locationtech.geowave.analytic.mapreduce.nn.NNMapReduce.PartitionDataWritable;
@@ -46,8 +43,8 @@ import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.JobContextAdapterStore;
 import org.locationtech.geowave.mapreduce.JobContextInternalAdapterStore;
@@ -69,9 +66,9 @@ public class DBScanMapReduceTest
 			new PrecisionModel(
 					0.000001),
 			4326);
-	short internalAdapterId = 1234;
-	final NNMapReduce.NNMapper<ClusterItem> nnMapper = new NNMapReduce.NNMapper<ClusterItem>();
-	final NNMapReduce.NNReducer<ClusterItem, GeoWaveInputKey, ObjectWritable, Map<ByteArrayId, Cluster>> nnReducer = new DBScanMapReduce.DBScanMapHullReducer();
+	short adapterId = 1234;
+	final NNMapReduce.NNMapper<ClusterItem> nnMapper = new NNMapReduce.NNMapper<>();
+	final NNMapReduce.NNReducer<ClusterItem, GeoWaveInputKey, ObjectWritable, Map<ByteArray, Cluster>> nnReducer = new DBScanMapReduce.DBScanMapHullReducer();
 
 	@Before
 	public void setUp()
@@ -107,7 +104,7 @@ public class DBScanMapReduceTest
 				SimpleFeatureProjection.class,
 				Projection.class);
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
@@ -118,14 +115,14 @@ public class DBScanMapReduceTest
 		JobContextAdapterStore.addDataAdapter(
 				reduceDriver.getConfiguration(),
 				adapter);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+		JobContextInternalAdapterStore.addTypeName(
 				mapDriver.getConfiguration(),
-				adapter.getAdapterId(),
-				internalAdapterId);
-		JobContextInternalAdapterStore.addInternalDataAdapter(
+				adapter.getTypeName(),
+				adapterId);
+		JobContextInternalAdapterStore.addTypeName(
 				reduceDriver.getConfiguration(),
-				adapter.getAdapterId(),
-				internalAdapterId);
+				adapter.getTypeName(),
+				adapterId);
 		serializations();
 	}
 
@@ -219,50 +216,50 @@ public class DBScanMapReduceTest
 
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature1.getID())),
 				feature1);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature2.getID())),
 				feature2);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature3.getID())),
 				feature3);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature4.getID())),
 				feature4);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature5.getID())),
 				feature5);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature6.getID())),
 				feature6);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature7.getID())),
 				feature7);
 		mapDriver.addInput(
 				new GeoWaveInputKey(
-						internalAdapterId,
-						new ByteArrayId(
+						adapterId,
+						new ByteArray(
 								feature8.getID())),
 				feature8);
 
@@ -357,7 +354,7 @@ public class DBScanMapReduceTest
 
 	private List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> getReducerDataFromMapperInput(
 			final List<Pair<PartitionDataWritable, AdapterWithObjectWritable>> mapperResults ) {
-		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> reducerInputSet = new ArrayList<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>>();
+		final List<Pair<PartitionDataWritable, List<AdapterWithObjectWritable>>> reducerInputSet = new ArrayList<>();
 		for (final Pair<PartitionDataWritable, AdapterWithObjectWritable> pair : mapperResults) {
 			getListFor(
 					pair.getFirst(),
@@ -377,7 +374,7 @@ public class DBScanMapReduceTest
 				return pair.getSecond();
 			}
 		}
-		final List<AdapterWithObjectWritable> newPairList = new ArrayList<AdapterWithObjectWritable>();
+		final List<AdapterWithObjectWritable> newPairList = new ArrayList<>();
 		reducerInputSet.add(new Pair(
 				pd,
 				newPairList));
@@ -416,8 +413,8 @@ public class DBScanMapReduceTest
 							round(30.0 + (r.nextGaussian() * 0.00001))));
 			mapDriver.addInput(
 					new GeoWaveInputKey(
-							internalAdapterId,
-							new ByteArrayId(
+							adapterId,
+							new ByteArray(
 									feature.getID())),
 					feature);
 		}
@@ -454,8 +451,8 @@ public class DBScanMapReduceTest
 							round(30.0 + (r.nextGaussian() * 0.0001))));
 			mapDriver.addInput(
 					new GeoWaveInputKey(
-							internalAdapterId,
-							new ByteArrayId(
+							adapterId,
+							new ByteArray(
 									feature.getID())),
 					feature);
 		}

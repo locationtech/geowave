@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,27 +12,27 @@ package org.locationtech.geowave.core.store.adapter;
 
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * This is used by the AbstractDataAdapter to get individual field values from
  * the row
- * 
+ *
  * @param <RowType>
  * @param <FieldType>
  */
 public interface NativeFieldHandler<RowType, FieldType>
 {
 	/**
-	 * Get the field ID that this handler supports
-	 * 
-	 * @return the field ID supported
+	 * Get the field name that this handler supports
+	 *
+	 * @return the field name supported
 	 */
-	public ByteArrayId getFieldId();
+	public String getFieldName();
 
 	/**
 	 * Get the field value from the row
-	 * 
+	 *
 	 * @param row
 	 *            the row
 	 * @return the field value
@@ -43,33 +43,33 @@ public interface NativeFieldHandler<RowType, FieldType>
 	/**
 	 * This is used internally by the AbstractDataAdapter to build a row from a
 	 * set of field values
-	 * 
+	 *
 	 * @param <RowType>
 	 * @param <FieldType>
 	 */
 	public static interface RowBuilder<RowType, FieldType>
 	{
 		/**
-		 * Set a field ID/value pair
-		 * 
+		 * Set a field name/value pair
+		 *
 		 * @param fieldValue
 		 *            the field ID/value pair
 		 */
 		public void setField(
-				ByteArrayId id,
+				String fieldName,
 				FieldType fieldValue );
 
 		public void setFields(
-				Map<ByteArrayId, FieldType> values );
+				Map<String, FieldType> values );
 
 		/**
 		 * Create a row with the previously set fields
-		 * 
+		 *
 		 * @param dataId
 		 *            the unique data ID for the row
 		 * @return the row
 		 */
 		public RowType buildRow(
-				ByteArrayId dataId );
+				ByteArray dataId );
 	}
 }

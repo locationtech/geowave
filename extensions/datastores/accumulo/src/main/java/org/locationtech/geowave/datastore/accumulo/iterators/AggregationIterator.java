@@ -24,19 +24,18 @@ import org.apache.accumulo.core.iterators.IteratorEnvironment;
 import org.apache.accumulo.core.iterators.SortedKeyValueIterator;
 import org.apache.hadoop.io.Text;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.adapter.AbstractAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.Aggregation;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.flatten.FlattenedUnreadData;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,8 +158,7 @@ public class AggregationIterator extends
 				startRowOfAggregation = currentRow;
 			}
 		}
-		else if (((Short) (persistenceEncoding.getInternalAdapterId()))
-				.equals((Short) (adapter.getInternalAdapterId()))) {
+		else if (((Short) (persistenceEncoding.getInternalAdapterId())).equals((Short) (adapter.getAdapterId()))) {
 			final PersistentDataset<Object> adapterExtendedValues = new PersistentDataset<Object>();
 			if (persistenceEncoding instanceof AbstractAdapterPersistenceEncoding) {
 				((AbstractAdapterPersistenceEncoding) persistenceEncoding).convertUnknownValues(
@@ -309,12 +307,12 @@ public class AggregationIterator extends
 
 	protected Value getTopStatValue() {
 		if (hasTopStat()) {
-			final Mergeable result = aggregationFunction.getResult();
+			final Object result = aggregationFunction.getResult();
 			if (result == null) {
 				return null;
 			}
 			return new Value(
-					PersistenceUtils.toBinary(result));
+					aggregationFunction.resultToBinary(result));
 		}
 		return null;
 	}

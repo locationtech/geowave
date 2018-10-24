@@ -14,7 +14,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.QueryRanges;
@@ -73,7 +73,7 @@ public class TemporalIndexStrategy implements
 	public InsertionIds getInsertionIds(
 			final Date indexedData ) {
 		return new InsertionIds(
-				Collections.singletonList(new ByteArrayId(
+				Collections.singletonList(new ByteArray(
 						toIndexByte(indexedData))));
 	}
 
@@ -86,8 +86,8 @@ public class TemporalIndexStrategy implements
 
 	@Override
 	public Date getRangeForId(
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey ) {
+			final ByteArray partitionKey,
+			final ByteArray sortKey ) {
 		return new Date(
 				Lexicoders.LONG.fromByteArray(sortKey.getBytes()));
 	}

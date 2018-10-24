@@ -12,9 +12,9 @@ package org.locationtech.geowave.format.geotools.vector;
 
 import org.locationtech.geowave.core.ingest.avro.AvroFormatPlugin;
 import org.locationtech.geowave.core.ingest.hdfs.mapreduce.IngestFromHdfsPlugin;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
-import org.locationtech.geowave.core.ingest.spi.IngestFormatOptionProvider;
 import org.locationtech.geowave.core.ingest.spi.IngestFormatPluginProviderSpi;
+import org.locationtech.geowave.core.store.ingest.IngestFormatOptions;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.locationtech.geowave.format.geotools.vector.retyping.date.DateFieldRetypingPlugin;
 import org.opengis.feature.simple.SimpleFeature;
 
@@ -28,7 +28,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 {
 	@Override
 	public AvroFormatPlugin<Object, SimpleFeature> createAvroFormatPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoTools vector files cannot be ingested using intermediate avro files");
@@ -36,7 +36,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 
 	@Override
 	public IngestFromHdfsPlugin<Object, SimpleFeature> createIngestFromHdfsPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		// unsupported right now
 		throw new UnsupportedOperationException(
 				"GeoTools vector files cannot be ingested from HDFS");
@@ -44,7 +44,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 
 	@Override
 	public LocalFileIngestPlugin<SimpleFeature> createLocalFileIngestPlugin(
-			IngestFormatOptionProvider options ) {
+			IngestFormatOptions options ) {
 		GeoToolsVectorDataOptions vectorDataOptions = (GeoToolsVectorDataOptions) options;
 		return new GeoToolsVectorDataStoreIngestPlugin(
 				new DateFieldRetypingPlugin(
@@ -64,7 +64,7 @@ public class GeoToolsVectorDataStoreIngestFormat implements
 	}
 
 	@Override
-	public IngestFormatOptionProvider createOptionsInstances() {
+	public IngestFormatOptions createOptionsInstances() {
 		return new GeoToolsVectorDataOptions();
 	}
 

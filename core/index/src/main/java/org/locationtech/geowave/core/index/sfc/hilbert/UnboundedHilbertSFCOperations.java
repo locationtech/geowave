@@ -16,7 +16,7 @@ import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
 import org.locationtech.geowave.core.index.sfc.SFCDimensionDefinition;
@@ -380,9 +380,9 @@ public class UnboundedHilbertSFCOperations implements
 			return new RangeDecomposition(
 					new ByteArrayRange[] {
 						new ByteArrayRange(
-								new ByteArrayId(
+								new ByteArray(
 										new byte[] {}),
-								new ByteArrayId(
+								new ByteArray(
 										new byte[] {}))
 					});
 		}
@@ -410,9 +410,9 @@ public class UnboundedHilbertSFCOperations implements
 					expectedByteCount,
 					endValue.toByteArray());
 			sfcRanges[i] = new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							start),
-					new ByteArrayId(
+					new ByteArray(
 							end));
 		}
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -31,7 +31,8 @@ import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinit
 import org.locationtech.geowave.cli.osm.osmfeature.types.features.FeatureDefinitionSet;
 import org.locationtech.geowave.cli.osm.types.TypeUtils;
 import org.locationtech.geowave.cli.osm.types.generated.MemberType;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.opengis.feature.simple.SimpleFeature;
@@ -213,73 +214,51 @@ public class SimpleFeatureGenerator
 				final Map<Key, Value> osm ) {
 			for (final Map.Entry<Key, Value> item : osm.entrySet()) {
 				if (OsmType.equals(OSMType.UNSET)) {
-					final ByteSequence CF = item.getKey().getColumnFamilyData();
-					if (Schema.arraysEqual(
-							CF,
-							ColumnFamily.NODE)) {
+					final String CF = item.getKey().getColumnFamily().toString();
+					if (CF.equals(ColumnFamily.NODE)) {
 						OsmType = OSMType.NODE;
 					}
-					else if (Schema.arraysEqual(
-							CF,
-							ColumnFamily.WAY)) {
+					else if (CF.equals(ColumnFamily.WAY)) {
 						OsmType = OSMType.WAY;
 					}
-					else if (Schema.arraysEqual(
-							CF,
-							ColumnFamily.RELATION)) {
+					else if (CF.equals(ColumnFamily.RELATION)) {
 						OsmType = OSMType.RELATION;
 					}
 				}
 
+				final String CQStr = StringUtils.stringFromBinary(item
+						.getKey()
+						.getColumnQualifierData()
+						.getBackingArray());
 				final ByteSequence CQ = item.getKey().getColumnQualifierData();
-				if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.ID)) {
+				if (CQStr.equals(ColumnQualifier.ID)) {
 					Id = longReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.VERSION)) {
+				else if (CQStr.equals(ColumnQualifier.VERSION)) {
 					Version = longReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.TIMESTAMP)) {
+				else if (CQStr.equals(ColumnQualifier.TIMESTAMP)) {
 					Timestamp = longReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.CHANGESET)) {
+				else if (CQStr.equals(ColumnQualifier.CHANGESET)) {
 					Changeset = longReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.USER_ID)) {
+				else if (CQStr.equals(ColumnQualifier.USER_ID)) {
 					UserId = longReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.USER_TEXT)) {
+				else if (CQStr.equals(ColumnQualifier.USER_TEXT)) {
 					UserName = stringReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.OSM_VISIBILITY)) {
+				else if (CQStr.equals(ColumnQualifier.OSM_VISIBILITY)) {
 					Visible = booleanReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.LATITUDE)) {
+				else if (CQStr.equals(ColumnQualifier.LATITUDE)) {
 					Lattitude = doubleReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.LONGITUDE)) {
+				else if (CQStr.equals(ColumnQualifier.LONGITUDE)) {
 					Longitude = doubleReader.readField(item.getValue().get());
 				}
-				else if (Schema.arraysEqual(
-						CQ,
-						ColumnQualifier.REFERENCES)) {
+				else if (CQStr.equals(ColumnQualifier.REFERENCES)) {
 					try {
 						Nodes = TypeUtils.deserializeLongArray(
 								item.getValue().get(),
@@ -363,7 +342,7 @@ public class SimpleFeatureGenerator
 						tags = new HashMap<>();
 					}
 					tags.put(
-							item.getKey().getColumnQualifier().toString(),
+							CQStr,
 							new String(
 									item.getValue().get(),
 									Constants.CHARSET));

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,12 +24,8 @@ import org.locationtech.geowave.analytic.mapreduce.operations.AnalyticSection;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlQueryRunner;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlResultsWriter;
 import org.locationtech.geowave.core.cli.annotations.GeowaveOperation;
-import org.locationtech.geowave.core.cli.api.Command;
-import org.locationtech.geowave.core.cli.api.DefaultOperation;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
 import org.slf4j.Logger;
@@ -53,13 +49,13 @@ public class SparkSqlCommand extends
 			+ "adaptername" + STORE_ADAPTER_DELIM + "viewName] where condition...'";
 
 	@Parameter(description = CMD_DESCR)
-	private List<String> parameters = new ArrayList<String>();
+	private List<String> parameters = new ArrayList<>();
 
 	@ParametersDelegate
 	private SparkSqlOptions sparkSqlOptions = new SparkSqlOptions();
 
 	private DataStorePluginOptions outputDataStore = null;
-	private SqlQueryRunner sqlRunner = new SqlQueryRunner();
+	private final SqlQueryRunner sqlRunner = new SqlQueryRunner();
 
 	// Log some timing
 	Stopwatch stopwatch = new Stopwatch();
@@ -78,7 +74,7 @@ public class SparkSqlCommand extends
 
 	@Override
 	public Void computeResults(
-			OperationParams params )
+			final OperationParams params )
 			throws Exception {
 
 		// Config file
@@ -87,7 +83,7 @@ public class SparkSqlCommand extends
 		final String sql = parameters.get(0);
 
 		LOGGER.debug("Input SQL: " + sql);
-		String cleanSql = initStores(
+		final String cleanSql = initStores(
 				configFile,
 				sql,
 				sparkSqlOptions.getOutputStoreName());
@@ -102,7 +98,7 @@ public class SparkSqlCommand extends
 		stopwatch.start();
 
 		// Execute the query
-		Dataset<Row> results = sqlRunner.run();
+		final Dataset<Row> results = sqlRunner.run();
 
 		stopwatch.stop();
 
@@ -122,7 +118,7 @@ public class SparkSqlCommand extends
 				"GeoWave SparkSQL query returned " + results.count() + " results");
 
 		if (outputDataStore != null) {
-			SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
+			final SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
 					results,
 					outputDataStore);
 
@@ -153,11 +149,11 @@ public class SparkSqlCommand extends
 	}
 
 	private String initStores(
-			File configFile,
-			String sql,
-			String outputStoreName ) {
-		Pattern storeDetect = Pattern.compile("(\\\"[^\\\"]*\\\"|'[^']*')|([%][^.,\\s]+)");
-		String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
+			final File configFile,
+			final String sql,
+			final String outputStoreName ) {
+		final Pattern storeDetect = Pattern.compile("(\\\"[^\\\"]*\\\"|'[^']*')|([%][^.,\\s]+)");
+		final String escapedDelimRegex = java.util.regex.Pattern.quote(STORE_ADAPTER_DELIM);
 
 		Matcher matchedStore = getFirstPositiveMatcher(
 				storeDetect,
@@ -166,7 +162,7 @@ public class SparkSqlCommand extends
 
 		while (matchedStore != null) {
 			String parseStore = matchedStore.group(2);
-			String originalStoreText = parseStore;
+			final String originalStoreText = parseStore;
 
 			// Drop the first character off string should be % sign
 			parseStore = parseStore.substring(1);
@@ -174,9 +170,9 @@ public class SparkSqlCommand extends
 
 			LOGGER.debug("parsed store: " + parseStore);
 
-			String[] storeNameParts = parseStore.split(escapedDelimRegex);
+			final String[] storeNameParts = parseStore.split(escapedDelimRegex);
 			LOGGER.debug("Split Count: " + storeNameParts.length);
-			for (String split : storeNameParts) {
+			for (final String split : storeNameParts) {
 				LOGGER.debug("Store split: " + split);
 			}
 			String storeName = null;
@@ -201,16 +197,10 @@ public class SparkSqlCommand extends
 				throw new ParameterException(
 						"Cannot find input store: " + inputStoreLoader.getStoreName());
 			}
-			DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
-
-			ByteArrayId adapterId = null;
-			if (adapterName != null) {
-				adapterId = new ByteArrayId(
-						adapterName);
-			}
+			final DataStorePluginOptions storeOptions = inputStoreLoader.getDataStorePlugin();
 			viewName = sqlRunner.addInputStore(
 					storeOptions,
-					adapterId,
+					adapterName,
 					viewName);
 			if (viewName != null) {
 				replacedSQL = StringUtils.replace(
@@ -227,14 +217,14 @@ public class SparkSqlCommand extends
 	}
 
 	private Matcher getFirstPositiveMatcher(
-			Pattern compiledPattern,
-			String sql ) {
-		Matcher returnMatch = compiledPattern.matcher(sql);
+			final Pattern compiledPattern,
+			final String sql ) {
+		final Matcher returnMatch = compiledPattern.matcher(sql);
 		return getNextPositiveMatcher(returnMatch);
 	}
 
 	private Matcher getNextPositiveMatcher(
-			Matcher lastMatch ) {
+			final Matcher lastMatch ) {
 		while (lastMatch.find()) {
 			if (lastMatch.group(2) != null) {
 				return lastMatch;
@@ -249,7 +239,7 @@ public class SparkSqlCommand extends
 
 	public void setParameters(
 			final String sql ) {
-		parameters = new ArrayList<String>();
+		parameters = new ArrayList<>();
 		parameters.add(sql);
 	}
 

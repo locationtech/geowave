@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,28 +24,34 @@ import org.geotools.feature.simple.SimpleFeatureTypeBuilder;
 import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.vector.index.SecondaryIndexManager;
 import org.locationtech.geowave.adapter.vector.plugin.visibility.VisibilityConfiguration;
-import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.adapter.vector.stats.StatsConfigurationCollection.SimpleFeatureStatsConfigurationCollection;
+import org.locationtech.geowave.adapter.vector.stats.StatsManager;
 import org.locationtech.geowave.adapter.vector.util.FeatureDataUtils;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors;
-import org.locationtech.geowave.adapter.vector.utils.TimeDescriptors.TimeDescriptorConfiguration;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.core.geotime.store.GeotoolsFeatureDataAdapter;
 import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors;
+import org.locationtech.geowave.core.geotime.util.TimeDescriptors.TimeDescriptorConfiguration;
+import org.locationtech.geowave.core.geotime.util.TimeUtils;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.EntryVisibilityHandler;
 import org.locationtech.geowave.core.store.adapter.AbstractDataAdapter;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.IndexFieldHandler;
+import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler;
-import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
 import org.locationtech.geowave.core.store.adapter.NativeFieldHandler.RowBuilder;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.PersistentIndexFieldHandler;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
 import org.locationtech.geowave.core.store.adapter.statistics.StatisticsProvider;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldUtils;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
@@ -53,9 +59,8 @@ import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataAdapter;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.locationtech.geowave.mapreduce.HadoopDataAdapter;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
@@ -119,10 +124,10 @@ public class FeatureDataAdapter extends
 		GeotoolsFeatureDataAdapter,
 		StatisticsProvider<SimpleFeature>,
 		HadoopDataAdapter<SimpleFeature, FeatureWritable>,
-		SecondaryIndexDataAdapter<SimpleFeature>
+		SecondaryIndexDataAdapter<SimpleFeature>,
+		InitializeWithIndicesDataAdapter<SimpleFeature>
 {
 	private final static Logger LOGGER = LoggerFactory.getLogger(FeatureDataAdapter.class);
-
 	// the original coordinate system will always be represented internally by
 	// the persisted type
 	private SimpleFeatureType persistedFeatureType;
@@ -260,26 +265,13 @@ public class FeatureDataAdapter extends
 		setFeatureType(featureType);
 	}
 
-	// -----------------------------------------------------------------------------------
-	// -----------------------------------------------------------------------------------
-	// Simplify for call from pyspark/jupyter
-	public void init(
-			final PrimaryIndex index ) {
-		this.init(new PrimaryIndex[] {
-			index
-		});
-	}
-
 	@Override
-	public void init(
-			final PrimaryIndex... indices )
+	public boolean init(
+			final Index... indices )
 			throws RuntimeException {
-		// TODO get projection here, make sure if multiple indices are given
-		// that they match
-
-		String indexCrsCode = null;
-		for (final PrimaryIndex primaryindx : indices) {
-
+		String indexCrsCode = reprojectedFeatureType == null ? null : GeometryUtils.getCrsCode(reprojectedFeatureType
+				.getCoordinateReferenceSystem());
+		for (final Index primaryindx : indices) {
 			// for first iteration
 			if (indexCrsCode == null) {
 				if (primaryindx.getIndexModel() instanceof CustomCrsIndexModel) {
@@ -297,25 +289,27 @@ public class FeatureDataAdapter extends
 						throw new RuntimeException(
 								"Multiple indices with different CRS is not supported");
 					}
-					else {
-						if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
-							LOGGER.error("Multiple indices with different CRS is not supported");
-							throw new RuntimeException(
-									"Multiple indices with different CRS is not supported");
-						}
-
+				}
+				else {
+					if (!indexCrsCode.equals(GeometryUtils.DEFAULT_CRS_STR)) {
+						LOGGER.error("Multiple indices with different CRS is not supported");
+						throw new RuntimeException(
+								"Multiple indices with different CRS is not supported");
 					}
+
 				}
 			}
 		}
-
+		if (reprojectedFeatureType != null) {
+			return false;
+		}
 		initCRS(indexCrsCode);
+		return true;
 	}
 
 	private void initCRS(
 			String indexCrsCode ) {
 		if ((indexCrsCode == null) || indexCrsCode.isEmpty()) {
-			// TODO make sure we handle null/empty to make it default
 			indexCrsCode = GeometryUtils.DEFAULT_CRS_STR;
 		}
 		CoordinateReferenceSystem persistedCRS = persistedFeatureType.getCoordinateReferenceSystem();
@@ -403,7 +397,7 @@ public class FeatureDataAdapter extends
 	 */
 	protected List<NativeFieldHandler<SimpleFeature, Object>> getFieldHandlersFromFeatureType(
 			final SimpleFeatureType featureType ) {
-		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<NativeFieldHandler<SimpleFeature, Object>>(
+		final List<NativeFieldHandler<SimpleFeature, Object>> nativeHandlers = new ArrayList<>(
 				featureType.getAttributeCount());
 
 		for (final AttributeDescriptor attrDesc : featureType.getAttributeDescriptors()) {
@@ -430,7 +424,7 @@ public class FeatureDataAdapter extends
 			final SimpleFeatureType featureType ) {
 		final VisibilityConfiguration config = new VisibilityConfiguration(
 				featureType);
-		final TimeDescriptors timeDescriptors = inferTimeAttributeDescriptor(featureType);
+		final TimeDescriptors timeDescriptors = TimeUtils.inferTimeAttributeDescriptor(featureType);
 
 		if ((timeDescriptors.getStartRange() != null) && (timeDescriptors.getEndRange() != null)) {
 
@@ -491,7 +485,7 @@ public class FeatureDataAdapter extends
 		if ((typeObj != null) && (typeObj instanceof SimpleFeatureType)) {
 
 			final SimpleFeatureType internalType = (SimpleFeatureType) typeObj;
-			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>>();
+			final List<IndexFieldHandler<SimpleFeature, ? extends CommonIndexValue, Object>> defaultHandlers = new ArrayList<>();
 
 			nativeFieldHandlers = getFieldHandlersFromFeatureType(internalType);
 
@@ -541,7 +535,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Map of Field Readers associated with a Field ID
 	 */
-	private final Map<ByteArrayId, FieldReader<Object>> mapOfFieldIdToReaders = new HashMap<ByteArrayId, FieldReader<Object>>();
+	private final Map<String, FieldReader<Object>> mapOfFieldNameToReaders = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -550,22 +544,22 @@ public class FeatureDataAdapter extends
 	 */
 	@Override
 	public FieldReader<Object> getReader(
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		// Go to the map to get a reader for given fieldId
 
-		FieldReader<Object> reader = mapOfFieldIdToReaders.get(fieldId);
+		FieldReader<Object> reader = mapOfFieldNameToReaders.get(fieldName);
 
 		// Check the map to see if a reader has already been found.
 		if (reader == null) {
 			// Reader not in Map, go to the reprojected feature type and get the
 			// default reader
-			final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldId.getString());
+			final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldName);
 			final Class<?> bindingClass = descriptor.getType().getBinding();
 			reader = (FieldReader<Object>) FieldUtils.getDefaultReaderForClass(bindingClass);
 
 			// Add it to map for the next time
-			mapOfFieldIdToReaders.put(
-					fieldId,
+			mapOfFieldNameToReaders.put(
+					fieldName,
 					reader);
 		}
 
@@ -576,7 +570,7 @@ public class FeatureDataAdapter extends
 	/**
 	 * Map of Field Writers associated with a Field ID
 	 */
-	private final Map<ByteArrayId, FieldWriter<SimpleFeature, Object>> mapOfFieldIdToWriters = new HashMap<ByteArrayId, FieldWriter<SimpleFeature, Object>>();
+	private final Map<String, FieldWriter<SimpleFeature, Object>> mapOfFieldNameToWriters = new HashMap<>();
 
 	/**
 	 * {@inheritDoc}
@@ -585,15 +579,15 @@ public class FeatureDataAdapter extends
 	 */
 	@Override
 	public FieldWriter<SimpleFeature, Object> getWriter(
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		// Go to the map to get a writer for given fieldId
 
-		FieldWriter<SimpleFeature, Object> writer = mapOfFieldIdToWriters.get(fieldId);
+		FieldWriter<SimpleFeature, Object> writer = mapOfFieldNameToWriters.get(fieldName);
 
 		// Check the map to see if a writer has already been found.
 		if (writer == null) {
-			final FieldVisibilityHandler<SimpleFeature, Object> handler = getLocalVisibilityHandler(fieldId);
-			final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldId.getString());
+			final FieldVisibilityHandler<SimpleFeature, Object> handler = getLocalVisibilityHandler(fieldName);
+			final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldName);
 
 			final Class<?> bindingClass = descriptor.getType().getBinding();
 			if (handler != null) {
@@ -608,8 +602,8 @@ public class FeatureDataAdapter extends
 				LOGGER.error("BasicWriter not found for binding type:" + bindingClass.getName().toString());
 			}
 
-			mapOfFieldIdToWriters.put(
-					fieldId,
+			mapOfFieldNameToWriters.put(
+					fieldName,
 					writer);
 		}
 		return writer;
@@ -618,7 +612,7 @@ public class FeatureDataAdapter extends
 	// ----------------------------------------------------------------------------------
 
 	private FieldVisibilityHandler<SimpleFeature, Object> getLocalVisibilityHandler(
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		final VisibilityConfiguration visConfig = new VisibilityConfiguration(
 				reprojectedFeatureType);
 
@@ -630,7 +624,7 @@ public class FeatureDataAdapter extends
 		}
 
 		// Yes, then get the descriptor for the given field ID
-		final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldId.getString());
+		final AttributeDescriptor descriptor = reprojectedFeatureType.getDescriptor(fieldName);
 
 		return visConfig.getManager().createVisibilityHandler(
 				descriptor.getLocalName(),
@@ -671,7 +665,7 @@ public class FeatureDataAdapter extends
 				typeName,
 				new VisibilityConfiguration(
 						persistedFeatureType));
-		byte[] attrBytes = userDataConfiguration.toBinary();
+		final byte[] attrBytes = userDataConfiguration.toBinary();
 		final String namespace = reprojectedFeatureType.getName().getNamespaceURI();
 
 		byte[] namespaceBytes;
@@ -808,22 +802,14 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId getAdapterId() {
-		return new ByteArrayId(
-				StringUtils.stringToBinary(persistedFeatureType.getTypeName()));
+	public String getTypeName() {
+		return persistedFeatureType.getTypeName();
 	}
 
 	@Override
-	public boolean isSupported(
+	public ByteArray getDataId(
 			final SimpleFeature entry ) {
-		return reprojectedFeatureType.getName().getURI().equals(
-				entry.getType().getName().getURI());
-	}
-
-	@Override
-	public ByteArrayId getDataId(
-			final SimpleFeature entry ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				StringUtils.stringToBinary(entry.getID()));
 	}
 
@@ -858,7 +844,7 @@ public class FeatureDataAdapter extends
 
 		if (transform != null) {
 			return super.encode(
-					FeatureDataUtils.crsTransform(
+					GeometryUtils.crsTransform(
 							entry,
 							reprojectedFeatureType,
 							transform),
@@ -871,21 +857,21 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public ByteArrayId[] getSupportedStatisticsTypes() {
-		return statsManager.getSupportedStatisticsIds();
+	public StatisticsId[] getSupportedStatistics() {
+		return statsManager.getSupportedStatistics();
 	}
 
 	@Override
-	public DataStatistics<SimpleFeature> createDataStatistics(
-			final ByteArrayId statisticsId ) {
-		return statsManager.createDataStatistics(statisticsId);
+	public <R, B extends StatisticsQueryBuilder<R, B>> InternalDataStatistics<SimpleFeature, R, B> createDataStatistics(
+			final StatisticsId statisticsId ) {
+		return (InternalDataStatistics<SimpleFeature, R, B>) statsManager.createDataStatistics(statisticsId);
 	}
 
 	@Override
 	public EntryVisibilityHandler<SimpleFeature> getVisibilityHandler(
 			final CommonIndexModel indexModel,
-			final DataAdapter<SimpleFeature> adapter,
-			final ByteArrayId statisticsId ) {
+			final DataTypeAdapter<SimpleFeature> adapter,
+			final StatisticsId statisticsId ) {
 		return statsManager.getVisibilityHandler(
 				indexModel,
 				adapter,
@@ -898,39 +884,14 @@ public class FeatureDataAdapter extends
 	}
 
 	public synchronized void resetTimeDescriptors() {
-		timeDescriptors = inferTimeAttributeDescriptor(persistedFeatureType);
+		timeDescriptors = TimeUtils.inferTimeAttributeDescriptor(persistedFeatureType);
 	}
 
 	@Override
 	public synchronized TimeDescriptors getTimeDescriptors() {
 		if (timeDescriptors == null) {
-			timeDescriptors = inferTimeAttributeDescriptor(persistedFeatureType);
+			timeDescriptors = TimeUtils.inferTimeAttributeDescriptor(persistedFeatureType);
 		}
-		return timeDescriptors;
-	}
-
-	/**
-	 * Determine if a time or range descriptor is set. If so, then use it,
-	 * otherwise infer.
-	 *
-	 * @param persistType
-	 *            - FeatureType that will be scanned for TimeAttributes
-	 * @return
-	 */
-	protected static final TimeDescriptors inferTimeAttributeDescriptor(
-			final SimpleFeatureType persistType ) {
-
-		final TimeDescriptorConfiguration config = new TimeDescriptorConfiguration(
-				persistType);
-		final TimeDescriptors timeDescriptors = new TimeDescriptors(
-				persistType,
-				config);
-
-		// Up the meta-data so that it is clear and visible any inference that
-		// has occurred here. Also, this is critical to
-		// serialization/deserialization
-
-		config.updateType(persistType);
 		return timeDescriptors;
 	}
 
@@ -967,23 +928,23 @@ public class FeatureDataAdapter extends
 	}
 
 	@Override
-	public List<SecondaryIndex<SimpleFeature>> getSupportedSecondaryIndices() {
+	public List<SecondaryIndexImpl<SimpleFeature>> getSupportedSecondaryIndices() {
 		return secondaryIndexManager.getSupportedSecondaryIndices();
 	}
 
-	private transient final BiMap<ByteArrayId, Integer> fieldToPositionMap = HashBiMap.create();
-	private transient BiMap<Integer, ByteArrayId> positionToFieldMap = null;
-	private transient final Map<String, List<ByteArrayId>> modelToDimensionsMap = new ConcurrentHashMap<>();
+	private transient final BiMap<String, Integer> fieldToPositionMap = HashBiMap.create();
+	private transient BiMap<Integer, String> positionToFieldMap = null;
+	private transient final Map<String, List<String>> modelToDimensionsMap = new ConcurrentHashMap<>();
 	private transient volatile boolean positionMapsInitialized = false;
 
 	@Override
 	public int getPositionOfOrderedField(
 			final CommonIndexModel model,
-			final ByteArrayId fieldId ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
+			final String fieldName ) {
+		final List<String> dimensionFieldNames = getDimensionFieldNames(model);
 		// first check CommonIndexModel dimensions
-		if (dimensionFieldIds.contains(fieldId)) {
-			return dimensionFieldIds.indexOf(fieldId);
+		if (dimensionFieldNames.contains(fieldName)) {
+			return dimensionFieldNames.indexOf(fieldName);
 		}
 		if (!positionMapsInitialized) {
 			synchronized (this) {
@@ -992,20 +953,20 @@ public class FeatureDataAdapter extends
 		}
 		// next check other fields
 		// dimension fields must be first, add padding
-		final Integer position = fieldToPositionMap.get(fieldId);
+		final Integer position = fieldToPositionMap.get(fieldName);
 		if (position == null) {
 			return -1;
 		}
-		return position.intValue() + dimensionFieldIds.size();
+		return position.intValue() + dimensionFieldNames.size();
 	}
 
 	@Override
-	public ByteArrayId getFieldIdForPosition(
+	public String getFieldNameForPosition(
 			final CommonIndexModel model,
 			final int position ) {
-		final List<ByteArrayId> dimensionFieldIds = getDimensionFieldIds(model);
-		if (position >= dimensionFieldIds.size()) {
-			final int adjustedPosition = position - dimensionFieldIds.size();
+		final List<String> dimensionFieldNames = getDimensionFieldNames(model);
+		if (position >= dimensionFieldNames.size()) {
+			final int adjustedPosition = position - dimensionFieldNames.size();
 			if (!positionMapsInitialized) {
 				synchronized (this) {
 					initializePositionMaps();
@@ -1015,7 +976,7 @@ public class FeatureDataAdapter extends
 			return positionToFieldMap.get(adjustedPosition);
 		}
 		// otherwise check CommonIndexModel dimensions
-		return dimensionFieldIds.get(position);
+		return dimensionFieldNames.get(position);
 	}
 
 	private void initializePositionMaps() {
@@ -1025,10 +986,9 @@ public class FeatureDataAdapter extends
 		try {
 			for (int i = 0; i < reprojectedFeatureType.getAttributeCount(); i++) {
 				final AttributeDescriptor ad = reprojectedFeatureType.getDescriptor(i);
-				final ByteArrayId currFieldId = new ByteArrayId(
-						ad.getLocalName());
+				final String currFieldName = ad.getLocalName();
 				fieldToPositionMap.forcePut(
-						currFieldId,
+						currFieldName,
 						i);
 			}
 			positionToFieldMap = fieldToPositionMap.inverse();
@@ -1041,17 +1001,17 @@ public class FeatureDataAdapter extends
 		}
 	}
 
-	protected List<ByteArrayId> getDimensionFieldIds(
+	protected List<String> getDimensionFieldNames(
 			final CommonIndexModel model ) {
-		final List<ByteArrayId> retVal = modelToDimensionsMap.get(model.getId());
+		final List<String> retVal = modelToDimensionsMap.get(model.getId());
 		if (retVal != null) {
 			return retVal;
 		}
-		final List<ByteArrayId> dimensionFieldIds = DataStoreUtils.getUniqueDimensionFields(model);
+		final List<String> dimensionFieldNames = DataStoreUtils.getUniqueDimensionFields(model);
 		modelToDimensionsMap.put(
 				model.getId(),
-				dimensionFieldIds);
-		return dimensionFieldIds;
+				dimensionFieldNames);
+		return dimensionFieldNames;
 	}
 
 	public static CoordinateReferenceSystem decodeCRS(

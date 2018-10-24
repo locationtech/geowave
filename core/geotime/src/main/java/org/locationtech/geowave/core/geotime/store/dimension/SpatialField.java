@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,7 +12,7 @@ package org.locationtech.geowave.core.geotime.store.dimension;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.dimension.NumericDimensionDefinition;
 import org.locationtech.geowave.core.index.dimension.bin.BinRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -24,24 +24,27 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 
 /**
  * A base class for EPSG:4326 latitude/longitude fields that use JTS geometry
- * 
+ *
  */
 abstract public class SpatialField implements
 		NumericDimensionField<GeometryWrapper>
 {
 	protected NumericDimensionDefinition baseDefinition;
-	private final GeometryAdapter geometryAdapter;
-	private ByteArrayId fieldId;
+	private final GeometryWrapperReader geometryReader;
+	private final GeometryWrapperWriter geometryWriter;
+	private String fieldName;
 
 	protected SpatialField() {
-		geometryAdapter = new GeometryAdapter();
+		geometryReader = new GeometryWrapperReader();
+		geometryWriter = new GeometryWrapperWriter();
+		this.fieldName = GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME;
 	}
 
 	public SpatialField(
 			final NumericDimensionDefinition baseDefinition ) {
 		this(
 				baseDefinition,
-				GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
+				GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 	}
 
 	@Override
@@ -51,10 +54,11 @@ abstract public class SpatialField implements
 
 	public SpatialField(
 			final NumericDimensionDefinition baseDefinition,
-			final ByteArrayId fieldId ) {
+			final String fieldName ) {
 		this.baseDefinition = baseDefinition;
-		this.fieldId = fieldId;
-		geometryAdapter = new GeometryAdapter();
+		this.fieldName = fieldName;
+		geometryReader = new GeometryWrapperReader();
+		geometryWriter = new GeometryWrapperWriter();
 	}
 
 	@Override
@@ -99,18 +103,18 @@ abstract public class SpatialField implements
 	}
 
 	@Override
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	@Override
 	public FieldWriter<?, GeometryWrapper> getWriter() {
-		return geometryAdapter;
+		return geometryWriter;
 	}
 
 	@Override
 	public FieldReader<GeometryWrapper> getReader() {
-		return geometryAdapter;
+		return geometryReader;
 	}
 
 	@Override
@@ -121,9 +125,10 @@ abstract public class SpatialField implements
 	@Override
 	public byte[] toBinary() {
 		final byte[] dimensionBinary = PersistenceUtils.toBinary(baseDefinition);
-		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldId.getBytes().length + 4);
-		buf.putInt(fieldId.getBytes().length);
-		buf.put(fieldId.getBytes());
+		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
+		final ByteBuffer buf = ByteBuffer.allocate(dimensionBinary.length + fieldNameBytes.length + 4);
+		buf.putInt(fieldNameBytes.length);
+		buf.put(fieldNameBytes);
 		buf.put(dimensionBinary);
 		return buf.array();
 	}
@@ -132,13 +137,11 @@ abstract public class SpatialField implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer buf = ByteBuffer.wrap(bytes);
-		final int fieldIdLength = buf.getInt();
-		final byte[] fieldIdBinary = new byte[fieldIdLength];
-		buf.get(fieldIdBinary);
-		fieldId = new ByteArrayId(
-				fieldIdBinary);
-
-		final byte[] dimensionBinary = new byte[bytes.length - fieldIdLength - 4];
+		final int fieldNameLength = buf.getInt();
+		final byte[] fieldNameBytes = new byte[fieldNameLength];
+		buf.get(fieldNameBytes);
+		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
+		final byte[] dimensionBinary = new byte[bytes.length - fieldNameLength - 4];
 		buf.get(dimensionBinary);
 		baseDefinition = (NumericDimensionDefinition) PersistenceUtils.fromBinary(dimensionBinary);
 	}
@@ -150,7 +153,7 @@ abstract public class SpatialField implements
 		final String className = getClass().getName();
 		result = (prime * result) + ((className == null) ? 0 : className.hashCode());
 		result = (prime * result) + ((baseDefinition == null) ? 0 : baseDefinition.hashCode());
-		result = (prime * result) + ((fieldId == null) ? 0 : fieldId.hashCode());
+		result = (prime * result) + ((fieldName == null) ? 0 : fieldName.hashCode());
 		return result;
 	}
 
@@ -175,12 +178,12 @@ abstract public class SpatialField implements
 		else if (!baseDefinition.equals(other.baseDefinition)) {
 			return false;
 		}
-		if (fieldId == null) {
-			if (other.fieldId != null) {
+		if (fieldName == null) {
+			if (other.fieldName != null) {
 				return false;
 			}
 		}
-		else if (!fieldId.equals(other.fieldId)) {
+		else if (!fieldName.equals(other.fieldName)) {
 			return false;
 		}
 		return true;

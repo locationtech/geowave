@@ -14,7 +14,7 @@ package org.locationtech.geowave.core.index;
  * Interface which defines an index strategy.
  *
  */
-public interface SortedIndexStrategy<QueryRangeType extends QueryConstraints, EntryRangeType> extends
+public interface SortedIndexStrategy<QueryRangeType extends IndexConstraints, EntryRangeType> extends
 		IndexStrategy
 {
 	/**
@@ -80,7 +80,7 @@ public interface SortedIndexStrategy<QueryRangeType extends QueryConstraints, En
 	 *         the start and exclusive on the end for the range
 	 */
 	public EntryRangeType getRangeForId(
-			ByteArrayId partitionKey,
-			ByteArrayId sortKey );
+			ByteArray partitionKey,
+			ByteArray sortKey );
 
 }

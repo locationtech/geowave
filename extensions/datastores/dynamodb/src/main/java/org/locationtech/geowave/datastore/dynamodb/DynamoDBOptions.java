@@ -101,6 +101,30 @@ public class DynamoDBOptions extends
 		}
 	};
 
+	public DynamoDBOptions() {}
+
+	public DynamoDBOptions(
+			String endpoint,
+			Regions region,
+			long writeCapacity,
+			long readCapacity,
+			int maxConnections,
+			Protocol protocol,
+			boolean enableCacheResponseMetadata,
+			String gwNamespace,
+			BaseDataStoreOptions baseOptions ) {
+		super(
+				gwNamespace);
+		this.endpoint = endpoint;
+		this.region = region;
+		this.writeCapacity = writeCapacity;
+		this.readCapacity = readCapacity;
+		this.maxConnections = maxConnections;
+		this.protocol = protocol;
+		this.enableCacheResponseMetadata = enableCacheResponseMetadata;
+		this.baseOptions = baseOptions;
+	}
+
 	private final ClientConfiguration clientConfig = new ClientConfiguration();
 
 	public ClientConfiguration getClientConfig() {

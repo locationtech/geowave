@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,12 +14,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
-
-import java.util.Map;
 
 /**
  * This class provides utility methods for accessing job context configuration
@@ -29,8 +29,10 @@ public class GeoWaveInputConfigurator extends
 		GeoWaveConfiguratorBase
 {
 	protected static enum InputConfig {
-		QUERY,
-		QUERY_OPTIONS,
+		QUERY_CONSTRAINTS,
+		INDEX_QUERY_OPTIONS,
+		DATA_TYPE_QUERY_OPTIONS,
+		COMMON_QUERY_OPTIONS,
 		MIN_SPLITS,
 		MAX_SPLITS,
 		OUTPUT_WRITABLE, // used to inform the input format to output a Writable
@@ -38,32 +40,62 @@ public class GeoWaveInputConfigurator extends
 		AUTHORIZATION
 	}
 
-	private static DistributableQuery getQueryInternal(
+	private static QueryConstraints getQueryConstraintsInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration ) {
 		final String queryStr = configuration.get(
 				enumToConfKey(
 						implementingClass,
-						InputConfig.QUERY),
+						InputConfig.QUERY_CONSTRAINTS),
 				"");
 		if ((queryStr != null) && !queryStr.isEmpty()) {
 			final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
-			return (DistributableQuery) PersistenceUtils.fromBinary(queryBytes);
+			return (QueryConstraints) PersistenceUtils.fromBinary(queryBytes);
 		}
 		return null;
 	}
 
-	private static QueryOptions getQueryOptionsInternal(
+	private static IndexQueryOptions getIndexQueryOptionsInternal(
 			final Class<?> implementingClass,
 			final Configuration configuration ) {
 		final String queryStr = configuration.get(
 				enumToConfKey(
 						implementingClass,
-						InputConfig.QUERY_OPTIONS),
+						InputConfig.INDEX_QUERY_OPTIONS),
 				"");
 		if ((queryStr != null) && !queryStr.isEmpty()) {
 			final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
-			return (QueryOptions) PersistenceUtils.fromBinary(queryBytes);
+			return (IndexQueryOptions) PersistenceUtils.fromBinary(queryBytes);
+		}
+		return null;
+	}
+
+	private static DataTypeQueryOptions<?> getDataTypeQueryOptionsInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		final String queryStr = configuration.get(
+				enumToConfKey(
+						implementingClass,
+						InputConfig.DATA_TYPE_QUERY_OPTIONS),
+				"");
+		if ((queryStr != null) && !queryStr.isEmpty()) {
+			final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
+			return (DataTypeQueryOptions<?>) PersistenceUtils.fromBinary(queryBytes);
+		}
+		return null;
+	}
+
+	private static CommonQueryOptions getCommonQueryOptionsInternal(
+			final Class<?> implementingClass,
+			final Configuration configuration ) {
+		final String queryStr = configuration.get(
+				enumToConfKey(
+						implementingClass,
+						InputConfig.COMMON_QUERY_OPTIONS),
+				"");
+		if ((queryStr != null) && !queryStr.isEmpty()) {
+			final byte[] queryBytes = ByteArrayUtils.byteArrayFromString(queryStr);
+			return (CommonQueryOptions) PersistenceUtils.fromBinary(queryBytes);
 		}
 		return null;
 	}
@@ -102,7 +134,7 @@ public class GeoWaveInputConfigurator extends
 		return null;
 	}
 
-	public static PrimaryIndex getIndex(
+	public static Index getIndex(
 			final Class<?> implementingClass,
 			final Configuration config ) {
 		final String input = config.get(enumToConfKey(
@@ -110,60 +142,112 @@ public class GeoWaveInputConfigurator extends
 				GeoWaveConfg.INDEX));
 		if (input != null) {
 			final byte[] indexBytes = ByteArrayUtils.byteArrayFromString(input);
-			return (PrimaryIndex) PersistenceUtils.fromBinary(indexBytes);
+			return (Index) PersistenceUtils.fromBinary(indexBytes);
 		}
 		return null;
 	}
 
-	public static DistributableQuery getQuery(
+	public static QueryConstraints getQueryCosntraints(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return getQueryInternal(
+		return getQueryConstraintsInternal(
 				implementingClass,
 				getConfiguration(context));
 	}
 
-	public static void setQuery(
+	public static void setQueryConstraints(
 			final Class<?> implementingClass,
 			final Configuration config,
-			final DistributableQuery query ) {
+			final QueryConstraints query ) {
 		if (query != null) {
 			config.set(
 					enumToConfKey(
 							implementingClass,
-							InputConfig.QUERY),
+							InputConfig.QUERY_CONSTRAINTS),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(query)));
 		}
 		else {
 			config.unset(enumToConfKey(
 					implementingClass,
-					InputConfig.QUERY));
+					InputConfig.QUERY_CONSTRAINTS));
 		}
 	}
 
-	public static QueryOptions getQueryOptions(
+	public static IndexQueryOptions getIndexQueryOptions(
 			final Class<?> implementingClass,
 			final JobContext context ) {
-		return getQueryOptionsInternal(
+		return getIndexQueryOptionsInternal(
 				implementingClass,
 				getConfiguration(context));
 	}
 
-	public static void setQueryOptions(
+	public static void setIndexQueryOptions(
 			final Class<?> implementingClass,
 			final Configuration config,
-			final QueryOptions queryOptions ) {
+			final IndexQueryOptions queryOptions ) {
 		if (queryOptions != null) {
 			config.set(
 					enumToConfKey(
 							implementingClass,
-							InputConfig.QUERY_OPTIONS),
+							InputConfig.INDEX_QUERY_OPTIONS),
 					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(queryOptions)));
 		}
 		else {
 			config.unset(enumToConfKey(
 					implementingClass,
-					InputConfig.QUERY_OPTIONS));
+					InputConfig.INDEX_QUERY_OPTIONS));
+		}
+	}
+
+	public static DataTypeQueryOptions<?> getDataTypeQueryOptions(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return getDataTypeQueryOptionsInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	public static void setDataTypeQueryOptions(
+			final Class<?> implementingClass,
+			final Configuration config,
+			final DataTypeQueryOptions<?> queryOptions ) {
+		if (queryOptions != null) {
+			config.set(
+					enumToConfKey(
+							implementingClass,
+							InputConfig.DATA_TYPE_QUERY_OPTIONS),
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(queryOptions)));
+		}
+		else {
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.DATA_TYPE_QUERY_OPTIONS));
+		}
+	}
+
+	public static CommonQueryOptions getCommonQueryOptions(
+			final Class<?> implementingClass,
+			final JobContext context ) {
+		return getCommonQueryOptionsInternal(
+				implementingClass,
+				getConfiguration(context));
+	}
+
+	public static void setCommonQueryOptions(
+			final Class<?> implementingClass,
+			final Configuration config,
+			final CommonQueryOptions queryOptions ) {
+		if (queryOptions != null) {
+			config.set(
+					enumToConfKey(
+							implementingClass,
+							InputConfig.COMMON_QUERY_OPTIONS),
+					ByteArrayUtils.byteArrayToString(PersistenceUtils.toBinary(queryOptions)));
+		}
+		else {
+			config.unset(enumToConfKey(
+					implementingClass,
+					InputConfig.COMMON_QUERY_OPTIONS));
 		}
 	}
 

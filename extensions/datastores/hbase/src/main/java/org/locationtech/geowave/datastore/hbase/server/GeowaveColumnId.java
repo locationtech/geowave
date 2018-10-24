@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.datastore.hbase.server;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public interface GeowaveColumnId
 {
@@ -51,7 +51,7 @@ class ByteArrayColumnId implements
 		GeowaveColumnId
 {
 
-	private ByteArrayId columnId;
+	private ByteArray columnId;
 
 	@Override
 	public int hashCode() {
@@ -76,7 +76,7 @@ class ByteArrayColumnId implements
 	}
 
 	public ByteArrayColumnId(
-			ByteArrayId columnId ) {
+			ByteArray columnId ) {
 		this.columnId = columnId;
 	}
 }

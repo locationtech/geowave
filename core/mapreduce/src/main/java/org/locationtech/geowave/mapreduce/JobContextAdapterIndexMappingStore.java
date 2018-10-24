@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,10 +15,8 @@ import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.JobContext;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 
 /**
  * This class implements an adapter index mapping store by first checking the
@@ -32,7 +30,7 @@ public class JobContextAdapterIndexMappingStore implements
 	private static final Class<?> CLASS = JobContextAdapterIndexMappingStore.class;
 	private final JobContext context;
 	private final AdapterIndexMappingStore persistentAdapterIndexMappingStore;
-	private final Map<Short, AdapterToIndexMapping> adapterCache = new HashMap<Short, AdapterToIndexMapping>();
+	private final Map<Short, AdapterToIndexMapping> adapterCache = new HashMap<>();
 
 	public JobContextAdapterIndexMappingStore(
 			final JobContext context,
@@ -86,7 +84,7 @@ public class JobContextAdapterIndexMappingStore implements
 
 	@Override
 	public AdapterToIndexMapping getIndicesForAdapter(
-			short adapterId ) {
+			final short adapterId ) {
 		AdapterToIndexMapping adapter = adapterCache.get(adapterId);
 		if (adapter == null) {
 			adapter = getIndicesForAdapterInternal(adapterId);
@@ -96,16 +94,15 @@ public class JobContextAdapterIndexMappingStore implements
 
 	@Override
 	public void addAdapterIndexMapping(
-			AdapterToIndexMapping mapping )
-			throws MismatchedIndexToAdapterMapping {
+			final AdapterToIndexMapping mapping ) {
 		adapterCache.put(
-				mapping.getInternalAdapterId(),
+				mapping.getAdapterId(),
 				mapping);
 	}
 
 	@Override
 	public void remove(
-			short internalAdapterId ) {
+			final short internalAdapterId ) {
 		adapterCache.remove(internalAdapterId);
 	}
 

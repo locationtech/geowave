@@ -15,10 +15,7 @@ import java.util.List;
 
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.api.ServiceEnabledCommand;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
@@ -56,9 +53,9 @@ public abstract class AbstractStatsCommand<T> extends
 			final List<String> parameters ) {
 
 		final String storeName = parameters.get(0);
-		String adapterIdName = null;
+		String typeName = null;
 		if (parameters.size() > 1) {
-			adapterIdName = parameters.get(1);
+			typeName = parameters.get(1);
 		}
 
 		// Attempt to load input store if not already provided (test purposes).
@@ -75,12 +72,10 @@ public abstract class AbstractStatsCommand<T> extends
 			// Various stores needed
 			final PersistentAdapterStore adapterStore = inputStoreOptions.createAdapterStore();
 
-			if (adapterIdName != null) {
-				final ByteArrayId adapterId = new ByteArrayId(
-						adapterIdName);
+			if (typeName != null) {
 				final InternalAdapterStore internalAdapterStore = inputStoreOptions.createInternalAdapterStore();
-				final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapterId);
-				InternalDataAdapter<?> adapter = adapterStore.getAdapter(internalAdapterId);
+				final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+				InternalDataAdapter<?> adapter = adapterStore.getAdapter(adapterId);
 				if (adapter != null) {
 					performStatsCommand(
 							inputStoreOptions,
@@ -91,16 +86,13 @@ public abstract class AbstractStatsCommand<T> extends
 					// If this adapter is not known, provide list of available
 					// adapters
 					LOGGER.error("Unknown adapter " + adapterId);
-					final CloseableIterator<InternalDataAdapter<?>> it = adapterStore.getAdapters();
 					final StringBuffer buffer = new StringBuffer();
-					while (it.hasNext()) {
-						adapter = it.next();
+					for (String t : internalAdapterStore.getTypeNames()) {
 						buffer.append(
-								adapter.getAdapterId().getString()).append(
+								t).append(
 								' ');
 					}
-					it.close();
-					LOGGER.info("Available adapters: " + buffer.toString());
+					LOGGER.info("Available data types: " + buffer.toString());
 				}
 			}
 			else {
@@ -112,8 +104,7 @@ public abstract class AbstractStatsCommand<T> extends
 								inputStoreOptions,
 								adapter,
 								statsOptions)) {
-							LOGGER.info("Unable to calculate statistics for adapter: "
-									+ adapter.getAdapterId().getString());
+							LOGGER.info("Unable to calculate statistics for data type: " + adapter.getTypeName());
 						}
 					}
 				}

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -23,21 +23,18 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDD;
 import org.locationtech.geowave.analytic.spark.GeoWaveRDDLoader;
 import org.locationtech.geowave.analytic.spark.RDDOptions;
-import org.locationtech.geowave.analytic.spark.sparksql.SimpleFeatureDataFrame;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlQueryRunner;
 import org.locationtech.geowave.analytic.spark.sparksql.SqlResultsWriter;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveBasicVectorIT;
-import org.locationtech.geowave.test.spark.SparkTestEnvironment;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,8 +87,8 @@ public class GeoWaveJavaSparkSQLIT extends
 	public void testCreateDataFrame()
 			throws Exception {
 		// Set up Spark
-		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
-		SparkContext context = session.sparkContext();
+		final SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
+		final SparkContext context = session.sparkContext();
 
 		// ingest test points
 		TestUtils.testLocalIngest(
@@ -100,18 +97,18 @@ public class GeoWaveJavaSparkSQLIT extends
 				HAIL_SHAPEFILE_FILE,
 				1);
 
-		SqlQueryRunner queryRunner = new SqlQueryRunner();
+		final SqlQueryRunner queryRunner = new SqlQueryRunner();
 		queryRunner.setSparkSession(session);
 
 		try {
 			// Load RDD from datastore, no filters
-			GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
+			final GeoWaveRDD newRDD = GeoWaveRDDLoader.loadRDD(
 					context,
 					dataStore,
 					new RDDOptions());
-			JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
+			final JavaPairRDD<GeoWaveInputKey, SimpleFeature> javaRdd = newRDD.getRawRDD();
 
-			long count = javaRdd.count();
+			final long count = javaRdd.count();
 			LOGGER.warn("DataStore loaded into RDD with " + count + " features.");
 
 			queryRunner.addInputStore(
@@ -119,17 +116,17 @@ public class GeoWaveJavaSparkSQLIT extends
 					null,
 					"features");
 
-			String bbox = "POLYGON ((-94 34, -93 34, -93 35, -94 35, -94 34))";
+			final String bbox = "POLYGON ((-94 34, -93 34, -93 35, -94 35, -94 34))";
 
 			queryRunner.setSql("SELECT * FROM features WHERE GeomContains(GeomFromWKT('" + bbox + "'), geom)");
 
 			Dataset<Row> results = queryRunner.run();
-			long containsCount = results.count();
+			final long containsCount = results.count();
 			LOGGER.warn("Got " + containsCount + " for GeomContains test");
 
 			queryRunner.setSql("SELECT * FROM features WHERE GeomWithin(geom, GeomFromWKT('" + bbox + "'))");
 			results = queryRunner.run();
-			long withinCount = results.count();
+			final long withinCount = results.count();
 			LOGGER.warn("Got " + withinCount + " for GeomWithin test");
 
 			Assert.assertTrue(
@@ -137,7 +134,7 @@ public class GeoWaveJavaSparkSQLIT extends
 					containsCount == withinCount);
 
 			// Test the output writer
-			SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
+			final SqlResultsWriter sqlResultsWriter = new SqlResultsWriter(
 					results,
 					dataStore);
 
@@ -146,12 +143,12 @@ public class GeoWaveJavaSparkSQLIT extends
 			queryRunner.removeAllStores();
 
 			// Test other spatial UDFs
-			String line1 = "LINESTRING(0 0, 10 10)";
-			String line2 = "LINESTRING(0 10, 10 0)";
+			final String line1 = "LINESTRING(0 0, 10 10)";
+			final String line2 = "LINESTRING(0 10, 10 0)";
 			queryRunner.setSql("SELECT GeomIntersects(GeomFromWKT('" + line1 + "'), GeomFromWKT('" + line2 + "'))");
 			Row result = queryRunner.run().head();
 
-			boolean intersect = result.getBoolean(0);
+			final boolean intersect = result.getBoolean(0);
 			LOGGER.warn("GeomIntersects returned " + intersect);
 
 			Assert.assertTrue(
@@ -161,7 +158,7 @@ public class GeoWaveJavaSparkSQLIT extends
 			queryRunner.setSql("SELECT GeomDisjoint(GeomFromWKT('" + line1 + "'), GeomFromWKT('" + line2 + "'))");
 			result = queryRunner.run().head();
 
-			boolean disjoint = result.getBoolean(0);
+			final boolean disjoint = result.getBoolean(0);
 			LOGGER.warn("GeomDisjoint returned " + disjoint);
 
 			Assert.assertFalse(
@@ -185,9 +182,9 @@ public class GeoWaveJavaSparkSQLIT extends
 			throws Exception {
 
 		// Set up Spark
-		SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
+		final SparkSession session = SparkTestEnvironment.getInstance().getDefaultSession();
 
-		SqlQueryRunner queryRunner = new SqlQueryRunner();
+		final SqlQueryRunner queryRunner = new SqlQueryRunner();
 		queryRunner.setSparkSession(session);
 
 		// ingest test points
@@ -207,16 +204,14 @@ public class GeoWaveJavaSparkSQLIT extends
 			// Run a valid sql query that should do a optimized join
 			queryRunner.addInputStore(
 					dataStore,
-					new ByteArrayId(
-							"hail"),
+					"hail",
 					"hail");
 			queryRunner.addInputStore(
 					dataStore,
-					new ByteArrayId(
-							"tornado_tracks"),
+					"tornado_tracks",
 					"tornado");
 			queryRunner.setSql("select hail.* from hail, tornado where GeomIntersects(hail.geom, tornado.geom)");
-			Dataset<Row> results = queryRunner.run();
+			final Dataset<Row> results = queryRunner.run();
 			LOGGER.warn("Indexed intersect from sql returns: " + results.count() + " results.");
 		}
 		catch (final Exception e) {

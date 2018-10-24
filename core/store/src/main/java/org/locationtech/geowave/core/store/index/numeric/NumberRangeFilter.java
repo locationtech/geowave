@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -12,16 +12,17 @@ package org.locationtech.geowave.core.store.index.numeric;
 
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.data.IndexedPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class NumberRangeFilter implements
-		DistributableQueryFilter
+		QueryFilter
 {
-	protected ByteArrayId fieldId;
+	protected String fieldName;
 	protected Number lowerValue;
 	protected Number upperValue;
 	protected boolean inclusiveLow;
@@ -32,21 +33,21 @@ public class NumberRangeFilter implements
 	}
 
 	public NumberRangeFilter(
-			ByteArrayId fieldId,
-			Number lowerValue,
-			Number upperValue,
-			boolean inclusiveLow,
-			boolean inclusiveHigh ) {
+			final String fieldName,
+			final Number lowerValue,
+			final Number upperValue,
+			final boolean inclusiveLow,
+			final boolean inclusiveHigh ) {
 		super();
-		this.fieldId = fieldId;
+		this.fieldName = fieldName;
 		this.lowerValue = lowerValue;
 		this.upperValue = upperValue;
 		this.inclusiveHigh = inclusiveHigh;
 		this.inclusiveLow = inclusiveLow;
 	}
 
-	public ByteArrayId getFieldId() {
-		return fieldId;
+	public String getFieldName() {
+		return fieldName;
 	}
 
 	public Number getLowerValue() {
@@ -69,27 +70,32 @@ public class NumberRangeFilter implements
 	public boolean accept(
 			final CommonIndexModel indexModel,
 			final IndexedPersistenceEncoding<?> persistenceEncoding ) {
-		final ByteArrayId value = (ByteArrayId) persistenceEncoding.getCommonData().getValue(
-				fieldId);
+		final ByteArray value = (ByteArray) persistenceEncoding.getCommonData().getValue(
+				fieldName);
 		if (value != null) {
 			final double val = Lexicoders.DOUBLE.fromByteArray(value.getBytes());
-			if (inclusiveLow && inclusiveHigh)
-				return val >= lowerValue.doubleValue() && val <= upperValue.doubleValue();
-			else if (inclusiveLow)
-				return val >= lowerValue.doubleValue() && val < upperValue.doubleValue();
-			else if (inclusiveHigh)
-				return val > lowerValue.doubleValue() && val <= upperValue.doubleValue();
-			else
-				return val > lowerValue.doubleValue() && val < upperValue.doubleValue();
+			if (inclusiveLow && inclusiveHigh) {
+				return (val >= lowerValue.doubleValue()) && (val <= upperValue.doubleValue());
+			}
+			else if (inclusiveLow) {
+				return (val >= lowerValue.doubleValue()) && (val < upperValue.doubleValue());
+			}
+			else if (inclusiveHigh) {
+				return (val > lowerValue.doubleValue()) && (val <= upperValue.doubleValue());
+			}
+			else {
+				return (val > lowerValue.doubleValue()) && (val < upperValue.doubleValue());
+			}
 		}
 		return false;
 	}
 
 	@Override
 	public byte[] toBinary() {
-		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldId.getBytes().length + 16);
-		bb.putInt(fieldId.getBytes().length);
-		bb.put(fieldId.getBytes());
+		final byte[] fieldNameBytes = StringUtils.stringToBinary(fieldName);
+		final ByteBuffer bb = ByteBuffer.allocate(4 + fieldNameBytes.length + 16);
+		bb.putInt(fieldNameBytes.length);
+		bb.put(fieldNameBytes);
 		bb.putDouble(lowerValue.doubleValue());
 		bb.putDouble(upperValue.doubleValue());
 		return bb.array();
@@ -99,10 +105,9 @@ public class NumberRangeFilter implements
 	public void fromBinary(
 			final byte[] bytes ) {
 		final ByteBuffer bb = ByteBuffer.wrap(bytes);
-		final byte[] fieldIdBytes = new byte[bb.getInt()];
-		bb.get(fieldIdBytes);
-		fieldId = new ByteArrayId(
-				fieldIdBytes);
+		final byte[] fieldNameBytes = new byte[bb.getInt()];
+		bb.get(fieldNameBytes);
+		fieldName = StringUtils.stringFromBinary(fieldNameBytes);
 		lowerValue = new Double(
 				bb.getDouble());
 		upperValue = new Double(

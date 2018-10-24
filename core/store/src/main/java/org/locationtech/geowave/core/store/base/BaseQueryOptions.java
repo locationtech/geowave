@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,29 +15,32 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.ImmutablePair;
 import org.apache.commons.lang3.tuple.Pair;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.Aggregation;
+import org.locationtech.geowave.core.store.api.AggregationQuery;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.Aggregation;
+import org.locationtech.geowave.core.store.query.options.AggregateTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.FilterByTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,58 +63,165 @@ public class BaseQueryOptions
 		"SE_TRANSIENT_FIELD_NOT_RESTORED"
 	})
 	private Collection<InternalDataAdapter<?>> adapters = null;
-	private Collection<Short> adapterIds = null;
-	private ByteArrayId indexId = null;
-	private transient PrimaryIndex index = null;
+	private short[] adapterIds = null;
+	private String indexName = null;
+	private transient Index index = null;
 	private Pair<InternalDataAdapter<?>, Aggregation<?, ?, ?>> aggregationAdapterPair;
 	private Integer limit = -1;
 	private Integer maxRangeDecomposition = null;
 	private double[] maxResolutionSubsamplingPerDimension = null;
+	private double[] targetResolutionPerDimensionForHierarchicalIndex = null;
 	private transient ScanCallback<?, ?> scanCallback = DEFAULT_CALLBACK;
 	private String[] authorizations = new String[0];
-	private Pair<List<String>, InternalDataAdapter<?>> fieldIdsAdapterPair;
+	private Pair<String[], InternalDataAdapter<?>> fieldIdsAdapterPair;
 	private boolean nullId = false;
 
 	public BaseQueryOptions(
-			final QueryOptions options,
+			final Query<?> query,
+			final PersistentAdapterStore adapterStore,
 			final InternalAdapterStore internalAdapterStore ) {
-		super();
-		indexId = options.getIndexId();
-		index = options.getIndex();
-		limit = options.getLimit();
-		maxRangeDecomposition = options.getMaxRangeDecomposition();
-		maxResolutionSubsamplingPerDimension = options.getMaxResolutionSubsamplingPerDimension();
-		authorizations = options.getAuthorizations();
+		this(
+				query,
+				adapterStore,
+				internalAdapterStore,
+				null);
+	}
 
-		if (options.getAggregation() != null) {
-			final DataAdapter<?> adapter = options.getAggregation().getLeft();
-			final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
-			aggregationAdapterPair = new ImmutablePair<>(
-					new InternalDataAdapterWrapper(
-							(WritableDataAdapter) adapter,
-							internalAdapterId),
-					options.getAggregation().getRight());
+	public BaseQueryOptions(
+			final AggregationQuery<?, ?, ?> query,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore ) {
+		this(
+				query.getCommonQueryOptions(),
+				query.getDataTypeQueryOptions(),
+				query.getIndexQueryOptions(),
+				adapterStore,
+				internalAdapterStore,
+				null);
+	}
+
+	public BaseQueryOptions(
+			final Query<?> query,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
+			final ScanCallback<?, ?> scanCallback ) {
+		this(
+				query.getCommonQueryOptions(),
+				query.getDataTypeQueryOptions(),
+				query.getIndexQueryOptions(),
+				adapterStore,
+				internalAdapterStore,
+				scanCallback);
+	}
+
+	public BaseQueryOptions(
+			final CommonQueryOptions commonOptions,
+			final DataTypeQueryOptions<?> typeOptions,
+			final IndexQueryOptions indexOptions,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore ) {
+		this(
+				commonOptions,
+				typeOptions,
+				indexOptions,
+				adapterStore,
+				internalAdapterStore,
+				null);
+	}
+
+	public BaseQueryOptions(
+			final CommonQueryOptions commonOptions,
+			final DataTypeQueryOptions<?> typeOptions,
+			final IndexQueryOptions indexOptions,
+			final PersistentAdapterStore adapterStore,
+			final InternalAdapterStore internalAdapterStore,
+			final ScanCallback<?, ?> scanCallback ) {
+		if (scanCallback != null) {
+			this.scanCallback = scanCallback;
+		}
+		indexName = indexOptions.getIndexName();
+		limit = commonOptions.getLimit();
+		maxRangeDecomposition = (Integer) commonOptions.getHints().get(
+				DataStoreUtils.MAX_RANGE_DECOMPOSITION);
+		maxResolutionSubsamplingPerDimension = (double[]) commonOptions.getHints().get(
+				DataStoreUtils.MAX_RESOLUTION_SUBSAMPLING_PER_DIMENSION);
+		targetResolutionPerDimensionForHierarchicalIndex = (double[]) commonOptions.getHints().get(
+				DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX);
+		authorizations = commonOptions.getAuthorizations();
+
+		if ((typeOptions instanceof AggregateTypeQueryOptions)
+				&& (((AggregateTypeQueryOptions) typeOptions).getAggregation() != null)) {
+			// TODO issue #1439 addresses being able to handle multiple types
+			// within aa single aggregation
+			// it seems that the best approach would check if its a
+			// commonindexaggregation and then it can be done with a single
+			// query with simply adapter IDs rather than even needing adapters,
+			// but if its not commonindexaggregation it would require multiple
+			// adapters either in the context of a single query or multiple
+			// queries, one per adapter and then aggregating the final result
+			// for now let's just assume a single type name and get the adapter,
+			// rather than just type name (which type name would be sufficient
+			// for commonindexaggregation)
+			if (((AggregateTypeQueryOptions) typeOptions).getTypeNames().length == 1) {
+				final String typeName = ((AggregateTypeQueryOptions) typeOptions).getTypeNames()[0];
+				final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+				if (adapterId != null) {
+					final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+					aggregationAdapterPair = new ImmutablePair<>(
+							new InternalDataAdapterWrapper<>(
+									adapter,
+									adapterId),
+							((AggregateTypeQueryOptions) typeOptions).getAggregation());
+				}
+				else {
+					throw new IllegalArgumentException(
+							"Type name " + typeName + " does not exist");
+				}
+			}
+			else {
+				// TODO GEOWAVE issue #1439 should tackle this case
+				throw new IllegalArgumentException(
+						"Single type name supported currently");
+			}
 		}
 
-		if (options.getFieldIdsAdapterPair() != null) {
-			final DataAdapter<?> adapter = options.getFieldIdsAdapterPair().getRight();
-			final short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter.getAdapterId());
-			fieldIdsAdapterPair = new ImmutablePair<>(
-					options.getFieldIdsAdapterPair().getLeft(),
-					new InternalDataAdapterWrapper(
-							(WritableDataAdapter) adapter,
-							internalAdapterId));
+		else if ((typeOptions instanceof FilterByTypeQueryOptions)
+				&& (((FilterByTypeQueryOptions) typeOptions).getFieldNames() != null)
+				&& (((FilterByTypeQueryOptions) typeOptions).getFieldNames().length > 0)
+				&& (((FilterByTypeQueryOptions) typeOptions).getTypeNames().length > 0)) {
+			// filter by type for field subsetting only allows a single type
+			// name
+			final String typeName = ((FilterByTypeQueryOptions) typeOptions).getTypeNames()[0];
+			if (typeName != null) {
+				final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+				if (adapterId != null) {
+					final DataTypeAdapter<?> adapter = adapterStore.getAdapter(adapterId);
+					fieldIdsAdapterPair = new ImmutablePair<>(
+							((FilterByTypeQueryOptions) typeOptions).getFieldNames(),
+							new InternalDataAdapterWrapper<>(
+									adapter,
+									adapterId));
+				}
+				else {
+					throw new IllegalArgumentException(
+							"Type name " + typeName + " does not exist");
+				}
+			}
+			else {
+				throw new IllegalArgumentException(
+						"Type name cannot be null for field subsetting");
+			}
 		}
 
-		if (options.getAdapterIds() != null) {
-			adapterIds = Collections2.filter(
+		if ((typeOptions != null) && (typeOptions.getTypeNames() != null) && (typeOptions.getTypeNames().length > 0)) {
+			adapterIds = ArrayUtils.toPrimitive(Collections2.filter(
 					Lists.transform(
-							options.getAdapterIds(),
-							new Function<ByteArrayId, Short>() {
+							Arrays.asList(typeOptions.getTypeNames()),
+							new Function<String, Short>() {
 								@Override
 								public Short apply(
-										final ByteArrayId input ) {
-									return internalAdapterStore.getInternalAdapterId(input);
+										final String input ) {
+									return internalAdapterStore.getAdapterId(input);
 								}
 							}),
 					new Predicate<Short>() {
@@ -124,42 +234,15 @@ public class BaseQueryOptions
 							}
 							return true;
 						}
-					});
-		}
-		if (options.getAdapters() != null) {
-			adapters = Collections2.filter(
-					Lists.transform(
-							options.getAdapters(),
-							new Function<DataAdapter<?>, InternalDataAdapter<?>>() {
-								@Override
-								public InternalDataAdapter<?> apply(
-										final DataAdapter<?> adapter ) {
-									final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(adapter
-											.getAdapterId());
-									if (internalAdapterId == null) {
-										LOGGER.warn("Unable to get internal Adapter ID from store.");
-										nullId = true;
-										return null;
-									}
-									return new InternalDataAdapterWrapper(
-											(WritableDataAdapter) adapter,
-											internalAdapterId);
-								}
-							}),
-					new Predicate<InternalDataAdapter<?>>() {
-						@Override
-						public boolean apply(
-								final InternalDataAdapter<?> input ) {
-							return input != null;
-						}
-					});
+					}).toArray(
+					new Short[0]));
 		}
 	}
 
 	public boolean isAllAdapters() {
 		// TODO what about field ID subsetting and aggregation which implicitly
 		// filters by adapter
-		return ((adapterIds == null) || adapterIds.isEmpty());
+		return ((adapterIds == null) || (adapterIds.length == 0));
 	}
 
 	/**
@@ -178,7 +261,7 @@ public class BaseQueryOptions
 	 * @throws IOException
 	 */
 
-	public List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
+	public List<Pair<Index, List<InternalDataAdapter<?>>>> getIndicesForAdapters(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
@@ -192,7 +275,7 @@ public class BaseQueryOptions
 	public InternalDataAdapter<?>[] getAdaptersArray(
 			final PersistentAdapterStore adapterStore )
 			throws IOException {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+		if ((adapterIds != null) && (adapterIds.length != 0)) {
 			if ((adapters == null) || adapters.isEmpty()) {
 				adapters = new ArrayList<>();
 				for (final Short id : adapterIds) {
@@ -227,24 +310,28 @@ public class BaseQueryOptions
 		return list.toArray(new InternalDataAdapter[list.size()]);
 	}
 
-	public void setInternalAdapterId(
-			final short internalAdapterId ) {
-		adapterIds = Arrays.asList(internalAdapterId);
+	public void setAdapterId(
+			final Short adapterId ) {
+		if (adapterId != null) {
+			adapterIds = new short[] {
+				adapterId
+			};
+		}
 	}
 
-	public Collection<Short> getAdapterIds() {
+	public short[] getAdapterIds() {
 		return adapterIds;
 	}
 
-	private List<Pair<PrimaryIndex, InternalDataAdapter<?>>> compileIndicesForAdapters(
+	private List<Pair<Index, InternalDataAdapter<?>>> compileIndicesForAdapters(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
 			throws IOException {
-		if ((adapterIds != null) && !adapterIds.isEmpty()) {
+		if ((adapterIds != null) && (adapterIds.length != 0)) {
 			if ((adapters == null) || adapters.isEmpty()) {
 				adapters = new ArrayList<>();
-				for (final Short id : adapterIds) {
+				for (final short id : adapterIds) {
 					final InternalDataAdapter<?> adapter = adapterStore.getAdapter(id);
 					if (adapter != null) {
 						adapters.add(adapter);
@@ -263,26 +350,25 @@ public class BaseQueryOptions
 		else if (adapters == null) {
 			adapters = Collections.emptyList();
 		}
-		final List<Pair<PrimaryIndex, InternalDataAdapter<?>>> result = new ArrayList<>();
+		final List<Pair<Index, InternalDataAdapter<?>>> result = new ArrayList<>();
 		for (final InternalDataAdapter<?> adapter : adapters) {
-			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(adapter
-					.getInternalAdapterId());
+			final AdapterToIndexMapping indices = adapterIndexMappingStore.getIndicesForAdapter(adapter.getAdapterId());
 			if (index != null) {
 				result.add(Pair.of(
 						index,
 						adapter));
 			}
-			else if ((indexId != null) && indices.contains(indexId)) {
+			else if ((indexName != null) && indices.contains(indexName)) {
 				if (index == null) {
-					index = (PrimaryIndex) indexStore.getIndex(indexId);
+					index = indexStore.getIndex(indexName);
 					result.add(Pair.of(
 							index,
 							adapter));
 				}
 			}
 			else if (indices.isNotEmpty()) {
-				for (final ByteArrayId id : indices.getIndexIds()) {
-					final PrimaryIndex pIndex = (PrimaryIndex) indexStore.getIndex(id);
+				for (final String name : indices.getIndexNames()) {
+					final Index pIndex = indexStore.getIndex(name);
 					// this could happen if persistent was turned off
 					if (pIndex != null) {
 						result.add(Pair.of(
@@ -319,11 +405,11 @@ public class BaseQueryOptions
 
 	/**
 	 * a value of null indicates to use the data store configured default
-	 * 
+	 *
 	 * @param maxRangeDecomposition
 	 */
 	public void setMaxRangeDecomposition(
-			Integer maxRangeDecomposition ) {
+			final Integer maxRangeDecomposition ) {
 		this.maxRangeDecomposition = maxRangeDecomposition;
 	}
 
@@ -360,6 +446,15 @@ public class BaseQueryOptions
 	public void setAuthorizations(
 			final String[] authorizations ) {
 		this.authorizations = authorizations;
+	}
+
+	public double[] getTargetResolutionPerDimensionForHierarchicalIndex() {
+		return targetResolutionPerDimensionForHierarchicalIndex;
+	}
+
+	public void setTargetResolutionPerDimensionForHierarchicalIndex(
+			final double[] targetResolutionPerDimensionForHierarchicalIndex ) {
+		this.targetResolutionPerDimensionForHierarchicalIndex = targetResolutionPerDimensionForHierarchicalIndex;
 	}
 
 	public void setMaxResolutionSubsamplingPerDimension(
@@ -400,7 +495,7 @@ public class BaseQueryOptions
 	 * @return
 	 * @throws IOException
 	 */
-	public List<Pair<PrimaryIndex, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
+	public List<Pair<Index, List<InternalDataAdapter<?>>>> getAdaptersWithMinimalSetOfIndices(
 			final PersistentAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore,
 			final IndexStore indexStore )
@@ -418,50 +513,38 @@ public class BaseQueryOptions
 	 * @return a paring of fieldIds and their associated data adapter >>>>>>>
 	 *         wip: bitmask approach
 	 */
-	public Pair<List<String>, InternalDataAdapter<?>> getFieldIdsAdapterPair() {
+	public Pair<String[], InternalDataAdapter<?>> getFieldIdsAdapterPair() {
 		return fieldIdsAdapterPair;
 	}
 
-	public Set<Short> getValidInternalAdapterIds(
+	public short[] getValidAdapterIds(
 			final InternalAdapterStore adapterStore,
 			final AdapterIndexMappingStore adapterIndexMappingStore )
 			throws IOException {
 		// Grab the list of adapter ids, either from the query (if included),
 		// Or the whole list from the adapter store...
-		final Set<Short> adapterIds = getAdapterIds(adapterStore);
+		final short[] adapterIds = getAdapterIds(adapterStore);
 
 		// Then for each adapter, verify that it exists in the index-adapter
 		// mapping
-		final Iterator<Short> adapterIdIterator = adapterIds.iterator();
-		while (adapterIdIterator.hasNext()) {
-			final AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterIdIterator
-					.next());
-			if (!mapping.contains(indexId)) {
-				adapterIdIterator.remove();
+		final List<Short> validIds = new ArrayList<>();
+		for (final short adapterId : adapterIds) {
+			final AdapterToIndexMapping mapping = adapterIndexMappingStore.getIndicesForAdapter(adapterId);
+			if (mapping.contains(indexName)) {
+				validIds.add(adapterId);
 			}
 		}
 
-		return adapterIds;
+		return ArrayUtils.toPrimitive(validIds.toArray(new Short[0]));
 	}
 
-	public Set<Short> getAdapterIds(
+	public short[] getAdapterIds(
 			final InternalAdapterStore adapterStore ) {
-		final Set<Short> ids = new HashSet<>();
-		if ((adapterIds == null) || adapterIds.isEmpty()) {
-			try (CloseableIterator<Short> it = adapterStore.getInternalAdapterIds()) {
-				while (it.hasNext()) {
-					ids.add(it.next());
-				}
-			}
-			catch (final IOException e) {
-				LOGGER.error(
-						"Unable to get internal adapter IDs",
-						e);
-			}
+		if ((adapterIds == null) || (adapterIds.length == 0)) {
+			return adapterStore.getAdapterIds();
 		}
 		else {
-			ids.addAll(adapterIds);
+			return adapterIds;
 		}
-		return ids;
 	}
 }

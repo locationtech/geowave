@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,13 +10,13 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 
 /**
  * This is responsible for persisting secondary index entries
@@ -25,7 +25,7 @@ public interface SecondaryIndexDataStore
 {
 	/**
 	 * Set the reference to the primary data store
-	 * 
+	 *
 	 * @param dataStore
 	 */
 	public void setDataStore(
@@ -34,47 +34,48 @@ public interface SecondaryIndexDataStore
 	/**
 	 * Stores a secondary index entry that will require a join against the
 	 * primary index upon lookup.
-	 * 
-	 * @param secondaryIndexId
+	 *
+	 * @param secondaryIndexName
 	 * @param indexedAttributeValue
-	 * @param adapterId
-	 * @param indexedAttributeFieldId
+	 * @param typeName
+	 * @param indexedAttributeFieldName
+	 * @param primaryIndexName
 	 * @param primaryIndexPartitionKey
 	 * @param primaryIndexSortKey
 	 * @param attributeVisibility
 	 */
 	public void storeJoinEntry(
-			ByteArrayId secondaryIndexId,
-			ByteArrayId indexedAttributeValue,
-			ByteArrayId adapterId,
-			ByteArrayId indexedAttributeFieldId,
-			ByteArrayId primaryIndexId,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility );
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			String primaryIndexName,
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility );
 
 	/**
 	 * Stores a secondary index entry that will not require a join against the
 	 * primary index upon lookup.
-	 * 
-	 * @param secondaryIndexId
+	 *
+	 * @param secondaryIndexName
 	 * @param indexedAttributeValue
 	 * @param adapterId
-	 * @param indexedAttributeFieldId
+	 * @param indexedAttributeFieldName
 	 * @param dataId
 	 * @param originalFields
 	 */
 	public void storeEntry(
-			ByteArrayId secondaryIndexId,
-			ByteArrayId indexedAttributeValue,
-			ByteArrayId adapterId,
-			ByteArrayId indexedAttributeFieldId,
-			ByteArrayId dataId,
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			ByteArray dataId,
 			GeoWaveValue... originalFields );
 
 	/**
 	 * Execute a query against the given secondary index
-	 * 
+	 *
 	 * @param secondaryIndex
 	 * @param indexedAttributeFieldId
 	 * @param adapter
@@ -84,28 +85,29 @@ public interface SecondaryIndexDataStore
 	 * @return
 	 */
 	public <T> CloseableIterator<T> query(
-			final SecondaryIndex<T> secondaryIndex,
-			final ByteArrayId indexedAttributeFieldId,
+			final SecondaryIndexImpl<T> secondaryIndex,
+			final String indexedAttributeFieldName,
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex primaryIndex,
-			final DistributableQuery query,
+			final Index primaryIndex,
+			final QueryConstraints query,
 			final String... authorizations );
 
 	public void deleteJoinEntry(
-			ByteArrayId secondaryIndexId,
-			ByteArrayId indexedAttributeValue,
-			ByteArrayId adapterId,
-			ByteArrayId indexedAttributeFieldId,
-			ByteArrayId primaryIndexPartitionKey,
-			ByteArrayId primaryIndexSortKey,
-			ByteArrayId attributeVisibility );
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			String primaryIndexName,
+			ByteArray primaryIndexPartitionKey,
+			ByteArray primaryIndexSortKey,
+			ByteArray attributeVisibility );
 
 	public void deleteEntry(
-			ByteArrayId secondaryIndexId,
-			ByteArrayId indexedAttributeValue,
-			ByteArrayId adapterId,
-			ByteArrayId indexedAttributeFieldId,
-			ByteArrayId dataId,
+			String secondaryIndexName,
+			ByteArray indexedAttributeValue,
+			String typeName,
+			String indexedAttributeFieldName,
+			ByteArray dataId,
 			GeoWaveValue... originalFields );
 
 	public void flush();

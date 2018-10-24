@@ -23,7 +23,7 @@ import java.util.Set;
 
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.CompoundIndexStrategy;
@@ -82,7 +82,7 @@ public class HashKeyIndexStrategyTest
 
 	@Test
 	public void testDistribution() {
-		final Map<ByteArrayId, Long> counts = new HashMap<ByteArrayId, Long>();
+		final Map<ByteArray, Long> counts = new HashMap<ByteArray, Long>();
 		int total = 0;
 		for (double x = 90; x < 180; x += 0.05) {
 			for (double y = 50; y < 90; y += 0.5) {
@@ -97,7 +97,7 @@ public class HashKeyIndexStrategyTest
 							dimension1Range,
 							dimension2Range
 						});
-				for (final ByteArrayId id : hashIdexStrategy.getInsertionPartitionKeys(sfcIndexedRange)) {
+				for (final ByteArray id : hashIdexStrategy.getInsertionPartitionKeys(sfcIndexedRange)) {
 					final Long count = counts.get(id);
 					final long nextcount = count == null ? 1 : count + 1;
 					counts.put(
@@ -153,7 +153,7 @@ public class HashKeyIndexStrategyTest
 				});
 		final InsertionIds id = compoundIndexStrategy.getInsertionIds(sfcIndexedRange);
 		for (final SinglePartitionInsertionIds partitionKey : id.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionKey.getSortKeys()) {
+			for (final ByteArray sortKey : partitionKey.getSortKeys()) {
 				final MultiDimensionalCoordinates coords = compoundIndexStrategy.getCoordinatesPerDimension(
 						partitionKey.getPartitionKey(),
 						sortKey);
@@ -167,7 +167,7 @@ public class HashKeyIndexStrategyTest
 		assertTrue(it.hasNext());
 		final SinglePartitionInsertionIds partitionId = it.next();
 		assertTrue(!it.hasNext());
-		for (final ByteArrayId sortKey : partitionId.getSortKeys()) {
+		for (final ByteArray sortKey : partitionId.getSortKeys()) {
 			final MultiDimensionalNumericData nd = compoundIndexStrategy.getRangeForId(
 					partitionId.getPartitionKey(),
 					sortKey);
@@ -197,13 +197,13 @@ public class HashKeyIndexStrategyTest
 		final List<ByteArrayRange> ranges = new ArrayList<>();
 		for (int i = 0; i < 3; i++) {
 			for (final ByteArrayRange r2 : sfcIndexRanges) {
-				final ByteArrayId start = new ByteArrayId(
+				final ByteArray start = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i
 								},
 								r2.getStart().getBytes()));
-				final ByteArrayId end = new ByteArrayId(
+				final ByteArray end = new ByteArray(
 						ByteArrayUtils.combineArrays(
 								new byte[] {
 									(byte) i

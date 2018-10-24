@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -28,25 +28,23 @@ import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryAdapter;
+import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
 import org.locationtech.geowave.core.store.adapter.statistics.CountDataStatistics;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.adapter.statistics.StatisticsId;
+import org.locationtech.geowave.core.store.api.AggregationQueryBuilder;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
 import org.locationtech.geowave.core.store.data.field.FieldVisibilityHandler;
 import org.locationtech.geowave.core.store.data.visibility.DifferingFieldVisibilityEntryCount;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
-import org.locationtech.geowave.core.store.query.aggregate.CountAggregation;
-import org.locationtech.geowave.core.store.query.aggregate.CountResult;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -77,6 +75,7 @@ public class GeoWaveVisibilityIT extends
 
 	private static final int TOTAL_FEATURES = 800;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStoreOptions;
 	}
@@ -103,7 +102,7 @@ public class GeoWaveVisibilityIT extends
 		LOGGER.warn("-----------------------------------------");
 	}
 
-	@Test
+	// @Test
 	public void testIngestAndQueryMixedVisibilityRasters()
 			throws IOException {
 		final String coverageName = "testMixedVisibilityRasters";
@@ -124,7 +123,7 @@ public class GeoWaveVisibilityIT extends
 		TestUtils.deleteAll(dataStoreOptions);
 	}
 
-	@Test
+	// @Test
 	public void testComplexVisibility()
 			throws IOException {
 		final String coverageName = "testComplexVisibility";
@@ -176,10 +175,10 @@ public class GeoWaveVisibilityIT extends
 				raster1,
 				raster2,
 				tileSize);
-
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			// Write the first raster w/ vis info
 			writer.write(
 					RasterUtils.createCoverageTypeDouble(
@@ -203,14 +202,9 @@ public class GeoWaveVisibilityIT extends
 
 		// First, query w/ no authorizations. We should get
 		// just the second raster back
-		QueryOptions queryOptions = new QueryOptions(
-				new ByteArrayId(
-						coverageName),
-				null);
 
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -225,11 +219,11 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 0; b < numBands; b++) {
-						double p0 = raster.getSampleDouble(
+						final double p0 = raster.getSampleDouble(
 								x,
 								y,
 								b);
-						double p1 = raster2.getSampleDouble(
+						final double p1 = raster2.getSampleDouble(
 								x,
 								y,
 								b);
@@ -249,13 +243,9 @@ public class GeoWaveVisibilityIT extends
 
 		// Next, query w/ only 'a' authorization. We should get
 		// just the second raster back
-		queryOptions.setAuthorizations(new String[] {
-			"a",
-		});
-
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).addAuthorization(
+				"a").build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -270,11 +260,11 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 0; b < numBands; b++) {
-						double p0 = raster.getSampleDouble(
+						final double p0 = raster.getSampleDouble(
 								x,
 								y,
 								b);
-						double p1 = raster2.getSampleDouble(
+						final double p1 = raster2.getSampleDouble(
 								x,
 								y,
 								b);
@@ -294,13 +284,9 @@ public class GeoWaveVisibilityIT extends
 
 		// Next, query w/ only 'b' authorization. We should get
 		// just the second raster back
-		queryOptions.setAuthorizations(new String[] {
-			"b"
-		});
-
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).addAuthorization(
+				"b").build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -315,11 +301,11 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 0; b < numBands; b++) {
-						double p0 = raster.getSampleDouble(
+						final double p0 = raster.getSampleDouble(
 								x,
 								y,
 								b);
-						double p1 = raster2.getSampleDouble(
+						final double p1 = raster2.getSampleDouble(
 								x,
 								y,
 								b);
@@ -339,13 +325,10 @@ public class GeoWaveVisibilityIT extends
 
 		// Now, query w/ only "c" authorization. We should get
 		// just the merged raster back
-		queryOptions.setAuthorizations(new String[] {
-			"c"
-		});
 
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).addAuthorization(
+				"c").build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -364,12 +347,12 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 1; b < 7; b++) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								b,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								b);
@@ -381,12 +364,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((y % 2) == 0) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								0,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -398,7 +381,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -409,7 +392,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -420,12 +403,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								7,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -444,14 +427,11 @@ public class GeoWaveVisibilityIT extends
 
 		// Finally, query w/ "a" and "b" authorization. We should get
 		// just the merged raster back
-		queryOptions.setAuthorizations(new String[] {
-			"a",
-			"b"
-		});
 
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).addAuthorization(
+				"a").addAuthorization(
+				"b").build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -470,12 +450,12 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 1; b < 7; b++) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								b,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								b);
@@ -487,12 +467,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((y % 2) == 0) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								0,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -504,7 +484,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -515,7 +495,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -526,12 +506,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								7,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -576,10 +556,10 @@ public class GeoWaveVisibilityIT extends
 				raster1,
 				raster2,
 				tileSize);
-
-		try (IndexWriter writer = dataStore.createWriter(
+		dataStore.addType(
 				adapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (Writer writer = dataStore.createWriter(adapter.getTypeName())) {
 			// Write the first raster w/ vis info
 			writer.write(
 					RasterUtils.createCoverageTypeDouble(
@@ -603,14 +583,9 @@ public class GeoWaveVisibilityIT extends
 
 		// First, query w/ no authorizations. We should get
 		// just the second raster back
-		QueryOptions queryOptions = new QueryOptions(
-				new ByteArrayId(
-						coverageName),
-				null);
 
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -625,11 +600,11 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 0; b < numBands; b++) {
-						double p0 = raster.getSampleDouble(
+						final double p0 = raster.getSampleDouble(
 								x,
 								y,
 								b);
-						double p1 = raster2.getSampleDouble(
+						final double p1 = raster2.getSampleDouble(
 								x,
 								y,
 								b);
@@ -649,14 +624,10 @@ public class GeoWaveVisibilityIT extends
 
 		// Now, query w/ authorization. We should get
 		// just the merged raster back
-		String[] auths = {
-			"a"
-		};
-		queryOptions.setAuthorizations(auths);
 
-		try (CloseableIterator<?> it = dataStore.query(
-				queryOptions,
-				new EverythingQuery())) {
+		try (CloseableIterator<?> it = dataStore.query(QueryBuilder.newBuilder().addTypeName(
+				coverageName).addAuthorization(
+				"a").build())) {
 
 			final GridCoverage coverage = (GridCoverage) it.next();
 			final Raster raster = coverage.getRenderedImage().getData();
@@ -675,12 +646,12 @@ public class GeoWaveVisibilityIT extends
 			for (int x = 0; x < tileSize; x++) {
 				for (int y = 0; y < tileSize; y++) {
 					for (int b = 1; b < 7; b++) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								b,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								b);
@@ -692,12 +663,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((y % 2) == 0) {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								0,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -709,7 +680,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								0);
@@ -720,7 +691,7 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					if ((x > ((tileSize * 3) / 4)) && (y > ((tileSize * 3) / 4))) {
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -731,12 +702,12 @@ public class GeoWaveVisibilityIT extends
 								0.0);
 					}
 					else {
-						double pExp = TestUtils.getTileValue(
+						final double pExp = TestUtils.getTileValue(
 								x,
 								y,
 								7,
 								tileSize);
-						double pAct = raster.getSampleDouble(
+						final double pAct = raster.getSampleDouble(
 								x,
 								y,
 								7);
@@ -763,9 +734,10 @@ public class GeoWaveVisibilityIT extends
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				getType());
 		final DataStore store = dataStoreOptions.createDataStore();
-		try (IndexWriter writer = store.createWriter(
+		store.addType(
 				adapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (Writer writer = store.createWriter(adapter.getTypeName())) {
 			for (int i = 0; i < TOTAL_FEATURES; i++) {
 				bldr.set(
 						"a",
@@ -786,45 +758,50 @@ public class GeoWaveVisibilityIT extends
 						getFeatureVisWriter());
 			}
 		}
-		DataStatisticsStore statsStore = dataStoreOptions.createDataStatisticsStore();
+		final DataStatisticsStore statsStore = dataStoreOptions.createDataStatisticsStore();
 		final InternalAdapterStore internalDataStore = dataStoreOptions.createInternalAdapterStore();
-		short internalAdapterId = internalDataStore.getInternalAdapterId(adapter.getAdapterId());
-		final DifferingFieldVisibilityEntryCount differingVisibilities = (DifferingFieldVisibilityEntryCount) statsStore
+		final short internalAdapterId = internalDataStore.getAdapterId(adapter.getTypeName());
+
+		final StatisticsId statsId = DifferingFieldVisibilityEntryCount.STATS_TYPE.newBuilder().indexName(
+				TestUtils.DEFAULT_SPATIAL_INDEX.getName()).build().getId();
+		try (CloseableIterator<DifferingFieldVisibilityEntryCount> differingVisibilitiesIt = (CloseableIterator) statsStore
 				.getDataStatistics(
 						internalAdapterId,
-						DifferingFieldVisibilityEntryCount.composeId(TestUtils.DEFAULT_SPATIAL_INDEX.getId()));
-
-		Assert.assertEquals(
-				"Exactly half the entries should have differing visibility",
-				TOTAL_FEATURES / 2,
-				differingVisibilities.getEntriesWithDifferingFieldVisibilities());
-		testQueryMixed(
-				store,
-				statsStore,
-				internalAdapterId,
-				false);
-		testQueryMixed(
-				store,
-				statsStore,
-				internalAdapterId,
-				true);
-		TestUtils.deleteAll(dataStoreOptions);
+						statsId.getExtendedId(),
+						statsId.getType())) {
+			final DifferingFieldVisibilityEntryCount differingVisibilities = differingVisibilitiesIt.next();
+			Assert.assertEquals(
+					"Exactly half the entries should have differing visibility",
+					TOTAL_FEATURES / 2,
+					differingVisibilities.getEntriesWithDifferingFieldVisibilities());
+			testQueryMixed(
+					store,
+					statsStore,
+					internalAdapterId,
+					false);
+			testQueryMixed(
+					store,
+					statsStore,
+					internalAdapterId,
+					true);
+			TestUtils.deleteAll(dataStoreOptions);
+		}
 	}
 
 	private VisibilityWriter<SimpleFeature> getFeatureVisWriter() {
 		return new VisibilityWriter<SimpleFeature>() {
 			@Override
 			public FieldVisibilityHandler<SimpleFeature, Object> getFieldVisibilityHandler(
-					final ByteArrayId fieldId ) {
+					final String fieldId ) {
 				return new FieldVisibilityHandler<SimpleFeature, Object>() {
 
 					@Override
 					public byte[] getVisibility(
 							final SimpleFeature rowValue,
-							final ByteArrayId fieldId,
+							final String fieldId,
 							final Object fieldValue ) {
 
-						final boolean isGeom = fieldId.equals(GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID);
+						final boolean isGeom = fieldId.equals(GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME);
 						final int fieldValueInt;
 						if (isGeom) {
 							fieldValueInt = Integer.parseInt(rowValue.getID());
@@ -847,15 +824,15 @@ public class GeoWaveVisibilityIT extends
 							final int switchValue = (fieldValueInt / 2) % 4;
 							switch (switchValue) {
 								case 0:
-									return new ByteArrayId(
+									return new ByteArray(
 											"a").getBytes();
 
 								case 1:
-									return new ByteArrayId(
+									return new ByteArray(
 											"b").getBytes();
 
 								case 2:
-									return new ByteArrayId(
+									return new ByteArray(
 											"c").getBytes();
 
 								case 3:
@@ -870,18 +847,18 @@ public class GeoWaveVisibilityIT extends
 	}
 
 	private VisibilityWriter<GridCoverage> getRasterVisWriter(
-			String visExpression ) {
+			final String visExpression ) {
 		return new VisibilityWriter<GridCoverage>() {
 			@Override
 			public FieldVisibilityHandler<GridCoverage, Object> getFieldVisibilityHandler(
-					ByteArrayId fieldId ) {
+					final String fieldId ) {
 				return new FieldVisibilityHandler<GridCoverage, Object>() {
 					@Override
 					public byte[] getVisibility(
-							GridCoverage rowValue,
-							ByteArrayId fieldId,
-							Object fieldValue ) {
-						return new ByteArrayId(
+							final GridCoverage rowValue,
+							final String fieldId,
+							final Object fieldValue ) {
+						return new ByteArray(
 								visExpression).getBytes();
 					}
 
@@ -894,8 +871,8 @@ public class GeoWaveVisibilityIT extends
 	private static void testQueryMixed(
 			final DataStore store,
 			final DataStatisticsStore statsStore,
-			short internalAdapterId,
-			boolean spatial )
+			final short internalAdapterId,
+			final boolean spatial )
 			throws IOException {
 
 		// you have to at least be able to see the geometry field which is wide
@@ -910,7 +887,7 @@ public class GeoWaveVisibilityIT extends
 				(5 * TOTAL_FEATURES) / 8,
 				((TOTAL_FEATURES / 8) * 4) + (TOTAL_FEATURES / 2));
 
-		for (String auth : new String[] {
+		for (final String auth : new String[] {
 			"a",
 			"b",
 			"c"
@@ -924,11 +901,11 @@ public class GeoWaveVisibilityIT extends
 					},
 					spatial,
 					(6 * TOTAL_FEATURES) / 8,
-					((2 * TOTAL_FEATURES / 8) * 4) + (2 * TOTAL_FEATURES / 2));
+					(((2 * TOTAL_FEATURES) / 8) * 4) + ((2 * TOTAL_FEATURES) / 2));
 		}
 
 		// order shouldn't matter, but let's make sure here
-		for (String[] auths : new String[][] {
+		for (final String[] auths : new String[][] {
 			new String[] {
 				"a",
 				"b"
@@ -961,7 +938,7 @@ public class GeoWaveVisibilityIT extends
 					auths,
 					spatial,
 					(7 * TOTAL_FEATURES) / 8,
-					((3 * TOTAL_FEATURES / 8) * 4) + (3 * TOTAL_FEATURES / 2));
+					(((3 * TOTAL_FEATURES) / 8) * 4) + ((3 * TOTAL_FEATURES) / 2));
 		}
 
 		testQuery(
@@ -980,23 +957,25 @@ public class GeoWaveVisibilityIT extends
 
 	private static void testQuery(
 			final DataStore store,
-			DataStatisticsStore statsStore,
-			short internalAdapterId,
+			final DataStatisticsStore statsStore,
+			final short internalAdapterId,
 			final String[] auths,
 			final boolean spatial,
 			final int expectedResultCount,
 			final int expectedNonNullFieldCount )
 			throws IOException {
-		final QueryOptions queryOpts = new QueryOptions();
-		queryOpts.setAuthorizations(auths);
-		try (CloseableIterator<SimpleFeature> it = (CloseableIterator) store.query(
-				queryOpts,
-				spatial ? new SpatialQuery(
-						new GeometryFactory().toGeometry(new Envelope(
-								-1,
-								1,
-								-1,
-								1))) : null)) {
+		try (CloseableIterator<SimpleFeature> it = (CloseableIterator) store.query(QueryBuilder
+				.newBuilder()
+				.setAuthorizations(
+						auths)
+				.constraints(
+						spatial ? new SpatialQuery(
+								new GeometryFactory().toGeometry(new Envelope(
+										-1,
+										1,
+										-1,
+										1))) : null)
+				.build())) {
 			int resultCount = 0;
 			int nonNullFieldsCount = 0;
 			while (it.hasNext()) {
@@ -1021,39 +1000,33 @@ public class GeoWaveVisibilityIT extends
 					nonNullFieldsCount);
 		}
 
-		queryOpts.setAggregation(
-				new CountAggregation(),
-				new FeatureDataAdapter(
-						getType()));
-		try (CloseableIterator<CountResult> it = (CloseableIterator) store.query(
-				queryOpts,
+		final Long count = (Long) store.aggregate(AggregationQueryBuilder.newBuilder().count(
+				getType().getTypeName()).setAuthorizations(
+				auths).constraints(
 				spatial ? new SpatialQuery(
 						new GeometryFactory().toGeometry(new Envelope(
 								-1,
 								1,
 								-1,
-								1))) : null)) {
-			CountResult result = it.next();
-			long count = 0;
-			if (result != null) {
-				count = result.getCount();
-			}
+								1))) : null).build());
+		Assert.assertEquals(
+				"Unexpected aggregation result count for " + (spatial ? "spatial query" : "full table scan")
+						+ " with auths " + Arrays.toString(auths),
+				expectedResultCount,
+				count.intValue());
+
+		try (final CloseableIterator<CountDataStatistics<?>> statsIt = (CloseableIterator) statsStore
+				.getDataStatistics(
+						internalAdapterId,
+						CountDataStatistics.STATS_TYPE,
+						auths)) {
+			final CountDataStatistics<?> stats = statsIt.next();
 			Assert.assertEquals(
-					"Unexpected aggregation result count for " + (spatial ? "spatial query" : "full table scan")
+					"Unexpected stats result count for " + (spatial ? "spatial query" : "full table scan")
 							+ " with auths " + Arrays.toString(auths),
 					expectedResultCount,
-					count);
+					stats.getCount());
 		}
-		CountDataStatistics<?> stats = (CountDataStatistics<?>) statsStore.getDataStatistics(
-				internalAdapterId,
-				CountDataStatistics.STATS_TYPE,
-				auths);
-
-		Assert.assertEquals(
-				"Unexpected stats result count for " + (spatial ? "spatial query" : "full table scan") + " with auths "
-						+ Arrays.toString(auths),
-				expectedResultCount,
-				stats.getCount());
 	}
 
 	private static SimpleFeatureType getType() {

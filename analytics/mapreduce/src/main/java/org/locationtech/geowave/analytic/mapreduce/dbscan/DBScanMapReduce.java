@@ -46,7 +46,7 @@ import org.locationtech.geowave.analytic.param.ClusteringParameters;
 import org.locationtech.geowave.analytic.param.GlobalParameters;
 import org.locationtech.geowave.analytic.param.HullParameters;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.store.metadata.InternalAdapterStoreImpl;
 import org.locationtech.geowave.mapreduce.HadoopWritableSerializer;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
@@ -95,23 +95,23 @@ public class DBScanMapReduce
 	protected static final Logger LOGGER = LoggerFactory.getLogger(DBScanMapReduce.class);
 
 	public abstract static class DBScanMapReducer<KEYOUT, VALUEOUT> extends
-			NNReducer<ClusterItem, KEYOUT, VALUEOUT, Map<ByteArrayId, Cluster>>
+			NNReducer<ClusterItem, KEYOUT, VALUEOUT, Map<ByteArray, Cluster>>
 	{
 		protected int minOwners = 0;
 
 		@Override
-		protected Map<ByteArrayId, Cluster> createSummary() {
-			return new HashMap<ByteArrayId, Cluster>();
+		protected Map<ByteArray, Cluster> createSummary() {
+			return new HashMap<ByteArray, Cluster>();
 		}
 
 		@Override
 		protected void processNeighbors(
 				final PartitionData partitionData,
-				final ByteArrayId primaryId,
+				final ByteArray primaryId,
 				final ClusterItem primary,
 				final NeighborList<ClusterItem> neighbors,
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, KEYOUT, VALUEOUT>.Context context,
-				final Map<ByteArrayId, Cluster> index )
+				final Map<ByteArray, Cluster> index )
 				throws IOException,
 				InterruptedException {
 			if (LOGGER.isTraceEnabled()) {
@@ -173,7 +173,7 @@ public class DBScanMapReduce
 
 		@Override
 		public ClusterItem convert(
-				final ByteArrayId id,
+				final ByteArray id,
 				final Object o ) {
 			final SimpleFeature feature = (SimpleFeature) o;
 			final Long count = (Long) feature.getAttribute(AnalyticFeature.ClusterFeatureAttribute.COUNT.attrName());
@@ -220,7 +220,7 @@ public class DBScanMapReduce
 		protected void preprocess(
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, GeoWaveInputKey, ObjectWritable>.Context context,
 				final NNProcessor<Object, ClusterItem> processor,
-				final Map<ByteArrayId, Cluster> index )
+				final Map<ByteArray, Cluster> index )
 				throws IOException,
 				InterruptedException {
 			if (!firstIteration) {
@@ -247,7 +247,7 @@ public class DBScanMapReduce
 
 						@Override
 						public void complete(
-								final ByteArrayId id,
+								final ByteArray id,
 								final ClusterItem value,
 								final NeighborList<ClusterItem> list ) {
 							final Cluster cluster = ((ClusterNeighborList) list).getCluster();
@@ -263,9 +263,9 @@ public class DBScanMapReduce
 								value.setGeometry(cluster.getGeometry());
 								value.setCount(list.size());
 								value.setCompressed();
-								final Iterator<ByteArrayId> it = cluster.getLinkedClusters().iterator();
+								final Iterator<ByteArray> it = cluster.getLinkedClusters().iterator();
 								while (it.hasNext()) {
-									final ByteArrayId idToRemove = it.next();
+									final ByteArray idToRemove = it.next();
 									processor.remove(idToRemove);
 									it.remove();
 								}
@@ -282,14 +282,14 @@ public class DBScanMapReduce
 		@Override
 		protected void processSummary(
 				final PartitionData partitionData,
-				final Map<ByteArrayId, Cluster> summary,
+				final Map<ByteArray, Cluster> summary,
 				final Reducer<PartitionDataWritable, AdapterWithObjectWritable, GeoWaveInputKey, ObjectWritable>.Context context )
 				throws IOException,
 				InterruptedException {
 			final HadoopWritableSerializer<SimpleFeature, FeatureWritable> serializer = outputAdapter
 					.createWritableSerializer();
 			final Set<Cluster> processed = new HashSet<Cluster>();
-			final Iterator<Map.Entry<ByteArrayId, Cluster>> clusterIt = summary.entrySet().iterator();
+			final Iterator<Map.Entry<ByteArray, Cluster>> clusterIt = summary.entrySet().iterator();
 			while (clusterIt.hasNext()) {
 				final Cluster cluster = clusterIt.next().getValue();
 				clusterIt.remove();
@@ -332,8 +332,8 @@ public class DBScanMapReduce
 									// unlikely that the value for internal
 									// adapter ID even matters, but if it does
 									// this is the best effort
-									InternalAdapterStoreImpl.getInitialInternalAdapterId(outputAdapter.getAdapterId()),
-									new ByteArrayId(
+									InternalAdapterStoreImpl.getInitialAdapterId(outputAdapter.getTypeName()),
+									new ByteArray(
 											newPolygonFeature.getID())),
 							output);
 				}
@@ -342,7 +342,7 @@ public class DBScanMapReduce
 
 		@Override
 		public NeighborListFactory<ClusterItem> createNeighborsListFactory(
-				final Map<ByteArrayId, Cluster> summary ) {
+				final Map<ByteArray, Cluster> summary ) {
 			return new ClusterNeighborListFactory(
 					(firstIteration) ? new SingleItemClusterListFactory(
 							summary) : new ClusterUnionListFactory(

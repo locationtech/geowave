@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -19,8 +19,8 @@ import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.RowMergingDataAdapter;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
 import org.locationtech.geowave.core.store.metadata.AdapterIndexMappingStoreImpl;
 import org.locationtech.geowave.core.store.metadata.AdapterStoreImpl;
@@ -87,25 +87,23 @@ public class HBaseDataStore extends
 	@Override
 	protected <T> void initOnIndexWriterCreate(
 			final InternalDataAdapter<T> adapter,
-			final PrimaryIndex index ) {
-		final String indexName = index.getId().getString();
+			final Index index ) {
+		final String indexName = index.getName();
 		final boolean rowMerging = adapter.getAdapter() instanceof RowMergingDataAdapter;
 		if (rowMerging) {
 			if (!((HBaseOperations) baseOperations).isRowMergingEnabled(
-					adapter.getInternalAdapterId(),
+					adapter.getAdapterId(),
 					indexName)) {
-				if (baseOptions.isCreateTable()) {
-					((HBaseOperations) baseOperations).createTable(
-							index.getIndexStrategy().getPredefinedSplits(),
-							index.getId(),
-							false,
-							adapter.getInternalAdapterId());
-				}
+				((HBaseOperations) baseOperations).createTable(
+						index.getIndexStrategy().getPredefinedSplits(),
+						index.getName(),
+						false,
+						adapter.getAdapterId());
 				if (baseOptions.isServerSideLibraryEnabled()) {
-					((HBaseOperations) baseOperations).ensureServerSideOperationsObserverAttached(index.getId());
+					((HBaseOperations) baseOperations).ensureServerSideOperationsObserverAttached(index.getName());
 					ServerOpHelper.addServerSideRowMerging(
 							((RowMergingDataAdapter<?, ?>) adapter.getAdapter()),
-							adapter.getInternalAdapterId(),
+							adapter.getAdapterId(),
 							(ServerSideOperations) baseOperations,
 							RowMergingServerOp.class.getName(),
 							RowMergingVisibilityServerOp.class.getName(),
@@ -113,7 +111,7 @@ public class HBaseDataStore extends
 				}
 
 				((HBaseOperations) baseOperations).verifyColumnFamily(
-						adapter.getInternalAdapterId(),
+						adapter.getAdapterId(),
 						false,
 						indexName,
 						true);

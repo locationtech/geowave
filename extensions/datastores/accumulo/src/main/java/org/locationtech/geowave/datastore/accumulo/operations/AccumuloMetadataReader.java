@@ -28,7 +28,7 @@ import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.CloseableIteratorWrapper;
 import org.locationtech.geowave.core.store.DataStoreOptions;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.entities.GeoWaveMetadata;
 import org.locationtech.geowave.core.store.metadata.AbstractGeoWavePersistence;
 import org.locationtech.geowave.core.store.operations.MetadataQuery;
@@ -94,17 +94,18 @@ public class AccumuloMetadataReader implements
 			// For stats w/ no server-side support, need to merge here
 			if ((metadataType == MetadataType.STATS) && !options.isServerSideLibraryEnabled()) {
 
-				final HashMap<Text, Key> keyMap = new HashMap();
-				final HashMap<Text, DataStatistics> mergedDataMap = new HashMap();
+				final HashMap<Text, Key> keyMap = new HashMap<>();
+				final HashMap<Text, InternalDataStatistics<?, ?, ?>> mergedDataMap = new HashMap<>();
 				final Iterator<Entry<Key, Value>> it = scanner.iterator();
 
 				while (it.hasNext()) {
 					final Entry<Key, Value> row = it.next();
 
-					final DataStatistics stats = (DataStatistics) PersistenceUtils.fromBinary(row.getValue().get());
+					final InternalDataStatistics<?, ?, ?> stats = (InternalDataStatistics<?, ?, ?>) PersistenceUtils
+							.fromBinary(row.getValue().get());
 
 					if (keyMap.containsKey(row.getKey().getRow())) {
-						final DataStatistics mergedStats = mergedDataMap.get(row.getKey().getRow());
+						final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(row.getKey().getRow());
 						mergedStats.merge(stats);
 					}
 					else {
@@ -121,7 +122,7 @@ public class AccumuloMetadataReader implements
 				for (final Entry<Text, Key> entry : keyMap.entrySet()) {
 					final Text rowId = entry.getKey();
 					final Key key = keyMap.get(rowId);
-					final DataStatistics mergedStats = mergedDataMap.get(rowId);
+					final InternalDataStatistics<?, ?, ?> mergedStats = mergedDataMap.get(rowId);
 
 					metadataList.add(new GeoWaveMetadata(
 							key.getRow().getBytes(),

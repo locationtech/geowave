@@ -22,14 +22,14 @@ public class RemoteOperationProvider implements
 		RemoteSection.class,
 		CalculateStatCommand.class,
 		ClearCommand.class,
-		ListAdapterCommand.class,
-		ListIndexCommand.class,
+		ListTypesCommand.class,
+		ListIndicesCommand.class,
 		ListStatsCommand.class,
 		VersionCommand.class,
 		MergeDataCommand.class,
 		RecalculateStatsCommand.class,
 		CombineStatsCommand.class,
-		RemoveAdapterCommand.class,
+		RemoveTypeCommand.class,
 		RemoveStatCommand.class
 	};
 

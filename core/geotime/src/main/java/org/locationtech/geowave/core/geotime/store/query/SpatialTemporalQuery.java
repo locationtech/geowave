@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.index.dimension.TimeDefinition;
-import org.locationtech.geowave.core.geotime.store.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.store.query.filter.SpatialQueryFilter.CompareOperation;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.query.filter.BasicQueryFilter.BasicQueryCompareOperation;
+import org.threeten.extra.Interval;
 
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -107,6 +109,23 @@ public class SpatialTemporalQuery extends
 				compareOp.getBaseCompareOp());
 	}
 
+	public SpatialTemporalQuery(
+			final Interval[] intervals,
+			final Geometry queryGeometry,
+			final String crsCode,
+			final CompareOperation compareOp ) {
+		super(
+				createSpatialTemporalConstraints(
+						intervals,
+						queryGeometry),
+				queryGeometry,
+				crsCode,
+				compareOp,
+				// it seems like temporal should always use intersection and not
+				// inherit from the spatial compare op
+				BasicQueryCompareOperation.INTERSECTS);
+	}
+
 	/**
 	 * Applies the set of temporal constraints to the boundaries of the provided
 	 * polygon. If a multi-polygon is provided, then all matching combinations
@@ -159,6 +178,23 @@ public class SpatialTemporalQuery extends
 				constraints);
 	}
 
+	public static Constraints createConstraints(
+			final Interval[] intervals,
+			final boolean isDefault ) {
+		final List<ConstraintSet> constraints = new ArrayList<>();
+		for (final Interval range : intervals) {
+			constraints.add(new ConstraintSet(
+					TimeDefinition.class,
+					new ConstraintData(
+							new NumericRange(
+									range.getStart().toEpochMilli(),
+									range.getEnd().toEpochMilli()),
+							isDefault)));
+		}
+		return new Constraints(
+				constraints);
+	}
+
 	/**
 	 * Supports multi-polygons and multiple temporal bounds. Creates all
 	 * matchings between polygon and temporal bounds.
@@ -174,6 +210,25 @@ public class SpatialTemporalQuery extends
 		final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
 		final Constraints timeConstraints = createConstraints(
 				temporalConstraints,
+				false);
+		return geoConstraints.merge(timeConstraints);
+	}
+
+	/**
+	 * Supports multi-polygons and multiple temporal bounds. Creates all
+	 * matchings between polygon and temporal bounds.
+	 *
+	 * @param startTime
+	 * @param endTime
+	 * @param queryGeometry
+	 * @return
+	 */
+	private static Constraints createSpatialTemporalConstraints(
+			final Interval[] intervals,
+			final Geometry queryGeometry ) {
+		final Constraints geoConstraints = GeometryUtils.basicConstraintsFromGeometry(queryGeometry);
+		final Constraints timeConstraints = createConstraints(
+				intervals,
 				false);
 		return geoConstraints.merge(timeConstraints);
 	}

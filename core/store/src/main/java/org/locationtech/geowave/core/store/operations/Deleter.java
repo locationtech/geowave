@@ -4,7 +4,7 @@ import org.locationtech.geowave.core.store.callback.ScanCallback;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 
 public interface Deleter<T> extends
-		Reader<T>,
+		RowReader<T>,
 		ScanCallback<T, GeoWaveRow>
 {
 }

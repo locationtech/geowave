@@ -10,10 +10,12 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter;
 
-public interface InternalDataAdapter<T> extends
-		WritableDataAdapter<T>
-{
-	public short getInternalAdapterId();
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
-	public WritableDataAdapter<?> getAdapter();
+public interface InternalDataAdapter<T> extends
+		DataTypeAdapter<T>
+{
+	public short getAdapterId();
+
+	public DataTypeAdapter<?> getAdapter();
 }

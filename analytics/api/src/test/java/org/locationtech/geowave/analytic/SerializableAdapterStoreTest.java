@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,14 +21,11 @@ import java.io.ObjectOutputStream;
 import org.geotools.feature.type.BasicFeatureTypes;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.analytic.AnalyticFeature;
-import org.locationtech.geowave.analytic.SerializableAdapterStore;
 import org.locationtech.geowave.analytic.clustering.ClusteringUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.memory.MemoryAdapterStore;
 import org.opengis.feature.simple.SimpleFeatureType;
 
@@ -46,18 +43,17 @@ public class SerializableAdapterStoreTest
 				BasicFeatureTypes.DEFAULT_NAMESPACE,
 				ClusteringUtils.CLUSTERING_CRS).getFeatureType();
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				ftype);
 		adapter.init(index);
 		final SerializableAdapterStore store = new SerializableAdapterStore(
 				new MemoryAdapterStore(
-						new DataAdapter<?>[] {
+						new DataTypeAdapter<?>[] {
 							adapter
 						}));
 
-		final ByteArrayId id = new ByteArrayId(
-				"centroid");
+		final String id = "centroid";
 		assertNotNull(checkSerialization(
 				store).getAdapter(
 				id));

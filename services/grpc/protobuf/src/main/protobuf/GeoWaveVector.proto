@@ -32,15 +32,15 @@ service Vector {
 // Parameters for standard vector query
 message VectorQueryParameters {
 	string storeName = 1;	// required
-	bytes adapterId = 2;		// required
+	string typeName = 2;		// required
 	string query = 3;		// required
 }
 
 // Base parameters needed to access data, adapter, and index stores
 message VectorStoreParameters {
 	string storeName = 1;	// required
-	bytes indexId = 2;		// optional	
-	bytes adapterId = 3;		// optional
+	string indexName = 2;		// optional	
+	string typeName = 3;		// optional
 }
 
 // A CQL query string to be executed by the server
@@ -51,7 +51,7 @@ message CQLQueryParameters {
 
 message SpatialQueryParameters {
 	VectorStoreParameters baseParams = 1;
-	string geometry = 2;	//ISO 19107 Geometry text definition
+	bytes geometry = 2;	//ISO 19107 Geometry binary definition (WKB)
 }
 
 message SpatialTemporalQueryParameters {
@@ -79,7 +79,7 @@ message FeatureAttribute {
     float  valFloat = 7;
     double valDouble = 8;
     //google.protobuf.Timestamp valDate = 9;
-    string valGeometry = 10;
+    bytes valGeometry = 10; //ISO 19107 Geometry binary definition (WKB)
   }
 }
 

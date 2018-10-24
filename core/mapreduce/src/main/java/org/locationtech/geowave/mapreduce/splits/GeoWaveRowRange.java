@@ -16,7 +16,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import org.apache.hadoop.io.Writable;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 
 public class GeoWaveRowRange implements
@@ -141,7 +141,7 @@ public class GeoWaveRowRange implements
 		}
 
 		return (endKey == null) ? ByteArrayUtils.combineArrays(
-				ByteArrayId.getNextPrefix(partitionKey),
+				ByteArray.getNextPrefix(partitionKey),
 				endKey) : ByteArrayUtils.combineArrays(
 				partitionKey,
 				endKey);

@@ -13,12 +13,13 @@ package org.locationtech.geowave.core.store.adapter;
 import java.io.IOException;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.persist.Persistable;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 public interface RowMergingDataAdapter<T, M extends Mergeable> extends
-		WritableDataAdapter<T>
+		DataTypeAdapter<T>
 {
 	public RowTransform<M> getTransform();
 
@@ -35,7 +36,7 @@ public interface RowMergingDataAdapter<T, M extends Mergeable> extends
 
 		public M getRowAsMergeableObject(
 				final short internalAdapterId,
-				final ByteArrayId fieldId,
+				final ByteArray fieldId,
 				final byte[] rowValueBinary );
 
 		public byte[] getBinaryFromMergedObject(

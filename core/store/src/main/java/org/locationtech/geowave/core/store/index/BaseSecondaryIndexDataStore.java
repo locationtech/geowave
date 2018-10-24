@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -16,12 +16,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,29 +32,29 @@ public abstract class BaseSecondaryIndexDataStore implements
 {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(BaseSecondaryIndexDataStore.class);
-	protected final Map<String, Writer> writerCache = new HashMap<>();
+	protected final Map<String, RowWriter> writerCache = new HashMap<>();
 	protected final static byte[] EMPTY_VALUE = new byte[0];
 
 	public BaseSecondaryIndexDataStore() {}
 
 	@Override
 	public void storeJoinEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryPartitionKey,
-			final ByteArrayId primarySortKey,
-			final ByteArrayId attributeVisibility ) {
+			final String secondaryIndexName,
+			final ByteArray indexedAttributeValue,
+			final String typeName,
+			final String indexedAttributeFieldName,
+			final String primaryIndexName,
+			final ByteArray primaryPartitionKey,
+			final ByteArray primarySortKey,
+			final ByteArray attributeVisibility ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
 				writer.write(buildJoinMutation(
 						indexedAttributeValue.getBytes(),
-						adapterId.getBytes(),
-						indexedAttributeFieldId.getBytes(),
-						primaryIndexId.getBytes(),
+						StringUtils.stringToBinary(typeName),
+						StringUtils.stringToBinary(indexedAttributeFieldName),
+						StringUtils.stringToBinary(primaryIndexName),
 						primaryPartitionKey.getBytes(),
 						primarySortKey.getBytes(),
 						attributeVisibility.getBytes()));
@@ -68,20 +69,20 @@ public abstract class BaseSecondaryIndexDataStore implements
 
 	@Override
 	public void storeEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId dataId,
+			final String secondaryIndexName,
+			final ByteArray indexedAttributeValue,
+			final String typeName,
+			final String indexedAttributeFieldName,
+			final ByteArray dataId,
 			final GeoWaveValue... values ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
 				for (final GeoWaveValue v : values) {
 					writer.write(buildMutation(
 							indexedAttributeValue.getBytes(),
-							adapterId.getBytes(),
-							indexedAttributeFieldId.getBytes(),
+							StringUtils.stringToBinary(typeName),
+							StringUtils.stringToBinary(indexedAttributeFieldName),
 							dataId.getBytes(),
 							v.getFieldMask(),
 							v.getValue(),
@@ -96,9 +97,9 @@ public abstract class BaseSecondaryIndexDataStore implements
 		}
 	}
 
-	protected static DistributableQueryFilter getFilter(
-			final List<DistributableQueryFilter> constraints ) {
-		final DistributableQueryFilter filter;
+	protected static QueryFilter getFilter(
+			final List<QueryFilter> constraints ) {
+		final QueryFilter filter;
 		if (constraints.isEmpty()) {
 			filter = null;
 		}
@@ -106,7 +107,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			filter = constraints.get(0);
 		}
 		else {
-			filter = new DistributableFilterList(
+			filter = new FilterList(
 					false,
 					constraints);
 		}
@@ -115,22 +116,24 @@ public abstract class BaseSecondaryIndexDataStore implements
 
 	@Override
 	public void deleteJoinEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId primaryIndexId,
-			final ByteArrayId primaryIndexRowId,
-			final ByteArrayId attributeVisibility ) {
+			final String secondaryIndexName,
+			final ByteArray indexedAttributeValue,
+			final String typeName,
+			final String indexedAttributeFieldName,
+			final String primaryIndexName,
+			final ByteArray primaryIndexPartitionKey,
+			final ByteArray primaryIndexSortKey,
+			final ByteArray attributeVisibility ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
 				writer.write(buildJoinDeleteMutation(
 						indexedAttributeValue.getBytes(),
-						adapterId.getBytes(),
-						indexedAttributeFieldId.getBytes(),
-						primaryIndexId.getBytes(),
-						primaryIndexRowId.getBytes()));
+						StringUtils.stringToBinary(typeName),
+						StringUtils.stringToBinary(indexedAttributeFieldName),
+						StringUtils.stringToBinary(primaryIndexName),
+						primaryIndexPartitionKey.getBytes(),
+						primaryIndexSortKey.getBytes()));
 			}
 		}
 		catch (final Exception e) {
@@ -142,20 +145,20 @@ public abstract class BaseSecondaryIndexDataStore implements
 
 	@Override
 	public void deleteEntry(
-			final ByteArrayId secondaryIndexId,
-			final ByteArrayId indexedAttributeValue,
-			final ByteArrayId adapterId,
-			final ByteArrayId indexedAttributeFieldId,
-			final ByteArrayId dataId,
+			final String secondaryIndexName,
+			final ByteArray indexedAttributeValue,
+			final String typeName,
+			final String indexedAttributeFieldName,
+			final ByteArray dataId,
 			final GeoWaveValue... values ) {
 		try {
-			final Writer writer = getWriter(secondaryIndexId);
+			final RowWriter writer = getWriter(secondaryIndexName);
 			if (writer != null) {
 				for (final GeoWaveValue v : values) {
 					writer.write(buildFullDeleteMutation(
 							indexedAttributeValue.getBytes(),
-							adapterId.getBytes(),
-							indexedAttributeFieldId.getBytes(),
+							StringUtils.stringToBinary(typeName),
+							StringUtils.stringToBinary(indexedAttributeFieldName),
 							dataId.getBytes(),
 							v.getFieldMask()));
 				}
@@ -176,7 +179,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 
 	@Override
 	public void close() {
-		for (final Writer writer : writerCache.values()) {
+		for (final RowWriter writer : writerCache.values()) {
 			try {
 				writer.close();
 			}
@@ -219,7 +222,8 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final byte[] adapterId,
 			final byte[] indexedAttributeFieldId,
 			final byte[] primaryIndexId,
-			final byte[] primaryIndexRowId )
+			final byte[] primaryIndexPartitionKey,
+			final byte[] primaryIndexSortKey )
 			throws IOException;
 
 	protected abstract GeoWaveRow buildFullDeleteMutation(
@@ -230,7 +234,7 @@ public abstract class BaseSecondaryIndexDataStore implements
 			final byte[] fieldId )
 			throws IOException;
 
-	protected abstract Writer getWriter(
-			ByteArrayId secondaryIndexId );
+	protected abstract RowWriter getWriter(
+			String secondaryIndexName );
 
 }

@@ -30,7 +30,7 @@ import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.param.PartitionParameters.Partition;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
@@ -38,6 +38,7 @@ import org.locationtech.geowave.core.index.sfc.SFCFactory.SFCType;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexFactory;
 import org.locationtech.geowave.core.index.sfc.tiered.TieredSFCIndexStrategy;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.PrimaryIndex;
@@ -54,7 +55,7 @@ public abstract class AbstractPartitioner<T> implements
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private transient PrimaryIndex index = null;
+	private transient Index index = null;
 	private double[] distancePerDimension = null;
 	private double precisionFactor = 1.0;
 
@@ -81,7 +82,7 @@ public abstract class AbstractPartitioner<T> implements
 		return distancePerDimension;
 	}
 
-	protected PrimaryIndex getIndex() {
+	protected Index getIndex() {
 		return index;
 	}
 
@@ -123,7 +124,7 @@ public abstract class AbstractPartitioner<T> implements
 		final InsertionIds primaryIds = getIndex().getIndexStrategy().getInsertionIds(
 				numericData.primary);
 		for (final SinglePartitionInsertionIds partitionInsertionIds : primaryIds.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+			for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 				callback.partitionWith(new PartitionData(
 						partitionInsertionIds.getPartitionKey(),
 						sortKey,
@@ -135,7 +136,7 @@ public abstract class AbstractPartitioner<T> implements
 			final InsertionIds expansionIds = getIndex().getIndexStrategy().getInsertionIds(
 					expansionData);
 			for (final SinglePartitionInsertionIds partitionInsertionIds : expansionIds.getPartitionKeys()) {
-				for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+				for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 					callback.partitionWith(new PartitionData(
 							partitionInsertionIds.getPartitionKey(),
 							sortKey,
@@ -166,7 +167,7 @@ public abstract class AbstractPartitioner<T> implements
 			final InsertionIds insertionIds,
 			final boolean isPrimary ) {
 		for (final SinglePartitionInsertionIds partitionInsertionIds : insertionIds.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionInsertionIds.getSortKeys()) {
+			for (final ByteArray sortKey : partitionInsertionIds.getSortKeys()) {
 				masterList.add(new PartitionData(
 						partitionInsertionIds.getPartitionKey(),
 						sortKey,
@@ -331,7 +332,7 @@ public abstract class AbstractPartitioner<T> implements
 			ClassNotFoundException {
 		final byte[] indexData = new byte[stream.readInt()];
 		stream.readFully(indexData);
-		index = (PrimaryIndex) PersistenceUtils.fromBinary(indexData);
+		index = (Index) PersistenceUtils.fromBinary(indexData);
 		precisionFactor = stream.readDouble();
 		distancePerDimension = new double[stream.readInt()];
 		for (int i = 0; i < distancePerDimension.length; i++) {

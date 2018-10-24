@@ -23,7 +23,7 @@ import org.apache.accumulo.core.iterators.user.TransformingIterator;
 import org.apache.accumulo.core.security.ColumnVisibility;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.hadoop.io.Text;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.operations.MetadataType;

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -26,14 +26,12 @@ import org.locationtech.geowave.analytic.store.PersistableStore;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.index.Index;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +45,7 @@ public class ClusteringUtils
 
 	final static Logger LOGGER = LoggerFactory.getLogger(ClusteringUtils.class);
 
-	private static DataAdapter<?> createAdapter(
+	private static DataTypeAdapter<?> createAdapter(
 			final String sampleDataTypeId,
 			final String sampleDataNamespaceURI,
 			final AdapterStore adapterStore,
@@ -59,7 +57,7 @@ public class ClusteringUtils
 				sampleDataNamespaceURI,
 				CLUSTERING_CRS);
 
-		final ByteArrayId dbId = new ByteArrayId(
+		final ByteArray dbId = new ByteArray(
 				sampleDataTypeId);
 		if (!adapterStore.adapterExists(dbId)) {
 			adapterStore.addAdapter(adapter);
@@ -71,48 +69,43 @@ public class ClusteringUtils
 
 	}
 
-	public static DataAdapter[] getAdapters(
+	public static DataTypeAdapter[] getAdapters(
 			final PropertyManagement propertyManagement )
 			throws IOException {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final AdapterStore adapterStore = store.getDataStoreOptions().createAdapterStore();
 
-		final org.locationtech.geowave.core.store.CloseableIterator<DataAdapter<?>> it = adapterStore.getAdapters();
-		final List<DataAdapter> adapters = new LinkedList<DataAdapter>();
+		final org.locationtech.geowave.core.store.CloseableIterator<DataTypeAdapter<?>> it = adapterStore.getAdapters();
+		final List<DataTypeAdapter> adapters = new LinkedList<>();
 		while (it.hasNext()) {
 			adapters.add(it.next());
 		}
 		it.close();
-		final DataAdapter[] result = new DataAdapter[adapters.size()];
+		final DataTypeAdapter[] result = new DataTypeAdapter[adapters.size()];
 		adapters.toArray(result);
 		return result;
 	}
 
-	public static PrimaryIndex[] getIndices(
+	public static Index[] getIndices(
 			final PropertyManagement propertyManagement ) {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
 
-		final org.locationtech.geowave.core.store.CloseableIterator<Index<?, ?>> it = indexStore.getIndices();
-		final List<PrimaryIndex> indices = new LinkedList<PrimaryIndex>();
-		while (it.hasNext()) {
-			indices.add((PrimaryIndex) it.next());
+		try (final org.locationtech.geowave.core.store.CloseableIterator<Index> it = indexStore.getIndices()) {
+			final List<Index> indices = new LinkedList<>();
+			while (it.hasNext()) {
+				indices.add(it.next());
+			}
+			final Index[] result = new Index[indices.size()];
+			indices.toArray(result);
+			return result;
 		}
-		try {
-			it.close();
-		}
-		catch (final IOException e) {
-			LOGGER.warn("Unable to close iterator" + e);
-		}
-		final PrimaryIndex[] result = new PrimaryIndex[indices.size()];
-		indices.toArray(result);
-		return result;
 	}
 
 	/*
@@ -122,28 +115,28 @@ public class ClusteringUtils
 	protected static QueryRanges getGeoWaveRangesForQuery(
 			final Polygon polygon ) {
 
-		final PrimaryIndex index = new SpatialDimensionalityTypeProvider().createPrimaryIndex(new SpatialOptions());
+		final Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 		final QueryRanges ranges = DataStoreUtils.constraintsToQueryRanges(
 				new SpatialQuery(
 						polygon).getIndexConstraints(index),
 				index.getIndexStrategy(),
+				null,
 				-1);
 
 		return ranges;
 	}
 
-	public static PrimaryIndex createIndex(
+	public static Index createIndex(
 			final PropertyManagement propertyManagement ) {
 
-		PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
+		final PersistableStore store = (PersistableStore) StoreParameters.StoreParam.INPUT_STORE.getHelper().getValue(
 				propertyManagement);
 
 		final IndexStore indexStore = store.getDataStoreOptions().createIndexStore();
-		return (PrimaryIndex) indexStore.getIndex(new ByteArrayId(
-				propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID)));
+		return indexStore.getIndex(propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME));
 	}
 
-	public static DataAdapter<?> createAdapter(
+	public static DataTypeAdapter<?> createAdapter(
 			final PropertyManagement propertyManagement )
 			throws ClassNotFoundException,
 			InstantiationException,

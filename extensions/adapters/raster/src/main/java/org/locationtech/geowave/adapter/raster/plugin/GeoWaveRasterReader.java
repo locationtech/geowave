@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,6 +14,7 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,15 +25,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 
 import javax.imageio.ImageReadParam;
 import javax.media.jai.Histogram;
 import javax.media.jai.ImageLayout;
 import javax.media.jai.Interpolation;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.coverage.grid.GridCoverage2D;
 import org.geotools.coverage.grid.GridEnvelope2D;
 import org.geotools.coverage.grid.GridGeometry2D;
@@ -43,7 +41,6 @@ import org.geotools.coverage.grid.io.OverviewPolicy;
 import org.geotools.data.DataSourceException;
 import org.geotools.factory.Hints;
 import org.geotools.geometry.GeneralEnvelope;
-import org.geotools.geometry.jts.ReferencedEnvelope;
 import org.geotools.parameter.Parameter;
 import org.geotools.referencing.CRS;
 import org.geotools.referencing.operation.BufferedCoordinateOperationFactory;
@@ -51,36 +48,29 @@ import org.geotools.util.Utilities;
 import org.locationtech.geowave.adapter.auth.AuthorizationSPI;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.Resolution;
-import org.locationtech.geowave.adapter.raster.adapter.CompoundHierarchicalIndexStrategyWrapper;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.stats.HistogramStatistics;
 import org.locationtech.geowave.adapter.raster.stats.OverviewStatistics;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
 import org.locationtech.geowave.core.geotime.store.query.IndexOnlySpatialQuery;
 import org.locationtech.geowave.core.geotime.store.statistics.BoundingBoxDataStatistics;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy;
-import org.locationtech.geowave.core.index.HierarchicalNumericIndexStrategy.SubStrategy;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.AdapterToIndexMapping;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.CloseableIterator.Wrapper;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.Index;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.util.DataStoreUtils;
 import org.opengis.coverage.grid.Format;
 import org.opengis.coverage.grid.GridCoverage;
 import org.opengis.coverage.grid.GridEnvelope;
@@ -94,6 +84,8 @@ import org.opengis.referencing.datum.PixelInCell;
 import org.opengis.referencing.operation.CoordinateOperationFactory;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
@@ -121,7 +113,7 @@ public class GeoWaveRasterReader extends
 	private IndexStore geowaveIndexStore;
 
 	private AdapterIndexMappingStore geowaveAdapterIndexMappingStore;
-	protected Map<String, CoordinateReferenceSystem> crsCache = new HashMap<String, CoordinateReferenceSystem>();
+	protected Map<String, CoordinateReferenceSystem> crsCache = new HashMap<>();
 	protected CoordinateReferenceSystem defaultCrs;
 
 	private AuthorizationSPI authorizationSPI;
@@ -135,13 +127,13 @@ public class GeoWaveRasterReader extends
 	private static Set<AxisDirection> LEFTDirections;
 	// class initializer
 	static {
-		LEFTDirections = new HashSet<AxisDirection>();
+		LEFTDirections = new HashSet<>();
 		LEFTDirections.add(AxisDirection.DISPLAY_LEFT);
 		LEFTDirections.add(AxisDirection.EAST);
 		LEFTDirections.add(AxisDirection.GEOCENTRIC_X);
 		LEFTDirections.add(AxisDirection.COLUMN_POSITIVE);
 
-		UPDirections = new HashSet<AxisDirection>();
+		UPDirections = new HashSet<>();
 		UPDirections.add(AxisDirection.DISPLAY_UP);
 		UPDirections.add(AxisDirection.NORTH);
 		UPDirections.add(AxisDirection.GEOCENTRIC_Y);
@@ -248,9 +240,9 @@ public class GeoWaveRasterReader extends
 			defaultCrs = crsCache.values().iterator().next();
 		}
 		else {
-			String[] coverageNames = getGridCoverageNames();
-			for (String coverageName : coverageNames) {
-				CoordinateReferenceSystem crs = getCrsForCoverage(coverageName);
+			final String[] coverageNames = getGridCoverageNames();
+			for (final String coverageName : coverageNames) {
+				final CoordinateReferenceSystem crs = getCrsForCoverage(coverageName);
 				if (crs != null) {
 					defaultCrs = crs;
 					break;
@@ -266,18 +258,17 @@ public class GeoWaveRasterReader extends
 	}
 
 	protected CoordinateReferenceSystem getCrsForCoverage(
-			String coverageName ) {
+			final String coverageName ) {
 		CoordinateReferenceSystem crs = crsCache.get(coverageName);
 		if (crs != null) {
 			return crs;
 		}
 
-		AdapterToIndexMapping adapterMapping = geowaveAdapterIndexMappingStore
-				.getIndicesForAdapter(getInternalAdapterId(new ByteArrayId(
-						coverageName)));
-		PrimaryIndex[] indices = adapterMapping.getIndices(geowaveIndexStore);
+		final AdapterToIndexMapping adapterMapping = geowaveAdapterIndexMappingStore
+				.getIndicesForAdapter(getAdapterId(coverageName));
+		final Index[] indices = adapterMapping.getIndices(geowaveIndexStore);
 
-		if (indices != null && indices.length > 0) {
+		if ((indices != null) && (indices.length > 0)) {
 			crs = GeometryUtils.getIndexCrs(indices[0]);
 			crsCache.put(
 					coverageName,
@@ -294,21 +285,15 @@ public class GeoWaveRasterReader extends
 	@Override
 	public String[] getGridCoverageNames() {
 		try (final CloseableIterator<InternalDataAdapter<?>> it = geowaveAdapterStore.getAdapters()) {
-			final List<String> coverageNames = new ArrayList<String>();
+			final List<String> coverageNames = new ArrayList<>();
 			while (it.hasNext()) {
-				final DataAdapter<?> adapter = it.next().getAdapter();
+				final DataTypeAdapter<?> adapter = it.next().getAdapter();
 				if (adapter instanceof RasterDataAdapter) {
 					coverageNames.add(((RasterDataAdapter) adapter).getCoverageName());
 				}
 			}
 			return coverageNames.toArray(new String[coverageNames.size()]);
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close adapter iterator while looking up coverage names",
-					e);
-		}
-		return new String[] {};
 	}
 
 	@Override
@@ -316,19 +301,13 @@ public class GeoWaveRasterReader extends
 		try (final CloseableIterator<InternalDataAdapter<?>> it = geowaveAdapterStore.getAdapters()) {
 			int coverageCount = 0;
 			while (it.hasNext()) {
-				final DataAdapter<?> adapter = it.next().getAdapter();
+				final DataTypeAdapter<?> adapter = it.next().getAdapter();
 				if (adapter instanceof RasterDataAdapter) {
 					coverageCount++;
 				}
 			}
 			return coverageCount;
 		}
-		catch (final IOException e) {
-			LOGGER.warn(
-					"unable to close data adapter when looking up coverage count",
-					e);
-		}
-		return 0;
 	}
 
 	@Override
@@ -345,9 +324,8 @@ public class GeoWaveRasterReader extends
 			return null;
 		}
 
-		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName))).getAdapter();
+		final DataTypeAdapter<?> adapter = geowaveAdapterStore.getAdapter(
+				getAdapterId(coverageName)).getAdapter();
 		final Set<String> var = ((RasterDataAdapter) adapter).getMetadata().keySet();
 		return var.toArray(new String[var.size()]);
 	}
@@ -368,9 +346,8 @@ public class GeoWaveRasterReader extends
 			return null;
 		}
 
-		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName))).getAdapter();
+		final DataTypeAdapter<?> adapter = geowaveAdapterStore.getAdapter(
+				getAdapterId(coverageName)).getAdapter();
 
 		return ((RasterDataAdapter) adapter).getMetadata().get(
 				name);
@@ -383,9 +360,8 @@ public class GeoWaveRasterReader extends
 				"coverageName",
 				coverageName);
 
-		final DataAdapter<?> adapter = geowaveAdapterStore.getAdapter(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName))).getAdapter();
+		final DataTypeAdapter<?> adapter = geowaveAdapterStore.getAdapter(
+				getAdapterId(coverageName)).getAdapter();
 		return (adapter != null) && (adapter instanceof RasterDataAdapter);
 	}
 
@@ -398,25 +374,42 @@ public class GeoWaveRasterReader extends
 	@Override
 	public GeneralEnvelope getOriginalEnvelope(
 			final String coverageName ) {
-		final DataStatistics<?> statistics = geowaveStatisticsStore.getDataStatistics(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName)),
-				BoundingBoxDataStatistics.STATS_TYPE,
-				authorizationSPI.getAuthorizations());
-		// try to use both the bounding box and the overview statistics to
-		// determine the width and height at the highest resolution
-		if (statistics instanceof BoundingBoxDataStatistics) {
-			final BoundingBoxDataStatistics<?> bboxStats = (BoundingBoxDataStatistics<?>) statistics;
+		final Envelope envelope = geowaveDataStore.aggregateStatistics(BoundingBoxDataStatistics.STATS_TYPE
+				.newBuilder()
+				.setAuthorizations(
+						authorizationSPI.getAuthorizations())
+				.dataType(
+						coverageName)
+				.build());
+		if (envelope == null) {
+			CoordinateReferenceSystem crs = getCoordinateReferenceSystem(coverageName);
+			double minX = crs.getCoordinateSystem().getAxis(
+					0).getMinimumValue();
+			double maxX = crs.getCoordinateSystem().getAxis(
+					0).getMaximumValue();
+			double minY = crs.getCoordinateSystem().getAxis(
+					1).getMinimumValue();
+			double maxY = crs.getCoordinateSystem().getAxis(
+					1).getMaximumValue();
 			final GeneralEnvelope env = new GeneralEnvelope(
 					new Rectangle2D.Double(
-							bboxStats.getMinX(),
-							bboxStats.getMinY(),
-							bboxStats.getWidth(),
-							bboxStats.getHeight()));
-			env.setCoordinateReferenceSystem(getCoordinateReferenceSystem(coverageName));
+							minX,
+							minY,
+							maxX - minX,
+							maxY - minY));
+			env.setCoordinateReferenceSystem(crs);
 			return env;
 		}
-		return null;
+		// try to use both the bounding box and the overview statistics to
+		// determine the width and height at the highest resolution
+		final GeneralEnvelope env = new GeneralEnvelope(
+				new Rectangle2D.Double(
+						envelope.getMinX(),
+						envelope.getMinY(),
+						envelope.getWidth(),
+						envelope.getHeight()));
+		env.setCoordinateReferenceSystem(getCoordinateReferenceSystem(coverageName));
+		return env;
 	}
 
 	@Override
@@ -439,38 +432,47 @@ public class GeoWaveRasterReader extends
 	@Override
 	public GridEnvelope getOriginalGridRange(
 			final String coverageName ) {
-		DataStatistics<?> statistics = geowaveStatisticsStore.getDataStatistics(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName)),
-				BoundingBoxDataStatistics.STATS_TYPE,
-				authorizationSPI.getAuthorizations());
-		int width = 0;
-		int height = 0;
-		// try to use both the bounding box and the overview statistics to
-		// determine the width and height at the highest resolution
-		if (statistics instanceof BoundingBoxDataStatistics) {
-			final BoundingBoxDataStatistics<?> bboxStats = (BoundingBoxDataStatistics<?>) statistics;
-			statistics = geowaveStatisticsStore.getDataStatistics(
-					getInternalAdapterId(new ByteArrayId(
-							coverageName)),
-					OverviewStatistics.STATS_TYPE,
-					authorizationSPI.getAuthorizations());
-			if (statistics instanceof OverviewStatistics) {
-				final OverviewStatistics overviewStats = (OverviewStatistics) statistics;
-				width = (int) Math
-						.ceil(((bboxStats.getMaxX() - bboxStats.getMinX()) / overviewStats.getResolutions()[0]
-								.getResolution(0)));
-				height = (int) Math
-						.ceil(((bboxStats.getMaxY() - bboxStats.getMinY()) / overviewStats.getResolutions()[0]
-								.getResolution(1)));
-			}
-		}
+		try (CloseableIterator<InternalDataStatistics<?, ?, ?>> statisticsIt = geowaveStatisticsStore
+				.getDataStatistics(
+						getAdapterId(coverageName),
+						BoundingBoxDataStatistics.STATS_TYPE,
+						authorizationSPI.getAuthorizations())) {
 
-		return new GridEnvelope2D(
-				0,
-				0,
-				width,
-				height);
+			int width = 0;
+			int height = 0;
+			// try to use both the bounding box and the overview statistics to
+			// determine the width and height at the highest resolution
+			InternalDataStatistics<?, ?, ?> statistics = null;
+			if (statisticsIt.hasNext()) {
+				statistics = statisticsIt.next();
+			}
+			if ((statistics != null) && (statistics instanceof BoundingBoxDataStatistics)) {
+				final BoundingBoxDataStatistics<?> bboxStats = (BoundingBoxDataStatistics<?>) statistics;
+				try (CloseableIterator<InternalDataStatistics<?, ?, ?>> overviewStatisticsIt = geowaveStatisticsStore
+						.getDataStatistics(
+								getAdapterId(coverageName),
+								OverviewStatistics.STATS_TYPE,
+								authorizationSPI.getAuthorizations())) {
+					statistics = null;
+					if (overviewStatisticsIt.hasNext()) {
+						statistics = overviewStatisticsIt.next();
+					}
+					if ((statistics != null) && (statistics instanceof OverviewStatistics)) {
+						final OverviewStatistics overviewStats = (OverviewStatistics) statistics;
+						width = (int) Math.ceil(((bboxStats.getMaxX() - bboxStats.getMinX()) / overviewStats
+								.getResolutions()[0].getResolution(0)));
+						height = (int) Math.ceil(((bboxStats.getMaxY() - bboxStats.getMinY()) / overviewStats
+								.getResolutions()[0].getResolution(1)));
+					}
+				}
+			}
+
+			return new GridEnvelope2D(
+					0,
+					0,
+					width,
+					height);
+		}
 	}
 
 	@Override
@@ -650,8 +652,7 @@ public class GeoWaveRasterReader extends
 		final Integer imageChoice;
 
 		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore.getAdapter(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName))).getAdapter();
+				getAdapterId(coverageName)).getAdapter();
 		if (pixelDimension != null) {
 			try {
 				synchronized (this) {
@@ -722,7 +723,7 @@ public class GeoWaveRasterReader extends
 		}
 		boolean scaleTo8Bit = true; // default to always scale to 8-bit
 
-		boolean scaleTo8BitSet = config.isScaleTo8BitSet();
+		final boolean scaleTo8BitSet = config.isScaleTo8BitSet();
 		if (scaleTo8BitSet) {
 			scaleTo8Bit = config.isScaleTo8Bit();
 		}
@@ -775,7 +776,7 @@ public class GeoWaveRasterReader extends
 		// portions of the inherited class, which does not handle
 		// multiple coverage names
 		final double[][] resLevels = getResolutionLevels(coverageName);
-		if (resLevels.length == 0) {
+		if (resLevels == null || resLevels.length == 0) {
 			return false;
 		}
 		numOverviews = resLevels.length - 1;
@@ -804,7 +805,7 @@ public class GeoWaveRasterReader extends
 			final double levelResY,
 			final RasterDataAdapter adapter )
 			throws IOException {
-		final Query query;
+		final QueryConstraints query;
 		if (requestEnvelope.getCoordinateReferenceSystem() != null) {
 			query = new IndexOnlySpatialQuery(
 					new GeometryFactory().toGeometry(new Envelope(
@@ -833,90 +834,22 @@ public class GeoWaveRasterReader extends
 
 	private CloseableIterator<GridCoverage> queryForTiles(
 			final RasterDataAdapter adapter,
-			final Query query,
+			final QueryConstraints query,
 			final double[] targetResolutionPerDimension ) {
 		final AdapterToIndexMapping adapterIndexMapping = geowaveAdapterIndexMappingStore
-				.getIndicesForAdapter(getInternalAdapterId(adapter.getAdapterId()));
-		final PrimaryIndex[] indices = adapterIndexMapping.getIndices(geowaveIndexStore);
+				.getIndicesForAdapter(getAdapterId(adapter.getTypeName()));
+		final Index[] indices = adapterIndexMapping.getIndices(geowaveIndexStore);
 		// just work on the first spatial only index that contains this adapter
 		// ID
 		// TODO consider the best strategy for handling temporal queries here
-		for (final PrimaryIndex rasterIndex : indices) {
+		for (final Index rasterIndex : indices) {
 			if (SpatialDimensionalityTypeProvider.isSpatial(rasterIndex)) {
-				// determine the correct tier to query for the given resolution
-				final HierarchicalNumericIndexStrategy strategy = CompoundHierarchicalIndexStrategyWrapper
-						.findHierarchicalStrategy(rasterIndex.getIndexStrategy());
-				if (strategy != null) {
-					final TreeMap<Double, SubStrategy> sortedStrategies = new TreeMap<Double, SubStrategy>();
-					SubStrategy targetIndexStrategy = null;
-					for (final SubStrategy subStrategy : strategy.getSubStrategies()) {
-						final double[] idRangePerDimension = subStrategy
-								.getIndexStrategy()
-								.getHighestPrecisionIdRangePerDimension();
-						double rangeSum = 0;
-						for (final double range : idRangePerDimension) {
-							rangeSum += range;
-						}
-						// sort by the sum of the range in each dimension
-						sortedStrategies.put(
-								rangeSum,
-								subStrategy);
-					}
-					for (final SubStrategy subStrategy : sortedStrategies.descendingMap().values()) {
-						final double[] highestPrecisionIdRangePerDimension = subStrategy
-								.getIndexStrategy()
-								.getHighestPrecisionIdRangePerDimension();
-						// if the id range is less than or equal to the target
-						// resolution in each dimension, use this substrategy
-						boolean withinTargetResolution = true;
-						for (int d = 0; d < highestPrecisionIdRangePerDimension.length; d++) {
-							if (highestPrecisionIdRangePerDimension[d] > targetResolutionPerDimension[d]) {
-								withinTargetResolution = false;
-								break;
-							}
-						}
-						if (withinTargetResolution) {
-							targetIndexStrategy = subStrategy;
-							break;
-						}
-					}
-					if (targetIndexStrategy == null) {
-						// if there is not a substrategy that is within the
-						// target
-						// resolution, use the first substrategy (the lowest
-						// range
-						// per
-						// dimension, which is the highest precision)
-						targetIndexStrategy = sortedStrategies.firstEntry().getValue();
-					}
-					return geowaveDataStore.query(
-							new QueryOptions(
-									adapter,
-									new CustomIdIndex(
-											// replace the index strategy with a
-											// single
-											// substrategy that fits the target
-											// resolution
-											targetIndexStrategy.getIndexStrategy(),
-											rasterIndex.getIndexModel(),
-											rasterIndex.getId()), // make sure
-																	// the
-																	// index ID
-																	// is
-																	// the
-									authorizationSPI.getAuthorizations()),
-							// same as the orginal so that we
-							// are querying the correct table
-							query);
-				}
-				else {
-					return geowaveDataStore.query(
-							new QueryOptions(
-									adapter,
-									rasterIndex,
-									authorizationSPI.getAuthorizations()),
-							query);
-				}
+				return (CloseableIterator) geowaveDataStore.query(QueryBuilder.newBuilder().setAuthorizations(
+						authorizationSPI.getAuthorizations()).addTypeName(
+						adapter.getTypeName()).constraints(
+						query).addHint(
+						DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX,
+						targetResolutionPerDimension).build());
 			}
 		}
 		return new Wrapper(
@@ -1104,8 +1037,7 @@ public class GeoWaveRasterReader extends
 		}
 
 		final RasterDataAdapter adapter = (RasterDataAdapter) geowaveAdapterStore
-				.getAdapter(getInternalAdapterId(new ByteArrayId(
-						coverageName)));
+				.getAdapter(getAdapterId(coverageName));
 		final GridEnvelope gridEnvelope = getOriginalGridRange();
 		return new ImageLayout().setMinX(
 				gridEnvelope.getLow(0)).setMinY(
@@ -1129,21 +1061,24 @@ public class GeoWaveRasterReader extends
 	public double[][] getResolutionLevels(
 			final String coverageName )
 			throws IOException {
-		final DataStatistics<?> stats = geowaveStatisticsStore.getDataStatistics(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName)),
-				OverviewStatistics.STATS_TYPE,
-				authorizationSPI.getAuthorizations());
-		if ((stats != null) && (stats instanceof OverviewStatistics)) {
-			final Resolution[] resolutions = ((OverviewStatistics) stats).getResolutions();
-			final double[][] retVal = new double[resolutions.length][];
-			int i = 0;
-			for (final Resolution res : resolutions) {
-				retVal[i++] = res.getResolutionPerDimension();
-			}
-			return retVal;
+		final Resolution[] resolutions = geowaveDataStore.aggregateStatistics(OverviewStatistics.STATS_TYPE
+				.newBuilder()
+				.setAuthorizations(
+						authorizationSPI.getAuthorizations())
+				.dataType(
+						coverageName)
+				.build());
+		if (resolutions == null) {
+			LOGGER.warn("Cannot find resolutions for coverage '" + coverageName + "'");
+			return null;
 		}
-		return new double[][] {};
+		final double[][] retVal = new double[resolutions.length][];
+		int i = 0;
+		for (final Resolution res : resolutions) {
+			retVal[i++] = res.getResolutionPerDimension();
+		}
+		return retVal;
+
 	}
 
 	private Histogram getHistogram(
@@ -1151,13 +1086,12 @@ public class GeoWaveRasterReader extends
 			final double resX,
 			final double resY )
 			throws IOException {
-		final DataStatistics<?> stats = geowaveStatisticsStore.getDataStatistics(
-				getInternalAdapterId(new ByteArrayId(
-						coverageName)),
-				HistogramStatistics.STATS_TYPE,
-				authorizationSPI.getAuthorizations());
-		if ((stats != null) && (stats instanceof HistogramStatistics)) {
-			return ((HistogramStatistics) stats).getHistogram(new Resolution(
+		final Map<Resolution, Histogram> histograms = geowaveDataStore
+				.aggregateStatistics(HistogramStatistics.STATS_TYPE.newBuilder().setAuthorizations(
+						authorizationSPI.getAuthorizations()).dataType(
+						coverageName).build());
+		if (histograms != null) {
+			return histograms.get(new Resolution(
 					new double[] {
 						resX,
 						resY
@@ -1206,10 +1140,10 @@ public class GeoWaveRasterReader extends
 		return -1;
 	}
 
-	private short getInternalAdapterId(
-			ByteArrayId adapterId ) {
+	private short getAdapterId(
+			final String coverageName ) {
 
-		return geowaveInternalAdapterStore.getInternalAdapterId(adapterId);
+		return geowaveInternalAdapterStore.getAdapterId(coverageName);
 
 	}
 

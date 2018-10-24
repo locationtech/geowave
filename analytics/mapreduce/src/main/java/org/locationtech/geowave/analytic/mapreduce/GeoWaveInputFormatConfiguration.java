@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,11 +21,11 @@ import org.locationtech.geowave.analytic.param.FormatConfiguration;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 
 public class GeoWaveInputFormatConfiguration implements
@@ -33,8 +33,8 @@ public class GeoWaveInputFormatConfiguration implements
 {
 
 	protected boolean isDataWritable = false;
-	protected List<DataAdapter<?>> adapters = new ArrayList<DataAdapter<?>>();
-	protected List<PrimaryIndex> indices = new ArrayList<PrimaryIndex>();
+	protected List<DataTypeAdapter<?>> adapters = new ArrayList<>();
+	protected List<Index> indices = new ArrayList<>();
 
 	public GeoWaveInputFormatConfiguration() {
 
@@ -51,21 +51,35 @@ public class GeoWaveInputFormatConfiguration implements
 				configuration,
 				dataStoreOptions);
 
-		final DistributableQuery query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
+		final Query<?> query = runTimeProperties.getPropertyAsQuery(ExtractParameters.Extract.QUERY);
 
 		if (query != null) {
-			GeoWaveInputFormat.setQuery(
-					configuration,
-					query);
-		}
+			if (query.getQueryConstraints() != null) {
+				GeoWaveInputFormat.setQueryConstraints(
+						configuration,
+						(QueryConstraints) query.getQueryConstraints());
+			}
 
-		final QueryOptions queryoptions = runTimeProperties
-				.getPropertyAsQueryOptions(ExtractParameters.Extract.QUERY_OPTIONS);
+			if (query.getCommonQueryOptions() != null) {
+				GeoWaveInputFormat.setCommonQueryOptions(
+						configuration,
+						query.getCommonQueryOptions());
+			}
 
-		if (queryoptions != null) {
-			GeoWaveInputFormat.setQueryOptions(
-					configuration,
-					queryoptions);
+			if (query.getDataTypeQueryOptions() != null) {
+				GeoWaveInputFormat.setDataTypeQueryOptions(
+						configuration,
+						query.getDataTypeQueryOptions(),
+						dataStoreOptions.createAdapterStore(),
+						dataStoreOptions.createInternalAdapterStore());
+			}
+
+			if (query.getIndexQueryOptions() != null) {
+				GeoWaveInputFormat.setIndexQueryOptions(
+						configuration,
+						query.getIndexQueryOptions(),
+						dataStoreOptions.createIndexStore());
+			}
 		}
 
 		final int minInputSplits = runTimeProperties.getPropertyAsInt(
@@ -91,12 +105,12 @@ public class GeoWaveInputFormatConfiguration implements
 	}
 
 	public void addDataAdapter(
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		adapters.add(adapter);
 	}
 
 	public void addIndex(
-			final PrimaryIndex index ) {
+			final Index index ) {
 		indices.add(index);
 	}
 
@@ -120,7 +134,6 @@ public class GeoWaveInputFormatConfiguration implements
 	@Override
 	public List<ParameterEnum<?>> getParameters() {
 		return Arrays.asList(new ParameterEnum<?>[] {
-			ExtractParameters.Extract.QUERY_OPTIONS,
 			ExtractParameters.Extract.QUERY,
 			ExtractParameters.Extract.MAX_INPUT_SPLIT,
 			ExtractParameters.Extract.MIN_INPUT_SPLIT,

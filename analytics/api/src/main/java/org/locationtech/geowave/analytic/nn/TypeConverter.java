@@ -10,7 +10,7 @@
  ******************************************************************************/
 package org.locationtech.geowave.analytic.nn;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 /**
  * Convert object consumed by NN to a 'smaller' object pertinent to any subclass
@@ -21,6 +21,6 @@ import org.locationtech.geowave.core.index.ByteArrayId;
 public interface TypeConverter<TYPE>
 {
 	public TYPE convert(
-			ByteArrayId id,
+			ByteArray id,
 			Object o );
 }

@@ -17,12 +17,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 
 /**
  * This is a simple HashMap based in-memory implementation of the AdapterStore
@@ -37,46 +35,46 @@ public class MemoryAdapterStore implements
 	 *
 	 */
 	private static final long serialVersionUID = 1L;
-	private Map<ByteArrayId, DataAdapter<?>> adapterMap;
+	private Map<String, DataTypeAdapter<?>> adapterMap;
 
 	public MemoryAdapterStore() {
-		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
+		adapterMap = Collections.synchronizedMap(new HashMap<String, DataTypeAdapter<?>>());
 	}
 
 	public MemoryAdapterStore(
-			final DataAdapter<?>[] adapters ) {
-		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
-		for (final DataAdapter<?> adapter : adapters) {
+			final DataTypeAdapter<?>[] adapters ) {
+		adapterMap = Collections.synchronizedMap(new HashMap<String, DataTypeAdapter<?>>());
+		for (final DataTypeAdapter<?> adapter : adapters) {
 			adapterMap.put(
-					adapter.getAdapterId(),
+					adapter.getTypeName(),
 					adapter);
 		}
 	}
 
 	@Override
 	public void addAdapter(
-			final DataAdapter<?> adapter ) {
+			final DataTypeAdapter<?> adapter ) {
 		adapterMap.put(
-				adapter.getAdapterId(),
+				adapter.getTypeName(),
 				adapter);
 	}
 
 	@Override
-	public DataAdapter<?> getAdapter(
-			final ByteArrayId adapterId ) {
-		return adapterMap.get(adapterId);
+	public DataTypeAdapter<?> getAdapter(
+			final String typeName ) {
+		return adapterMap.get(typeName);
 	}
 
 	@Override
 	public boolean adapterExists(
-			final ByteArrayId adapterId ) {
-		return adapterMap.containsKey(adapterId);
+			final String typeName ) {
+		return adapterMap.containsKey(typeName);
 	}
 
 	@Override
-	public CloseableIterator<DataAdapter<?>> getAdapters() {
-		return new CloseableIterator.Wrapper<DataAdapter<?>>(
-				new ArrayList<DataAdapter<?>>(
+	public CloseableIterator<DataTypeAdapter<?>> getAdapters() {
+		return new CloseableIterator.Wrapper<DataTypeAdapter<?>>(
+				new ArrayList<DataTypeAdapter<?>>(
 						adapterMap.values()).iterator());
 	}
 
@@ -90,8 +88,8 @@ public class MemoryAdapterStore implements
 			throws IOException {
 		final int count = adapterMap.size();
 		out.writeInt(count);
-		for (final Map.Entry<ByteArrayId, DataAdapter<?>> entry : adapterMap.entrySet()) {
-			out.writeObject(entry.getKey());
+		for (final Map.Entry<String, DataTypeAdapter<?>> entry : adapterMap.entrySet()) {
+			out.writeUTF(entry.getKey());
 			final byte[] val = PersistenceUtils.toBinary(entry.getValue());
 			out.writeObject(val);
 		}
@@ -102,18 +100,18 @@ public class MemoryAdapterStore implements
 			throws IOException,
 			ClassNotFoundException {
 		final int count = in.readInt();
-		adapterMap = Collections.synchronizedMap(new HashMap<ByteArrayId, DataAdapter<?>>());
+		adapterMap = Collections.synchronizedMap(new HashMap<String, DataTypeAdapter<?>>());
 		for (int i = 0; i < count; i++) {
-			final ByteArrayId id = (ByteArrayId) in.readObject();
+			final String id = in.readUTF();
 			final byte[] data = (byte[]) in.readObject();
 			adapterMap.put(
 					id,
-					(DataAdapter<?>) PersistenceUtils.fromBinary(data));
+					(DataTypeAdapter<?>) PersistenceUtils.fromBinary(data));
 		}
 	}
 
 	public void removeAdapter(
-			ByteArrayId adapterId ) {
-		adapterMap.remove(adapterId);
+			String typeName ) {
+		adapterMap.remove(typeName);
 	}
 }

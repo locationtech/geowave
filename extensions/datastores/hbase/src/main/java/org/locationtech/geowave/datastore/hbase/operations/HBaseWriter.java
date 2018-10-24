@@ -19,13 +19,13 @@ import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.security.visibility.CellVisibility;
 import org.apache.log4j.Logger;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.entities.GeoWaveKey;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.locationtech.geowave.core.store.entities.GeoWaveValue;
-import org.locationtech.geowave.core.store.operations.Writer;
+import org.locationtech.geowave.core.store.operations.RowWriter;
 
 /**
  * This is a basic wrapper around the HBase BufferedMutator so that write
@@ -34,11 +34,11 @@ import org.locationtech.geowave.core.store.operations.Writer;
  * this implementation within a custom implementation of HBaseOperations.
  */
 public class HBaseWriter implements
-		Writer
+		RowWriter
 {
 	private final static Logger LOGGER = Logger.getLogger(HBaseWriter.class);
 
-	protected Set<ByteArrayId> duplicateRowTracker = new HashSet<>();
+	protected Set<ByteArray> duplicateRowTracker = new HashSet<>();
 	private final BufferedMutator mutator;
 
 	public HBaseWriter(
@@ -108,7 +108,7 @@ public class HBaseWriter implements
 		// batches and if the same row exists within a batch we will not
 		// retain multiple versions)
 		synchronized (duplicateRowTracker) {
-			final ByteArrayId rowId = new ByteArrayId(
+			final ByteArray rowId = new ByteArray(
 					rowBytes);
 			if (!duplicateRowTracker.add(rowId)) {
 				try {
@@ -131,7 +131,7 @@ public class HBaseWriter implements
 					rowBytes);
 
 			put.addColumn(
-					StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getInternalAdapterId())),
+					StringUtils.stringToBinary(ByteArrayUtils.shortToString(row.getAdapterId())),
 					value.getFieldMask(),
 					value.getValue());
 

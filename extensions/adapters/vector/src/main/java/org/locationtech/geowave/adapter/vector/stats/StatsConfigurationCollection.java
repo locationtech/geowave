@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,20 +17,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A collection of statistics configurations targeted to a specific attribute.
  * Each configuration describes how to construct a statistic for an attribute.
- * 
+ *
  */
 public class StatsConfigurationCollection implements
 		java.io.Serializable,
@@ -58,7 +58,7 @@ public class StatsConfigurationCollection implements
 
 	public void setConfigurationsForAttribute(
 			final List<StatsConfig<SimpleFeature>> configrationsForAttribute ) {
-		this.configurationsForAttribute = configrationsForAttribute;
+		configurationsForAttribute = configrationsForAttribute;
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class StatsConfigurationCollection implements
 
 	@Override
 	public void fromBinary(
-			byte[] bytes ) {
+			final byte[] bytes ) {
 		configurationsForAttribute = (List) PersistenceUtils.fromBinaryAsList(bytes);
 	}
 
@@ -77,7 +77,7 @@ public class StatsConfigurationCollection implements
 	{
 
 		private static final long serialVersionUID = -9149753182284018327L;
-		private Map<String, StatsConfigurationCollection> attConfig = new HashMap<String, StatsConfigurationCollection>();
+		private Map<String, StatsConfigurationCollection> attConfig = new HashMap<>();
 
 		public SimpleFeatureStatsConfigurationCollection() {}
 
@@ -133,24 +133,24 @@ public class StatsConfigurationCollection implements
 		@Override
 		public byte[] toBinary() {
 			int size = 4;
-			List<byte[]> entries = new ArrayList<>(
+			final List<byte[]> entries = new ArrayList<>(
 					attConfig.size());
-			for (Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
-				byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
+			for (final Entry<String, StatsConfigurationCollection> e : attConfig.entrySet()) {
+				final byte[] keyBytes = StringUtils.stringToBinary(e.getKey());
 				int entrySize = 8 + keyBytes.length;
-				byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
+				final byte[] confBytes = PersistenceUtils.toBinary(e.getValue());
 				entrySize += confBytes.length;
 				size += entrySize;
-				ByteBuffer buf = ByteBuffer.allocate(entrySize);
+				final ByteBuffer buf = ByteBuffer.allocate(entrySize);
 				buf.putInt(keyBytes.length);
 				buf.put(keyBytes);
 				buf.putInt(confBytes.length);
 				buf.put(confBytes);
 				entries.add(buf.array());
 			}
-			ByteBuffer buf = ByteBuffer.allocate(size);
+			final ByteBuffer buf = ByteBuffer.allocate(size);
 			buf.putInt(attConfig.size());
-			for (byte[] e : entries) {
+			for (final byte[] e : entries) {
 				buf.put(e);
 			}
 			return buf.array();
@@ -158,24 +158,24 @@ public class StatsConfigurationCollection implements
 
 		@Override
 		public void fromBinary(
-				byte[] bytes ) {
-			ByteBuffer buf = ByteBuffer.wrap(bytes);
-			int entrySize = buf.getInt();
-			Map<String, StatsConfigurationCollection> internalAttConfig = new HashMap<>(
+				final byte[] bytes ) {
+			final ByteBuffer buf = ByteBuffer.wrap(bytes);
+			final int entrySize = buf.getInt();
+			final Map<String, StatsConfigurationCollection> internalAttConfig = new HashMap<>(
 					entrySize);
 			for (int i = 0; i < entrySize; i++) {
-				int keySize = buf.getInt();
-				byte[] keyBytes = new byte[keySize];
+				final int keySize = buf.getInt();
+				final byte[] keyBytes = new byte[keySize];
 				buf.get(keyBytes);
-				String key = StringUtils.stringFromBinary(keyBytes);
-				byte[] entryBytes = new byte[buf.getInt()];
+				final String key = StringUtils.stringFromBinary(keyBytes);
+				final byte[] entryBytes = new byte[buf.getInt()];
 				buf.get(entryBytes);
 
 				internalAttConfig.put(
 						key,
 						(StatsConfigurationCollection) PersistenceUtils.fromBinary(entryBytes));
 			}
-			this.attConfig = internalAttConfig;
+			attConfig = internalAttConfig;
 		}
 	}
 }

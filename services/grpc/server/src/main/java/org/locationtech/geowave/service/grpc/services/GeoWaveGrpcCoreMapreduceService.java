@@ -47,7 +47,7 @@ public class GeoWaveGrpcCoreMapreduceService extends
 
 		ConfigHDFSCommand cmd = new ConfigHDFSCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,18 +24,17 @@ import org.geotools.filter.text.cql2.CQLException;
 import org.junit.Before;
 import org.junit.Test;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
-import org.locationtech.geowave.adapter.vector.query.cql.CQLQuery;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.store.query.ExplicitCQLQuery;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 import org.locationtech.geowave.core.store.adapter.AdapterPersistenceEncoding;
 import org.locationtech.geowave.core.store.adapter.IndexedAdapterPersistenceEncoding;
-import org.locationtech.geowave.core.store.filter.DistributableFilterList;
-import org.locationtech.geowave.core.store.filter.DistributableQueryFilter;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.query.filter.FilterList;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -79,24 +78,23 @@ public class CQLQueryFilterTest
 				exp1,
 				exp2,
 				false);
-		final PrimaryIndex spatialIndex = new SpatialDimensionalityTypeProvider()
-				.createPrimaryIndex(new SpatialOptions());
+		final Index spatialIndex = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 		final FeatureDataAdapter adapter = new FeatureDataAdapter(
 				type);
 		adapter.init(spatialIndex);
-		final CQLQuery cqlQuery = new CQLQuery(
+		final ExplicitCQLQuery cqlQuery = new ExplicitCQLQuery(
 				null,
 				f,
 				adapter);
 
 		final List<QueryFilter> filters = cqlQuery.createFilters(spatialIndex);
-		final List<DistributableQueryFilter> dFilters = new ArrayList<DistributableQueryFilter>();
+		final List<QueryFilter> dFilters = new ArrayList<>();
 		for (final QueryFilter filter : filters) {
-			dFilters.add((DistributableQueryFilter) filter);
+			dFilters.add(filter);
 		}
 
-		final DistributableFilterList dFilterList = new DistributableFilterList(
+		final FilterList dFilterList = new FilterList(
 				dFilters);
 
 		assertTrue(dFilterList.accept(
@@ -110,13 +108,13 @@ public class CQLQueryFilterTest
 	}
 
 	private static List<IndexedAdapterPersistenceEncoding> getEncodings(
-			final PrimaryIndex index,
+			final Index index,
 			final AdapterPersistenceEncoding encoding ) {
 		final InsertionIds ids = encoding.getInsertionIds(index);
-		final ArrayList<IndexedAdapterPersistenceEncoding> encodings = new ArrayList<IndexedAdapterPersistenceEncoding>();
+		final ArrayList<IndexedAdapterPersistenceEncoding> encodings = new ArrayList<>();
 
 		for (final SinglePartitionInsertionIds partitionIds : ids.getPartitionKeys()) {
-			for (final ByteArrayId sortKey : partitionIds.getSortKeys()) {
+			for (final ByteArray sortKey : partitionIds.getSortKeys()) {
 				encodings.add(new IndexedAdapterPersistenceEncoding(
 						encoding.getInternalAdapterId(),
 						encoding.getDataId(),

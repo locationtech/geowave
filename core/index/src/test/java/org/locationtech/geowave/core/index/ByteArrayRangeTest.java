@@ -20,7 +20,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.ByteArrayRange.MergeOperation;
 
@@ -30,24 +30,24 @@ public class ByteArrayRangeTest
 	@Test
 	public void testUnion() {
 		ByteArrayRange bar1 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"232"),
-				new ByteArrayId(
+				new ByteArray(
 						"332"));
 		ByteArrayRange bar2 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"282"),
-				new ByteArrayId(
+				new ByteArray(
 						"300"));
 		ByteArrayRange bar3 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"272"),
-				new ByteArrayId(
+				new ByteArray(
 						"340"));
 		ByteArrayRange bar4 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"392"),
-				new ByteArrayId(
+				new ByteArray(
 						"410"));
 
 		Collection<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
@@ -80,16 +80,16 @@ public class ByteArrayRangeTest
 
 		assertEquals(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								"232"),
-						new ByteArrayId(
+						new ByteArray(
 								"340")),
 				((ArrayList<ByteArrayRange>) l1).get(0));
 		assertEquals(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								"392"),
-						new ByteArrayId(
+						new ByteArray(
 								"410")),
 				((ArrayList<ByteArrayRange>) l1).get(1));
 
@@ -98,24 +98,24 @@ public class ByteArrayRangeTest
 	@Test
 	public void testIntersection() {
 		ByteArrayRange bar1 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"232"),
-				new ByteArrayId(
+				new ByteArray(
 						"332"));
 		ByteArrayRange bar2 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"282"),
-				new ByteArrayId(
+				new ByteArray(
 						"300"));
 		ByteArrayRange bar3 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"272"),
-				new ByteArrayId(
+				new ByteArray(
 						"340"));
 		ByteArrayRange bar4 = new ByteArrayRange(
-				new ByteArrayId(
+				new ByteArray(
 						"392"),
-				new ByteArrayId(
+				new ByteArray(
 						"410"));
 
 		Collection<ByteArrayRange> l1 = new ArrayList<ByteArrayRange>(
@@ -148,16 +148,16 @@ public class ByteArrayRangeTest
 
 		assertEquals(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								"282"),
-						new ByteArrayId(
+						new ByteArray(
 								"300")),
 				((ArrayList<ByteArrayRange>) l1).get(0));
 		assertEquals(
 				new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								"392"),
-						new ByteArrayId(
+						new ByteArray(
 								"410")),
 				((ArrayList<ByteArrayRange>) l1).get(1));
 
@@ -193,9 +193,9 @@ public class ByteArrayRangeTest
 			String seed = UUID.randomUUID().toString();
 			for (int j = 0; j < 500; j++) {
 				l2.add(new ByteArrayRange(
-						new ByteArrayId(
+						new ByteArray(
 								seed),
-						new ByteArrayId(
+						new ByteArray(
 								increment(seed))));
 				seed = increment(seed);
 			}

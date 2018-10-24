@@ -35,14 +35,14 @@ import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureSource;
 import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.dimension.Time;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
-import org.locationtech.geowave.core.ingest.GeoWaveData;
-import org.locationtech.geowave.core.ingest.local.LocalFileIngestPlugin;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.GeoWaveData;
+import org.locationtech.geowave.core.store.ingest.LocalFileIngestPlugin;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.type.Name;
 import org.opengis.filter.Filter;
@@ -146,15 +146,15 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public WritableDataAdapter<SimpleFeature>[] getDataAdapters(
+	public DataTypeAdapter<SimpleFeature>[] getDataAdapters(
 			final String globalVisibility ) {
-		return new WritableDataAdapter[] {};
+		return new DataTypeAdapter[] {};
 	}
 
 	@Override
 	public CloseableIterator<GeoWaveData<SimpleFeature>> toGeoWaveData(
 			final URL input,
-			final Collection<ByteArrayId> primaryIndexIds,
+			final String[] indexNames,
 			final String visibility ) {
 		DataStore dataStore = null;
 		try {
@@ -211,7 +211,7 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 			}
 			return new SimpleFeatureGeoWaveWrapper(
 					featureCollections,
-					primaryIndexIds,
+					indexNames,
 					visibility,
 					dataStore,
 					retypingPlugin,
@@ -223,8 +223,8 @@ public class GeoToolsVectorDataStoreIngestPlugin implements
 	}
 
 	@Override
-	public PrimaryIndex[] getRequiredIndices() {
-		return new PrimaryIndex[] {};
+	public Index[] getRequiredIndices() {
+		return new Index[] {};
 	}
 
 	@Override

@@ -129,8 +129,8 @@ public class DynamoDBRow extends
 	}
 
 	@Override
-	public short getInternalAdapterId() {
-		return key.getInternalAdapterId();
+	public short getAdapterId() {
+		return key.getAdapterId();
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class DynamoDBRow extends
 			final GeoWaveKey key ) {
 		final byte[] sortKey = DynamoDBUtils.encodeSortableBase64(key.getSortKey());
 		final ByteBuffer buffer = ByteBuffer.allocate(sortKey.length + key.getDataId().length + 18);
-		buffer.put(ByteArrayUtils.shortToByteArray(key.getInternalAdapterId()));
+		buffer.put(ByteArrayUtils.shortToByteArray(key.getAdapterId()));
 		buffer.put(sortKey);
 		buffer.put(key.getDataId());
 		buffer.putLong(Long.MAX_VALUE - System.nanoTime());

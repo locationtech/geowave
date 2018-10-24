@@ -327,7 +327,7 @@ public class DBScanIterationsJobRunner implements
 							BasicFeatureTypes.DEFAULT_NAMESPACE));
 			localScopeProperties.storeIfEmpty(
 					OutputParameters.Output.INDEX_ID,
-					localScopeProperties.get(HullParameters.Hull.INDEX_ID));
+					localScopeProperties.get(HullParameters.Hull.INDEX_NAME));
 			inputLoadRunner.setInputFormatConfiguration(new SequenceFileInputFormatConfiguration(
 					startPath));
 			// HP Fortify "Command Injection" false positive

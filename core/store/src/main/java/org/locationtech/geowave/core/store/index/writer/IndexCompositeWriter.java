@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -10,32 +10,30 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.index.writer;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.data.VisibilityWriter;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 
 public class IndexCompositeWriter<T> implements
-		IndexWriter<T>
+		Writer<T>
 {
-	final IndexWriter<T>[] writers;
+	final Writer<T>[] writers;
 
 	public IndexCompositeWriter(
-			final IndexWriter<T>[] writers ) {
+			final Writer<T>[] writers ) {
 		super();
 		this.writers = writers;
 	}
 
 	@Override
-	public void close()
-			throws IOException {
-		for (final IndexWriter<T> indexWriter : writers) {
+	public void close() {
+		for (final Writer<T> indexWriter : writers) {
 			indexWriter.close();
 		}
 	}
@@ -43,9 +41,9 @@ public class IndexCompositeWriter<T> implements
 	@Override
 	public InsertionIds write(
 			final T entry ) {
-		final List<SinglePartitionInsertionIds> ids = new ArrayList<SinglePartitionInsertionIds>();
+		final List<SinglePartitionInsertionIds> ids = new ArrayList<>();
 
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			final InsertionIds i = indexWriter.write(entry);
 			ids.addAll(i.getPartitionKeys());
 		}
@@ -57,8 +55,8 @@ public class IndexCompositeWriter<T> implements
 	public InsertionIds write(
 			final T entry,
 			final VisibilityWriter<T> fieldVisibilityWriter ) {
-		final List<SinglePartitionInsertionIds> ids = new ArrayList<SinglePartitionInsertionIds>();
-		for (final IndexWriter<T> indexWriter : writers) {
+		final List<SinglePartitionInsertionIds> ids = new ArrayList<>();
+		for (final Writer<T> indexWriter : writers) {
 			final InsertionIds i = indexWriter.write(
 					entry,
 					fieldVisibilityWriter);
@@ -69,17 +67,17 @@ public class IndexCompositeWriter<T> implements
 	}
 
 	@Override
-	public PrimaryIndex[] getIndices() {
-		final List<PrimaryIndex> ids = new ArrayList<PrimaryIndex>();
-		for (final IndexWriter<T> indexWriter : writers) {
+	public Index[] getIndices() {
+		final List<Index> ids = new ArrayList<>();
+		for (final Writer<T> indexWriter : writers) {
 			ids.addAll(Arrays.asList(indexWriter.getIndices()));
 		}
-		return ids.toArray(new PrimaryIndex[ids.size()]);
+		return ids.toArray(new Index[ids.size()]);
 	}
 
 	@Override
 	public void flush() {
-		for (final IndexWriter<T> indexWriter : writers) {
+		for (final Writer<T> indexWriter : writers) {
 			indexWriter.flush();
 		}
 	}

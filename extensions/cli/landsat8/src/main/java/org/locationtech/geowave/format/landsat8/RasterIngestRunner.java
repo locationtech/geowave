@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -33,23 +33,19 @@ import org.geotools.referencing.CRS;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
 import org.locationtech.geowave.adapter.raster.adapter.RasterDataAdapter;
 import org.locationtech.geowave.adapter.raster.adapter.merge.nodata.NoDataMergeStrategy;
-import org.locationtech.geowave.adapter.raster.plugin.GeoWaveGTRasterFormat;
 import org.locationtech.geowave.adapter.raster.plugin.gdal.GDALGeoTiffReader;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitor;
-import org.locationtech.geowave.adapter.vector.plugin.ExtractGeometryFilterVisitorResult;
-import org.locationtech.geowave.adapter.vector.plugin.GeoWaveGTDataStore;
 import org.locationtech.geowave.core.cli.api.OperationParams;
 import org.locationtech.geowave.core.cli.operations.config.options.ConfigOptions;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.store.dimension.CustomCrsIndexModel;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
-import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitor;
+import org.locationtech.geowave.core.geotime.util.ExtractGeometryFilterVisitorResult;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexLoader;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.StoreLoader;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.AttributeDescriptor;
@@ -59,7 +55,6 @@ import org.opengis.parameter.InvalidParameterValueException;
 import org.opengis.parameter.ParameterNotFoundException;
 import org.opengis.parameter.ParameterValueGroup;
 import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.crs.CoordinateReferenceSystem;
 import org.opengis.referencing.operation.MathTransform;
 import org.opengis.referencing.operation.TransformException;
 import org.slf4j.Logger;
@@ -84,14 +79,14 @@ public class RasterIngestRunner extends
 	private static Map<String, Landsat8BandConverterSpi> registeredBandConverters = null;
 	protected final List<String> parameters;
 	protected Landsat8RasterIngestCommandLineOptions ingestOptions;
-	protected List<SimpleFeature> lastSceneBands = new ArrayList<SimpleFeature>();
+	protected List<SimpleFeature> lastSceneBands = new ArrayList<>();
 	protected Template coverageNameTemplate;
-	protected final Map<String, IndexWriter> writerCache = new HashMap<String, IndexWriter>();
+	protected final Map<String, Writer> writerCache = new HashMap<>();
 
 	protected String[] bandsIngested;
 	protected DataStore store = null;
 	protected DataStorePluginOptions dataStorePluginOptions = null;
-	protected PrimaryIndex[] indices = null;
+	protected Index[] indices = null;
 
 	public RasterIngestRunner(
 			final Landsat8BasicCommandLineOptions analyzeOptions,
@@ -139,10 +134,10 @@ public class RasterIngestRunner extends
 		}
 		final List<IndexPluginOptions> indexOptions = indexLoader.getLoadedIndexes();
 
-		indices = new PrimaryIndex[indexOptions.size()];
+		indices = new Index[indexOptions.size()];
 		int i = 0;
 		for (final IndexPluginOptions dimensionType : indexOptions) {
-			final PrimaryIndex primaryIndex = dimensionType.createPrimaryIndex();
+			final Index primaryIndex = dimensionType.createIndex();
 			if (primaryIndex == null) {
 				LOGGER.error("Could not get index instance, getIndex() returned null;");
 				throw new IOException(
@@ -166,16 +161,9 @@ public class RasterIngestRunner extends
 			super.runInternal(params);
 		}
 		finally {
-			for (final IndexWriter writer : writerCache.values()) {
+			for (final Writer writer : writerCache.values()) {
 				if (writer != null) {
-					try {
-						writer.close();
-					}
-					catch (final IOException e) {
-						LOGGER.error(
-								"Unable to close Accumulo writer",
-								e);
-					}
+					writer.close();
 				}
 			}
 		}
@@ -185,7 +173,7 @@ public class RasterIngestRunner extends
 			final SimpleFeature band )
 			throws IOException,
 			TemplateException {
-		final Map<String, Object> model = new HashMap<String, Object>();
+		final Map<String, Object> model = new HashMap<>();
 		final SimpleFeatureType type = band.getFeatureType();
 		for (final AttributeDescriptor attr : type.getAttributeDescriptors()) {
 			final String attrName = attr.getLocalName();
@@ -332,10 +320,10 @@ public class RasterIngestRunner extends
 				final GridCoverage2D coverage = bandData.coverage;
 				final String coverageName = bandData.name;
 				final GDALGeoTiffReader reader = bandData.reader;
-				IndexWriter writer = writerCache.get(coverageName);
+				Writer writer = writerCache.get(coverageName);
 				final GridCoverage2D nextCov = coverage;
 				if (writer == null) {
-					final Map<String, String> metadata = new HashMap<String, String>();
+					final Map<String, String> metadata = new HashMap<>();
 					final String[] mdNames = reader.getMetadataNames();
 					if ((mdNames != null) && (mdNames.length > 0)) {
 						for (final String mdName : mdNames) {
@@ -359,9 +347,10 @@ public class RasterIngestRunner extends
 								}
 							},
 							new NoDataMergeStrategy());
-					writer = store.createWriter(
+					store.addType(
 							adapter,
 							indices);
+					writer = store.createWriter(adapter.getTypeName());
 					writerCache.put(
 							coverageName,
 							writer);
@@ -394,17 +383,15 @@ public class RasterIngestRunner extends
 		super.lastSceneComplete(analysisInfo);
 		if (!ingestOptions.isSkipMerge()) {
 			System.out.println("Merging overlapping tiles...");
-			for (final PrimaryIndex index : indices) {
+			for (final Index index : indices) {
 				if (dataStorePluginOptions.createDataStoreOperations().mergeData(
 						index,
 						dataStorePluginOptions.createAdapterStore(),
 						dataStorePluginOptions.createAdapterIndexMappingStore())) {
-					System.out.println("Successfully merged overlapping tiles within index '"
-							+ index.getId().getString() + "'");
+					System.out.println("Successfully merged overlapping tiles within index '" + index.getName() + "'");
 				}
 				else {
-					System.err.println("Unable to merge overlapping landsat8 tiles in index '"
-							+ index.getId().getString() + "'");
+					System.err.println("Unable to merge overlapping landsat8 tiles in index '" + index.getName() + "'");
 				}
 			}
 		}
@@ -426,8 +413,8 @@ public class RasterIngestRunner extends
 			if (!lastSceneBands.isEmpty()) {
 				// we are sorting by band name to ensure a consistent order for
 				// bands
-				final TreeMap<String, BandData> sceneData = new TreeMap<String, BandData>();
-				IndexWriter writer;
+				final TreeMap<String, BandData> sceneData = new TreeMap<>();
+				Writer writer;
 				// get coverage info, ensuring that all coverage names are the
 				// same
 				String coverageName = null;
@@ -488,7 +475,7 @@ public class RasterIngestRunner extends
 				if (bandsIngested == null) {
 					// this means this is the first scene
 					// setup adapter and other required info
-					final Map<String, String> metadata = new HashMap<String, String>();
+					final Map<String, String> metadata = new HashMap<>();
 					// merge metadata from all readers
 					for (final BandData b : sceneData.values()) {
 						final String[] mdNames = b.reader.getMetadataNames();
@@ -500,41 +487,30 @@ public class RasterIngestRunner extends
 							}
 						}
 					}
-					try {
-						final double[][] noDataValues = new double[sceneData.size()][];
-						int b = 0;
-						for (final String bandName : sceneData.keySet()) {
-							noDataValues[b++] = new double[] {
-								getNoDataValueFromName(bandName)
-							};
-						}
-						final RasterDataAdapter adapter = new RasterDataAdapter(
-								coverageName,
-								metadata,
-								mergedCoverage,
-								ingestOptions.getTileSize(),
-								ingestOptions.isCreatePyramid(),
-								ingestOptions.isCreateHistogram(),
-								noDataValues,
-								new NoDataMergeStrategy());
-						writer = store.createWriter(
-								adapter,
-								indices);
-						writerCache.put(
-								coverageName,
-								writer);
-						bandsIngested = thisSceneBands;
+					final double[][] noDataValues = new double[sceneData.size()][];
+					int b = 0;
+					for (final String bandName : sceneData.keySet()) {
+						noDataValues[b++] = new double[] {
+							getNoDataValueFromName(bandName)
+						};
 					}
-					catch (final MismatchedIndexToAdapterMapping e) {
-						LOGGER.warn(
-								"Unable to create index writer for coverage '" + coverageName + "'.  Skipping scene '"
-										+ lastSceneBands.get(
-												0).getAttribute(
-												SceneFeatureIterator.ENTITY_ID_ATTRIBUTE_NAME) + "'.",
-								e);
-						lastSceneBands.clear();
-						return;
-					}
+					final RasterDataAdapter adapter = new RasterDataAdapter(
+							coverageName,
+							metadata,
+							mergedCoverage,
+							ingestOptions.getTileSize(),
+							ingestOptions.isCreatePyramid(),
+							ingestOptions.isCreateHistogram(),
+							noDataValues,
+							new NoDataMergeStrategy());
+					store.addType(
+							adapter,
+							indices);
+					writer = store.createWriter(adapter.getTypeName());
+					writerCache.put(
+							coverageName,
+							writer);
+					bandsIngested = thisSceneBands;
 				}
 				else if (!Arrays.equals(
 						bandsIngested,
@@ -584,7 +560,7 @@ public class RasterIngestRunner extends
 
 	private synchronized Map<String, Landsat8BandConverterSpi> getRegisteredConverters() {
 		if (registeredBandConverters == null) {
-			registeredBandConverters = new HashMap<String, Landsat8BandConverterSpi>();
+			registeredBandConverters = new HashMap<>();
 			final ServiceLoader<Landsat8BandConverterSpi> converters = ServiceLoader
 					.load(Landsat8BandConverterSpi.class);
 			final Iterator<Landsat8BandConverterSpi> it = converters.iterator();

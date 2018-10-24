@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -47,15 +47,13 @@ import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.raster.util.ZipUtils;
 import org.locationtech.geowave.adapter.vector.export.VectorMRExportCommand;
 import org.locationtech.geowave.adapter.vector.export.VectorMRExportOptions;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.adapter.InitializeWithIndicesDataAdapter;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.format.gpx.GpxIngestPlugin;
 import org.locationtech.geowave.mapreduce.GeoWaveConfiguratorBase;
 import org.locationtech.geowave.mapreduce.GeoWaveWritableInputMapper;
@@ -67,12 +65,10 @@ import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.TestUtils.DimensionalityType;
 import org.locationtech.geowave.test.TestUtils.ExpectedResults;
 import org.locationtech.geowave.test.annotation.Environments;
-import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.Environments.Environment;
+import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreType;
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestEnvironment;
-import org.locationtech.geowave.test.mapreduce.MapReduceTestUtils;
 import org.opengis.feature.simple.SimpleFeature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -163,15 +159,15 @@ public class BasicMapReduceIT extends
 				GENERAL_GPX_INPUT_GPX_DIR);
 		final File expectedResultsDir = new File(
 				GENERAL_GPX_EXPECTED_RESULTS_DIR);
-		final List<URL> expectedResultsResources = new ArrayList<URL>();
-		final Map<String, URL> baseNameToExpectedResultURL = new HashMap<String, URL>();
+		final List<URL> expectedResultsResources = new ArrayList<>();
+		final Map<String, URL> baseNameToExpectedResultURL = new HashMap<>();
 
 		for (final File file : expectedResultsDir.listFiles(new FileFilter() {
 
 			@Override
 			public boolean accept(
 					final File pathname ) {
-				final Map<String, Object> map = new HashMap<String, Object>();
+				final Map<String, Object> map = new HashMap<>();
 				try {
 					map.put(
 							"url",
@@ -228,36 +224,38 @@ public class BasicMapReduceIT extends
 				dataStorePluginOptions,
 				DimensionalityType.ALL,
 				OSM_GPX_INPUT_DIR);
-		final WritableDataAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
+		final DataTypeAdapter<SimpleFeature>[] adapters = new GpxIngestPlugin().getDataAdapters(null);
 
-		for (WritableDataAdapter<SimpleFeature> adapter : adapters) {
-			adapter.init(TestUtils.DEFAULT_SPATIAL_INDEX);
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
+			if (adapter instanceof InitializeWithIndicesDataAdapter) {
+				((InitializeWithIndicesDataAdapter) adapter).init(TestUtils.DEFAULT_SPATIAL_INDEX);
+			}
 		}
 
-		final org.locationtech.geowave.core.store.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
-		final Map<ByteArrayId, ExpectedResults> adapterIdToResultsMap = new HashMap<ByteArrayId, ExpectedResults>();
-		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
+		final org.locationtech.geowave.core.store.api.DataStore geowaveStore = dataStorePluginOptions.createDataStore();
+		final Map<String, ExpectedResults> adapterIdToResultsMap = new HashMap<>();
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
 			adapterIdToResultsMap.put(
-					adapter.getAdapterId(),
-					TestUtils.getExpectedResults(geowaveStore.query(
-							new QueryOptions(
-									adapter.getAdapterId(),
-									null),
-							new EverythingQuery())));
+					adapter.getTypeName(),
+					TestUtils.getExpectedResults(geowaveStore.query(QueryBuilder.newBuilder().addTypeName(
+							adapter.getTypeName()).build())));
 		}
 
-		final List<DataAdapter<?>> firstTwoAdapters = new ArrayList<DataAdapter<?>>();
+		final List<DataTypeAdapter<?>> firstTwoAdapters = new ArrayList<>();
 		firstTwoAdapters.add(adapters[0]);
 		firstTwoAdapters.add(adapters[1]);
 
-		final ExpectedResults firstTwoAdaptersResults = TestUtils.getExpectedResults(geowaveStore.query(
-				new QueryOptions(
-						firstTwoAdapters),
-				new EverythingQuery()));
+		final ExpectedResults firstTwoAdaptersResults = TestUtils.getExpectedResults(geowaveStore.query(QueryBuilder
+				.newBuilder()
+				.addTypeName(
+						adapters[0].getTypeName())
+				.addTypeName(
+						adapters[1].getTypeName())
+				.build()));
 
-		final ExpectedResults fullDataSetResults = TestUtils.getExpectedResults(geowaveStore.query(
-				new QueryOptions(),
-				new EverythingQuery()));
+		final ExpectedResults fullDataSetResults = TestUtils.getExpectedResults(geowaveStore.query(QueryBuilder
+				.newBuilder()
+				.build()));
 
 		// just for sanity verify its greater than 0 (ie. that data was actually
 		// ingested in the first place)
@@ -269,15 +267,15 @@ public class BasicMapReduceIT extends
 		// re-ingest it
 		testMapReduceExportAndReingest(DimensionalityType.ALL);
 		// first try each adapter individually
-		for (final WritableDataAdapter<SimpleFeature> adapter : adapters) {
-			ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getAdapterId());
+		for (final DataTypeAdapter<SimpleFeature> adapter : adapters) {
+			final ExpectedResults expResults = adapterIdToResultsMap.get(adapter.getTypeName());
 
 			if (expResults.count > 0) {
-				LOGGER.error("Running test for adapter " + adapter.getAdapterId().getString());
+				LOGGER.error("Running test for adapter " + adapter.getTypeName());
 				runTestJob(
 						expResults,
 						null,
-						new DataAdapter[] {
+						new DataTypeAdapter[] {
 							adapter
 						},
 						null);
@@ -289,7 +287,7 @@ public class BasicMapReduceIT extends
 		runTestJob(
 				firstTwoAdaptersResults,
 				null,
-				new DataAdapter[] {
+				new DataTypeAdapter[] {
 					adapters[0],
 					adapters[1]
 				},
@@ -370,37 +368,56 @@ public class BasicMapReduceIT extends
 	@SuppressFBWarnings(value = "DM_GC", justification = "Memory usage kept low for travis-ci")
 	private void runTestJob(
 			final ExpectedResults expectedResults,
-			final DistributableQuery query,
-			final DataAdapter<?>[] adapters,
-			final PrimaryIndex index )
+			final QueryConstraints query,
+			final DataTypeAdapter<?>[] adapters,
+			final Index index )
 			throws Exception {
 		final TestJobRunner jobRunner = new TestJobRunner(
 				dataStorePluginOptions,
 				expectedResults);
-		jobRunner.setMinInputSplits(MapReduceTestUtils.MIN_INPUT_SPLITS);
-		jobRunner.setMaxInputSplits(MapReduceTestUtils.MAX_INPUT_SPLITS);
+		jobRunner
+				.setMinInputSplits(
+						MapReduceTestUtils.MIN_INPUT_SPLITS);
+		jobRunner
+				.setMaxInputSplits(
+						MapReduceTestUtils.MAX_INPUT_SPLITS);
+		final QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder();
 		if (query != null) {
-			jobRunner.setQuery(query);
+			bldr
+					.constraints(
+							query);
 		}
-		final QueryOptions options = new QueryOptions();
-
 		if ((index != null)) {
-			options.setIndex(index);
+			bldr
+					.indexName(
+							index.getName());
 		}
-		jobRunner.setQueryOptions(options);
 		final Configuration conf = MapReduceTestUtils.getConfiguration();
 
-		MapReduceTestUtils.filterConfiguration(conf);
+		MapReduceTestUtils
+				.filterConfiguration(
+						conf);
 		if ((adapters != null) && (adapters.length > 0)) {
-			options.setAdapters(Arrays.asList(adapters));
+			Arrays
+					.stream(
+							adapters)
+					.forEach(
+							a -> bldr
+									.addTypeName(
+											a.getTypeName()));
 		}
-		final int res = ToolRunner.run(
-				conf,
-				jobRunner,
-				new String[] {});
-		Assert.assertEquals(
-				0,
-				res);
+		jobRunner
+				.setQuery(
+						bldr.build());
+		final int res = ToolRunner
+				.run(
+						conf,
+						jobRunner,
+						new String[] {});
+		Assert
+				.assertEquals(
+						0,
+						res);
 		// for travis-ci to run, we want to limit the memory consumption
 		System.gc();
 	}
@@ -488,7 +505,7 @@ public class BasicMapReduceIT extends
 	private static class VerifyExpectedResultsMapper extends
 			GeoWaveWritableInputMapper<NullWritable, NullWritable>
 	{
-		private Set<Long> expectedHashedCentroids = new HashSet<Long>();
+		private Set<Long> expectedHashedCentroids = new HashSet<>();
 
 		@Override
 		protected void mapNativeValue(
@@ -520,7 +537,7 @@ public class BasicMapReduceIT extends
 			final Configuration config = GeoWaveConfiguratorBase.getConfiguration(context);
 			final String expectedResults = config.get(MapReduceTestUtils.EXPECTED_RESULTS_KEY);
 			if (expectedResults != null) {
-				expectedHashedCentroids = new HashSet<Long>();
+				expectedHashedCentroids = new HashSet<>();
 				final byte[] expectedResultsBinary = ByteArrayUtils.byteArrayFromString(expectedResults);
 				final ByteBuffer buf = ByteBuffer.wrap(expectedResultsBinary);
 				final int count = buf.getInt();

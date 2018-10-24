@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,8 +17,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.geotools.data.DataUtilities;
 import org.geotools.feature.SchemaException;
 import org.geotools.feature.simple.SimpleFeatureBuilder;
@@ -31,16 +29,17 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.util.FeatureTranslatingIterator;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
 import org.locationtech.geowave.core.geotime.ingest.SpatialDimensionalityTypeProvider;
 import org.locationtech.geowave.core.geotime.ingest.SpatialOptions;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.IndexWriter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.test.GeoWaveITRunner;
 import org.locationtech.geowave.test.TestUtils;
 import org.locationtech.geowave.test.annotation.GeoWaveTestStore;
@@ -48,6 +47,8 @@ import org.locationtech.geowave.test.annotation.GeoWaveTestStore.GeoWaveStoreTyp
 import org.locationtech.geowave.test.basic.AbstractGeoWaveIT;
 import org.opengis.feature.simple.SimpleFeature;
 import org.opengis.feature.simple.SimpleFeatureType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
@@ -69,6 +70,7 @@ public class AttributesSubsetQueryIT extends
 	})
 	protected DataStorePluginOptions dataStore;
 
+	@Override
 	protected DataStorePluginOptions getDataStorePluginOptions() {
 		return dataStore;
 	}
@@ -80,8 +82,7 @@ public class AttributesSubsetQueryIT extends
 	private static final String LAND_AREA_ATTRIBUTE = "landArea";
 	private static final String GEOMETRY_ATTRIBUTE = "geometry";
 
-	private static PrimaryIndex index = new SpatialDimensionalityTypeProvider()
-			.createPrimaryIndex(new SpatialOptions());
+	private static Index index = new SpatialDimensionalityTypeProvider().createIndex(new SpatialOptions());
 
 	private static final Collection<String> ALL_ATTRIBUTES = Arrays.asList(
 			CITY_ATTRIBUTE,
@@ -98,7 +99,7 @@ public class AttributesSubsetQueryIT extends
 			-84.3900,
 			33.7550);
 
-	private final Query spatialQuery = new SpatialQuery(
+	private final QueryConstraints spatialQuery = new SpatialQuery(
 			GeometryUtils.GEOMETRY_FACTORY.toGeometry(new Envelope(
 					GUADALAJARA,
 					ATLANTA)));
@@ -139,11 +140,11 @@ public class AttributesSubsetQueryIT extends
 	public void testNoFiltering()
 			throws IOException {
 
-		final CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
-				new QueryOptions(
-						dataAdapter,
-						TestUtils.DEFAULT_SPATIAL_INDEX),
-				spatialQuery);
+		final CloseableIterator<SimpleFeature> results = (CloseableIterator) dataStore.createDataStore().query(
+				QueryBuilder.newBuilder().addTypeName(
+						dataAdapter.getTypeName()).indexName(
+						TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
+						spatialQuery).build());
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for each SimpleFeature attribute
@@ -157,16 +158,17 @@ public class AttributesSubsetQueryIT extends
 	public void testServerSideFiltering()
 			throws IOException {
 
-		final QueryOptions queryOptions = new QueryOptions(
-				dataAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX);
-		queryOptions.setFieldIds(
-				Arrays.asList(CITY_ATTRIBUTE),
-				dataAdapter);
+		QueryBuilder<?, ?> bldr = QueryBuilder.newBuilder().addTypeName(
+				dataAdapter.getTypeName()).indexName(
+				TestUtils.DEFAULT_SPATIAL_INDEX.getName()).subsetFields(
+				dataAdapter.getTypeName(),
+				CITY_ATTRIBUTE);
 
-		CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
-				queryOptions,
-				spatialQuery);
+		CloseableIterator<SimpleFeature> results = (CloseableIterator<SimpleFeature>) dataStore
+				.createDataStore()
+				.query(
+						bldr.constraints(
+								spatialQuery).build());
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for a subset of attributes (city) and nulls for the
@@ -178,13 +180,15 @@ public class AttributesSubsetQueryIT extends
 				results,
 				3,
 				expectedAttributes);
-		queryOptions.setFieldIds(
-				Arrays.asList(GEOMETRY_ATTRIBUTE),
-				dataAdapter);
+		bldr = QueryBuilder.newBuilder().addTypeName(
+				dataAdapter.getTypeName()).indexName(
+				TestUtils.DEFAULT_SPATIAL_INDEX.getName()).subsetFields(
+				dataAdapter.getTypeName(),
+				GEOMETRY_ATTRIBUTE);
 		// now try just geometry
-		results = dataStore.createDataStore().query(
-				queryOptions,
-				spatialQuery);
+		results = (CloseableIterator<SimpleFeature>) dataStore.createDataStore().query(
+				bldr.constraints(
+						spatialQuery).build());
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for geometry and null values for all other attributes
@@ -204,11 +208,11 @@ public class AttributesSubsetQueryIT extends
 				CITY_ATTRIBUTE,
 				POPULATION_ATTRIBUTE);
 
-		final CloseableIterator<SimpleFeature> results = dataStore.createDataStore().query(
-				new QueryOptions(
-						dataAdapter,
-						TestUtils.DEFAULT_SPATIAL_INDEX),
-				spatialQuery);
+		final CloseableIterator<SimpleFeature> results = (CloseableIterator) dataStore.createDataStore().query(
+				QueryBuilder.newBuilder().addTypeName(
+						dataAdapter.getTypeName()).indexName(
+						TestUtils.DEFAULT_SPATIAL_INDEX.getName()).constraints(
+						spatialQuery).build());
 
 		// query expects to match 3 cities from Texas, which should each contain
 		// non-null values for a subset of attributes (city, population) and
@@ -287,10 +291,11 @@ public class AttributesSubsetQueryIT extends
 			throws IOException {
 
 		LOGGER.info("Ingesting canned data...");
-
-		try (IndexWriter writer = dataStore.createDataStore().createWriter(
+		final DataStore store = dataStore.createDataStore();
+		store.addType(
 				dataAdapter,
-				TestUtils.DEFAULT_SPATIAL_INDEX)) {
+				TestUtils.DEFAULT_SPATIAL_INDEX);
+		try (Writer writer = store.createWriter(dataAdapter.getTypeName())) {
 			for (final SimpleFeature sf : buildCityDataSet()) {
 				writer.write(sf);
 			}

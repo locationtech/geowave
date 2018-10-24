@@ -50,7 +50,7 @@ public class GeoWaveGrpcAnalyticSparkService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		KmeansSparkCommand cmd = new KmeansSparkCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -82,7 +82,7 @@ public class GeoWaveGrpcAnalyticSparkService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		SparkSqlCommand cmd = new SparkSqlCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 
@@ -114,7 +114,7 @@ public class GeoWaveGrpcAnalyticSparkService extends
 			StreamObserver<VoidResponse> responseObserver ) {
 		SpatialJoinCommand cmd = new SpatialJoinCommand();
 		Map<FieldDescriptor, Object> m = request.getAllFields();
-		GeoWaveGrpcServiceCommandUtil.SetGrpcToCommandFields(
+		GeoWaveGrpcServiceCommandUtil.setGrpcToCommandFields(
 				m,
 				cmd);
 

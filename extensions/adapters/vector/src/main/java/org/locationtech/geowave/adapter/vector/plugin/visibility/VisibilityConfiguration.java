@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -13,7 +13,7 @@ package org.locationtech.geowave.adapter.vector.plugin.visibility;
 import java.io.ObjectStreamException;
 import java.nio.ByteBuffer;
 
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.store.data.visibility.VisibilityManagement;
 import org.opengis.feature.simple.SimpleFeature;

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.Set;
 import java.util.UUID;
 
 import org.apache.accumulo.core.client.AccumuloException;
@@ -56,35 +54,35 @@ import org.locationtech.geowave.adapter.vector.FeatureDataAdapter;
 import org.locationtech.geowave.adapter.vector.index.NumericSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.index.TemporalSecondaryIndexConfiguration;
 import org.locationtech.geowave.adapter.vector.index.TextSecondaryIndexConfiguration;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfiguration;
-import org.locationtech.geowave.adapter.vector.utils.SimpleFeatureUserDataConfigurationSet;
-import org.locationtech.geowave.core.geotime.GeometryUtils;
-import org.locationtech.geowave.core.geotime.store.dimension.GeometryAdapter;
+import org.locationtech.geowave.adapter.vector.util.SimpleFeatureUserDataConfigurationSet;
+import org.locationtech.geowave.core.geotime.store.dimension.GeometryWrapper;
 import org.locationtech.geowave.core.geotime.store.query.SpatialQuery;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.geotime.util.GeometryUtils;
+import org.locationtech.geowave.core.geotime.util.SimpleFeatureUserDataConfiguration;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.lexicoder.Lexicoders;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
-import org.locationtech.geowave.core.store.IndexWriter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalDataAdapterWrapper;
 import org.locationtech.geowave.core.store.adapter.exceptions.MismatchedIndexToAdapterMapping;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
+import org.locationtech.geowave.core.store.api.Writer;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.index.FilterableConstraints;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.index.SecondaryIndex;
 import org.locationtech.geowave.core.store.index.SecondaryIndexDataStore;
+import org.locationtech.geowave.core.store.index.SecondaryIndexImpl;
 import org.locationtech.geowave.core.store.index.SecondaryIndexType;
 import org.locationtech.geowave.core.store.index.SecondaryIndexUtils;
 import org.locationtech.geowave.core.store.index.numeric.NumericGreaterThanConstraint;
 import org.locationtech.geowave.core.store.index.temporal.TemporalQueryConstraint;
 import org.locationtech.geowave.core.store.index.text.TextQueryConstraint;
-import org.locationtech.geowave.core.store.query.DataIdQuery;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.Query;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.DataIdQuery;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
 import org.locationtech.geowave.datastore.accumulo.cli.config.AccumuloRequiredOptions;
 import org.locationtech.geowave.datastore.accumulo.index.secondary.AccumuloSecondaryIndexDataStore;
 import org.locationtech.geowave.datastore.accumulo.util.ConnectorPool;
@@ -112,15 +110,15 @@ public class SecondaryIndexIT
 	protected DataStorePluginOptions dataStoreOptions;
 
 	private FeatureDataAdapter dataAdapter;
-	private PrimaryIndex index;
+	private Index index;
 	private DataStore dataStore;
 	private SecondaryIndexDataStore secondaryDataStore;
 	private InternalAdapterStore internalAdapterStore;
-	private List<ByteArrayId> allPrimaryIndexIds = new ArrayList<>();
-	private List<String> allDataIds = new ArrayList<>();
+	private final List<ByteArray> allIndexIds = new ArrayList<>();
+	private final List<String> allDataIds = new ArrayList<>();
 	private int numAttributes;
-	private List<SecondaryIndex<SimpleFeature>> allSecondaryIndices;
-	private DistributableQuery query;
+	private List<SecondaryIndexImpl<SimpleFeature>> allSecondaryIndices;
+	private QueryConstraints query;
 	private Point expectedPoint;
 	private String expectedDataId;
 
@@ -156,7 +154,7 @@ public class SecondaryIndexIT
 			TableNotFoundException,
 			ParseException,
 			IOException {
-		Assert.assertTrue(allPrimaryIndexIds.size() == 3);
+		Assert.assertTrue(allIndexIds.size() == 3);
 
 		if (dataStoreOptions.getType().equals(
 				"accumulo")) {
@@ -219,16 +217,16 @@ public class SecondaryIndexIT
 
 		Assert.assertTrue(allSecondaryIndices.size() == 9);
 
-		InternalDataAdapter<SimpleFeature> internalDataAdapter = new InternalDataAdapterWrapper(
+		final InternalDataAdapter<SimpleFeature> internalDataAdapter = new InternalDataAdapterWrapper(
 				dataAdapter,
-				internalAdapterStore.getInternalAdapterId(dataAdapter.getAdapterId()));
+				internalAdapterStore.getAdapterId(dataAdapter.getTypeName()));
 
-		for (final SecondaryIndex<SimpleFeature> secondaryIndex : allSecondaryIndices) {
+		for (final SecondaryIndexImpl<SimpleFeature> secondaryIndex : allSecondaryIndices) {
 
 			final List<SimpleFeature> queryResults = new ArrayList<>();
 			try (final CloseableIterator<SimpleFeature> results = secondaryDataStore.query(
 					secondaryIndex,
-					secondaryIndex.getFieldId(),
+					secondaryIndex.getFieldName(),
 					internalDataAdapter,
 					index,
 					query,
@@ -241,7 +239,7 @@ public class SecondaryIndexIT
 
 			final int numResults = queryResults.size();
 			Assert.assertTrue(
-					secondaryIndex.getId().getString() + " returned " + numResults + " results (should have been 1)",
+					secondaryIndex.getName() + " returned " + numResults + " results (should have been 1)",
 					numResults == 1);
 
 			final SimpleFeature result = queryResults.get(0);
@@ -257,22 +255,20 @@ public class SecondaryIndexIT
 		}
 
 		// test delete
-		final Query deleteQuery = new DataIdQuery(
-				new ByteArrayId(
+		final QueryConstraints deleteQuery = new DataIdQuery(
+				new ByteArray(
 						expectedDataId));
-		final QueryOptions queryOptions = new QueryOptions(
-				dataAdapter,
-				index);
-		dataStore.delete(
-				queryOptions,
-				deleteQuery);
+		dataStore.delete(QueryBuilder.newBuilder().addTypeName(
+				dataAdapter.getTypeName()).indexName(
+				index.getName()).constraints(
+				deleteQuery).build());
 
-		for (final SecondaryIndex<SimpleFeature> secondaryIndex : allSecondaryIndices) {
+		for (final SecondaryIndexImpl<SimpleFeature> secondaryIndex : allSecondaryIndices) {
 
 			int numResults = 0;
 			try (final CloseableIterator<SimpleFeature> results = secondaryDataStore.query(
 					secondaryIndex,
-					secondaryIndex.getFieldId(),
+					secondaryIndex.getFieldName(),
 					internalDataAdapter,
 					index,
 					query,
@@ -284,7 +280,7 @@ public class SecondaryIndexIT
 				}
 			}
 			Assert.assertTrue(
-					secondaryIndex.getId().getString() + " returned " + numResults + " results (should have been 0)",
+					secondaryIndex.getName() + " returned " + numResults + " results (should have been 0)",
 					numResults == 0);
 		}
 	}
@@ -300,36 +296,18 @@ public class SecondaryIndexIT
 	private static final String TEMPORAL_PARTIAL_TABLE = TestUtils.TEST_NAMESPACE + "_GEOWAVE_2ND_IDX_TEMPORAL_PARTIAL";
 	private static final String GEOMETRY_FIELD = "geometryField";
 	private static final String NUMERIC_JOIN_FIELD = "doubleField";
-	private static final ByteArrayId NUMERIC_JOIN_FIELD_ID = new ByteArrayId(
-			NUMERIC_JOIN_FIELD);
 	private static final String TEMPORAL_JOIN_FIELD = "dateField";
-	private static final ByteArrayId TEMPORAL_JOIN_FIELD_ID = new ByteArrayId(
-			TEMPORAL_JOIN_FIELD);
 	private static final String TEXT_JOIN_FIELD = "stringField";
-	private static final ByteArrayId TEXT_JOIN_FIELD_ID = new ByteArrayId(
-			TEXT_JOIN_FIELD);
 	private static final String NUMERIC_FULL_FIELD = "doubleField2";
-	private static final ByteArrayId NUMERIC_FULL_FIELD_ID = new ByteArrayId(
-			NUMERIC_FULL_FIELD);
 	private static final String TEMPORAL_FULL_FIELD = "dateField2";
-	private static final ByteArrayId TEMPORAL_FULL_FIELD_ID = new ByteArrayId(
-			TEMPORAL_FULL_FIELD);
 	private static final String TEXT_FULL_FIELD = "stringField2";
-	private static final ByteArrayId TEXT_FULL_FIELD_ID = new ByteArrayId(
-			TEXT_FULL_FIELD);
 	private static final String NUMERIC_PARTIAL_FIELD = "doubleField3";
-	private static final ByteArrayId NUMERIC_PARTIAL_FIELD_ID = new ByteArrayId(
-			NUMERIC_PARTIAL_FIELD);
 	private static final String TEMPORAL_PARTIAL_FIELD = "dateField3";
-	private static final ByteArrayId TEMPORAL_PARTIAL_FIELD_ID = new ByteArrayId(
-			TEMPORAL_PARTIAL_FIELD);
 	private static final String TEXT_PARTIAL_FIELD = "stringField3";
-	private static final ByteArrayId TEXT_PARTIAL_FIELD_ID = new ByteArrayId(
-			TEXT_PARTIAL_FIELD);
 	private static final DateFormat DATE_FORMAT = new SimpleDateFormat(
 			"dd-MM-yyyy");
-	private static final ByteArrayId GEOMETRY_FIELD_ID = new ByteArrayId(
-			GeometryAdapter.DEFAULT_GEOMETRY_FIELD_ID.getBytes());
+	private static final ByteArray GEOMETRY_FIELD_ID = new ByteArray(
+			GeometryWrapper.DEFAULT_GEOMETRY_FIELD_NAME.getBytes());
 	private static final String[] DEFAULT_AUTHORIZATIONS = new String[] {};
 	private static final Authorizations DEFAULT_ACCUMULO_AUTHORIZATIONS = new Authorizations(
 			DEFAULT_AUTHORIZATIONS);
@@ -436,12 +414,13 @@ public class SecondaryIndexIT
 				schema);
 		index = TestUtils.DEFAULT_SPATIAL_INDEX;
 		dataAdapter.init(index);
-		try (@SuppressWarnings("unchecked")
-		final IndexWriter<SimpleFeature> writer = dataStore.createWriter(
+		dataStore.addType(
 				dataAdapter,
-				index)) {
+				index);
+		try (@SuppressWarnings("unchecked")
+		final Writer<SimpleFeature> writer = dataStore.createWriter(dataAdapter.getTypeName())) {
 			for (final SimpleFeature aFeature : features) {
-				allPrimaryIndexIds.addAll(writer.write(
+				allIndexIds.addAll(writer.write(
 						aFeature).getCompositeInsertionIds());
 			}
 		}
@@ -449,63 +428,63 @@ public class SecondaryIndexIT
 		internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
 		allSecondaryIndices = dataAdapter.getSupportedSecondaryIndices();
 
-		final Map<ByteArrayId, FilterableConstraints> additionalConstraints = new HashMap<>();
+		final Map<String, FilterableConstraints> additionalConstraints = new HashMap<>();
 
 		final Number number = 25d;
 		additionalConstraints.put(
-				NUMERIC_JOIN_FIELD_ID,
+				NUMERIC_JOIN_FIELD,
 				new NumericGreaterThanConstraint(
-						NUMERIC_JOIN_FIELD_ID,
+						NUMERIC_JOIN_FIELD,
 						number));
 		additionalConstraints.put(
-				NUMERIC_FULL_FIELD_ID,
+				NUMERIC_FULL_FIELD,
 				new NumericGreaterThanConstraint(
-						NUMERIC_FULL_FIELD_ID,
+						NUMERIC_FULL_FIELD,
 						number));
 		additionalConstraints.put(
-				NUMERIC_PARTIAL_FIELD_ID,
+				NUMERIC_PARTIAL_FIELD,
 				new NumericGreaterThanConstraint(
-						NUMERIC_PARTIAL_FIELD_ID,
+						NUMERIC_PARTIAL_FIELD,
 						number));
 
 		final String matchValue = "ccc";
 		additionalConstraints.put(
-				TEXT_JOIN_FIELD_ID,
+				TEXT_JOIN_FIELD,
 				new TextQueryConstraint(
-						TEXT_JOIN_FIELD_ID,
+						TEXT_JOIN_FIELD,
 						matchValue,
 						true));
 		additionalConstraints.put(
-				TEXT_FULL_FIELD_ID,
+				TEXT_FULL_FIELD,
 				new TextQueryConstraint(
-						TEXT_FULL_FIELD_ID,
+						TEXT_FULL_FIELD,
 						matchValue,
 						true));
 		additionalConstraints.put(
-				TEXT_PARTIAL_FIELD_ID,
+				TEXT_PARTIAL_FIELD,
 				new TextQueryConstraint(
-						TEXT_PARTIAL_FIELD_ID,
+						TEXT_PARTIAL_FIELD,
 						matchValue,
 						true));
 
 		final Date start = DATE_FORMAT.parse("12-24-2015");
 		final Date end = DATE_FORMAT.parse("12-26-2015");
 		additionalConstraints.put(
-				TEMPORAL_JOIN_FIELD_ID,
+				TEMPORAL_JOIN_FIELD,
 				new TemporalQueryConstraint(
-						TEMPORAL_JOIN_FIELD_ID,
+						TEMPORAL_JOIN_FIELD,
 						start,
 						end));
 		additionalConstraints.put(
-				TEMPORAL_FULL_FIELD_ID,
+				TEMPORAL_FULL_FIELD,
 				new TemporalQueryConstraint(
-						TEMPORAL_FULL_FIELD_ID,
+						TEMPORAL_FULL_FIELD,
 						start,
 						end));
 		additionalConstraints.put(
-				TEMPORAL_PARTIAL_FIELD_ID,
+				TEMPORAL_PARTIAL_FIELD,
 				new TemporalQueryConstraint(
-						TEMPORAL_PARTIAL_FIELD_ID,
+						TEMPORAL_PARTIAL_FIELD,
 						start,
 						end));
 
@@ -519,7 +498,7 @@ public class SecondaryIndexIT
 	}
 
 	/**
-	 * 
+	 *
 	 * @throws IOException
 	 */
 
@@ -530,7 +509,7 @@ public class SecondaryIndexIT
 	}
 
 	/**
-	 * 
+	 *
 	 * @param connector
 	 * @throws TableNotFoundException
 	 */
@@ -550,62 +529,26 @@ public class SecondaryIndexIT
 
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						NUMERIC_JOIN_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						NUMERIC_JOIN_FIELD)));
 		int numResults = 0;
 
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
 			if (numResults == 1) {
-				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(0)));
+				Assert.assertTrue(primaryRowId.equals(allIndexIds.get(0)));
 			}
 			else if (numResults == 2) {
-				Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+				Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
 			}
 		}
 		scanner.close();
 		Assert.assertTrue(numResults == 2);
 	}
-
-	// private void numericJoinHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((NUMERIC_JOIN_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// NUMERIC_JOIN_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
-	// scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final ByteArrayId primaryRowId =
-	// SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
-	// if (numResults == 1) {
-	// Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(0)));
-	// }
-	// else if (numResults == 2) {
-	// Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
-	// }
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 2);
-	// }
 
 	private void textJoinAccumulo(
 			final Connector connector )
@@ -615,57 +558,24 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEXT_JOIN_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						TEXT_JOIN_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
-			Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+			Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
 		}
 		scanner.close();
 		Assert.assertTrue(numResults == 1);
 	}
-
-	// private void textJoinHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEXT_JOIN_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEXT_JOIN_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// scan.setStopRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final ByteArrayId primaryRowId =
-	// SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
-	// Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
 
 	private void temporalJoinAccumulo(
 			final Connector connector )
@@ -674,68 +584,34 @@ public class SecondaryIndexIT
 		final Scanner scanner = connector.createScanner(
 				TEMPORAL_JOIN_TABLE,
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
-		Text startText = new Text(
+		final Text startText = new Text(
 				Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
 						"11-30-2012").getTime()));
-		Text stopText = new Text(
+		final Text stopText = new Text(
 				Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
 						"11-30-2014").getTime()));
 
 		scanner.setRange(new Range(
 				startText,
 				stopText));
-		byte[] colFam = SecondaryIndexUtils.constructColumnFamily(
-				dataAdapter.getAdapterId(),
-				TEMPORAL_JOIN_FIELD_ID);
+		final byte[] colFam = SecondaryIndexUtils.constructColumnFamily(
+				dataAdapter.getTypeName(),
+				TEMPORAL_JOIN_FIELD);
 
 		scanner.fetchColumnFamily(new Text(
 				colFam));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
-			final ByteArrayId primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
+			final ByteArray primaryRowId = SecondaryIndexUtils.getPrimaryRowId(entry
 					.getKey()
 					.getColumnQualifierData()
 					.getBackingArray());
-			Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
+			Assert.assertTrue(primaryRowId.equals(allIndexIds.get(1)));
 		}
 		scanner.close();
 		Assert.assertTrue(numResults == 1);
 	}
-
-	// private void temporalJoinHBase(
-	// final Connection connection )
-	// throws IOException,
-	// ParseException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEMPORAL_JOIN_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEMPORAL_JOIN_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2012").getTime()));
-	// scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2014").getTime()));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final ByteArrayId primaryRowId =
-	// SecondaryIndexUtils.getPrimaryRowId(entry.getKey());
-	// Assert.assertTrue(primaryRowId.equals(allPrimaryIndexIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
 
 	private void numericFullAccumulo(
 			final Connector connector )
@@ -750,8 +626,8 @@ public class SecondaryIndexIT
 						Lexicoders.DOUBLE.toByteArray(20d))));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						NUMERIC_FULL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						NUMERIC_FULL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			final String dataId = SecondaryIndexUtils.getDataId(entry
@@ -770,37 +646,6 @@ public class SecondaryIndexIT
 		Assert.assertTrue(numResults == (2 * numAttributes));
 	}
 
-	// private void numericFullHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((NUMERIC_FULL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// NUMERIC_FULL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
-	// scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == numAttributes);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
-	// Assert.assertTrue((dataId.equals(allDataIds.get(0))) ||
-	// (dataId.equals(allDataIds.get(1))));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 2);
-	// }
-
 	private void textFullAccumulo(
 			final Connector connector )
 			throws TableNotFoundException {
@@ -809,12 +654,12 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEXT_FULL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						TEXT_FULL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
@@ -827,38 +672,6 @@ public class SecondaryIndexIT
 		scanner.close();
 		Assert.assertTrue(numResults == numAttributes);
 	}
-
-	// private void textFullHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEXT_FULL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEXT_FULL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// scan.setStopRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == numAttributes);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
-	// Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
 
 	private void temporalFullAccumulo(
 			final Connector connector )
@@ -876,8 +689,8 @@ public class SecondaryIndexIT
 								"11-30-2014").getTime()))));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEMPORAL_FULL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						TEMPORAL_FULL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
@@ -890,39 +703,6 @@ public class SecondaryIndexIT
 		scanner.close();
 		Assert.assertTrue(numResults == numAttributes);
 	}
-
-	// private void temporalFullHBase(
-	// final Connection connection )
-	// throws IOException,
-	// ParseException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEMPORAL_FULL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEMPORAL_FULL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2012").getTime()));
-	// scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2014").getTime()));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == numAttributes);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final String dataId = SecondaryIndexUtils.getDataId(entry.getKey());
-	// Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
 
 	private void numericPartialAccumulo(
 			final Connector connector )
@@ -937,13 +717,13 @@ public class SecondaryIndexIT
 						Lexicoders.DOUBLE.toByteArray(20d))));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						NUMERIC_PARTIAL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						NUMERIC_PARTIAL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
 			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			final String fieldId = SecondaryIndexUtils.getFieldName(cq);
 			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
 			final String dataId = SecondaryIndexUtils.getDataId(entry
 					.getKey()
@@ -960,41 +740,6 @@ public class SecondaryIndexIT
 		Assert.assertTrue(numResults == 2);
 	}
 
-	//
-	// private void numericPartialHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((NUMERIC_PARTIAL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// NUMERIC_PARTIAL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.DOUBLE.toByteArray(0d));
-	// scan.setStopRow(Lexicoders.DOUBLE.toByteArray(20d));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final byte[] cq = entry.getKey();
-	// final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
-	// Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-	// final String dataId = SecondaryIndexUtils.getDataId(cq);
-	// Assert.assertTrue((dataId.equals(allDataIds.get(0))) ||
-	// (dataId.equals(allDataIds.get(1))));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 2);
-	// }
-
 	private void textPartialAccumulo(
 			final Connector connector )
 			throws TableNotFoundException {
@@ -1003,17 +748,17 @@ public class SecondaryIndexIT
 				DEFAULT_ACCUMULO_AUTHORIZATIONS);
 		scanner.setRange(new Range(
 				new Text(
-						new ByteArrayId(
+						new ByteArray(
 								"bbb").getBytes())));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEXT_PARTIAL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						TEXT_PARTIAL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
 			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			final String fieldId = SecondaryIndexUtils.getFieldName(cq);
 			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
 			final String dataId = SecondaryIndexUtils.getDataId(cq);
 			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
@@ -1021,41 +766,6 @@ public class SecondaryIndexIT
 		scanner.close();
 		Assert.assertTrue(numResults == 1);
 	}
-
-	// private void textPartialHBase(
-	// final Connection connection )
-	// throws IOException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEXT_PARTIAL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEXT_PARTIAL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// scan.setStopRow(new ByteArrayId(
-	// "bbb").getBytes());
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final byte[] cq = entry.getKey();
-	// final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
-	// Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-	// final String dataId = SecondaryIndexUtils.getDataId(cq);
-	// Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
 
 	private void temporalPartialAccumulo(
 			final Connector connector )
@@ -1073,13 +783,13 @@ public class SecondaryIndexIT
 								"11-30-2014").getTime()))));
 		scanner.fetchColumnFamily(new Text(
 				SecondaryIndexUtils.constructColumnFamily(
-						dataAdapter.getAdapterId(),
-						TEMPORAL_PARTIAL_FIELD_ID)));
+						dataAdapter.getTypeName(),
+						TEMPORAL_PARTIAL_FIELD)));
 		int numResults = 0;
 		for (final Entry<Key, Value> entry : scanner) {
 			numResults += 1;
 			final byte[] cq = entry.getKey().getColumnQualifierData().getBackingArray();
-			final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
+			final String fieldId = SecondaryIndexUtils.getFieldName(cq);
 			Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
 			final String dataId = SecondaryIndexUtils.getDataId(cq);
 			Assert.assertTrue(dataId.equals(allDataIds.get(1)));
@@ -1088,44 +798,8 @@ public class SecondaryIndexIT
 		Assert.assertTrue(numResults == 1);
 	}
 
-	// private void temporalPartialHBase(
-	// final Connection connection )
-	// throws IOException,
-	// ParseException {
-	// final Table table =
-	// connection.getTable(TableName.valueOf((TEMPORAL_PARTIAL_TABLE)));
-	// final Scan scan = new Scan();
-	// final byte[] columnFamily = SecondaryIndexUtils.constructColumnFamily(
-	// dataAdapter.getAdapterId(),
-	// TEMPORAL_PARTIAL_FIELD_ID);
-	// scan.addFamily(columnFamily);
-	// scan.setStartRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2012").getTime()));
-	// scan.setStopRow(Lexicoders.LONG.toByteArray(DATE_FORMAT.parse(
-	// "11-30-2014").getTime()));
-	// final ResultScanner results = table.getScanner(scan);
-	// int numResults = 0;
-	// for (final Result result : results) {
-	// numResults += 1;
-	// final NavigableMap<byte[], byte[]> qualifierToValueMap =
-	// result.getFamilyMap(columnFamily);
-	// final Set<Entry<byte[], byte[]>> entries =
-	// qualifierToValueMap.entrySet();
-	// Assert.assertTrue(entries.size() == 1);
-	// for (final Entry<byte[], byte[]> entry : entries) {
-	// final byte[] cq = entry.getKey();
-	// final ByteArrayId fieldId = SecondaryIndexUtils.getFieldId(cq);
-	// Assert.assertTrue(fieldId.equals(GEOMETRY_FIELD_ID));
-	// final String dataId = SecondaryIndexUtils.getDataId(cq);
-	// Assert.assertTrue(dataId.equals(allDataIds.get(1)));
-	// }
-	// }
-	// table.close();
-	// Assert.assertTrue(numResults == 1);
-	// }
-
 	/**
-	 * 
+	 *
 	 * @param builder
 	 *            SimpleFeature builder to be used
 	 * @param lng

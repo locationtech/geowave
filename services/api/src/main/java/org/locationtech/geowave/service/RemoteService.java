@@ -27,16 +27,16 @@ public interface RemoteService
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Path("/listadapter")
-	public Response listAdapter(
+	@Path("/listtypes")
+	public Response listTypes(
 			@QueryParam("store_name")
 			final String store_name );
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Path("/listindex")
-	public Response listIndex(
+	@Path("/listindices")
+	public Response listIndices(
 			@QueryParam("store_name")
 			final String store_name );
 
@@ -46,7 +46,7 @@ public interface RemoteService
 	@Path("/liststats")
 	public Response listStats(
 			@QueryParam("store_name") String store_name,
-			@QueryParam("adapterId") String adapterId,
+			@QueryParam("typeName") String typeName,
 			@QueryParam("authorizations") String authorizations,
 			@QueryParam("jsonFormatFlag") Boolean jsonFormatFlag );
 
@@ -55,7 +55,7 @@ public interface RemoteService
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/version")
 	public Response version(
-			@QueryParam("storename") String storename );
+			@QueryParam("store_name") String storename );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -63,8 +63,8 @@ public interface RemoteService
 	@Path("/calcstat")
 	public Response calcStat(
 			@QueryParam("store_name") String store_name,
-			@QueryParam("adapterId") String adapterId,
-			@QueryParam("statId") String statId,
+			@QueryParam("datatype_name") String typeName,
+			@QueryParam("stat_type") String statType,
 			@QueryParam("authorizations") String authorizations,
 			@QueryParam("jsonFormatFlag") Boolean jsonFormatFlag );
 
@@ -78,20 +78,27 @@ public interface RemoteService
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
+	@Path("/combinestats")
+	public Response combineStats(
+			@QueryParam("store_name") String store_name );
+
+	@POST
+	@Produces(MediaType.APPLICATION_JSON)
+	@Consumes(MediaType.MULTIPART_FORM_DATA)
 	@Path("/recalcstats")
 	public Response recalcStats(
 			@QueryParam("store_name") String store_name,
-			@QueryParam("adapterId") String adapterId,
+			@QueryParam("typeName") String typeName,
 			@QueryParam("authorizations") String authorizations,
 			@QueryParam("jsonFormatFlag") Boolean jsonFormatFlag );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
 	@Consumes(MediaType.MULTIPART_FORM_DATA)
-	@Path("/rmadapter")
-	public Response removeAdapter(
+	@Path("/rmtype")
+	public Response removeType(
 			@QueryParam("store_name") String store_name,
-			@QueryParam("adapterId") String adapterId );
+			@QueryParam("datatype_name") String typeName );
 
 	@POST
 	@Produces(MediaType.APPLICATION_JSON)
@@ -99,8 +106,8 @@ public interface RemoteService
 	@Path("/rmstat")
 	public Response removeStat(
 			@QueryParam("store_name") String store_name,
-			@QueryParam("adapterId") String adapterId,
-			@QueryParam("statId") String statId,
+			@QueryParam("datatype_name") String typeName,
+			@QueryParam("stat_type") String statType,
 			@QueryParam("authorizations") String authorizations,
 			@QueryParam("jsonFormatFlag") Boolean jsonFormatFlag );
 }

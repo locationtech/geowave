@@ -11,20 +11,20 @@
 package org.locationtech.geowave.analytic.clustering;
 
 import org.apache.commons.codec.binary.Hex;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 
 public class NeighborData<T> implements
 		Comparable<NeighborData<T>>
 {
 	private T element;
-	private ByteArrayId id;
+	private ByteArray id;
 	private double distance;
 
 	public NeighborData() {}
 
 	public NeighborData(
 			final T element,
-			final ByteArrayId id,
+			final ByteArray id,
 			final double distance ) {
 		super();
 		this.element = element;
@@ -41,12 +41,12 @@ public class NeighborData<T> implements
 		this.distance = distance;
 	}
 
-	public ByteArrayId getId() {
+	public ByteArray getId() {
 		return id;
 	}
 
 	protected void setId(
-			final ByteArrayId id ) {
+			final ByteArray id ) {
 		this.id = id;
 	}
 

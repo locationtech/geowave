@@ -13,7 +13,7 @@ package org.locationtech.geowave.core.index;
 import org.apache.commons.lang3.tuple.Pair;
 import org.junit.Assert;
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 
 public class ByteArrayUtilsTest
@@ -21,9 +21,9 @@ public class ByteArrayUtilsTest
 
 	@Test
 	public void testSplit() {
-		final ByteArrayId first = new ByteArrayId(
+		final ByteArray first = new ByteArray(
 				"first");
-		final ByteArrayId second = new ByteArrayId(
+		final ByteArray second = new ByteArray(
 				"second");
 		final byte[] combined = ByteArrayUtils.combineVariableLengthArrays(
 				first.getBytes(),

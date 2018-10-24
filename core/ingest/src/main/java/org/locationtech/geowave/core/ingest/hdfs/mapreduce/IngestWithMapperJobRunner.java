@@ -31,7 +31,7 @@ public class IngestWithMapperJobRunner extends
 			final List<IndexPluginOptions> indexOptions,
 			final VisibilityOptions ingestOptions,
 			final Path inputFile,
-			final String typeName,
+			final String formatPluginName,
 			final IngestFromHdfsPlugin<?, ?> plugin,
 			final IngestWithMapper<?, ?> mapperIngest ) {
 		super(
@@ -39,7 +39,7 @@ public class IngestWithMapperJobRunner extends
 				indexOptions,
 				ingestOptions,
 				inputFile,
-				typeName,
+				formatPluginName,
 				plugin,
 				mapperIngest);
 	}

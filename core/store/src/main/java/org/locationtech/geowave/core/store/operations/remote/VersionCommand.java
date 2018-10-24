@@ -37,7 +37,7 @@ import com.beust.jcommander.Parameters;
 public class VersionCommand extends
 		ServiceEnabledCommand<String>
 {
-	@Parameter(description = "<storename>")
+	@Parameter(description = "<store name>")
 	private final List<String> parameters = new ArrayList<String>();
 
 	@Override

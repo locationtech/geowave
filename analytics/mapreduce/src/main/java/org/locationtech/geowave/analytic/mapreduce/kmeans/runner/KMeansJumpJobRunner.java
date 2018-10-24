@@ -129,11 +129,11 @@ public class KMeansJumpJobRunner extends
 
 		propertyManagement.copy(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
-				SampleParameters.Sample.DATA_TYPE_ID);
+				SampleParameters.Sample.DATA_TYPE_NAME);
 
 		propertyManagement.copy(
-				CentroidParameters.Centroid.INDEX_ID,
-				SampleParameters.Sample.INDEX_ID);
+				CentroidParameters.Centroid.INDEX_NAME,
+				SampleParameters.Sample.INDEX_NAME);
 
 		ClusteringUtils.createAdapter(propertyManagement);
 		ClusteringUtils.createIndex(propertyManagement);
@@ -204,7 +204,7 @@ public class KMeansJumpJobRunner extends
 			final int result = distortionGroupManagement.retainBestGroups(
 					(AnalyticItemWrapperFactory<SimpleFeature>) analyticItemWrapperFC.newInstance(),
 					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.DATA_TYPE_ID),
-					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_ID),
+					propertyManagement.getPropertyAsString(CentroidParameters.Centroid.INDEX_NAME),
 					currentBatchId,
 					currentZoomLevel);
 
@@ -229,7 +229,7 @@ public class KMeansJumpJobRunner extends
 			JumpParameters.Jump.KPLUSPLUS_MIN,
 			ClusteringParameters.Clustering.MAX_REDUCER_COUNT,
 			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.INDEX_NAME,
 			CentroidParameters.Centroid.DATA_TYPE_ID,
 			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,
@@ -241,8 +241,8 @@ public class KMeansJumpJobRunner extends
 		params.addAll(MapReduceParameters.getParameters());
 
 		params.remove(CentroidParameters.Centroid.ZOOM_LEVEL);
-		params.remove(SampleParameters.Sample.DATA_TYPE_ID);
-		params.remove(SampleParameters.Sample.INDEX_ID);
+		params.remove(SampleParameters.Sample.DATA_TYPE_NAME);
+		params.remove(SampleParameters.Sample.INDEX_NAME);
 		return params;
 	}
 

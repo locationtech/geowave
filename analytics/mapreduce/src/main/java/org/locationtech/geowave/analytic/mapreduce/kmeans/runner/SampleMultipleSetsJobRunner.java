@@ -159,11 +159,11 @@ public class SampleMultipleSetsJobRunner<T> extends
 
 		runTimeProperties.copy(
 				CentroidParameters.Centroid.DATA_TYPE_ID,
-				SampleParameters.Sample.DATA_TYPE_ID);
+				SampleParameters.Sample.DATA_TYPE_NAME);
 
 		runTimeProperties.copy(
-				CentroidParameters.Centroid.INDEX_ID,
-				SampleParameters.Sample.INDEX_ID);
+				CentroidParameters.Centroid.INDEX_NAME,
+				SampleParameters.Sample.INDEX_NAME);
 
 		runTimeProperties.store(
 				CentroidParameters.Centroid.ZOOM_LEVEL,
@@ -197,7 +197,7 @@ public class SampleMultipleSetsJobRunner<T> extends
 			SampleParameters.Sample.SAMPLE_ITERATIONS,
 			SampleParameters.Sample.MIN_SAMPLE_SIZE,
 			CentroidParameters.Centroid.WRAPPER_FACTORY_CLASS,
-			CentroidParameters.Centroid.INDEX_ID,
+			CentroidParameters.Centroid.INDEX_NAME,
 			CentroidParameters.Centroid.DATA_TYPE_ID,
 			CentroidParameters.Centroid.DATA_NAMESPACE_URI,
 			CentroidParameters.Centroid.EXTRACTOR_CLASS,

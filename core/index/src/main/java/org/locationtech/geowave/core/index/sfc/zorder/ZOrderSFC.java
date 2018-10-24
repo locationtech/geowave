@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.index.sfc.RangeDecomposition;
@@ -154,9 +154,9 @@ public class ZOrderSFC implements
 		return new RangeDecomposition(
 				new ByteArrayRange[] {
 					new ByteArrayRange(
-							new ByteArrayId(
+							new ByteArray(
 									minZorder),
-							new ByteArrayId(
+							new ByteArray(
 									maxZorder))
 				});
 	}

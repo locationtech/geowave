@@ -14,7 +14,7 @@ import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.StringUtils;
 
 public class ImageChipUtils
@@ -73,23 +73,23 @@ public class ImageChipUtils
 		return bi;
 	}
 
-	public static ByteArrayId getDataId(
+	public static ByteArray getDataId(
 			final String mission,
 			final String trackId,
 			final long timeMillis ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				mission + "/" + trackId + "/" + timeMillis);
 	}
 
-	public static ByteArrayId getTrackDataIdPrefix(
+	public static ByteArray getTrackDataIdPrefix(
 			final String mission,
 			final String trackId ) {
-		return new ByteArrayId(
+		return new ByteArray(
 				mission + "/" + trackId + "/");
 	}
 
 	public static ImageChip fromDataIdAndValue(
-			final ByteArrayId dataId,
+			final ByteArray dataId,
 			final byte[] value ) {
 		final String dataIdStr = StringUtils.stringFromBinary(dataId.getBytes());
 		final String[] split = dataIdStr.split("/");

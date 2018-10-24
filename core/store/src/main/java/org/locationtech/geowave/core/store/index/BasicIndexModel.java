@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -17,7 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.StringUtils;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
@@ -30,7 +29,7 @@ import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
  * common for a given index. This way distributable filters will not need to
  * handle any adapter-specific transformation, but can use the common index
  * fields.
- * 
+ *
  */
 public class BasicIndexModel implements
 		CommonIndexModel
@@ -38,7 +37,7 @@ public class BasicIndexModel implements
 	protected NumericDimensionField<?>[] dimensions;
 	// the first dimension of a particular field ID will be the persistence
 	// model used
-	private Map<ByteArrayId, NumericDimensionField<?>> fieldIdToPeristenceMap;
+	private Map<String, NumericDimensionField<?>> fieldIdToPeristenceMap;
 	private transient String id;
 
 	public BasicIndexModel() {}
@@ -51,11 +50,11 @@ public class BasicIndexModel implements
 	public void init(
 			final NumericDimensionField<?>[] dimensions ) {
 		this.dimensions = dimensions;
-		fieldIdToPeristenceMap = new HashMap<ByteArrayId, NumericDimensionField<?>>();
+		fieldIdToPeristenceMap = new HashMap<>();
 		for (final NumericDimensionField<?> d : dimensions) {
-			if (!fieldIdToPeristenceMap.containsKey(d.getFieldId())) {
+			if (!fieldIdToPeristenceMap.containsKey(d.getFieldName())) {
 				fieldIdToPeristenceMap.put(
-						d.getFieldId(),
+						d.getFieldName(),
 						d);
 			}
 		}
@@ -64,8 +63,8 @@ public class BasicIndexModel implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public FieldWriter<Object, CommonIndexValue> getWriter(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
+			final String fieldName ) {
+		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldName);
 		if (dimension != null) {
 			return (FieldWriter<Object, CommonIndexValue>) dimension.getWriter();
 		}
@@ -75,8 +74,8 @@ public class BasicIndexModel implements
 	@SuppressWarnings("unchecked")
 	@Override
 	public FieldReader<CommonIndexValue> getReader(
-			final ByteArrayId fieldId ) {
-		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldId);
+			final String fieldName ) {
+		final NumericDimensionField<?> dimension = fieldIdToPeristenceMap.get(fieldName);
 		if (dimension != null) {
 			return (FieldReader<CommonIndexValue>) dimension.getReader();
 		}
@@ -119,7 +118,7 @@ public class BasicIndexModel implements
 	@Override
 	public byte[] toBinary() {
 		int byteBufferLength = 4;
-		final List<byte[]> dimensionBinaries = new ArrayList<byte[]>(
+		final List<byte[]> dimensionBinaries = new ArrayList<>(
 				dimensions.length);
 		for (final NumericDimensionField<?> dimension : dimensions) {
 			final byte[] dimensionBinary = PersistenceUtils.toBinary(dimension);

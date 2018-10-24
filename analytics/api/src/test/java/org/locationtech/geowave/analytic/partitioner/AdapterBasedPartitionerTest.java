@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -33,11 +33,9 @@ import org.locationtech.geowave.analytic.param.CommonParameters;
 import org.locationtech.geowave.analytic.param.ParameterEnum;
 import org.locationtech.geowave.analytic.param.PartitionParameters;
 import org.locationtech.geowave.analytic.param.StoreParameters.StoreParam;
-import org.locationtech.geowave.analytic.partitioner.AdapterBasedPartitioner;
 import org.locationtech.geowave.analytic.partitioner.AdapterBasedPartitioner.AdapterDataEntry;
 import org.locationtech.geowave.analytic.partitioner.Partitioner.PartitionData;
 import org.locationtech.geowave.analytic.store.PersistableStore;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.store.GeoWaveStoreFinder;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
@@ -124,17 +122,17 @@ public class AdapterBasedPartitionerTest
 				new MemoryStoreFactoryFamily());
 		pluginOptions.selectPlugin("memory");
 		final String namespace = "test_" + getClass().getName() + "_" + name.getMethodName();
-		MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
+		final MemoryRequiredOptions opts = (MemoryRequiredOptions) pluginOptions.getFactoryOptions();
 		opts.setGeowaveNamespace(namespace);
 		final PersistableStore store = new PersistableStore(
 				pluginOptions);
-		FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
+		final FeatureDataAdapter dataAdapter = new FeatureDataAdapter(
 				ftype);
 		dataAdapter.init();
-		InternalAdapterStore internalDataStore = pluginOptions.createInternalAdapterStore();
-		InternalDataAdapter<?> internalDataAdapter = new InternalDataAdapterWrapper(
+		final InternalAdapterStore internalDataStore = pluginOptions.createInternalAdapterStore();
+		final InternalDataAdapter<?> internalDataAdapter = new InternalDataAdapterWrapper(
 				dataAdapter,
-				internalDataStore.addAdapterId(dataAdapter.getAdapterId()));
+				internalDataStore.addTypeName(dataAdapter.getTypeName()));
 		store.getDataStoreOptions().createAdapterStore().addAdapter(
 				internalDataAdapter);
 		((ParameterEnum<PersistableStore>) StoreParam.INPUT_STORE).getHelper().setValue(
@@ -146,8 +144,7 @@ public class AdapterBasedPartitionerTest
 				scope);
 
 		List<PartitionData> partitions = partitioner.getCubeIdentifiers(new AdapterDataEntry(
-				new ByteArrayId(
-						ftype.getName().getLocalPart()),
+				ftype.getName().getLocalPart(),
 				feature));
 		assertEquals(
 				4,
@@ -183,8 +180,7 @@ public class AdapterBasedPartitionerTest
 				0);
 
 		partitions = partitioner.getCubeIdentifiers(new AdapterDataEntry(
-				new ByteArrayId(
-						ftype.getName().getLocalPart()),
+				ftype.getName().getLocalPart(),
 				feature));
 		assertEquals(
 				4,
@@ -212,8 +208,7 @@ public class AdapterBasedPartitionerTest
 				0);
 
 		partitions = partitioner.getCubeIdentifiers(new AdapterDataEntry(
-				new ByteArrayId(
-						ftype.getName().getLocalPart()),
+				ftype.getName().getLocalPart(),
 				feature));
 		assertEquals(
 				2,
@@ -241,8 +236,7 @@ public class AdapterBasedPartitionerTest
 				0);
 
 		partitions = partitioner.getCubeIdentifiers(new AdapterDataEntry(
-				new ByteArrayId(
-						ftype.getName().getLocalPart()),
+				ftype.getName().getLocalPart(),
 				feature));
 		assertEquals(
 				4,

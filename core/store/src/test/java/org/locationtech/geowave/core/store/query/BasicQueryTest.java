@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -24,8 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.junit.Test;
-import org.locationtech.geowave.core.index.ByteArrayId;
-import org.locationtech.geowave.core.index.ByteArrayRange;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.IndexMetaData;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.MultiDimensionalCoordinateRanges;
@@ -38,21 +37,21 @@ import org.locationtech.geowave.core.index.sfc.data.BasicNumericDataset;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericData;
 import org.locationtech.geowave.core.index.sfc.data.NumericRange;
+import org.locationtech.geowave.core.store.api.Index;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.data.field.FieldReader;
 import org.locationtech.geowave.core.store.data.field.FieldWriter;
 import org.locationtech.geowave.core.store.dimension.NumericDimensionField;
-import org.locationtech.geowave.core.store.filter.QueryFilter;
 import org.locationtech.geowave.core.store.index.BasicIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
 import org.locationtech.geowave.core.store.index.CommonIndexValue;
-import org.locationtech.geowave.core.store.index.CustomIdIndex;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
-import org.locationtech.geowave.core.store.query.BasicQuery;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintData;
-import org.locationtech.geowave.core.store.query.BasicQuery.ConstraintSet;
-import org.locationtech.geowave.core.store.query.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.index.CustomNameIndex;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintData;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.ConstraintSet;
+import org.locationtech.geowave.core.store.query.constraints.BasicQuery.Constraints;
+import org.locationtech.geowave.core.store.query.filter.QueryFilter;
 
 public class BasicQueryTest
 {
@@ -62,15 +61,14 @@ public class BasicQueryTest
 
 	@Test
 	public void testIntersectCasesWithPersistence() {
-		final PrimaryIndex index = new CustomIdIndex(
+		final Index index = new CustomNameIndex(
 				new ExampleNumericIndexStrategy(),
 				new BasicIndexModel(
 						new NumericDimensionField[] {
 							new ExampleDimensionOne(),
 							new ExampleDimensionTwo()
 						}),
-				new ByteArrayId(
-						"22"));
+				"22");
 		final List<MultiDimensionalNumericData> expectedResults = new ArrayList<>();
 		expectedResults.add(new BasicNumericDataset(
 				new NumericData[] {
@@ -205,15 +203,14 @@ public class BasicQueryTest
 				constraints).toBinary();
 		final BasicQuery query = new BasicQuery();
 		query.fromBinary(image);
-		final PrimaryIndex index = new CustomIdIndex(
+		final Index index = new CustomNameIndex(
 				new ExampleNumericIndexStrategy(),
 				new BasicIndexModel(
 						new NumericDimensionField[] {
 							new ExampleDimensionOne(),
 							new ExampleDimensionTwo()
 						}),
-				new ByteArrayId(
-						"22"));
+				"22");
 		assertEquals(
 				expectedResults,
 				query.getIndexConstraints(index));
@@ -224,16 +221,14 @@ public class BasicQueryTest
 				1,
 				filters.size());
 
-		final Map<ByteArrayId, ConstrainedIndexValue> fieldIdToValueMap = new HashMap<>();
+		final Map<String, ConstrainedIndexValue> fieldIdToValueMap = new HashMap<>();
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"one"),
+				"one",
 				new ConstrainedIndexValue(
 						0.4,
 						0.4));
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"two"),
+				"two",
 				new ConstrainedIndexValue(
 						0.5,
 						0.5));
@@ -244,19 +239,18 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
 								fieldIdToValueMap),
 						null)));
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"one"),
+				"one",
 				new ConstrainedIndexValue(
 						0.1,
 						0.1));
@@ -265,11 +259,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -277,14 +271,12 @@ public class BasicQueryTest
 						null)));
 
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"one"),
+				"one",
 				new ConstrainedIndexValue(
 						0.4,
 						0.4));
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"two"),
+				"two",
 				new ConstrainedIndexValue(
 						5.0,
 						5.0));
@@ -293,11 +285,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -308,8 +300,7 @@ public class BasicQueryTest
 		 * Tests the 'OR' Case
 		 */
 		fieldIdToValueMap.put(
-				new ByteArrayId(
-						"two"),
+				"two",
 				new ConstrainedIndexValue(
 						3.5,
 						3.5));
@@ -318,11 +309,11 @@ public class BasicQueryTest
 				model,
 				new CommonIndexedPersistenceEncoding(
 						(short) 1,
-						new ByteArrayId(
+						new ByteArray(
 								"data"),
-						new ByteArrayId(
+						new ByteArray(
 								"partition"),
-						new ByteArrayId(
+						new ByteArray(
 								"sort"),
 						1, // duplicate count
 						new PersistentDataset(
@@ -369,63 +360,63 @@ public class BasicQueryTest
 
 		@Override
 		public MultiDimensionalCoordinateRanges[] getCoordinateRangesPerDimension(
-				MultiDimensionalNumericData dataRange,
-				IndexMetaData... hints ) {
+				final MultiDimensionalNumericData dataRange,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public QueryRanges getQueryRanges(
-				MultiDimensionalNumericData indexedRange,
-				IndexMetaData... hints ) {
+				final MultiDimensionalNumericData indexedRange,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public QueryRanges getQueryRanges(
-				MultiDimensionalNumericData indexedRange,
-				int maxEstimatedRangeDecomposition,
-				IndexMetaData... hints ) {
+				final MultiDimensionalNumericData indexedRange,
+				final int maxEstimatedRangeDecomposition,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public InsertionIds getInsertionIds(
-				MultiDimensionalNumericData indexedData ) {
+				final MultiDimensionalNumericData indexedData ) {
 			return null;
 		}
 
 		@Override
 		public InsertionIds getInsertionIds(
-				MultiDimensionalNumericData indexedData,
-				int maxEstimatedDuplicateIds ) {
+				final MultiDimensionalNumericData indexedData,
+				final int maxEstimatedDuplicateIds ) {
 			return null;
 		}
 
 		@Override
 		public MultiDimensionalNumericData getRangeForId(
-				ByteArrayId partitionKey,
-				ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getInsertionPartitionKeys(
-				MultiDimensionalNumericData insertionData ) {
+		public Set<ByteArray> getInsertionPartitionKeys(
+				final MultiDimensionalNumericData insertionData ) {
 			return null;
 		}
 
 		@Override
-		public Set<ByteArrayId> getQueryPartitionKeys(
-				MultiDimensionalNumericData queryData,
-				IndexMetaData... hints ) {
+		public Set<ByteArray> getQueryPartitionKeys(
+				final MultiDimensionalNumericData queryData,
+				final IndexMetaData... hints ) {
 			return null;
 		}
 
 		@Override
 		public MultiDimensionalCoordinates getCoordinatesPerDimension(
-				ByteArrayId partitionKey,
-				ByteArrayId sortKey ) {
+				final ByteArray partitionKey,
+				final ByteArray sortKey ) {
 			return null;
 		}
 
@@ -435,7 +426,7 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public Set<ByteArrayId> getPredefinedSplits() {
+		public Set<ByteArray> getPredefinedSplits() {
 			// TODO Auto-generated method stub
 			return null;
 		}
@@ -557,9 +548,8 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public ByteArrayId getFieldId() {
-			return new ByteArrayId(
-					"one");
+		public String getFieldName() {
+			return "one";
 		}
 
 		@Override
@@ -587,9 +577,8 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public ByteArrayId getFieldId() {
-			return new ByteArrayId(
-					"two");
+		public String getFieldName() {
+			return "two";
 		}
 
 	}
@@ -603,9 +592,8 @@ public class BasicQueryTest
 		}
 
 		@Override
-		public ByteArrayId getFieldId() {
-			return new ByteArrayId(
-					"three");
+		public String getFieldName() {
+			return "three";
 		}
 
 	}

@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.InsertionIds;
 import org.locationtech.geowave.core.index.SinglePartitionInsertionIds;
 
@@ -101,7 +101,7 @@ public class GeoWaveKeyImpl implements
 	}
 
 	@Override
-	public short getInternalAdapterId() {
+	public short getAdapterId() {
 		return internalAdapterId;
 	}
 
@@ -159,8 +159,8 @@ public class GeoWaveKeyImpl implements
 				else {
 					partitionKeyBytes = partitionKey.getPartitionKey().getBytes();
 				}
-				final List<ByteArrayId> sortKeys = partitionKey.getSortKeys();
-				for (final ByteArrayId sortKey : sortKeys) {
+				final List<ByteArray> sortKeys = partitionKey.getSortKeys();
+				for (final ByteArray sortKey : sortKeys) {
 					keys[i++] = new GeoWaveKeyImpl(
 							dataId,
 							internalAdapterId,

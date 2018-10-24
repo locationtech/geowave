@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -15,9 +15,12 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.util.Tool;
+import org.locationtech.geowave.core.store.api.Query;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputFormat;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 import org.slf4j.Logger;
@@ -35,8 +38,10 @@ public abstract class AbstractGeoWaveJobRunner extends
 	protected static final Logger LOGGER = LoggerFactory.getLogger(AbstractGeoWaveJobRunner.class);
 
 	protected DataStorePluginOptions dataStoreOptions;
-	protected DistributableQuery query = null;
-	protected QueryOptions queryOptions;
+	protected QueryConstraints constraints = null;
+	protected CommonQueryOptions commonOptions;
+	protected DataTypeQueryOptions<?> dataTypeOptions;
+	protected IndexQueryOptions indexOptions;
 	protected Integer minInputSplits = null;
 	protected Integer maxInputSplits = null;
 
@@ -66,16 +71,31 @@ public abstract class AbstractGeoWaveJobRunner extends
 
 		configure(job);
 
-		if (queryOptions != null) {
-			GeoWaveInputFormat.setQueryOptions(
+		if (commonOptions != null) {
+			GeoWaveInputFormat.setCommonQueryOptions(
 					conf,
-					queryOptions);
+					commonOptions);
 
 		}
-		if (query != null) {
-			GeoWaveInputFormat.setQuery(
+		if (dataTypeOptions != null) {
+			GeoWaveInputFormat.setDataTypeQueryOptions(
 					conf,
-					query);
+					dataTypeOptions,
+					dataStoreOptions.createAdapterStore(),
+					dataStoreOptions.createInternalAdapterStore());
+
+		}
+		if (indexOptions != null) {
+			GeoWaveInputFormat.setIndexQueryOptions(
+					conf,
+					indexOptions,
+					dataStoreOptions.createIndexStore());
+
+		}
+		if (constraints != null) {
+			GeoWaveInputFormat.setQueryConstraints(
+					conf,
+					constraints);
 		}
 		if (minInputSplits != null) {
 			GeoWaveInputFormat.setMinimumSplitCount(
@@ -107,14 +127,32 @@ public abstract class AbstractGeoWaveJobRunner extends
 		this.minInputSplits = minInputSplits;
 	}
 
-	public void setQueryOptions(
-			final QueryOptions options ) {
-		queryOptions = options;
+	public void setQuery(
+			Query<?> query ) {
+		setCommonQueryOptions(query.getCommonQueryOptions());
+		setDataTypeQueryOptions(query.getDataTypeQueryOptions());
+		setIndexQueryOptions(query.getIndexQueryOptions());
+		setQueryConstraints(query.getQueryConstraints());
 	}
 
-	public void setQuery(
-			final DistributableQuery query ) {
-		this.query = query;
+	public void setCommonQueryOptions(
+			final CommonQueryOptions commonOptions ) {
+		this.commonOptions = commonOptions;
+	}
+
+	public void setDataTypeQueryOptions(
+			final DataTypeQueryOptions<?> dataTypeOptions ) {
+		this.dataTypeOptions = dataTypeOptions;
+	}
+
+	public void setIndexQueryOptions(
+			final IndexQueryOptions indexOptions ) {
+		this.indexOptions = indexOptions;
+	}
+
+	public void setQueryConstraints(
+			final QueryConstraints constraints ) {
+		this.constraints = constraints;
 	}
 
 	@Override

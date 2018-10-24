@@ -21,12 +21,12 @@ import org.apache.hadoop.hbase.client.Delete;
 import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.RowMutations;
 import org.apache.hadoop.hbase.filter.MultiRowRangeFilter.RowRange;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.QueryRanges;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
-import org.locationtech.geowave.core.store.adapter.statistics.DataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.server.ServerOpConfig.ServerOpScope;
 import org.locationtech.geowave.mapreduce.URLClassloaderUtils;
 import org.slf4j.Logger;
@@ -144,12 +144,13 @@ public class HBaseUtils
 		}
 	}
 
-	public static DataStatistics getMergedStats(
+	public static InternalDataStatistics<?, ?, ?> getMergedStats(
 			final List<Cell> rowCells ) {
-		DataStatistics mergedStats = null;
+		InternalDataStatistics<?, ?, ?> mergedStats = null;
 		for (final Cell cell : rowCells) {
 			final byte[] byteValue = CellUtil.cloneValue(cell);
-			final DataStatistics stats = (DataStatistics) URLClassloaderUtils.fromBinary(byteValue);
+			final InternalDataStatistics<?, ?, ?> stats = (InternalDataStatistics) URLClassloaderUtils
+					.fromBinary(byteValue);
 
 			if (mergedStats != null) {
 				mergedStats.merge(stats);

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -23,28 +23,30 @@ import java.util.TreeSet;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.hadoop.mapreduce.InputSplit;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.ByteArrayRange;
 import org.locationtech.geowave.core.index.NumericIndexStrategy;
 import org.locationtech.geowave.core.index.sfc.data.MultiDimensionalNumericData;
+import org.locationtech.geowave.core.store.CloseableIterator;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
-import org.locationtech.geowave.core.store.adapter.AdapterStore;
-import org.locationtech.geowave.core.store.adapter.DataAdapter;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
-import org.locationtech.geowave.core.store.adapter.InternalDataAdapter;
-import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
 import org.locationtech.geowave.core.store.adapter.TransientAdapterStore;
 import org.locationtech.geowave.core.store.adapter.statistics.DataStatisticsStore;
+import org.locationtech.geowave.core.store.adapter.statistics.InternalDataStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.PartitionStatistics;
 import org.locationtech.geowave.core.store.adapter.statistics.RowRangeHistogramStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.histogram.NumericHistogram;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.StatisticsQuery;
+import org.locationtech.geowave.core.store.api.StatisticsQueryBuilder;
 import org.locationtech.geowave.core.store.base.BaseDataStoreUtils;
 import org.locationtech.geowave.core.store.index.IndexStore;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
 import org.locationtech.geowave.core.store.operations.DataStoreOperations;
-import org.locationtech.geowave.core.store.query.DistributableQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
+import org.locationtech.geowave.core.store.query.constraints.QueryConstraints;
+import org.locationtech.geowave.core.store.query.options.CommonQueryOptions;
+import org.locationtech.geowave.core.store.query.options.DataTypeQueryOptions;
+import org.locationtech.geowave.core.store.query.options.IndexQueryOptions;
 import org.locationtech.geowave.core.store.util.DataStoreUtils;
-import org.locationtech.geowave.mapreduce.MapReduceUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +63,10 @@ public class SplitsProvider
 	 */
 	public List<InputSplit> getSplits(
 			final DataStoreOperations operations,
-			final DistributableQuery query,
-			final QueryOptions queryOptions,
+			final CommonQueryOptions commonOptions,
+			final DataTypeQueryOptions<?> typeOptions,
+			final IndexQueryOptions indexOptions,
+			final QueryConstraints constraints,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final InternalAdapterStore internalAdapterStore,
@@ -73,20 +77,20 @@ public class SplitsProvider
 			throws IOException,
 			InterruptedException {
 
-		final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>>();
+		final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache = new HashMap<>();
 
-		final List<InputSplit> retVal = new ArrayList<InputSplit>();
-		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<IntermediateSplitInfo>();
-		final Map<ByteArrayId, List<Short>> indexIdToAdaptersMap = new HashMap<>();
-		for (final Pair<PrimaryIndex, List<Short>> indexAdapterIdPair : BaseDataStoreUtils
-				.getAdaptersWithMinimalSetOfIndices(
-						queryOptions,
-						adapterStore,
-						internalAdapterStore,
-						adapterIndexMappingStore,
-						indexStore)) {
+		final List<InputSplit> retVal = new ArrayList<>();
+		final TreeSet<IntermediateSplitInfo> splits = new TreeSet<>();
+		final Map<String, List<Short>> indexIdToAdaptersMap = new HashMap<>();
+		for (final Pair<Index, List<Short>> indexAdapterIdPair : BaseDataStoreUtils.getAdaptersWithMinimalSetOfIndices(
+				typeOptions.getTypeNames(),
+				indexOptions.getIndexName(),
+				adapterStore,
+				internalAdapterStore,
+				adapterIndexMappingStore,
+				indexStore)) {
 			indexIdToAdaptersMap.put(
-					indexAdapterIdPair.getKey().getId(),
+					indexAdapterIdPair.getKey().getName(),
 					indexAdapterIdPair.getValue());
 			populateIntermediateSplits(
 					splits,
@@ -97,8 +101,10 @@ public class SplitsProvider
 					adapterStore,
 					statsStore,
 					maxSplits,
-					query,
-					queryOptions.getAuthorizations());
+					constraints,
+					(double[]) commonOptions.getHints().get(
+							DataStoreUtils.TARGET_RESOLUTION_PER_DIMENSION_FOR_HIERARCHICAL_INDEX),
+					commonOptions.getAuthorizations());
 		}
 
 		// this is an incremental algorithm, it may be better use the target
@@ -107,7 +113,7 @@ public class SplitsProvider
 		// range into two down the middle and then split one of those ranges
 		// down the middle to get 3, rather than splitting one range into
 		// thirds)
-		List<IntermediateSplitInfo> unsplittable = new ArrayList<IntermediateSplitInfo>();
+		final List<IntermediateSplitInfo> unsplittable = new ArrayList<>();
 		if (!statsCache.isEmpty() && !splits.isEmpty() && (minSplits != null) && (splits.size() < minSplits)) {
 			// set the ranges to at least min splits
 			do {
@@ -127,7 +133,7 @@ public class SplitsProvider
 					splits.add(otherSplit);
 				}
 			}
-			while (splits.size() != 0 && splits.size() + unsplittable.size() < minSplits);
+			while ((splits.size() != 0) && ((splits.size() + unsplittable.size()) < minSplits));
 
 			// Add all unsplittable splits back to splits array
 			splits.addAll(unsplittable);
@@ -157,7 +163,7 @@ public class SplitsProvider
 			retVal.add(split.toFinalSplit(
 					statsStore,
 					indexIdToAdaptersMap,
-					queryOptions.getAuthorizations()));
+					commonOptions.getAuthorizations()));
 		}
 		return retVal;
 	}
@@ -165,13 +171,14 @@ public class SplitsProvider
 	protected TreeSet<IntermediateSplitInfo> populateIntermediateSplits(
 			final TreeSet<IntermediateSplitInfo> splits,
 			final DataStoreOperations operations,
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
 			final Integer maxSplits,
-			final DistributableQuery query,
+			final QueryConstraints constraints,
+			final double[] targetResolutionPerDimensionForHierarchicalIndex,
 			final String[] authorizations )
 			throws IOException {
 
@@ -180,22 +187,24 @@ public class SplitsProvider
 
 		// Build list of row ranges from query
 		List<ByteArrayRange> ranges = null;
-		if (query != null) {
-			final List<MultiDimensionalNumericData> indexConstraints = query.getIndexConstraints(index);
+		if (constraints != null) {
+			final List<MultiDimensionalNumericData> indexConstraints = constraints.getIndexConstraints(index);
 			if ((maxSplits != null) && (maxSplits > 0)) {
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						maxSplits).getCompositeQueryRanges();
 			}
 			else {
 				ranges = DataStoreUtils.constraintsToQueryRanges(
 						indexConstraints,
 						indexStrategy,
+						targetResolutionPerDimensionForHierarchicalIndex,
 						-1).getCompositeQueryRanges();
 			}
 		}
-		final List<RangeLocationPair> rangeList = new ArrayList<RangeLocationPair>();
+		final List<RangeLocationPair> rangeList = new ArrayList<>();
 		if (ranges == null) {
 
 			final PartitionStatistics<?> statistics = getPartitionStats(
@@ -206,8 +215,8 @@ public class SplitsProvider
 
 			// Try to get ranges from histogram statistics
 			if (statistics != null) {
-				final Set<ByteArrayId> partitionKeys = statistics.getPartitionKeys();
-				for (final ByteArrayId partitionKey : partitionKeys) {
+				final Set<ByteArray> partitionKeys = statistics.getPartitionKeys();
+				for (final ByteArray partitionKey : partitionKeys) {
 					final GeoWaveRowRange gwRange = new GeoWaveRowRange(
 							partitionKey.getBytes(),
 							null,
@@ -254,7 +263,7 @@ public class SplitsProvider
 								adapterStore,
 								statsStore,
 								statsCache,
-								new ByteArrayId(
+								new ByteArray(
 										gwRange.getPartitionKey()),
 								authorizations),
 						gwRange);
@@ -266,11 +275,11 @@ public class SplitsProvider
 			}
 		}
 
-		final Map<ByteArrayId, SplitInfo> splitInfo = new HashMap<ByteArrayId, SplitInfo>();
+		final Map<String, SplitInfo> splitInfo = new HashMap<>();
 
 		if (!rangeList.isEmpty()) {
 			splitInfo.put(
-					index.getId(),
+					index.getName(),
 					new SplitInfo(
 							index,
 							rangeList));
@@ -302,12 +311,12 @@ public class SplitsProvider
 	}
 
 	protected RowRangeHistogramStatistics<?> getHistStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore statsStore,
-			final Map<Pair<PrimaryIndex, ByteArrayId>, RowRangeHistogramStatistics<?>> statsCache,
-			final ByteArrayId partitionKey,
+			final Map<Pair<Index, ByteArray>, RowRangeHistogramStatistics<?>> statsCache,
+			final ByteArray partitionKey,
 			final String[] authorizations )
 			throws IOException {
 		RowRangeHistogramStatistics<?> rangeStats = statsCache.get(Pair.of(
@@ -358,25 +367,38 @@ public class SplitsProvider
 	}
 
 	private RowRangeHistogramStatistics<?> getRangeStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
 			final TransientAdapterStore adapterStore,
 			final DataStatisticsStore store,
-			final ByteArrayId partitionKey,
+			final ByteArray partitionKey,
 			final String[] authorizations ) {
 		RowRangeHistogramStatistics<?> singleStats = null;
+
+		final StatisticsQuery<NumericHistogram> statsQuery = StatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.rowHistogram()
+				.indexName(
+						index.getName())
+				.partition(
+						partitionKey)
+				.build();
 		for (final Short adapterId : adapterIds) {
-			final RowRangeHistogramStatistics<?> rowStat = (RowRangeHistogramStatistics<?>) store.getDataStatistics(
+			try (final CloseableIterator<InternalDataStatistics<?, ?, ?>> it = store.getDataStatistics(
 					adapterId,
-					RowRangeHistogramStatistics.composeId(
-							index.getId(),
-							partitionKey),
-					authorizations);
-			if (singleStats == null) {
-				singleStats = rowStat;
-			}
-			else {
-				singleStats.merge(rowStat);
+					statsQuery.getExtendedId(),
+					statsQuery.getStatsType(),
+					authorizations)) {
+				while (it.hasNext()) {
+					final RowRangeHistogramStatistics<?> rowStat = (RowRangeHistogramStatistics<?>) it.next();
+					if (singleStats == null) {
+						singleStats = rowStat;
+					}
+					else {
+						singleStats.merge(rowStat);
+					}
+				}
 			}
 		}
 
@@ -384,22 +406,33 @@ public class SplitsProvider
 	}
 
 	protected PartitionStatistics<?> getPartitionStats(
-			final PrimaryIndex index,
+			final Index index,
 			final List<Short> adapterIds,
-
 			final DataStatisticsStore store,
 			final String[] authorizations ) {
 		PartitionStatistics<?> singleStats = null;
+		final StatisticsQuery<Set<ByteArray>> statsQuery = StatisticsQueryBuilder
+				.newBuilder()
+				.factory()
+				.partitions()
+				.indexName(
+						index.getName())
+				.build();
 		for (final Short adapterId : adapterIds) {
-			final PartitionStatistics<?> rowStat = (PartitionStatistics<?>) store.getDataStatistics(
+			try (CloseableIterator<InternalDataStatistics<?, ?, ?>> it = store.getDataStatistics(
 					adapterId,
-					PartitionStatistics.composeId(index.getId()),
-					authorizations);
-			if (singleStats == null) {
-				singleStats = rowStat;
-			}
-			else {
-				singleStats.merge(rowStat);
+					statsQuery.getExtendedId(),
+					statsQuery.getStatsType(),
+					authorizations)) {
+				while (it.hasNext()) {
+					final PartitionStatistics<?> rowStat = (PartitionStatistics<?>) it.next();
+					if (singleStats == null) {
+						singleStats = rowStat;
+					}
+					else {
+						singleStats.merge(rowStat);
+					}
+				}
 			}
 		}
 
@@ -624,9 +657,9 @@ public class SplitsProvider
 			final byte[] endKey = (range.getEndSortKey() == null) ? null : range.getEndSortKey();
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 		else {
@@ -634,15 +667,15 @@ public class SplitsProvider
 					range.getPartitionKey(),
 					range.getStartSortKey());
 
-			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArrayId.getNextPrefix(range.getPartitionKey())
+			final byte[] endKey = (range.getEndSortKey() == null) ? ByteArray.getNextPrefix(range.getPartitionKey())
 					: ArrayUtils.addAll(
 							range.getPartitionKey(),
 							range.getEndSortKey());
 
 			return new ByteArrayRange(
-					new ByteArrayId(
+					new ByteArray(
 							startKey),
-					new ByteArrayId(
+					new ByteArray(
 							endKey));
 		}
 	}

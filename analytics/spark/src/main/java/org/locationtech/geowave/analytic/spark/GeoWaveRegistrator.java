@@ -14,7 +14,7 @@ import org.apache.spark.serializer.KryoRegistrator;
 import org.geotools.feature.simple.SimpleFeatureImpl;
 import org.locationtech.geowave.analytic.kryo.FeatureSerializer;
 import org.locationtech.geowave.analytic.kryo.PersistableSerializer;
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
 import org.locationtech.geowave.core.index.persist.PersistableFactory;
 import org.locationtech.geowave.mapreduce.input.GeoWaveInputKey;
 
@@ -38,7 +38,7 @@ public class GeoWaveRegistrator implements
 		kryo.register(GeoWaveIndexedRDD.class);
 		kryo.register(Geometry.class);
 		kryo.register(PreparedGeometry.class);
-		kryo.register(ByteArrayId.class);
+		kryo.register(ByteArray.class);
 		kryo.register(GeoWaveInputKey.class);
 		kryo.register(
 				SimpleFeatureImpl.class,

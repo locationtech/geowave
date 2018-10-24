@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -14,9 +14,10 @@ import java.nio.ByteBuffer;
 
 import org.locationtech.geowave.adapter.raster.FitToIndexGridCoverage;
 import org.locationtech.geowave.adapter.raster.RasterUtils;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.Mergeable;
 import org.locationtech.geowave.core.store.adapter.statistics.AbstractDataStatistics;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsQueryBuilder;
+import org.locationtech.geowave.core.store.adapter.statistics.BaseStatisticsType;
 import org.locationtech.geowave.core.store.entities.GeoWaveRow;
 import org.opengis.coverage.grid.GridCoverage;
 import org.slf4j.Logger;
@@ -26,12 +27,13 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import com.vividsolutions.jts.io.WKBWriter;
+import com.vividsolutions.jts.io.WKTWriter;
 
 public class RasterFootprintStatistics extends
-		AbstractDataStatistics<GridCoverage>
+		AbstractDataStatistics<GridCoverage, Geometry, BaseStatisticsQueryBuilder<Geometry>>
 {
 	private static final Logger LOGGER = LoggerFactory.getLogger(RasterFootprintStatistics.class);
-	public static final ByteArrayId STATS_TYPE = new ByteArrayId(
+	public static final BaseStatisticsType<Geometry> STATS_TYPE = new BaseStatisticsType<>(
 			"FOOTPRINT");
 	private Geometry footprint;
 
@@ -41,9 +43,9 @@ public class RasterFootprintStatistics extends
 	}
 
 	public RasterFootprintStatistics(
-			final Short internalAdapterId ) {
+			final Short adapterId ) {
 		super(
-				internalAdapterId,
+				adapterId,
 				STATS_TYPE);
 	}
 
@@ -100,5 +102,20 @@ public class RasterFootprintStatistics extends
 					footprint,
 					((RasterFootprintStatistics) statistics).footprint);
 		}
+	}
+
+	@Override
+	public Geometry getResult() {
+		return footprint;
+	}
+
+	@Override
+	protected String resultsName() {
+		return "footprint";
+	}
+
+	@Override
+	protected Object resultsValue() {
+		return new WKTWriter().write(footprint);
 	}
 }

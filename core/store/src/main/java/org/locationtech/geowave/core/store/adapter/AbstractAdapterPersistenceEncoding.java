@@ -10,7 +10,8 @@
  ******************************************************************************/
 package org.locationtech.geowave.core.store.adapter;
 
-import org.locationtech.geowave.core.index.ByteArrayId;
+import org.locationtech.geowave.core.index.ByteArray;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
 import org.locationtech.geowave.core.store.data.CommonIndexedPersistenceEncoding;
 import org.locationtech.geowave.core.store.data.PersistentDataset;
 import org.locationtech.geowave.core.store.index.CommonIndexModel;
@@ -27,9 +28,9 @@ public abstract class AbstractAdapterPersistenceEncoding extends
 
 	public AbstractAdapterPersistenceEncoding(
 			final short internalAdapterId,
-			final ByteArrayId dataId,
-			final ByteArrayId partitionKey,
-			final ByteArrayId sortKey,
+			final ByteArray dataId,
+			final ByteArray partitionKey,
+			final ByteArray sortKey,
 			final int duplicateCount,
 			final PersistentDataset<CommonIndexValue> commonData,
 			final PersistentDataset<byte[]> unknownData,
@@ -63,6 +64,6 @@ public abstract class AbstractAdapterPersistenceEncoding extends
 	 * @param model
 	 */
 	abstract public void convertUnknownValues(
-			final DataAdapter<?> adapter,
+			final DataTypeAdapter<?> adapter,
 			final CommonIndexModel model );
 }

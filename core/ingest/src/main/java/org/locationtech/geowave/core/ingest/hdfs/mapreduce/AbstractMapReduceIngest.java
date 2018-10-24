@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013-2018 Contributors to the Eclipse Foundation
- *   
+ *
  *  See the NOTICE file distributed with this work for additional
  *  information regarding copyright ownership.
  *  All rights reserved. This program and the accompanying materials
@@ -21,24 +21,22 @@ import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.util.Tool;
-import org.locationtech.geowave.core.index.ByteArrayId;
 import org.locationtech.geowave.core.index.ByteArrayUtils;
 import org.locationtech.geowave.core.index.persist.Persistable;
 import org.locationtech.geowave.core.index.persist.PersistenceUtils;
-import org.locationtech.geowave.core.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.store.CloseableIterator;
-import org.locationtech.geowave.core.store.DataStore;
 import org.locationtech.geowave.core.store.adapter.AdapterIndexMappingStore;
 import org.locationtech.geowave.core.store.adapter.InternalAdapterStore;
 import org.locationtech.geowave.core.store.adapter.PersistentAdapterStore;
-import org.locationtech.geowave.core.store.adapter.WritableDataAdapter;
+import org.locationtech.geowave.core.store.api.DataStore;
+import org.locationtech.geowave.core.store.api.DataTypeAdapter;
+import org.locationtech.geowave.core.store.api.Index;
+import org.locationtech.geowave.core.store.api.QueryBuilder;
 import org.locationtech.geowave.core.store.cli.remote.options.DataStorePluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.IndexPluginOptions;
 import org.locationtech.geowave.core.store.cli.remote.options.VisibilityOptions;
-import org.locationtech.geowave.core.store.index.PrimaryIndex;
+import org.locationtech.geowave.core.store.ingest.DataAdapterProvider;
 import org.locationtech.geowave.core.store.operations.MetadataType;
-import org.locationtech.geowave.core.store.query.EverythingQuery;
-import org.locationtech.geowave.core.store.query.QueryOptions;
 import org.locationtech.geowave.mapreduce.output.GeoWaveOutputFormat;
 
 /**
@@ -56,13 +54,13 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 {
 	public static final String INGEST_PLUGIN_KEY = "INGEST_PLUGIN";
 	public static final String GLOBAL_VISIBILITY_KEY = "GLOBAL_VISIBILITY";
-	public static final String PRIMARY_INDEX_IDS_KEY = "PRIMARY_INDEX_IDS";
+	public static final String INDEX_NAMES_KEY = "INDEX_NAMES";
 	private static String JOB_NAME = "%s ingest from %s to namespace %s (%s)";
 	protected final DataStorePluginOptions dataStoreOptions;
 	protected final List<IndexPluginOptions> indexOptions;
 	protected final VisibilityOptions ingestOptions;
 	protected final Path inputFile;
-	protected final String typeName;
+	protected final String formatPluginName;
 	protected final IngestFromHdfsPlugin<?, ?> parentPlugin;
 	protected final T ingestPlugin;
 
@@ -71,14 +69,14 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 			final List<IndexPluginOptions> indexOptions,
 			final VisibilityOptions ingestOptions,
 			final Path inputFile,
-			final String typeName,
+			final String formatPluginName,
 			final IngestFromHdfsPlugin<?, ?> parentPlugin,
 			final T ingestPlugin ) {
 		this.dataStoreOptions = dataStoreOptions;
 		this.indexOptions = indexOptions;
 		this.ingestOptions = ingestOptions;
 		this.inputFile = inputFile;
-		this.typeName = typeName;
+		this.formatPluginName = formatPluginName;
 		this.parentPlugin = parentPlugin;
 		this.ingestPlugin = ingestPlugin;
 	}
@@ -86,7 +84,7 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 	public String getJobName() {
 		return String.format(
 				JOB_NAME,
-				typeName,
+				formatPluginName,
 				inputFile.toString(),
 				dataStoreOptions.getGeowaveNamespace(),
 				getIngestDescription());
@@ -94,18 +92,13 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 
 	abstract protected String getIngestDescription();
 
-	protected static List<ByteArrayId> getPrimaryIndexIds(
+	protected static String[] getIndexNames(
 			final Configuration conf ) {
-		final String primaryIndexIdStr = conf.get(AbstractMapReduceIngest.PRIMARY_INDEX_IDS_KEY);
-		final List<ByteArrayId> primaryIndexIds = new ArrayList<ByteArrayId>();
-		if ((primaryIndexIdStr != null) && !primaryIndexIdStr.isEmpty()) {
-			final String[] indexIds = primaryIndexIdStr.split(",");
-			for (final String indexId : indexIds) {
-				primaryIndexIds.add(new ByteArrayId(
-						indexId));
-			}
+		final String primaryIndexNamesStr = conf.get(AbstractMapReduceIngest.INDEX_NAMES_KEY);
+		if ((primaryIndexNamesStr != null) && !primaryIndexNamesStr.isEmpty()) {
+			return primaryIndexNamesStr.split(",");
 		}
-		return primaryIndexIds;
+		return new String[0];
 	}
 
 	@Override
@@ -124,26 +117,26 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		final Job job = new Job(
 				conf,
 				getJobName());
-		final StringBuilder indexIds = new StringBuilder();
-		final List<PrimaryIndex> indexes = new ArrayList<PrimaryIndex>();
+		final StringBuilder indexNames = new StringBuilder();
+		final List<Index> indexes = new ArrayList<>();
 		for (final IndexPluginOptions indexOption : indexOptions) {
-			final PrimaryIndex primaryIndex = indexOption.createPrimaryIndex();
+			final Index primaryIndex = indexOption.createIndex();
 			indexes.add(primaryIndex);
 			if (primaryIndex != null) {
 				// add index
 				GeoWaveOutputFormat.addIndex(
 						job.getConfiguration(),
 						primaryIndex);
-				if (indexIds.length() != 0) {
-					indexIds.append(",");
+				if (indexNames.length() != 0) {
+					indexNames.append(",");
 				}
-				indexIds.append(primaryIndex.getId().getString());
+				indexNames.append(primaryIndex.getName());
 			}
 		}
 
 		job.getConfiguration().set(
-				PRIMARY_INDEX_IDS_KEY,
-				indexIds.toString());
+				INDEX_NAMES_KEY,
+				indexNames.toString());
 
 		job.setJarByClass(AbstractMapReduceIngest.class);
 
@@ -164,17 +157,17 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 				job.getConfiguration(),
 				dataStoreOptions);
 		final DataStore store = dataStoreOptions.createDataStore();
-		final WritableDataAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
-		final PrimaryIndex[] indexesArray = indexes.toArray(new PrimaryIndex[indexes.size()]);
+		final DataTypeAdapter<?>[] dataAdapters = ingestPlugin.getDataAdapters(ingestOptions.getVisibility());
+		final Index[] indices = indexes.toArray(new Index[indexes.size()]);
 		if ((dataAdapters != null) && (dataAdapters.length > 0)) {
-			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
+			for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
 				// from a controlled client, intialize the writer within the
 				// context of the datastore before distributing ingest
 				// however, after ingest we should cleanup any pre-created
 				// metadata for which there is no data
-				store.createWriter(
+				store.addType(
 						dataAdapter,
-						indexesArray).close();
+						indices);
 
 				GeoWaveOutputFormat.addDataAdapter(
 						job.getConfiguration(),
@@ -184,21 +177,14 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		else {
 			// if the adapter is unknown by the ingest format, at least add the
 			// indices from the client
-			for (final PrimaryIndex index : indexesArray) {
-				if (dataStoreOptions.getFactoryOptions().getStoreOptions().isPersistIndex()) {
-					dataStoreOptions.createIndexStore().addIndex(
-							index);
-				}
+			for (final Index index : indices) {
+				dataStoreOptions.createIndexStore().addIndex(
+						index);
 			}
-			if (indexesArray.length > 0) {
-				for (MetadataType type : MetadataType.values()) {
+			if (indices.length > 0) {
+				for (final MetadataType type : MetadataType.values()) {
 					// stats and index metadata writers are created elsewhere
-					if (!MetadataType.INDEX.equals(type)
-							&& !MetadataType.STATS.equals(type)
-							&& !(MetadataType.ADAPTER.equals(type) && !dataStoreOptions
-									.getFactoryOptions()
-									.getStoreOptions()
-									.isPersistAdapter())) {
+					if (!MetadataType.INDEX.equals(type) && !MetadataType.STATS.equals(type)) {
 						dataStoreOptions.createDataStoreOperations().createMetadataWriter(
 								type).close();
 					}
@@ -214,9 +200,9 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 		job.setSpeculativeExecution(false);
 
 		// add required indices
-		final PrimaryIndex[] requiredIndices = parentPlugin.getRequiredIndices();
+		final Index[] requiredIndices = parentPlugin.getRequiredIndices();
 		if (requiredIndices != null) {
-			for (final PrimaryIndex requiredIndex : requiredIndices) {
+			for (final Index requiredIndex : requiredIndices) {
 				GeoWaveOutputFormat.addIndex(
 						job.getConfiguration(),
 						requiredIndex);
@@ -230,25 +216,22 @@ abstract public class AbstractMapReduceIngest<T extends Persistable & DataAdapte
 			PersistentAdapterStore adapterStore = null;
 			AdapterIndexMappingStore adapterIndexMappingStore = null;
 			InternalAdapterStore internalAdapterStore = null;
-			for (final WritableDataAdapter<?> dataAdapter : dataAdapters) {
-				final QueryOptions queryOptions = new QueryOptions(
-						dataAdapter);
-				queryOptions.setLimit(1);
-				try (CloseableIterator<?> it = store.query(
-						queryOptions,
-						new EverythingQuery())) {
+			for (final DataTypeAdapter<?> dataAdapter : dataAdapters) {
+				String typeName = dataAdapter.getTypeName();
+				try (CloseableIterator<?> it = store.query(QueryBuilder.newBuilder().addTypeName(
+						typeName).limit(
+						1).build())) {
 					if (!it.hasNext()) {
 						if (adapterStore == null) {
 							adapterStore = dataStoreOptions.createAdapterStore();
 							internalAdapterStore = dataStoreOptions.createInternalAdapterStore();
 							adapterIndexMappingStore = dataStoreOptions.createAdapterIndexMappingStore();
 						}
-						final Short internalAdapterId = internalAdapterStore.getInternalAdapterId(dataAdapter
-								.getAdapterId());
-						if (internalAdapterId != null) {
-							internalAdapterStore.remove(internalAdapterId);
-							adapterStore.removeAdapter(internalAdapterId);
-							adapterIndexMappingStore.remove(internalAdapterId);
+						final Short adapterId = internalAdapterStore.getAdapterId(typeName);
+						if (adapterId != null) {
+							internalAdapterStore.remove(adapterId);
+							adapterStore.removeAdapter(adapterId);
+							adapterIndexMappingStore.remove(adapterId);
 						}
 					}
 				}
